@@ -125,8 +125,8 @@ explore a branch; analysis variations are retained in exported PGN.
 
 ### About and licensing
 
-The About screen shows the installed version and links to Maia-3, Lichess
-Flutter Chessground, Lichess multistockfish, and the bundled licences.
+The About screen shows the installed version and links to Maia-3, En Croissant,
+Lichess Flutter Chessground, Lichess multistockfish, and the bundled licences.
 
 <p align="center">
   <img src="docs/screenshots/20260828_v0_about.jpg" width="38%" alt="Mobile Maia version, project credits, and licence links">
@@ -238,6 +238,15 @@ support uses
 [Lichess multistockfish](https://github.com/lichess-org/dart-multistockfish).
 Both Lichess projects are credited and linked in the app's About screen.
 
+Game Review's move-classification and sacrifice-detection heuristics are
+adapted and translated to Dart from
+[En Croissant](https://github.com/franciscoBSalgueiro/en-croissant), the
+open-source chess GUI by Francisco Salgueiro and contributors. Mobile Maia
+retains the upstream classification rules while adding bounded search,
+background-isolate execution, and its own review integration. The pinned
+upstream revision and licence details are recorded in
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
 ## Licensing
 
 Copyright (c) 2026 Dash. Original application code in this repository is
@@ -247,8 +256,9 @@ licensed under the [GNU Affero General Public License v3.0 only](LICENSE)
 Mobile Maia Preview as a combined application is distributed under
 AGPL-3.0-only. Individual third-party components retain their respective
 copyright notices and licences, notably Maia-3 (AGPL-3.0),
-Stockfish/multistockfish (GPL-3.0), and dartchess (GPL-3.0). See
+Stockfish/multistockfish (GPL-3.0), dartchess (GPL-3.0), and adapted
+En Croissant code (GPL-3.0). See
 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 
 This is an independent community project and is not an official Maia Chess,
-University of Toronto CSSLab, Stockfish, or Lichess application.
+University of Toronto CSSLab, Stockfish, Lichess, or En Croissant application.
