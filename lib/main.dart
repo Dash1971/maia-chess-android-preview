@@ -54,16 +54,17 @@ const mobileMaiaSourceUrl =
 const mobileMaiaLicenseUrl = '$mobileMaiaSourceUrl/blob/main/LICENSE';
 const maiaPlayEloPreferenceKey = 'maiaPlayEloV1';
 
-// Match Lichess's non-magnified drag preference: keep the piece at its board
-// size and centred under the pointer, with Lichess's 150 ms move animation.
+// Match the Lichess app defaults across live play, Analysis Board, and Game
+// Review: magnify touch drags, lift the piece above the pointer, show the
+// circular drop target, and retain the 150 ms move animation.
 const mobileMaiaInteractiveBoardSettings = cg.ChessboardSettings(
   colorScheme: cg.ChessboardColorScheme.brown,
   pieceAssets: cg.PieceSet.cburnettAssets,
   enableCoordinates: true,
   animationDuration: Duration(milliseconds: 150),
-  dragFeedbackScale: 1.0,
-  dragFeedbackOffset: Offset.zero,
-  dragTargetKind: cg.DragTargetKind.none,
+  dragFeedbackScale: 2.0,
+  dragFeedbackOffset: Offset(0.0, -1.0),
+  dragTargetKind: cg.DragTargetKind.circle,
   enablePremoves: true,
   pieceShiftMethod: cg.PieceShiftMethod.either,
 );

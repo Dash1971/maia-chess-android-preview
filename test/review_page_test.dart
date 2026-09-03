@@ -167,6 +167,10 @@ void main() {
 
     final board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
     expect(board.controller.fen, replacement);
+    expect(board.settings.dragFeedbackScale, 2.0);
+    expect(board.settings.dragFeedbackOffset, const Offset(0.0, -1.0));
+    expect(board.settings.dragTargetKind, cg.DragTargetKind.circle);
+    expect(board.settings.animationDuration, const Duration(milliseconds: 150));
     expect(
       find.descendant(of: moveList, matching: find.text('e4')),
       findsNothing,
@@ -464,9 +468,9 @@ void main() {
         find.byKey(const ValueKey('game-board')),
       );
       expect(board.settings.pieceShiftMethod, cg.PieceShiftMethod.either);
-      expect(board.settings.dragFeedbackScale, 1.0);
-      expect(board.settings.dragFeedbackOffset, Offset.zero);
-      expect(board.settings.dragTargetKind, cg.DragTargetKind.none);
+      expect(board.settings.dragFeedbackScale, 2.0);
+      expect(board.settings.dragFeedbackOffset, const Offset(0.0, -1.0));
+      expect(board.settings.dragTargetKind, cg.DragTargetKind.circle);
       expect(
         board.settings.animationDuration,
         const Duration(milliseconds: 150),
