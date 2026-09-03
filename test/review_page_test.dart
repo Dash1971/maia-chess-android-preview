@@ -440,6 +440,63 @@ void main() {
     expect(find.widgetWithText(TextButton, 'Home'), findsNothing);
   });
 
+  testWidgets('live board accepts both tap and drag moves', (tester) async {
+    tester.view.physicalSize = const Size(800, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    const mateInOne = '7k/8/5KQ1/8/8/8/8/8 w - - 0 1';
+    final expected = chess.Chess.fromFEN(mateInOne)
+      ..move({'from': 'g6', 'to': 'g7'});
+
+    Future<cg.Chessboard> startPosition() async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: GamePage(
+            startingFen: mateInOne,
+            startingSide: PlayerSide.white,
+            startingElo: 1600,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final board = tester.widget<cg.Chessboard>(
+        find.byKey(const ValueKey('game-board')),
+      );
+      expect(board.settings.pieceShiftMethod, cg.PieceShiftMethod.either);
+      expect(board.controller.game.playerSide, cg.PlayerSide.white);
+      return board;
+    }
+
+    Offset squareCenter(Rect board, int file, int rank) {
+      final square = board.width / 8;
+      return Offset(
+        board.left + (file + 0.5) * square,
+        board.top + (7 - rank + 0.5) * square,
+      );
+    }
+
+    var board = await startPosition();
+    var rect = tester.getRect(find.byKey(const ValueKey('game-board')));
+    await tester.tapAt(squareCenter(rect, 6, 5));
+    await tester.pump();
+    await tester.tapAt(squareCenter(rect, 6, 6));
+    await tester.pumpAndSettle();
+    expect(board.controller.fen, expected.fen);
+    expect(find.text('Checkmate — you win!'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    board = await startPosition();
+    rect = tester.getRect(find.byKey(const ValueKey('game-board')));
+    final from = squareCenter(rect, 6, 5);
+    final to = squareCenter(rect, 6, 6);
+    await tester.dragFrom(from, to - from);
+    await tester.pumpAndSettle();
+    expect(board.controller.fen, expected.fen);
+    expect(find.text('Checkmate — you win!'), findsOneWidget);
+  });
+
   test('move classification uses En Croissant win-chance thresholds', () {
     const position = chess.Chess.DEFAULT_POSITION;
     MoveClassification classify(int evaluation) => MoveClassifier.classify(
@@ -1759,7 +1816,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
 
-    final board = tester.getRect(find.byType(cg.StaticChessboard));
+    final board = tester.getRect(find.byType(cg.Chessboard));
     final blackMaterial = tester.getRect(
       find.byKey(const ValueKey('black-material')),
     );

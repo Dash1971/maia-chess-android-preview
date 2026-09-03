@@ -597,9 +597,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   chess.Color _playerColor = chess.Color.WHITE;
   int _elo = 1500;
   int _analysisElo = 1600;
-  String? _selectedSquare;
-  String? _premoveFrom;
-  String? _premoveTo;
+  late final cg.ChessboardController _gameBoardController;
   String _status = 'Choose your settings and start a game.';
   bool _started = false;
   bool _engineThinking = false;
@@ -639,6 +637,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _gameBoardController = cg.ChessboardController(game: _gameBoardData());
     if (widget.startingSide != null) _sideChoice = widget.startingSide!;
     if (widget.startingElo != null) _elo = widget.startingElo!;
     unawaited(_loadEnginePreferences());
@@ -818,6 +817,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
         _status = saved['status'] as String? ?? 'Game restored.';
         _started = true;
       });
+      _syncGameBoard(animate: false, resetPremove: true);
       if (_clockEnabled && !_gameFinished) {
         _clockTimer = Timer.periodic(
           const Duration(milliseconds: 200),
@@ -1084,6 +1084,35 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     );
   }
 
+  cg.GameData _gameBoardData() {
+    final position = dc.Chess.fromSetup(dc.Setup.parseFen(_game.fen));
+    final lastMove = _uciMoves.isEmpty
+        ? null
+        : dc.NormalMove.fromUci(_uciMoves.last);
+    return cg.GameData(
+      fen: _game.fen,
+      playerSide: !_started || _gameFinished
+          ? cg.PlayerSide.none
+          : _playerIsWhite
+          ? cg.PlayerSide.white
+          : cg.PlayerSide.black,
+      sideToMove: position.turn,
+      validMoves: dc.makeLegalMoves(position),
+      kingSquareInCheck: position.isCheck
+          ? position.board.kingOf(position.turn)
+          : null,
+      lastMove: lastMove,
+    );
+  }
+
+  void _syncGameBoard({bool animate = true, bool resetPremove = false}) {
+    _gameBoardController.updatePosition(
+      _gameBoardData(),
+      animate: animate,
+      resetPremove: resetPremove,
+    );
+  }
+
   void _startGame() {
     _gameGeneration++;
     _clockTimer?.cancel();
@@ -1103,9 +1132,6 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       _uciMoves.clear();
       _takebackVariations.clear();
       _reviewVariationSnapshot = null;
-      _selectedSquare = null;
-      _premoveFrom = null;
-      _premoveTo = null;
       _forcedResult = null;
       _started = true;
       final startingMillis = _baseMinutes * 60 * 1000;
@@ -1142,6 +1168,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
         _game.set_header(['SetUp', '1', 'FEN', widget.startingFen!]);
       }
     });
+    _syncGameBoard(animate: false, resetPremove: true);
     if (_clockEnabled) {
       _clockTimer = Timer.periodic(
         const Duration(milliseconds: 200),
@@ -1196,144 +1223,58 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
             ? 'White ran out of time.'
             : 'Black ran out of time.';
       });
+      _syncGameBoard(animate: false, resetPremove: true);
       unawaited(_saveGameState());
       return;
     }
     setState(() {});
   }
 
-  Future<void> _tapSquare(String square) async {
-    if (!_started || _gameFinished) {
+  Future<void> _onGameBoardMove(dc.Move move, {bool? viaDragAndDrop}) async {
+    if (!_started || _gameFinished || _engineThinking || !_isPlayerTurn) {
       return;
     }
-    if (_engineThinking || !_isPlayerTurn) {
-      _tapPremoveSquare(square);
-      return;
-    }
-    final piece = _game.get(square);
-    if (_selectedSquare == null) {
-      if (piece?.color == _playerColor) {
-        setState(() => _selectedSquare = square);
-      }
-      return;
-    }
-
-    if (piece?.color == _playerColor) {
-      setState(() => _selectedSquare = square);
-      return;
-    }
-
-    final candidates = _game
+    final uci = move.uci;
+    final chosen = _game
         .moves({'asObjects': true})
         .cast<chess.Move>()
-        .where(
-          (move) =>
-              move.fromAlgebraic == _selectedSquare &&
-              move.toAlgebraic == square,
-        )
-        .toList();
-    if (candidates.isEmpty) {
-      setState(() => _selectedSquare = null);
-      return;
-    }
-    var chosen = candidates.first;
-    if (candidates.length > 1) {
-      final promotion = await _choosePromotion();
-      if (promotion == null || !mounted || _gameFinished || !_isPlayerTurn) {
-        return;
-      }
-      chosen = candidates.firstWhere((move) => move.promotion == promotion);
-    }
+        .where((candidate) => MaiaEncoding.uci(candidate) == uci)
+        .firstOrNull;
+    if (chosen == null) return;
 
     _commitClock(_playerColor);
-    _uciMoves.add(MaiaEncoding.uci(chosen));
+    _uciMoves.add(uci);
     _game.move(chosen);
     _positionHistory.add(_game.fen);
     _recordClockSnapshot();
     setState(() {
-      _selectedSquare = null;
       _status = _game.game_over ? _finishNaturalGame() : 'Game in progress.';
     });
+    _syncGameBoard();
     unawaited(_saveGameState());
     if (!_game.game_over) _playMaiaMove();
   }
 
-  void _tapPremoveSquare(String square) {
-    final piece = _game.get(square);
-    if (_premoveFrom == null) {
-      if (piece?.color == _playerColor) {
-        setState(() {
-          _premoveFrom = square;
-          _premoveTo = null;
-          _status = 'Premove: select destination.';
-        });
-      }
-      return;
-    }
-    final from = _premoveFrom!;
-    if (isPremoveDestination(_game.fen, from, square)) {
-      setState(() {
-        _premoveTo = square;
-        _status = 'Premove queued: $from–$square';
-      });
-      return;
-    }
-    if (piece?.color == _playerColor) {
-      setState(() {
-        _premoveFrom = square;
-        _premoveTo = null;
-      });
-    }
-  }
-
   Future<bool> _playQueuedPremove() async {
-    final from = _premoveFrom;
-    final to = _premoveTo;
-    _premoveFrom = null;
-    _premoveTo = null;
-    if (from == null || to == null || !_isPlayerTurn || _gameFinished) {
+    final move = _gameBoardController.premove;
+    _gameBoardController.premove = null;
+    if (move is! dc.NormalMove || !_isPlayerTurn || _gameFinished) {
       return false;
     }
-    final candidates = _game
+    final chosen = _game
         .moves({'asObjects': true})
         .cast<chess.Move>()
-        .where((move) => move.fromAlgebraic == from && move.toAlgebraic == to)
-        .toList();
-    if (candidates.isEmpty) return false;
-    var chosen = candidates.first;
-    if (candidates.length > 1) {
-      final promotion = await _choosePromotion();
-      if (promotion == null || !mounted || _gameFinished) return false;
-      chosen = candidates.firstWhere((move) => move.promotion == promotion);
-    }
+        .where((candidate) => MaiaEncoding.uci(candidate) == move.uci)
+        .firstOrNull;
+    if (chosen == null) return false;
     _commitClock(_playerColor);
-    _uciMoves.add(MaiaEncoding.uci(chosen));
+    _uciMoves.add(move.uci);
     _game.move(chosen);
     _positionHistory.add(_game.fen);
     _recordClockSnapshot();
+    _syncGameBoard();
     return true;
   }
-
-  Future<chess.PieceType?> _choosePromotion() => showDialog<chess.PieceType>(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) => AlertDialog(
-      title: const Text('Promote pawn'),
-      content: const Text('Choose a piece'),
-      actions: [
-        for (final choice in const [
-          (piece: chess.Chess.QUEEN, label: 'Queen'),
-          (piece: chess.Chess.ROOK, label: 'Rook'),
-          (piece: chess.Chess.BISHOP, label: 'Bishop'),
-          (piece: chess.Chess.KNIGHT, label: 'Knight'),
-        ])
-          TextButton(
-            onPressed: () => Navigator.pop(context, choice.piece),
-            child: Text(choice.label),
-          ),
-      ],
-    ),
-  );
 
   Future<void> _playMaiaMove() async {
     if (_game.game_over) return;
@@ -1374,6 +1315,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       _game.move(move);
       _positionHistory.add(_game.fen);
       _recordClockSnapshot();
+      _syncGameBoard();
       final premovePlayed = await _playQueuedPremove();
       if (!mounted || generation != _gameGeneration) return;
       setState(() {
@@ -1463,6 +1405,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       _game.set_header(['Result', result, 'Termination', 'Player resigned']);
       _status = 'You resigned — Maia wins.';
     });
+    _syncGameBoard(animate: false, resetPremove: true);
     unawaited(_saveGameState());
   }
 
@@ -1472,11 +1415,9 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     setState(() {
       _started = false;
       _engineThinking = false;
-      _selectedSquare = null;
-      _premoveFrom = null;
-      _premoveTo = null;
       _status = 'Choose your settings and start a game.';
     });
+    _syncGameBoard(animate: false, resetPremove: true);
     unawaited(ActiveSessionStore.clear());
   }
 
@@ -1555,13 +1496,11 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       _blackMillis = clock.blackMillis;
       _turnStartedAt = _clockEnabled ? DateTime.now() : null;
       _engineThinking = false;
-      _selectedSquare = null;
-      _premoveFrom = null;
-      _premoveTo = null;
       _forcedResult = null;
       _game.set_header(['Result', '*']);
       _status = 'Move taken back. Your move.';
     });
+    _syncGameBoard(animate: false, resetPremove: true);
     if (_clockEnabled) {
       _clockTimer?.cancel();
       _clockTimer = Timer.periodic(
@@ -2005,35 +1944,20 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   }
 
   Widget _board() {
-    final selected = <dc.Square, cg.SquareHighlight>{};
-    if (_selectedSquare != null) {
-      selected[dc.Square.fromName(_selectedSquare!)] = const cg.SquareHighlight(
-        details: cg.HighlightDetails(solidColor: Color(0x99D59120)),
-      );
-    }
-    for (final square in [_premoveFrom, _premoveTo]) {
-      if (square != null) {
-        selected[dc.Square.fromName(square)] = const cg.SquareHighlight(
-          details: cg.HighlightDetails(solidColor: Color(0x99B84A4A)),
-        );
-      }
-    }
-    final lastMove = _uciMoves.isEmpty
-        ? null
-        : dc.NormalMove.fromUci(_uciMoves.last);
     return LayoutBuilder(
-      builder: (context, constraints) => cg.StaticChessboard(
+      builder: (context, constraints) => cg.Chessboard(
+        key: const ValueKey('game-board'),
         size: constraints.biggest.shortestSide,
         orientation: _playerIsWhite ? dc.Side.white : dc.Side.black,
-        fen: _game.fen,
-        lastMove: lastMove,
-        squareHighlights: selected,
-        settings: const cg.StaticChessboardSettings(
+        controller: _gameBoardController,
+        onMove: _onGameBoardMove,
+        settings: const cg.ChessboardSettings(
           colorScheme: cg.ChessboardColorScheme.brown,
           pieceAssets: cg.PieceSet.cburnettAssets,
           enableCoordinates: true,
+          enablePremoves: true,
+          pieceShiftMethod: cg.PieceShiftMethod.either,
         ),
-        onTouchedSquare: (square) => unawaited(_tapSquare(square.name)),
       ),
     );
   }
@@ -2094,6 +2018,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _clockTimer?.cancel();
+    _gameBoardController.dispose();
     super.dispose();
   }
 }
