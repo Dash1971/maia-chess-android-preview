@@ -63,6 +63,7 @@ const mobileMaiaInteractiveBoardSettings = cg.ChessboardSettings(
   animationDuration: Duration(milliseconds: 150),
   dragFeedbackScale: 1.0,
   dragFeedbackOffset: Offset.zero,
+  dragTargetKind: cg.DragTargetKind.none,
   enablePremoves: true,
   pieceShiftMethod: cg.PieceShiftMethod.either,
 );
@@ -1628,36 +1629,59 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final boardSize = min(constraints.maxWidth, 560.0);
-            return SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+            if (!_started) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 560),
+                    child: _setupCard(),
+                  ),
+                ),
+              );
+            }
+
+            final contentWidth = min(
+              max(0.0, constraints.maxWidth - 24),
+              560.0,
+            );
+            final contentHeight = max(0.0, constraints.maxHeight - 16);
+            // Keep the live board outside every scrollable, as Lichess does.
+            // Reserve the remaining height for status, player rows and the
+            // independently scrollable game details below the board.
+            final boardSize = min(contentWidth, max(0.0, contentHeight - 250));
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
               child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 560),
+                child: SizedBox(
+                  width: contentWidth,
+                  height: contentHeight,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      if (!_started) _setupCard(),
-                      if (_started) ...[
-                        _statusCard(),
-                        const SizedBox(height: 12),
-                        _playerInfoRow(
-                          _playerIsWhite
-                              ? chess.Color.BLACK
-                              : chess.Color.WHITE,
-                          'Maia',
-                        ),
-                        const SizedBox(height: 4),
-                        SizedBox(
+                      _statusCard(),
+                      const SizedBox(height: 12),
+                      _playerInfoRow(
+                        _playerIsWhite ? chess.Color.BLACK : chess.Color.WHITE,
+                        'Maia',
+                      ),
+                      const SizedBox(height: 4),
+                      Center(
+                        child: SizedBox(
                           width: boardSize,
                           height: boardSize,
                           child: _board(),
                         ),
-                        const SizedBox(height: 4),
-                        _playerInfoRow(_playerColor, 'You'),
-                        const SizedBox(height: 12),
-                        _gameInfoCard(),
-                      ],
+                      ),
+                      const SizedBox(height: 4),
+                      _playerInfoRow(_playerColor, 'You'),
+                      const SizedBox(height: 12),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          key: const ValueKey('game-details-scroll'),
+                          child: _gameInfoCard(),
+                        ),
+                      ),
                     ],
                   ),
                 ),

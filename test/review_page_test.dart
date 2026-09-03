@@ -466,6 +466,7 @@ void main() {
       expect(board.settings.pieceShiftMethod, cg.PieceShiftMethod.either);
       expect(board.settings.dragFeedbackScale, 1.0);
       expect(board.settings.dragFeedbackOffset, Offset.zero);
+      expect(board.settings.dragTargetKind, cg.DragTargetKind.none);
       expect(
         board.settings.animationDuration,
         const Duration(milliseconds: 150),
@@ -495,10 +496,15 @@ void main() {
     await tester.pump();
     board = await startPosition();
     rect = tester.getRect(find.byKey(const ValueKey('game-board')));
+    final boardTopBeforeDrag = rect.top;
     final from = squareCenter(rect, 6, 5);
     final to = squareCenter(rect, 6, 6);
     await tester.dragFrom(from, to - from);
     await tester.pumpAndSettle();
+    expect(
+      tester.getRect(find.byKey(const ValueKey('game-board'))).top,
+      boardTopBeforeDrag,
+    );
     expect(board.controller.fen, expected.fen);
     expect(find.text('Checkmate — you win!'), findsOneWidget);
   });
