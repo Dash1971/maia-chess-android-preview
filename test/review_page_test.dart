@@ -464,6 +464,12 @@ void main() {
         find.byKey(const ValueKey('game-board')),
       );
       expect(board.settings.pieceShiftMethod, cg.PieceShiftMethod.either);
+      expect(board.settings.dragFeedbackScale, 1.0);
+      expect(board.settings.dragFeedbackOffset, Offset.zero);
+      expect(
+        board.settings.animationDuration,
+        const Duration(milliseconds: 150),
+      );
       expect(board.controller.game.playerSide, cg.PlayerSide.white);
       return board;
     }

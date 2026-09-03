@@ -54,6 +54,19 @@ const mobileMaiaSourceUrl =
 const mobileMaiaLicenseUrl = '$mobileMaiaSourceUrl/blob/main/LICENSE';
 const maiaPlayEloPreferenceKey = 'maiaPlayEloV1';
 
+// Match Lichess's non-magnified drag preference: keep the piece at its board
+// size and centred under the pointer, with Lichess's 150 ms move animation.
+const mobileMaiaInteractiveBoardSettings = cg.ChessboardSettings(
+  colorScheme: cg.ChessboardColorScheme.brown,
+  pieceAssets: cg.PieceSet.cburnettAssets,
+  enableCoordinates: true,
+  animationDuration: Duration(milliseconds: 150),
+  dragFeedbackScale: 1.0,
+  dragFeedbackOffset: Offset.zero,
+  enablePremoves: true,
+  pieceShiftMethod: cg.PieceShiftMethod.either,
+);
+
 class MaiaInferenceQueue {
   static Future<void> _tail = Future<void>.value();
   static int _replaceableGeneration = 0;
@@ -1951,13 +1964,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
         orientation: _playerIsWhite ? dc.Side.white : dc.Side.black,
         controller: _gameBoardController,
         onMove: _onGameBoardMove,
-        settings: const cg.ChessboardSettings(
-          colorScheme: cg.ChessboardColorScheme.brown,
-          pieceAssets: cg.PieceSet.cburnettAssets,
-          enableCoordinates: true,
-          enablePremoves: true,
-          pieceShiftMethod: cg.PieceShiftMethod.either,
-        ),
+        settings: mobileMaiaInteractiveBoardSettings,
       ),
     );
   }
@@ -4336,11 +4343,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                   orientation: boardOrientation,
                                   onMove: _onAnalysisMove,
                                   shapes: _arrows,
-                                  settings: const cg.ChessboardSettings(
-                                    colorScheme: cg.ChessboardColorScheme.brown,
-                                    pieceAssets: cg.PieceSet.cburnettAssets,
-                                    enableCoordinates: true,
-                                  ),
+                                  settings: mobileMaiaInteractiveBoardSettings,
                                 ),
                                 if (agreement != null ||
                                     boardAnnotation != null)
