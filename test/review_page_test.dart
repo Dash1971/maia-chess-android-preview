@@ -1714,6 +1714,51 @@ void main() {
     },
   );
 
+  testWidgets(
+    'stepping back from a directly authored root creates a variation',
+    (tester) async {
+      List<RecordedVariation> saved = const [];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ReviewPage(
+            positions: const [chess.Chess.DEFAULT_POSITION],
+            uciMoves: const [],
+            sanMoves: const [],
+            playerIsWhite: true,
+            pgn: '[Result "*"]\n\n*',
+            onHome: () {},
+            onSessionChanged: (_, _, variations) async {
+              saved = variations;
+            },
+            evaluator: (_) async => const StockfishReview(0, 'a2a3'),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      for (final uci in const ['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1b5']) {
+        final board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
+        board.onMove!(dc.NormalMove.fromUci(uci));
+        await tester.pumpAndSettle();
+      }
+
+      await tester.ensureVisible(find.byTooltip('Previous move'));
+      await tester.tap(find.byTooltip('Previous move'));
+      await tester.pumpAndSettle();
+      final board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
+      board.onMove!(dc.NormalMove.fromUci('d2d4'));
+      await tester.pumpAndSettle();
+
+      expect(saved, hasLength(1));
+      expect(saved.single.sanMoves, ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5']);
+      expect(saved.single.children, hasLength(1));
+      expect(saved.single.children.single.basePly, 4);
+      expect(saved.single.children.single.sanMoves, ['d4']);
+      expect(find.byKey(const ValueKey('mainline-move-5')), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('branching from a variation creates a nested clickable line', (
     tester,
   ) async {

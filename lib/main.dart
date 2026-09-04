@@ -3237,6 +3237,12 @@ class _ReviewPageState extends State<ReviewPage> {
               item.sanMoves.first == _variationSan.first,
         );
         _variations.add(updated);
+        // A line authored directly from the Analysis Board is still the
+        // currently opened line. Without this reference, stepping backward
+        // and playing a different move appends that move to the end of the
+        // root SAN list, shifting White moves into Black's column instead of
+        // creating a sibling variation at the selected ply.
+        _openedVariation = updated;
       }
     }
     _boardController.updatePosition(_boardGameData());
