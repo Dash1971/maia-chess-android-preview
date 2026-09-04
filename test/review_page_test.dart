@@ -877,6 +877,20 @@ void main() {
             .dx,
       ),
     );
+    final controlCenters = [
+      'analysis-actions-menu',
+      'analysis-flip-button',
+      'analysis-engine-toggle',
+      'previous-move-button',
+      'next-move-button',
+    ].map((key) => tester.getCenter(find.byKey(ValueKey(key))).dx).toList();
+    final controlSpacing = controlCenters[1] - controlCenters[0];
+    for (var index = 2; index < controlCenters.length; index++) {
+      expect(
+        controlCenters[index] - controlCenters[index - 1],
+        closeTo(controlSpacing, 0.1),
+      );
+    }
     expect(
       tester.getSize(find.byKey(const ValueKey('graph-tab'))).height,
       greaterThanOrEqualTo(48),

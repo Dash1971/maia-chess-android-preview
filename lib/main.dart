@@ -4519,68 +4519,81 @@ class _ReviewPageState extends State<ReviewPage> {
     }
   }
 
-  Widget _analysisControls() => SizedBox(
-    key: const ValueKey('analysis-controls'),
-    height: 52,
-    child: Row(
-      children: [
-        IconButton(
-          key: const ValueKey('analysis-actions-menu'),
-          onPressed: _hasAnalysisMenu ? _showAnalysisMenu : null,
-          icon: const Icon(Icons.menu),
-          tooltip: 'Analysis menu',
-        ),
-        IconButton(
-          key: const ValueKey('analysis-flip-button'),
-          onPressed: _flipAnalysisBoard,
-          icon: const Icon(CupertinoIcons.arrow_2_squarepath),
-          tooltip: 'Flip board',
-        ),
-        Tooltip(
-          message: _engineEnabled ? 'Turn engine off' : 'Turn engine on',
-          child: TextButton.icon(
-            key: const ValueKey('analysis-engine-toggle'),
-            onPressed: _toggleAnalysisEngine,
-            icon: Icon(
-              Icons.power_settings_new,
-              color: _engineEnabled
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.onSurfaceVariant,
+  Widget _analysisControls() {
+    Widget slot(Widget child) => Expanded(child: Center(child: child));
+
+    return SizedBox(
+      key: const ValueKey('analysis-controls'),
+      height: 52,
+      child: Row(
+        children: [
+          slot(
+            IconButton(
+              key: const ValueKey('analysis-actions-menu'),
+              onPressed: _hasAnalysisMenu ? _showAnalysisMenu : null,
+              icon: const Icon(Icons.menu),
+              tooltip: 'Analysis menu',
             ),
-            label: Text(
-              'SF',
-              style: TextStyle(
-                color: _engineEnabled
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w700,
+          ),
+          slot(
+            IconButton(
+              key: const ValueKey('analysis-flip-button'),
+              onPressed: _flipAnalysisBoard,
+              icon: const Icon(CupertinoIcons.arrow_2_squarepath),
+              tooltip: 'Flip board',
+            ),
+          ),
+          slot(
+            Tooltip(
+              message: _engineEnabled ? 'Turn engine off' : 'Turn engine on',
+              child: TextButton.icon(
+                key: const ValueKey('analysis-engine-toggle'),
+                onPressed: _toggleAnalysisEngine,
+                icon: Icon(
+                  Icons.power_settings_new,
+                  color: _engineEnabled
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                label: Text(
+                  'SF',
+                  style: TextStyle(
+                    color: _engineEnabled
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-        const Spacer(),
-        IconButton(
-          key: const ValueKey('previous-move-button'),
-          tooltip: 'Previous move',
-          onPressed: (_inVariation ? _variationIndex == 0 : _ply == 0)
-              ? null
-              : () => _step(-1),
-          icon: const Icon(CupertinoIcons.chevron_back),
-        ),
-        IconButton(
-          key: const ValueKey('next-move-button'),
-          tooltip: 'Next move',
-          onPressed:
-              (_inVariation
-                  ? _variationIndex == _variationSan.length
-                  : _ply == _maximumPly)
-              ? null
-              : () => _step(1),
-          icon: const Icon(CupertinoIcons.chevron_forward),
-        ),
-      ],
-    ),
-  );
+          slot(
+            IconButton(
+              key: const ValueKey('previous-move-button'),
+              tooltip: 'Previous move',
+              onPressed: (_inVariation ? _variationIndex == 0 : _ply == 0)
+                  ? null
+                  : () => _step(-1),
+              icon: const Icon(CupertinoIcons.chevron_back),
+            ),
+          ),
+          slot(
+            IconButton(
+              key: const ValueKey('next-move-button'),
+              tooltip: 'Next move',
+              onPressed:
+                  (_inVariation
+                      ? _variationIndex == _variationSan.length
+                      : _ply == _maximumPly)
+                  ? null
+                  : () => _step(1),
+              icon: const Icon(CupertinoIcons.chevron_forward),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _analysisTabBar() {
     final colors = Theme.of(context).colorScheme;
