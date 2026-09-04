@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:chess/chess.dart' as chess;
@@ -30,14 +31,16 @@ Future<void> main() async {
     return true;
   };
   ErrorWidget.builder = (_) => const DiagnosticsErrorScreen();
-  try {
-    await OpeningNames.load();
-  } catch (error, stackTrace) {
-    // Opening labels are useful but not required for playing or analysis.
-    // A damaged optional asset must not prevent the entire app from starting.
-    await AppDiagnostics.record('opening-names-load', error, stackTrace);
-  }
   runApp(const MaiaChessApp());
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    // Opening labels are useful but several taps away. Load them after the
+    // first frame instead of making every cold start parse the full TSV asset.
+    unawaited(
+      OpeningNames.load().catchError((Object error, StackTrace stackTrace) {
+        return AppDiagnostics.record('opening-names-load', error, stackTrace);
+      }),
+    );
+  });
   unawaited(AppDiagnostics.recordEvent('app-started'));
 }
 
@@ -69,28 +72,38 @@ const mobileMaiaInteractiveBoardSettings = cg.ChessboardSettings(
   pieceShiftMethod: cg.PieceShiftMethod.either,
 );
 
+class MaiaInferenceScope {
+  int _generation = 0;
+
+  int begin() => ++_generation;
+  bool isCurrent(int generation) => generation == _generation;
+  void invalidate() => _generation++;
+}
+
 class MaiaInferenceQueue {
   static Future<void> _tail = Future<void>.value();
-  static int _replaceableGeneration = 0;
 
-  static Future<List<dynamic>?> predict(
+  static Future<Float32List?> predict(
     Map<String, Object> arguments, {
-    bool replaceable = false,
+    MaiaInferenceScope? replaceableScope,
+    Duration timeout = const Duration(seconds: 90),
   }) {
-    final result = Completer<List<dynamic>?>();
-    final generation = replaceable ? ++_replaceableGeneration : null;
+    final result = Completer<Float32List?>();
+    final generation = replaceableScope?.begin();
     _tail = _tail.catchError((_) {}).then((_) async {
-      if (replaceable && generation != _replaceableGeneration) {
+      if (generation != null && !replaceableScope!.isCurrent(generation)) {
         result.complete(null);
         return;
       }
       try {
-        result.complete(
-          await maiaEngineChannel.invokeMethod<List<dynamic>>(
-            'predict',
-            arguments,
-          ),
-        );
+        final response = await maiaEngineChannel
+            .invokeMethod<Float32List>('predict', arguments)
+            .timeout(timeout);
+        if (generation != null && !replaceableScope!.isCurrent(generation)) {
+          result.complete(null);
+          return;
+        }
+        result.complete(response);
       } catch (error, stackTrace) {
         result.completeError(error, stackTrace);
       }
@@ -223,8 +236,47 @@ bool shouldRequestMaiaReply({
   required bool gameOver,
 }) => premovePlayed && !gameOver;
 
-class MaiaChessApp extends StatelessWidget {
+class MaiaChessApp extends StatefulWidget {
   const MaiaChessApp({super.key});
+
+  @override
+  State<MaiaChessApp> createState() => _MaiaChessAppState();
+}
+
+class _MaiaChessAppState extends State<MaiaChessApp>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      unawaited(
+        StockfishAnalyzer.instance.close().catchError(
+          (Object error, StackTrace stackTrace) =>
+              AppDiagnostics.record('stockfish-close', error, stackTrace),
+        ),
+      );
+      unawaited(
+        maiaEngineChannel
+            .invokeMethod<void>('release')
+            .catchError(
+              (Object error, StackTrace stackTrace) =>
+                  AppDiagnostics.record('maia-close', error, stackTrace),
+            ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -333,7 +385,15 @@ class ActiveSessionStore {
     final source = (await SharedPreferences.getInstance()).getString(_key);
     if (source == null) return null;
     try {
-      return Map<String, dynamic>.from(jsonDecode(source) as Map);
+      final decoded = Map<String, dynamic>.from(jsonDecode(source) as Map);
+      if (decoded['schema'] != 1) {
+        await AppDiagnostics.recordEvent(
+          'active-session-unsupported-schema:${decoded['schema']}',
+        );
+        await clear();
+        return null;
+      }
+      return decoded;
     } catch (error, stackTrace) {
       await AppDiagnostics.record('active-session-load', error, stackTrace);
       // Do not retry a permanently malformed session on every app launch.
@@ -419,7 +479,25 @@ class PgnVariationExporter {
     if (mainSan.isEmpty) {
       final rootLines = byBase[0] ?? const <RecordedVariation>[];
       if (rootLines.isNotEmpty) {
-        tokens.add(_formatLine(rootLines.first));
+        // Analysis sessions use the first base-0 line as their mainline. If a
+        // recovery path left sibling branches at later plies at the top level,
+        // attach them while formatting so visible analysis is never omitted.
+        final root = rootLines.first;
+        final recoveredChildren = [
+          ...root.children,
+          for (final entry in byBase.entries)
+            if (entry.key != 0) ...entry.value,
+        ];
+        tokens.add(
+          _formatLine(
+            RecordedVariation(
+              basePly: root.basePly,
+              baseFen: root.baseFen,
+              sanMoves: root.sanMoves,
+              children: recoveredChildren,
+            ),
+          ),
+        );
         for (final alternative in rootLines.skip(1)) {
           tokens.add('(${_formatLine(alternative)})');
         }
@@ -592,12 +670,15 @@ class GamePage extends StatefulWidget {
     this.startingFen,
     this.startingSide,
     this.startingElo,
+    this.maiaEvaluator,
     super.key,
   });
 
   final String? startingFen;
   final PlayerSide? startingSide;
   final int? startingElo;
+  final Future<Float32List> Function(List<String> positions, int elo)?
+  maiaEvaluator;
 
   @override
   State<GamePage> createState() => _GamePageState();
@@ -627,13 +708,15 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   int _blackMillis = 0;
   DateTime? _turnStartedAt;
   Timer? _clockTimer;
+  late final ValueNotifier<ClockSnapshot> _clockDisplay;
   final List<ClockSnapshot> _clockHistory = [];
   int _gameGeneration = 0;
   bool _reviewOpen = false;
   List<RecordedVariation>? _reviewVariationSnapshot;
   bool _advancedExpanded = false;
   bool _playEloChangedSinceLoad = false;
-  final Random _timingRandom = Random.secure();
+  bool _screenWakeLockEnabled = false;
+  final Random _timingRandom = Random();
 
   bool get _playerIsWhite => _playerColor == chess.Color.WHITE;
   bool get _isPlayerTurn => _game.turn == _playerColor;
@@ -652,14 +735,20 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _clockDisplay = ValueNotifier(const ClockSnapshot(0, 0));
     _gameBoardController = cg.ChessboardController(game: _gameBoardData());
     if (widget.startingSide != null) _sideChoice = widget.startingSide!;
     if (widget.startingElo != null) _elo = widget.startingElo!;
-    unawaited(_loadEnginePreferences());
+    unawaited(_initialize());
+  }
+
+  Future<void> _initialize() async {
+    await _loadEnginePreferences();
+    if (!mounted) return;
     if (widget.startingFen != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _startGame());
     } else {
-      unawaited(_restoreActiveSession());
+      await _restoreActiveSession();
     }
   }
 
@@ -671,6 +760,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
         state == AppLifecycleState.hidden) {
       if (!_reviewOpen) unawaited(_saveGameState());
     }
+    _updateScreenWakeLock(state);
   }
 
   Future<void> _restoreActiveSession() async {
@@ -1126,12 +1216,38 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       animate: animate,
       resetPremove: resetPremove,
     );
+    _publishClock();
+    _updateScreenWakeLock();
+  }
+
+  void _publishClock() {
+    _clockDisplay.value = ClockSnapshot(
+      _liveMillis(chess.Color.WHITE),
+      _liveMillis(chess.Color.BLACK),
+    );
+  }
+
+  void _updateScreenWakeLock([AppLifecycleState? lifecycleState]) {
+    final foreground =
+        (lifecycleState ?? WidgetsBinding.instance.lifecycleState) ==
+        AppLifecycleState.resumed;
+    final enabled = foreground && _started && _clockEnabled && !_gameFinished;
+    if (_screenWakeLockEnabled == enabled) return;
+    _screenWakeLockEnabled = enabled;
+    unawaited(
+      maiaEngineChannel
+          .invokeMethod<void>('setKeepScreenOn', {'enabled': enabled})
+          .catchError(
+            (Object error, StackTrace stackTrace) =>
+                AppDiagnostics.record('screen-wake-lock', error, stackTrace),
+          ),
+    );
   }
 
   void _startGame() {
     _gameGeneration++;
     _clockTimer?.cancel();
-    final randomWhite = Random.secure().nextBool();
+    final randomWhite = Random().nextBool();
     _playerColor = switch (_sideChoice) {
       PlayerSide.white => chess.Color.WHITE,
       PlayerSide.black => chess.Color.BLACK,
@@ -1156,7 +1272,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       _clockHistory
         ..clear()
         ..add(ClockSnapshot(_whiteMillis, _blackMillis));
-      _status = _playerIsWhite ? 'Your move.' : 'Game in progress.';
+      _status = _isPlayerTurn ? 'Your move.' : 'Game in progress.';
       final date = DateTime.now();
       final dateTag =
           '${date.year.toString().padLeft(4, '0')}.'
@@ -1190,7 +1306,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
         (_) => _tickClock(),
       );
     }
-    if (!_playerIsWhite) _playMaiaMove();
+    if (!_isPlayerTurn) unawaited(_playMaiaMove());
     unawaited(_saveGameState());
   }
 
@@ -1242,7 +1358,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       unawaited(_saveGameState());
       return;
     }
-    setState(() {});
+    _publishClock();
   }
 
   Future<void> _onGameBoardMove(dc.Move move, {bool? viaDragAndDrop}) async {
@@ -1298,19 +1414,21 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     setState(() => _engineThinking = true);
     try {
       final tokens = MaiaEncoding.historicalTokens(_positionHistory);
-      final response = await MaiaInferenceQueue.predict({
-        'tokens': tokens,
-        'selfElo': _elo,
-        'opponentElo': _elo,
-      });
+      final response = widget.maiaEvaluator != null
+          ? await widget.maiaEvaluator!(
+              List.unmodifiable(_positionHistory),
+              _elo,
+            )
+          : await MaiaInferenceQueue.predict({
+              'tokens': tokens,
+              'selfElo': _elo,
+              'opponentElo': _elo,
+            });
       if (!mounted || generation != _gameGeneration || _gameFinished) return;
       if (response == null || response.length != 4352) {
         throw StateError('Maia returned an invalid policy vector.');
       }
-      final logits = response
-          .cast<num>()
-          .map((value) => value.toDouble())
-          .toList();
+      final logits = response.toList(growable: false);
       final legalMoves = _game.moves({'asObjects': true}).cast<chess.Move>();
       final move = MaiaEncoding.sampleLegalMove(
         _game,
@@ -1944,29 +2062,36 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   }
 
   Widget _clockTile(chess.Color color) {
-    final milliseconds = _liveMillis(color);
-    final urgent = milliseconds < 10000;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: _game.turn == color && !_gameFinished
-            ? const Color(0xfff0f0f0)
-            : const Color(0xff343735),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        _formatClock(milliseconds),
-        style: TextStyle(
-          color: urgent
-              ? Colors.redAccent
-              : _game.turn == color && !_gameFinished
-              ? Colors.black
-              : Colors.white70,
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          fontFeatures: const [FontFeature.tabularFigures()],
-        ),
-      ),
+    return ValueListenableBuilder<ClockSnapshot>(
+      valueListenable: _clockDisplay,
+      builder: (context, clock, _) {
+        final milliseconds = color == chess.Color.WHITE
+            ? clock.whiteMillis
+            : clock.blackMillis;
+        final urgent = milliseconds < 10000;
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: _game.turn == color && !_gameFinished
+                ? const Color(0xfff0f0f0)
+                : const Color(0xff343735),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(
+            _formatClock(milliseconds),
+            style: TextStyle(
+              color: urgent
+                  ? Colors.redAccent
+                  : _game.turn == color && !_gameFinished
+                  ? Colors.black
+                  : Colors.white70,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -2050,6 +2175,9 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _clockTimer?.cancel();
+    _started = false;
+    _updateScreenWakeLock(AppLifecycleState.detached);
+    _clockDisplay.dispose();
     _gameBoardController.dispose();
     super.dispose();
   }
@@ -2600,6 +2728,7 @@ class _ReviewPageState extends State<ReviewPage> {
   final Map<String, Future<String?>> _pendingVariationMaia = {};
   bool _sessionNotificationScheduled = false;
   final Set<String> _collapsedVariationKeys = {};
+  final MaiaInferenceScope _maiaInferenceScope = MaiaInferenceScope();
 
   bool get _inVariation => _variationBasePly != null;
   String get _currentFen => _inVariation
@@ -2729,6 +2858,7 @@ class _ReviewPageState extends State<ReviewPage> {
 
   @override
   void dispose() {
+    _maiaInferenceScope.invalidate();
     _boardController.dispose();
     super.dispose();
   }
@@ -2940,14 +3070,14 @@ class _ReviewPageState extends State<ReviewPage> {
         'tokens': MaiaEncoding.historicalTokens(positions),
         'selfElo': widget.maiaElo,
         'opponentElo': widget.maiaElo,
-      }, replaceable: true);
+      }, replaceableScope: _maiaInferenceScope);
       if (response == null || response.length != 4352) return;
       final game = chess.Chess.fromFEN(widget.positions[ply]);
       if (game.game_over) return;
       final move = MaiaEncoding.sampleLegalMove(
         game,
         game.moves({'asObjects': true}).cast<chess.Move>().toList(),
-        response.cast<num>().map((value) => value.toDouble()).toList(),
+        response.toList(growable: false),
         temperature: 0,
       );
       if (mounted) setState(() => _maiaMoves[ply] = MaiaEncoding.uci(move));
@@ -2979,10 +3109,51 @@ class _ReviewPageState extends State<ReviewPage> {
     return operation;
   }
 
-  List<String> _variationHistory() => [
-    ...widget.positions.take((_variationBasePly ?? 0) + 1),
-    ..._variationPositions.skip(1).take(_variationIndex),
-  ];
+  List<RecordedVariation>? _pathToVariation(RecordedVariation target) {
+    List<RecordedVariation>? visit(
+      List<RecordedVariation> lines,
+      List<RecordedVariation> ancestors,
+    ) {
+      for (final line in lines) {
+        final path = [...ancestors, line];
+        if (identical(line, target)) return path;
+        final nested = visit(line.children, path);
+        if (nested != null) return nested;
+      }
+      return null;
+    }
+
+    return visit(_variations, const []);
+  }
+
+  List<String> _variationHistory() {
+    final target = _openedVariation;
+    final path = target == null ? null : _pathToVariation(target);
+    if (path == null || path.isEmpty) {
+      return [
+        ...widget.positions.take((_variationBasePly ?? 0) + 1),
+        ..._variationPositions.skip(1).take(_variationIndex),
+      ];
+    }
+
+    final first = path.first;
+    final history = first.basePly == 0
+        ? <String>[first.baseFen]
+        : widget.positions.take(first.basePly + 1).toList();
+    for (var depth = 0; depth < path.length - 1; depth++) {
+      final line = path[depth];
+      final next = path[depth + 1];
+      final game = chess.Chess.fromFEN(line.baseFen);
+      for (var offset = 0; offset < line.sanMoves.length; offset++) {
+        if (!game.move(line.sanMoves[offset])) break;
+        final plyAfterMove = line.basePly + offset + 1;
+        if (plyAfterMove <= next.basePly) history.add(game.fen);
+        if (plyAfterMove >= next.basePly) break;
+      }
+    }
+    history.addAll(_variationPositions.skip(1).take(_variationIndex));
+    return history;
+  }
 
   String _variationHistoryKey(List<String> positions) => positions.join('\n');
 
@@ -3015,14 +3186,14 @@ class _ReviewPageState extends State<ReviewPage> {
       'tokens': MaiaEncoding.historicalTokens(positions),
       'selfElo': widget.maiaElo,
       'opponentElo': widget.maiaElo,
-    }, replaceable: true);
+    }, replaceableScope: _maiaInferenceScope);
     if (response == null || response.length != 4352) return null;
     final game = chess.Chess.fromFEN(fen);
     if (game.game_over) return null;
     final move = MaiaEncoding.sampleLegalMove(
       game,
       game.moves({'asObjects': true}).cast<chess.Move>().toList(),
-      response.cast<num>().map((value) => value.toDouble()).toList(),
+      response.toList(growable: false),
       temperature: 0,
     );
     return MaiaEncoding.uci(move);
@@ -3359,17 +3530,16 @@ class _ReviewPageState extends State<ReviewPage> {
     final positions = <String>[variation.baseFen];
     final uciMoves = <String>[];
     for (final san in variation.sanMoves) {
-      final sanOptions = sanGame.moves().cast<String>().toList();
-      final moveOptions = sanGame
-          .moves({'asObjects': true})
-          .cast<chess.Move>()
-          .toList();
-      final index = sanOptions.indexOf(san);
-      if (index < 0) return;
-      final uci = MaiaEncoding.uci(moveOptions[index]);
+      if (!sanGame.move(san)) return;
+      final verbose = sanGame
+          .getHistory({'verbose': true})
+          .cast<Map<String, dynamic>>()
+          .last;
+      final uci =
+          '${verbose['from']}${verbose['to']}${verbose['promotion'] ?? ''}';
       uciMoves.add(uci);
       final move = dc.NormalMove.fromUci(uci);
-      if (!position.isLegal(move) || !sanGame.move(moveOptions[index])) return;
+      if (!position.isLegal(move)) return;
       position = position.playUnchecked(move) as dc.Chess;
       positions.add(position.fen);
     }
@@ -3575,6 +3745,16 @@ class _ReviewPageState extends State<ReviewPage> {
     });
   }
 
+  void _cancelFullAnalysis() {
+    if (!_fullAnalysisRunning) return;
+    setState(() {
+      _fullAnalysisGeneration++;
+      _fullAnalysisRunning = false;
+      _fullAnalysisClassifying = false;
+      _analysisError = 'Computer analysis stopped.';
+    });
+  }
+
   Set<cg.Shape> get _arrows {
     final stockfishMoves = _stockfishMoves;
     final maiaMove = _inVariation
@@ -3630,6 +3810,14 @@ class _ReviewPageState extends State<ReviewPage> {
       .where((move) => move.ply == graphPly)
       .firstOrNull
       ?.classification;
+
+  int get _selectedComputerAnalysisPly {
+    if (!_inVariation) return _ply;
+    if (identical(_openedVariation, _rootMainline)) return _variationIndex;
+    // A side variation does not have a one-to-one graph position. Keep the
+    // cursor at the branch point on the analysed root line.
+    return _variationBasePly ?? 0;
+  }
 
   ({String square, MoveClassification classification})?
   get _currentBoardAnnotation {
@@ -4151,7 +4339,7 @@ class _ReviewPageState extends State<ReviewPage> {
               scores: scores,
               positions: _graphPositions,
               classifications: _graphClassifications,
-              selectedPly: _rootMainline == null ? _ply : _variationIndex,
+              selectedPly: _selectedComputerAnalysisPly,
               onSelected: _showComputerAnalysisPly,
             ),
             const SizedBox(height: 8),
@@ -4165,7 +4353,7 @@ class _ReviewPageState extends State<ReviewPage> {
             ] else
               MoveClassificationSummary(
                 moves: _graphClassifications,
-                selectedPly: _rootMainline == null ? _ply : _variationIndex,
+                selectedPly: _selectedComputerAnalysisPly,
                 onSelected: _showComputerAnalysisPly,
               ),
             if (_analysisError != null) ...[
@@ -4206,6 +4394,13 @@ class _ReviewPageState extends State<ReviewPage> {
                 _fullAnalysisClassifying
                     ? 'Classifying moves…'
                     : 'Analyzing $_fullAnalysisCompleted of $total positions…',
+              ),
+              const SizedBox(height: 8),
+              TextButton.icon(
+                key: const ValueKey('cancel-computer-analysis'),
+                onPressed: _cancelFullAnalysis,
+                icon: const Icon(Icons.stop_circle_outlined),
+                label: const Text('Stop analysis'),
               ),
             ] else ...[
               const Text(
@@ -5534,13 +5729,10 @@ class MaterialDifference extends StatelessWidget {
     final difference = MaterialDifferenceData.fromFen(fen).byColor(side);
     final pieces = <Icon>[];
     final spoken = <String>[];
-    final mediaQuery = MediaQueryData.fromView(View.of(context));
+    final size = MediaQuery.sizeOf(context);
+    final viewPadding = MediaQuery.viewPaddingOf(context);
     final remainingHeight =
-        mediaQuery.size.height -
-        mediaQuery.viewPadding.vertical -
-        mediaQuery.size.width -
-        kToolbarHeight -
-        56;
+        size.height - viewPadding.vertical - size.width - kToolbarHeight - 56;
     final isShortScreen = remainingHeight < 200;
     final iconSize = isShortScreen ? 11.0 : 13.0;
     final textSize = isShortScreen ? 12.0 : 14.0;
@@ -5584,37 +5776,6 @@ class MaterialDifference extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class AnalysisEntry {
-  const AnalysisEntry(
-    this.move,
-    this.evaluation,
-    this.loss,
-    this.maiaProbability,
-    this.maiaTopMove,
-  );
-
-  final String move;
-  final int evaluation;
-  final int loss;
-  final double maiaProbability;
-  final String maiaTopMove;
-
-  String? get label => switch (loss) {
-    >= 300 => 'Blunder',
-    >= 150 => 'Mistake',
-    >= 70 => 'Inaccuracy',
-    _ => null,
-  };
-
-  String get evaluationText {
-    if (evaluation.abs() >= 10000) {
-      return evaluation > 0 ? 'White mates' : 'Black mates';
-    }
-    final pawns = evaluation / 100;
-    return '${pawns >= 0 ? '+' : ''}${pawns.toStringAsFixed(2)}';
   }
 }
 
@@ -5763,10 +5924,22 @@ class StockfishAnalyzer {
     }
   }
 
-  Future<void> close() async {
-    await _queue;
-    await _engine.quit();
-    _startup = null;
+  Future<void> close() {
+    final result = Completer<void>();
+    _queue = _queue.then((_) async {
+      if (_startup == null) {
+        result.complete();
+        return;
+      }
+      try {
+        await _engine.quit();
+        _startup = null;
+        result.complete();
+      } catch (error, stackTrace) {
+        result.completeError(error, stackTrace);
+      }
+    });
+    return result.future;
   }
 }
 
@@ -5812,9 +5985,9 @@ class StockfishLine {
 }
 
 class MaiaEncoding {
-  static final Random _random = Random.secure();
+  static final Random _random = Random();
 
-  static List<double> historicalTokens(List<String> positions) {
+  static Float32List historicalTokens(List<String> positions) {
     final recent = positions.length > 8
         ? positions.sublist(positions.length - 8)
         : List<String>.from(positions);
@@ -5824,14 +5997,16 @@ class MaiaEncoding {
     }
     padded.addAll(recent);
     final boards = padded.map(tokenizeFen).toList();
-    return List<double>.generate(64 * 97, (index) {
-      final square = index ~/ 97;
-      final channel = index % 97;
-      if (channel == 96) return 0;
-      final historyIndex = channel ~/ 12;
-      final pieceChannel = channel % 12;
-      return boards[historyIndex][square * 12 + pieceChannel];
-    });
+    return Float32List.fromList(
+      List<double>.generate(64 * 97, (index) {
+        final square = index ~/ 97;
+        final channel = index % 97;
+        if (channel == 96) return 0;
+        final historyIndex = channel ~/ 12;
+        final pieceChannel = channel % 12;
+        return boards[historyIndex][square * 12 + pieceChannel];
+      }),
+    );
   }
 
   static List<double> tokenizeFen(String fen) {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:chess/chess.dart' as chess;
@@ -66,6 +67,28 @@ void main() {
     expect(exported, contains('1. e4 e5 (1. d4 d5) *'));
   });
 
+  test('recovered top-level branches are not dropped from analysis PGN', () {
+    final afterE4 = chess.Chess()..move('e4');
+    final exported = PgnVariationExporter.export(
+      '[Event "Analysis"]\n[Result "*"]\n\n*',
+      const [],
+      [
+        const RecordedVariation(
+          basePly: 0,
+          baseFen: chess.Chess.DEFAULT_POSITION,
+          sanMoves: ['e4', 'c5', 'Nf3'],
+        ),
+        RecordedVariation(
+          basePly: 1,
+          baseFen: afterE4.fen,
+          sanMoves: const ['e5', 'Nf3'],
+        ),
+      ],
+    );
+
+    expect(exported, contains('1. e4 c5 (1... e5 2. Nf3) 2. Nf3 *'));
+  });
+
   test('opening names prefer the longest known sequence', () {
     expect(
       OpeningNames.identify(['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1b5']),
@@ -123,6 +146,84 @@ void main() {
     final preferences = await SharedPreferences.getInstance();
     expect(preferences.getString('activeSessionV1'), isNull);
     expect(await AppDiagnostics.report(), contains('[active-session-load]'));
+  });
+
+  test('unsupported active session schema is discarded', () async {
+    SharedPreferences.setMockInitialValues({
+      'activeSessionV1': '{"schema":99,"type":"game"}',
+    });
+
+    expect(await ActiveSessionStore.load(), isNull);
+    final preferences = await SharedPreferences.getInstance();
+    expect(preferences.getString('activeSessionV1'), isNull);
+  });
+
+  test('a timed-out Maia reply does not wedge the inference queue', () async {
+    var invocation = 0;
+    final messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    messenger.setMockMethodCallHandler(maiaEngineChannel, (_) {
+      invocation++;
+      if (invocation == 1) return Completer<Object?>().future;
+      return Future<Object?>.value(Float32List(4352));
+    });
+    addTearDown(
+      () => messenger.setMockMethodCallHandler(maiaEngineChannel, null),
+    );
+
+    await expectLater(
+      MaiaInferenceQueue.predict({
+        'tokens': Float32List(64 * 97),
+        'selfElo': 1500,
+        'opponentElo': 1500,
+      }, timeout: const Duration(milliseconds: 10)),
+      throwsA(isA<TimeoutException>()),
+    );
+    final recovered = await MaiaInferenceQueue.predict({
+      'tokens': Float32List(64 * 97),
+      'selfElo': 1500,
+      'opponentElo': 1500,
+    });
+
+    expect(recovered, hasLength(4352));
+    expect(invocation, 2);
+  });
+
+  test('replaceable Maia requests are isolated by caller scope', () async {
+    final firstReply = Completer<Object?>();
+    var invocation = 0;
+    final messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    messenger.setMockMethodCallHandler(maiaEngineChannel, (_) {
+      invocation++;
+      if (invocation == 1) return firstReply.future;
+      return Future<Object?>.value(Float32List(4352));
+    });
+    addTearDown(
+      () => messenger.setMockMethodCallHandler(maiaEngineChannel, null),
+    );
+    final arguments = <String, Object>{
+      'tokens': Float32List(64 * 97),
+      'selfElo': 1500,
+      'opponentElo': 1500,
+    };
+
+    final blocker = MaiaInferenceQueue.predict(arguments);
+    await Future<void>.delayed(Duration.zero);
+    final fromPageA = MaiaInferenceQueue.predict(
+      arguments,
+      replaceableScope: MaiaInferenceScope(),
+    );
+    final fromPageB = MaiaInferenceQueue.predict(
+      arguments,
+      replaceableScope: MaiaInferenceScope(),
+    );
+    firstReply.complete(Float32List(4352));
+
+    expect(await blocker, isNotNull);
+    expect(await fromPageA, isNotNull);
+    expect(await fromPageB, isNotNull);
+    expect(invocation, 3);
   });
 
   testWidgets('loading a FEN replaces restored Analysis Board state', (
@@ -444,6 +545,61 @@ void main() {
     expect(find.widgetWithText(TextButton, 'Home'), findsNothing);
   });
 
+  testWidgets('custom FEN starts Maia only when it is Maia turn', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    var predictions = 0;
+    const blackToMove =
+        'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1';
+    const cases = [
+      (chess.Chess.DEFAULT_POSITION, PlayerSide.white, 0),
+      (chess.Chess.DEFAULT_POSITION, PlayerSide.black, 1),
+      (blackToMove, PlayerSide.white, 1),
+      (blackToMove, PlayerSide.black, 0),
+    ];
+
+    for (var caseIndex = 0; caseIndex < cases.length; caseIndex++) {
+      final (fen, side, expectedPredictions) = cases[caseIndex];
+      predictions = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: GamePage(
+            key: ValueKey('turn-case-$caseIndex'),
+            startingFen: fen,
+            startingSide: side,
+            startingElo: 1600,
+            maiaEvaluator: (_, _) async {
+              predictions++;
+              return Float32List(4352);
+            },
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      for (
+        var attempt = 0;
+        attempt < 50 && predictions < expectedPredictions;
+        attempt++
+      ) {
+        await tester.pump(const Duration(milliseconds: 20));
+      }
+
+      expect(predictions, expectedPredictions, reason: '$fen / $side');
+      expect(find.text('Your move.'), findsOneWidget);
+      final board = tester.widget<cg.Chessboard>(
+        find.byKey(const ValueKey('game-board')),
+      );
+      expect(
+        board.controller.game.playerSide,
+        side == PlayerSide.white ? cg.PlayerSide.white : cg.PlayerSide.black,
+      );
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+    }
+  });
+
   testWidgets('live board accepts both tap and drag moves', (tester) async {
     tester.view.physicalSize = const Size(800, 1000);
     tester.view.devicePixelRatio = 1;
@@ -686,6 +842,53 @@ void main() {
     expect(find.text('Not enough moves'), findsOneWidget);
     expect(find.text('Position 0 of 1  ·  +0.0'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('full-game computer analysis can be stopped', (tester) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final replay = chess.Chess()..move('e4');
+    final stalled = Completer<StockfishReview>();
+    var evaluations = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ReviewPage(
+          positions: [chess.Chess.DEFAULT_POSITION, replay.fen],
+          uciMoves: const ['e2e4'],
+          sanMoves: const ['e4'],
+          playerIsWhite: true,
+          pgn: '1. e4 *',
+          onHome: () {},
+          evaluator: (_) {
+            evaluations++;
+            if (evaluations == 1) {
+              return Future.value(const StockfishReview(0, 'e2e4'));
+            }
+            return stalled.future;
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Computer analysis'));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('run-computer-analysis')));
+    await tester.pump();
+
+    expect(
+      find.byKey(const ValueKey('cancel-computer-analysis')),
+      findsOneWidget,
+    );
+    await tester.tap(find.byKey(const ValueKey('cancel-computer-analysis')));
+    await tester.pump();
+    expect(find.text('Computer analysis stopped.'), findsWidgets);
+    expect(find.byKey(const ValueKey('run-computer-analysis')), findsOneWidget);
+
+    stalled.complete(const StockfishReview(0, 'e7e5'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AnalysisGraph), findsNothing);
   });
 
   test('accuracy is computed separately for White and Black', () {
@@ -1113,6 +1316,69 @@ void main() {
     board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
     expect(board.controller.lastMove?.uci, 'e7e5');
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('nested variation Maia history follows its actual parent line', (
+    tester,
+  ) async {
+    final replay = chess.Chess();
+    final expectedHistory = <String>[replay.fen];
+    for (final san in const ['e4', 'c5', 'Nc3']) {
+      expect(replay.move(san), isTrue);
+      expectedHistory.add(replay.fen);
+    }
+    final histories = <List<String>>[];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ReviewPage(
+          positions: const [chess.Chess.DEFAULT_POSITION],
+          uciMoves: const [],
+          sanMoves: const [],
+          playerIsWhite: true,
+          pgn: '*',
+          initialVariations: [
+            RecordedVariation(
+              basePly: 0,
+              baseFen: chess.Chess.DEFAULT_POSITION,
+              sanMoves: const ['e4', 'e5'],
+              children: [
+                RecordedVariation(
+                  basePly: 1,
+                  baseFen: expectedHistory[1],
+                  sanMoves: const ['c5', 'Nf3'],
+                  children: [
+                    RecordedVariation(
+                      basePly: 2,
+                      baseFen: expectedHistory[2],
+                      sanMoves: const ['Nc3'],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+          initialCurrentFen: expectedHistory.last,
+          onHome: () {},
+          onSessionChanged: (_, _, _) async {},
+          evaluator: (_) async => const StockfishReview(0, 'a2a3'),
+          maiaEvaluator: (positions, _) async {
+            histories.add(List.of(positions));
+            return null;
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(histories.last, expectedHistory);
+    await tester.tap(find.byTooltip('Computer analysis'));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('run-computer-analysis')));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<AnalysisGraph>(find.byType(AnalysisGraph)).selectedPly,
+      2,
+    );
   });
 
   testWidgets('variation analysis is reused when navigating an explored line', (

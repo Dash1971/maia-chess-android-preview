@@ -65,6 +65,10 @@ android {
             // F-Droid can build an unsigned release when signing credentials are
             // absent. Official Mobile Maia releases provide all three variables.
             signingConfig = signingConfigs.findByName("mobileMaiaRelease")
+            // The bundled ONNX model dominates APK size; Java/Kotlin shrinking
+            // adds release risk without a meaningful download-size reduction.
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
