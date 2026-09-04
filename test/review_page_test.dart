@@ -226,13 +226,12 @@ void main() {
     expect(invocation, 3);
   });
 
-  testWidgets('loading a FEN replaces restored Analysis Board state', (
+  testWidgets('Clear moves replaces restored Analysis Board state', (
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
     const afterE4 =
         'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
-    const replacement = '8/8/8/8/8/4k3/8/4K3 w - - 0 1';
     await tester.pumpWidget(
       MaterialApp(
         home: AnalysisBoardPage(
@@ -258,16 +257,13 @@ void main() {
       findsOneWidget,
     );
 
-    await tester.tap(find.byTooltip('Analysis Board actions'));
+    await tester.tap(find.byKey(const ValueKey('analysis-actions-menu')));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Load FEN'));
-    await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField), replacement);
-    await tester.tap(find.text('Load'));
+    await tester.tap(find.text('Clear moves'));
     await tester.pumpAndSettle();
 
     final board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
-    expect(board.controller.fen, replacement);
+    expect(board.controller.fen, chess.Chess.DEFAULT_POSITION);
     expect(board.settings.dragFeedbackScale, 2.0);
     expect(board.settings.dragFeedbackOffset, const Offset(0.0, -1.0));
     expect(board.settings.dragTargetKind, cg.DragTargetKind.circle);
@@ -277,7 +273,7 @@ void main() {
       findsNothing,
     );
     final saved = await ActiveSessionStore.load();
-    expect(saved?['currentFen'], replacement);
+    expect(saved?['currentFen'], chess.Chess.DEFAULT_POSITION);
     expect(saved?['variations'], isEmpty);
   });
 
@@ -522,6 +518,54 @@ void main() {
     expect(find.byKey(const ValueKey('game-home-button')), findsNothing);
   });
 
+  testWidgets('live game uses compact Lichess-style controls and menus', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(800, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    SharedPreferences.setMockInitialValues({});
+    await tester.pumpWidget(const MaiaChessApp());
+    expect(find.byTooltip('About'), findsOneWidget);
+
+    await tester.tap(find.text('Start game'));
+    await tester.pumpAndSettle();
+    expect(find.byTooltip('About'), findsNothing);
+    expect(find.byTooltip('Share and export'), findsOneWidget);
+    expect(find.byKey(const ValueKey('live-move-strip')), findsOneWidget);
+    expect(find.text('Maia3 1500elo'), findsOneWidget);
+    expect(find.textContaining('offline'), findsNothing);
+    expect(find.byIcon(Icons.smart_toy_outlined), findsNothing);
+    expect(find.byKey(const ValueKey('quick-resign-button')), findsOneWidget);
+    expect(find.byKey(const ValueKey('quick-takeback-button')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('game-share-menu')));
+    await tester.pumpAndSettle();
+    expect(find.text('Copy PGN'), findsOneWidget);
+    expect(find.text('Copy FEN'), findsOneWidget);
+    await tester.tap(find.text('Copy FEN'));
+    await tester.pumpAndSettle();
+    expect(find.text('Copy FEN'), findsNothing);
+
+    final before = tester.widget<cg.Chessboard>(
+      find.byKey(const ValueKey('game-board')),
+    );
+    expect(before.orientation, dc.Side.white);
+    await tester.tap(find.byKey(const ValueKey('game-actions-menu')));
+    await tester.pumpAndSettle();
+    expect(find.text('Flip board'), findsOneWidget);
+    expect(find.text('Analysis Board'), findsOneWidget);
+    expect(find.text('Resign'), findsOneWidget);
+    expect(find.text('New game'), findsOneWidget);
+    await tester.tap(find.text('Flip board'));
+    await tester.pumpAndSettle();
+    final after = tester.widget<cg.Chessboard>(
+      find.byKey(const ValueKey('game-board')),
+    );
+    expect(after.orientation, dc.Side.black);
+  });
+
   testWidgets('post-game actions keep Home in the app bar only', (
     tester,
   ) async {
@@ -533,9 +577,7 @@ void main() {
     await tester.pumpWidget(const MaiaChessApp());
     await tester.tap(find.text('Start game'));
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.widgetWithText(TextButton, 'Resign'));
-    await tester.pump();
-    await tester.tap(find.widgetWithText(TextButton, 'Resign'));
+    await tester.tap(find.byKey(const ValueKey('quick-resign-button')));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, 'Resign'));
     await tester.pumpAndSettle();
@@ -586,7 +628,9 @@ void main() {
       }
 
       expect(predictions, expectedPredictions, reason: '$fen / $side');
-      expect(find.text('Your move.'), findsOneWidget);
+      expect(find.text('Your move.'), findsNothing);
+      expect(find.text('Maia3 1600elo'), findsOneWidget);
+      expect(find.textContaining('offline'), findsNothing);
       final board = tester.widget<cg.Chessboard>(
         find.byKey(const ValueKey('game-board')),
       );
@@ -605,6 +649,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
+    SharedPreferences.setMockInitialValues({});
     const mateInOne = '7k/8/5KQ1/8/8/8/8/8 w - - 0 1';
     final expected = chess.Chess.fromFEN(mateInOne)
       ..move({'from': 'g6', 'to': 'g7'});
@@ -650,7 +695,12 @@ void main() {
     await tester.tapAt(squareCenter(rect, 6, 6));
     await tester.pumpAndSettle();
     expect(board.controller.fen, expected.fen);
-    expect(find.text('Checkmate — you win!'), findsOneWidget);
+    expect(find.byKey(const ValueKey('live-move-scroll')), findsOneWidget);
+    expect(find.text('White is victorious'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('game-conclusion-dialog')),
+      findsOneWidget,
+    );
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
@@ -666,7 +716,7 @@ void main() {
       boardTopBeforeDrag,
     );
     expect(board.controller.fen, expected.fen);
-    expect(find.text('Checkmate — you win!'), findsOneWidget);
+    expect(find.text('White is victorious'), findsOneWidget);
   });
 
   test('move classification uses En Croissant win-chance thresholds', () {
@@ -813,11 +863,19 @@ void main() {
     expect(find.byKey(const ValueKey('analysis-move-list')), findsOneWidget);
     expect(
       tester.getSize(find.byKey(const ValueKey('previous-move-button'))).width,
-      greaterThanOrEqualTo(80),
+      48,
     );
     expect(
       tester.getSize(find.byKey(const ValueKey('next-move-button'))).width,
-      greaterThanOrEqualTo(80),
+      48,
+    );
+    expect(
+      tester.getCenter(find.byKey(const ValueKey('previous-move-button'))).dx,
+      greaterThan(
+        tester
+            .getCenter(find.byKey(const ValueKey('analysis-engine-toggle')))
+            .dx,
+      ),
     );
     expect(
       tester.getSize(find.byKey(const ValueKey('graph-tab'))).height,
@@ -842,6 +900,56 @@ void main() {
     expect(find.text('Not enough moves'), findsOneWidget);
     expect(find.text('Position 0 of 1  ·  +0.0'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('analysis engine toggle hides output without locking the board', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ReviewPage(
+          positions: const [chess.Chess.DEFAULT_POSITION],
+          uciMoves: const [],
+          sanMoves: const [],
+          playerIsWhite: true,
+          pgn: '*',
+          onHome: () {},
+          evaluator: (_) async => const StockfishReview(25, 'e2e4'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byTooltip('About'), findsNothing);
+    expect(find.byKey(const ValueKey('analysis-share-menu')), findsOneWidget);
+    final boardRect = tester.getRect(find.byType(cg.Chessboard));
+    final barRect = tester.getRect(find.byType(EvaluationBar));
+    expect(barRect.left, greaterThan(boardRect.right));
+    expect(
+      find.descendant(
+        of: find.byType(EvaluationBar),
+        matching: find.byType(RotatedBox),
+      ),
+      findsNothing,
+    );
+    expect(find.byKey(const ValueKey('analysis-engine-lines')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('analysis-engine-toggle')));
+    await tester.pump();
+    expect(find.byKey(const ValueKey('analysis-engine-lines')), findsNothing);
+    expect(
+      tester.widget<EvaluationBar>(find.byType(EvaluationBar)).enabled,
+      isFalse,
+    );
+
+    final board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
+    board.onMove!(dc.NormalMove.fromUci('e2e4'));
+    await tester.pump();
+    expect(board.controller.fen, isNot(chess.Chess.DEFAULT_POSITION));
   });
 
   testWidgets('full-game computer analysis can be stopped', (tester) async {
@@ -1862,9 +1970,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byIcon(Icons.chevron_right));
+    await tester.tap(find.byKey(const ValueKey('next-move-button')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.chevron_right));
+    await tester.tap(find.byKey(const ValueKey('next-move-button')));
     await tester.pumpAndSettle();
     expect(find.text('#-1'), findsWidgets);
     expect(tester.takeException(), isNull);
