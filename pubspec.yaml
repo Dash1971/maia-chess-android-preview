@@ -66,6 +66,8 @@ flutter:
   uses-material-design: true
 
   assets:
+    - LICENSE
+    - THIRD_PARTY_NOTICES.md
     - assets/models/maia3-79m.onnx
     - assets/openings/lichess_openings.tsv
     - assets/openings/LICHESS_OPENINGS_CC0.txt

@@ -185,21 +185,37 @@ Chess releases. Android may ask you to confirm each update.
 
 ## Build
 
-Requirements: Flutter 3.47+, JDK 17, and Android SDK 36.
+Requirements: **Flutter 3.47.1** (pinned in `.fvmrc`), JDK 17, Android SDK 36,
+Python 3, and Git LFS. Use the locked dependencies. A GitHub source ZIP contains
+an LFS pointer rather than the 316 MB Maia model, so clone with Git LFS:
 
 ```sh
-flutter pub get
+git clone https://github.com/Dash1971/maia-chess-android-preview.git
+cd maia-chess-android-preview
+git lfs install
+git lfs pull
+python3 tool/verify_model.py
+flutter pub get --enforce-lockfile
 flutter analyze
 flutter test
-flutter build apk --release --split-per-abi --target-platform android-arm64 \
-  --obfuscate --split-debug-info=build/symbols \
-  --extra-gen-snapshot-options=--strip
+tool/build_android_release.sh
 ```
 
-The ARM64 APK is written to
-`build/app/outputs/flutter-apk/app-arm64-v8a-release.apk`. For public builds,
-build from a neutral staging path so generated source URIs do not disclose a
-local account or workspace name.
+The ARM64 release APK is written to
+`build/app/outputs/flutter-apk/app-arm64-v8a-release.apk`.
+It packages the mobile ARM64 ABI instead of bundling unused CPU architectures.
+Use this same script for official releases and independent rebuilds. It sets a
+fixed source timestamp, prepares stable generated Dart source URIs, and leaves
+obfuscation disabled. Gradle also verifies the model's exact size and SHA-256,
+so a direct `flutter build` cannot silently package a placeholder or altered
+model. The build downloads dependencies; installed release apps work offline.
+
+To check reproducibility, build the **same commit** in two clean directories
+with the same pinned toolchain and no signing variables, then compare the
+unsigned APKs using `sha256sum`. Retain both hashes with the release notes;
+the procedure is not itself evidence that a particular release reproduced.
+The manual Checks workflow can build an unsigned APK; pull requests run the
+Dart analyzer and regression tests.
 
 Official releases are signed with the dedicated Mobile Maia app-signing key.
 The build reads `MOBILE_MAIA_KEYSTORE`, `MOBILE_MAIA_STORE_PASSWORD`, and
@@ -262,3 +278,23 @@ En Croissant code (GPL-3.0). See
 
 This is an independent community project and is not an official Maia Chess,
 University of Toronto CSSLab, Stockfish, Lichess, or En Croissant application.
+
+## Offline games and files
+
+Games and analysis are checkpointed in app-private files, with a previous-good
+backup. Home and New game keep the previous session in **Recent games**, where
+it can be reopened or explicitly deleted. The legacy preference checkpoint is
+migrated on first launch. Android may erase app-private data when the app is
+uninstalled; use **Save PGN file** or **Share PGN** to keep an independent copy.
+
+**Open PGN file**, Android's Open with action, and shared PGN attachments import
+a single game with its variations, comments and annotations. Files are limited
+to 2 MB and 20,000 moves across all branches. Save and share use Android's
+system picker and temporary URI grants; no storage or Internet permission is
+required. PGN import uses the first game in a multi-game document.
+
+Training clocks pause while the app is backgrounded, while reviewing the
+current game, or after a Maia error. Returning resumes the saved clock; Retry
+restarts a failed Maia turn. Analysis stops scheduling engine work offscreen.
+Selecting a position gets a short Stockfish search, then a longer refinement
+if it remains selected. Full computer analysis uses the longer budget.
