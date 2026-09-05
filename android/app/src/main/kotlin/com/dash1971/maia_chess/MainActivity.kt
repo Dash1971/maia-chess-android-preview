@@ -14,13 +14,14 @@ import io.flutter.plugin.common.MethodChannel
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.security.MessageDigest
 import java.nio.FloatBuffer
 import java.nio.LongBuffer
 import java.util.concurrent.Executors
 
 private object MaiaEngine {
     private const val MODEL_ASSET = "flutter_assets/assets/models/maia3-79m.onnx"
-    private const val MODEL_FILE = "maia3-79m-3454b03a.onnx"
+    private const val MODEL_FILE = "maia3-79m-3454b03a-sha256.onnx"
     private const val EXPECTED_MODEL_BYTES = 316_034_244L
     private val environment = OrtEnvironment.getEnvironment()
     private val executor = Executors.newSingleThreadExecutor { runnable ->
@@ -63,9 +64,16 @@ private object MaiaEngine {
             throw IOException("Could not clear an incomplete Maia model")
         }
         try {
+            val digest = MessageDigest.getInstance("SHA-256")
             context.assets.open(MODEL_ASSET).use { input ->
                 FileOutputStream(temporary).use { output ->
-                    input.copyTo(output)
+                    val buffer = ByteArray(1024 * 1024)
+                    while (true) {
+                        val count = input.read(buffer)
+                        if (count < 0) break
+                        digest.update(buffer, 0, count)
+                        output.write(buffer, 0, count)
+                    }
                     output.fd.sync()
                 }
             }
@@ -74,13 +82,18 @@ private object MaiaEngine {
                     "Maia model copy has ${temporary.length()} bytes; expected $EXPECTED_MODEL_BYTES"
                 )
             }
+            val sha256 = digest.digest().joinToString("") { "%02x".format(it) }
+            if (sha256 != "3454b03ae78baa64a87b345fdb1a457265d912caec531039b074f07eda0d8010") {
+                throw IOException("Maia model checksum mismatch")
+            }
             if (target.exists() && !target.delete()) {
                 throw IOException("Could not replace an invalid Maia model")
             }
             if (!temporary.renameTo(target)) {
                 throw IOException("Could not publish the verified Maia model")
             }
-            // Remove the one unversioned cache name used by older builds.
+            // Remove older caches only after the SHA-256-verified copy is durable.
+            File(context.cacheDir, "maia3-79m-3454b03a.onnx").delete()
             File(context.cacheDir, "maia3-79m.onnx").delete()
             return target
         } finally {
@@ -92,6 +105,7 @@ private object MaiaEngine {
 class MainActivity : FlutterActivity() {
     private val channelName = "maia_chess/engine"
     private var methodChannel: MethodChannel? = null
+    private val documents by lazy { PgnDocuments(this) { methodChannel?.invokeMethod("pgnReceived", null) } }
 
     @Volatile
     private var engineAttached = false
@@ -102,6 +116,11 @@ class MainActivity : FlutterActivity() {
         methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).also {
             it.setMethodCallHandler { call, result ->
                 when (call.method) {
+                    "dataDirectory" -> result.success(filesDir.absolutePath)
+                    "getPendingPgn" -> documents.takePending(result)
+                    "openPgnFile" -> documents.open(result)
+                    "savePgnFile" -> documents.save(call.argument<String>("pgn") ?: "", result)
+                    "sharePgn" -> documents.share(call.argument<String>("pgn") ?: "", result)
                     "openUrl" -> {
                         val uri = call.argument<String>("url")?.let(Uri::parse)
                         if (uri == null || uri.scheme?.lowercase() !in setOf("http", "https")) {
@@ -144,6 +163,26 @@ class MainActivity : FlutterActivity() {
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        documents.consumeIntent(intent)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        documents.consumeIntent(intent)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (!documents.onResult(requestCode, resultCode, data)) super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onDestroy() {
+        documents.close()
+        super.onDestroy()
     }
 
     private fun predict(
