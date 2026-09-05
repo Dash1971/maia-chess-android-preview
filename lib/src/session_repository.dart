@@ -139,6 +139,19 @@ class SessionRepository {
     _activeId = null;
   });
 
+  Future<void> discardActive() => _serial(() async {
+    final envelope = await _read(_active);
+    final id = envelope?['id'] as String? ?? _activeId ?? 'none';
+    // Write the tombstone first so a process death can never restore the
+    // discarded game as active. Remove every archived recovery generation as
+    // well, because Reset means erase rather than add to Recent games.
+    await _write(_active, {'version': 1, 'id': id, 'data': null});
+    final previous = File('${_active.path}.previous');
+    if (await previous.exists()) await previous.delete();
+    _activeId = null;
+    await _deleteArchiveFiles(id);
+  });
+
   Future<List<RecentSession>> recent() => _serial(() async {
     final entries = <String, RecentSession>{};
     void add(Map<String, dynamic>? envelope) {
@@ -190,6 +203,10 @@ class SessionRepository {
       if (await previous.exists()) await previous.delete();
       _activeId = null;
     }
+    await _deleteArchiveFiles(id);
+  });
+
+  Future<void> _deleteArchiveFiles(String id) async {
     final archive = _archiveFile(id);
     // Delete rollback files first and the primary last. If deletion is
     // interrupted, _read() must never resurrect an older .previous copy after
@@ -198,7 +215,7 @@ class SessionRepository {
       final file = File('${archive.path}$suffix');
       if (await file.exists()) await file.delete();
     }
-  });
+  }
 }
 
 class RecentGamesPage extends StatefulWidget {

@@ -75,6 +75,22 @@ void main() {
   );
 
   test(
+    'discarding the active game does not leave it in Recent games',
+    () async {
+      await store.save({'type': 'game', 'pgn': '1. d4 d5 *'});
+      final id = (await store.recent()).single.id;
+      await store.startNew();
+      await store.open(id);
+
+      await store.discardActive();
+
+      final restarted = SessionRepository(directory);
+      expect(await restarted.load(), isNull);
+      expect(await restarted.recent(), isEmpty);
+    },
+  );
+
+  test(
     'deleting an archived session removes every recovery generation',
     () async {
       await store.save({'type': 'game', 'pgn': '1. e4 *'});

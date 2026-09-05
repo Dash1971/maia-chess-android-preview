@@ -478,9 +478,7 @@ void main() {
     expect(find.text('Maia rating: 2200'), findsOneWidget);
   });
 
-  testWidgets('home and new game require confirmation while a game is active', (
-    tester,
-  ) async {
+  testWidgets('home archives but reset erases the active game', (tester) async {
     tester.view.physicalSize = const Size(800, 1000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -506,11 +504,9 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('new-game-button')));
     await tester.pumpAndSettle();
-    expect(
-      find.text('Your game will be kept in Recent games.'),
-      findsOneWidget,
-    );
-    await tester.tap(find.text('Continue'));
+    expect(find.text('Reset game?'), findsOneWidget);
+    expect(find.text('This game will be permanently erased.'), findsOneWidget);
+    await tester.tap(find.text('Reset'));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('game-home-button')), findsOneWidget);
 
@@ -562,7 +558,7 @@ void main() {
     expect(find.text('Flip board'), findsOneWidget);
     expect(find.text('Analysis Board'), findsOneWidget);
     expect(find.text('Resign'), findsOneWidget);
-    expect(find.text('New game'), findsOneWidget);
+    expect(find.text('Reset game'), findsOneWidget);
     await tester.tap(find.text('Flip board'));
     await tester.pumpAndSettle();
     final after = tester.widget<cg.Chessboard>(

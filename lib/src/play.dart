@@ -806,10 +806,12 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     );
   }
 
-  void _startGame() {
+  void _startGame({bool archiveCurrent = true}) {
     _pauseGame();
-    unawaited(_saveGameState());
-    unawaited(ActiveSessionStore.startNew());
+    if (archiveCurrent) {
+      unawaited(_saveGameState());
+      unawaited(ActiveSessionStore.startNew());
+    }
     _gameGeneration++;
     _gameInferenceScope.invalidate();
     _clockTimer?.cancel();
@@ -1196,8 +1198,30 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   }
 
   Future<void> _requestNewGame() async {
-    if (!await _confirmEraseCurrentGame() || !mounted) return;
-    _startGame();
+    final confirmed =
+        await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Reset game?'),
+            content: const Text('This game will be permanently erased.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancel'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Reset'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+    if (!confirmed || !mounted) return;
+    _pauseGame();
+    await ActiveSessionStore.discardActive();
+    if (!mounted) return;
+    _startGame(archiveCurrent: false);
   }
 
   void _takeBack() {
@@ -1306,7 +1330,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
             ),
             ListTile(
               leading: const Icon(Icons.refresh),
-              title: const Text('New game'),
+              title: const Text('Reset game'),
               onTap: () => Navigator.pop(context, 'new'),
             ),
           ],
@@ -1464,7 +1488,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
               key: const ValueKey('new-game-button'),
               onPressed: _requestNewGame,
               icon: const Icon(Icons.refresh),
-              tooltip: 'New game',
+              tooltip: 'Reset game',
             ),
             PopupMenuButton<String>(
               key: const ValueKey('game-share-menu'),

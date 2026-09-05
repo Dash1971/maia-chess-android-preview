@@ -19,6 +19,14 @@ class ActiveSessionStore {
     }
   }
 
+  static Future<void> discardActive() async {
+    if (Platform.isAndroid) {
+      await (await repository).discardActive();
+    } else {
+      await (await SharedPreferences.getInstance()).remove(_key);
+    }
+  }
+
   static Future<List<RecentSession>> recent() async =>
       Platform.isAndroid ? (await repository).recent() : [];
   static Future<Map<String, dynamic>?> open(String id) async =>

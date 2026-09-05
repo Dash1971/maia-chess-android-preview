@@ -26,30 +26,28 @@ void main() {
     expect(MaiaEncoding.historicalTokens([fen]), hasLength(64 * 97));
   });
 
-  test(
-    'short history repeats earliest board and keeps ponder channel zero',
-    () {
-      final game = chess.Chess();
-      final earliest = game.fen;
-      expect(game.move('e4'), isTrue);
-      final tokens = MaiaEncoding.historicalTokens([earliest, game.fen]);
-      const e2 = 12;
-      const e5 = 36;
+  test('model input repeats current board and keeps ponder channel zero', () {
+    final game = chess.Chess();
+    final earliest = game.fen;
+    expect(game.move('e4'), isTrue);
+    final currentOnly = MaiaEncoding.historicalTokens([game.fen]);
+    final tokens = MaiaEncoding.historicalTokens([earliest, game.fen]);
+    const e2 = 12;
+    const e5 = 36;
 
-      // Maia-3's reference get_historical_tokens left-pads with the earliest
-      // board. The final channel is clk_ponder / 100, which is zero because the
-      // mobile model is not supplied clock metadata.
-      expect(tokens[e2 * 97], 1);
-      expect(tokens[e2 * 97 + 72], 1);
-      // After 1.e4 Black is to move, so that latest board is mirrored: the
-      // moved pawn is represented as an opposing pawn on e5 (channel 90).
-      expect(tokens[e5 * 97 + 6], 0);
-      expect(tokens[e5 * 97 + 90], 1);
-      for (var square = 0; square < 64; square++) {
-        expect(tokens[square * 97 + 96], 0);
-      }
-    },
-  );
+    // Extra reconstructed history must not alter the released engine's
+    // default current-position-only input. After 1.e4 Black is to move, so
+    // every board slot contains the opposing pawn mirrored onto e5.
+    expect(tokens, currentOnly);
+    for (var history = 0; history < 8; history++) {
+      final offset = history * 12;
+      expect(tokens[e2 * 97 + offset + 6], 0);
+      expect(tokens[e5 * 97 + offset + 6], 1);
+    }
+    for (var square = 0; square < 64; square++) {
+      expect(tokens[square * 97 + 96], 0);
+    }
+  });
 
   test('top-p sampling keeps only the highest probability moves', () {
     final game = chess.Chess();

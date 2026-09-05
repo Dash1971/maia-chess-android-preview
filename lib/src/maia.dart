@@ -4,23 +4,18 @@ class MaiaEncoding {
   static final Random _random = Random();
 
   static Float32List historicalTokens(List<String> positions) {
-    final recent = positions.length > 8
-        ? positions.sublist(positions.length - 8)
-        : List<String>.from(positions);
-    final padded = <String>[];
-    while (padded.length + recent.length < 8) {
-      padded.add(recent.first);
-    }
-    padded.addAll(recent);
-    final boards = padded.map(tokenizeFen).toList();
+    // Maia-3 exposes reconstructed move history as an optional UCI mode. Its
+    // released engine default repeats the current position in all eight board
+    // slots. Alternating independently mirrored historical FENs can otherwise
+    // create a strong false copy-the-opponent signal when Maia plays Black.
+    final current = tokenizeFen(positions.last);
     return Float32List.fromList(
       List<double>.generate(64 * 97, (index) {
         final square = index ~/ 97;
         final channel = index % 97;
         if (channel == 96) return 0;
-        final historyIndex = channel ~/ 12;
         final pieceChannel = channel % 12;
-        return boards[historyIndex][square * 12 + pieceChannel];
+        return current[square * 12 + pieceChannel];
       }),
     );
   }
