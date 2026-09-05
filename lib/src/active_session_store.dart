@@ -32,6 +32,8 @@ class ActiveSessionStore {
   static Future<Map<String, dynamic>?> open(String id) async =>
       (await repository).open(id);
   static Future<void> delete(String id) async => (await repository).delete(id);
+  static Future<void> deleteMany(Iterable<String> ids) async =>
+      (await repository).deleteMany(ids);
 
   static Future<Map<String, dynamic>?> load() async {
     if (Platform.isAndroid) {

@@ -36,7 +36,7 @@ class ReviewPage extends StatefulWidget {
   final List<RecordedVariation> initialVariations;
   final bool initialTreeIsAuthoritative;
   final int maiaElo;
-  final VoidCallback onHome;
+  final FutureOr<void> Function() onHome;
   final bool returnToGame;
   final Future<StockfishReview> Function(String fen)? evaluator;
   final Future<String?> Function(List<String> positions, int elo)?
@@ -2233,13 +2233,15 @@ class _ReviewPageState extends State<ReviewPage>
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
-          onPressed: () {
+          onPressed: () async {
             if (widget.returnToGame) {
               Navigator.of(context).pop();
               return;
             }
-            widget.onHome();
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            await widget.onHome();
+            if (context.mounted) {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            }
           },
           icon: Icon(
             widget.returnToGame ? Icons.arrow_back : Icons.home_outlined,

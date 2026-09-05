@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -46,18 +47,94 @@ void main() {
     },
   );
 
-  test('starting new sessions archives independently and reopening preserves current', () async {
+  test(
+    'analysis sessions are excluded while games remain reopenable',
+    () async {
+      await store.save({'type': 'game', 'pgn': '1. e4 *'});
+      final first = (await store.recent()).single.id;
+      await store.startNew();
+      expect(await SessionRepository(directory).load(), isNull);
+      await store.save({'type': 'analysis', 'pgn': '1. d4 *'});
+      final entries = await store.recent();
+      expect(entries.map((entry) => entry.id), [first]);
+      expect((await store.open(first))!['pgn'], '1. e4 *');
+      expect((await store.recent()).single.id, first);
+    },
+  );
+
+  test('live checkpoints restore but do not appear in Recent games', () async {
+    await store.save({
+      'type': 'game',
+      'recentState': 'active',
+      'pgn': '[Result "*"]\n\n1. e4 *',
+    });
+
+    expect((await store.load())!['pgn'], contains('e4'));
+    expect(await store.recent(), isEmpty);
+    await store.startNew();
+    expect(await store.recent(), isEmpty);
+  });
+
+  test('incomplete games convert to completed without duplication', () async {
+    await store.save({
+      'type': 'game',
+      'recentState': 'incomplete',
+      'pgn': '[Result "*"]\n\n1. e4 *',
+    });
+    final incomplete = (await store.recent()).single;
+    expect(incomplete.isIncomplete, isTrue);
+    await store.startNew();
+    await store.open(incomplete.id);
+    await store.save({
+      'type': 'game',
+      'recentState': 'completed',
+      'pgn': '[Result "1-0"]\n\n1. e4 e5 1-0',
+    });
+
+    final completed = (await store.recent()).single;
+    expect(completed.id, incomplete.id);
+    expect(completed.isIncomplete, isFalse);
+    expect(completed.data['pgn'], contains('1-0'));
+  });
+
+  test('review checkpoints expose only their saved game', () async {
+    await store.save({
+      'type': 'review',
+      'activeGame': {
+        'type': 'game',
+        'recentState': 'completed',
+        'pgn': '[Result "0-1"]\n\n0-1',
+      },
+      'session': {'pgn': '[Result "*"]\n\n*'},
+    });
+
+    final recent = (await store.recent()).single;
+    expect(recent.data['type'], 'game');
+    await store.startNew();
+    final reopened = await store.open(recent.id);
+    expect(reopened!['type'], 'game');
+    expect(reopened['pgn'], contains('0-1'));
+  });
+
+  test('bulk deletion removes selected games and recovery files', () async {
     await store.save({'type': 'game', 'pgn': '1. e4 *'});
     final first = (await store.recent()).single.id;
     await store.startNew();
-    expect(await SessionRepository(directory).load(), isNull);
-    await store.save({'type': 'analysis', 'pgn': '1. d4 *'});
-    final entries = await store.recent();
-    expect(entries.length, 2);
-    final second = entries.firstWhere((entry) => entry.id != first).id;
-    expect((await store.open(first))!['pgn'], '1. e4 *');
-    expect((await store.open(second))!['pgn'], '1. d4 *');
-    expect((await store.recent()).length, 2);
+    await store.save({'type': 'game', 'pgn': '1. d4 *'});
+    final all = await store.recent();
+    final second = all.firstWhere((entry) => entry.id != first).id;
+
+    await store.deleteMany([first, second]);
+
+    expect(await store.recent(), isEmpty);
+    expect(await store.load(), isNull);
+    for (final id in [first, second]) {
+      expect(await File('${directory.path}/games/$id.json').exists(), isFalse);
+      expect(
+        await File('${directory.path}/games/$id.json.previous').exists(),
+        isFalse,
+      );
+    }
   });
 
   test(
@@ -157,4 +234,84 @@ void main() {
     expect(preferences.getString('activeSessionV1'), isNull);
     expect((await store.recent()).single.data, legacy);
   });
+
+  testWidgets(
+    'Recent games supports multi-select, select all, and delete all',
+    (tester) async {
+      final games = <RecentSession>[
+        RecentSession('first', DateTime.utc(2026, 9, 5), {
+          'type': 'game',
+          'recentState': 'incomplete',
+          'elo': 500,
+          'pgn': '[Event "First"]\n[Result "*"]\n\n*',
+        }),
+        RecentSession('second', DateTime.utc(2026, 9, 4), {
+          'type': 'game',
+          'recentState': 'completed',
+          'elo': 1500,
+          'pgn': '[Event "Second"]\n[Result "1-0"]\n\n1-0',
+        }),
+        RecentSession('third', DateTime.utc(2026, 9, 3), {
+          'type': 'game',
+          'recentState': 'completed',
+          'elo': 2000,
+          'pgn': '[Event "Third"]\n[Result "0-1"]\n\n0-1',
+        }),
+      ];
+      final deletionBatches = <Set<String>>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: RecentGamesPage(
+            loadGames: () async => List.of(games),
+            deleteGames: (ids) async {
+              final deleted = ids.toSet();
+              deletionBatches.add(deleted);
+              games.removeWhere((game) => deleted.contains(game.id));
+            },
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('Incomplete · 2026-09-05'), findsOneWidget);
+      expect(find.textContaining('Completed · 2026-09-04'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('recent-games-menu')));
+      await tester.pumpAndSettle();
+      expect(find.text('Delete all games'), findsOneWidget);
+      await tester.tap(find.text('Select games'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('First'));
+      await tester.pumpAndSettle();
+      expect(find.text('1 selected'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('select-all-games')));
+      await tester.pumpAndSettle();
+      expect(find.text('3 selected'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('select-all-games')));
+      await tester.pumpAndSettle();
+      expect(find.text('0 selected'), findsOneWidget);
+      await tester.tap(find.text('First'));
+      await tester.tap(find.text('Second'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('delete-selected-games')));
+      await tester.pumpAndSettle();
+      expect(find.text('Delete 2 games?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
+      await tester.pumpAndSettle();
+      expect(deletionBatches.single, {'first', 'second'});
+      expect(find.text('Third'), findsOneWidget);
+
+      await tester.tap(find.byKey(const ValueKey('recent-games-menu')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete all games'));
+      await tester.pumpAndSettle();
+      expect(find.text('Delete saved game?'), findsOneWidget);
+      await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
+      await tester.pumpAndSettle();
+      expect(deletionBatches.last, {'third'});
+      expect(
+        find.textContaining('Completed games and incomplete games'),
+        findsOneWidget,
+      );
+    },
+  );
 }

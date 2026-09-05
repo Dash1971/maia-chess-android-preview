@@ -241,7 +241,7 @@ class _AnalysisBoardPageState extends State<AnalysisBoardPage> {
     evaluator: widget.evaluator,
     maiaEvaluator: widget.maiaEvaluator,
     title: 'Analysis Board',
-    onHome: () => unawaited(ActiveSessionStore.clear()),
+    onHome: ActiveSessionStore.clear,
     onLoadFen: _loadFen,
     onLoadPgn: _loadPgn,
     onLoadPgnFile: _loadPgnFile,

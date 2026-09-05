@@ -60,12 +60,17 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   bool _screenWakeLockEnabled = false;
   bool _boardFlipped = false;
   bool _resultDialogShown = false;
+  bool _savedAsIncomplete = false;
+  int? _viewedPly;
   final ScrollController _liveMovesController = ScrollController();
   final Random _timingRandom = Random();
 
   bool get _playerIsWhite => _playerColor == chess.Color.WHITE;
   bool get _isPlayerTurn => _game.turn == _playerColor;
   bool get _gameFinished => _naturalGameOver || _forcedResult != null;
+  int get _displayPly => _viewedPly ?? max(0, _positionHistory.length - 1);
+  bool get _isViewingLivePosition =>
+      _viewedPly == null || _displayPly == _positionHistory.length - 1;
   bool get _clockEnabled => _timePreset != TimePreset.unlimited;
   dc.Side get _boardOrientation {
     final playerSide = _playerIsWhite ? dc.Side.white : dc.Side.black;
@@ -218,7 +223,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
                           flipped,
                           updated,
                         ),
-                    onHome: () => unawaited(ActiveSessionStore.clear()),
+                    onHome: ActiveSessionStore.clear,
                     returnToGame: _started && !_gameFinished,
                   ),
                 ),
@@ -332,6 +337,12 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
         _forcedResult = saved['forcedResult'] as String?;
         _status = saved['status'] as String? ?? 'Game restored.';
         _boardFlipped = saved['flipped'] as bool? ?? false;
+        _savedAsIncomplete =
+            saved['recentState'] == 'incomplete' ||
+            (saved['recentState'] == null &&
+                saved['forcedResult'] == null &&
+                !restored.game_over);
+        _viewedPly = null;
         _started = true;
       });
       _syncGameBoard(animate: false, resetPremove: true);
@@ -386,8 +397,15 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     await ActiveSessionStore.save(_gameSnapshot());
   }
 
-  Map<String, Object?> _gameSnapshot() => {
+  Map<String, Object?> _gameSnapshot({String? recentState}) => {
     'type': 'game',
+    'recentState':
+        recentState ??
+        (_gameFinished
+            ? 'completed'
+            : _savedAsIncomplete
+            ? 'incomplete'
+            : 'active'),
     'pgn': _game.pgn(),
     'positions': List<String>.of(_positionHistory),
     'uciMoves': List<String>.of(_uciMoves),
@@ -421,7 +439,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   ) => ActiveSessionStore.save({
     'type': 'review',
     'treeIsAuthoritative': true,
-    if (_started && !_gameFinished) 'activeGame': _gameSnapshot(),
+    if (_started) 'activeGame': _gameSnapshot(),
     'session': session.toJson(),
     'variations': variations.map((item) => item.toJson()).toList(),
     'currentFen': currentFen,
@@ -734,13 +752,17 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   }
 
   cg.GameData _gameBoardData() {
-    final position = dc.Chess.fromSetup(dc.Setup.parseFen(_game.fen));
-    final lastMove = _uciMoves.isEmpty
+    final ply = _displayPly
+        .clamp(0, max(0, _positionHistory.length - 1))
+        .toInt();
+    final fen = _positionHistory.isEmpty ? _game.fen : _positionHistory[ply];
+    final position = dc.Chess.fromSetup(dc.Setup.parseFen(fen));
+    final lastMove = ply == 0 || _uciMoves.isEmpty
         ? null
-        : dc.NormalMove.fromUci(_uciMoves.last);
+        : dc.NormalMove.fromUci(_uciMoves[ply - 1]);
     return cg.GameData(
-      fen: _game.fen,
-      playerSide: !_started || _gameFinished
+      fen: fen,
+      playerSide: !_started || _gameFinished || !_isViewingLivePosition
           ? cg.PlayerSide.none
           : _playerIsWhite
           ? cg.PlayerSide.white
@@ -769,6 +791,18 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     _publishClock();
     _updateScreenWakeLock();
     _scrollLiveMovesToEnd();
+  }
+
+  void _stepGameHistory(int delta) {
+    if (_positionHistory.isEmpty) return;
+    final last = _positionHistory.length - 1;
+    final next = (_displayPly + delta).clamp(0, last);
+    setState(() => _viewedPly = next == last ? null : next);
+    _gameBoardController.updatePosition(
+      _gameBoardData(),
+      animate: true,
+      resetPremove: true,
+    );
   }
 
   void _scrollLiveMovesToEnd() {
@@ -838,6 +872,8 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       _clockPaused = false;
       _boardFlipped = false;
       _resultDialogShown = false;
+      _savedAsIncomplete = false;
+      _viewedPly = null;
       _started = true;
       final startingMillis = _baseMinutes * 60 * 1000;
       _whiteMillis = startingMillis;
@@ -957,7 +993,11 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   }
 
   Future<void> _onGameBoardMove(dc.Move move, {bool? viaDragAndDrop}) async {
-    if (!_started || _gameFinished || _engineThinking || !_isPlayerTurn) {
+    if (!_started ||
+        _gameFinished ||
+        _engineThinking ||
+        !_isPlayerTurn ||
+        !_isViewingLivePosition) {
       return;
     }
     final uci = move.uci;
@@ -1156,9 +1196,13 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     _scheduleGameConclusion();
   }
 
-  void _goHome() {
+  Future<void> _goHome() async {
     _pauseGame();
-    unawaited(_saveGameState());
+    _savedAsIncomplete = !_gameFinished;
+    final snapshot = _gameSnapshot();
+    await ActiveSessionStore.save(snapshot);
+    await ActiveSessionStore.clear();
+    if (!mounted) return;
     _gameGeneration++;
     _gameInferenceScope.invalidate();
     _clockTimer?.cancel();
@@ -1168,7 +1212,6 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       _status = 'Choose your settings and start a game.';
     });
     _syncGameBoard(animate: false, resetPremove: true);
-    unawaited(ActiveSessionStore.clear());
   }
 
   Future<bool> _confirmEraseCurrentGame() async =>
@@ -1193,8 +1236,8 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
 
   Future<void> _requestHome() async {
     if (!await _confirmEraseCurrentGame() || !mounted) return;
-    _goHome();
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    await _goHome();
+    if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   Future<void> _requestNewGame() async {
@@ -1270,6 +1313,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
           : null;
       _engineThinking = false;
       _forcedResult = null;
+      _viewedPly = null;
       _game.set_header(['Result', '*']);
       _clockPaused = false;
       _maiaFailed = false;
@@ -1329,6 +1373,14 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
                   : null,
             ),
             ListTile(
+              enabled: _canTakeBack,
+              leading: const Icon(CupertinoIcons.arrow_uturn_left),
+              title: const Text('Take back move'),
+              onTap: _canTakeBack
+                  ? () => Navigator.pop(context, 'takeback')
+                  : null,
+            ),
+            ListTile(
               leading: const Icon(Icons.refresh),
               title: const Text('Reset game'),
               onTap: () => Navigator.pop(context, 'new'),
@@ -1346,6 +1398,8 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
         await _analyzeGame();
       case 'resign':
         await _resign();
+      case 'takeback':
+        _takeBack();
       case 'new':
         await _requestNewGame();
     }
@@ -2001,24 +2055,47 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     height: 52,
     child: Row(
       children: [
-        IconButton(
-          key: const ValueKey('game-actions-menu'),
-          onPressed: _showGameMenu,
-          icon: const Icon(Icons.menu),
-          tooltip: 'Game menu',
+        Expanded(
+          child: Center(
+            child: IconButton(
+              key: const ValueKey('game-actions-menu'),
+              onPressed: _showGameMenu,
+              icon: const Icon(Icons.menu),
+              tooltip: 'Game menu',
+            ),
+          ),
         ),
-        const Spacer(),
-        IconButton(
-          key: const ValueKey('quick-resign-button'),
-          onPressed: !_gameFinished && !_engineThinking ? _resign : null,
-          icon: const Icon(CupertinoIcons.flag),
-          tooltip: 'Resign',
+        Expanded(
+          child: Center(
+            child: IconButton(
+              key: const ValueKey('quick-resign-button'),
+              onPressed: !_gameFinished && !_engineThinking ? _resign : null,
+              icon: const Icon(CupertinoIcons.flag),
+              tooltip: 'Resign',
+            ),
+          ),
         ),
-        IconButton(
-          key: const ValueKey('quick-takeback-button'),
-          onPressed: _canTakeBack ? _takeBack : null,
-          icon: const Icon(CupertinoIcons.arrow_uturn_left),
-          tooltip: 'Takeback',
+        Expanded(
+          child: Center(
+            child: IconButton(
+              key: const ValueKey('game-previous-move-button'),
+              onPressed: _displayPly == 0 ? null : () => _stepGameHistory(-1),
+              icon: const Icon(CupertinoIcons.chevron_back),
+              tooltip: 'Previous move',
+            ),
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: IconButton(
+              key: const ValueKey('game-next-move-button'),
+              onPressed: _isViewingLivePosition
+                  ? null
+                  : () => _stepGameHistory(1),
+              icon: const Icon(CupertinoIcons.chevron_forward),
+              tooltip: 'Next move',
+            ),
+          ),
         ),
       ],
     ),

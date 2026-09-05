@@ -539,7 +539,24 @@ void main() {
     expect(find.textContaining('offline'), findsNothing);
     expect(find.byIcon(Icons.smart_toy_outlined), findsNothing);
     expect(find.byKey(const ValueKey('quick-resign-button')), findsOneWidget);
-    expect(find.byKey(const ValueKey('quick-takeback-button')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('game-previous-move-button')),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey('game-next-move-button')), findsOneWidget);
+    final controlCenters = [
+      'game-actions-menu',
+      'quick-resign-button',
+      'game-previous-move-button',
+      'game-next-move-button',
+    ].map((key) => tester.getCenter(find.byKey(ValueKey(key))).dx).toList();
+    final controlSpacing = controlCenters[1] - controlCenters[0];
+    for (var index = 2; index < controlCenters.length; index++) {
+      expect(
+        controlCenters[index] - controlCenters[index - 1],
+        closeTo(controlSpacing, 0.1),
+      );
+    }
 
     await tester.tap(find.byKey(const ValueKey('game-share-menu')));
     await tester.pumpAndSettle();
@@ -558,6 +575,7 @@ void main() {
     expect(find.text('Flip board'), findsOneWidget);
     expect(find.text('Analysis Board'), findsOneWidget);
     expect(find.text('Resign'), findsOneWidget);
+    expect(find.text('Take back move'), findsOneWidget);
     expect(find.text('Reset game'), findsOneWidget);
     await tester.tap(find.text('Flip board'));
     await tester.pumpAndSettle();
@@ -565,6 +583,55 @@ void main() {
       find.byKey(const ValueKey('game-board')),
     );
     expect(after.orientation, dc.Side.black);
+  });
+
+  testWidgets('live game history controls browse moves without changing play', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(800, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    SharedPreferences.setMockInitialValues({});
+    final maia = Completer<Float32List>();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: GamePage(
+          startingFen: chess.Chess.DEFAULT_POSITION,
+          startingSide: PlayerSide.white,
+          startingElo: 1500,
+          maiaEvaluator: (_, _) => maia.future,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    var board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
+    board.onMove!(dc.NormalMove.fromUci('e2e4'));
+    await tester.pump();
+    await tester.pump();
+    final afterE4 = chess.Chess()..move('e4');
+    String positionCore(String fen) => fen.split(' ').take(4).join(' ');
+    board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
+    expect(positionCore(board.controller.fen), positionCore(afterE4.fen));
+
+    await tester.tap(find.byKey(const ValueKey('game-previous-move-button')));
+    await tester.pumpAndSettle();
+    board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
+    expect(
+      positionCore(board.controller.fen),
+      positionCore(chess.Chess.DEFAULT_POSITION),
+    );
+    expect(board.controller.interactive, isFalse);
+
+    await tester.tap(find.byKey(const ValueKey('game-next-move-button')));
+    await tester.pumpAndSettle();
+    board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
+    expect(positionCore(board.controller.fen), positionCore(afterE4.fen));
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    maia.complete(Float32List(4352));
+    await tester.pump();
   });
 
   testWidgets('post-game actions keep Home in the app bar only', (
