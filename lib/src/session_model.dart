@@ -219,6 +219,68 @@ class AnalysisSession {
     }
   }
 
+  static void _validatePgnTokens(String source) {
+    var movetext = source.replaceFirst('\ufeff', '');
+    movetext = movetext.replaceAll(
+      RegExp(r'\[[A-Za-z0-9][A-Za-z0-9_+#=:-]*\s+"(?:[^"\\]|\\["\\])*"\]'),
+      ' ',
+    );
+    movetext = movetext.replaceAll(RegExp(r'^\s*%.*$', multiLine: true), ' ');
+
+    final uncommented = StringBuffer();
+    var inBraceComment = false;
+    var inLineComment = false;
+    for (final codeUnit in movetext.codeUnits) {
+      final character = String.fromCharCode(codeUnit);
+      if (inBraceComment) {
+        if (character == '}') inBraceComment = false;
+        continue;
+      }
+      if (inLineComment) {
+        if (character == '\n' || character == '\r') {
+          inLineComment = false;
+          uncommented.write(' ');
+        }
+        continue;
+      }
+      if (character == '{') {
+        inBraceComment = true;
+      } else if (character == ';') {
+        inLineComment = true;
+      } else if (character == '}') {
+        throw const FormatException('Malformed PGN comment.');
+      } else {
+        uncommented.write(character);
+      }
+    }
+    if (inBraceComment) {
+      throw const FormatException('Malformed PGN comment.');
+    }
+
+    movetext = uncommented.toString();
+    var variationDepth = 0;
+    for (final character in movetext.codeUnits) {
+      if (character == 0x28) variationDepth++;
+      if (character == 0x29 && --variationDepth < 0) {
+        throw const FormatException('Malformed PGN variation.');
+      }
+    }
+    if (variationDepth != 0) {
+      throw const FormatException('Malformed PGN variation.');
+    }
+
+    movetext = movetext.replaceAll(RegExp(r'\d+\.(?:\.\.)?'), ' ');
+    movetext = movetext.replaceAll(
+      RegExp(
+        r'(?:[NBKRQ]?[a-h]?[1-8]?[-x]?[a-h][1-8](?:=?[nbrqkNBRQK])?|[pnbrqkPNBRQK]?@[a-h][1-8]|O-O-O|0-0-0|O-O|0-0)[+#]?|--|Z0|0000|@@@@|\$\d{1,4}|[?!]{1,2}|\(|\)|\*|1-0|0-1|1/2-1/2',
+      ),
+      ' ',
+    );
+    if (movetext.trim().isNotEmpty) {
+      throw const FormatException('The PGN contains invalid movetext.');
+    }
+  }
+
   factory AnalysisSession.fromFen(String fen) {
     validateFen(fen);
     final game = chess.Chess.fromFEN(fen.trim());
@@ -247,6 +309,7 @@ class AnalysisSession {
     if (source.length > 2 * 1024 * 1024) {
       throw const FormatException('PGN is too large.');
     }
+    _validatePgnTokens(source);
     final parsed = dc.PgnGame.parsePgn(
       source.trim(),
       initHeaders: dc.PgnGame.emptyHeaders,

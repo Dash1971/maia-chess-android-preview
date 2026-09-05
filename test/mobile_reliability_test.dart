@@ -75,6 +75,25 @@ void main() {
     expect(AnalysisSession.fromPgn(output).sanMoves, ['e4', 'e5', 'Nf3']);
   });
 
+  test('PGN headers cannot hide malformed or truncated movetext', () {
+    expect(
+      () => AnalysisSession.fromPgn(
+        '[Event "Broken"]\n[Result "*"]\n\n1. DefinitelyNotAMove *',
+      ),
+      throwsFormatException,
+    );
+    expect(
+      () => AnalysisSession.fromPgn(
+        '[Event "Broken"]\n[Result "*"]\n\n1. e4 e5 2. garbage *',
+      ),
+      throwsFormatException,
+    );
+    expect(
+      AnalysisSession.fromPgn('[Event "Empty"]\n[Result "*"]\n\n*').sanMoves,
+      isEmpty,
+    );
+  });
+
   testWidgets('a move arriving after flag fall cannot gain an increment', (
     tester,
   ) async {
