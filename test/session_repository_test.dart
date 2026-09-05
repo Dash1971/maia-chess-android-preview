@@ -75,6 +75,27 @@ void main() {
   );
 
   test(
+    'deleting an archived session removes every recovery generation',
+    () async {
+      await store.save({'type': 'game', 'pgn': '1. e4 *'});
+      final id = (await store.recent()).single.id;
+      await store.startNew();
+      await store.open(id);
+      await store.startNew();
+      final archive = File('${directory.path}/games/$id.json');
+      expect(await archive.exists(), isTrue);
+      expect(await File('${archive.path}.previous').exists(), isTrue);
+
+      await store.delete(id);
+
+      expect(await archive.exists(), isFalse);
+      expect(await File('${archive.path}.previous').exists(), isFalse);
+      expect(await File('${archive.path}.pending').exists(), isFalse);
+      expect(await SessionRepository(directory).recent(), isEmpty);
+    },
+  );
+
+  test(
     'archived backups remain available when their primary file is corrupt',
     () async {
       await store.save({'type': 'game', 'pgn': '1. e4 *'});

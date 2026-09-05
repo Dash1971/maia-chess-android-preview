@@ -7,9 +7,10 @@ class AnalysisCancelled implements Exception {
 /// One native search at a time. Foreground requests preempt batch work; a
 /// stopped search is drained before the next request consumes native output.
 class EngineWorkQueue<T> {
-  EngineWorkQueue({required this.run, required this.stop});
+  EngineWorkQueue({required this.run, required this.stop, this.onStopError});
   final Future<T> Function(String, bool) run;
   final void Function() stop;
+  final void Function(Object, StackTrace)? onStopError;
   final List<_EngineWork<T>> _pending = [];
   _EngineWork<T>? _active;
   Completer<void>? _idle;
@@ -25,11 +26,11 @@ class EngineWorkQueue<T> {
     final work = _EngineWork<T>(fen, scope, scope?.begin(), background);
     if (scope != null) {
       _discardWhere((item) => identical(item.scope, scope));
-      if (identical(_active?.scope, scope)) stop();
+      if (identical(_active?.scope, scope)) _requestStop();
     }
     if (!background && _active?.background == true && _active!.current) {
       _active!.preempted = true;
-      stop();
+      _requestStop();
     }
     _pending.add(work);
     _pump();
@@ -39,7 +40,7 @@ class EngineWorkQueue<T> {
   void cancel(MaiaInferenceScope scope) {
     scope.invalidate();
     _discardWhere((item) => identical(item.scope, scope));
-    if (identical(_active?.scope, scope)) stop();
+    if (identical(_active?.scope, scope)) _requestStop();
   }
 
   void _discardWhere(bool Function(_EngineWork<T>) test) {
@@ -54,7 +55,7 @@ class EngineWorkQueue<T> {
     _discardWhere((_) => true);
     if (_active != null) {
       _active!.cancelled = true;
-      stop();
+      _requestStop();
       await (_idle ??= Completer<void>()).future;
     }
   }
@@ -62,6 +63,17 @@ class EngineWorkQueue<T> {
   void resume() {
     paused = false;
     _pump();
+  }
+
+  void _requestStop() {
+    try {
+      stop();
+    } catch (error, stackTrace) {
+      // The native process may have exited between the searching-state check
+      // and the stop write. Cancellation remains valid and the active run will
+      // still drain or fail; do not wedge the queue during lifecycle cleanup.
+      onStopError?.call(error, stackTrace);
+    }
   }
 
   void _pump() {

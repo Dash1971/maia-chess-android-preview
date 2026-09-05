@@ -181,15 +181,22 @@ class SessionRepository {
   });
 
   Future<void> delete(String id) => _serial(() async {
-    for (final suffix in ['', '.previous', '.pending']) {
-      final file = File('${_archiveFile(id).path}$suffix');
-      if (await file.exists()) await file.delete();
-    }
+    // Tombstone the active checkpoint before touching its archive. A process
+    // death can then leave an incomplete deletion visible in Recent games, but
+    // it cannot restore the deleted session as the active game on next launch.
     if ((await _read(_active))?['id'] == id) {
       await _write(_active, {'version': 1, 'id': id, 'data': null});
       final previous = File('${_active.path}.previous');
       if (await previous.exists()) await previous.delete();
       _activeId = null;
+    }
+    final archive = _archiveFile(id);
+    // Delete rollback files first and the primary last. If deletion is
+    // interrupted, _read() must never resurrect an older .previous copy after
+    // the primary has disappeared.
+    for (final suffix in ['.pending', '.previous', '']) {
+      final file = File('${archive.path}$suffix');
+      if (await file.exists()) await file.delete();
     }
   });
 }

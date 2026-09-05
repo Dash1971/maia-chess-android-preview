@@ -1873,8 +1873,7 @@ class _ReviewPageState extends State<ReviewPage>
       }
     });
     if (!enabled) {
-      _maiaInferenceScope.invalidate();
-      StockfishAnalyzer.instance.cancel(_stockfishScope);
+      _cancelSelectedWork();
       StockfishAnalyzer.instance.cancel(_batchScope);
       if (widget.evaluator == null) {
         unawaited(

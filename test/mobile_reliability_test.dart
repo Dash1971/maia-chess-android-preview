@@ -106,6 +106,52 @@ void main() {
     expect(saved['forcedResult'], '0-1');
   });
 
+  testWidgets('game checkpoints use timezone-stable UTC timestamps', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: GamePage(
+          startingFen: chess.Chess.DEFAULT_POSITION,
+          startingSide: PlayerSide.white,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final saved = await ActiveSessionStore.load();
+    expect(saved!['type'], 'game');
+    expect(DateTime.parse(saved['savedAt'] as String).isUtc, isTrue);
+  });
+
+  testWidgets('a future saved timestamp cannot add clock time', (tester) async {
+    final clock = ManualStopwatch();
+    final session = AnalysisSession.start();
+    await ActiveSessionStore.save({
+      'type': 'game',
+      'pgn': session.pgn,
+      'positions': session.positions,
+      'uciMoves': <String>[],
+      'timePreset': 'blitz',
+      'whiteMillis': 1000,
+      'blackMillis': 180000,
+      'clockPaused': false,
+      'savedAt': DateTime.now()
+          .add(const Duration(minutes: 1))
+          .toUtc()
+          .toIso8601String(),
+      'playerIsWhite': true,
+    });
+
+    await tester.pumpWidget(
+      MaterialApp(home: GamePage(clockFactory: () => clock)),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('0:01.0'), findsOneWidget);
+    expect(find.text('1:01'), findsNothing);
+  });
+
   testWidgets('Retry completes the failed Maia turn once', (tester) async {
     var attempts = 0;
     await tester.pumpWidget(

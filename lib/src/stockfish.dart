@@ -13,6 +13,8 @@ class StockfishAnalyzer {
     stop: () {
       if (_searching) _engine.stdin = 'stop';
     },
+    onStopError: (error, stackTrace) =>
+        unawaited(AppDiagnostics.record('stockfish-stop', error, stackTrace)),
   );
 
   void cancel(MaiaInferenceScope scope) => _queue.cancel(scope);
@@ -160,8 +162,8 @@ class StockfishAnalyzer {
       _closing ??= _closeNow().whenComplete(() => _closing = null);
 
   Future<void> _closeNow() async {
-    await _queue.suspend();
     try {
+      await _queue.suspend();
       if (_startup != null) {
         await _engine.quit().timeout(const Duration(seconds: 3));
       }

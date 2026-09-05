@@ -21,17 +21,13 @@ class PgnDocuments(private val activity: Activity, private val received: () -> U
     private val io = Executors.newSingleThreadExecutor()
     private var result: MethodChannel.Result? = null
     private var exportText: String? = null
-    private var pendingPgn: String? = null
-    private var pendingError: String? = null
+    private data class PendingPgn(val text: String? = null, val error: String? = null)
+    private val pending = ArrayDeque<PendingPgn>()
 
     fun takePending(reply: MethodChannel.Result) {
-        val error = pendingError
-        pendingError = null
-        if (error != null) reply.error("pgn_read_failed", error, null)
-        else {
-            reply.success(pendingPgn)
-            pendingPgn = null
-        }
+        val item = pending.removeFirstOrNull()
+        if (item?.error != null) reply.error("pgn_read_failed", item.error, null)
+        else reply.success(item?.text)
     }
 
     fun open(reply: MethodChannel.Result) = pick(OPEN, null, reply)
@@ -101,22 +97,30 @@ class PgnDocuments(private val activity: Activity, private val received: () -> U
         if (intent?.action !in setOf(Intent.ACTION_VIEW, Intent.ACTION_SEND)) return
         val uri = if (intent?.action == Intent.ACTION_VIEW) intent.data
             else intent?.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+                ?: intent?.clipData?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.uri
         val text = if (uri == null) intent?.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString() else null
         if (uri == null && text == null) return
         // Clear the consumed payload so reopening the activity does not import twice.
         intent?.action = Intent.ACTION_MAIN
         io.execute {
             try {
-                val pgn = uri?.let(::read) ?: text!!
+                val pgn = (uri?.let(::read) ?: text!!).removePrefix("\uFEFF")
                 if (pgn.toByteArray(Charsets.UTF_8).size > MAX_BYTES) throw IOException("PGN exceeds 2 MB")
-                activity.runOnUiThread { pendingPgn = pgn; received() }
+                activity.runOnUiThread { pending.addLast(PendingPgn(text = pgn)); received() }
             } catch (error: Exception) {
-                activity.runOnUiThread { pendingError = error.message; received() }
+                activity.runOnUiThread {
+                    pending.addLast(PendingPgn(error = error.message ?: error.javaClass.simpleName))
+                    received()
+                }
             }
         }
     }
 
     fun share(text: String, reply: MethodChannel.Result) {
+        if (text.toByteArray(Charsets.UTF_8).size > MAX_BYTES) {
+            reply.error("pgn_too_large", "PGN exceeds 2 MB", null)
+            return
+        }
         io.execute {
             try {
                 val folder = File(activity.cacheDir, "pgn-share").apply { mkdirs() }

@@ -98,7 +98,10 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     if (widget.startingElo != null) _elo = widget.startingElo!;
     if (widget.startingFen == null) {
       maiaEngineChannel.setMethodCallHandler((call) async {
-        if (call.method == 'pgnReceived') await _checkIncomingPgn();
+        if (call.method == 'pgnReceived') {
+          _incomingPgnCheckRequested = true;
+          await _checkIncomingPgn();
+        }
       });
     }
     unawaited(_initialize());
@@ -268,7 +271,11 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
           saved['clockPaused'] != true &&
           saved['forcedResult'] == null &&
           !restored.game_over) {
-        final elapsed = DateTime.now().difference(savedAt).inMilliseconds;
+        // Wall-clock corrections must never add time to a saved clock.
+        final elapsed = max(
+          0,
+          DateTime.now().difference(savedAt).inMilliseconds,
+        );
         if (restored.turn == chess.Color.WHITE) {
           whiteMillis = max(0, whiteMillis - elapsed);
         } else {
@@ -395,7 +402,9 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     'clockHistory': _clockHistory
         .map((item) => [item.whiteMillis, item.blackMillis])
         .toList(),
-    'savedAt': DateTime.now().toIso8601String(),
+    // UTC keeps elapsed-clock recovery stable if Android's timezone changes
+    // while the process is stopped. Legacy local timestamps still parse.
+    'savedAt': DateTime.now().toUtc().toIso8601String(),
     'forcedResult': _forcedResult,
     'status': _status,
     'clockPaused': _clockPaused,
@@ -638,19 +647,34 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
 
   bool _importing = false;
   bool _initialized = false;
+  bool _incomingPgnCheckRequested = false;
   Future<void> _checkIncomingPgn() async {
-    if (!_initialized || _importing || !mounted) return;
+    if (!_initialized || !mounted) return;
+    if (_importing) {
+      _incomingPgnCheckRequested = true;
+      return;
+    }
     _importing = true;
+    _incomingPgnCheckRequested = false;
+    var consumed = false;
     try {
       final text = await maiaEngineChannel.invokeMethod<String>(
         'getPendingPgn',
       );
       if (text != null) {
+        consumed = true;
         final session = await Isolate.run(() => AnalysisSession.fromPgn(text));
         if (mounted) await _openImportedSession(session);
       }
     } on MissingPluginException {
       /* No Android document bridge in host tests. */
+    } on PlatformException catch (error) {
+      consumed = error.code == 'pgn_read_failed';
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not open PGN: $error')));
+      }
     } catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(
@@ -659,6 +683,11 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       }
     } finally {
       _importing = false;
+      if (mounted && (consumed || _incomingPgnCheckRequested)) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => unawaited(_checkIncomingPgn()),
+        );
+      }
     }
   }
 

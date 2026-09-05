@@ -108,4 +108,41 @@ void main() {
     await failed;
     expect(await next, 'ok');
   });
+
+  test('a stop state error cannot wedge cancellation or suspend', () async {
+    final errors = <Object>[];
+    queue = EngineWorkQueue(
+      run: (fen, background) {
+        starts.add(fen);
+        final result = Completer<String>();
+        searches.add(result);
+        return result.future;
+      },
+      stop: () => throw StateError('engine already exited'),
+      onStopError: (error, _) => errors.add(error),
+    );
+    final scope = MaiaInferenceScope();
+    final cancelled = expectLater(
+      queue.add('active', scope: scope),
+      throwsA(isA<AnalysisCancelled>()),
+    );
+    queue.cancel(scope);
+    searches.single.complete('late output');
+    await cancelled;
+    await drain();
+
+    final duringSuspend = expectLater(
+      queue.add('suspend'),
+      throwsA(isA<AnalysisCancelled>()),
+    );
+    final suspended = queue.suspend();
+    searches.last.complete('drained');
+    await Future.wait([duringSuspend, suspended]);
+    queue.resume();
+    final next = queue.add('next');
+    searches.last.complete('ok');
+
+    expect(await next, 'ok');
+    expect(errors, hasLength(2));
+  });
 }
