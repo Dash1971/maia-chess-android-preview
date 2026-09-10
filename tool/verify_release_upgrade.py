@@ -127,6 +127,25 @@ def emulator_preflight(shell, allow_reset):
     require(shell('getenforce').strip() == b'Enforcing', 'Keep emulator SELinux enforcing.')
 
 
+def restored_ui_ready(xml, elo, completed):
+    labels = [node.get('content-desc', '') + node.get('text', '')
+              for node in ET.fromstring(xml).iter('node')]
+    return any(f'Maia3 {elo}elo' in label for label in labels) or (
+        completed and 'Analysis Board' in labels)
+
+
+def check_baseline(fixture, before):
+    # Natural endings can replace the seed's forced-result marker with null.
+    # The chess result must still match; subsequent upgrade comparisons check
+    # the baseline app's actual saved representation, including this marker.
+    for field in PRESERVED:
+        if field != 'forcedResult':
+            require(before['data'].get(field) == fixture['data'].get(field),
+                    'Baseline did not retain fixture field: ' + field)
+    require(parse_pgn(before['data']['pgn']).headers['Result'] ==
+            parse_pgn(fixture['data']['pgn']).headers['Result'], 'Baseline changed the game result.')
+
+
 def verify(args, report):
     def stage(name):
         report['stage'] = name
@@ -166,21 +185,19 @@ def verify(args, report):
 
     def wait_saved(previous):
         deadline = time.monotonic() + args.timeout
-        if fixture['data'].get('forcedResult') is None:
-            # A live game need not rewrite its checkpoint merely on opening.
-            # Wait for its real UI, then background it to exercise persistence.
-            while time.monotonic() < deadline:
-                shell('uiautomator', 'dump', '/sdcard/maia-release-check.xml')
-                xml = command('exec-out', 'cat', '/sdcard/maia-release-check.xml')
-                nodes = ET.fromstring(xml).iter('node')
-                label = f"Maia3 {fixture['data']['elo']}elo"
-                if any(label in (node.get('content-desc', '') + node.get('text', '')) for node in nodes):
-                    (args.output / 'restored-ui.xml').write_bytes(xml)
-                    (args.output / 'restored-screen.png').write_bytes(command('exec-out', 'screencap', '-p'))
-                    shell('input', 'keyevent', 'KEYCODE_HOME')
-                    break
-            else:
-                raise ValueError('Restored game UI did not appear before timeout.')
+        # Neither live nor naturally finished games must rewrite a checkpoint
+        # merely on opening. Background the real restored UI to request a save.
+        while time.monotonic() < deadline:
+            shell('uiautomator', 'dump', '/sdcard/maia-release-check.xml')
+            xml = command('exec-out', 'cat', '/sdcard/maia-release-check.xml')
+            if restored_ui_ready(xml, fixture['data']['elo'],
+                                 fixture['data']['recentState'] == 'completed'):
+                (args.output / 'restored-ui.xml').write_bytes(xml)
+                (args.output / 'restored-screen.png').write_bytes(command('exec-out', 'screencap', '-p'))
+                shell('input', 'keyevent', 'KEYCODE_HOME')
+                break
+        else:
+            raise ValueError('Restored game UI did not appear before timeout.')
         while time.monotonic() < deadline:
             current = json.loads(read_raw())
             if current.get('updatedAt') != previous:
@@ -236,9 +253,7 @@ def verify(args, report):
             launch(identities[0])
             before = wait_saved(fixture['updatedAt'])
             write_report(args.output / 'before.json', before)
-            for field in PRESERVED:
-                require(before['data'].get(field) == fixture['data'].get(field),
-                        'Baseline did not retain fixture field: ' + field)
+            check_baseline(fixture, before)
             shell('am', 'force-stop', args.package)
             raw = {name: read_raw(name) for name in targets}
             stage('Installing candidate and comparing saved game')

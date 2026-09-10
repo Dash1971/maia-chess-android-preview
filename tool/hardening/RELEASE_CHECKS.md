@@ -138,13 +138,17 @@ Use `--fixture another.pgn` for an additional single-game case. An unfinished
 fixture is seeded with the human on the side to move and paused clocks so the
 upgrade check does not depend on a random Maia reply. Its time preset is
 unlimited to prevent normal clock advancement from changing the comparison.
-The script waits for the restored game's accessibility label, then backgrounds
-the app to trigger a real checkpoint. Timed clock preservation is checked with
+For every fixture, the script waits for the restored game or result dialog's
+accessibility label, then backgrounds the app to trigger a real checkpoint.
+Naturally finished games need not save merely on opening. Timed clock
+preservation is checked with
 the completed fixture; running-clock behavior is covered by the host/native
 regressions. Update this UI readiness check if the player-label wording changes.
 
 Repeat with `--fixture tool/hardening/fixtures/incomplete_game.pgn` and a new
 output directory to check the included unfinished-game case as well.
+`--fixture tool/hardening/fixtures/checkmate.pgn` checks natural result restoration,
+including conversion of a forced-result marker to the board's natural result.
 
 Use a new or empty output directory for each run. `result.json`, before/after
 records, restart data, logcat and a screenshot are retained; diagnostic capture

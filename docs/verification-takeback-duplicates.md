@@ -116,20 +116,24 @@ private download or production signing configuration required.
 
 Local verification of the portable tools passed:
 
-- All ten Python tooling tests, including negative checks for unexpected
+- All eleven Python tooling tests, including negative checks for unexpected
   payload changes, incompatible ELF segments, unsuitable devices, lost notes,
   changed main lines, duplicate branches and altered clock history.
 - Packaging verification of the corrected unsigned release; signed-versus-
   unsigned payload equivalence; and comparison with beta.17 allowing only the
   known Dart library change.
-- Real emulator upgrades with both the completed 59-ply duplicate-variation
-  fixture and an unfinished four-ply game. Active/archive bytes survive the
+- Real emulator upgrades with the completed 59-ply duplicate-variation
+  fixture, an unfinished four-ply game, and a checkmate fixture. Active/archive
+  bytes survive the
   update; both active and archived-snapshot restoration preserve game data;
   the completed case removes two redundant copies; restart preserves PGN.
 
-The completed case checks exact timed clock snapshots. The unfinished case is
-untimed and backgrounds the restored app to trigger a real checkpoint, avoiding
-normal live-clock advancement in the comparison. Archived records are snapshots,
+The completed cases check exact timed clock snapshots. The unfinished case is
+untimed, avoiding normal live-clock advancement in the comparison. Every case
+backgrounds the restored UI to trigger a real checkpoint; naturally finished
+games need not rewrite a checkpoint merely on opening. Natural-result markers
+are allowed to normalize during baseline setup while the PGN result must stay
+unchanged. Archived records are snapshots,
 so the tool verifies their bytes remain unchanged and then explicitly restores
 a copy through the active checkpoint reader. Recent-games UI behavior remains
 covered by the separate native integration suite.

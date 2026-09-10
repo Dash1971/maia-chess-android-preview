@@ -6,7 +6,8 @@ from unittest.mock import Mock
 import zipfile
 
 from verify_release_apk import compare_payloads, elf_alignment, payload_names
-from verify_release_upgrade import check_restored, emulator_preflight, seed_record
+from verify_release_upgrade import (check_baseline, check_restored, emulator_preflight,
+                                    restored_ui_ready, seed_record)
 
 
 def archive(files):
@@ -55,6 +56,20 @@ class ArtifactChecksTest(unittest.TestCase):
 
 
 class UpgradeChecksTest(unittest.TestCase):
+    def test_natural_result_checkpoint_and_result_dialog_readiness(self):
+        fixture = seed_record('1. f3 e5 2. g4 Qh4# 0-1')
+        baseline = copy.deepcopy(fixture)
+        baseline['data']['forcedResult'] = None
+        check_baseline(fixture, baseline)
+        check_restored(baseline, copy.deepcopy(baseline))
+        dialog = b'<hierarchy><node content-desc="Analysis Board"/></hierarchy>'
+        self.assertTrue(restored_ui_ready(dialog, 700, True))
+        self.assertFalse(restored_ui_ready(dialog, 700, False))
+        self.assertFalse(restored_ui_ready(b'<hierarchy/>', 700, True))
+        baseline['data']['pgn'] = '1. f3 e5 2. g4 Qh4# 1-0'
+        with self.assertRaisesRegex(ValueError, 'game result'):
+            check_baseline(fixture, baseline)
+
     def test_refuses_physical_devices_before_any_mutation(self):
         shell = Mock(return_value=b'0\n')
         with self.assertRaisesRegex(ValueError, 'physical device'):
