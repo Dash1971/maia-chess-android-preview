@@ -92,7 +92,7 @@ byte for byte before launch. After launch:
 Both release APK copies used the same local Android test key for this upgrade
 check. Production signing keys were not used. This verifies release-mode
 restoration across the code update, not the eventual production signature or
-OpenClaw's future merge/build. No merge or release publication was performed.
+future merged release build. No merge or release publication was performed.
 
 ## Continuing release hardening
 
