@@ -102,7 +102,10 @@ tool/build_android_release.sh
 The corpus generator requires the optional python-chess development dependency.
 The app itself adds no new dependencies and no network requirement.
 
-Release runtime commit: `48f7a8d09415242b459ce33b9a3e4bb7814704b6`. Unsigned APK: 393,503,519
+Pre-review Android runtime commit: `48f7a8d09415242b459ce33b9a3e4bb7814704b6`.
+Review hardening commit: `ab37f818e7d2e748837b6edf8c12dde1cb6114a1`;
+its static analysis, affected-area tests, and complete 286-test host suite passed.
+Unsigned APK: 393,503,519
 bytes, SHA-256 `99ccb2bff1185b1fd9e246371625070f4421c5f59dc6206887d233fcaab90517`. The emulator used a separate local test-signed
 copy. Production signing keys were not used. The clean build passed and the
 final legacy fix was rebuilt with the same locked, reproducible release
