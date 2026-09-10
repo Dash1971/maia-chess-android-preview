@@ -10,7 +10,7 @@ The published release is `v2.1.0-beta.16`, commit
 
 - PRs #1, #2, #3, #4, #5, #6, and #12 all have merge commits in the release's
   ancestry. Each merge tree is identical to its corresponding final PR head.
-- PR #12 includes OpenClaw's additional takeback-persistence fix `ab37f818`.
+- PR #12 includes the additional takeback-persistence fix `ab37f818`.
   The only change after the merge is the version bump to beta.16.
 - The release tag's GitHub test check passed. Its Android job is manual-only;
   Android integration was independently executed locally for this review.
