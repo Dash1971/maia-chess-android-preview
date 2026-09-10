@@ -670,6 +670,80 @@ void main() {
   );
 
   testWidgets(
+    'restored timed takeback removes clock tags from the abandoned branch',
+    (tester) async {
+      const pgn =
+          '[TimeControl "60+2"]\n\n'
+          '1. e4 {[%clk 0:01:01.001]} e5 {[%clk 0:01:01.002]} '
+          '2. Nf3 \$1 {Keep knight note [%clk 0:01:02.003]} '
+          'Nc6 {[%clk 0:01:02.004]} *';
+      await ActiveSessionStore.save(
+        gameRecord(
+          pgn: pgn,
+          history: [
+            [60000, 60000],
+            [61001, 60000],
+            [61001, 61002],
+            [62003, 61002],
+            [62003, 62004],
+          ],
+        ),
+      );
+      await tester.pumpWidget(const MaterialApp(home: GamePage()));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('game-actions-menu')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Take back move'));
+      await tester.pumpAndSettle();
+
+      final saved = (await ActiveSessionStore.load())!;
+      final exported = saved['pgn'] as String;
+      expect(RegExp(r'\[%clk ').allMatches(exported).length, 2);
+      expect(AnalysisSession.fromPgn(exported).uciMoves, ['e2e4', 'e7e5']);
+      expect(exported, contains('Unplayed takeback line after ply 2'));
+      expect(exported, contains('Keep knight note'));
+      expect(exported, contains(r'$1'));
+      final branch = (saved['variations'] as List)
+          .map(
+            (item) => RecordedVariation.fromJson(
+              Map<String, dynamic>.from(item as Map),
+            ),
+          )
+          .singleWhere((line) => line.basePly == 2);
+      expect(branch.sanMoves, ['Nf3', 'Nc6']);
+      expect(branch.annotations.first['nags'], [1]);
+      expect(branch.annotations.first['comments'], ['Keep knight note']);
+      expect(branch.annotations.toString(), isNot(contains('[%clk')));
+      await disposeGame(tester);
+      await tester.pumpWidget(const MaterialApp(home: GamePage()));
+      await tester.pumpAndSettle();
+      expect(
+        boardOf(tester).controller.fen,
+        AnalysisSession.fromPgn('1. e4 e5 *').positions.last,
+      );
+      final maia = ControlledMaia();
+      await disposeGame(tester);
+      await tester.pumpWidget(
+        MaterialApp(home: GamePage(maiaEvaluator: maia.call)),
+      );
+      await tester.pumpAndSettle();
+      boardOf(tester).onMove!(dc.NormalMove.fromUci('f1c4'));
+      await tester.pumpAndSettle();
+      final continued = (await ActiveSessionStore.load())!['pgn'] as String;
+      expect(continued, isNot(contains('Unplayed takeback line')));
+      expect(
+        PgnVariationExporter.parseTree(continued)
+            .single
+            .children
+            .single
+            .sanMoves,
+        ['Nf3', 'Nc6'],
+      );
+      await disposeGame(tester);
+    },
+  );
+
+  testWidgets(
     'mating premove clears later moves without requesting another reply',
     (tester) async {
       SharedPreferences.setMockInitialValues({

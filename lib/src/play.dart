@@ -2576,7 +2576,10 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
           basePly: basePly,
           baseFen: _positionHistory[basePly],
           sanMoves: removedSan,
-          annotations: _mainlineAnnotations.skip(basePly).toList(),
+          annotations: _mainlineAnnotations
+              .skip(basePly)
+              .map(PgnClockExporter.withoutClockTags)
+              .toList(),
           children: nested,
         ),
       );

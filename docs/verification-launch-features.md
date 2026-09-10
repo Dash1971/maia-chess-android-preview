@@ -34,11 +34,11 @@ for the automated checks below.
 - Missing or malformed clock-history entries remain unknown at their original
   indices. They display a dash and generate no clock annotation. Existing PGN
   TimeControl/clk data is retained rather than guessed or overwritten.
-- Taking back every played move leaves an empty main line. PGN requires a played
-  move before a recursive annotation variation, so export describes the unplayed
-  line in a comment. The complete editable tree remains in the session JSON and
-  is exported as a normal variation after a new first move is played. This also
-  prevents reopening an empty game from silently replaying its abandoned line.
+- A recursive annotation variation needs a played sibling move. If a takeback
+  leaves no replacement move at that point, export describes the unplayed line
+  in a comment. The complete editable tree remains in session JSON and becomes
+  a normal PGN variation after a replacement is played. This prevents reopening
+  a truncated game from silently replaying its abandoned continuation.
 
 ## Additional hardening
 
@@ -52,8 +52,8 @@ for the automated checks below.
 - A legacy takeback without its target clock snapshot retains both current
   clocks from before the side-to-move changes, avoiding a deduction from the
   wrong player.
-- Takebacks retain existing move comments in the abandoned branch and remove the
-  corresponding mainline clock/annotation entries before further play.
+- Takebacks retain existing move comments and NAGs in the abandoned branch but
+  remove mainline-only clock tags, including after a save/reopen cycle.
 - Timed clocks and game controls fit compact portrait and landscape layouts at
   enlarged text sizes; clock text scales down only when its available width
   requires it. The new queue does not cause board resizing during input.
@@ -65,7 +65,7 @@ for the automated checks below.
 | Check | Result |
 | --- | --- |
 | Static analysis | Passed, no issues. |
-| Mac unit/widget regressions | 283-test full suite passed, plus the added drag and legacy-takeback regressions (285 tests covered); the final 70-test affected-area suite also passed. |
+| Mac unit/widget regressions | The final full suite passed all 286 tests, including the added drag, legacy-takeback, and restored timed-takeback regressions; the affected-area suites also passed. |
 | Android integration | All 11 tests passed, including real Maia and Stockfish. The subsequent legacy-clock fallback fix passed its affected-area host suite and release verification. |
 | Independent chess oracle | All 20,000 positions and full move vocabulary/mirroring passed. |
 | Python tooling | Both tests passed. |
@@ -111,9 +111,9 @@ configuration. A restored game reached its first Android activity frame in
 
 ## Visual checks
 
-![Multiple premoves](screenshots/20260910_launch_premoves.png)
+![Multiple premoves](screenshots/20260910_v0_launch_premoves.png)
 
-![Completed-game confirmation in the release APK](screenshots/20260910_launch_new_game.png)
+![Completed-game confirmation in the release APK](screenshots/20260910_v0_launch_new_game.png)
 
 The premove screenshot is rendered from the actual game widget and board assets. Layout
 checks cover 360×720 portrait, 320×568 at 2× text, and 800×360 landscape at 1× and

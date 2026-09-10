@@ -14,6 +14,8 @@ List<ClockSnapshot?> restoreClockHistory(Object? saved, int positions) {
 }
 
 class PgnClockExporter {
+  static final RegExp _clockTag = RegExp(r'\s*\[%clk\s+[^\]]+\]');
+
   static String format(int milliseconds) {
     final value = max(0, milliseconds);
     final hours = value ~/ 3600000;
@@ -21,6 +23,28 @@ class PgnClockExporter {
     final seconds = (value ~/ 1000 % 60).toString().padLeft(2, '0');
     final millis = (value % 1000).toString().padLeft(3, '0');
     return '$hours:$minutes:$seconds.$millis';
+  }
+
+  /// Clock tags belong only to the played main line. If a played move becomes
+  /// a takeback variation, retain its human annotations but remove clock data.
+  static Map<String, dynamic> withoutClockTags(
+    Map<String, dynamic> annotation,
+  ) {
+    final result = Map<String, dynamic>.of(annotation);
+    for (final key in const ['comments', 'startingComments']) {
+      final values = (result[key] as List?)?.cast<String>();
+      if (values == null) continue;
+      final cleaned = values
+          .map((text) => text.replaceAll(_clockTag, '').trim())
+          .where((text) => text.isNotEmpty)
+          .toList(growable: false);
+      if (cleaned.isEmpty) {
+        result.remove(key);
+      } else {
+        result[key] = cleaned;
+      }
+    }
+    return result;
   }
 
   /// Annotate only played moves. Imported clock tags are authoritative.
