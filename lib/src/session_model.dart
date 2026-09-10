@@ -84,6 +84,9 @@ class PgnVariationExporter {
     List<String> mainSan,
     List<RecordedVariation> variations, {
     List<String>? mainPositions,
+    List<Map<String, dynamic>>? mainAnnotations,
+    List<String>? startingComments,
+    bool preserveEmptyMainline = false,
   }) {
     final source = dc.PgnGame.parsePgn(
       pgn,
@@ -102,15 +105,17 @@ class PgnVariationExporter {
               headers['FEN'] ??
               chess.Chess.DEFAULT_POSITION,
           sanMoves: mainSan,
-          annotations: [
-            for (final data in seed)
-              {
-                if (data.comments != null) 'comments': data.comments,
-                if (data.startingComments != null)
-                  'startingComments': data.startingComments,
-                if (data.nags != null) 'nags': data.nags,
-              },
-          ],
+          annotations:
+              mainAnnotations ??
+              [
+                for (final data in seed)
+                  {
+                    if (data.comments != null) 'comments': data.comments,
+                    if (data.startingComments != null)
+                      'startingComments': data.startingComments,
+                    if (data.nags != null) 'nags': data.nags,
+                  },
+              ],
           children: variations
               .where(
                 (v) =>
@@ -176,10 +181,30 @@ class PgnVariationExporter {
     for (final root in roots) {
       addLine(tree, root);
     }
+    if (preserveEmptyMainline && mainSan.isEmpty && roots.isNotEmpty) {
+      // PGN requires a played move before a RAV. Keep an unplayed root line
+      // readable as a comment until the player chooses a new first move;
+      // the complete editable tree remains in the session's variations field.
+      final unplayed =
+          dc.PgnGame(headers: {'Result': '*'}, moves: tree, comments: const [])
+              .makePgn()
+              .replaceAll(RegExp(r'^\[.*\]\s*', multiLine: true), '')
+              .replaceAll('{', '(')
+              .replaceAll('}', ')')
+              .trim();
+      final note = 'Unplayed takeback line: $unplayed';
+      final comments = [...(startingComments ?? source.comments)];
+      if (!comments.contains(note)) comments.add(note);
+      return dc.PgnGame(
+        headers: headers,
+        moves: dc.PgnNode<dc.PgnNodeData>(),
+        comments: comments,
+      ).makePgn().trim();
+    }
     return dc.PgnGame(
       headers: headers,
       moves: tree,
-      comments: source.comments,
+      comments: startingComments ?? source.comments,
     ).makePgn().trim();
   }
 }
