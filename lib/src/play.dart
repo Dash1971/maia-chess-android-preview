@@ -2538,6 +2538,12 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   Future<void> _takeBack() async {
     if (!_started || !_canTakeBack) return;
     final chessnutTakeback = _chessnutGameActive;
+    // Legacy records may lack the target snapshot. Retain current clock values
+    // from before undo changes the side to move; do not charge the other side.
+    final fallbackClock = ClockSnapshot(
+      _liveMillis(chess.Color.WHITE),
+      _liveMillis(chess.Color.BLACK),
+    );
     final observed = _chessnutPosition;
     _gameGeneration++;
     _gameInferenceScope.invalidate();
@@ -2582,12 +2588,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       if (_clockHistory.length > 1) _clockHistory.removeLast();
       if (_mainlineAnnotations.isNotEmpty) _mainlineAnnotations.removeLast();
     }
-    final clock =
-        _clockHistory.lastOrNull ??
-        ClockSnapshot(
-          _liveMillis(chess.Color.WHITE),
-          _liveMillis(chess.Color.BLACK),
-        );
+    final clock = _clockHistory.lastOrNull ?? fallbackClock;
     setState(() {
       _whiteMillis = clock.whiteMillis;
       _blackMillis = clock.blackMillis;

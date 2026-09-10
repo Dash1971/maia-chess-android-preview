@@ -832,4 +832,33 @@ void main() {
       await disposeGame(tester);
     },
   );
+  testWidgets(
+    'legacy takeback without snapshots preserves both current clocks',
+    (tester) async {
+      final maia = ControlledMaia();
+      await ActiveSessionStore.save(
+        gameRecord(pgn: '1. e4 *', white: 7000, black: 9000),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: GamePage(
+            maiaEvaluator: maia.call,
+            clockFactory: () => TestClock(17),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('game-actions-menu')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Take back move'));
+      await tester.pumpAndSettle();
+      final saved = (await ActiveSessionStore.load())!;
+      // White has started a new turn; Black retains the time used before undo.
+      expect(saved['whiteMillis'], 6983);
+      expect(saved['blackMillis'], 8983);
+      expect(saved['clockHistory'], [null]);
+      expect(saved['pgn'], isNot(contains('[%clk')));
+      await disposeGame(tester);
+    },
+  );
 }

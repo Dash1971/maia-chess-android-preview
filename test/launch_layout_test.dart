@@ -49,9 +49,16 @@ void main() {
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
-      await ActiveSessionStore.save(gameRecord(
-        pgn: '1. e4 *', preset: 'blitz', history: [[180000,180000], [179999,180000]],
-      ));
+      await ActiveSessionStore.save(
+        gameRecord(
+          pgn: '1. e4 *',
+          preset: 'blitz',
+          history: [
+            [180000, 180000],
+            [179999, 180000],
+          ],
+        ),
+      );
       final maia = ControlledMaia();
       final capture = GlobalKey();
       await tester.pumpWidget(
@@ -77,7 +84,10 @@ void main() {
                   .copyWith(textScaler: TextScaler.linear(scale)),
               child: child!,
             ),
-            home: GamePage(maiaEvaluator: maia.call, clockFactory: () => TestClock(0)),
+            home: GamePage(
+              maiaEvaluator: maia.call,
+              clockFactory: () => TestClock(0),
+            ),
           ),
         ),
       );
@@ -114,7 +124,8 @@ void main() {
           image.dispose();
         });
       }
-      await tester.tap(cancel); await tester.pumpAndSettle();
+      await tester.tap(cancel);
+      await tester.pumpAndSettle();
       expect(find.byKey(const ValueKey('premove-queue')), findsNothing);
       expect(tester.getSize(find.byType(cg.Chessboard)), sizeBefore);
       expect(tester.takeException(), isNull);
