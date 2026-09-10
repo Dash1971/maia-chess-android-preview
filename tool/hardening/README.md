@@ -1,9 +1,9 @@
 # Release hardening without physical devices
 
 The ordinary CI suite includes the deterministic regressions and a checked-in
-256-position chess oracle. Python is optional unless regenerating or expanding
-the oracle. These tools do not add runtime dependencies or network access to
-the app.
+256-position chess oracle. The Python development environment is required for
+release-tool tests and for regenerating/expanding the oracles. These tools do
+not add runtime dependencies or network access to the app.
 
 ## Standard checks
 
@@ -13,7 +13,9 @@ Use the Flutter version and commit pinned in `.github/workflows/checks.yml`.
 flutter pub get --enforce-lockfile
 flutter analyze
 flutter test --reporter expanded
-python3 -m unittest discover -s tool -p '*_test.py'
+python3 -m venv /tmp/maia-release-venv
+/tmp/maia-release-venv/bin/pip install -r tool/hardening/requirements.txt
+/tmp/maia-release-venv/bin/python -m unittest discover -s tool -p '*_test.py'
 ```
 
 The added tests cover Top-P sampling, malformed checkpoint metadata, PGN byte
@@ -154,3 +156,12 @@ verify the artifact that will ship.
 Keep release artifacts unsigned for review. Do not commit materialized model
 binaries, SDKs, caches, emulator disks, or generated APKs. The checked-in LFS
 pointer must remain a pointer.
+
+## Portable APK and upgrade checks
+
+[`RELEASE_CHECKS.md`](RELEASE_CHECKS.md) documents the repository tools for APK
+packaging/signature/payload verification and an emulator saved-game upgrade.
+They replace the one-off Mac scripts with configurable SDK/APK paths, a
+sanitized checked-in PGN, JSON pass/fail results and failure diagnostics. The
+manual CI release-build job also runs packaging verification and retains its
+APK/log/report artifacts for 14 days.

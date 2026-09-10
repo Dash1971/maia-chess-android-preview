@@ -105,3 +105,35 @@ expanded seeded corpus, native integration, clean release build and saved-game
 update smoke test before publication. Verify the published APK against the
 merged source separately. Physical-phone performance and real Chessnut BLE/LED
 behavior remain device tests; these results do not prove the absence of all bugs.
+
+## Portable release-tool follow-up
+
+The APK and upgrade checks are now repository tools, documented in
+[`RELEASE_CHECKS.md`](../tool/hardening/RELEASE_CHECKS.md). SDK locations, APKs,
+emulator ID, package and expected versions are inputs. The upgrade script uses
+sanitized completed/incomplete fixtures and a temporary test key, with no
+private download or production signing configuration required.
+
+Local verification of the portable tools passed:
+
+- All ten Python tooling tests, including negative checks for unexpected
+  payload changes, incompatible ELF segments, unsuitable devices, lost notes,
+  changed main lines, duplicate branches and altered clock history.
+- Packaging verification of the corrected unsigned release; signed-versus-
+  unsigned payload equivalence; and comparison with beta.17 allowing only the
+  known Dart library change.
+- Real emulator upgrades with both the completed 59-ply duplicate-variation
+  fixture and an unfinished four-ply game. Active/archive bytes survive the
+  update; both active and archived-snapshot restoration preserve game data;
+  the completed case removes two redundant copies; restart preserves PGN.
+
+The completed case checks exact timed clock snapshots. The unfinished case is
+untimed and backgrounds the restored app to trigger a real checkpoint, avoiding
+normal live-clock advancement in the comparison. Archived records are snapshots,
+so the tool verifies their bytes remain unchanged and then explicitly restores
+a copy through the active checkpoint reader. Recent-games UI behavior remains
+covered by the separate native integration suite.
+
+The ordinary CI job now tests these tools. The optional Android build job runs
+packaging verification and uploads diagnostics plus the successful unsigned
+APK with 14-day retention. App runtime code is unchanged by this tooling work.
