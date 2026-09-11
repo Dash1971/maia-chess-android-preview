@@ -22,10 +22,10 @@ Implementation: `613ddc290f2ff9e9e77d8819f4591ca95ed6ab33`.
   sizes. Both menus scroll on short screens, correcting an overflow exposed
   while testing the draw-offer case.
 
-The widget-rendered preview below uses the app's color scheme and a synthetic
-regression game, not a physical Chessnut board:
-
-<img src="screenshots/20260910_v0_chessnut_phone_continuation.png" width="300" alt="Chessnut connection card with Reconnect and Play in app above the board">
+Current product screenshots are maintained in the
+[stable Mobile Maia feature guide](https://github.com/Dash1971/maia-chess-android#feature-guide).
+The related visual regression uses the app's color scheme and a synthetic game,
+not a physical Chessnut board.
 
 ## Completed verification
 

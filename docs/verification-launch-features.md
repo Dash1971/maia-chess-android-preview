@@ -114,11 +114,10 @@ configuration. A restored game reached its first Android activity frame in
 
 ## Visual checks
 
-![Multiple premoves](screenshots/20260910_v0_launch_premoves.png)
+Current product screenshots are maintained in the
+[stable Mobile Maia feature guide](https://github.com/Dash1971/maia-chess-android#feature-guide).
 
-![Completed-game confirmation in the release APK](screenshots/20260910_v0_launch_new_game.png)
-
-The premove screenshot is rendered from the actual game widget and board assets. Layout
+The premove visual regression uses the actual game widget and board assets. Layout
 checks cover 360×720 portrait, 320×568 at 2× text, and 800×360 landscape at 1× and
 2× text. Actual tap targets, board size stability, queue cancellation, and Flutter
 layout exceptions are asserted.
