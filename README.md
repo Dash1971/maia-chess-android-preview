@@ -123,6 +123,15 @@ support uses
 [Lichess multistockfish](https://github.com/lichess-org/dart-multistockfish).
 Both Lichess projects are credited and linked in the app's About screen.
 
+Experimental Chessnut Go support uses Chessnut's
+[published e-board API](https://github.com/chessnutech/Chessnut_eBoards) and
+MIT-licensed [EasyLinkSDK](https://github.com/chessnutech/EasyLinkSDK), and was
+cross-checked against Roberto Marabini's GPL-3.0
+[chessnutair](https://github.com/rmarabini/chessnutair) reference
+implementation. Mobile Maia's Bluetooth transport uses Android's native BLE
+APIs. Protocol sources, copyright notices, licence terms, and adaptation
+details are recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
 Game Review's move-classification and sacrifice-detection heuristics are
 adapted and translated to Dart from
 [En Croissant](https://github.com/franciscoBSalgueiro/en-croissant), the
