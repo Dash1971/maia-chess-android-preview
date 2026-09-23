@@ -28,6 +28,12 @@ class PreviewBuildContractTest(unittest.TestCase):
             self.assertIn('--allow-abi ' + abi, workflow)
         self.assertNotIn('app-arm64-v8a-release.apk', workflow)
 
+    def test_universal_build_remains_upgrade_compatible_with_split_beta20(self):
+        version = next(line for line in (REPO / 'pubspec.yaml').read_text().splitlines()
+                       if line.startswith('version: '))
+        build_number = int(version.rsplit('+', 1)[1])
+        self.assertGreaterEqual(build_number, 2075)
+
 
 if __name__ == '__main__':
     unittest.main()
