@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify an ARM64 offline release APK; optionally compare two APK payloads."""
+"""Verify an offline release APK; optionally compare two APK payloads."""
 import argparse
 from pathlib import Path
 import struct
@@ -11,6 +11,11 @@ from verify_model import MODEL_SHA256, MODEL_SIZE
 
 REPO = Path(__file__).resolve().parents[1]
 MODEL_ENTRY = 'assets/flutter_assets/assets/models/maia3-79m.onnx'
+ABI_ELF = {
+    'armeabi-v7a': (1, 40),
+    'arm64-v8a': (2, 183),
+    'x86_64': (2, 62),
+}
 
 
 def payload_names(names):
@@ -22,19 +27,35 @@ def payload_names(names):
          name.upper().endswith(('.SF', '.RSA', '.DSA', '.EC'))))}
 
 
-def elf_alignment(data):
-    require(len(data) >= 64 and data[:6] == b'\x7fELF\x02\x01', 'Not a little-endian ELF64 library.')
-    require(struct.unpack_from('<H', data, 18)[0] == 183, 'Native library is not ARM64.')
-    offset = struct.unpack_from('<Q', data, 32)[0]
-    size, count = struct.unpack_from('<HH', data, 54)
-    require(size >= 56 and offset + size * count <= len(data), 'Truncated ELF program headers.')
+def elf_alignment(data, abi='arm64-v8a'):
+    require(abi in ABI_ELF, 'Unsupported native ABI: ' + abi)
+    elf_class, machine = ABI_ELF[abi]
+    require(len(data) >= 52 and data[:4] == b'\x7fELF' and data[4] == elf_class and
+            data[5] == 1, f'Native library is not little-endian {abi} ELF.')
+    require(struct.unpack_from('<H', data, 18)[0] == machine,
+            'Native library architecture does not match ' + abi + '.')
+    if elf_class == 2:
+        require(len(data) >= 64, 'Truncated ELF64 header.')
+        offset = struct.unpack_from('<Q', data, 32)[0]
+        size, count = struct.unpack_from('<HH', data, 54)
+        minimum_size = 56
+    else:
+        offset = struct.unpack_from('<I', data, 28)[0]
+        size, count = struct.unpack_from('<HH', data, 42)
+        minimum_size = 32
+    require(size >= minimum_size and offset + size * count <= len(data),
+            'Truncated ELF program headers.')
     alignments = []
     for index in range(count):
         header = offset + index * size
         if struct.unpack_from('<I', data, header)[0] != 1:
             continue
-        file_offset, virtual_address = struct.unpack_from('<QQ', data, header + 8)
-        alignment = struct.unpack_from('<Q', data, header + 48)[0]
+        if elf_class == 2:
+            file_offset, virtual_address = struct.unpack_from('<QQ', data, header + 8)
+            alignment = struct.unpack_from('<Q', data, header + 48)[0]
+        else:
+            file_offset, virtual_address = struct.unpack_from('<II', data, header + 4)
+            alignment = struct.unpack_from('<I', data, header + 28)[0]
         require(alignment >= 16384 and alignment & (alignment - 1) == 0 and
                 file_offset % 16384 == virtual_address % 16384,
                 'ELF load segment is not 16 KB compatible.')
@@ -85,19 +106,30 @@ def verify(args):
             report['model_sha256'] = digest(model)
         require(report['model_sha256'] == MODEL_SHA256, 'Bundled model hash mismatch.')
         libraries = {}
+        observed_abis = set()
         for name in names:
             if not name.endswith('.so'):
                 continue
-            require(name.startswith('lib/arm64-v8a/'), 'Unexpected native ABI: ' + name)
+            parts = name.split('/')
+            require(len(parts) == 3 and parts[0] == 'lib',
+                    'Unexpected native library path: ' + name)
+            abi = parts[1]
+            require(abi in args.allow_abi, 'Unexpected native ABI: ' + abi)
+            observed_abis.add(abi)
             data = apk.read(name)
-            libraries[name] = elf_alignment(data)
+            libraries[name] = elf_alignment(data, abi)
             if name.endswith('/libapp.so'):
                 for path in [str(REPO), '/Users/', '/home/runner/work/', *args.forbid_path]:
                     require(path.encode() not in data, 'Dart binary contains a forbidden checkout path.')
-        require({'lib/arm64-v8a/' + name for name in (
-            'libapp.so', 'libflutter.so', 'libonnxruntime.so', 'libmultistockfish_chess.so')}
-            <= libraries.keys(), 'A required native engine/library is missing.')
+        require(observed_abis == set(args.allow_abi),
+                'Native ABI set does not match request: ' + ', '.join(sorted(observed_abis)))
+        required = {'libapp.so', 'libflutter.so', 'libonnxruntime.so',
+                    'libmultistockfish_chess.so'}
+        for abi in args.allow_abi:
+            require({'lib/' + abi + '/' + name for name in required} <= libraries.keys(),
+                    'A required native engine/library is missing for ' + abi + '.')
         report['elf_load_alignments'] = libraries
+        report['native_abis'] = sorted(observed_abis)
         report['payload_entries'] = len(payload_names(names))
         if args.compare:
             with zipfile.ZipFile(args.compare) as baseline:
@@ -115,12 +147,16 @@ def main():
     sdk_arguments(parser)
     parser.add_argument('--version-name')
     parser.add_argument('--version-code', type=int)
+    parser.add_argument('--allow-abi', action='append', choices=sorted(ABI_ELF),
+                        default=[], help='Expected native ABI; repeat for universal APKs.')
     parser.add_argument('--require-signature', action='store_true')
     parser.add_argument('--compare', type=Path, help='Default comparison allows no changed payload entries.')
     parser.add_argument('--allow-change', action='append', default=[], help='Exact ZIP entry allowed to change; repeatable.')
     parser.add_argument('--forbid-path', action='append', default=[], help='Additional build path forbidden in libapp.so.')
     parser.add_argument('--output', type=Path, required=True, help='JSON result, including failure reason.')
     args = parser.parse_args()
+    if not args.allow_abi:
+        args.allow_abi = ['arm64-v8a']
     if args.allow_change and not args.compare:
         parser.error('--allow-change requires --compare')
     try:

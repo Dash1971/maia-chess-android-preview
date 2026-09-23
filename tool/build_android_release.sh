@@ -18,16 +18,19 @@ python3 tool/verify_model.py
 SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-$(git log -1 --format=%ct)}
 export SOURCE_DATE_EPOCH
 
+python3 tool/prepare_reproducible_flutter_sdk.py --flutter-bin "$flutter_path"
 "$flutter_bin" clean
 "$flutter_bin" pub get --enforce-lockfile
+python3 tool/prepare_reproducible_stockfish.py \
+  --package-config .dart_tool/package_config.json
 # Run Flutter's release configuration pass before changing package_config.json.
 # This filters test-only native plugins from the generated release registrant.
-"$flutter_bin" build apk --release --config-only --split-per-abi --target-platform android-arm64
+"$flutter_bin" build apk --release --config-only
 # Flutter 3.47.1 otherwise embeds the absolute path to its generated Dart
 # plugin registrant in libapp.so. Give that generated source a stable package
 # URI before compiling so release artifacts remain private and reproducible
 # across different checkout paths. --no-pub preserves the prepared config.
 "$dart_bin" tool/prepare_reproducible_package_config.dart \
   .dart_tool/package_config.json
-"$flutter_bin" build apk --release --no-pub --split-per-abi --target-platform android-arm64 \
+"$flutter_bin" build apk --release --no-pub \
   --android-project-arg="mobileMaiaSourceDateEpoch=$SOURCE_DATE_EPOCH"

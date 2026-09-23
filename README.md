@@ -64,14 +64,17 @@ flutter test
 tool/build_android_release.sh
 ```
 
-The ARM64 release APK is written to
-`build/app/outputs/flutter-apk/app-arm64-v8a-release.apk`.
-It packages the mobile ARM64 ABI instead of bundling unused CPU architectures.
+The universal release APK is written to
+`build/app/outputs/flutter-apk/app-release.apk`.
+It packages the same ARMv7, ARM64, and x86_64 ABI set as Stable so Preview
+exercises the production artifact shape before promotion.
 Use this same script for official releases and independent rebuilds. It sets a
 fixed source timestamp, prepares stable generated Dart source URIs, and leaves
-obfuscation disabled. Gradle also verifies the model's exact size and SHA-256,
-so a direct `flutter build` cannot silently package a placeholder or altered
-model. The build downloads dependencies; installed release apps work offline.
+Dart obfuscation disabled. R8 still shrinks, optimizes, and obfuscates
+Java/Kotlin bytecode using the checked-in ONNX/JNI keep rules. Gradle also
+verifies the model's exact size and SHA-256, so a direct `flutter build` cannot
+silently package a placeholder or altered model. The build downloads
+dependencies; installed release apps work offline.
 
 To check reproducibility, build the **same commit** in two clean directories
 with the same pinned toolchain and no signing variables, then compare the

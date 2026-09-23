@@ -1,8 +1,8 @@
 # Reproducible Android builds
 
-Mobile Maia Preview's Android release build is reproducible when the same
-source revision, Flutter SDK, Java runtime, Android SDK, and locked Dart
-dependencies are used.
+Mobile Maia Preview's Android release build is reproducible when the same source
+revision, Flutter SDK, Java runtime, Android SDK, host operating-system family,
+and locked Dart dependencies are used.
 
 Build with:
 
@@ -36,10 +36,38 @@ libraries because the NDK otherwise gives byte-identical native code different
 inputs, preventing a stale native cache from retaining an older `__DATE__`
 value.
 
+The pinned `multistockfish_sf16` package downloads its Stockfish 16 NNUE network
+during CMake configuration. Before every release build, Mobile Maia applies a
+narrowly guarded patch to that exact package version and source line. CMake must
+verify SHA-256
+`5af11540bbfefcb54e38c5dd000cab4b469dfa7599a1d55be5d2722c20a8929b`
+and fail the build if the download is incomplete or different. This prevents a
+partial network response from being embedded into only one ABI's native
+library.
+
+Android NDK packages with the same revision contain host-specific compiler
+builds. In particular, NDK 28.2.13676358 produces different native output on
+macOS and Linux. Starting with Preview version 2.1.0-beta.21, the canonical
+unsigned release APK is therefore built on Linux by the manually dispatched
+GitHub Actions Android job. A separate Linux host must rebuild the same source
+commit and produce the same APK SHA-256 before signing. The developer signing
+key remains offline: the verified Linux artifact is downloaded and signed
+without rebuilding it.
+
+Flutter 3.47.1 discovers resolution-aware asset directories with an unsorted
+filesystem listing. That can serialize identical image variants in a different
+order in `AssetManifest.bin`. The release script applies a narrowly guarded
+backport to the pinned Flutter checkout before building: it sorts the discovered
+variant paths, invalidates any previously compiled Flutter tool snapshot, and
+refuses any unexpected Flutter revision or source shape.
+
 ## Verification
 
-For version `1.7.0-beta.26`, two clean unsigned builds from the same revision
-must have identical SHA-256 hashes. To verify a developer-signed APK, use
+For Preview version `2.1.0-beta.21` and later, the GitHub Actions build and a
+clean independent Linux build from the same revision must have identical
+SHA-256 hashes. The workflow requires the expected full source SHA, refuses a
+checkout mismatch, and retains the APK hash plus source, runner, Flutter, Java,
+NDK, and Clang provenance. To verify a developer-signed APK, use
 [`apksigcopier`](https://github.com/obfusk/apksigcopier) to extract its
 signature, apply that signature to the independently built unsigned APK, and
 compare the reconstructed APK byte-for-byte with the published APK.

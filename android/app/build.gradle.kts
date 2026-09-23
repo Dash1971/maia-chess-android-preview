@@ -64,12 +64,14 @@ android {
 
     buildTypes {
         release {
-            // F-Droid can build an unsigned release when signing credentials are
-            // absent. Official Mobile Maia releases provide all three variables.
+            // Reproducible builders produce an unsigned release when signing
+            // credentials are absent. Official Preview releases provide all
+            // three variables.
             signingConfig = signingConfigs.findByName("mobileMaiaRelease")
-            // The bundled ONNX model dominates APK size; Java/Kotlin shrinking
-            // adds release risk without a meaningful download-size reduction.
-            isMinifyEnabled = false
+            // Remove unused Java/Kotlin bytecode, including Flutter's dormant
+            // deferred-component bridge. JNI/reflection-sensitive ONNX classes
+            // remain protected by the explicit rules in proguard-rules.pro.
+            isMinifyEnabled = true
             isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

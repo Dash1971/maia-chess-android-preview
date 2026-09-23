@@ -54,6 +54,28 @@ class ArtifactChecksTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 elf_alignment(broken)
 
+    def test_native_alignment_accepts_expected_arm32_and_x86_64(self):
+        arm32 = bytearray(84)
+        arm32[:6] = b'\x7fELF\x01\x01'
+        struct.pack_into('<H', arm32, 18, 40)
+        struct.pack_into('<I', arm32, 28, 52)
+        struct.pack_into('<HH', arm32, 42, 32, 1)
+        struct.pack_into('<I', arm32, 52, 1)
+        struct.pack_into('<I', arm32, 80, 16384)
+        self.assertEqual(elf_alignment(arm32, 'armeabi-v7a'), [16384])
+
+        x86_64 = bytearray(120)
+        x86_64[:6] = b'\x7fELF\x02\x01'
+        struct.pack_into('<H', x86_64, 18, 62)
+        struct.pack_into('<Q', x86_64, 32, 64)
+        struct.pack_into('<HH', x86_64, 54, 56, 1)
+        struct.pack_into('<I', x86_64, 64, 1)
+        struct.pack_into('<Q', x86_64, 112, 16384)
+        self.assertEqual(elf_alignment(x86_64, 'x86_64'), [16384])
+
+        with self.assertRaisesRegex(ValueError, 'does not match'):
+            elf_alignment(x86_64, 'arm64-v8a')
+
 
 class UpgradeChecksTest(unittest.TestCase):
     def test_checkpoint_polling_retries_transient_reads_but_waits_for_a_new_save(self):
