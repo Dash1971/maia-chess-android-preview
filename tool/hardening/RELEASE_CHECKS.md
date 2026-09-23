@@ -12,6 +12,10 @@ Android build-tools 36.0.0 and platform-tools. Set `ANDROID_HOME` and `JAVA_HOME
 for the machine running the checks. `--sdk-root` and `--build-tools-version`
 can override SDK discovery explicitly. Python 3.10 or newer is recommended.
 
+The release wrapper applies the guarded Flutter 3.47.1 asset-variant-order
+backport documented in `REPRODUCIBLE_BUILDS.md`. A different Flutter revision or
+unexpected upstream source must fail before the build begins.
+
 ```sh
 python3 -m venv /tmp/maia-release-venv
 /tmp/maia-release-venv/bin/pip install -r tool/hardening/requirements.txt
@@ -43,20 +47,26 @@ mkdir -p release-checks
 tool/build_android_release.sh 2>&1 | tee release-checks/build.log
 ```
 
+The wrapper also patches the exact locked `multistockfish_sf16` package so its
+build-time NNUE download is SHA-256 verified. An unexpected package version,
+CMake source shape, partial download, or changed network file must fail before
+an APK can be accepted.
+
 ## Verify the APK
 
 ```sh
 python3 tool/verify_release_apk.py \
-  build/app/outputs/flutter-apk/app-arm64-v8a-release.apk \
+  build/app/outputs/flutter-apk/app-release.apk \
+  --allow-abi armeabi-v7a --allow-abi arm64-v8a --allow-abi x86_64 \
   --output release-checks/apk.json
 ```
 
 The command exits nonzero on failure and saves a JSON result with the reason.
 It checks the package, release/debug flag, Internet permission, exact bundled
-model hash/size, ZIP integrity and duplicate entries, ARM64 ELF architecture
-and 16 KB alignment, required engine libraries, and accidental test/key/build
-path inclusion. Large model/ZIP comparisons are streamed rather than loading
-both APKs into memory.
+model hash/size, ZIP integrity and duplicate entries, the requested native ABI
+set and ELF architecture, 16 KB alignment, required engine libraries, and
+accidental test/key/build-path inclusion. Large model/ZIP comparisons are
+streamed rather than loading both APKs into memory.
 
 Use `--version-name` and `--version-code` to require the intended release
 identity. For a published signed APK, add `--require-signature`. That validates
@@ -69,7 +79,8 @@ To verify that a published APK matches a clean unsigned rebuild:
 ```sh
 python3 tool/verify_release_apk.py /path/to/published.apk \
   --require-signature \
-  --compare build/app/outputs/flutter-apk/app-arm64-v8a-release.apk \
+  --allow-abi armeabi-v7a --allow-abi arm64-v8a --allow-abi x86_64 \
+  --compare build/app/outputs/flutter-apk/app-release.apk \
   --output release-checks/reproducibility.json
 ```
 
@@ -172,18 +183,27 @@ deliberately feed the checkers corrupted/changed artifacts, missing notes,
 altered clocks, duplicate lines and unsuitable emulator properties so a broken
 checker cannot silently report success for those cases.
 
-The existing **Checks** workflow has an optional `build_android` input. Select
-the desired branch in GitHub Actions and run it with that input enabled, or:
+The existing **Checks** workflow has a `build_android` input. Bind every release
+build to the exact intended source commit:
 
 ```sh
-gh workflow run checks.yml --ref YOUR_BRANCH -f build_android=true
+release_sha=$(git rev-parse YOUR_BRANCH)
+gh workflow run checks.yml --ref YOUR_BRANCH \
+  -f build_android=true \
+  -f expected_source_sha="$release_sha"
 ```
 
+Confirm the completed run's `headSha` equals `release_sha`. The Android job
+also refuses to build when the checked-out commit differs from the supplied
+full SHA.
+
 That job builds the unsigned APK, runs packaging verification, and uploads the
-build log/JSON diagnostics even after failure. The unsigned APK is uploaded
-after success. Both artifact types expire after **14 days**. The ARM64 emulator
-upgrade and native-engine checks remain explicit commands on a suitable host;
-the ordinary Ubuntu CI job does not claim to run them.
+build log/JSON diagnostics even after failure. Successful runs also retain the
+APK SHA-256 and sanitized source/runner/Flutter/Java/NDK/Clang provenance. The
+unsigned APK is uploaded after success. Both artifact types include the source
+SHA in their names and expire after **90 days**. The ARM64 emulator upgrade and
+native-engine checks remain explicit commands on a suitable host; the ordinary
+Ubuntu CI job does not claim to run them.
 
 Keep compact verification summaries, hashes, commands/seeds and sanitized
 fixtures in Git. Keep APKs, full logs and screenshots in ignored local output
