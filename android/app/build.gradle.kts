@@ -41,6 +41,8 @@ android {
     defaultConfig {
         applicationId = "com.dash1971.maia_chess.preview"
         manifestPlaceholders["appLabel"] = "Mobile Maia Preview"
+        manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+        manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_round"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -69,11 +71,15 @@ android {
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
             manifestPlaceholders["appLabel"] = "Mobile Maia Preview Dev"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_dev"
+            manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_dev_round"
         }
         getByName("profile") {
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
             manifestPlaceholders["appLabel"] = "Mobile Maia Preview Dev"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_dev"
+            manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_dev_round"
         }
         release {
             // Reproducible builders produce an unsigned release when signing
@@ -84,6 +90,8 @@ android {
                 applicationIdSuffix = ".dev"
                 versionNameSuffix = "-dev"
                 manifestPlaceholders["appLabel"] = "Mobile Maia Preview Dev"
+                manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_dev"
+                manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_dev_round"
                 signingConfig = signingConfigs.getByName("debug")
             } else {
                 signingConfig = signingConfigs.findByName("mobileMaiaRelease")

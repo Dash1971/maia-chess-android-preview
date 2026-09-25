@@ -88,7 +88,8 @@ analyzer and regression tests.
 Development builds install as **Mobile Maia Preview Dev** with package ID
 `com.dash1971.maia_chess.preview.dev`. They can coexist with Stable and the
 officially signed Preview app, and their separate data cannot overwrite either
-installation.
+installation. Dev uses the same launcher mark in red so it remains visibly
+distinct from the gold official Preview app.
 
 For interactive UI and behavior work, connect an authorized Android phone over
 USB debugging and run:
