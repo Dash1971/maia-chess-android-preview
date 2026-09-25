@@ -34,6 +34,24 @@ class PreviewBuildContractTest(unittest.TestCase):
         build_number = int(version.rsplit('+', 1)[1])
         self.assertGreaterEqual(build_number, 2075)
 
+    def test_fast_iteration_uses_a_separate_development_identity(self):
+        gradle = (REPO / 'android/app/build.gradle.kts').read_text()
+        manifest = (REPO / 'android/app/src/main/AndroidManifest.xml').read_text()
+        snapshot = (REPO / 'tool/build_android_snapshot.sh').read_text()
+
+        self.assertIn('mobileMaiaDevelopment', gradle)
+        self.assertIn('applicationIdSuffix = ".dev"', gradle)
+        self.assertIn('Mobile Maia Preview Dev', gradle)
+        self.assertIn('signingConfigs.getByName("debug")', gradle)
+        self.assertIn('android:label="${appLabel}"', manifest)
+        self.assertIn('build apk --release --config-only', snapshot)
+        self.assertIn('--split-per-abi', snapshot)
+        self.assertIn('--target-platform android-arm64', snapshot)
+        self.assertIn('--android-project-arg=mobileMaiaDevelopment=true', snapshot)
+        self.assertNotIn('flutter clean', snapshot)
+        self.assertNotIn('prepare_reproducible_flutter_sdk.py', snapshot)
+        self.assertNotIn('prepare_reproducible_stockfish.py', snapshot)
+
 
 if __name__ == '__main__':
     unittest.main()

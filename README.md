@@ -83,6 +83,35 @@ procedure is not itself evidence that a particular release reproduced. The
 manual Checks workflow can build an unsigned APK; pull requests run the Dart
 analyzer and regression tests.
 
+## Fast phone iteration
+
+Development builds install as **Mobile Maia Preview Dev** with package ID
+`com.dash1971.maia_chess.preview.dev`. They can coexist with Stable and the
+officially signed Preview app, and their separate data cannot overwrite either
+installation.
+
+For interactive UI and behavior work, connect an authorized Android phone over
+USB debugging and run:
+
+```sh
+flutter devices
+flutter run
+```
+
+Flutter installs the Dev app and supports hot reload or hot restart. For a
+longer private phone test, build one cached ARM64 release-mode snapshot:
+
+```sh
+tool/build_android_snapshot.sh
+adb install -r build/app/outputs/flutter-apk/Mobile-Maia-Preview-Dev-arm64.apk
+```
+
+The snapshot retains release mode, R8, and model-integrity checks, but it is
+development-signed and is not a reproducible or publishable release artifact.
+Do not tag it, publish it through GitHub/Obtainium, or use it as Stable-release
+evidence. Use `tool/build_android_release.sh` and the full qualification process
+once a feature is substantially settled.
+
 The [release verification guide](tool/hardening/RELEASE_CHECKS.md) includes
 portable APK checks, sanitized saved-game upgrade fixtures, emulator commands,
 and CI artifact retention. See the

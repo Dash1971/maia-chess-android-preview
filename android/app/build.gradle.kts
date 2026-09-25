@@ -14,6 +14,8 @@ val releaseSigningValues = listOf(
     releaseStorePassword,
     releaseKeyPassword,
 )
+val developmentSnapshot =
+    providers.gradleProperty("mobileMaiaDevelopment").orNull == "true"
 
 require(releaseSigningValues.all { it == null } || releaseSigningValues.all { it != null }) {
     "Set MOBILE_MAIA_KEYSTORE, MOBILE_MAIA_STORE_PASSWORD, and " +
@@ -38,6 +40,7 @@ android {
 
     defaultConfig {
         applicationId = "com.dash1971.maia_chess.preview"
+        manifestPlaceholders["appLabel"] = "Mobile Maia Preview"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -62,11 +65,29 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            manifestPlaceholders["appLabel"] = "Mobile Maia Preview Dev"
+        }
+        getByName("profile") {
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            manifestPlaceholders["appLabel"] = "Mobile Maia Preview Dev"
+        }
         release {
             // Reproducible builders produce an unsigned release when signing
             // credentials are absent. Official Preview releases provide all
-            // three variables.
-            signingConfig = signingConfigs.findByName("mobileMaiaRelease")
+            // three variables. Fast private snapshots use the separate Dev
+            // identity and Android's development signer, never the release key.
+            if (developmentSnapshot) {
+                applicationIdSuffix = ".dev"
+                versionNameSuffix = "-dev"
+                manifestPlaceholders["appLabel"] = "Mobile Maia Preview Dev"
+                signingConfig = signingConfigs.getByName("debug")
+            } else {
+                signingConfig = signingConfigs.findByName("mobileMaiaRelease")
+            }
             // Remove unused Java/Kotlin bytecode, including Flutter's dormant
             // deferred-component bridge. JNI/reflection-sensitive ONNX classes
             // remain protected by the explicit rules in proguard-rules.pro.
