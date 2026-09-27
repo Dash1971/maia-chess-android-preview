@@ -2054,41 +2054,17 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   Widget _analysisControls() {
-    final current = _inVariation ? _variationIndex : _ply;
-    final total = _inVariation ? _variationSan.length : _maximumPly;
-    final isBranch =
-        _inVariation && !identical(_openedVariation, _rootMainline);
-    final status = isBranch
-        ? 'Variation · $current / $total'
-        : _atAnalysisStart
-        ? 'Start · $current / $total'
-        : _atAnalysisEnd
-        ? 'End · $current / $total'
-        : 'Move · $current / $total';
-    final semantics = isBranch
-        ? 'Variation position, move $current of $total'
-        : _atAnalysisStart
-        ? 'Starting position, move $current of $total'
-        : _atAnalysisEnd
-        ? 'End position, move $current of $total'
-        : 'Move $current of $total';
-
     return MoveHistoryNavigator(
       key: const ValueKey('analysis-controls'),
-      firstKey: const ValueKey('first-move-button'),
       previousKey: const ValueKey('previous-move-button'),
       nextKey: const ValueKey('next-move-button'),
-      lastKey: const ValueKey('last-move-button'),
-      statusKey: const ValueKey('analysis-history-position'),
-      status: status,
-      statusSemanticsLabel: semantics,
       canGoBack: !_atAnalysisStart,
       canGoForward: !_atAnalysisEnd,
       onFirst: _jumpToStart,
       onPrevious: () => _step(-1),
       onNext: () => _step(1),
       onLast: _jumpToEnd,
-      lastTooltip: 'End position',
+      endTooltip: 'end position',
       headerActionWidth: 56,
       headerActions: [
         IconButton(

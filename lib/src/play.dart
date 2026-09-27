@@ -91,6 +91,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   bool _savedAsIncomplete = false;
   int? _viewedPly;
   final ScrollController _liveMovesController = ScrollController();
+  final Map<int, GlobalKey> _liveMoveKeys = {};
   final Random _timingRandom = Random();
   late final ElectronicBoardTransport _chessnut;
   late final ChessnutLedController _chessnutLeds;
@@ -1733,6 +1734,32 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       animate: true,
       resetPremove: true,
     );
+    _scrollDisplayedMoveIntoView(next);
+  }
+
+  void _scrollDisplayedMoveIntoView(int ply) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_liveMovesController.hasClients) return;
+      if (ply == 0) {
+        _liveMovesController.animateTo(
+          _liveMovesController.position.minScrollExtent,
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+        );
+        return;
+      }
+      final moveContext = _liveMoveKeys[ply - 1]?.currentContext;
+      if (moveContext == null) return;
+      final scrollable = Scrollable.maybeOf(moveContext);
+      final renderObject = moveContext.findRenderObject();
+      if (scrollable == null || renderObject == null) return;
+      scrollable.position.ensureVisible(
+        renderObject,
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        alignment: 0.5,
+      );
+    });
   }
 
   void _scrollLiveMovesToEnd() {
@@ -3561,6 +3588,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     final moves = _liveSanMoves;
     final children = <Widget>[];
     for (var index = 0; index < moves.length; index++) {
+      final selected = index == _displayPly - 1;
       final root = _positionHistory.first.split(' ');
       final absolute =
           ((int.tryParse(root[5]) ?? 1) - 1) * 2 +
@@ -3581,11 +3609,29 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
         );
       }
       children.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+        AnimatedContainer(
+          key: _liveMoveKeys.putIfAbsent(
+            index,
+            () => GlobalKey(debugLabel: 'live-move-$index'),
+          ),
+          duration: const Duration(milliseconds: 140),
+          curve: Curves.easeOut,
+          margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+          decoration: BoxDecoration(
+            color: selected
+                ? Theme.of(context).colorScheme.primaryContainer
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: Text(
             moves[index],
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            style: TextStyle(
+              color: selected
+                  ? Theme.of(context).colorScheme.onPrimaryContainer
+                  : null,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       );
@@ -3608,29 +3654,48 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
                 ),
               ),
             )
-          : SingleChildScrollView(
-              key: const ValueKey('live-move-scroll'),
-              controller: _liveMovesController,
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.only(right: 12),
-              child: Row(children: children),
+          : Row(
+              children: [
+                if (!_isViewingLivePosition)
+                  Container(
+                    key: const ValueKey('game-history-indicator'),
+                    height: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 9),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                      borderRadius: const BorderRadius.horizontal(
+                        left: Radius.circular(4),
+                      ),
+                    ),
+                    child: Text(
+                      _displayPly == 0 ? 'START' : 'HISTORY',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    key: const ValueKey('live-move-scroll'),
+                    controller: _liveMovesController,
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.only(right: 12),
+                    child: Row(children: children),
+                  ),
+                ),
+              ],
             ),
     );
   }
 
   Widget _liveGameControls() => MoveHistoryNavigator(
     key: const ValueKey('live-game-controls'),
-    firstKey: const ValueKey('game-first-move-button'),
     previousKey: const ValueKey('game-previous-move-button'),
     nextKey: const ValueKey('game-next-move-button'),
-    lastKey: const ValueKey('game-latest-move-button'),
-    statusKey: const ValueKey('game-history-position'),
-    status: _isViewingLivePosition
-        ? 'Live · $_displayPly / ${max(0, _positionHistory.length - 1)}'
-        : 'History · $_displayPly / ${max(0, _positionHistory.length - 1)}',
-    statusSemanticsLabel: _isViewingLivePosition
-        ? 'Live position, move $_displayPly of ${max(0, _positionHistory.length - 1)}'
-        : 'History position, move $_displayPly of ${max(0, _positionHistory.length - 1)}',
     canGoBack: _displayPly > 0,
     canGoForward: !_isViewingLivePosition,
     onFirst: () => _showGamePly(0),
