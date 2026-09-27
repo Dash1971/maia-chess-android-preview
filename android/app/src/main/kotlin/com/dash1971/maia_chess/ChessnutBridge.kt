@@ -65,7 +65,7 @@ class ChessnutBridge(
     private var serviceDiscoveryStarted = false
     private var ready = false
     private var state = "disconnected"
-    private var stateMessage = "Chessnut Go is disconnected."
+    private var stateMessage = "Chessnut is disconnected."
     private var deviceName: String? = null
     private var lastGattStatus: Int? = null
     private var scanAttempts = 0
@@ -90,7 +90,7 @@ class ChessnutBridge(
         when (call.method) {
             "connect" -> connect(result)
             "disconnect" -> {
-                disconnect("Chessnut Go disconnected.")
+                disconnect("Chessnut disconnected.")
                 result.success(null)
             }
             "setLeds" -> setLeds(call, result)
@@ -135,7 +135,7 @@ class ChessnutBridge(
                 emitError(error.message ?: "Could not start Chessnut scan.")
             }
         } else {
-            val message = "Bluetooth permission is required to connect Chessnut Go."
+            val message = "Bluetooth permission is required to connect Chessnut."
             result?.error("permission_denied", message, null)
             emitError(message)
         }
@@ -144,7 +144,7 @@ class ChessnutBridge(
 
     private fun connect(result: MethodChannel.Result) {
         if (ready) {
-            emitStatus("ready", "Chessnut Go is ready.", deviceName)
+            emitStatus("ready", "Chessnut is ready.", deviceName)
             result.success(null)
             return
         }
@@ -196,7 +196,7 @@ class ChessnutBridge(
         scanAttempts++
         val scanner = adapter?.bluetoothLeScanner
             ?: throw IllegalStateException("Bluetooth LE scanning is unavailable.")
-        emitStatus("scanning", "Searching for Chessnut Go…")
+        emitStatus("scanning", "Searching for Chessnut…")
         val callback = object : ScanCallback() {
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 val name = try {
@@ -206,7 +206,7 @@ class ChessnutBridge(
                 }
                 if (!looksLikeChessnut(name)) return
                 stopScan()
-                connectGatt(result.device, name.ifBlank { "Chessnut Go" })
+                connectGatt(result.device, name.ifBlank { "Chessnut" })
             }
 
             override fun onScanFailed(errorCode: Int) {
@@ -224,7 +224,7 @@ class ChessnutBridge(
         mainHandler.postDelayed({
             if (scanCallback === callback) {
                 stopScan()
-                emitError("No Chessnut Go found. Check that the board is on and nearby.")
+                emitError("No Chessnut found. Check that the board is on and nearby.")
             }
         }, SCAN_TIMEOUT_MS)
     }
@@ -255,7 +255,7 @@ class ChessnutBridge(
                 @Suppress("DEPRECATION")
                 device.connectGatt(activity, false, gattCallback)
             }
-            if (gatt == null) failConnection("Could not open the Chessnut Go connection.")
+            if (gatt == null) failConnection("Could not open the Chessnut connection.")
         } catch (error: SecurityException) {
             failConnection(error.message ?: "Bluetooth permission was revoked.")
         }
@@ -274,7 +274,7 @@ class ChessnutBridge(
                 }
                 when (newState) {
                     BluetoothProfile.STATE_CONNECTED -> {
-                        emitStatus("connected", "Connected; configuring Chessnut Go…", deviceName)
+                        emitStatus("connected", "Connected; configuring Chessnut…", deviceName)
                         try {
                             if (!gatt.requestMtu(500)) discoverServicesOnce(gatt)
                         } catch (error: SecurityException) {
@@ -288,7 +288,7 @@ class ChessnutBridge(
                         if (unexpected) {
                             emitStatus(
                                 "disconnected",
-                                "Chessnut Go connection was lost. Tap reconnect to continue.",
+                                "Chessnut connection was lost. Tap reconnect to continue.",
                                 deviceName,
                                 "gattStatus=$status newState=$newState",
                             )
@@ -446,7 +446,7 @@ class ChessnutBridge(
 
     private fun finishConfiguration() {
         ready = true
-        emitStatus("ready", "Chessnut Go is ready.", deviceName)
+        emitStatus("ready", "Chessnut is ready.", deviceName)
         enqueueWrite(INIT_COMMAND)
         enqueueWrite(BATTERY_COMMAND)
     }
@@ -475,7 +475,7 @@ class ChessnutBridge(
 
     private fun setLeds(call: MethodCall, result: MethodChannel.Result) {
         if (!ready) {
-            result.error("not_connected", "Chessnut Go is not ready.", null)
+            result.error("not_connected", "Chessnut is not ready.", null)
             return
         }
         val values = call.argument<List<Number>>("command")
@@ -491,7 +491,7 @@ class ChessnutBridge(
 
     private fun beep(call: MethodCall, result: MethodChannel.Result) {
         if (!ready) {
-            result.error("not_connected", "Chessnut Go is not ready.", null)
+            result.error("not_connected", "Chessnut is not ready.", null)
             return
         }
         val values = call.argument<List<Number>>("command")
@@ -559,11 +559,11 @@ class ChessnutBridge(
             activeWrite = null
             pendingWrite.completion?.error(
                 "write_not_started",
-                "Could not send a command to Chessnut Go.",
+                "Could not send a command to Chessnut.",
                 null,
             )
             if (pendingWrite.failureIsFatal) {
-                failConnection("Could not send a command to Chessnut Go.")
+                failConnection("Could not send a command to Chessnut.")
             } else {
                 scheduleNextWrite()
             }

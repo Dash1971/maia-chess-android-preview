@@ -186,7 +186,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final toggle = find.byKey(const ValueKey('chessnut-go-toggle'));
+    final toggle = find.byKey(const ValueKey('chessnut-toggle'));
     await tester.ensureVisible(toggle);
     await tester.tap(toggle);
     await tester.pumpAndSettle();
@@ -256,7 +256,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final toggle = find.byKey(const ValueKey('chessnut-go-toggle'));
+    final toggle = find.byKey(const ValueKey('chessnut-toggle'));
     await tester.ensureVisible(toggle);
     await tester.tap(toggle);
     await tester.pumpAndSettle();

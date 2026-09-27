@@ -287,7 +287,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final toggle = find.byKey(const ValueKey('chessnut-go-toggle'));
+    final toggle = find.byKey(const ValueKey('chessnut-toggle'));
     await tester.ensureVisible(toggle);
     await tester.tap(toggle);
     await tester.pumpAndSettle();
@@ -339,7 +339,7 @@ void main() {
     board.position(ChessnutProtocol.pieceMapFromFen(game.fen));
     await tester.pump();
     expect(board.ledCommands.last, isEmpty);
-    expect(find.text('Your move on Chessnut Go.'), findsOneWidget);
+    expect(find.text('Your move on Chessnut.'), findsOneWidget);
     final clearIndex = board.ledCommands.lastIndexWhere(
       (command) => command.isEmpty,
     );
@@ -373,7 +373,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final toggle = find.byKey(const ValueKey('chessnut-go-toggle'));
+    final toggle = find.byKey(const ValueKey('chessnut-toggle'));
     await tester.ensureVisible(toggle);
     await tester.tap(toggle);
     await tester.pumpAndSettle();
@@ -424,9 +424,9 @@ void main() {
       );
       await tester.pumpAndSettle();
       await tester.ensureVisible(
-        find.byKey(const ValueKey('chessnut-go-toggle')),
+        find.byKey(const ValueKey('chessnut-toggle')),
       );
-      await tester.tap(find.byKey(const ValueKey('chessnut-go-toggle')));
+      await tester.tap(find.byKey(const ValueKey('chessnut-toggle')));
       await tester.pumpAndSettle();
       await tester.ensureVisible(
         find.widgetWithText(FilledButton, 'Start game'),
@@ -481,9 +481,9 @@ void main() {
     );
     await tester.pumpAndSettle();
     await tester.ensureVisible(
-      find.byKey(const ValueKey('chessnut-go-toggle')),
+      find.byKey(const ValueKey('chessnut-toggle')),
     );
-    await tester.tap(find.byKey(const ValueKey('chessnut-go-toggle')));
+    await tester.tap(find.byKey(const ValueKey('chessnut-toggle')));
     await tester.pumpAndSettle();
     final sounds = tester.widget<SwitchListTile>(
       find.byKey(const ValueKey('chessnut-sounds-toggle')),
@@ -525,9 +525,9 @@ void main() {
     );
     await tester.pumpAndSettle();
     await tester.ensureVisible(
-      find.byKey(const ValueKey('chessnut-go-toggle')),
+      find.byKey(const ValueKey('chessnut-toggle')),
     );
-    await tester.tap(find.byKey(const ValueKey('chessnut-go-toggle')));
+    await tester.tap(find.byKey(const ValueKey('chessnut-toggle')));
     await tester.pumpAndSettle();
     await tester.ensureVisible(find.widgetWithText(FilledButton, 'Start game'));
     await tester.tap(find.widgetWithText(FilledButton, 'Start game'));
@@ -546,7 +546,7 @@ void main() {
     await tester.tap(find.text('Take back move'));
     await tester.pump();
     expect(
-      find.text('Takeback: restore the lit squares on Chessnut Go.'),
+      find.text('Takeback: restore the lit squares on Chessnut.'),
       findsOneWidget,
     );
     expect(board.ledCommands.last.toSet(), containsAll(const {'e2', 'e4'}));
@@ -562,7 +562,7 @@ void main() {
     );
     await tester.pump();
     expect(
-      find.text('Takeback complete. Your move on Chessnut Go.'),
+      find.text('Takeback complete. Your move on Chessnut.'),
       findsOneWidget,
     );
     await tester.pump();
@@ -585,7 +585,7 @@ void main() {
       MaterialApp(home: GamePage(electronicBoardTransport: board)),
     );
     await tester.pumpAndSettle();
-    final toggle = find.byKey(const ValueKey('chessnut-go-toggle'));
+    final toggle = find.byKey(const ValueKey('chessnut-toggle'));
     await tester.ensureVisible(toggle);
     await tester.tap(toggle);
     await tester.pumpAndSettle();

@@ -21,24 +21,33 @@ class RecentSession {
   }
 
   String get title {
-    final pgn = data['pgn'] ?? (data['session'] as Map?)?['pgn'];
-    // Listing a long game must not parse its move tree on the UI isolate.
-    final eventHeader = pgn is String
-        ? RegExp(
-            r'^\[Event .*$',
-            multiLine: true,
-          ).firstMatch(pgn.substring(0, min(pgn.length, 8192)))?.group(0)
-        : null;
-    final event = eventHeader == null
-        ? null
-        : dc.PgnGame.parsePgn(
-            eventHeader,
-            initHeaders: dc.PgnGame.emptyHeaders,
-          ).headers['Event'];
-    return event != null && event != '?' && !event.startsWith('Mobile Maia')
-        ? event
-        : 'Game · Maia ${data['elo'] ?? 1600}';
+    final maia = 'Maia ${data['elo'] ?? 1600}';
+    final playerIsWhite = data['playerIsWhite'];
+    return playerIsWhite is! bool || playerIsWhite
+        ? 'Player — $maia'
+        : '$maia — Player';
   }
+
+  String get resultLabel {
+    if (isIncomplete) return 'Incomplete';
+    final forcedResult = data['forcedResult'];
+    if (forcedResult is String && _isFinalResult(forcedResult)) {
+      return forcedResult;
+    }
+    final pgn = data['pgn'] ?? (data['session'] as Map?)?['pgn'];
+    if (pgn is String) {
+      final headers = pgn.substring(0, min(pgn.length, 8192));
+      final match = RegExp(
+        r'^\[Result\s+"(1-0|0-1|1/2-1/2)"\]\s*$',
+        multiLine: true,
+      ).firstMatch(headers);
+      if (match != null) return match.group(1)!;
+    }
+    return 'Completed';
+  }
+
+  static bool _isFinalResult(String result) =>
+      result == '1-0' || result == '0-1' || result == '1/2-1/2';
 }
 
 /// App-private, transactional files. Each successful write retains the previous
@@ -547,7 +556,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                     : null,
                 title: Text(game.title),
                 subtitle: Text(
-                  '${game.isIncomplete ? 'Incomplete' : 'Completed'} · '
+                  '${game.resultLabel} · '
                   '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
                 ),
                 onTap: () {

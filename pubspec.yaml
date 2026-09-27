@@ -40,6 +40,7 @@ dependencies:
   multistockfish: ^0.5.0
   package_info_plus: ^10.2.1
   shared_preferences: ^2.5.3
+  sound_effect: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +81,7 @@ flutter:
         - preview
     - assets/openings/lichess_openings.tsv
     - assets/openings/LICHESS_OPENINGS_CC0.txt
+    - assets/sounds/standard/
 
   fonts:
     - family: LichessIcons
