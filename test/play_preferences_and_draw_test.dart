@@ -112,7 +112,7 @@ void main() {
 
     await tester.pumpWidget(const MaterialApp(home: GamePage()));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Advanced'));
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
     await tester.pumpAndSettle();
 
     DropdownButtonFormField<GameAnalysisQuality> field() => tester.widget(
@@ -137,11 +137,13 @@ void main() {
     await tester.pump();
     await tester.pumpWidget(const MaterialApp(home: GamePage()));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Advanced'));
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
     await tester.pumpAndSettle();
     expect(field().initialValue, GameAnalysisQuality.fast);
     expect(find.textContaining('Faster, but noisier'), findsOneWidget);
 
+    await tester.tap(find.byKey(const ValueKey('settings-back-button')));
+    await tester.pumpAndSettle();
     await tester.ensureVisible(find.text('Analysis Board'));
     await tester.tap(find.text('Analysis Board'));
     await tester.pumpAndSettle();
@@ -165,7 +167,7 @@ void main() {
 
     await tester.pumpWidget(const MaterialApp(home: GamePage()));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Advanced'));
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
     await tester.pumpAndSettle();
 
     SwitchListTile setting(String key) =>
@@ -184,7 +186,7 @@ void main() {
     await tester.pump();
     await tester.pumpWidget(const MaterialApp(home: GamePage()));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Advanced'));
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
     await tester.pumpAndSettle();
     expect(setting('game-sounds-setting').value, isTrue);
     expect(setting('game-haptics-setting').value, isFalse);

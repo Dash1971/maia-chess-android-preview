@@ -1,0 +1,105 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:maia_chess/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
+  testWidgets('home focuses on setup and three large actions', (tester) async {
+    tester.view.physicalSize = const Size(360, 720);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const MaterialApp(home: GamePage()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Play Maia'), findsOneWidget);
+    expect(find.text('Play a human-like opponent'), findsNothing);
+    expect(find.textContaining('runs entirely on your phone'), findsNothing);
+    expect(find.text('Open PGN file'), findsNothing);
+    expect(find.text('Advanced'), findsNothing);
+
+    for (final label in ['Start game', 'Analysis Board', 'Recent games']) {
+      final button = label == 'Start game'
+          ? find.widgetWithText(FilledButton, label)
+          : find.widgetWithText(OutlinedButton, label);
+      expect(button, findsOneWidget);
+      expect(
+        button.hitTestable(),
+        findsOneWidget,
+        reason: '$label rect ${tester.getRect(button)}',
+      );
+      expect(tester.getSize(button).height, greaterThanOrEqualTo(52));
+    }
+    expect(
+      find.byKey(const ValueKey('home-settings-button')).hitTestable(),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Settings separates game, engine, and Chessnut controls', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: GamePage()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Game settings'), findsOneWidget);
+    expect(find.text('Engine settings'), findsOneWidget);
+    expect(find.text('Chessnut'), findsOneWidget);
+    expect(find.byKey(const ValueKey('game-sounds-setting')), findsOneWidget);
+    expect(find.byKey(const ValueKey('premoves-setting')), findsOneWidget);
+    expect(find.byKey(const ValueKey('sampling-help')), findsOneWidget);
+    expect(find.text('Copy diagnostics'), findsOneWidget);
+    expect(find.text('Play Maia'), findsNothing);
+    expect(find.text('Advanced'), findsNothing);
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.text('Play Maia'), findsOneWidget);
+    expect(find.text('Game settings'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('compact large-text layouts keep all actions reachable', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 568);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.6)),
+          child: child!,
+        ),
+        home: const GamePage(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+
+    final recent = find.widgetWithText(OutlinedButton, 'Recent games');
+    await tester.ensureVisible(recent);
+    expect(recent.hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+    await tester.pumpAndSettle();
+    final diagnostics = find.text('Copy diagnostics');
+    await tester.ensureVisible(diagnostics);
+    expect(diagnostics.hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+}

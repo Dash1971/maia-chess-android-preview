@@ -109,6 +109,8 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('game-home-button')));
       await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+      await tester.pumpAndSettle();
       final toggle = tester.widget<SwitchListTile>(
         find.byKey(const ValueKey('chessnut-toggle')),
       );
