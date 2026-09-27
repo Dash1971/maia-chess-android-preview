@@ -2355,7 +2355,35 @@ void main() {
     final board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
     expect(board.controller.fen, positions.last);
     expect(tester.getSize(tabPanel), initialPanelSize);
-    expect(find.byKey(const ValueKey('analysis-move-scroll')), findsOneWidget);
+    final moveList = find.byKey(const ValueKey('analysis-move-list'));
+    final moveScroll = find.byKey(const ValueKey('analysis-move-scroll'));
+    final selectedMove = find.byKey(const ValueKey('analysis-selected-move'));
+    expect(moveScroll, findsOneWidget);
+    expect(selectedMove, findsOneWidget);
+    var scrollRect = tester.getRect(moveScroll);
+    var selectedRect = tester.getRect(selectedMove);
+    expect(selectedRect.top, greaterThanOrEqualTo(scrollRect.top - 0.5));
+    expect(selectedRect.bottom, lessThanOrEqualTo(scrollRect.bottom + 0.5));
+    final moveScrollable = find.descendant(
+      of: moveList,
+      matching: find.byType(SingleChildScrollView),
+    );
+    final scrollController = tester
+        .widget<SingleChildScrollView>(moveScrollable)
+        .controller!;
+    expect(scrollController.offset, greaterThan(0));
+
+    await tester.ensureVisible(find.byTooltip('Previous move'));
+    await tester.longPress(find.byTooltip('Previous move'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Next move'));
+    await tester.pumpAndSettle();
+
+    expect(scrollController.offset, closeTo(0, 0.5));
+    scrollRect = tester.getRect(moveScroll);
+    selectedRect = tester.getRect(selectedMove);
+    expect(selectedRect.top, greaterThanOrEqualTo(scrollRect.top - 0.5));
+    expect(selectedRect.bottom, lessThanOrEqualTo(scrollRect.bottom + 0.5));
   });
 
   test('analysis graph fills black above and white below the curve', () async {
