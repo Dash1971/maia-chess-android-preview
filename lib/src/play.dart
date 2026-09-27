@@ -3415,6 +3415,49 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
               title: const Text('Chessnut (experimental)'),
               onChanged: (value) => unawaited(_setUseChessnutGo(value)),
             ),
+            if (_useChessnutGo) ...[
+              Container(
+                key: const ValueKey('chessnut-setup-status'),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      _chessnutReady
+                          ? Icons.bluetooth_connected
+                          : Icons.bluetooth_searching,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(child: Text(_chessnutMessage)),
+                    if (_chessnutBatteryPercent != null)
+                      Text(
+                        '$_chessnutBatteryPercent%${_chessnutCharging ? ' ⚡' : ''}',
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                key: const ValueKey('chessnut-connect-button'),
+                onPressed: _chessnutReady
+                    ? _disconnectChessnut
+                    : _connectChessnut,
+                icon: Icon(
+                  _chessnutReady ? Icons.bluetooth_disabled : Icons.bluetooth,
+                ),
+                label: Text(_chessnutReady ? 'Disconnect' : 'Connect Chessnut'),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text(
+                  'The first preview supports standard-position, unlimited games only.',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+            ],
             const SizedBox(height: 10),
             FilledButton.icon(
               style: FilledButton.styleFrom(
@@ -3670,77 +3713,15 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
                 icon: Icons.bluetooth_outlined,
                 children: [
                   SwitchListTile(
-                    key: const ValueKey('chessnut-toggle'),
-                    value: _useChessnutGo,
-                    title: const Text('Chessnut (experimental)'),
+                    key: const ValueKey('chessnut-sounds-toggle'),
+                    value: _chessnutSoundsEnabled,
+                    title: const Text('Board sounds'),
                     subtitle: const Text(
-                      'Enter moves on the physical board and follow Maia’s LEDs.',
+                      'Beep for check, checkmate, and completed illegal moves.',
                     ),
-                    onChanged: (value) => unawaited(_setUseChessnutGo(value)),
+                    onChanged: (value) =>
+                        unawaited(_setChessnutSoundsEnabled(value)),
                   ),
-                  if (_useChessnutGo) ...[
-                    SwitchListTile(
-                      key: const ValueKey('chessnut-sounds-toggle'),
-                      value: _chessnutSoundsEnabled,
-                      title: const Text('Board sounds'),
-                      subtitle: const Text(
-                        'Beep for check, checkmate, and completed illegal moves.',
-                      ),
-                      onChanged: (value) =>
-                          unawaited(_setChessnutSoundsEnabled(value)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-                      child: Container(
-                        key: const ValueKey('chessnut-setup-status'),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              _chessnutReady
-                                  ? Icons.bluetooth_connected
-                                  : Icons.bluetooth_searching,
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(child: Text(_chessnutMessage)),
-                            if (_chessnutBatteryPercent != null)
-                              Text(
-                                '$_chessnutBatteryPercent%${_chessnutCharging ? ' ⚡' : ''}',
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: OutlinedButton.icon(
-                        onPressed: _chessnutReady
-                            ? _disconnectChessnut
-                            : _connectChessnut,
-                        icon: Icon(
-                          _chessnutReady
-                              ? Icons.bluetooth_disabled
-                              : Icons.bluetooth,
-                        ),
-                        label: Text(
-                          _chessnutReady ? 'Disconnect' : 'Connect Chessnut',
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                      child: Text(
-                        'The first preview supports standard-position, unlimited games only.',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ),
-                  ],
                 ],
               ),
               const SizedBox(height: 16),
