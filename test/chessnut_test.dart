@@ -379,6 +379,46 @@ void main() {
     await board.close();
   });
 
+  testWidgets('Chessnut always starts and returns home with Unlimited time', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      maiaTimePresetPreferenceKey: TimePreset.blitzFive.name,
+    });
+    final board = _FakeElectronicBoard();
+    await tester.pumpWidget(
+      MaterialApp(home: GamePage(electronicBoardTransport: board)),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('time-preset-blitzFive')), findsOneWidget);
+
+    await _enableChessnut(tester);
+    expect(find.byKey(const ValueKey('time-preset-unlimited')), findsOneWidget);
+    final start = find.widgetWithText(FilledButton, 'Start game');
+    await tester.ensureVisible(start);
+    await tester.tap(start);
+    await tester.pumpAndSettle();
+    expect((await ActiveSessionStore.load())!['timePreset'], 'unlimited');
+
+    await tester.tap(find.byKey(const ValueKey('game-home-button')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Continue'));
+    await tester.pumpAndSettle();
+    expect(
+      tester
+          .widget<SwitchListTile>(
+            find.byKey(const ValueKey('home-chessnut-toggle')),
+          )
+          .value,
+      isTrue,
+    );
+    expect(find.byKey(const ValueKey('time-preset-unlimited')), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    await board.close();
+  });
+
   testWidgets('inline reconnect rescans without losing the live game', (
     tester,
   ) async {
