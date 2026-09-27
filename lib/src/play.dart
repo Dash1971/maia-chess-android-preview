@@ -3051,12 +3051,12 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
             );
             final contentHeight = max(0.0, constraints.maxHeight - 16);
             // Keep the live board fixed while moves alone scroll horizontally.
-            final boardSize = min(
+            final availableBoardSize = min(
               contentWidth,
               max(
                 0.0,
                 contentHeight -
-                    (154 +
+                    (206 +
                         2 * _playerRowHeight +
                         max(
                               0,
@@ -3071,72 +3071,84 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
                     (_chessnutGameActive ? _chessnutBannerHeight + 6 : 0),
               ),
             );
+            final useScrollableLayout = availableBoardSize <= 80;
+            final boardSize = useScrollableLayout
+                ? min(contentWidth, 81.0)
+                : availableBoardSize;
+            Widget portraitContent() => Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: useScrollableLayout
+                  ? MainAxisSize.min
+                  : MainAxisSize.max,
+              children: [
+                _liveMoveStrip(),
+                if (_multiplePremoves &&
+                    _premovesEnabled &&
+                    !_chessnutGameActive)
+                  _premoveStrip(),
+                if (_chessnutGameActive) ...[
+                  const SizedBox(height: 6),
+                  _chessnutStatusBanner(),
+                ],
+                const SizedBox(height: 6),
+                _playerInfoRow(_topBoardColor, _playerLabel(_topBoardColor)),
+                const SizedBox(height: 4),
+                Center(
+                  child: SizedBox(
+                    width: boardSize,
+                    height: boardSize,
+                    child: _board(),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                _playerInfoRow(
+                  _bottomBoardColor,
+                  _playerLabel(_bottomBoardColor),
+                ),
+                if (useScrollableLayout)
+                  const SizedBox(height: 8)
+                else
+                  const Spacer(),
+                if (_maiaFailed)
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Text('Maia error. Please retry.', maxLines: 1),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _maiaFailed = false;
+                          _resumeGame();
+                        },
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  )
+                else if (_engineThinking)
+                  const Text(
+                    'Maia is thinking…',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                _liveGameControls(),
+              ],
+            );
             return Padding(
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
               child: Center(
-                child: SizedBox(
-                  width: contentWidth,
-                  height: contentHeight,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _liveMoveStrip(),
-                      if (_multiplePremoves &&
-                          _premovesEnabled &&
-                          !_chessnutGameActive)
-                        _premoveStrip(),
-                      if (_chessnutGameActive) ...[
-                        const SizedBox(height: 6),
-                        _chessnutStatusBanner(),
-                      ],
-                      const SizedBox(height: 6),
-                      _playerInfoRow(
-                        _topBoardColor,
-                        _playerLabel(_topBoardColor),
-                      ),
-                      const SizedBox(height: 4),
-                      Center(
+                child: useScrollableLayout
+                    ? SingleChildScrollView(
                         child: SizedBox(
-                          width: boardSize,
-                          height: boardSize,
-                          child: _board(),
+                          width: contentWidth,
+                          child: portraitContent(),
                         ),
+                      )
+                    : SizedBox(
+                        width: contentWidth,
+                        height: contentHeight,
+                        child: portraitContent(),
                       ),
-                      const SizedBox(height: 4),
-                      _playerInfoRow(
-                        _bottomBoardColor,
-                        _playerLabel(_bottomBoardColor),
-                      ),
-                      const Spacer(),
-                      if (_maiaFailed)
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: Text(
-                                'Maia error. Please retry.',
-                                maxLines: 1,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                _maiaFailed = false;
-                                _resumeGame();
-                              },
-                              child: const Text('Retry'),
-                            ),
-                          ],
-                        )
-                      else if (_engineThinking)
-                        const Text(
-                          'Maia is thinking…',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                        ),
-                      _liveGameControls(),
-                    ],
-                  ),
-                ),
               ),
             );
           },
@@ -3606,90 +3618,41 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     );
   }
 
-  Widget _liveGameControls() => SizedBox(
+  Widget _liveGameControls() => MoveHistoryNavigator(
     key: const ValueKey('live-game-controls'),
-    height: 52,
-    child: Row(
-      children: [
-        Expanded(
-          child: Center(
-            child: IconButton(
-              key: const ValueKey('game-actions-menu'),
-              onPressed: _drawOfferEvaluating ? null : _showGameMenu,
-              icon: const Icon(Icons.menu),
-              tooltip: 'Game menu',
-            ),
-          ),
-        ),
-        Expanded(
-          child: Center(
-            child: IconButton(
-              key: const ValueKey('quick-resign-button'),
-              onPressed:
-                  !_gameFinished && !_engineThinking && !_drawOfferEvaluating
-                  ? _resign
-                  : null,
-              icon: const Icon(CupertinoIcons.flag),
-              tooltip: 'Resign',
-            ),
-          ),
-        ),
-        Expanded(
-          child: Center(
-            child: _historyButton(
-              key: const ValueKey('game-previous-move-button'),
-              enabled: _displayPly > 0,
-              onTap: () => _stepGameHistory(-1),
-              onLongPress: () => _showGamePly(0),
-              icon: CupertinoIcons.chevron_back,
-              tooltip: 'Previous move',
-            ),
-          ),
-        ),
-        Expanded(
-          child: Center(
-            child: _historyButton(
-              key: const ValueKey('game-next-move-button'),
-              enabled: !_isViewingLivePosition,
-              onTap: () => _stepGameHistory(1),
-              onLongPress: () => _showGamePly(_positionHistory.length - 1),
-              icon: CupertinoIcons.chevron_forward,
-              tooltip: 'Next move',
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-
-  Widget _historyButton({
-    required Key key,
-    required bool enabled,
-    required VoidCallback onTap,
-    required VoidCallback onLongPress,
-    required IconData icon,
-    required String tooltip,
-  }) => Tooltip(
-    message: tooltip,
-    child: Semantics(
-      button: true,
-      enabled: enabled,
-      child: InkResponse(
-        key: key,
-        radius: 24,
-        onTap: enabled ? onTap : null,
-        onLongPress: enabled ? onLongPress : null,
-        child: SizedBox.square(
-          dimension: 48,
-          child: Icon(
-            icon,
-            color: enabled
-                ? Theme.of(context).colorScheme.onSurfaceVariant
-                : Theme.of(context).colorScheme.outlineVariant,
-          ),
-        ),
+    firstKey: const ValueKey('game-first-move-button'),
+    previousKey: const ValueKey('game-previous-move-button'),
+    nextKey: const ValueKey('game-next-move-button'),
+    lastKey: const ValueKey('game-latest-move-button'),
+    statusKey: const ValueKey('game-history-position'),
+    status: _isViewingLivePosition
+        ? 'Live · $_displayPly / ${max(0, _positionHistory.length - 1)}'
+        : 'History · $_displayPly / ${max(0, _positionHistory.length - 1)}',
+    statusSemanticsLabel: _isViewingLivePosition
+        ? 'Live position, move $_displayPly of ${max(0, _positionHistory.length - 1)}'
+        : 'History position, move $_displayPly of ${max(0, _positionHistory.length - 1)}',
+    canGoBack: _displayPly > 0,
+    canGoForward: !_isViewingLivePosition,
+    onFirst: () => _showGamePly(0),
+    onPrevious: () => _stepGameHistory(-1),
+    onNext: () => _stepGameHistory(1),
+    onLast: () => _showGamePly(_positionHistory.length - 1),
+    headerActions: [
+      IconButton(
+        key: const ValueKey('game-actions-menu'),
+        onPressed: _drawOfferEvaluating ? null : _showGameMenu,
+        icon: const Icon(Icons.menu),
+        tooltip: 'Game menu',
       ),
-    ),
+      IconButton(
+        key: const ValueKey('quick-resign-button'),
+        onPressed: !_gameFinished && !_engineThinking && !_drawOfferEvaluating
+            ? _resign
+            : null,
+        icon: const Icon(CupertinoIcons.flag),
+        tooltip: 'Resign',
+      ),
+    ],
   );
 
   double get _playerRowHeight => max(

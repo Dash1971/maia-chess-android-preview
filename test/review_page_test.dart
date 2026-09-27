@@ -598,18 +598,22 @@ void main() {
       findsOneWidget,
     );
     expect(find.byKey(const ValueKey('game-next-move-button')), findsOneWidget);
-    final controlCenters = [
-      'game-actions-menu',
-      'quick-resign-button',
+    expect(
+      find.byKey(const ValueKey('game-first-move-button')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('game-latest-move-button')),
+      findsOneWidget,
+    );
+    expect(find.text('Live · 0 / 0'), findsOneWidget);
+    for (final key in [
+      'game-first-move-button',
       'game-previous-move-button',
       'game-next-move-button',
-    ].map((key) => tester.getCenter(find.byKey(ValueKey(key))).dx).toList();
-    final controlSpacing = controlCenters[1] - controlCenters[0];
-    for (var index = 2; index < controlCenters.length; index++) {
-      expect(
-        controlCenters[index] - controlCenters[index - 1],
-        closeTo(controlSpacing, 0.1),
-      );
+      'game-latest-move-button',
+    ]) {
+      expect(tester.getSize(find.byKey(ValueKey(key))), const Size(48, 48));
     }
 
     await tester.tap(find.byKey(const ValueKey('game-share-menu')));
@@ -671,6 +675,7 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('game-previous-move-button')));
     await tester.pumpAndSettle();
+    expect(find.text('History · 0 / 1'), findsOneWidget);
     board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
     expect(
       positionCore(board.controller.fen),
@@ -680,6 +685,22 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('game-next-move-button')));
     await tester.pumpAndSettle();
+    expect(find.text('Live · 1 / 1'), findsOneWidget);
+    board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
+    expect(positionCore(board.controller.fen), positionCore(afterE4.fen));
+
+    await tester.tap(find.byKey(const ValueKey('game-first-move-button')));
+    await tester.pumpAndSettle();
+    expect(find.text('History · 0 / 1'), findsOneWidget);
+    board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
+    expect(
+      positionCore(board.controller.fen),
+      positionCore(chess.Chess.DEFAULT_POSITION),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('game-latest-move-button')));
+    await tester.pumpAndSettle();
+    expect(find.text('Live · 1 / 1'), findsOneWidget);
     board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
     expect(positionCore(board.controller.fen), positionCore(afterE4.fen));
 
@@ -1008,28 +1029,21 @@ void main() {
       tester.getSize(find.byKey(const ValueKey('next-move-button'))).width,
       48,
     );
-    expect(
-      tester.getCenter(find.byKey(const ValueKey('previous-move-button'))).dx,
-      greaterThan(
-        tester
-            .getCenter(find.byKey(const ValueKey('analysis-engine-toggle')))
-            .dx,
-      ),
-    );
-    final controlCenters = [
-      'analysis-actions-menu',
-      'analysis-flip-button',
-      'analysis-engine-toggle',
+    for (final key in [
+      'first-move-button',
       'previous-move-button',
       'next-move-button',
-    ].map((key) => tester.getCenter(find.byKey(ValueKey(key))).dx).toList();
-    final controlSpacing = controlCenters[1] - controlCenters[0];
-    for (var index = 2; index < controlCenters.length; index++) {
-      expect(
-        controlCenters[index] - controlCenters[index - 1],
-        closeTo(controlSpacing, 0.1),
-      );
+      'last-move-button',
+    ]) {
+      expect(tester.getSize(find.byKey(ValueKey(key))), const Size(48, 48));
     }
+    expect(find.text('Start · 0 / 1'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('last-move-button')));
+    await tester.pump();
+    expect(find.text('End · 1 / 1'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('first-move-button')));
+    await tester.pump();
+    expect(find.text('Start · 0 / 1'), findsOneWidget);
     expect(
       tester.getSize(find.byKey(const ValueKey('graph-tab'))).height,
       greaterThanOrEqualTo(48),
@@ -2183,7 +2197,13 @@ void main() {
     await tester.pumpAndSettle();
 
     final graph = find.byType(AnalysisGraph);
-    final rect = tester.getRect(graph);
+    await tester.ensureVisible(graph);
+    await tester.pumpAndSettle();
+    final gesture = find.descendant(
+      of: graph,
+      matching: find.byType(GestureDetector),
+    );
+    final rect = tester.getRect(gesture);
     await tester.tapAt(Offset(rect.right - 1, rect.center.dy));
     await tester.pumpAndSettle();
 

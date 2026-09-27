@@ -2053,109 +2053,79 @@ class _ReviewPageState extends State<ReviewPage>
     }
   }
 
-  Widget _analysisNavigationButton({
-    required Key key,
-    required String tooltip,
-    required IconData icon,
-    required bool tapEnabled,
-    required bool longPressEnabled,
-    required VoidCallback onTap,
-    required VoidCallback onLongPress,
-  }) {
-    final colors = Theme.of(context).colorScheme;
-    final enabled = tapEnabled || longPressEnabled;
-    return Tooltip(
-      message: tooltip,
-      child: InkResponse(
-        key: key,
-        radius: 24,
-        onTap: tapEnabled ? onTap : null,
-        onLongPress: longPressEnabled ? onLongPress : null,
-        child: SizedBox.square(
-          dimension: 48,
-          child: Icon(
-            icon,
-            color: enabled ? colors.onSurfaceVariant : colors.outlineVariant,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _analysisControls() {
-    Widget slot(Widget child) => Expanded(child: Center(child: child));
+    final current = _inVariation ? _variationIndex : _ply;
+    final total = _inVariation ? _variationSan.length : _maximumPly;
+    final isBranch =
+        _inVariation && !identical(_openedVariation, _rootMainline);
+    final status = isBranch
+        ? 'Variation · $current / $total'
+        : _atAnalysisStart
+        ? 'Start · $current / $total'
+        : _atAnalysisEnd
+        ? 'End · $current / $total'
+        : 'Move · $current / $total';
+    final semantics = isBranch
+        ? 'Variation position, move $current of $total'
+        : _atAnalysisStart
+        ? 'Starting position, move $current of $total'
+        : _atAnalysisEnd
+        ? 'End position, move $current of $total'
+        : 'Move $current of $total';
 
-    return SizedBox(
+    return MoveHistoryNavigator(
       key: const ValueKey('analysis-controls'),
-      height: 52,
-      child: Row(
-        children: [
-          slot(
-            IconButton(
-              key: const ValueKey('analysis-actions-menu'),
-              onPressed: _hasAnalysisMenu ? _showAnalysisMenu : null,
-              icon: const Icon(Icons.menu),
-              tooltip: 'Analysis menu',
+      firstKey: const ValueKey('first-move-button'),
+      previousKey: const ValueKey('previous-move-button'),
+      nextKey: const ValueKey('next-move-button'),
+      lastKey: const ValueKey('last-move-button'),
+      statusKey: const ValueKey('analysis-history-position'),
+      status: status,
+      statusSemanticsLabel: semantics,
+      canGoBack: !_atAnalysisStart,
+      canGoForward: !_atAnalysisEnd,
+      onFirst: _jumpToStart,
+      onPrevious: () => _step(-1),
+      onNext: () => _step(1),
+      onLast: _jumpToEnd,
+      lastTooltip: 'End position',
+      headerActionWidth: 56,
+      headerActions: [
+        IconButton(
+          key: const ValueKey('analysis-actions-menu'),
+          onPressed: _hasAnalysisMenu ? _showAnalysisMenu : null,
+          icon: const Icon(Icons.menu),
+          tooltip: 'Analysis menu',
+        ),
+        IconButton(
+          key: const ValueKey('analysis-flip-button'),
+          onPressed: _flipAnalysisBoard,
+          icon: const Icon(CupertinoIcons.arrow_2_squarepath),
+          tooltip: 'Flip board',
+        ),
+        Tooltip(
+          message: _engineEnabled ? 'Turn engine off' : 'Turn engine on',
+          child: TextButton.icon(
+            key: const ValueKey('analysis-engine-toggle'),
+            onPressed: _toggleAnalysisEngine,
+            icon: Icon(
+              Icons.power_settings_new,
+              color: _engineEnabled
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-          ),
-          slot(
-            IconButton(
-              key: const ValueKey('analysis-flip-button'),
-              onPressed: _flipAnalysisBoard,
-              icon: const Icon(CupertinoIcons.arrow_2_squarepath),
-              tooltip: 'Flip board',
-            ),
-          ),
-          slot(
-            Tooltip(
-              message: _engineEnabled ? 'Turn engine off' : 'Turn engine on',
-              child: TextButton.icon(
-                key: const ValueKey('analysis-engine-toggle'),
-                onPressed: _toggleAnalysisEngine,
-                icon: Icon(
-                  Icons.power_settings_new,
-                  color: _engineEnabled
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-                label: Text(
-                  'SF',
-                  style: TextStyle(
-                    color: _engineEnabled
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+            label: Text(
+              'SF',
+              style: TextStyle(
+                color: _engineEnabled
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
-          slot(
-            _analysisNavigationButton(
-              key: const ValueKey('previous-move-button'),
-              tooltip: 'Previous move',
-              icon: CupertinoIcons.chevron_back,
-              tapEnabled: !_atAnalysisStart,
-              longPressEnabled: !_atAnalysisStart,
-              onTap: () => _step(-1),
-              onLongPress: _jumpToStart,
-            ),
-          ),
-          slot(
-            _analysisNavigationButton(
-              key: const ValueKey('next-move-button'),
-              tooltip: 'Next move',
-              icon: CupertinoIcons.chevron_forward,
-              tapEnabled: !(_inVariation
-                  ? _variationIndex == _variationSan.length
-                  : _ply == _maximumPly),
-              longPressEnabled: !_atAnalysisEnd,
-              onTap: () => _step(1),
-              onLongPress: _jumpToEnd,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

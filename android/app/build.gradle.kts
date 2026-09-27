@@ -16,6 +16,8 @@ val releaseSigningValues = listOf(
 )
 val developmentSnapshot =
     providers.gradleProperty("mobileMaiaDevelopment").orNull == "true"
+val developmentArm64Only =
+    providers.gradleProperty("mobileMaiaArm64Only").orNull == "true"
 
 require(releaseSigningValues.all { it == null } || releaseSigningValues.all { it != null }) {
     "Set MOBILE_MAIA_KEYSTORE, MOBILE_MAIA_STORE_PASSWORD, and " +
@@ -33,6 +35,10 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -40,9 +46,11 @@ android {
 
     defaultConfig {
         applicationId = "com.dash1971.maia_chess.preview"
-        manifestPlaceholders["appLabel"] = "Mobile Maia Preview"
-        manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
-        manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_round"
+        if (developmentArm64Only) {
+            ndk {
+                abiFilters += "arm64-v8a"
+            }
+        }
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -66,32 +74,55 @@ android {
         }
     }
 
+    flavorDimensions += "channel"
+    productFlavors {
+        create("dev") {
+            dimension = "channel"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            manifestPlaceholders["appLabel"] = "Mobile Maia Preview Dev"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_dev"
+            manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_dev_round"
+            buildConfigField(
+                "String",
+                "MAIA_MODEL_ASSET",
+                "\"flutter_assets/assets/models/maia3-5m.onnx\"",
+            )
+            buildConfigField("String", "MAIA_MODEL_FILE", "\"maia3-5m-ddae2aa8.onnx\"")
+            buildConfigField("long", "MAIA_MODEL_BYTES", "21346652L")
+            buildConfigField(
+                "String",
+                "MAIA_MODEL_SHA256",
+                "\"ddae2aa893b5ca7ec94d24178871f1c337d09fd72ff38abe8d76b8ecf08cb942\"",
+            )
+        }
+        create("preview") {
+            dimension = "channel"
+            manifestPlaceholders["appLabel"] = "Mobile Maia Preview"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+            manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_round"
+            buildConfigField(
+                "String",
+                "MAIA_MODEL_ASSET",
+                "\"flutter_assets/assets/models/maia3-79m.onnx\"",
+            )
+            buildConfigField("String", "MAIA_MODEL_FILE", "\"maia3-79m-3454b03a-sha256.onnx\"")
+            buildConfigField("long", "MAIA_MODEL_BYTES", "316034244L")
+            buildConfigField(
+                "String",
+                "MAIA_MODEL_SHA256",
+                "\"3454b03ae78baa64a87b345fdb1a457265d912caec531039b074f07eda0d8010\"",
+            )
+        }
+    }
+
     buildTypes {
-        debug {
-            applicationIdSuffix = ".dev"
-            versionNameSuffix = "-dev"
-            manifestPlaceholders["appLabel"] = "Mobile Maia Preview Dev"
-            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_dev"
-            manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_dev_round"
-        }
-        getByName("profile") {
-            applicationIdSuffix = ".dev"
-            versionNameSuffix = "-dev"
-            manifestPlaceholders["appLabel"] = "Mobile Maia Preview Dev"
-            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_dev"
-            manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_dev_round"
-        }
         release {
             // Reproducible builders produce an unsigned release when signing
             // credentials are absent. Official Preview releases provide all
             // three variables. Fast private snapshots use the separate Dev
             // identity and Android's development signer, never the release key.
             if (developmentSnapshot) {
-                applicationIdSuffix = ".dev"
-                versionNameSuffix = "-dev"
-                manifestPlaceholders["appLabel"] = "Mobile Maia Preview Dev"
-                manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_dev"
-                manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_dev_round"
                 signingConfig = signingConfigs.getByName("debug")
             } else {
                 signingConfig = signingConfigs.findByName("mobileMaiaRelease")
@@ -121,28 +152,41 @@ flutter {
 
 // Fail before Flutter copies assets: GitHub ZIP downloads and incomplete LFS
 // clones otherwise produce an installable APK with a tiny text pointer as Maia.
-val verifyMaiaModel by tasks.registering {
-    val model = rootProject.file("../assets/models/maia3-79m.onnx")
-    inputs.file(model)
+val verifyMaiaModels by tasks.registering {
+    val models = listOf(
+        Triple(
+            rootProject.file("../assets/models/maia3-5m.onnx"),
+            21_346_652L,
+            "ddae2aa893b5ca7ec94d24178871f1c337d09fd72ff38abe8d76b8ecf08cb942",
+        ),
+        Triple(
+            rootProject.file("../assets/models/maia3-79m.onnx"),
+            316_034_244L,
+            "3454b03ae78baa64a87b345fdb1a457265d912caec531039b074f07eda0d8010",
+        ),
+    )
+    inputs.files(models.map { it.first })
     doLast {
-        require(model.isFile && model.length() == 316_034_244L) {
-            "Maia model missing or wrong size. Run git lfs install && git lfs pull."
-        }
-        val digest = MessageDigest.getInstance("SHA-256")
-        model.inputStream().buffered().use { stream ->
-            val buffer = ByteArray(1024 * 1024)
-            while (true) {
-                val count = stream.read(buffer)
-                if (count < 0) break
-                digest.update(buffer, 0, count)
+        for ((model, expectedBytes, expectedSha256) in models) {
+            require(model.isFile && model.length() == expectedBytes) {
+                "${model.name} missing or wrong size. Run git lfs install && git lfs pull."
             }
-        }
-        val sha256 = digest.digest().joinToString("") { "%02x".format(it) }
-        require(sha256 == "3454b03ae78baa64a87b345fdb1a457265d912caec531039b074f07eda0d8010") {
-            "Maia model SHA-256 mismatch. Restore the pinned Git LFS object."
+            val digest = MessageDigest.getInstance("SHA-256")
+            model.inputStream().buffered().use { stream ->
+                val buffer = ByteArray(1024 * 1024)
+                while (true) {
+                    val count = stream.read(buffer)
+                    if (count < 0) break
+                    digest.update(buffer, 0, count)
+                }
+            }
+            val sha256 = digest.digest().joinToString("") { "%02x".format(it) }
+            require(sha256 == expectedSha256) {
+                "${model.name} SHA-256 mismatch. Restore the pinned Git LFS object."
+            }
         }
     }
 }
 tasks.matching { it.name == "preBuild" || it.name.startsWith("compileFlutterBuild") }.configureEach {
-    dependsOn(verifyMaiaModel)
+    dependsOn(verifyMaiaModels)
 }

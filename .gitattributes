@@ -1,1 +1,2 @@
 assets/models/maia3-79m.onnx filter=lfs diff=lfs merge=lfs -text
+assets/models/maia3-5m.onnx filter=lfs diff=lfs merge=lfs -text

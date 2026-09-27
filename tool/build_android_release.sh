@@ -9,7 +9,7 @@ dart_bin=${DART_BIN:-$(dirname -- "$flutter_path")/dart}
 
 cd "$repo_root"
 
-python3 tool/verify_model.py
+python3 tool/verify_model.py assets/models/maia3-79m.onnx
 
 # A fixed source timestamp and locked dependencies keep independent release
 # builds reproducible. Dart obfuscation is deliberately not enabled: its
@@ -25,7 +25,7 @@ python3 tool/prepare_reproducible_stockfish.py \
   --package-config .dart_tool/package_config.json
 # Run Flutter's release configuration pass before changing package_config.json.
 # This filters test-only native plugins from the generated release registrant.
-"$flutter_bin" build apk --release --config-only
+"$flutter_bin" build apk --release --config-only --flavor preview
 # Flutter 3.47.1 otherwise embeds the absolute path to its generated Dart
 # plugin registrant in libapp.so. Give that generated source a stable package
 # URI before compiling so release artifacts remain private and reproducible
@@ -33,4 +33,9 @@ python3 tool/prepare_reproducible_stockfish.py \
 "$dart_bin" tool/prepare_reproducible_package_config.dart \
   .dart_tool/package_config.json
 "$flutter_bin" build apk --release --no-pub \
+  --flavor preview \
   --android-project-arg="mobileMaiaSourceDateEpoch=$SOURCE_DATE_EPOCH"
+
+# Keep the established release-tooling path stable despite the explicit flavor.
+cp build/app/outputs/flutter-apk/app-preview-release.apk \
+  build/app/outputs/flutter-apk/app-release.apk
