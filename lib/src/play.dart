@@ -417,9 +417,15 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
       final savedAt = DateTime.tryParse(saved['savedAt'] as String? ?? '');
       var whiteMillis = saved['whiteMillis'] as int? ?? 0;
       var blackMillis = saved['blackMillis'] as int? ?? 0;
-      final preset = TimePreset.values.byName(
+      final storedPreset = TimePreset.values.byName(
         saved['timePreset'] as String? ?? TimePreset.unlimited.name,
       );
+      // Chessnut games never run a clock. Repair older or interrupted records
+      // before applying wall-clock correction so stale timed metadata cannot
+      // turn a physical-board game into a timeout loss.
+      final preset = saved['electronicBoard'] == 'chessnut-go'
+          ? TimePreset.unlimited
+          : storedPreset;
       if (savedAt != null &&
           preset != TimePreset.unlimited &&
           saved['clockPaused'] != true &&
@@ -749,7 +755,9 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
       _preferredTimePreset = savedTimePreset ?? TimePreset.unlimited;
       _preferredCustomMinutes = savedCustomMinutes;
       _preferredCustomIncrement = savedCustomIncrement;
-      _timePreset = _preferredTimePreset;
+      _timePreset = _useChessnutGo
+          ? TimePreset.unlimited
+          : _preferredTimePreset;
       _customMinutes = _preferredCustomMinutes;
       _customIncrement = _preferredCustomIncrement;
       _humanTiming = preferences.getBool('humanTiming') ?? false;
@@ -1097,6 +1105,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
             initialSession: session,
             maiaElo: _analysisElo,
             gameAnalysisQuality: _gameAnalysisQuality,
+            maiaPolicyEvaluator: widget.maiaEvaluator,
           ),
         ),
       ),
@@ -1119,6 +1128,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
           initialSession: AnalysisSession.start(),
           maiaElo: _analysisElo,
           gameAnalysisQuality: _gameAnalysisQuality,
+          maiaPolicyEvaluator: widget.maiaEvaluator,
         ),
       ),
     );
@@ -1921,6 +1931,12 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
           .showSnackBar(SnackBar(content: Text(message)));
       return;
     }
+    // Defense in depth: the toggle normally sets Unlimited and disables the
+    // selector, but preference loading or a future navigation path must never
+    // allow a Chessnut game to inherit a timed preset.
+    if (_useChessnutGo && _timePreset != TimePreset.unlimited) {
+      setState(() => _timePreset = TimePreset.unlimited);
+    }
     _pauseGame();
     if (archiveCurrent) {
       unawaited(_saveGameState());
@@ -2575,7 +2591,9 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
       _pendingPhysicalMaiaMove = null;
       _chessnutTakebackRestoreActive = false;
       _lastChessnutIllegalPosition = null;
-      _timePreset = _preferredTimePreset;
+      _timePreset = _useChessnutGo
+          ? TimePreset.unlimited
+          : _preferredTimePreset;
       _customMinutes = _preferredCustomMinutes;
       _customIncrement = _preferredCustomIncrement;
       _status = 'Choose your settings and start a game.';
@@ -2661,7 +2679,9 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
         _pendingPhysicalMaiaMove = null;
         _chessnutTakebackRestoreActive = false;
         _lastChessnutIllegalPosition = null;
-        _timePreset = _preferredTimePreset;
+        _timePreset = _useChessnutGo
+            ? TimePreset.unlimited
+            : _preferredTimePreset;
         _customMinutes = _preferredCustomMinutes;
         _customIncrement = _preferredCustomIncrement;
         _status = 'Choose your settings and start a game.';
