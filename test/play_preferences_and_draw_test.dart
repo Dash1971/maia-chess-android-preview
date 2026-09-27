@@ -151,6 +151,45 @@ void main() {
     );
   });
 
+  testWidgets('game sound and haptic settings persist independently', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      gameSoundsPreferenceKey: false,
+      gameHapticsPreferenceKey: true,
+    });
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const MaterialApp(home: GamePage()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Advanced'));
+    await tester.pumpAndSettle();
+
+    SwitchListTile setting(String key) =>
+        tester.widget<SwitchListTile>(find.byKey(ValueKey(key)));
+    expect(setting('game-sounds-setting').value, isFalse);
+    expect(setting('game-haptics-setting').value, isTrue);
+    setting('game-sounds-setting').onChanged!(true);
+    setting('game-haptics-setting').onChanged!(false);
+    await tester.pumpAndSettle();
+
+    final preferences = await SharedPreferences.getInstance();
+    expect(preferences.getBool(gameSoundsPreferenceKey), isTrue);
+    expect(preferences.getBool(gameHapticsPreferenceKey), isFalse);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    await tester.pumpWidget(const MaterialApp(home: GamePage()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Advanced'));
+    await tester.pumpAndSettle();
+    expect(setting('game-sounds-setting').value, isTrue);
+    expect(setting('game-haptics-setting').value, isFalse);
+  });
+
   testWidgets('last side and time-control settings survive a restart', (
     tester,
   ) async {

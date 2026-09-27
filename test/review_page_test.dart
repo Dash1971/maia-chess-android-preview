@@ -305,6 +305,47 @@ void main() {
     expect(cg.readFen(board.fen)[dc.Square.e4], isNotNull);
     expect(find.text('Continue'), findsNothing);
   });
+
+  testWidgets('board editor flip changes orientation without changing setup', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: BoardEditorPage(initialFen: chess.Chess.DEFAULT_POSITION),
+      ),
+    );
+
+    var board = tester.widget<cg.StaticChessboard>(
+      find.byType(cg.StaticChessboard),
+    );
+    final initialFen = board.fen;
+    expect(board.orientation, dc.Side.white);
+
+    await tester.tap(find.byKey(const ValueKey('board-editor-flip')));
+    await tester.pump();
+    board = tester.widget<cg.StaticChessboard>(
+      find.byType(cg.StaticChessboard),
+    );
+    expect(board.orientation, dc.Side.black);
+    expect(board.fen, initialFen);
+
+    board.onTouchedSquare!(dc.Square.e2);
+    await tester.pump();
+    board = tester.widget<cg.StaticChessboard>(
+      find.byType(cg.StaticChessboard),
+    );
+    expect(cg.readFen(board.fen)[dc.Square.e2], isNull);
+
+    await tester.tap(find.byKey(const ValueKey('board-editor-flip')));
+    await tester.pump();
+    board = tester.widget<cg.StaticChessboard>(
+      find.byType(cg.StaticChessboard),
+    );
+    expect(board.orientation, dc.Side.white);
+    expect(cg.readFen(board.fen)[dc.Square.e2], isNull);
+    expect(find.byTooltip('Flip board'), findsOneWidget);
+  });
+
   test('PGN export preserves takebacks as recursive annotation variations', () {
     const source =
         '[Event "Mobile Maia Game"]\n[Result "*"]\n\n1. e4 e5 2. Nf3 *';
@@ -643,6 +684,7 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     SharedPreferences.setMockInitialValues({});
     final maia = Completer<Float32List>();
+    final feedback = <GameFeedbackEvent>[];
     await tester.pumpWidget(
       MaterialApp(
         home: GamePage(
@@ -650,6 +692,11 @@ void main() {
           startingSide: PlayerSide.white,
           startingElo: 1500,
           maiaEvaluator: (_, _) => maia.future,
+          gameFeedbackPlayer: (event, soundsEnabled, hapticsEnabled) async {
+            expect(soundsEnabled, isTrue);
+            expect(hapticsEnabled, isTrue);
+            feedback.add(event);
+          },
         ),
       ),
     );
@@ -663,6 +710,7 @@ void main() {
     String positionCore(String fen) => fen.split(' ').take(4).join(' ');
     board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
     expect(positionCore(board.controller.fen), positionCore(afterE4.fen));
+    expect(feedback, [GameFeedbackEvent.move]);
 
     await tester.tap(find.byKey(const ValueKey('game-previous-move-button')));
     await tester.pumpAndSettle();
@@ -683,6 +731,7 @@ void main() {
     expect(find.byKey(const ValueKey('game-history-indicator')), findsNothing);
     board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
     expect(positionCore(board.controller.fen), positionCore(afterE4.fen));
+    expect(feedback, [GameFeedbackEvent.move]);
 
     await tester.longPress(
       find.byKey(const ValueKey('game-previous-move-button')),
