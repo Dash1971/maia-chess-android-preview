@@ -24,6 +24,10 @@ void main() {
     expect(find.textContaining('runs entirely on your phone'), findsNothing);
     expect(find.text('Open PGN file'), findsNothing);
     expect(find.text('Advanced'), findsNothing);
+    expect(
+      find.byKey(const ValueKey('home-chessnut-toggle')).hitTestable(),
+      findsOneWidget,
+    );
 
     for (final label in ['Start game', 'Analysis Board', 'Recent games']) {
       final button = label == 'Start game'
@@ -37,10 +41,9 @@ void main() {
       );
       expect(tester.getSize(button).height, greaterThanOrEqualTo(52));
     }
-    expect(
-      find.byKey(const ValueKey('home-settings-button')).hitTestable(),
-      findsOneWidget,
-    );
+    final settings = find.byKey(const ValueKey('home-settings-button'));
+    expect(settings.hitTestable(), findsOneWidget);
+    expect(tester.getSize(settings).height, greaterThanOrEqualTo(48));
     expect(tester.takeException(), isNull);
   });
 
@@ -56,6 +59,22 @@ void main() {
     expect(find.text('Engine settings'), findsOneWidget);
     expect(find.text('Chessnut'), findsOneWidget);
     expect(find.byKey(const ValueKey('game-sounds-setting')), findsOneWidget);
+    expect(
+      tester
+          .widget<SwitchListTile>(
+            find.byKey(const ValueKey('game-sounds-setting')),
+          )
+          .value,
+      isFalse,
+    );
+    expect(
+      tester
+          .widget<SwitchListTile>(
+            find.byKey(const ValueKey('game-haptics-setting')),
+          )
+          .value,
+      isTrue,
+    );
     expect(find.byKey(const ValueKey('premoves-setting')), findsOneWidget);
     expect(find.byKey(const ValueKey('sampling-help')), findsOneWidget);
     expect(find.text('Copy diagnostics'), findsOneWidget);

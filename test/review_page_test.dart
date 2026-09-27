@@ -697,7 +697,7 @@ void main() {
           startingElo: 1500,
           maiaEvaluator: (_, _) => maia.future,
           gameFeedbackPlayer: (event, soundsEnabled, hapticsEnabled) async {
-            expect(soundsEnabled, isTrue);
+            expect(soundsEnabled, isFalse);
             expect(hapticsEnabled, isTrue);
             feedback.add(event);
           },

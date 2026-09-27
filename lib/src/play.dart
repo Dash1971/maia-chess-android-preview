@@ -92,7 +92,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   bool _screenWakeLockEnabled = false;
   bool _boardFlipped = false;
   bool _resultDialogShown = false;
-  bool _gameSoundsEnabled = true;
+  bool _gameSoundsEnabled = false;
   bool _gameHapticsEnabled = true;
   Timer? _gameEndFeedbackTimer;
   bool _drawOfferEvaluating = false;
@@ -740,7 +740,8 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       _gameAnalysisQuality = GameAnalysisQuality.fromStoredName(
         preferences.getString(gameAnalysisQualityPreferenceKey),
       );
-      _gameSoundsEnabled = preferences.getBool(gameSoundsPreferenceKey) ?? true;
+      _gameSoundsEnabled =
+          preferences.getBool(gameSoundsPreferenceKey) ?? false;
       _gameHapticsEnabled =
           preferences.getBool(gameHapticsPreferenceKey) ?? true;
       _chessnutSoundsEnabled =
@@ -3269,13 +3270,18 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
           ? SafeArea(
               top: false,
               child: SizedBox(
-                height: 48,
+                height: 56,
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: TextButton.icon(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: OutlinedButton.icon(
                       key: const ValueKey('home-settings-button'),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(0, 48),
+                        padding: const EdgeInsets.symmetric(horizontal: 18),
+                        textStyle: const TextStyle(fontSize: 16),
+                      ),
                       onPressed: () => setState(() => _settingsOpen = true),
                       icon: const Icon(Icons.settings_outlined),
                       label: const Text('Settings'),
@@ -3398,7 +3404,18 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
                 onChangeEnd: (_) => unawaited(_persistTimeControl()),
               ),
             ],
-            const SizedBox(height: 18),
+            const SizedBox(height: 6),
+            SwitchListTile(
+              key: const ValueKey('home-chessnut-toggle'),
+              contentPadding: EdgeInsets.zero,
+              dense: true,
+              visualDensity: VisualDensity.compact,
+              secondary: const Icon(Icons.bluetooth_outlined, size: 22),
+              value: _useChessnutGo,
+              title: const Text('Chessnut (experimental)'),
+              onChanged: (value) => unawaited(_setUseChessnutGo(value)),
+            ),
+            const SizedBox(height: 10),
             FilledButton.icon(
               style: FilledButton.styleFrom(
                 minimumSize: const Size.fromHeight(52),

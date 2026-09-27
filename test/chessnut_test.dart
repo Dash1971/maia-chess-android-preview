@@ -59,12 +59,9 @@ Future<void> _openSettings(WidgetTester tester) async {
 }
 
 Future<void> _enableChessnut(WidgetTester tester) async {
-  await _openSettings(tester);
-  final toggle = find.byKey(const ValueKey('chessnut-toggle'));
+  final toggle = find.byKey(const ValueKey('home-chessnut-toggle'));
   await tester.ensureVisible(toggle);
   await tester.tap(toggle);
-  await tester.pumpAndSettle();
-  await tester.tap(find.byKey(const ValueKey('settings-back-button')));
   await tester.pumpAndSettle();
 }
 
