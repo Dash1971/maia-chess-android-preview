@@ -126,6 +126,16 @@ class _FakeElectronicBoard implements ElectronicBoardTransport {
     _events.add(ElectronicBoardEvent(type: 'position', position: pieces));
   }
 
+  void battery(int percent, {bool charging = false}) {
+    _events.add(
+      ElectronicBoardEvent(
+        type: 'battery',
+        batteryPercent: percent,
+        charging: charging,
+      ),
+    );
+  }
+
   void ready(Map<String, String> pieces) {
     connected = true;
     _events.add(
@@ -301,6 +311,9 @@ void main() {
 
     await _enableChessnut(tester);
     expect(board.connected, isTrue);
+    board.battery(87, charging: true);
+    await tester.pump();
+    expect(find.text('87% ⚡'), findsOneWidget);
 
     final start = find.widgetWithText(FilledButton, 'Start game');
     await tester.ensureVisible(start);
@@ -483,9 +496,9 @@ void main() {
     );
     await tester.pumpAndSettle();
     await _openSettings(tester);
-    await tester.ensureVisible(find.byKey(const ValueKey('chessnut-toggle')));
-    await tester.tap(find.byKey(const ValueKey('chessnut-toggle')));
-    await tester.pumpAndSettle();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('chessnut-sounds-toggle')),
+    );
     final sounds = tester.widget<SwitchListTile>(
       find.byKey(const ValueKey('chessnut-sounds-toggle')),
     );
@@ -493,6 +506,7 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('settings-back-button')));
     await tester.pumpAndSettle();
 
+    await _enableChessnut(tester);
     await tester.ensureVisible(find.widgetWithText(FilledButton, 'Start game'));
     await tester.tap(find.widgetWithText(FilledButton, 'Start game'));
     await tester.pump();
@@ -584,8 +598,7 @@ void main() {
       MaterialApp(home: GamePage(electronicBoardTransport: board)),
     );
     await tester.pumpAndSettle();
-    await _openSettings(tester);
-    final toggle = find.byKey(const ValueKey('chessnut-toggle'));
+    final toggle = find.byKey(const ValueKey('home-chessnut-toggle'));
     await tester.ensureVisible(toggle);
     await tester.tap(toggle);
     await tester.pumpAndSettle();

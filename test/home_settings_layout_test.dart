@@ -78,6 +78,12 @@ void main() {
     expect(find.byKey(const ValueKey('premoves-setting')), findsOneWidget);
     expect(find.byKey(const ValueKey('sampling-help')), findsOneWidget);
     expect(find.text('Copy diagnostics'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('chessnut-sounds-toggle')),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey('home-chessnut-toggle')), findsNothing);
+    expect(find.byKey(const ValueKey('chessnut-setup-status')), findsNothing);
     expect(find.text('Play Maia'), findsNothing);
     expect(find.text('Advanced'), findsNothing);
 
@@ -85,6 +91,35 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Play Maia'), findsOneWidget);
     expect(find.text('Game settings'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Home owns the expanded Chessnut connection flow', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: GamePage()));
+    await tester.pumpAndSettle();
+
+    final toggle = find.byKey(const ValueKey('home-chessnut-toggle'));
+    await tester.tap(toggle);
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('chessnut-setup-status')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('chessnut-connect-button')),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'The first preview supports standard-position, unlimited games only.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey('chessnut-sounds-toggle')), findsNothing);
+
+    final start = find.widgetWithText(FilledButton, 'Start game');
+    await tester.ensureVisible(start);
+    expect(start, findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
