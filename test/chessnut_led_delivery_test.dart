@@ -18,6 +18,17 @@ Map<String, String> _after(chess.Chess game, String uci) {
   return ChessnutProtocol.pieceMapFromFen(next.fen);
 }
 
+Future<void> _enableChessnut(WidgetTester tester) async {
+  await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+  await tester.pumpAndSettle();
+  final toggle = find.byKey(const ValueKey('chessnut-toggle'));
+  await tester.ensureVisible(toggle);
+  await tester.tap(toggle);
+  await tester.pumpAndSettle();
+  await tester.tap(find.byKey(const ValueKey('settings-back-button')));
+  await tester.pumpAndSettle();
+}
+
 class _FakeElectronicBoard implements ElectronicBoardTransport {
   final StreamController<ElectronicBoardEvent> _events =
       StreamController<ElectronicBoardEvent>.broadcast(sync: true);
@@ -186,10 +197,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final toggle = find.byKey(const ValueKey('chessnut-toggle'));
-    await tester.ensureVisible(toggle);
-    await tester.tap(toggle);
-    await tester.pumpAndSettle();
+    await _enableChessnut(tester);
     final start = find.widgetWithText(FilledButton, 'Start game');
     await tester.ensureVisible(start);
     await tester.tap(start);
@@ -256,10 +264,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final toggle = find.byKey(const ValueKey('chessnut-toggle'));
-    await tester.ensureVisible(toggle);
-    await tester.tap(toggle);
-    await tester.pumpAndSettle();
+    await _enableChessnut(tester);
     final start = find.widgetWithText(FilledButton, 'Start game');
     await tester.ensureVisible(start);
     await tester.tap(start);

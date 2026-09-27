@@ -526,16 +526,17 @@ void main() {
     expect(find.text('Copy diagnostics'), findsNothing);
     expect(find.text('Licence'), findsOneWidget);
     expect(find.text('Mobile Maia source code'), findsOneWidget);
+    expect(find.textContaining('runs entirely on your phone'), findsOneWidget);
     expect(find.textContaining('AGPL-3.0-only'), findsOneWidget);
     expect(find.textContaining('without any warranty'), findsOneWidget);
     expect(find.textContaining('redistribute and modify'), findsOneWidget);
   });
 
-  testWidgets('Copy diagnostics is in Advanced settings', (tester) async {
+  testWidgets('Copy diagnostics is at the bottom of Settings', (tester) async {
     SharedPreferences.setMockInitialValues({});
     await tester.pumpWidget(const MaiaChessApp());
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Advanced'));
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
     await tester.pumpAndSettle();
 
     expect(find.text('Copy diagnostics'), findsOneWidget);
@@ -546,8 +547,9 @@ void main() {
     await tester.pumpWidget(const MaiaChessApp());
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('sampling-help')), findsNothing);
-    await tester.tap(find.text('Advanced'));
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const ValueKey('sampling-help')));
     await tester.tap(find.byKey(const ValueKey('sampling-help')));
     await tester.pumpAndSettle();
 
@@ -561,7 +563,9 @@ void main() {
     await tester.pumpWidget(const MaiaChessApp());
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Hard 2200'));
+    final rating = tester.widget<Slider>(find.byType(Slider).first);
+    rating.onChanged!(2200);
+    rating.onChangeEnd!(2200);
     await tester.pumpAndSettle();
     final preferences = await SharedPreferences.getInstance();
     expect(preferences.getInt(maiaPlayEloPreferenceKey), 2200);
