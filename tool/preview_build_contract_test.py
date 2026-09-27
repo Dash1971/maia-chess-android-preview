@@ -73,6 +73,12 @@ class PreviewBuildContractTest(unittest.TestCase):
         self.assertIn('--flavor dev', runner)
         self.assertIn('--target-platform android-arm64', runner)
 
+    def test_sound_effect_compiles_against_its_dependency_api_level(self):
+        gradle = (REPO / 'android/build.gradle.kts').read_text()
+
+        self.assertIn('name == "sound_effect"', gradle)
+        self.assertIn('compileSdk = 36', gradle)
+
 
 if __name__ == '__main__':
     unittest.main()
