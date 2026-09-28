@@ -25,7 +25,8 @@ Chessnut games so they do not duplicate the physical board's independent
 **Board sounds** setting.
 
 The **Game sounds** and **Haptic feedback** preferences are independent,
-enabled by default, stored locally, and available under **Advanced**. Audio and
+stored locally, and available under **Settings → Game settings**. Fresh installs
+default to sounds off and haptics on; existing choices are preserved. Audio and
 haptic failures are non-fatal on unsupported or muted devices.
 
 Pending audio is admitted again immediately before playback, after asset loading.

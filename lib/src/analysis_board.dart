@@ -56,6 +56,7 @@ class AnalysisBoardPage extends StatefulWidget {
     this.gameAnalysisQuality = GameAnalysisQuality.thorough,
     this.evaluator,
     this.maiaEvaluator,
+    this.maiaPolicyEvaluator,
     super.key,
   });
 
@@ -69,6 +70,8 @@ class AnalysisBoardPage extends StatefulWidget {
   final Future<StockfishReview> Function(String fen)? evaluator;
   final Future<String?> Function(List<String> positions, int elo)?
   maiaEvaluator;
+  final Future<List<double>?> Function(List<String> positions, int elo)?
+  maiaPolicyEvaluator;
 
   @override
   State<AnalysisBoardPage> createState() => _AnalysisBoardPageState();
@@ -244,6 +247,7 @@ class _AnalysisBoardPageState extends State<AnalysisBoardPage> {
     maiaElo: widget.maiaElo,
     evaluator: widget.evaluator,
     maiaEvaluator: widget.maiaEvaluator,
+    maiaPolicyEvaluator: widget.maiaPolicyEvaluator,
     title: 'Analysis Board',
     onHome: ActiveSessionStore.clear,
     onLoadFen: _loadFen,

@@ -184,3 +184,23 @@ They replace the one-off Mac scripts with configurable SDK/APK paths, a
 sanitized checked-in PGN, JSON pass/fail results and failure diagnostics. The
 manual CI release-build job also runs packaging verification and retains its
 APK/log/report artifacts for 14 days.
+
+## Feedback and Maia probability regressions
+
+`test/game_feedback_lifecycle_test.dart` holds sound loading pending while the
+app backgrounds, returns, changes routes, browses history, or disposes its game.
+It also verifies accepted feedback and one game-end event still work, and that
+entering analysis cancels the delayed end event. The shared navigation tests
+record platform feedback calls so implicit Material/tooltip haptics cannot
+bypass the phone feedback policy.
+
+`test/maia_probability_sheet_test.dart` opens and scrolls the entire probability
+sheet in portrait and landscape at normal, 160%, and 200% text sizes. It checks
+that the last legal move remains reachable without changing the board.
+`test/maia_probability_corpus_test.dart` compares raw legal probabilities with
+direct softmax across both colors, promotions, castling, en passant, terminal
+positions, and ten reproducible seeded games (seed 20260928).
+
+These tests run with the normal `flutter test` suite; they require neither
+physical phones nor an electronic board. Android Recent Games integration
+checks use stable session-ID keys rather than display names, which may repeat.

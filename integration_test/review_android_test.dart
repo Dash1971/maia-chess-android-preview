@@ -392,7 +392,7 @@ void main() {
       expect(
         tester
             .widget<SwitchListTile>(
-              find.byKey(const ValueKey('chessnut-toggle')),
+              find.byKey(const ValueKey('home-chessnut-toggle')),
             )
             .value,
         isFalse,

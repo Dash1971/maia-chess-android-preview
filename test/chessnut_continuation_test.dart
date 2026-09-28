@@ -110,7 +110,7 @@ void main() {
       await tester.tap(find.byKey(const ValueKey('game-home-button')));
       await tester.pumpAndSettle();
       final toggle = tester.widget<SwitchListTile>(
-        find.byKey(const ValueKey('chessnut-toggle')),
+        find.byKey(const ValueKey('home-chessnut-toggle')),
       );
       expect(toggle.value, isFalse);
       await disposeGame(tester, board);

@@ -14,6 +14,7 @@ class ReviewPage extends StatefulWidget {
     this.returnToGame = false,
     this.evaluator,
     this.maiaEvaluator,
+    this.maiaPolicyEvaluator,
     this.classifier,
     this.title = 'Game review',
     this.onLoadFen,
@@ -42,6 +43,8 @@ class ReviewPage extends StatefulWidget {
   final Future<StockfishReview> Function(String fen)? evaluator;
   final Future<String?> Function(List<String> positions, int elo)?
   maiaEvaluator;
+  final Future<List<double>?> Function(List<String> positions, int elo)?
+  maiaPolicyEvaluator;
   final MoveClassificationRunner? classifier;
   final String title;
   final Future<void> Function()? onLoadFen;
@@ -82,7 +85,7 @@ class _ReviewPageState extends State<ReviewPage>
   List<String> _graphPositions = const [];
   List<String> _graphMoves = const [];
   List<ClassifiedMove> _graphClassifications = const [];
-  final Map<int, String> _maiaMoves = {};
+  final Map<int, MaiaPositionAnalysis> _maiaAnalyses = {};
   final Set<int> _maiaLoading = {};
   late final cg.ChessboardController _boardController;
   late dc.Chess _boardPosition;
@@ -94,14 +97,14 @@ class _ReviewPageState extends State<ReviewPage>
   final List<String> _variationUci = [];
   final List<String> _variationPositions = [];
   StockfishReview? _variationReview;
-  String? _variationMaiaMove;
+  MaiaPositionAnalysis? _variationMaiaAnalysis;
   bool _variationLoading = false;
   bool _variationMaiaLoading = false;
   String? _variationError;
   final Map<String, StockfishReview> _variationReviewCache = {};
   final Map<String, Future<StockfishReview>> _pendingVariationReviews = {};
-  final Map<String, String> _variationMaiaCache = {};
-  final Map<String, Future<String?>> _pendingVariationMaia = {};
+  final Map<String, MaiaPositionAnalysis> _variationMaiaCache = {};
+  final Map<String, Future<MaiaPositionAnalysis?>> _pendingVariationMaia = {};
   bool _sessionNotificationScheduled = false;
   final Set<String> _collapsedVariationKeys = {};
   final ScrollController _moveListScrollController = ScrollController();
@@ -131,7 +134,7 @@ class _ReviewPageState extends State<ReviewPage>
       _pendingVariationReviews.clear();
       _loading.clear();
     }
-    if (widget.maiaEvaluator == null) {
+    if (widget.maiaEvaluator == null && widget.maiaPolicyEvaluator == null) {
       _pendingVariationMaia.clear();
       _maiaLoading.clear();
     }
@@ -447,7 +450,7 @@ class _ReviewPageState extends State<ReviewPage>
     _variationUci.clear();
     _variationPositions.clear();
     _variationReview = null;
-    _variationMaiaMove = null;
+    _variationMaiaAnalysis = null;
     _ply = ply.clamp(0, _maximumPly);
     _boardPosition = dc.Chess.fromSetup(
       dc.Setup.parseFen(widget.positions[_ply]),
@@ -570,7 +573,7 @@ class _ReviewPageState extends State<ReviewPage>
       setState(() {
         _invalidateGraphAnalysisIfLineChanged(analysisMovesBefore);
         _variationReview = null;
-        _variationMaiaMove = null;
+        _variationMaiaAnalysis = null;
       });
       unawaited(_analyzeVariation());
       _notifySessionChanged();
@@ -641,7 +644,7 @@ class _ReviewPageState extends State<ReviewPage>
     setState(() {
       _invalidateGraphAnalysisIfLineChanged(analysisMovesBefore);
       _variationReview = null;
-      _variationMaiaMove = null;
+      _variationMaiaAnalysis = null;
     });
     unawaited(_analyzeVariation());
     _notifySessionChanged();
@@ -649,17 +652,37 @@ class _ReviewPageState extends State<ReviewPage>
 
   Future<void> _analyzeMaiaPosition(int ply) async {
     if (!_engineEnabled || !_foreground) return;
+    if (chess.Chess.fromFEN(widget.positions[ply]).game_over) return;
     // Widget tests commonly inject only Stockfish. Do not invoke the native
     // Maia channel in that case unless a Maia test double was also supplied.
-    if (widget.evaluator != null && widget.maiaEvaluator == null) return;
-    if (_maiaMoves.containsKey(ply) || _maiaLoading.contains(ply)) return;
+    if (widget.evaluator != null &&
+        widget.maiaEvaluator == null &&
+        widget.maiaPolicyEvaluator == null) {
+      return;
+    }
+    if (_maiaAnalyses.containsKey(ply) || _maiaLoading.contains(ply)) return;
     setState(() => _maiaLoading.add(ply));
     try {
       final positions = widget.positions.take(ply + 1).toList(growable: false);
-      final injected = widget.maiaEvaluator;
-      if (injected != null) {
-        final move = await injected(positions, widget.maiaElo);
-        if (move != null && mounted) setState(() => _maiaMoves[ply] = move);
+      final policyEvaluator = widget.maiaPolicyEvaluator;
+      if (policyEvaluator != null) {
+        final response = await policyEvaluator(positions, widget.maiaElo);
+        final analysis = response == null
+            ? null
+            : _maiaAnalysisFromPolicy(widget.positions[ply], response);
+        if (analysis != null && mounted) {
+          setState(() => _maiaAnalyses[ply] = analysis);
+        }
+        return;
+      }
+      final moveEvaluator = widget.maiaEvaluator;
+      if (moveEvaluator != null) {
+        final move = await moveEvaluator(positions, widget.maiaElo);
+        if (move != null && mounted) {
+          setState(
+            () => _maiaAnalyses[ply] = MaiaPositionAnalysis.single(move),
+          );
+        }
         return;
       }
       final response = await MaiaInferenceQueue.predict({
@@ -667,21 +690,27 @@ class _ReviewPageState extends State<ReviewPage>
         'selfElo': widget.maiaElo,
         'opponentElo': widget.maiaElo,
       }, replaceableScope: _maiaInferenceScope);
-      if (response == null || response.length != 4352) return;
-      final game = chess.Chess.fromFEN(widget.positions[ply]);
-      if (game.game_over) return;
-      final move = MaiaEncoding.sampleLegalMove(
-        game,
-        game.moves({'asObjects': true}).cast<chess.Move>().toList(),
-        response.toList(growable: false),
-        temperature: 0,
-      );
-      if (mounted) setState(() => _maiaMoves[ply] = MaiaEncoding.uci(move));
+      if (response == null) return;
+      final analysis = _maiaAnalysisFromPolicy(widget.positions[ply], response);
+      if (analysis != null && mounted) {
+        setState(() => _maiaAnalyses[ply] = analysis);
+      }
     } catch (error, stackTrace) {
       unawaited(AppDiagnostics.record('maia-analysis', error, stackTrace));
     } finally {
       if (mounted) setState(() => _maiaLoading.remove(ply));
     }
+  }
+
+  MaiaPositionAnalysis? _maiaAnalysisFromPolicy(
+    String fen,
+    List<double> response,
+  ) {
+    if (response.length != 4352) return null;
+    final game = chess.Chess.fromFEN(fen);
+    if (game.game_over) return null;
+    final moves = MaiaEncoding.legalMoveProbabilities(game, response);
+    return moves.isEmpty ? null : MaiaPositionAnalysis(moves);
   }
 
   Future<StockfishReview> _stockfishForVariation(String fen) {
@@ -753,17 +782,20 @@ class _ReviewPageState extends State<ReviewPage>
 
   String _variationHistoryKey(List<String> positions) => positions.join('\n');
 
-  Future<String?> _maiaForVariation(List<String> positions, String fen) {
+  Future<MaiaPositionAnalysis?> _maiaForVariation(
+    List<String> positions,
+    String fen,
+  ) {
     final key = _variationHistoryKey(positions);
     final cached = _variationMaiaCache[key];
     if (cached != null) return Future.value(cached);
     final pending = _pendingVariationMaia[key];
     if (pending != null) return pending;
-    late Future<String?> operation;
+    late Future<MaiaPositionAnalysis?> operation;
     operation = _runVariationMaia(positions, fen)
-        .then((move) {
-          if (move != null) _variationMaiaCache[key] = move;
-          return move;
+        .then((analysis) {
+          if (analysis != null) _variationMaiaCache[key] = analysis;
+          return analysis;
         })
         .whenComplete(() {
           if (identical(_pendingVariationMaia[key], operation)) {
@@ -774,25 +806,28 @@ class _ReviewPageState extends State<ReviewPage>
     return operation;
   }
 
-  Future<String?> _runVariationMaia(List<String> positions, String fen) async {
-    final injected = widget.maiaEvaluator;
-    if (injected != null) return injected(positions, widget.maiaElo);
+  Future<MaiaPositionAnalysis?> _runVariationMaia(
+    List<String> positions,
+    String fen,
+  ) async {
+    if (chess.Chess.fromFEN(fen).game_over) return null;
+    final policyEvaluator = widget.maiaPolicyEvaluator;
+    if (policyEvaluator != null) {
+      final response = await policyEvaluator(positions, widget.maiaElo);
+      return response == null ? null : _maiaAnalysisFromPolicy(fen, response);
+    }
+    final moveEvaluator = widget.maiaEvaluator;
+    if (moveEvaluator != null) {
+      final move = await moveEvaluator(positions, widget.maiaElo);
+      return move == null ? null : MaiaPositionAnalysis.single(move);
+    }
     if (widget.evaluator != null) return null;
     final response = await MaiaInferenceQueue.predict({
       'tokens': MaiaEncoding.historicalTokens(positions),
       'selfElo': widget.maiaElo,
       'opponentElo': widget.maiaElo,
     }, replaceableScope: _maiaInferenceScope);
-    if (response == null || response.length != 4352) return null;
-    final game = chess.Chess.fromFEN(fen);
-    if (game.game_over) return null;
-    final move = MaiaEncoding.sampleLegalMove(
-      game,
-      game.moves({'asObjects': true}).cast<chess.Move>().toList(),
-      response.toList(growable: false),
-      temperature: 0,
-    );
-    return MaiaEncoding.uci(move);
+    return response == null ? null : _maiaAnalysisFromPolicy(fen, response);
   }
 
   Future<void> _analyzeVariation() async {
@@ -804,7 +839,7 @@ class _ReviewPageState extends State<ReviewPage>
     final cachedMaia = _variationMaiaCache[historyKey];
     setState(() {
       _variationReview = cachedReview;
-      _variationMaiaMove = cachedMaia;
+      _variationMaiaAnalysis = cachedMaia;
       _variationLoading = cachedReview == null;
       _variationMaiaLoading = false;
       _variationError = null;
@@ -839,9 +874,9 @@ class _ReviewPageState extends State<ReviewPage>
       setState(() => _variationMaiaLoading = true);
     }
     try {
-      final move = await _maiaForVariation(history, fen);
-      if (move != null && mounted && fen == _currentFen) {
-        setState(() => _variationMaiaMove = move);
+      final analysis = await _maiaForVariation(history, fen);
+      if (analysis != null && mounted && fen == _currentFen) {
+        setState(() => _variationMaiaAnalysis = analysis);
       }
     } catch (error, stackTrace) {
       unawaited(AppDiagnostics.record('maia-variation', error, stackTrace));
@@ -1176,7 +1211,7 @@ class _ReviewPageState extends State<ReviewPage>
         dc.Setup.parseFen(positions[_variationIndex]),
       );
       _variationReview = null;
-      _variationMaiaMove = null;
+      _variationMaiaAnalysis = null;
       _boardController.updatePosition(
         _boardGameData(),
         animate: false,
@@ -1404,9 +1439,10 @@ class _ReviewPageState extends State<ReviewPage>
   Set<cg.Shape> get _arrows {
     if (!_engineEnabled) return const {};
     final stockfishMoves = _stockfishMoves;
-    final maiaMove = _inVariation
-        ? _variationMaiaMove ?? ''
-        : _maiaMoves[_ply] ?? '';
+    final maiaMove =
+        (_inVariation ? _variationMaiaAnalysis : _maiaAnalyses[_ply])
+            ?.topMove ??
+        '';
     final valid = RegExp(r'^[a-h][1-8][a-h][1-8][qrbn]?$');
     final arrows = <cg.Shape>{};
     const stockfishColors = [Color(0xff3d9be9), Color(0xff8ac8f5)];
@@ -1442,9 +1478,10 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   ({String uci, Color tailColor})? get _agreementArrow {
-    final maiaMove = _inVariation
-        ? _variationMaiaMove ?? ''
-        : _maiaMoves[_ply] ?? '';
+    final maiaMove =
+        (_inVariation ? _variationMaiaAnalysis : _maiaAnalyses[_ply])
+            ?.topMove ??
+        '';
     final index = _stockfishMoves.indexOf(maiaMove);
     if (index < 0) return null;
     return (
@@ -1524,9 +1561,162 @@ class _ReviewPageState extends State<ReviewPage>
     return san.join(' ');
   }
 
+  String _formatMaiaProbability(double probability) {
+    final percent = probability * 100;
+    if (percent > 0 && percent < 1) return '<1%';
+    return '${percent.round()}%';
+  }
+
+  Future<void> _showMaiaProbabilities(
+    MaiaPositionAnalysis analysis,
+    String fen,
+  ) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => SafeArea(
+        child: DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.65,
+          maxChildSize: 0.9,
+          builder: (context, controller) => CustomScrollView(
+            controller: controller,
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Maia ${widget.maiaElo} move probabilities',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Raw model probabilities normalized across every legal move. Temperature and Top-P are not applied.',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SliverToBoxAdapter(child: Divider(height: 1)),
+              SliverList.builder(
+                itemCount: analysis.moves.length,
+                itemBuilder: (context, index) {
+                  final move = analysis.moves[index];
+                  final san = _sanForUci(fen, move.uci);
+                  return ListTile(
+                    key: ValueKey('maia-probability-${move.uci}'),
+                    leading: Text('${index + 1}'),
+                    title: Text(san),
+                    subtitle: Text(move.uci),
+                    trailing: Text(
+                      _formatMaiaProbability(move.probability),
+                      style: const TextStyle(
+                        fontFeatures: [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _maiaProbabilityRow(MaiaPositionAnalysis analysis, String fen) {
+    final shown = analysis.moves.take(4).toList(growable: false);
+    final shownMass = shown.fold<double>(
+      0,
+      (sum, move) => sum + move.probability,
+    );
+    final otherMass = max(0.0, 1 - shownMass);
+    final descriptions = [
+      for (final move in shown)
+        '${_sanForUci(fen, move.uci)} ${_formatMaiaProbability(move.probability)}',
+      if (otherMass > 0.005)
+        'other legal moves ${_formatMaiaProbability(otherMass)}',
+    ];
+    final textStyle = Theme.of(context).textTheme.bodySmall
+        ?.copyWith(fontFeatures: const [FontFeature.tabularFigures()]);
+    return Tooltip(
+      message: 'Raw Maia probabilities over legal moves. Top four shown; tap for all moves.',
+      child: Semantics(
+        label:
+            'Maia ${widget.maiaElo}, raw move probabilities. ${descriptions.join(', ')}. Tap for all legal moves.',
+        button: true,
+        child: InkWell(
+          key: const ValueKey('maia-engine-line'),
+          onTap: () => unawaited(_showMaiaProbabilities(analysis, fen)),
+          borderRadius: BorderRadius.circular(4),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: max(64, MediaQuery.textScalerOf(context).scale(52)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'M${widget.maiaElo}',
+                        style: const TextStyle(
+                          color: Color(0xffe89b3c),
+                          fontWeight: FontWeight.w700,
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      ),
+                      Text(
+                        'raw',
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Wrap(
+                    spacing: 10,
+                    runSpacing: 2,
+                    children: [
+                      for (final move in shown)
+                        Text(
+                          '${_sanForUci(fen, move.uci)} ${_formatMaiaProbability(move.probability)}',
+                          style: textStyle,
+                        ),
+                      if (otherMass > 0.005)
+                        Text(
+                          'other ${_formatMaiaProbability(otherMass)}',
+                          style: textStyle?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 4, top: 2),
+                  child: Icon(Icons.more_horiz, size: 18),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _engineLinesPanel() {
     final review = _review;
-    final maiaMove = _inVariation ? _variationMaiaMove : _maiaMoves[_ply];
+    final maiaAnalysis = _inVariation
+        ? _variationMaiaAnalysis
+        : _maiaAnalyses[_ply];
+    final maiaMove = maiaAnalysis?.topMove;
     final stockfishLines = review?.lines.isNotEmpty == true
         ? review!.lines.take(2).toList(growable: false)
         : review == null || review.bestMove == '(none)'
@@ -1543,9 +1733,7 @@ class _ReviewPageState extends State<ReviewPage>
     final maiaLoading = _inVariation
         ? _variationMaiaLoading
         : _maiaLoading.contains(_ply);
-    final maiaStockfishIndex = maiaMove == null
-        ? -1
-        : _stockfishMoves.indexOf(maiaMove);
+    final maiaTerminal = chess.Chess.fromFEN(_currentFen).game_over;
     Widget engineRow({
       required String label,
       required Color color,
@@ -1598,18 +1786,21 @@ class _ReviewPageState extends State<ReviewPage>
                       ? 'Analyzing…'
                       : '—'),
             ),
-          engineRow(
-            key: const ValueKey('maia-engine-line'),
-            label: 'M${widget.maiaElo}',
-            color: const Color(0xffe89b3c),
-            text: maiaMove == null
-                ? maiaLoading
-                      ? 'Analyzing…'
-                      : '—'
-                : maiaStockfishIndex >= 0
-                ? '${_sanForUci(_currentFen, maiaMove)} · Matches Stockfish${maiaStockfishIndex == 0 ? '' : ' #2'}'
-                : _sanForUci(_currentFen, maiaMove),
-          ),
+          if (maiaAnalysis?.hasRawProbabilities == true)
+            _maiaProbabilityRow(maiaAnalysis!, _currentFen)
+          else
+            engineRow(
+              key: const ValueKey('maia-engine-line'),
+              label: 'M${widget.maiaElo}',
+              color: const Color(0xffe89b3c),
+              text: maiaMove == null
+                  ? maiaLoading
+                        ? 'Analyzing…'
+                        : maiaTerminal
+                        ? 'No legal moves'
+                        : 'Unavailable'
+                  : _sanForUci(_currentFen, maiaMove),
+            ),
         ],
       ),
     );
@@ -1947,7 +2138,7 @@ class _ReviewPageState extends State<ReviewPage>
           dc.Setup.parseFen(_variationPositions[next]),
         );
         _variationReview = null;
-        _variationMaiaMove = null;
+        _variationMaiaAnalysis = null;
         _boardController.updatePosition(
           _boardGameData(),
           animate: false,
@@ -2458,8 +2649,17 @@ class _ReviewPageState extends State<ReviewPage>
             final textScale = MediaQuery.textScalerOf(context).scale(16) / 16;
             final boardGutter =
                 max(24.0, MediaQuery.textScalerOf(context).scale(24)) + 8;
+            final selectedMaiaAnalysis = _inVariation
+                ? _variationMaiaAnalysis
+                : _maiaAnalyses[_ply];
+            final maiaRowCount =
+                selectedMaiaAnalysis?.hasRawProbabilities == true
+                ? textScale >= 1.4
+                      ? 3
+                      : 2
+                : 1;
             final engineHeight = _engineEnabled
-                ? 3 * max(26.0, 22.0 * textScale) + 20
+                ? (2 + maiaRowCount) * max(26.0, 22.0 * textScale) + 20
                 : 0.0;
             Widget board(double size) => SizedBox(
               width: size + boardGutter,
@@ -2537,7 +2737,15 @@ class _ReviewPageState extends State<ReviewPage>
                   width: double.infinity,
                   child: _showGraph ? _graphTab() : _movesTab(),
                 );
-                if (available.maxHeight < engineHeight + 188) {
+                // At large text sizes each of the four moves and the omitted
+                // mass can occupy its own row. Keep that extra wrapping inside
+                // the existing scrollable fallback rather than overflowing.
+                final wrapAllowance =
+                    selectedMaiaAnalysis?.hasRawProbabilities == true &&
+                        textScale >= 1.4
+                    ? (5 - maiaRowCount) * max(26.0, 22.0 * textScale)
+                    : 0.0;
+                if (available.maxHeight < engineHeight + wrapAllowance + 188) {
                   return Column(
                     children: [
                       Expanded(
