@@ -67,11 +67,12 @@ GameFeedbackEvent acceptedMoveFeedbackEvent({
 };
 
 class GameFeedbackService {
-  GameFeedbackService._();
+  GameFeedbackService({SoundEffect? soundEffect})
+    : _soundEffect = soundEffect ?? SoundEffect();
 
-  static final instance = GameFeedbackService._();
+  static final instance = GameFeedbackService();
 
-  final SoundEffect _soundEffect = SoundEffect();
+  final SoundEffect _soundEffect;
   Future<void>? _initialization;
   bool _soundAvailable = true;
 
@@ -79,9 +80,11 @@ class GameFeedbackService {
     GameFeedbackEvent event, {
     required bool soundsEnabled,
     required bool hapticsEnabled,
+    required bool Function() isCurrent,
   }) async {
+    if (!isCurrent()) return;
     final plan = gameFeedbackPlan(event);
-    if (soundsEnabled) unawaited(_playSound(plan.sound));
+    if (soundsEnabled) unawaited(_playSound(plan.sound, isCurrent));
     if (hapticsEnabled) unawaited(_playHaptic(plan.haptic));
   }
 
@@ -111,10 +114,14 @@ class GameFeedbackService {
     }
   }
 
-  Future<void> _playSound(GameFeedbackSound sound) async {
-    if (!_soundAvailable) return;
+  Future<void> _playSound(
+    GameFeedbackSound sound,
+    bool Function() isCurrent,
+  ) async {
+    if (!_soundAvailable || !isCurrent()) return;
     await _ensureInitialized();
-    if (!_soundAvailable) return;
+    // Loading may finish after a route/lifecycle/game or preference change.
+    if (!_soundAvailable || !isCurrent()) return;
     try {
       await _soundEffect.play(sound.name);
     } catch (error, stackTrace) {

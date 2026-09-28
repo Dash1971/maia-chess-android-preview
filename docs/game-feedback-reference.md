@@ -27,3 +27,17 @@ Chessnut games so they do not duplicate the physical board's independent
 The **Game sounds** and **Haptic feedback** preferences are independent,
 enabled by default, stored locally, and available under **Advanced**. Audio and
 haptic failures are non-fatal on unsupported or muted devices.
+
+Pending audio is admitted again immediately before playback, after asset loading.
+Leaving the game, backgrounding, changing feedback settings, browsing history,
+and replacing or cancelling game work invalidate pending events. Returning to
+that screen does not replay them. The delayed game-end event is cancelled even
+when the finished game's clock is already stopped. Shared history controls also
+disable automatic Material and tooltip feedback.
+
+`test/game_feedback_lifecycle_test.dart` exercises delayed asset loading,
+background/resume, route return, history return, disposal, end-of-game navigation,
+and valid feedback after cancellation. `test/history_navigation_test.dart`
+records platform calls to catch feedback outside the game-feedback service.
+Android Recent Games regressions select archive rows by stable session ID,
+including the case where two rows have identical player/rating labels.

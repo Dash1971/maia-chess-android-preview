@@ -326,12 +326,22 @@ void main() {
     fail('Android screen or engine did not finish within 30 seconds');
   }
 
-  Future<void> openRecent(WidgetTester tester, String title) async {
+  String? fixtureEvent(RecentSession game) =>
+      dc.PgnGame.parsePgn(game.data['pgn'] as String).headers['Event'];
+
+  Future<RecentSession> recentFixture(String event) async =>
+      (await ActiveSessionStore.recent()).singleWhere(
+        (game) => fixtureEvent(game) == event,
+      );
+
+  Future<void> openRecent(WidgetTester tester, String id) async {
     final recent = find.text('Recent games');
     await tester.ensureVisible(recent);
     await tester.tap(recent);
-    await waitFor(tester, () => find.text(title).evaluate().isNotEmpty);
-    await tester.tap(find.text(title));
+    final tile = find.byKey(ValueKey('recent-game-$id'));
+    await waitFor(tester, () => tile.evaluate().isNotEmpty);
+    await tester.ensureVisible(tile);
+    await tester.tap(tile);
     await tester.pumpAndSettle();
   }
 
@@ -359,7 +369,10 @@ void main() {
         tester,
         () => find.text('Recent games').evaluate().isNotEmpty,
       );
-      await openRecent(tester, 'Chessnut completed regression');
+      await openRecent(
+        tester,
+        (await recentFixture('Chessnut completed regression')).id,
+      );
       await waitFor(
         tester,
         () => find.text('Black is victorious').evaluate().isNotEmpty,
@@ -379,13 +392,16 @@ void main() {
       expect(
         tester
             .widget<SwitchListTile>(
-              find.byKey(const ValueKey('chessnut-go-toggle')),
+              find.byKey(const ValueKey('chessnut-toggle')),
             )
             .value,
         isFalse,
       );
       // Selecting another completed record must not inherit the old result-dialog flag.
-      await openRecent(tester, 'Chessnut completed regression');
+      await openRecent(
+        tester,
+        (await recentFixture('Chessnut completed regression')).id,
+      );
       await waitFor(
         tester,
         () => find.text('Black is victorious').evaluate().isNotEmpty,
@@ -410,9 +426,7 @@ void main() {
         'timePreset': 'unlimited',
       });
       await ActiveSessionStore.clear();
-      final before = (await ActiveSessionStore.recent()).singleWhere(
-        (game) => game.title == 'Chessnut phone regression',
-      );
+      final before = await recentFixture('Chessnut phone regression');
       final board = SimulatedElectronicBoard();
       await tester.pumpWidget(
         MaterialApp(home: GamePage(electronicBoardTransport: board)),
@@ -421,7 +435,7 @@ void main() {
         tester,
         () => find.text('Recent games').evaluate().isNotEmpty,
       );
-      await openRecent(tester, 'Chessnut phone regression');
+      await openRecent(tester, before.id);
       await waitFor(
         tester,
         () => find.text('Play in app').evaluate().isNotEmpty,
@@ -462,11 +476,11 @@ void main() {
         () => find.text('Recent games').evaluate().isNotEmpty,
       );
       final after = (await ActiveSessionStore.recent()).singleWhere(
-        (game) => game.title == 'Chessnut phone regression',
+        (game) => game.id == before.id,
       );
       expect(after.id, before.id);
       expect(after.data['electronicBoard'], isNull);
-      await openRecent(tester, 'Chessnut phone regression');
+      await openRecent(tester, before.id);
       await waitFor(
         tester,
         () => find.byType(cg.Chessboard).evaluate().isNotEmpty,
@@ -660,10 +674,8 @@ void main() {
           tester,
           () => find.text('Recent games').evaluate().isNotEmpty,
         );
-        final before = (await ActiveSessionStore.recent()).singleWhere(
-          (record) => record.title == 'Launch $name',
-        );
-        await openRecent(tester, 'Launch $name');
+        final before = await recentFixture('Launch $name');
+        await openRecent(tester, before.id);
         await waitFor(
           tester,
           () => find.byType(AlertDialog).evaluate().isNotEmpty,
@@ -737,9 +749,7 @@ void main() {
         'recentState': 'incomplete',
       });
       await ActiveSessionStore.clear();
-      final old = (await ActiveSessionStore.recent()).singleWhere(
-        (game) => game.title == 'Launch unfinished reset',
-      );
+      final old = await recentFixture('Launch unfinished reset');
       await tester.pumpWidget(
         MaterialApp(home: GamePage(clockFactory: () => TestClock(0))),
       );
@@ -747,7 +757,7 @@ void main() {
         tester,
         () => find.text('Recent games').evaluate().isNotEmpty,
       );
-      await openRecent(tester, old.title);
+      await openRecent(tester, old.id);
       await tester.tap(find.byTooltip('Reset game'));
       await tester.pumpAndSettle();
       expect(
@@ -773,7 +783,7 @@ void main() {
       );
       expect(
         (await ActiveSessionStore.recent())
-            .where((game) => game.title.startsWith('Launch '))
+            .where((game) => fixtureEvent(game)?.startsWith('Launch ') == true)
             .length,
         5,
       );
@@ -906,9 +916,14 @@ void main() {
       await tester.tap(find.text('Open recent'));
       await waitFor(
         tester,
-        () => find.text('Second saved game').evaluate().isNotEmpty,
+        () =>
+            find.byKey(ValueKey('recent-game-$secondId')).evaluate().isNotEmpty,
       );
-      await tester.tap(find.text('Second saved game'));
+      expect(
+        find.widgetWithText(ListTile, 'Player — Maia 1600'),
+        findsNWidgets(2),
+      );
+      await tester.tap(find.byKey(ValueKey('recent-game-$secondId')));
       await waitFor(
         tester,
         () => find
@@ -923,7 +938,7 @@ void main() {
       final games = await store.recent();
       expect(games.singleWhere((game) => game.id == firstId).data, resumed);
       expect(games.singleWhere((game) => game.id == secondId).data, second);
-      await tester.tap(find.text('Second saved game'));
+      await tester.tap(find.byKey(ValueKey('recent-game-$secondId')));
       await waitFor(tester, () => selected != null);
       expect(attempts, 2);
       expect(selected, second);

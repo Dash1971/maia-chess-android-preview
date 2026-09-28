@@ -547,6 +547,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
               final game = games[index];
               final date = game.updatedAt.toLocal();
               return ListTile(
+                key: ValueKey('recent-game-${game.id}'),
                 selected: _selected.contains(game.id),
                 leading: _selecting
                     ? Checkbox(

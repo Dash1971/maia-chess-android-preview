@@ -10,9 +10,11 @@ class GamePage extends StatefulWidget {
     this.electronicBoardTransport,
     this.clockFactory,
     this.gameFeedbackPlayer,
+    this.gameFeedbackService,
     super.key,
   });
 
+  final GameFeedbackService? gameFeedbackService;
   final Stopwatch Function()? clockFactory;
   final String? startingFen;
   final PlayerSide? startingSide;
@@ -32,7 +34,7 @@ class GamePage extends StatefulWidget {
   State<GamePage> createState() => _GamePageState();
 }
 
-class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
+class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteAware {
   chess.Chess _game = chess.Chess();
   final List<String> _positionHistory = [];
   final List<String> _uciMoves = [];
@@ -95,6 +97,9 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   bool _gameSoundsEnabled = true;
   bool _gameHapticsEnabled = true;
   Timer? _gameEndFeedbackTimer;
+  int _feedbackEpoch = 0;
+  bool _feedbackForeground = true;
+  bool _feedbackRouteVisible = true;
   bool _drawOfferEvaluating = false;
   Object? _drawOfferRequest;
   String? _lastDrawOfferFen;
@@ -229,7 +234,26 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route is PageRoute<dynamic>) maiaRouteObserver.subscribe(this, route);
+  }
+
+  @override
+  void didPushNext() {
+    _feedbackRouteVisible = false;
+    _cancelGameFeedback();
+  }
+
+  @override
+  void didPopNext() {
+    _feedbackRouteVisible = true;
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    _feedbackForeground = state == AppLifecycleState.resumed;
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached ||
@@ -544,6 +568,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   }
 
   void _pauseGame() {
+    _cancelGameFeedback();
     if (!_started || _clockPaused || _gameFinished) return;
     _whiteMillis = _liveMillis(chess.Color.WHITE);
     _blackMillis = _liveMillis(chess.Color.BLACK);
@@ -805,18 +830,35 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   }
 
   Future<void> _setGameSoundsEnabled(bool enabled) async {
+    _cancelGameFeedback();
     setState(() => _gameSoundsEnabled = enabled);
     final preferences = await SharedPreferences.getInstance();
     await preferences.setBool(gameSoundsPreferenceKey, enabled);
   }
 
   Future<void> _setGameHapticsEnabled(bool enabled) async {
+    _cancelGameFeedback();
     setState(() => _gameHapticsEnabled = enabled);
     final preferences = await SharedPreferences.getInstance();
     await preferences.setBool(gameHapticsPreferenceKey, enabled);
   }
 
+  void _cancelGameFeedback() {
+    _feedbackEpoch++;
+    _gameEndFeedbackTimer?.cancel();
+    _gameEndFeedbackTimer = null;
+  }
+
+  bool get _canEmitGameFeedback =>
+      mounted &&
+      _started &&
+      _feedbackForeground &&
+      _feedbackRouteVisible &&
+      !_reviewOpen &&
+      _isViewingLivePosition;
+
   void _emitGameFeedback(GameFeedbackEvent event) {
+    if (!_canEmitGameFeedback) return;
     if (!shouldEmitPhoneGameFeedback(
       chessnutActive: _chessnutGameActive,
       soundsEnabled: _gameSoundsEnabled,
@@ -829,11 +871,18 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       unawaited(callback(event, _gameSoundsEnabled, _gameHapticsEnabled));
       return;
     }
+    final epoch = _feedbackEpoch;
+    final generation = _gameGeneration;
     unawaited(
-      GameFeedbackService.instance.play(
+      (widget.gameFeedbackService ?? GameFeedbackService.instance).play(
         event,
         soundsEnabled: _gameSoundsEnabled,
         hapticsEnabled: _gameHapticsEnabled,
+        isCurrent: () =>
+            epoch == _feedbackEpoch &&
+            generation == _gameGeneration &&
+            _canEmitGameFeedback &&
+            !_chessnutGameActive,
       ),
     );
   }
@@ -1785,6 +1834,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     if (_positionHistory.isEmpty) return;
     final last = _positionHistory.length - 1;
     final next = ply.clamp(0, last);
+    if (next != _displayPly) _cancelGameFeedback();
     _clearPremoves();
     setState(() => _viewedPly = next == last ? null : next);
     _gameBoardController.updatePosition(
@@ -3976,6 +4026,8 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    maiaRouteObserver.unsubscribe(this);
+    _cancelGameFeedback();
     _clockTimer?.cancel();
     _gameEndFeedbackTimer?.cancel();
     _stopChessnutLedRefresh();
