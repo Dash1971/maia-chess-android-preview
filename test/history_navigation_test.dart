@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/main.dart';
 
@@ -6,6 +7,23 @@ void main() {
   testWidgets('navigator exposes two large controls with long-press jumps', (
     tester,
   ) async {
+    final feedback = <MethodCall>[];
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async {
+        if (call.method == 'HapticFeedback.vibrate' ||
+            call.method == 'SystemSound.play') {
+          feedback.add(call);
+        }
+        return null;
+      },
+    );
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        null,
+      ),
+    );
     var selected = '';
     await tester.pumpWidget(
       MaterialApp(
@@ -42,6 +60,7 @@ void main() {
     expect(selected, 'first');
     await tester.longPress(find.byKey(const ValueKey('next')));
     expect(selected, 'last');
+    expect(feedback, isEmpty, reason: 'Browsing history is silent');
   });
 
   testWidgets('navigator keeps large arrows below actions on narrow layouts', (

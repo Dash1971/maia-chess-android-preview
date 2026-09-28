@@ -50,13 +50,9 @@ class MoveHistoryNavigator extends StatelessWidget {
     required BorderRadius borderRadius,
   }) {
     final colors = Theme.of(context).colorScheme;
-    void handleLongPress() {
-      unawaited(HapticFeedback.selectionClick());
-      onLongPress();
-    }
-
     return Expanded(
       child: Tooltip(
+        enableFeedback: false,
         message: tooltip,
         child: Semantics(
           button: true,
@@ -64,13 +60,14 @@ class MoveHistoryNavigator extends StatelessWidget {
           label: tooltip,
           hint: 'Hold for $longPressDestination',
           onTap: enabled ? onTap : null,
-          onLongPress: enabled ? handleLongPress : null,
+          onLongPress: enabled ? onLongPress : null,
           child: ExcludeSemantics(
             child: InkWell(
+              enableFeedback: false,
               key: key,
               borderRadius: borderRadius,
               onTap: enabled ? onTap : null,
-              onLongPress: enabled ? handleLongPress : null,
+              onLongPress: enabled ? onLongPress : null,
               child: SizedBox(
                 height: 56,
                 child: Icon(
