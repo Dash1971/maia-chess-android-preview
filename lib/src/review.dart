@@ -1579,46 +1579,46 @@ class _ReviewPageState extends State<ReviewPage>
           expand: false,
           initialChildSize: 0.65,
           maxChildSize: 0.9,
-          builder: (context, controller) => Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Maia ${widget.maiaElo} move probabilities',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Raw model probabilities normalized across every legal move. Temperature and Top-P are not applied.',
-                    ),
-                  ],
+          builder: (context, controller) => CustomScrollView(
+            controller: controller,
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Maia ${widget.maiaElo} move probabilities',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Raw model probabilities normalized across every legal move. Temperature and Top-P are not applied.',
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const Divider(height: 1),
-              Expanded(
-                child: ListView.builder(
-                  controller: controller,
-                  itemCount: analysis.moves.length,
-                  itemBuilder: (context, index) {
-                    final move = analysis.moves[index];
-                    final san = _sanForUci(fen, move.uci);
-                    return ListTile(
-                      leading: Text('${index + 1}'),
-                      title: Text(san),
-                      subtitle: Text(move.uci),
-                      trailing: Text(
-                        _formatMaiaProbability(move.probability),
-                        style: const TextStyle(
-                          fontFeatures: [FontFeature.tabularFigures()],
-                        ),
+              const SliverToBoxAdapter(child: Divider(height: 1)),
+              SliverList.builder(
+                itemCount: analysis.moves.length,
+                itemBuilder: (context, index) {
+                  final move = analysis.moves[index];
+                  final san = _sanForUci(fen, move.uci);
+                  return ListTile(
+                    key: ValueKey('maia-probability-${move.uci}'),
+                    leading: Text('${index + 1}'),
+                    title: Text(san),
+                    subtitle: Text(move.uci),
+                    trailing: Text(
+                      _formatMaiaProbability(move.probability),
+                      style: const TextStyle(
+                        fontFeatures: [FontFeature.tabularFigures()],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -2737,7 +2737,15 @@ class _ReviewPageState extends State<ReviewPage>
                   width: double.infinity,
                   child: _showGraph ? _graphTab() : _movesTab(),
                 );
-                if (available.maxHeight < engineHeight + 188) {
+                // At large text sizes each of the four moves and the omitted
+                // mass can occupy its own row. Keep that extra wrapping inside
+                // the existing scrollable fallback rather than overflowing.
+                final wrapAllowance =
+                    selectedMaiaAnalysis?.hasRawProbabilities == true &&
+                        textScale >= 1.4
+                    ? (5 - maiaRowCount) * max(26.0, 22.0 * textScale)
+                    : 0.0;
+                if (available.maxHeight < engineHeight + wrapAllowance + 188) {
                   return Column(
                     children: [
                       Expanded(
