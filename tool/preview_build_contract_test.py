@@ -1,6 +1,8 @@
 from pathlib import Path
 import unittest
 
+from generate_maia3_reference import CASES
+
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -78,6 +80,40 @@ class PreviewBuildContractTest(unittest.TestCase):
 
         self.assertIn('name == "sound_effect"', gradle)
         self.assertIn('compileSdk = 36', gradle)
+
+    def test_maia3_reference_gate_is_test_only_and_pinned(self):
+        fixture = (REPO / 'integration_test/fixtures/maia3_reference.dart').read_text()
+        integration = (REPO / 'integration_test/review_android_test.dart').read_text()
+        pubspec = (REPO / 'pubspec.yaml').read_text()
+
+        self.assertIn('1e13597c42d4858b7cfd7cfdae01e297263364b2', fixture)
+        self.assertIn('3fc6181d5db789b45a15305732148757ae74efa3e0028e81ba335b462dac45c2', fixture)
+        self.assertIn('3454b03ae78baa64a87b345fdb1a457265d912caec531039b074f07eda0d8010', fixture)
+        for case in ('initial-1500', 'after-e4-black-1600-vs-2100',
+                     'ruy-lopez-middlegame-1800', 'black-promotion-1200'):
+            self.assertIn(case, fixture)
+        self.assertIn("import 'fixtures/maia3_reference.dart';", integration)
+        self.assertIn('MaiaEncoding.historicalTokens([reference.fen])', integration)
+        self.assertIn('MaiaInferenceQueue.predict', integration)
+        self.assertIn('closeTo(expected.value, 0.002)', integration)
+        self.assertNotIn('integration_test/fixtures', pubspec)
+        self.assertIn("appFlavor == 'dev'", integration)
+        self.assertIn("expect(appFlavor, anyOf('dev', 'preview'))", integration)
+        self.assertIn('maia3ReferenceCases.take(1)', integration)
+        self.assertIn('if (useDevModel) continue;', integration)
+
+    def test_reference_cases_preserve_distinct_rating_inputs(self):
+        fixture = (REPO / 'integration_test/fixtures/maia3_reference.dart').read_text()
+        self.assertTrue(any(self_elo != opponent_elo
+                            for _, _, self_elo, opponent_elo in CASES))
+        for name, fen, self_elo, opponent_elo in CASES:
+            with self.subTest(case=name):
+                marker = f"name: '{name}',"
+                self.assertIn(marker, fixture)
+                fields = fixture.split(marker, 1)[1].split('legalMoveLogits:', 1)[0]
+                self.assertIn(f"fen: '{fen}',", fields)
+                self.assertIn(f'selfElo: {self_elo},', fields)
+                self.assertIn(f'opponentElo: {opponent_elo},', fields)
 
 
 if __name__ == '__main__':
