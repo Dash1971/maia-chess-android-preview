@@ -25,10 +25,10 @@ CASES = (
         1500,
     ),
     (
-        "after-e4-black-1600",
+        "after-e4-black-1600-vs-2100",
         "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
         1600,
-        1600,
+        2100,
     ),
     (
         "ruy-lopez-middlegame-1800",

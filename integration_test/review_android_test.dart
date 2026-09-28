@@ -32,41 +32,57 @@ void main() {
     }),
   );
 
-  testWidgets('real Maia bridge matches official Maia-3 79M references', (
-    tester,
-  ) async {
-    for (final reference in maia3ReferenceCases) {
-      final response = await MaiaInferenceQueue.predict({
-        'tokens': MaiaEncoding.historicalTokens([reference.fen]),
-        'selfElo': reference.selfElo,
-        'opponentElo': reference.opponentElo,
-      }, timeout: const Duration(minutes: 3));
+  final useDevModel = appFlavor == 'dev';
+  testWidgets(
+    useDevModel
+        ? 'real Maia bridge returns a typed 5M policy vector'
+        : 'real Maia bridge matches official Maia-3 79M references',
+    (tester) async {
+      // Fail closed for unknown flavors: release qualification must never
+      // accidentally run only the cheaper Dev smoke check.
+      expect(appFlavor, anyOf('dev', 'preview'));
+      final references = useDevModel
+          ? maia3ReferenceCases.take(1)
+          : maia3ReferenceCases;
+      for (final reference in references) {
+        final response = await MaiaInferenceQueue.predict({
+          'tokens': MaiaEncoding.historicalTokens([reference.fen]),
+          'selfElo': reference.selfElo,
+          'opponentElo': reference.opponentElo,
+        }, timeout: const Duration(minutes: 3));
 
-      expect(response, isA<Float32List>(), reason: reference.name);
-      expect(response, hasLength(4352), reason: reference.name);
-      expect(
-        response!.every((value) => value.isFinite),
-        isTrue,
-        reason: reference.name,
-      );
-      final game = chess.Chess.fromFEN(reference.fen);
-      final blackToMove = game.turn == chess.Color.BLACK;
-      for (final expected in reference.legalMoveLogits.entries) {
-        final index = MaiaEncoding.moveIndex(expected.key, blackToMove);
+        expect(response, isA<Float32List>(), reason: reference.name);
+        expect(response, hasLength(4352), reason: reference.name);
         expect(
-          response[index],
-          closeTo(expected.value, 0.002),
-          reason: '${reference.name} ${expected.key}',
+          response!.every((value) => value.isFinite),
+          isTrue,
+          reason: reference.name,
         );
+        // Dev deliberately ships a different model. Validate its native bridge,
+        // but reserve the 79M numerical reference comparison for Preview.
+        if (useDevModel) continue;
+        final game = chess.Chess.fromFEN(reference.fen);
+        final blackToMove = game.turn == chess.Color.BLACK;
+        for (final expected in reference.legalMoveLogits.entries) {
+          final index = MaiaEncoding.moveIndex(expected.key, blackToMove);
+          expect(
+            response[index],
+            closeTo(expected.value, 0.002),
+            reason: '${reference.name} ${expected.key}',
+          );
+        }
+        final actualTopMove = reference.legalMoveLogits.keys.reduce((
+          best,
+          move,
+        ) {
+          final bestLogit = response[MaiaEncoding.moveIndex(best, blackToMove)];
+          final moveLogit = response[MaiaEncoding.moveIndex(move, blackToMove)];
+          return moveLogit > bestLogit ? move : best;
+        });
+        expect(actualTopMove, reference.topMove, reason: reference.name);
       }
-      final actualTopMove = reference.legalMoveLogits.keys.reduce((best, move) {
-        final bestLogit = response[MaiaEncoding.moveIndex(best, blackToMove)];
-        final moveLogit = response[MaiaEncoding.moveIndex(move, blackToMove)];
-        return moveLogit > bestLogit ? move : best;
-      });
-      expect(actualTopMove, reference.topMove, reason: reference.name);
-    }
-  });
+    },
+  );
 
   Future<void> waitForRealEvaluation(WidgetTester tester) async {
     for (var i = 0; i < 240; i++) {
