@@ -147,11 +147,14 @@ ARM64 image with hardware acceleration, two virtual CPU cores, and 3 GB RAM.
 ```sh
 flutter devices
 flutter test integration_test/review_android_test.dart \
-  -d emulator-5554 --reporter expanded
+  --flavor preview -d emulator-5554 --reporter expanded
 tool/build_android_release.sh
 ```
 
-Substitute the actual emulator ID. Integration tests exercise the real Maia
+Substitute the actual emulator ID. Always select `--flavor preview` for official
+release qualification: the default flavor is `dev`, which packages Maia3-5M
+instead of the official 79M model. Use `--flavor dev` only for supplementary
+Dev-lane testing, and record the tested flavor in the results. Integration tests exercise the real Maia
 policy bridge, real Stockfish navigation and graph analysis, a reported game
 replay, and checkmate UI handling. Test-only simulated transports cover Bluetooth
 failures; the emulator does not establish actual GATT or LED behavior.

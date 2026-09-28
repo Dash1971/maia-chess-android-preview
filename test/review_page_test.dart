@@ -598,18 +598,13 @@ void main() {
       findsOneWidget,
     );
     expect(find.byKey(const ValueKey('game-next-move-button')), findsOneWidget);
-    final controlCenters = [
-      'game-actions-menu',
-      'quick-resign-button',
-      'game-previous-move-button',
-      'game-next-move-button',
-    ].map((key) => tester.getCenter(find.byKey(ValueKey(key))).dx).toList();
-    final controlSpacing = controlCenters[1] - controlCenters[0];
-    for (var index = 2; index < controlCenters.length; index++) {
-      expect(
-        controlCenters[index] - controlCenters[index - 1],
-        closeTo(controlSpacing, 0.1),
-      );
+    expect(find.byKey(const ValueKey('game-first-move-button')), findsNothing);
+    expect(find.byKey(const ValueKey('game-latest-move-button')), findsNothing);
+    expect(find.byKey(const ValueKey('game-history-indicator')), findsNothing);
+    for (final key in ['game-previous-move-button', 'game-next-move-button']) {
+      final size = tester.getSize(find.byKey(ValueKey(key)));
+      expect(size.height, 56);
+      expect(size.width, greaterThan(48));
     }
 
     await tester.tap(find.byKey(const ValueKey('game-share-menu')));
@@ -671,6 +666,11 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('game-previous-move-button')));
     await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('game-history-indicator')),
+      findsOneWidget,
+    );
+    expect(find.text('START'), findsOneWidget);
     board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
     expect(
       positionCore(board.controller.fen),
@@ -680,6 +680,28 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('game-next-move-button')));
     await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('game-history-indicator')), findsNothing);
+    board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
+    expect(positionCore(board.controller.fen), positionCore(afterE4.fen));
+
+    await tester.longPress(
+      find.byKey(const ValueKey('game-previous-move-button')),
+    );
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('game-history-indicator')),
+      findsOneWidget,
+    );
+    expect(find.text('START'), findsOneWidget);
+    board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
+    expect(
+      positionCore(board.controller.fen),
+      positionCore(chess.Chess.DEFAULT_POSITION),
+    );
+
+    await tester.longPress(find.byKey(const ValueKey('game-next-move-button')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('game-history-indicator')), findsNothing);
     board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
     expect(positionCore(board.controller.fen), positionCore(afterE4.fen));
 
@@ -1000,36 +1022,35 @@ void main() {
     expect(find.text('Game review'), findsOneWidget);
     expect(find.textContaining('Variation:'), findsNothing);
     expect(find.byKey(const ValueKey('analysis-move-list')), findsOneWidget);
-    expect(
-      tester.getSize(find.byKey(const ValueKey('previous-move-button'))).width,
-      48,
-    );
-    expect(
-      tester.getSize(find.byKey(const ValueKey('next-move-button'))).width,
-      48,
-    );
-    expect(
-      tester.getCenter(find.byKey(const ValueKey('previous-move-button'))).dx,
-      greaterThan(
-        tester
-            .getCenter(find.byKey(const ValueKey('analysis-engine-toggle')))
-            .dx,
-      ),
-    );
-    final controlCenters = [
-      'analysis-actions-menu',
-      'analysis-flip-button',
-      'analysis-engine-toggle',
-      'previous-move-button',
-      'next-move-button',
-    ].map((key) => tester.getCenter(find.byKey(ValueKey(key))).dx).toList();
-    final controlSpacing = controlCenters[1] - controlCenters[0];
-    for (var index = 2; index < controlCenters.length; index++) {
-      expect(
-        controlCenters[index] - controlCenters[index - 1],
-        closeTo(controlSpacing, 0.1),
-      );
+    expect(find.byKey(const ValueKey('first-move-button')), findsNothing);
+    expect(find.byKey(const ValueKey('last-move-button')), findsNothing);
+    for (final key in ['previous-move-button', 'next-move-button']) {
+      final size = tester.getSize(find.byKey(ValueKey(key)));
+      expect(size.height, 56);
+      expect(size.width, greaterThan(48));
     }
+    expect(
+      tester
+          .widget<InkWell>(find.byKey(const ValueKey('previous-move-button')))
+          .onTap,
+      isNull,
+    );
+    await tester.longPress(find.byKey(const ValueKey('next-move-button')));
+    await tester.pump();
+    expect(
+      tester
+          .widget<InkWell>(find.byKey(const ValueKey('next-move-button')))
+          .onTap,
+      isNull,
+    );
+    await tester.longPress(find.byKey(const ValueKey('previous-move-button')));
+    await tester.pump();
+    expect(
+      tester
+          .widget<InkWell>(find.byKey(const ValueKey('previous-move-button')))
+          .onTap,
+      isNull,
+    );
     expect(
       tester.getSize(find.byKey(const ValueKey('graph-tab'))).height,
       greaterThanOrEqualTo(48),
@@ -2183,7 +2204,13 @@ void main() {
     await tester.pumpAndSettle();
 
     final graph = find.byType(AnalysisGraph);
-    final rect = tester.getRect(graph);
+    await tester.ensureVisible(graph);
+    await tester.pumpAndSettle();
+    final gesture = find.descendant(
+      of: graph,
+      matching: find.byType(GestureDetector),
+    );
+    final rect = tester.getRect(gesture);
     await tester.tapAt(Offset(rect.right - 1, rect.center.dy));
     await tester.pumpAndSettle();
 
@@ -2328,7 +2355,35 @@ void main() {
     final board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
     expect(board.controller.fen, positions.last);
     expect(tester.getSize(tabPanel), initialPanelSize);
-    expect(find.byKey(const ValueKey('analysis-move-scroll')), findsOneWidget);
+    final moveList = find.byKey(const ValueKey('analysis-move-list'));
+    final moveScroll = find.byKey(const ValueKey('analysis-move-scroll'));
+    final selectedMove = find.byKey(const ValueKey('analysis-selected-move'));
+    expect(moveScroll, findsOneWidget);
+    expect(selectedMove, findsOneWidget);
+    var scrollRect = tester.getRect(moveScroll);
+    var selectedRect = tester.getRect(selectedMove);
+    expect(selectedRect.top, greaterThanOrEqualTo(scrollRect.top - 0.5));
+    expect(selectedRect.bottom, lessThanOrEqualTo(scrollRect.bottom + 0.5));
+    final moveScrollable = find.descendant(
+      of: moveList,
+      matching: find.byType(SingleChildScrollView),
+    );
+    final scrollController = tester
+        .widget<SingleChildScrollView>(moveScrollable)
+        .controller!;
+    expect(scrollController.offset, greaterThan(0));
+
+    await tester.ensureVisible(find.byTooltip('Previous move'));
+    await tester.longPress(find.byTooltip('Previous move'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Next move'));
+    await tester.pumpAndSettle();
+
+    expect(scrollController.offset, closeTo(0, 0.5));
+    scrollRect = tester.getRect(moveScroll);
+    selectedRect = tester.getRect(selectedMove);
+    expect(selectedRect.top, greaterThanOrEqualTo(scrollRect.top - 0.5));
+    expect(selectedRect.bottom, lessThanOrEqualTo(scrollRect.bottom + 0.5));
   });
 
   test('analysis graph fills black above and white below the curve', () async {

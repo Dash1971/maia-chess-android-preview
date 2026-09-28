@@ -104,6 +104,15 @@ class _ReviewPageState extends State<ReviewPage>
   final Map<String, Future<String?>> _pendingVariationMaia = {};
   bool _sessionNotificationScheduled = false;
   final Set<String> _collapsedVariationKeys = {};
+  final ScrollController _moveListScrollController = ScrollController();
+  final GlobalKey _moveListViewportKey = GlobalKey(
+    debugLabel: 'analysis-move-viewport',
+  );
+  final GlobalKey _selectedMoveContextKey = GlobalKey(
+    debugLabel: 'analysis-selected-move',
+  );
+  String? _lastRevealedMoveToken;
+  bool _moveRevealScheduled = false;
   final MaiaInferenceScope _maiaInferenceScope = MaiaInferenceScope();
   final MaiaInferenceScope _stockfishScope = MaiaInferenceScope();
   final MaiaInferenceScope _batchScope = MaiaInferenceScope();
@@ -383,6 +392,7 @@ class _ReviewPageState extends State<ReviewPage>
     StockfishAnalyzer.instance.cancel(_batchScope);
     _maiaInferenceScope.invalidate();
     _boardController.dispose();
+    _moveListScrollController.dispose();
     super.dispose();
   }
 
@@ -1621,32 +1631,91 @@ class _ReviewPageState extends State<ReviewPage>
     MoveClassification? classification,
   }) {
     final colors = Theme.of(context).colorScheme;
-    return Material(
-      key: key,
-      color: selected ? colors.primaryContainer : Colors.transparent,
-      borderRadius: BorderRadius.circular(3),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(3),
-        onTap: onTap,
-        onLongPress: onLongPress,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: variation ? 3 : 6,
-            vertical: variation ? 3 : 7,
-          ),
-          child: Text(
-            '$san${classification?.symbol ?? ''}',
-            style: TextStyle(
-              fontSize: variation ? 14 : 16,
-              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-              color: selected
-                  ? colors.onPrimaryContainer
-                  : classification?.color,
+    return KeyedSubtree(
+      key: selected ? _selectedMoveContextKey : null,
+      child: Semantics(
+        key: selected ? const ValueKey('analysis-selected-move') : null,
+        selected: selected,
+        child: Material(
+          key: key,
+          color: selected ? colors.primaryContainer : Colors.transparent,
+          borderRadius: BorderRadius.circular(3),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(3),
+            onTap: onTap,
+            onLongPress: onLongPress,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: variation ? 3 : 6,
+                vertical: variation ? 3 : 7,
+              ),
+              child: Text(
+                '$san${classification?.symbol ?? ''}',
+                style: TextStyle(
+                  fontSize: variation ? 14 : 16,
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  color: selected
+                      ? colors.onPrimaryContainer
+                      : classification?.color,
+                ),
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  String? get _selectedMoveToken {
+    if (_inVariation) {
+      final opened = _openedVariation;
+      if (opened == null || _variationIndex == 0) return null;
+      return 'variation:${_variationKey(opened)}:$_variationIndex';
+    }
+    return _ply == 0 ? null : 'main:$_ply';
+  }
+
+  void _scheduleSelectedMoveReveal(String token) {
+    if (_moveRevealScheduled) return;
+    _moveRevealScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _moveRevealScheduled = false;
+      if (!mounted || _showGraph || _selectedMoveToken != token) return;
+      final selectedContext = _selectedMoveContextKey.currentContext;
+      final viewportContext = _moveListViewportKey.currentContext;
+      if (selectedContext == null ||
+          viewportContext == null ||
+          !_moveListScrollController.hasClients) {
+        return;
+      }
+      final selectedBox = selectedContext.findRenderObject();
+      final viewportBox = viewportContext.findRenderObject();
+      if (selectedBox is! RenderBox || viewportBox is! RenderBox) return;
+
+      final selectedTop = selectedBox
+          .localToGlobal(Offset.zero, ancestor: viewportBox)
+          .dy;
+      final selectedBottom = selectedTop + selectedBox.size.height;
+      final position = _moveListScrollController.position;
+      final current = position.pixels;
+      const margin = 4.0;
+      var target = current;
+      if (selectedTop < margin) {
+        target += selectedTop - margin;
+      } else if (selectedBottom > viewportBox.size.height - margin) {
+        target += selectedBottom - (viewportBox.size.height - margin);
+      }
+      target = target.clamp(position.minScrollExtent, position.maxScrollExtent);
+      _lastRevealedMoveToken = token;
+      if ((target - current).abs() < 0.5) return;
+      unawaited(
+        _moveListScrollController.animateTo(
+          target,
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOutCubic,
+        ),
+      );
+    });
   }
 
   int _absolutePly(int relative) {
@@ -1796,6 +1865,11 @@ class _ReviewPageState extends State<ReviewPage>
         rows.add(_variationLine(variation));
       }
     }
+    final selectedMoveToken = _selectedMoveToken;
+    if (selectedMoveToken != null &&
+        selectedMoveToken != _lastRevealedMoveToken) {
+      _scheduleSelectedMoveReveal(selectedMoveToken);
+    }
     return Container(
       key: const ValueKey('analysis-move-list'),
       decoration: BoxDecoration(
@@ -1805,9 +1879,15 @@ class _ReviewPageState extends State<ReviewPage>
       ),
       clipBehavior: Clip.antiAlias,
       child: SingleChildScrollView(
-        key: const ValueKey('analysis-move-scroll'),
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Column(children: rows),
+        key: _moveListViewportKey,
+        controller: _moveListScrollController,
+        child: Semantics(
+          key: const ValueKey('analysis-move-scroll'),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Column(children: rows),
+          ),
+        ),
       ),
     );
   }
@@ -2053,109 +2133,55 @@ class _ReviewPageState extends State<ReviewPage>
     }
   }
 
-  Widget _analysisNavigationButton({
-    required Key key,
-    required String tooltip,
-    required IconData icon,
-    required bool tapEnabled,
-    required bool longPressEnabled,
-    required VoidCallback onTap,
-    required VoidCallback onLongPress,
-  }) {
-    final colors = Theme.of(context).colorScheme;
-    final enabled = tapEnabled || longPressEnabled;
-    return Tooltip(
-      message: tooltip,
-      child: InkResponse(
-        key: key,
-        radius: 24,
-        onTap: tapEnabled ? onTap : null,
-        onLongPress: longPressEnabled ? onLongPress : null,
-        child: SizedBox.square(
-          dimension: 48,
-          child: Icon(
-            icon,
-            color: enabled ? colors.onSurfaceVariant : colors.outlineVariant,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _analysisControls() {
-    Widget slot(Widget child) => Expanded(child: Center(child: child));
-
-    return SizedBox(
+    return MoveHistoryNavigator(
       key: const ValueKey('analysis-controls'),
-      height: 52,
-      child: Row(
-        children: [
-          slot(
-            IconButton(
-              key: const ValueKey('analysis-actions-menu'),
-              onPressed: _hasAnalysisMenu ? _showAnalysisMenu : null,
-              icon: const Icon(Icons.menu),
-              tooltip: 'Analysis menu',
+      previousKey: const ValueKey('previous-move-button'),
+      nextKey: const ValueKey('next-move-button'),
+      canGoBack: !_atAnalysisStart,
+      canGoForward: !_atAnalysisEnd,
+      onFirst: _jumpToStart,
+      onPrevious: () => _step(-1),
+      onNext: () => _step(1),
+      onLast: _jumpToEnd,
+      endTooltip: 'end position',
+      headerActionWidth: 56,
+      headerActions: [
+        IconButton(
+          key: const ValueKey('analysis-actions-menu'),
+          onPressed: _hasAnalysisMenu ? _showAnalysisMenu : null,
+          icon: const Icon(Icons.menu),
+          tooltip: 'Analysis menu',
+        ),
+        IconButton(
+          key: const ValueKey('analysis-flip-button'),
+          onPressed: _flipAnalysisBoard,
+          icon: const Icon(CupertinoIcons.arrow_2_squarepath),
+          tooltip: 'Flip board',
+        ),
+        Tooltip(
+          message: _engineEnabled ? 'Turn engine off' : 'Turn engine on',
+          child: TextButton.icon(
+            key: const ValueKey('analysis-engine-toggle'),
+            onPressed: _toggleAnalysisEngine,
+            icon: Icon(
+              Icons.power_settings_new,
+              color: _engineEnabled
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-          ),
-          slot(
-            IconButton(
-              key: const ValueKey('analysis-flip-button'),
-              onPressed: _flipAnalysisBoard,
-              icon: const Icon(CupertinoIcons.arrow_2_squarepath),
-              tooltip: 'Flip board',
-            ),
-          ),
-          slot(
-            Tooltip(
-              message: _engineEnabled ? 'Turn engine off' : 'Turn engine on',
-              child: TextButton.icon(
-                key: const ValueKey('analysis-engine-toggle'),
-                onPressed: _toggleAnalysisEngine,
-                icon: Icon(
-                  Icons.power_settings_new,
-                  color: _engineEnabled
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-                label: Text(
-                  'SF',
-                  style: TextStyle(
-                    color: _engineEnabled
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+            label: Text(
+              'SF',
+              style: TextStyle(
+                color: _engineEnabled
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
-          slot(
-            _analysisNavigationButton(
-              key: const ValueKey('previous-move-button'),
-              tooltip: 'Previous move',
-              icon: CupertinoIcons.chevron_back,
-              tapEnabled: !_atAnalysisStart,
-              longPressEnabled: !_atAnalysisStart,
-              onTap: () => _step(-1),
-              onLongPress: _jumpToStart,
-            ),
-          ),
-          slot(
-            _analysisNavigationButton(
-              key: const ValueKey('next-move-button'),
-              tooltip: 'Next move',
-              icon: CupertinoIcons.chevron_forward,
-              tapEnabled: !(_inVariation
-                  ? _variationIndex == _variationSan.length
-                  : _ply == _maximumPly),
-              longPressEnabled: !_atAnalysisEnd,
-              onTap: () => _step(1),
-              onLongPress: _jumpToEnd,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

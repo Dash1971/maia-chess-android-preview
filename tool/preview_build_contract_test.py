@@ -18,6 +18,8 @@ class PreviewBuildContractTest(unittest.TestCase):
         self.assertNotIn('--target-platform', wrapper)
         self.assertIn('prepare_reproducible_flutter_sdk.py', wrapper)
         self.assertIn('prepare_reproducible_stockfish.py', wrapper)
+        self.assertIn('--flavor preview', wrapper)
+        self.assertIn('app-preview-release.apk', wrapper)
         self.assertIn('build apk --release --config-only', wrapper)
         self.assertIn('build apk --release --no-pub', wrapper)
 
@@ -33,6 +35,43 @@ class PreviewBuildContractTest(unittest.TestCase):
                        if line.startswith('version: '))
         build_number = int(version.rsplit('+', 1)[1])
         self.assertGreaterEqual(build_number, 2075)
+
+    def test_fast_iteration_uses_a_separate_development_identity(self):
+        gradle = (REPO / 'android/app/build.gradle.kts').read_text()
+        manifest = (REPO / 'android/app/src/main/AndroidManifest.xml').read_text()
+        snapshot = (REPO / 'tool/build_android_snapshot.sh').read_text()
+        runner = (REPO / 'tool/run_android_dev.sh').read_text()
+        pubspec = (REPO / 'pubspec.yaml').read_text()
+
+        self.assertIn('mobileMaiaDevelopment', gradle)
+        self.assertIn('mobileMaiaArm64Only', gradle)
+        self.assertIn('applicationIdSuffix = ".dev"', gradle)
+        self.assertIn('Mobile Maia Preview Dev', gradle)
+        self.assertIn('@mipmap/ic_launcher_dev', gradle)
+        self.assertIn('signingConfigs.getByName("debug")', gradle)
+        self.assertIn('android:label="${appLabel}"', manifest)
+        self.assertIn('android:icon="${appIcon}"', manifest)
+        self.assertIn('android:roundIcon="${appRoundIcon}"', manifest)
+        dev_icon = (REPO / 'android/app/src/main/res/drawable/'
+                    'ic_launcher_dev_foreground.xml').read_text()
+        self.assertIn('#FF3B30', dev_icon)
+        self.assertIn('#C62828', dev_icon)
+        self.assertIn('build apk --release --config-only', snapshot)
+        self.assertIn('--flavor dev', snapshot)
+        self.assertNotIn('--split-per-abi', snapshot)
+        self.assertIn('--target-platform android-arm64', snapshot)
+        self.assertIn('mobileMaiaArm64Only=true', snapshot)
+        self.assertIn('app-dev-release.apk', snapshot)
+        self.assertIn('--android-project-arg=mobileMaiaDevelopment=true', snapshot)
+        self.assertNotIn('flutter clean', snapshot)
+        self.assertNotIn('prepare_reproducible_flutter_sdk.py', snapshot)
+        self.assertNotIn('prepare_reproducible_stockfish.py', snapshot)
+        self.assertIn('assets/models/maia3-5m.onnx', pubspec)
+        self.assertIn('assets/models/maia3-79m.onnx', pubspec)
+        self.assertIn('default-flavor: dev', pubspec)
+        self.assertIn('exec "$flutter_bin" run', runner)
+        self.assertIn('--flavor dev', runner)
+        self.assertIn('--target-platform android-arm64', runner)
 
 
 if __name__ == '__main__':

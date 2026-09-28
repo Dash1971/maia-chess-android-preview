@@ -83,6 +83,38 @@ procedure is not itself evidence that a particular release reproduced. The
 manual Checks workflow can build an unsigned APK; pull requests run the Dart
 analyzer and regression tests.
 
+## Fast phone iteration
+
+Development builds install as **Mobile Maia Preview Dev** with package ID
+`com.dash1971.maia_chess.preview.dev`. They can coexist with Stable and the
+officially signed Preview app, and their separate data cannot overwrite either
+installation. Dev uses the same launcher mark in red so it remains visibly
+distinct from the gold official Preview app.
+
+For interactive UI and behavior work, connect an authorized Android phone over
+USB debugging and run:
+
+```sh
+flutter devices
+tool/run_android_dev.sh -d <device-id>
+```
+
+Flutter installs the ARM64-only Dev app and supports hot reload or hot restart.
+Dev packages Maia3-5M to keep the initial install and full rebuild small. For a
+longer private phone test, build one cached ARM64 release-mode snapshot:
+
+```sh
+tool/build_android_snapshot.sh
+adb install -r build/app/outputs/flutter-apk/Mobile-Maia-Preview-Dev-arm64.apk
+```
+
+The snapshot retains release mode, R8, and model-integrity checks, but uses the
+smaller Maia3-5M model and Android's development signer. It is not a
+reproducible or publishable release artifact.
+Do not tag it, publish it through GitHub/Obtainium, or use it as Stable-release
+evidence. Use `tool/build_android_release.sh` and the full qualification process
+once a feature is substantially settled.
+
 The [release verification guide](tool/hardening/RELEASE_CHECKS.md) includes
 portable APK checks, sanitized saved-game upgrade fixtures, emulator commands,
 and CI artifact retention. See the
@@ -103,18 +135,20 @@ cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e
 
 ## Re-export Maia-3
 
-The checked-in ONNX model was exported from the official Maia-3 79M checkpoint.
-The exporter verifies ONNX Runtime outputs against PyTorch before succeeding.
+The checked-in ONNX models were exported from the official Maia-3 5M and 79M
+checkpoints. The exporter verifies ONNX Runtime outputs against PyTorch before
+succeeding.
 
 ```sh
 python -m pip install /path/to/maia3 onnx onnxruntime
+python tool/export_maia3_onnx.py --model maia3-5m --output assets/models/maia3-5m.onnx
 python tool/export_maia3_onnx.py --model maia3-79m --output assets/models/maia3-79m.onnx
 ```
 
 ## Credits and attributions
 
 Mobile Maia uses the
-[Maia-3 project](https://github.com/CSSLab/maia3) and its 79M model. Maia-3 was
+[Maia-3 project](https://github.com/CSSLab/maia3) and its 5M and 79M models. Maia-3 was
 created by the University of Toronto Computational Social Science Lab to model
 human chess move choices at different rating levels. The app includes an About
 screen linking directly to the upstream project and source code.

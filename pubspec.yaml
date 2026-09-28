@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.1.0-beta.21+2075
+version: 2.1.0-beta.23+2077
 
 environment:
   sdk: ^3.13.1
@@ -60,6 +60,10 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
 
+  # Interactive development defaults to the separately installable Dev flavor.
+  # Official Preview release tooling always selects the preview flavor explicitly.
+  default-flavor: dev
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -68,7 +72,12 @@ flutter:
   assets:
     - LICENSE
     - THIRD_PARTY_NOTICES.md
-    - assets/models/maia3-79m.onnx
+    - path: assets/models/maia3-5m.onnx
+      flavors:
+        - dev
+    - path: assets/models/maia3-79m.onnx
+      flavors:
+        - preview
     - assets/openings/lichess_openings.tsv
     - assets/openings/LICHESS_OPENINGS_CC0.txt
 

@@ -91,6 +91,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
   bool _savedAsIncomplete = false;
   int? _viewedPly;
   final ScrollController _liveMovesController = ScrollController();
+  final Map<int, GlobalKey> _liveMoveKeys = {};
   final Random _timingRandom = Random();
   late final ElectronicBoardTransport _chessnut;
   late final ChessnutLedController _chessnutLeds;
@@ -1733,6 +1734,32 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
       animate: true,
       resetPremove: true,
     );
+    _scrollDisplayedMoveIntoView(next);
+  }
+
+  void _scrollDisplayedMoveIntoView(int ply) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_liveMovesController.hasClients) return;
+      if (ply == 0) {
+        _liveMovesController.animateTo(
+          _liveMovesController.position.minScrollExtent,
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+        );
+        return;
+      }
+      final moveContext = _liveMoveKeys[ply - 1]?.currentContext;
+      if (moveContext == null) return;
+      final scrollable = Scrollable.maybeOf(moveContext);
+      final renderObject = moveContext.findRenderObject();
+      if (scrollable == null || renderObject == null) return;
+      scrollable.position.ensureVisible(
+        renderObject,
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        alignment: 0.5,
+      );
+    });
   }
 
   void _scrollLiveMovesToEnd() {
@@ -3051,12 +3078,12 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
             );
             final contentHeight = max(0.0, constraints.maxHeight - 16);
             // Keep the live board fixed while moves alone scroll horizontally.
-            final boardSize = min(
+            final availableBoardSize = min(
               contentWidth,
               max(
                 0.0,
                 contentHeight -
-                    (154 +
+                    (206 +
                         2 * _playerRowHeight +
                         max(
                               0,
@@ -3071,72 +3098,84 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
                     (_chessnutGameActive ? _chessnutBannerHeight + 6 : 0),
               ),
             );
+            final useScrollableLayout = availableBoardSize <= 80;
+            final boardSize = useScrollableLayout
+                ? min(contentWidth, 81.0)
+                : availableBoardSize;
+            Widget portraitContent() => Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: useScrollableLayout
+                  ? MainAxisSize.min
+                  : MainAxisSize.max,
+              children: [
+                _liveMoveStrip(),
+                if (_multiplePremoves &&
+                    _premovesEnabled &&
+                    !_chessnutGameActive)
+                  _premoveStrip(),
+                if (_chessnutGameActive) ...[
+                  const SizedBox(height: 6),
+                  _chessnutStatusBanner(),
+                ],
+                const SizedBox(height: 6),
+                _playerInfoRow(_topBoardColor, _playerLabel(_topBoardColor)),
+                const SizedBox(height: 4),
+                Center(
+                  child: SizedBox(
+                    width: boardSize,
+                    height: boardSize,
+                    child: _board(),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                _playerInfoRow(
+                  _bottomBoardColor,
+                  _playerLabel(_bottomBoardColor),
+                ),
+                if (useScrollableLayout)
+                  const SizedBox(height: 8)
+                else
+                  const Spacer(),
+                if (_maiaFailed)
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Text('Maia error. Please retry.', maxLines: 1),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _maiaFailed = false;
+                          _resumeGame();
+                        },
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  )
+                else if (_engineThinking)
+                  const Text(
+                    'Maia is thinking…',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                _liveGameControls(),
+              ],
+            );
             return Padding(
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
               child: Center(
-                child: SizedBox(
-                  width: contentWidth,
-                  height: contentHeight,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _liveMoveStrip(),
-                      if (_multiplePremoves &&
-                          _premovesEnabled &&
-                          !_chessnutGameActive)
-                        _premoveStrip(),
-                      if (_chessnutGameActive) ...[
-                        const SizedBox(height: 6),
-                        _chessnutStatusBanner(),
-                      ],
-                      const SizedBox(height: 6),
-                      _playerInfoRow(
-                        _topBoardColor,
-                        _playerLabel(_topBoardColor),
-                      ),
-                      const SizedBox(height: 4),
-                      Center(
+                child: useScrollableLayout
+                    ? SingleChildScrollView(
                         child: SizedBox(
-                          width: boardSize,
-                          height: boardSize,
-                          child: _board(),
+                          width: contentWidth,
+                          child: portraitContent(),
                         ),
+                      )
+                    : SizedBox(
+                        width: contentWidth,
+                        height: contentHeight,
+                        child: portraitContent(),
                       ),
-                      const SizedBox(height: 4),
-                      _playerInfoRow(
-                        _bottomBoardColor,
-                        _playerLabel(_bottomBoardColor),
-                      ),
-                      const Spacer(),
-                      if (_maiaFailed)
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: Text(
-                                'Maia error. Please retry.',
-                                maxLines: 1,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                _maiaFailed = false;
-                                _resumeGame();
-                              },
-                              child: const Text('Retry'),
-                            ),
-                          ],
-                        )
-                      else if (_engineThinking)
-                        const Text(
-                          'Maia is thinking…',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                        ),
-                      _liveGameControls(),
-                    ],
-                  ),
-                ),
               ),
             );
           },
@@ -3549,6 +3588,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
     final moves = _liveSanMoves;
     final children = <Widget>[];
     for (var index = 0; index < moves.length; index++) {
+      final selected = index == _displayPly - 1;
       final root = _positionHistory.first.split(' ');
       final absolute =
           ((int.tryParse(root[5]) ?? 1) - 1) * 2 +
@@ -3569,11 +3609,29 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
         );
       }
       children.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+        AnimatedContainer(
+          key: _liveMoveKeys.putIfAbsent(
+            index,
+            () => GlobalKey(debugLabel: 'live-move-$index'),
+          ),
+          duration: const Duration(milliseconds: 140),
+          curve: Curves.easeOut,
+          margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+          decoration: BoxDecoration(
+            color: selected
+                ? Theme.of(context).colorScheme.primaryContainer
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: Text(
             moves[index],
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            style: TextStyle(
+              color: selected
+                  ? Theme.of(context).colorScheme.onPrimaryContainer
+                  : null,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       );
@@ -3596,100 +3654,70 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver {
                 ),
               ),
             )
-          : SingleChildScrollView(
-              key: const ValueKey('live-move-scroll'),
-              controller: _liveMovesController,
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.only(right: 12),
-              child: Row(children: children),
+          : Row(
+              children: [
+                if (!_isViewingLivePosition)
+                  Container(
+                    key: const ValueKey('game-history-indicator'),
+                    height: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 9),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                      borderRadius: const BorderRadius.horizontal(
+                        left: Radius.circular(4),
+                      ),
+                    ),
+                    child: Text(
+                      _displayPly == 0 ? 'START' : 'HISTORY',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    key: const ValueKey('live-move-scroll'),
+                    controller: _liveMovesController,
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.only(right: 12),
+                    child: Row(children: children),
+                  ),
+                ),
+              ],
             ),
     );
   }
 
-  Widget _liveGameControls() => SizedBox(
+  Widget _liveGameControls() => MoveHistoryNavigator(
     key: const ValueKey('live-game-controls'),
-    height: 52,
-    child: Row(
-      children: [
-        Expanded(
-          child: Center(
-            child: IconButton(
-              key: const ValueKey('game-actions-menu'),
-              onPressed: _drawOfferEvaluating ? null : _showGameMenu,
-              icon: const Icon(Icons.menu),
-              tooltip: 'Game menu',
-            ),
-          ),
-        ),
-        Expanded(
-          child: Center(
-            child: IconButton(
-              key: const ValueKey('quick-resign-button'),
-              onPressed:
-                  !_gameFinished && !_engineThinking && !_drawOfferEvaluating
-                  ? _resign
-                  : null,
-              icon: const Icon(CupertinoIcons.flag),
-              tooltip: 'Resign',
-            ),
-          ),
-        ),
-        Expanded(
-          child: Center(
-            child: _historyButton(
-              key: const ValueKey('game-previous-move-button'),
-              enabled: _displayPly > 0,
-              onTap: () => _stepGameHistory(-1),
-              onLongPress: () => _showGamePly(0),
-              icon: CupertinoIcons.chevron_back,
-              tooltip: 'Previous move',
-            ),
-          ),
-        ),
-        Expanded(
-          child: Center(
-            child: _historyButton(
-              key: const ValueKey('game-next-move-button'),
-              enabled: !_isViewingLivePosition,
-              onTap: () => _stepGameHistory(1),
-              onLongPress: () => _showGamePly(_positionHistory.length - 1),
-              icon: CupertinoIcons.chevron_forward,
-              tooltip: 'Next move',
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-
-  Widget _historyButton({
-    required Key key,
-    required bool enabled,
-    required VoidCallback onTap,
-    required VoidCallback onLongPress,
-    required IconData icon,
-    required String tooltip,
-  }) => Tooltip(
-    message: tooltip,
-    child: Semantics(
-      button: true,
-      enabled: enabled,
-      child: InkResponse(
-        key: key,
-        radius: 24,
-        onTap: enabled ? onTap : null,
-        onLongPress: enabled ? onLongPress : null,
-        child: SizedBox.square(
-          dimension: 48,
-          child: Icon(
-            icon,
-            color: enabled
-                ? Theme.of(context).colorScheme.onSurfaceVariant
-                : Theme.of(context).colorScheme.outlineVariant,
-          ),
-        ),
+    previousKey: const ValueKey('game-previous-move-button'),
+    nextKey: const ValueKey('game-next-move-button'),
+    canGoBack: _displayPly > 0,
+    canGoForward: !_isViewingLivePosition,
+    onFirst: () => _showGamePly(0),
+    onPrevious: () => _stepGameHistory(-1),
+    onNext: () => _stepGameHistory(1),
+    onLast: () => _showGamePly(_positionHistory.length - 1),
+    headerActions: [
+      IconButton(
+        key: const ValueKey('game-actions-menu'),
+        onPressed: _drawOfferEvaluating ? null : _showGameMenu,
+        icon: const Icon(Icons.menu),
+        tooltip: 'Game menu',
       ),
-    ),
+      IconButton(
+        key: const ValueKey('quick-resign-button'),
+        onPressed: !_gameFinished && !_engineThinking && !_drawOfferEvaluating
+            ? _resign
+            : null,
+        icon: const Icon(CupertinoIcons.flag),
+        tooltip: 'Resign',
+      ),
+    ],
   );
 
   double get _playerRowHeight => max(
