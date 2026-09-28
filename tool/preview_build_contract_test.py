@@ -79,6 +79,23 @@ class PreviewBuildContractTest(unittest.TestCase):
         self.assertIn('name == "sound_effect"', gradle)
         self.assertIn('compileSdk = 36', gradle)
 
+    def test_maia3_reference_gate_is_test_only_and_pinned(self):
+        fixture = (REPO / 'integration_test/fixtures/maia3_reference.dart').read_text()
+        integration = (REPO / 'integration_test/review_android_test.dart').read_text()
+        pubspec = (REPO / 'pubspec.yaml').read_text()
+
+        self.assertIn('1e13597c42d4858b7cfd7cfdae01e297263364b2', fixture)
+        self.assertIn('3fc6181d5db789b45a15305732148757ae74efa3e0028e81ba335b462dac45c2', fixture)
+        self.assertIn('3454b03ae78baa64a87b345fdb1a457265d912caec531039b074f07eda0d8010', fixture)
+        for case in ('initial-1500', 'after-e4-black-1600',
+                     'ruy-lopez-middlegame-1800', 'black-promotion-1200'):
+            self.assertIn(case, fixture)
+        self.assertIn("import 'fixtures/maia3_reference.dart';", integration)
+        self.assertIn('MaiaEncoding.historicalTokens([reference.fen])', integration)
+        self.assertIn('MaiaInferenceQueue.predict', integration)
+        self.assertIn('closeTo(expected.value, 0.002)', integration)
+        self.assertNotIn('integration_test/fixtures', pubspec)
+
 
 if __name__ == '__main__':
     unittest.main()
