@@ -277,6 +277,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
   bool _bk = false;
   bool _bq = false;
   String _enPassant = '-';
+  bool _flipped = false;
 
   @override
   void initState() {
@@ -336,7 +337,15 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Board'),
-        actions: [TextButton(onPressed: _finish, child: const Text('Done'))],
+        actions: [
+          IconButton(
+            key: const ValueKey('board-editor-flip'),
+            tooltip: 'Flip board',
+            onPressed: () => setState(() => _flipped = !_flipped),
+            icon: const Icon(CupertinoIcons.arrow_2_squarepath),
+          ),
+          TextButton(onPressed: _finish, child: const Text('Done')),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -351,7 +360,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
                     child: LayoutBuilder(
                       builder: (_, box) => cg.StaticChessboard(
                         size: box.biggest.shortestSide,
-                        orientation: dc.Side.white,
+                        orientation: _flipped ? dc.Side.black : dc.Side.white,
                         fen: _position.fen,
                         settings: const cg.StaticChessboardSettings(
                           colorScheme: cg.ChessboardColorScheme.brown,

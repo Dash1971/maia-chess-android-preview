@@ -160,7 +160,7 @@ support uses
 [Lichess multistockfish](https://github.com/lichess-org/dart-multistockfish).
 Both Lichess projects are credited and linked in the app's About screen.
 
-Experimental Chessnut Go support uses Chessnut's
+Experimental Chessnut support uses Chessnut's
 [published e-board API](https://github.com/chessnutech/Chessnut_eBoards) and
 MIT-licensed [EasyLinkSDK](https://github.com/chessnutech/EasyLinkSDK), and was
 cross-checked against Roberto Marabini's GPL-3.0

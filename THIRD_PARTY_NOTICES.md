@@ -105,6 +105,23 @@ uses its Font Awesome chess-piece glyphs for the Lichess-style material
 difference display. The upstream generated icon declaration records the
 component authors and licence links.
 
+## Lichess game sounds and sound_effect
+
+- Project: <https://github.com/lichess-org/mobile>
+- Pinned source commit: `56eddc238fe485eb49beb6f3c4b483afd3624b93`
+- Sound assets: `assets/sounds/standard/{move,capture,error,dong}.mp3`
+- Sound player: <https://pub.dev/packages/sound_effect> version `0.2.0`
+- Copyright: Lichess Mobile contributors
+- Licence: GNU General Public License v3.0 or later for Lichess Mobile;
+  GNU General Public License v3.0 for `sound_effect`
+
+The four audio clips are unmodified files from the pinned Lichess Mobile
+revision. Mobile Maia uses them for accepted moves, captures, rejected input,
+and game completion. The event mapping and app-specific suppression rules are
+recorded in [`docs/game-feedback-reference.md`](docs/game-feedback-reference.md).
+Mobile Maia as a combined application remains distributed under
+AGPL-3.0-only as permitted by section 13 of AGPL-3.0.
+
 ## dartchess
 
 - Project: <https://github.com/lichess-org/dartchess>
