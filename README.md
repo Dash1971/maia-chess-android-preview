@@ -91,6 +91,12 @@ officially signed Preview app, and their separate data cannot overwrite either
 installation. Dev uses the same launcher mark in red so it remains visibly
 distinct from the gold official Preview app.
 
+The canonical source and development scripts remain in this repository.
+Versioned Dev snapshots for phone testing and Obtainium are published through
+the separate release-only
+[Mobile Maia Preview Dev repository](https://github.com/Dash1971/maia-chess-android-preview-dev).
+That feed is not an official Preview or Stable release channel.
+
 For interactive UI and behavior work, connect an authorized Android phone over
 USB debugging and run:
 
@@ -110,10 +116,12 @@ adb install -r build/app/outputs/flutter-apk/Mobile-Maia-Preview-Dev-arm64.apk
 
 The snapshot retains release mode, R8, and model-integrity checks, but uses the
 smaller Maia3-5M model and Android's development signer. It is not a
-reproducible or publishable release artifact.
-Do not tag it, publish it through GitHub/Obtainium, or use it as Stable-release
-evidence. Use `tool/build_android_release.sh` and the full qualification process
-once a feature is substantially settled.
+reproducible or publishable release artifact by itself. Do not tag or attach an
+arbitrary local snapshot to this official Preview repository, and do not use it
+as Stable-release evidence. When a tested Dev snapshot is requested, rebuild
+and verify it through the Dev publication workflow, then publish it only to the
+separate Dev repository above. Use `tool/build_android_release.sh` and the full
+qualification process once a feature is substantially settled.
 
 The [release verification guide](tool/hardening/RELEASE_CHECKS.md) includes
 portable APK checks, sanitized saved-game upgrade fixtures, emulator commands,
