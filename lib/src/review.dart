@@ -1781,7 +1781,9 @@ class _ReviewPageState extends State<ReviewPage>
       label: 'Maia $elo move probabilities. ${descriptions.join(', ')}.',
       child: ConstrainedBox(
         key: lineKey,
-        constraints: const BoxConstraints(minHeight: 48),
+        // Keep ordinary Maia results as compact as the Stockfish rows. The
+        // contents may grow or wrap naturally when text scaling needs it.
+        constraints: const BoxConstraints(minHeight: 26),
         child: Wrap(
           spacing: MediaQuery.textScalerOf(context).scale(4),
           runSpacing: 4,
@@ -1812,14 +1814,17 @@ class _ReviewPageState extends State<ReviewPage>
                 onTap: () =>
                     unawaited(_showMaiaProbabilities(analysis, fen, elo)),
                 child: ConstrainedBox(
+                  // A 48 dp minimum here made every result row at least 48 dp
+                  // tall. Keep the horizontal target generous while meeting
+                  // the 24 dp WCAG target minimum vertically.
                   constraints: const BoxConstraints(
                     minWidth: 48,
-                    minHeight: 48,
+                    minHeight: 24,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 2,
-                      vertical: 8,
+                      vertical: 3,
                     ),
                     child: Center(
                       widthFactor: 1,
@@ -2824,7 +2829,7 @@ class _ReviewPageState extends State<ReviewPage>
             final maiaRowCount = widget.secondMaiaElo == null ? 1 : 2;
             final engineHeight = _engineEnabled
                 ? 2 * max(26.0, 22.0 * textScale) +
-                      maiaRowCount * max(48.0, 22.0 * textScale) +
+                      maiaRowCount * max(26.0, 22.0 * textScale) +
                       20
                 : 0.0;
             Widget board(double size) => SizedBox(
