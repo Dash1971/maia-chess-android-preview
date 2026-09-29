@@ -22,8 +22,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install pinned Flutter
         run: |
-          git clone --depth 1 --branch 3.47.1 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
-          test "$(git -C "$RUNNER_TEMP/flutter" rev-parse HEAD)" = 6655482ec06e547f90abf8ae7590466f4415978d
+          git clone --depth 1 --branch 3.47.5 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          test "$(git -C "$RUNNER_TEMP/flutter" rev-parse HEAD)" = 6a19cca56475dbfba1478ee68d7bd0c2ef891da1
           echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
       - run: flutter pub get --enforce-lockfile
       - run: flutter analyze
@@ -53,8 +53,8 @@ jobs:
           java-version: '17'
       - name: Install pinned Flutter
         run: |
-          git clone --depth 1 --branch 3.47.1 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
-          test "$(git -C "$RUNNER_TEMP/flutter" rev-parse HEAD)" = 6655482ec06e547f90abf8ae7590466f4415978d
+          git clone --depth 1 --branch 3.47.5 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          test "$(git -C "$RUNNER_TEMP/flutter" rev-parse HEAD)" = 6a19cca56475dbfba1478ee68d7bd0c2ef891da1
           echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
       - run: python3 tool/verify_model.py
       - name: Build release APK
