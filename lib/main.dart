@@ -17,7 +17,6 @@ import 'package:flutter/services.dart';
 import 'package:multistockfish/multistockfish.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sound_effect/sound_effect.dart';
 
 part 'src/engine_queue.dart';
 part 'src/session_repository.dart';
@@ -34,6 +33,7 @@ part 'src/session_model.dart';
 part 'src/openings.dart';
 part 'src/chessnut.dart';
 part 'src/history_navigation.dart';
+part 'src/sound_effect.dart';
 part 'src/game_feedback.dart';
 part 'src/play.dart';
 part 'src/analysis_board.dart';
