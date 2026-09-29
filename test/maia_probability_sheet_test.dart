@@ -69,6 +69,14 @@ void main() {
               of: line,
               matching: find.byType(RichText),
             );
+            final moveColumnX = tester.getTopLeft(texts.at(1)).dx;
+            for (var i = 1; i < texts.evaluate().length; i++) {
+              expect(
+                tester.getTopLeft(texts.at(i)).dx,
+                greaterThanOrEqualTo(moveColumnX - 0.01),
+                reason: 'Wrapped entries stay inside the shared move column',
+              );
+            }
             if (scale == 1 && size.width == 1200) {
               final labels = find.descendant(
                 of: line,
@@ -199,6 +207,37 @@ void main() {
     await tester.pumpAndSettle();
     final primaryRect = tester.getRect(primary);
     final secondaryRect = tester.getRect(secondary);
+    final stockfishText = find
+        .descendant(
+          of: find.byKey(const ValueKey('stockfish-line-1')),
+          matching: find.byType(RichText),
+        )
+        .at(1);
+    final primaryText = find
+        .descendant(of: primary, matching: find.byType(RichText))
+        .at(1);
+    final secondaryText = find
+        .descendant(of: secondary, matching: find.byType(RichText))
+        .at(1);
+
+    final stockfishParagraph = tester.renderObject<RenderParagraph>(
+      stockfishText,
+    );
+    final stockfishFontSize =
+        (stockfishParagraph.text as TextSpan).style!.fontSize;
+    for (final text in [primaryText, secondaryText]) {
+      final paragraph = tester.renderObject<RenderParagraph>(text);
+      expect(
+        (paragraph.text as TextSpan).style!.fontSize,
+        stockfishFontSize,
+        reason: 'Stockfish and Maia use the same engine-row text size',
+      );
+      expect(
+        tester.getTopLeft(text).dx,
+        closeTo(tester.getTopLeft(stockfishText).dx, 0.01),
+        reason: 'Stockfish and Maia moves start in the same column',
+      );
+    }
 
     expect(primaryRect.height, lessThanOrEqualTo(42));
     expect(secondaryRect.height, lessThanOrEqualTo(42));

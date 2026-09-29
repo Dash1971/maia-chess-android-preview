@@ -1694,6 +1694,26 @@ class _ReviewPageState extends State<ReviewPage>
     return '${percent.round()}%';
   }
 
+  TextStyle? get _engineLineTextStyle =>
+      Theme.of(context).textTheme.bodyMedium
+          ?.copyWith(fontFeatures: const [FontFeature.tabularFigures()]);
+
+  double get _engineLabelWidth =>
+      max(64, MediaQuery.textScalerOf(context).scale(56));
+
+  Widget _engineLabel(String label, Color color) => SizedBox(
+    width: _engineLabelWidth,
+    child: Text(
+      label,
+      textAlign: TextAlign.right,
+      maxLines: 1,
+      style: _engineLineTextStyle?.copyWith(
+        color: color,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+  );
+
   Future<void> _showMaiaProbabilities(
     MaiaPositionAnalysis analysis,
     String fen,
@@ -1774,8 +1794,7 @@ class _ReviewPageState extends State<ReviewPage>
         '${_sanForUci(fen, move.uci)} ${_formatMaiaProbability(move.probability)}',
       'other legal moves ${_formatMaiaProbability(otherMass)}',
     ];
-    final textStyle = Theme.of(context).textTheme.bodySmall
-        ?.copyWith(fontFeatures: const [FontFeature.tabularFigures()]);
+    final textStyle = _engineLineTextStyle;
     return Semantics(
       container: true,
       label: 'Maia $elo move probabilities. ${descriptions.join(', ')}.',
@@ -1784,62 +1803,68 @@ class _ReviewPageState extends State<ReviewPage>
         // Keep ordinary Maia results as compact as the Stockfish rows. The
         // contents may grow or wrap naturally when text scaling needs it.
         constraints: const BoxConstraints(minHeight: 26),
-        child: Wrap(
-          spacing: MediaQuery.textScalerOf(context).scale(4),
-          runSpacing: 4,
-          crossAxisAlignment: WrapCrossAlignment.center,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              width: max(56, MediaQuery.textScalerOf(context).scale(52)),
-              child: Text(
-                'M$elo',
-                style: TextStyle(
-                  color: color,
-                  fontWeight: FontWeight.w700,
-                  fontFeatures: const [FontFeature.tabularFigures()],
-                ),
+            ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 24),
+              child: Align(
+                alignment: Alignment.centerRight,
+                widthFactor: 1,
+                child: _engineLabel('M$elo', color),
               ),
             ),
-            for (final move in shown)
-              Text(
-                '${_sanForUci(fen, move.uci)} ${_formatMaiaProbability(move.probability)}',
-                style: textStyle,
-                softWrap: false,
-              ),
-            Tooltip(
-              message: 'Show full raw model probabilities',
-              child: InkWell(
-                key: otherKey,
-                borderRadius: BorderRadius.circular(4),
-                onTap: () =>
-                    unawaited(_showMaiaProbabilities(analysis, fen, elo)),
-                child: ConstrainedBox(
-                  // A 48 dp minimum here made every result row at least 48 dp
-                  // tall. Keep the horizontal target generous while meeting
-                  // the 24 dp WCAG target minimum vertically.
-                  constraints: const BoxConstraints(
-                    minWidth: 48,
-                    minHeight: 24,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 2,
-                      vertical: 3,
+            const SizedBox(width: 8),
+            Expanded(
+              child: Wrap(
+                spacing: MediaQuery.textScalerOf(context).scale(4),
+                runSpacing: 4,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  for (final move in shown)
+                    Text(
+                      '${_sanForUci(fen, move.uci)} ${_formatMaiaProbability(move.probability)}',
+                      style: textStyle,
+                      softWrap: false,
                     ),
-                    child: Center(
-                      widthFactor: 1,
-                      heightFactor: 1,
-                      child: Text(
-                        'Other ${_formatMaiaProbability(otherMass)}',
-                        style: textStyle?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          decoration: TextDecoration.underline,
+                  Tooltip(
+                    message: 'Show full raw model probabilities',
+                    child: InkWell(
+                      key: otherKey,
+                      borderRadius: BorderRadius.circular(4),
+                      onTap: () =>
+                          unawaited(_showMaiaProbabilities(analysis, fen, elo)),
+                      child: ConstrainedBox(
+                        // Keep the horizontal target generous without
+                        // increasing the height of every engine row.
+                        constraints: const BoxConstraints(
+                          minWidth: 48,
+                          minHeight: 24,
                         ),
-                        softWrap: false,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 2,
+                            vertical: 2,
+                          ),
+                          child: Center(
+                            widthFactor: 1,
+                            heightFactor: 1,
+                            child: Text(
+                              'Other ${_formatMaiaProbability(otherMass)}',
+                              style: textStyle?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                decoration: TextDecoration.underline,
+                              ),
+                              softWrap: false,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ],
@@ -1885,19 +1910,15 @@ class _ReviewPageState extends State<ReviewPage>
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            width: max(64, MediaQuery.textScalerOf(context).scale(52)),
-            child: Text(
-              label,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.w700,
-                fontFeatures: const [FontFeature.tabularFigures()],
-              ),
-            ),
-          ),
+          _engineLabel(label, color),
+          const SizedBox(width: 8),
           Expanded(
-            child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis),
+            child: Text(
+              text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: _engineLineTextStyle,
+            ),
           ),
         ],
       ),
