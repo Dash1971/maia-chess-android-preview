@@ -32,6 +32,51 @@ void main() {
     }),
   );
 
+  testWidgets(
+    'real sound bridge loads, plays, releases and reloads all clips',
+    (tester) async {
+      final sound = SoundEffect();
+      for (var cycle = 0; cycle < 8; cycle++) {
+        await sound.initialize(maxStreams: 2);
+        await Future.wait(
+          GameFeedbackSound.values.map(
+            (id) =>
+                sound.load(id.name, 'assets/sounds/standard/${id.name}.mp3'),
+          ),
+        ).timeout(const Duration(seconds: 5));
+        // Exercise every clip over successive cycles without intentionally
+        // overflowing the two-stream SoundPool while streams are starting.
+        final id =
+            GameFeedbackSound.values[cycle % GameFeedbackSound.values.length];
+        await sound.play(id.name, volume: 0);
+        await sound.release();
+      }
+    },
+  );
+  testWidgets('missing sound fails promptly and permits recovery', (
+    tester,
+  ) async {
+    final sound = SoundEffect();
+    await sound.initialize();
+    await expectLater(
+      sound
+          .load('missing', 'assets/sounds/missing.mp3')
+          .timeout(const Duration(seconds: 5)),
+      throwsA(
+        isA<PlatformException>().having(
+          (error) => error.code,
+          "code",
+          "sound_load_failed",
+        ),
+      ),
+    );
+    await sound
+        .load('move', 'assets/sounds/standard/move.mp3')
+        .timeout(const Duration(seconds: 5));
+    await sound.play('move', volume: 0);
+    await sound.release();
+  });
+
   final useDevModel = appFlavor == 'dev';
   testWidgets(
     useDevModel

@@ -49,6 +49,23 @@ The dependency-bearing inputs were hashed after the hardening changes:
 
 The proposed source remains compatible with the existing F-Droid model: build from a tagged source tree, resolve the locked Pub/Maven graph, compile native Stockfish sources locally, verify the LFS model, and compare the developer APK through `Binaries`. Before Stable 2.3, its recipe must update the exact Flutter revision and version metadata, then repeat the independent reproducible build and signing-key continuity checks. Automatic tag-based update discovery is preserved.
 
+## Kotlin included-build qualification (follow-up review)
+
+The root app pin is 2.4.20, but it does not override Flutter's independent
+included Gradle build. At the pinned Flutter 3.47.5 revision, that build declares
+Kotlin JVM 2.2.20 and resolves Kotlin Gradle Plugin **2.2.21** through Gradle's
+`kotlin-dsl` plugin. This was verified with `android/gradlew
+:gradle:buildEnvironment`; it is a retained upstream build dependency, not a
+claim that every Kotlin component has been upgraded to 2.4.20.
+
+The [upstream advisory fix](https://github.com/JetBrains/kotlin/commit/bf51df6)
+filters deserialization of KAPT incremental caches. No KAPT use was found in
+the inspected app or Flutter included build. This review did not demonstrate
+an exploitable cache path. Keep build caches trusted and reassess applicability
+if KAPT or cache-sharing configuration changes; do not silently force an
+untested SDK build-plugin override. The original audit hashes and validation
+above describe PR #48's inputs, not subsequent runtime changes.
+
 ## Gate result
 
 **DEPENDENCY AUDIT PASSED** for the exact dependency-bearing inputs listed above. Any dependency, toolchain, workflow-action, native-source, model, patch, or lockfile change invalidates this result and requires a fresh audit before compilation.

@@ -75,18 +75,19 @@ class SoundEffectBridge(
             return
         }
         try {
-            val sample = synchronized(lock) {
+            synchronized(lock) {
                 val pool = soundPool
                     ?: throw IllegalStateException("Sound player is not initialized")
                 val assetPath = FlutterInjector.instance()
                     .flutterLoader()
                     .getLookupKeyForAsset(path)
-                context.assets.openFd(assetPath).use { descriptor ->
+                val sample = context.assets.openFd(assetPath).use { descriptor ->
                     pool.load(descriptor, 1)
                 }
-            }
-            if (sample == 0) throw IllegalStateException("SoundPool rejected $soundId")
-            synchronized(lock) {
+                if (sample == 0) throw IllegalStateException("SoundPool rejected $soundId")
+                // A short clip can finish decoding before load returns. Keep
+                // registration under the same lock so its callback cannot
+                // observe an unregistered sample and silently discard it.
                 samplesById[soundId] = sample
                 idsBySample[sample] = soundId
             }
