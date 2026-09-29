@@ -8,6 +8,22 @@ REPO = Path(__file__).resolve().parents[1]
 
 
 class PreviewBuildContractTest(unittest.TestCase):
+    def test_ci_actions_are_node24_releases_pinned_by_full_sha(self):
+        workflow = (REPO / '.github/workflows/checks.yml').read_text()
+        self.assertIn(
+            'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1',
+            workflow,
+        )
+        self.assertIn(
+            'actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1',
+            workflow,
+        )
+        self.assertIn(
+            'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1',
+            workflow,
+        )
+        self.assertNotRegex(workflow, r'uses: actions/[^@]+@v\d')
+
     def test_release_is_universal_r8_minified_and_jni_safe(self):
         gradle = (REPO / 'android/app/build.gradle.kts').read_text()
         rules = (REPO / 'android/app/proguard-rules.pro').read_text()
@@ -75,11 +91,22 @@ class PreviewBuildContractTest(unittest.TestCase):
         self.assertIn('--flavor dev', runner)
         self.assertIn('--target-platform android-arm64', runner)
 
-    def test_sound_effect_compiles_against_its_dependency_api_level(self):
-        gradle = (REPO / 'android/build.gradle.kts').read_text()
+    def test_sound_effect_is_app_owned_and_uses_the_fixed_kotlin_toolchain(self):
+        settings = (REPO / 'android/settings.gradle.kts').read_text()
+        root_gradle = (REPO / 'android/build.gradle.kts').read_text()
+        pubspec = (REPO / 'pubspec.yaml').read_text()
+        dart_bridge = (REPO / 'lib/src/sound_effect.dart').read_text()
+        android_bridge = (REPO / 'android/app/src/main/kotlin/com/dash1971/'
+                          'maia_chess/SoundEffectBridge.kt').read_text()
 
-        self.assertIn('name == "sound_effect"', gradle)
-        self.assertIn('compileSdk = 36', gradle)
+        self.assertIn('version "2.4.20"', settings)
+        self.assertNotIn('version "2.4.0"', settings)
+        self.assertNotIn('name == "sound_effect"', root_gradle)
+        self.assertNotIn('sound_effect:', pubspec)
+        self.assertIn("MethodChannel('maia_chess/sound_effect')", dart_bridge)
+        self.assertIn('CHANNEL = "maia_chess/sound_effect"', android_bridge)
+        self.assertIn('context.assets.openFd(assetPath).use', android_bridge)
+        self.assertNotIn('kotlin-gradle-plugin', android_bridge)
 
     def test_maia3_reference_gate_is_test_only_and_pinned(self):
         fixture = (REPO / 'integration_test/fixtures/maia3_reference.dart').read_text()

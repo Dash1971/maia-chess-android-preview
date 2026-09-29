@@ -12,7 +12,7 @@ Android build-tools 36.0.0 and platform-tools. Set `ANDROID_HOME` and `JAVA_HOME
 for the machine running the checks. `--sdk-root` and `--build-tools-version`
 can override SDK discovery explicitly. Python 3.10 or newer is recommended.
 
-The release wrapper applies the guarded Flutter 3.47.1 asset-variant-order
+The release wrapper applies the guarded Flutter 3.47.5 asset-variant-order
 backport documented in `REPRODUCIBLE_BUILDS.md`. A different Flutter revision or
 unexpected upstream source must fail before the build begins.
 

@@ -48,7 +48,7 @@ Maia Preview releases. Android may ask you to confirm each update.
 
 ## Build
 
-Requirements: **Flutter 3.47.1** (pinned in `.fvmrc`), JDK 17, Android SDK 36,
+Requirements: **Flutter 3.47.5** (pinned in `.fvmrc`), JDK 17, Android SDK 36,
 Python 3, and Git LFS. Use the locked dependencies. A GitHub source ZIP contains
 an LFS pointer rather than the 316 MB Maia model, so clone with Git LFS:
 

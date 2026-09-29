@@ -20,7 +20,7 @@ no useful source secrecy for this AGPL-licensed application, makes crash traces
 less useful, and uses randomized symbol mappings that prevent independent
 builds from matching.
 
-Flutter 3.47.1 does not forward its filesystem-root settings through the
+Flutter 3.47.5 does not forward its filesystem-root settings through the
 Android Gradle task. The release script therefore adds the generated Dart
 plugin registrant to the generated package configuration under the stable URI
 `package:mobile_maia_generated/dart_plugin_registrant.dart`. This prevents an
@@ -54,7 +54,7 @@ commit and produce the same APK SHA-256 before signing. The developer signing
 key remains offline: the verified Linux artifact is downloaded and signed
 without rebuilding it.
 
-Flutter 3.47.1 discovers resolution-aware asset directories with an unsorted
+Flutter 3.47.5 discovers resolution-aware asset directories with an unsorted
 filesystem listing. That can serialize identical image variants in a different
 order in `AssetManifest.bin`. The release script applies a narrowly guarded
 backport to the pinned Flutter checkout before building: it sorts the discovered

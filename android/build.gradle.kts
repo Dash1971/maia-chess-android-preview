@@ -54,20 +54,6 @@ subprojects {
     }
 }
 
-subprojects {
-    if (name == "sound_effect") {
-        // sound_effect 0.2.0 pins compileSdk 35, while its current Android
-        // lifecycle dependency requires API 36. This changes compilation
-        // availability only; Mobile Maia's targetSdk and runtime behavior stay
-        // unchanged.
-        afterEvaluate {
-            extensions.configure<LibraryExtension> {
-                compileSdk = 36
-            }
-        }
-    }
-}
-
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }

@@ -127,6 +127,7 @@ class MainActivity : FlutterActivity() {
     private val channelName = "maia_chess/engine"
     private var methodChannel: MethodChannel? = null
     private var chessnutBridge: ChessnutBridge? = null
+    private var soundEffectBridge: SoundEffectBridge? = null
     private val documents by lazy { PgnDocuments(this) { methodChannel?.invokeMethod("pgnReceived", null) } }
 
     @Volatile
@@ -304,6 +305,7 @@ class MainActivity : FlutterActivity() {
             }
         }
         chessnutBridge = ChessnutBridge(this, flutterEngine.dartExecutor.binaryMessenger)
+        soundEffectBridge = SoundEffectBridge(applicationContext, flutterEngine.dartExecutor.binaryMessenger)
         setProcessPhase("app-ready")
     }
 
@@ -315,7 +317,13 @@ class MainActivity : FlutterActivity() {
 
     override fun onStart() {
         super.onStart()
+        soundEffectBridge?.resume()
         documents.consumeIntent(intent)
+    }
+
+    override fun onStop() {
+        soundEffectBridge?.pause()
+        super.onStop()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -403,6 +411,8 @@ class MainActivity : FlutterActivity() {
         engineAttached = false
         chessnutBridge?.close()
         chessnutBridge = null
+        soundEffectBridge?.close()
+        soundEffectBridge = null
         methodChannel?.setMethodCallHandler(null)
         methodChannel = null
         super.cleanUpFlutterEngine(flutterEngine)
