@@ -8,6 +8,22 @@ REPO = Path(__file__).resolve().parents[1]
 
 
 class PreviewBuildContractTest(unittest.TestCase):
+    def test_ci_actions_are_node24_releases_pinned_by_full_sha(self):
+        workflow = (REPO / '.github/workflows/checks.yml').read_text()
+        self.assertIn(
+            'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1',
+            workflow,
+        )
+        self.assertIn(
+            'actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1',
+            workflow,
+        )
+        self.assertIn(
+            'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1',
+            workflow,
+        )
+        self.assertNotRegex(workflow, r'uses: actions/[^@]+@v\d')
+
     def test_release_is_universal_r8_minified_and_jni_safe(self):
         gradle = (REPO / 'android/app/build.gradle.kts').read_text()
         rules = (REPO / 'android/app/proguard-rules.pro').read_text()
