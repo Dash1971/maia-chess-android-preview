@@ -69,3 +69,44 @@ above describe PR #48's inputs, not subsequent runtime changes.
 ## Gate result
 
 **DEPENDENCY AUDIT PASSED** for the exact dependency-bearing inputs listed above. Any dependency, toolchain, workflow-action, native-source, model, patch, or lockfile change invalidates this result and requires a fresh audit before compilation.
+
+## 2026-09-30 Preview release-gate addendum
+
+The beta.4 release gate invalidated the earlier temporary Multistockfish
+retention decision. The full Android integration suite reproduced a native
+`SIGSEGV` in `libmultistockfish_sf16.so` while an engine was restarting after
+a startup timeout. The tombstone resolves into the old native library's engine
+thread; this is the same failure class described by upstream 0.6.0: a
+replacement engine could run over process-global state while its predecessor
+was still tearing down.
+
+Upstream published a coherent wrapper and native set during this qualification:
+
+- `multistockfish 0.6.1`
+- `multistockfish_chess 0.6.0`
+- `multistockfish_light 0.1.0`
+- `multistockfish_variant 0.4.0`
+
+The app now uses the intended per-engine handle API rather than the deprecated
+process-wide singleton. A handle is disposed before another engine of the same
+flavor can be created. Focused failure/restart tests and the Android crash
+reproducer pass with the new graph.
+
+The default engine changes from Stockfish 16 with a 38 MB net to Stockfish 19
+with a roughly 1 MB embedded net. The light package's exact CMake source
+downloads that net during compilation from Stockfish's official test service
+and pins SHA-256
+`61e7af4bb97d51eeeb25d322916f86513b5cd3a827ce189c98c6e31946f99e5b`.
+The existing `tool/prepare_reproducible_stockfish.py` entry point now guards
+the new exact package/version/source shape, verifies the same hash, records the
+download status and fails the build on any fetch or verification error. The
+F-Droid recipe already calls this stable helper name, so tag-based automatic
+updates do not require a metadata ticket or manual recipe change.
+
+The four exact Pub packages returned no OSV advisory on 2026-09-30. Their
+Android manifests add no permission, and the release APK verifier now requires
+the new `libmultistockfish_light.so` payload for every ABI. No Git dependency,
+prebuilt opaque library, proprietary SDK, runtime network path or Internet
+permission is introduced. The dependency and lockfile change requires the full
+source, native, reproducibility and privacy gates to be repeated before beta.4
+can be signed.
