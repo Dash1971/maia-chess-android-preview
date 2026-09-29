@@ -109,7 +109,7 @@ void main() {
               Offset.zero & target.size,
             );
             expect(targetRect.width, greaterThanOrEqualTo(48 - 0.01));
-            expect(targetRect.height, greaterThanOrEqualTo(48 - 0.01));
+            expect(targetRect.height, greaterThanOrEqualTo(24 - 0.01));
             expect(other.hitTestable(), findsOneWidget);
             await tester.tap(other);
             await tester.pumpAndSettle();
@@ -161,4 +161,52 @@ void main() {
       }
     }
   }
+
+  testWidgets('two Maia rows stay compact at normal text size', (tester) async {
+    tester.view.physicalSize = const Size(540, 1200);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ReviewPage(
+          positions: const [chess.Chess.DEFAULT_POSITION],
+          uciMoves: const [],
+          sanMoves: const [],
+          playerIsWhite: true,
+          pgn: '*',
+          onHome: () {},
+          maiaElo: 1600,
+          secondMaiaElo: 2400,
+          evaluator: (_) async => const StockfishReview(0, 'e2e4'),
+          maiaPolicyEvaluator: (_, elo) async {
+            final policy = List<double>.filled(4352, 0);
+            policy[MaiaEncoding.moveIndex(
+                  elo == 1600 ? 'e2e4' : 'g1f3',
+                  false,
+                )] =
+                5;
+            return policy;
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final primary = find.byKey(const ValueKey('maia-engine-line'));
+    final secondary = find.byKey(const ValueKey('second-maia-engine-line'));
+    await tester.ensureVisible(secondary);
+    await tester.pumpAndSettle();
+    final primaryRect = tester.getRect(primary);
+    final secondaryRect = tester.getRect(secondary);
+
+    expect(primaryRect.height, lessThanOrEqualTo(42));
+    expect(secondaryRect.height, lessThanOrEqualTo(42));
+    expect(
+      secondaryRect.center.dy - primaryRect.center.dy,
+      lessThanOrEqualTo(42),
+      reason: 'Normal-size Maia results should read as adjacent compact rows',
+    );
+    expect(tester.takeException(), isNull);
+  });
 }
