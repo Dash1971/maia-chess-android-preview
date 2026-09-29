@@ -1779,13 +1779,16 @@ class _ReviewPageState extends State<ReviewPage>
     return Semantics(
       container: true,
       label: 'Maia $elo move probabilities. ${descriptions.join(', ')}.',
-      child: SizedBox(
+      child: ConstrainedBox(
         key: lineKey,
-        height: max(26, MediaQuery.textScalerOf(context).scale(16) * 1.375),
-        child: Row(
+        constraints: const BoxConstraints(minHeight: 48),
+        child: Wrap(
+          spacing: MediaQuery.textScalerOf(context).scale(4),
+          runSpacing: 4,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             SizedBox(
-              width: max(64, MediaQuery.textScalerOf(context).scale(52)),
+              width: max(56, MediaQuery.textScalerOf(context).scale(52)),
               child: Text(
                 'M$elo',
                 style: TextStyle(
@@ -1795,47 +1798,42 @@ class _ReviewPageState extends State<ReviewPage>
                 ),
               ),
             ),
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    for (final move in shown)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Text(
-                          '${_sanForUci(fen, move.uci)} ${_formatMaiaProbability(move.probability)}',
-                          style: textStyle,
+            for (final move in shown)
+              Text(
+                '${_sanForUci(fen, move.uci)} ${_formatMaiaProbability(move.probability)}',
+                style: textStyle,
+                softWrap: false,
+              ),
+            Tooltip(
+              message: 'Show full raw model probabilities',
+              child: InkWell(
+                key: otherKey,
+                borderRadius: BorderRadius.circular(4),
+                onTap: () =>
+                    unawaited(_showMaiaProbabilities(analysis, fen, elo)),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minWidth: 48,
+                    minHeight: 48,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 2,
+                      vertical: 8,
+                    ),
+                    child: Center(
+                      widthFactor: 1,
+                      heightFactor: 1,
+                      child: Text(
+                        'Other ${_formatMaiaProbability(otherMass)}',
+                        style: textStyle?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          decoration: TextDecoration.underline,
                         ),
-                      ),
-                    Tooltip(
-                      message: 'Show full raw model probabilities',
-                      child: InkWell(
-                        key: otherKey,
-                        borderRadius: BorderRadius.circular(4),
-                        onTap: () => unawaited(
-                          _showMaiaProbabilities(analysis, fen, elo),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 2,
-                            vertical: 3,
-                          ),
-                          child: Text(
-                            'Other ${_formatMaiaProbability(otherMass)}',
-                            style: textStyle?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
+                        softWrap: false,
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -1936,6 +1934,7 @@ class _ReviewPageState extends State<ReviewPage>
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           for (var index = 0; index < 2; index++)
             engineRow(
@@ -2824,7 +2823,9 @@ class _ReviewPageState extends State<ReviewPage>
                 max(24.0, MediaQuery.textScalerOf(context).scale(24)) + 8;
             final maiaRowCount = widget.secondMaiaElo == null ? 1 : 2;
             final engineHeight = _engineEnabled
-                ? (2 + maiaRowCount) * max(26.0, 22.0 * textScale) + 20
+                ? 2 * max(26.0, 22.0 * textScale) +
+                      maiaRowCount * max(48.0, 22.0 * textScale) +
+                      20
                 : 0.0;
             Widget board(double size) => SizedBox(
               width: size + boardGutter,
@@ -2920,7 +2921,17 @@ class _ReviewPageState extends State<ReviewPage>
                 }
                 return Column(
                   children: [
-                    ...header,
+                    // Wrapped probabilities can exceed the minimum estimate.
+                    // Keep them scrollable while reserving room for moves and
+                    // the navigation controls on taller layouts too.
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: available.maxHeight - 112,
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(children: header),
+                      ),
+                    ),
                     Expanded(child: panel),
                     _analysisControls(),
                   ],

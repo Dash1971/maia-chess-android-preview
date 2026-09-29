@@ -1971,6 +1971,7 @@ void main() {
       expect(find.textContaining('Matches Stockfish'), findsNothing);
       expect(tester.takeException(), isNull);
 
+      await tester.ensureVisible(find.byKey(const ValueKey('maia-other')));
       await tester.tap(find.byKey(const ValueKey('maia-other')));
       await tester.pumpAndSettle();
       expect(find.text('Maia 1600 move probabilities'), findsOneWidget);
@@ -2080,7 +2081,7 @@ void main() {
   });
 
   testWidgets(
-    'Maia probabilities stay on one line on compact large-text layouts',
+    'Maia probabilities wrap on compact large-text layouts',
     (tester) async {
       tester.view.physicalSize = const Size(320, 568);
       tester.view.devicePixelRatio = 1;
@@ -2125,7 +2126,7 @@ void main() {
         'Other 19%',
       ].map((text) => tester.getCenter(find.text(text)).dy).toList();
       rowCenters.sort();
-      expect(rowCenters.last - rowCenters.first, lessThan(1));
+      expect(rowCenters.last - rowCenters.first, greaterThan(1));
       expect(tester.takeException(), isNull);
     },
   );
