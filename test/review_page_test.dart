@@ -577,6 +577,44 @@ void main() {
     expect(find.text('Maia rating: 2200'), findsOneWidget);
   });
 
+  testWidgets('second Maia engine settings persist across app restarts', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    await tester.pumpWidget(const MaiaChessApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+    await tester.pumpAndSettle();
+
+    final toggle = find.byKey(const ValueKey('second-maia-engine-setting'));
+    await tester.ensureVisible(toggle);
+    expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
+    await tester.tap(toggle);
+    await tester.pumpAndSettle();
+    expect(find.text('Second Maia analysis rating: 2400'), findsOneWidget);
+
+    final ratingTile = find.byKey(const ValueKey('second-maia-rating-setting'));
+    final rating = tester.widget<Slider>(
+      find.descendant(of: ratingTile, matching: find.byType(Slider)),
+    );
+    rating.onChanged!(2200);
+    rating.onChangeEnd!(2200);
+    await tester.pumpAndSettle();
+    final preferences = await SharedPreferences.getInstance();
+    expect(preferences.getBool(secondMaiaEnabledPreferenceKey), isTrue);
+    expect(preferences.getInt(secondMaiaEloPreferenceKey), 2200);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    await tester.pumpWidget(const MaiaChessApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(toggle);
+    expect(tester.widget<SwitchListTile>(toggle).value, isTrue);
+    expect(find.text('Second Maia analysis rating: 2200'), findsOneWidget);
+  });
+
   testWidgets('home archives but reset erases the active game', (tester) async {
     tester.view.physicalSize = const Size(800, 1000);
     tester.view.devicePixelRatio = 1;
@@ -1884,12 +1922,18 @@ void main() {
       find.byKey(const ValueKey('review-board-overlay')),
     );
     final painter = overlay.painter! as ReviewBoardOverlayPainter;
-    expect(painter.agreementUci, 'e2e4');
-    expect(painter.agreementTailColor, const Color(0xff3d9be9));
+    expect(painter.agreementArrows, hasLength(1));
+    expect(painter.agreementArrows.single.uci, 'e2e4');
+    expect(painter.agreementArrows.single.tailColors, const [
+      Color(0xff3d9be9),
+    ]);
+    expect(painter.agreementArrows.single.headColors, const [
+      primaryMaiaAnalysisColor,
+    ]);
   });
 
   testWidgets(
-    'Maia row shows four raw move probabilities and all-moves sheet',
+    'Maia row shows three moves and clickable Other opens all probabilities',
     (tester) async {
       tester.view.physicalSize = const Size(360, 720);
       tester.view.devicePixelRatio = 1;
@@ -1917,16 +1961,17 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('raw'), findsOneWidget);
+      expect(find.text('raw'), findsNothing);
       expect(find.text('e4 54%'), findsOneWidget);
       expect(find.text('Nf3 20%'), findsOneWidget);
       expect(find.text('d4 7%'), findsOneWidget);
-      expect(find.text('h3 3%'), findsOneWidget);
-      expect(find.text('other 16%'), findsOneWidget);
+      expect(find.text('h3 3%'), findsNothing);
+      expect(find.text('Other 19%'), findsOneWidget);
+      expect(find.byIcon(Icons.more_horiz), findsNothing);
       expect(find.textContaining('Matches Stockfish'), findsNothing);
       expect(tester.takeException(), isNull);
 
-      await tester.tap(find.byKey(const ValueKey('maia-engine-line')));
+      await tester.tap(find.byKey(const ValueKey('maia-other')));
       await tester.pumpAndSettle();
       expect(find.text('Maia 1600 move probabilities'), findsOneWidget);
       expect(
@@ -1980,25 +2025,178 @@ void main() {
     expect(find.text('e4 100%'), findsNothing);
   });
 
-  testWidgets('Maia probabilities wrap safely on compact large-text layouts', (
+  testWidgets('late second Maia policy cannot replace the selected position', (
     tester,
   ) async {
-    tester.view.physicalSize = const Size(320, 568);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-    final policy = List<double>.filled(4352, 0);
-    policy[MaiaEncoding.moveIndex('e2e4', false)] = 4;
-    policy[MaiaEncoding.moveIndex('g1f3', false)] = 3;
-    policy[MaiaEncoding.moveIndex('d2d4', false)] = 2;
-    policy[MaiaEncoding.moveIndex('h2h3', false)] = 1;
+    final game = chess.Chess()..move('e4');
+    final afterE4 = game.fen;
+    final requests = <String, Completer<List<double>?>>{};
+    Future<List<double>?> evaluate(List<String> positions, int elo) {
+      final completer = Completer<List<double>?>();
+      requests['${positions.length}-$elo'] = completer;
+      return completer.future;
+    }
+
     await tester.pumpWidget(
       MaterialApp(
-        builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context)
-              .copyWith(textScaler: const TextScaler.linear(1.6)),
-          child: child!,
+        home: ReviewPage(
+          positions: [chess.Chess.DEFAULT_POSITION, afterE4],
+          uciMoves: const ['e2e4'],
+          sanMoves: const ['e4'],
+          playerIsWhite: true,
+          pgn: '1. e4 *',
+          onHome: () {},
+          maiaElo: 1600,
+          secondMaiaElo: 2400,
+          evaluator: (fen) async =>
+              StockfishReview(0, fen == afterE4 ? 'e7e5' : 'e2e4'),
+          maiaPolicyEvaluator: evaluate,
         ),
+      ),
+    );
+    await tester.pump();
+    await tester.tap(find.byTooltip('Next move'));
+    await tester.pump();
+
+    List<double> policy(String move, bool black) {
+      final result = List<double>.filled(4352, -20);
+      result[MaiaEncoding.moveIndex(move, black)] = 20;
+      return result;
+    }
+
+    requests['2-1600']!.complete(policy('e7e5', true));
+    requests['2-2400']!.complete(policy('g8f6', true));
+    await tester.pumpAndSettle();
+    expect(find.text('e5 100%'), findsOneWidget);
+    expect(find.text('Nf6 100%'), findsOneWidget);
+
+    requests['1-1600']!.complete(policy('d2d4', false));
+    requests['1-2400']!.complete(policy('c2c4', false));
+    await tester.pumpAndSettle();
+    expect(find.text('e5 100%'), findsOneWidget);
+    expect(find.text('Nf6 100%'), findsOneWidget);
+    expect(find.text('d4 100%'), findsNothing);
+    expect(find.text('c4 100%'), findsNothing);
+  });
+
+  testWidgets(
+    'Maia probabilities stay on one line on compact large-text layouts',
+    (tester) async {
+      tester.view.physicalSize = const Size(320, 568);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final policy = List<double>.filled(4352, 0);
+      policy[MaiaEncoding.moveIndex('e2e4', false)] = 4;
+      policy[MaiaEncoding.moveIndex('g1f3', false)] = 3;
+      policy[MaiaEncoding.moveIndex('d2d4', false)] = 2;
+      policy[MaiaEncoding.moveIndex('h2h3', false)] = 1;
+      await tester.pumpWidget(
+        MaterialApp(
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: const TextScaler.linear(1.6)),
+            child: child!,
+          ),
+          home: ReviewPage(
+            positions: const [chess.Chess.DEFAULT_POSITION],
+            uciMoves: const [],
+            sanMoves: const [],
+            playerIsWhite: true,
+            pgn: '*',
+            onHome: () {},
+            evaluator: (_) async => const StockfishReview(20, 'e2e4'),
+            maiaPolicyEvaluator: (_, _) async => policy,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('analysis-engine-lines')),
+      );
+      expect(find.text('e4 54%'), findsOneWidget);
+      expect(find.text('Other 19%'), findsOneWidget);
+      final rowCenters = [
+        'M1600',
+        'e4 54%',
+        'Nf3 20%',
+        'd4 7%',
+        'Other 19%',
+      ].map((text) => tester.getCenter(find.text(text)).dy).toList();
+      rowCenters.sort();
+      expect(rowCenters.last - rowCenters.first, lessThan(1));
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'optional second Maia engine shows an independent probability row',
+    (tester) async {
+      final requestedRatings = <int>[];
+      Future<List<double>> policyFor(List<String> _, int elo) async {
+        requestedRatings.add(elo);
+        final policy = List<double>.filled(4352, -20);
+        policy[MaiaEncoding.moveIndex(elo == 1600 ? 'e2e4' : 'g1f3', false)] =
+            20;
+        return policy;
+      }
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ReviewPage(
+            positions: const [chess.Chess.DEFAULT_POSITION],
+            uciMoves: const [],
+            sanMoves: const [],
+            playerIsWhite: true,
+            pgn: '*',
+            onHome: () {},
+            maiaElo: 1600,
+            secondMaiaElo: 2400,
+            evaluator: (_) async => const StockfishReview(20, 'a2a3'),
+            maiaPolicyEvaluator: policyFor,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(requestedRatings, containsAll(<int>[1600, 2400]));
+      final primary = find.byKey(const ValueKey('maia-engine-line'));
+      final secondary = find.byKey(const ValueKey('second-maia-engine-line'));
+      expect(
+        find.descendant(of: primary, matching: find.text('e4 100%')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: secondary, matching: find.text('Nf3 100%')),
+        findsOneWidget,
+      );
+      expect(
+        tester
+            .widget<Text>(
+              find.descendant(of: primary, matching: find.text('M1600')),
+            )
+            .style
+            ?.color,
+        primaryMaiaAnalysisColor,
+      );
+      expect(
+        tester
+            .widget<Text>(
+              find.descendant(of: secondary, matching: find.text('M2400')),
+            )
+            .style
+            ?.color,
+        secondaryMaiaAnalysisColor,
+      );
+    },
+  );
+
+  testWidgets('second Maia failure does not remove the primary result', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
         home: ReviewPage(
           positions: const [chess.Chess.DEFAULT_POSITION],
           uciMoves: const [],
@@ -2006,19 +2204,141 @@ void main() {
           playerIsWhite: true,
           pgn: '*',
           onHome: () {},
-          evaluator: (_) async => const StockfishReview(20, 'e2e4'),
-          maiaPolicyEvaluator: (_, _) async => policy,
+          maiaElo: 1600,
+          secondMaiaElo: 2400,
+          evaluator: (_) async => const StockfishReview(20, 'a2a3'),
+          maiaPolicyEvaluator: (_, elo) async {
+            if (elo == 2400) throw StateError('second engine failed');
+            final policy = List<double>.filled(4352, -20);
+            policy[MaiaEncoding.moveIndex('e2e4', false)] = 20;
+            return policy;
+          },
         ),
       ),
     );
     await tester.pumpAndSettle();
 
-    await tester.ensureVisible(
-      find.byKey(const ValueKey('analysis-engine-lines')),
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('maia-engine-line')),
+        matching: find.text('e4 100%'),
+      ),
+      findsOneWidget,
     );
-    expect(find.text('e4 54%'), findsOneWidget);
-    expect(find.text('other 16%'), findsOneWidget);
-    expect(tester.takeException(), isNull);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('second-maia-engine-line')),
+        matching: find.text('Unavailable'),
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('matching Maia engines use a split orange and red arrow', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ReviewPage(
+          positions: const [chess.Chess.DEFAULT_POSITION],
+          uciMoves: const [],
+          sanMoves: const [],
+          playerIsWhite: true,
+          pgn: '*',
+          onHome: () {},
+          maiaElo: 1600,
+          secondMaiaElo: 2400,
+          evaluator: (_) async => const StockfishReview(20, 'e2e4'),
+          maiaEvaluator: (_, _) async => 'd2d4',
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final overlay = tester.widget<CustomPaint>(
+      find.byKey(const ValueKey('review-board-overlay')),
+    );
+    final painter = overlay.painter! as ReviewBoardOverlayPainter;
+    expect(painter.agreementArrows, hasLength(1));
+    expect(painter.agreementArrows.single.uci, 'd2d4');
+    expect(painter.agreementArrows.single.tailColors, const [
+      primaryMaiaAnalysisColor,
+      secondaryMaiaAnalysisColor,
+    ]);
+    expect(painter.agreementArrows.single.headColors, const [
+      primaryMaiaAnalysisColor,
+      secondaryMaiaAnalysisColor,
+    ]);
+  });
+
+  testWidgets('different Maia engines use distinct orange and red arrows', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ReviewPage(
+          positions: const [chess.Chess.DEFAULT_POSITION],
+          uciMoves: const [],
+          sanMoves: const [],
+          playerIsWhite: true,
+          pgn: '*',
+          onHome: () {},
+          maiaElo: 1600,
+          secondMaiaElo: 2400,
+          evaluator: (_) async => const StockfishReview(20, 'e2e4'),
+          maiaEvaluator: (_, elo) async => elo == 1600 ? 'd2d4' : 'c2c4',
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final arrows = tester
+        .widget<cg.Chessboard>(find.byType(cg.Chessboard))
+        .shapes
+        .whereType<cg.Arrow>()
+        .toList();
+    Color colorFor(String uci) => arrows
+        .singleWhere((arrow) => '${arrow.orig.name}${arrow.dest.name}' == uci)
+        .color;
+    expect(colorFor('d2d4'), primaryMaiaAnalysisColor);
+    expect(colorFor('c2c4'), secondaryMaiaAnalysisColor);
+    expect(colorFor('e2e4'), const Color(0xff3d9be9));
+  });
+
+  testWidgets('both Maias matching Stockfish split only the arrow head', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ReviewPage(
+          positions: const [chess.Chess.DEFAULT_POSITION],
+          uciMoves: const [],
+          sanMoves: const [],
+          playerIsWhite: true,
+          pgn: '*',
+          onHome: () {},
+          maiaElo: 1600,
+          secondMaiaElo: 2400,
+          evaluator: (_) async => const StockfishReview(20, 'e2e4'),
+          maiaEvaluator: (_, _) async => 'e2e4',
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final overlay = tester.widget<CustomPaint>(
+      find.byKey(const ValueKey('review-board-overlay')),
+    );
+    final painter = overlay.painter! as ReviewBoardOverlayPainter;
+    expect(painter.agreementArrows, hasLength(1));
+    expect(painter.agreementArrows.single.uci, 'e2e4');
+    expect(painter.agreementArrows.single.tailColors, const [
+      Color(0xff3d9be9),
+    ]);
+    expect(painter.agreementArrows.single.headColors, const [
+      primaryMaiaAnalysisColor,
+      secondaryMaiaAnalysisColor,
+    ]);
   });
 
   testWidgets(
@@ -2057,8 +2377,14 @@ void main() {
         find.byKey(const ValueKey('review-board-overlay')),
       );
       final painter = overlay.painter! as ReviewBoardOverlayPainter;
-      expect(painter.agreementUci, 'd2d4');
-      expect(painter.agreementTailColor, const Color(0xff8ac8f5));
+      expect(painter.agreementArrows, hasLength(1));
+      expect(painter.agreementArrows.single.uci, 'd2d4');
+      expect(painter.agreementArrows.single.tailColors, const [
+        Color(0xff8ac8f5),
+      ]);
+      expect(painter.agreementArrows.single.headColors, const [
+        primaryMaiaAnalysisColor,
+      ]);
       expect(
         find.descendant(
           of: find.byKey(const ValueKey('maia-engine-line')),

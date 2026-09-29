@@ -47,7 +47,7 @@ void main() {
           await tester.ensureVisible(
             find.byKey(const ValueKey('maia-engine-line')),
           );
-          await tester.tap(find.byKey(const ValueKey('maia-engine-line')));
+          await tester.tap(find.byKey(const ValueKey('maia-other')));
           await tester.pumpAndSettle();
           expect(tester.takeException(), isNull);
           final last = find.byKey(const ValueKey('maia-probability-h2h4'));
