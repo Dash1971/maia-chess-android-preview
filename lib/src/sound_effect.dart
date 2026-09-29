@@ -13,6 +13,7 @@ class SoundEffect {
   final Map<String, Completer<void>> _loads = {};
 
   Future<void> _handlePlatformCall(MethodCall call) async {
+    if (call.method != 'onLoadComplete' && call.method != 'onLoadError') return;
     final arguments = call.arguments;
     if (arguments is! Map) return;
     final soundId = arguments['soundId'];
@@ -30,24 +31,45 @@ class SoundEffect {
   Future<void> initialize({int maxStreams = 1}) =>
       _channel.invokeMethod<void>('initialize', {'maxStreams': maxStreams});
 
-  Future<void> load(String soundId, String path) async {
+  Future<void> load(String soundId, String path) {
     final completer = Completer<void>();
     final previous = _loads.remove(soundId);
     if (previous != null && !previous.isCompleted) {
       previous.completeError(StateError('Sound load replaced: $soundId'));
     }
     _loads[soundId] = completer;
+    // Observe errors before sending the request: native completion/release can
+    // arrive before the method reply. Never leave the internal future without
+    // a listener while awaiting that reply.
+    final ready = completer.future.timeout(
+      const Duration(seconds: 10),
+      onTimeout: () {
+        if (identical(_loads[soundId], completer)) _loads.remove(soundId);
+        throw TimeoutException('Timed out loading sound $soundId');
+      },
+    );
+    unawaited(_requestLoad(soundId, path, completer));
+    return ready;
+  }
+
+  Future<void> _requestLoad(
+    String soundId,
+    String path,
+    Completer<void> completer,
+  ) async {
     try {
       await _channel.invokeMethod<void>('load', {
         'soundId': soundId,
         'path': path,
       });
     } catch (error, stackTrace) {
-      if (_loads.remove(soundId) == completer && !completer.isCompleted) {
+      if (identical(_loads[soundId], completer)) {
+        _loads.remove(soundId);
+      }
+      if (!completer.isCompleted) {
         completer.completeError(error, stackTrace);
       }
     }
-    return completer.future;
   }
 
   Future<void> play(String soundId, {double volume = 1.0}) =>

@@ -251,3 +251,29 @@ positions, and ten reproducible seeded games (seed 20260928).
 These tests run with the normal `flutter test` suite; they require neither
 physical phones nor an electronic board. Android Recent Games integration
 checks use stable session-ID keys rather than display names, which may repeat.
+
+## Sound bridge concurrency and failure handling
+
+The ordinary Flutter suite includes `test/sound_effect_test.dart`. It covers
+callbacks before method replies, early decode failure, release during loading,
+replacement loads, unknown callbacks, volume clamping, and a missing native
+reply/completion. The ten-second deadline tests use virtual time, not a real
+ten-second sleep. Optional audio fails closed after a timeout without blocking
+chess play. Android integration also performs eight real SoundPool load/play/
+release cycles covering all four bundled clips and checks missing-asset recovery.
+
+A separate JVM scheduler probe compiles the actual production
+`SoundEffectBridge.kt` against minimal test doubles. A callback thread is made
+to wait on the bridge lock while a short sample loads, exercising registration
+and completion concurrently over 10,000 iterations. It fails on PR #48's split
+lock sections and passes when registration is atomic. It is supplementary to
+the real Android checks, not an audio-quality or device failure-rate measurement.
+Run it with JDK 17 and the repository's existing Gradle wrapper:
+
+```sh
+android/gradlew -p tool/hardening/sound_bridge_race run --console=plain
+```
+
+This optional native check uses Kotlin 2.4.20 and does not add work to the
+ordinary Flutter/Python PR gate. Run it when changing sound registration,
+callbacks, or teardown. The doubles never ship in the app.
