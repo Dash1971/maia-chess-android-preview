@@ -480,18 +480,39 @@ class GamePhaseDetector {
   }
 }
 
+class ReviewAgreementArrow {
+  const ReviewAgreementArrow({
+    required this.uci,
+    required this.tailColors,
+    required this.headColors,
+  });
+
+  final String uci;
+  final List<Color> tailColors;
+  final List<Color> headColors;
+
+  @override
+  bool operator ==(Object other) =>
+      other is ReviewAgreementArrow &&
+      other.uci == uci &&
+      listEquals(other.tailColors, tailColors) &&
+      listEquals(other.headColors, headColors);
+
+  @override
+  int get hashCode =>
+      Object.hash(uci, Object.hashAll(tailColors), Object.hashAll(headColors));
+}
+
 class ReviewBoardOverlayPainter extends CustomPainter {
   const ReviewBoardOverlayPainter({
     required this.orientation,
-    this.agreementUci,
-    this.agreementTailColor,
+    this.agreementArrows = const [],
     this.annotationSquare,
     this.classification,
   });
 
   final dc.Side orientation;
-  final String? agreementUci;
-  final Color? agreementTailColor;
+  final List<ReviewAgreementArrow> agreementArrows;
   final String? annotationSquare;
   final MoveClassification? classification;
 
@@ -506,36 +527,76 @@ class ReviewBoardOverlayPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final squareSize = size.width / 8;
-    final agreement = agreementUci;
-    if (agreement != null && agreement.length >= 4) {
-      final from = _squareCenter(agreement.substring(0, 2), squareSize);
-      final to = _squareCenter(agreement.substring(2, 4), squareSize);
+    for (final agreement in agreementArrows) {
+      if (agreement.uci.length < 4 ||
+          agreement.tailColors.isEmpty ||
+          agreement.headColors.isEmpty) {
+        continue;
+      }
+      final from = _squareCenter(agreement.uci.substring(0, 2), squareSize);
+      final to = _squareCenter(agreement.uci.substring(2, 4), squareSize);
       final angle = atan2(to.dy - from.dy, to.dx - from.dx);
       final start = from + Offset(cos(angle), sin(angle)) * (squareSize / 3);
       final arrowSize = squareSize * 0.48;
+      final shaftWidth = squareSize / 4;
       const arrowAngle = pi / 5;
       final arrowHeight = arrowSize * sin((pi - arrowAngle * 2) / 2);
       final headOffset = Offset(cos(angle), sin(angle)) * arrowHeight;
-      canvas.drawLine(
-        start,
-        to - headOffset,
-        Paint()
-          ..color = agreementTailColor ?? const Color(0xff3d9be9)
-          ..strokeWidth = squareSize / 4
-          ..strokeCap = StrokeCap.butt,
+      final shaftEnd = to - headOffset;
+      if (agreement.tailColors.length == 1) {
+        canvas.drawLine(
+          start,
+          shaftEnd,
+          Paint()
+            ..color = agreement.tailColors.single
+            ..strokeWidth = shaftWidth
+            ..strokeCap = StrokeCap.butt,
+        );
+      } else {
+        final perpendicular = Offset(-sin(angle), cos(angle));
+        for (var index = 0; index < 2; index++) {
+          final offset =
+              perpendicular * (index == 0 ? -shaftWidth / 4 : shaftWidth / 4);
+          canvas.drawLine(
+            start + offset,
+            shaftEnd + offset,
+            Paint()
+              ..color = agreement.tailColors[index]
+              ..strokeWidth = shaftWidth / 2 + 0.5
+              ..strokeCap = StrokeCap.butt,
+          );
+        }
+      }
+      final left = Offset(
+        to.dx - arrowSize * cos(angle - arrowAngle),
+        to.dy - arrowSize * sin(angle - arrowAngle),
       );
-      final head = Path()
-        ..moveTo(
-          to.dx - arrowSize * cos(angle - arrowAngle),
-          to.dy - arrowSize * sin(angle - arrowAngle),
-        )
-        ..lineTo(to.dx, to.dy)
-        ..lineTo(
-          to.dx - arrowSize * cos(angle + arrowAngle),
-          to.dy - arrowSize * sin(angle + arrowAngle),
-        )
-        ..close();
-      canvas.drawPath(head, Paint()..color = const Color(0xffe89b3c));
+      final right = Offset(
+        to.dx - arrowSize * cos(angle + arrowAngle),
+        to.dy - arrowSize * sin(angle + arrowAngle),
+      );
+      if (agreement.headColors.length == 1) {
+        final head = Path()
+          ..moveTo(left.dx, left.dy)
+          ..lineTo(to.dx, to.dy)
+          ..lineTo(right.dx, right.dy)
+          ..close();
+        canvas.drawPath(head, Paint()..color = agreement.headColors.single);
+      } else {
+        final baseMiddle = (left + right) / 2;
+        final firstHalf = Path()
+          ..moveTo(left.dx, left.dy)
+          ..lineTo(to.dx, to.dy)
+          ..lineTo(baseMiddle.dx, baseMiddle.dy)
+          ..close();
+        final secondHalf = Path()
+          ..moveTo(baseMiddle.dx, baseMiddle.dy)
+          ..lineTo(to.dx, to.dy)
+          ..lineTo(right.dx, right.dy)
+          ..close();
+        canvas.drawPath(firstHalf, Paint()..color = agreement.headColors.first);
+        canvas.drawPath(secondHalf, Paint()..color = agreement.headColors[1]);
+      }
     }
 
     final square = annotationSquare;
@@ -574,8 +635,7 @@ class ReviewBoardOverlayPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant ReviewBoardOverlayPainter oldDelegate) =>
       oldDelegate.orientation != orientation ||
-      oldDelegate.agreementUci != agreementUci ||
-      oldDelegate.agreementTailColor != agreementTailColor ||
+      !listEquals(oldDelegate.agreementArrows, agreementArrows) ||
       oldDelegate.annotationSquare != annotationSquare ||
       oldDelegate.classification != classification;
 }

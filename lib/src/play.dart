@@ -34,7 +34,8 @@ class GamePage extends StatefulWidget {
   State<GamePage> createState() => _GamePageState();
 }
 
-class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteAware {
+class _GamePageState extends State<GamePage>
+    with WidgetsBindingObserver, RouteAware {
   chess.Chess _game = chess.Chess();
   final List<String> _positionHistory = [];
   final List<String> _uciMoves = [];
@@ -44,6 +45,8 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
   chess.Color _playerColor = chess.Color.WHITE;
   int _elo = 1500;
   int _analysisElo = 1600;
+  bool _secondMaiaEnabled = false;
+  int _secondMaiaElo = 2400;
   GameAnalysisQuality _gameAnalysisQuality = GameAnalysisQuality.thorough;
   late final cg.ChessboardController _gameBoardController;
   String _status = 'Choose your settings and start a game.';
@@ -294,6 +297,9 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
               builder: (_) => AnalysisBoardPage(
                 initialSession: session,
                 maiaElo: saved['maiaElo'] as int? ?? _analysisElo,
+                secondMaiaElo: saved.containsKey('secondMaiaElo')
+                    ? saved['secondMaiaElo'] as int?
+                    : (_secondMaiaEnabled ? _secondMaiaElo : null),
                 gameAnalysisQuality: _gameAnalysisQuality,
                 initialVariations: variations,
                 initialTreeIsAuthoritative:
@@ -346,6 +352,9 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
                     initialTreeIsAuthoritative:
                         saved['treeIsAuthoritative'] == true,
                     maiaElo: saved['maiaElo'] as int? ?? _analysisElo,
+                    secondMaiaElo: saved.containsKey('secondMaiaElo')
+                        ? saved['secondMaiaElo'] as int?
+                        : (_secondMaiaEnabled ? _secondMaiaElo : null),
                     gameAnalysisQuality: _gameAnalysisQuality,
                     initialCurrentFen: saved['currentFen'] as String?,
                     initialFlipped: saved['flipped'] as bool? ?? false,
@@ -671,6 +680,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
     'flipped': flipped,
     'playerIsWhite': playerIsWhite,
     'maiaElo': _analysisElo,
+    if (_secondMaiaEnabled) 'secondMaiaElo': _secondMaiaElo,
   });
 
   Future<void> _handleReviewSessionChanged(
@@ -770,6 +780,10 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
       );
       _topP = (preferences.getDouble('topPV2') ?? 0.9).clamp(0.0, 1.0);
       _analysisElo = preferences.getInt('analysisElo') ?? 1600;
+      _secondMaiaEnabled =
+          preferences.getBool(secondMaiaEnabledPreferenceKey) ?? false;
+      _secondMaiaElo = (preferences.getInt(secondMaiaEloPreferenceKey) ?? 2400)
+          .clamp(500, 2400);
       _gameAnalysisQuality = GameAnalysisQuality.fromStoredName(
         preferences.getString(gameAnalysisQualityPreferenceKey),
       );
@@ -829,6 +843,8 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
       preferences.setDouble('temperatureV2', _temperature),
       preferences.setDouble('topPV2', _topP),
       preferences.setInt('analysisElo', _analysisElo),
+      preferences.setBool(secondMaiaEnabledPreferenceKey, _secondMaiaEnabled),
+      preferences.setInt(secondMaiaEloPreferenceKey, _secondMaiaElo),
       preferences.setString(
         gameAnalysisQualityPreferenceKey,
         _gameAnalysisQuality.name,
@@ -1104,6 +1120,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
           builder: (_) => AnalysisBoardPage(
             initialSession: session,
             maiaElo: _analysisElo,
+            secondMaiaElo: _secondMaiaEnabled ? _secondMaiaElo : null,
             gameAnalysisQuality: _gameAnalysisQuality,
             maiaPolicyEvaluator: widget.maiaEvaluator,
           ),
@@ -1127,6 +1144,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
         builder: (context) => AnalysisBoardPage(
           initialSession: AnalysisSession.start(),
           maiaElo: _analysisElo,
+          secondMaiaElo: _secondMaiaEnabled ? _secondMaiaElo : null,
           gameAnalysisQuality: _gameAnalysisQuality,
           maiaPolicyEvaluator: widget.maiaEvaluator,
         ),
@@ -2989,6 +3007,7 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
           pgn: session.pgn,
           initialVariations: initialVariations,
           maiaElo: _analysisElo,
+          secondMaiaElo: _secondMaiaEnabled ? _secondMaiaElo : null,
           gameAnalysisQuality: _gameAnalysisQuality,
           initialCurrentFen: session.positions.last,
           title: 'Analysis Board',
@@ -3727,6 +3746,35 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
                       onChangeEnd: (_) => unawaited(_saveEnginePreferences()),
                     ),
                   ),
+                  SwitchListTile(
+                    key: const ValueKey('second-maia-engine-setting'),
+                    title: const Text('Add second Maia engine'),
+                    subtitle: const Text(
+                      'Compare another Maia rating in analysis and review',
+                    ),
+                    value: _secondMaiaEnabled,
+                    onChanged: (value) {
+                      setState(() => _secondMaiaEnabled = value);
+                      unawaited(_saveEnginePreferences());
+                    },
+                  ),
+                  if (_secondMaiaEnabled)
+                    ListTile(
+                      key: const ValueKey('second-maia-rating-setting'),
+                      title: Text(
+                        'Second Maia analysis rating: $_secondMaiaElo',
+                      ),
+                      subtitle: Slider(
+                        min: 500,
+                        max: 2400,
+                        divisions: 19,
+                        value: _secondMaiaElo.toDouble(),
+                        label: '$_secondMaiaElo',
+                        onChanged: (value) =>
+                            setState(() => _secondMaiaElo = value.round()),
+                        onChangeEnd: (_) => unawaited(_saveEnginePreferences()),
+                      ),
+                    ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
                     child: DropdownButtonFormField<GameAnalysisQuality>(
@@ -3768,6 +3816,8 @@ class _GamePageState extends State<GamePage> with WidgetsBindingObserver, RouteA
                           _temperature = 0.5;
                           _topP = 0.9;
                           _analysisElo = 1600;
+                          _secondMaiaEnabled = false;
+                          _secondMaiaElo = 2400;
                           _gameAnalysisQuality = GameAnalysisQuality.thorough;
                         });
                         unawaited(_saveEnginePreferences());

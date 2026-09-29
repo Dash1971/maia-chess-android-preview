@@ -237,9 +237,13 @@ entering analysis cancels the delayed end event. The shared navigation tests
 record platform feedback calls so implicit Material/tooltip haptics cannot
 bypass the phone feedback policy.
 
-`test/maia_probability_sheet_test.dart` opens and scrolls the entire probability
-sheet in portrait and landscape at normal, 160%, and 200% text sizes. It checks
-that the last legal move remains reachable without changing the board.
+`test/maia_probability_sheet_test.dart` covers single-Maia and second-Maia
+probabilities in 24 phone, landscape, and tablet/text-size combinations. It
+checks painted font size at normal, 160%, and 200% text scaling, matching text
+sizes for moves and Other, 48-pixel minimum action targets, and a single line
+when entries fit. It opens each distribution, checks the selected rating and
+probabilities, and reaches the last legal move without changing the board.
+Wrapped engine panels remain scrollable while navigation controls stay usable.
 `test/maia_probability_corpus_test.dart` compares raw legal probabilities with
 direct softmax across both colors, promotions, castling, en passant, terminal
 positions, and ten reproducible seeded games (seed 20260928).

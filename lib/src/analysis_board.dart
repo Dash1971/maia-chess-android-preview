@@ -49,6 +49,7 @@ class AnalysisBoardPage extends StatefulWidget {
   const AnalysisBoardPage({
     required this.initialSession,
     required this.maiaElo,
+    this.secondMaiaElo,
     this.initialVariations = const [],
     this.initialTreeIsAuthoritative = false,
     this.initialCurrentFen,
@@ -62,6 +63,7 @@ class AnalysisBoardPage extends StatefulWidget {
 
   final AnalysisSession initialSession;
   final int maiaElo;
+  final int? secondMaiaElo;
   final List<RecordedVariation> initialVariations;
   final bool initialTreeIsAuthoritative;
   final String? initialCurrentFen;
@@ -111,6 +113,7 @@ class _AnalysisBoardPageState extends State<AnalysisBoardPage> {
     'currentFen': currentFen,
     'flipped': flipped,
     'maiaElo': widget.maiaElo,
+    if (widget.secondMaiaElo != null) 'secondMaiaElo': widget.secondMaiaElo,
   });
 
   void _replace(AnalysisSession session) {
@@ -245,6 +248,7 @@ class _AnalysisBoardPageState extends State<AnalysisBoardPage> {
     gameAnalysisQuality: widget.gameAnalysisQuality,
     onSessionChanged: _saveAnalysisState,
     maiaElo: widget.maiaElo,
+    secondMaiaElo: widget.secondMaiaElo,
     evaluator: widget.evaluator,
     maiaEvaluator: widget.maiaEvaluator,
     maiaPolicyEvaluator: widget.maiaPolicyEvaluator,
