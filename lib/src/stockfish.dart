@@ -27,20 +27,49 @@ enum GameAnalysisQuality {
       values.firstWhere((value) => value.name == name, orElse: () => thorough);
 }
 
+abstract interface class StockfishEngineHandle {
+  Stream<String> get stdout;
+
+  set stdin(String command);
+
+  Future<void> dispose();
+}
+
+final class _MultistockfishHandle implements StockfishEngineHandle {
+  _MultistockfishHandle(this._engine);
+
+  final Stockfish _engine;
+
+  @override
+  Stream<String> get stdout => _engine.stdout;
+
+  @override
+  set stdin(String command) => _engine.stdin = command;
+
+  @override
+  Future<void> dispose() => _engine.dispose();
+}
+
+typedef StockfishEngineFactory = Future<StockfishEngineHandle> Function();
+
 class StockfishAnalyzer {
-  StockfishAnalyzer._() : this.withEngine(Stockfish.instance);
+  StockfishAnalyzer._()
+    : this.withFactory(
+        () async => _MultistockfishHandle(await Stockfish.create()),
+      );
 
   /// Allows deterministic native failure tests without loading a chess engine.
-  StockfishAnalyzer.withEngine(
-    this._engine, {
+  StockfishAnalyzer.withFactory(
+    this._createEngine, {
     this.searchTimeout = const Duration(seconds: 20),
     this.drainTimeout = const Duration(seconds: 2),
   });
 
   static final instance = StockfishAnalyzer._();
-  final Stockfish _engine;
+  final StockfishEngineFactory _createEngine;
   final Duration searchTimeout;
   final Duration drainTimeout;
+  StockfishEngineHandle? _engine;
   Future<void>? _startup;
   bool _searching = false;
   Future<void>? _closing;
@@ -52,7 +81,7 @@ class StockfishAnalyzer {
           gameAnalysisQuality: configuration,
         ),
         stop: () {
-          if (_searching) _engine.stdin = 'stop';
+          if (_searching) _engine?.stdin = 'stop';
         },
         onStopError: (error, stackTrace) => unawaited(
           AppDiagnostics.record('stockfish-stop', error, stackTrace),
@@ -72,13 +101,15 @@ class StockfishAnalyzer {
   }
 
   Future<void> _startEngine() async {
+    StockfishEngineHandle? engine;
     try {
-      await _engine.start();
+      engine = await _createEngine();
+      _engine = engine;
       final ready = Completer<void>();
       // A synchronous write failure can abandon the handshake before its
       // future is awaited. Still consume any simultaneous stream error.
       ready.future.ignore();
-      final subscription = _engine.stdout.listen(
+      final subscription = engine.stdout.listen(
         (line) {
           if (line == 'readyok' && !ready.isCompleted) ready.complete();
         },
@@ -92,10 +123,10 @@ class StockfishAnalyzer {
         },
       );
       try {
-        _engine.stdin = 'setoption name Threads value 2';
-        _engine.stdin = 'setoption name Hash value 64';
-        _engine.stdin = 'setoption name MultiPV value 2';
-        _engine.stdin = 'isready';
+        engine.stdin = 'setoption name Threads value 2';
+        engine.stdin = 'setoption name Hash value 64';
+        engine.stdin = 'setoption name MultiPV value 2';
+        engine.stdin = 'isready';
         await ready.future.timeout(const Duration(seconds: 5));
       } finally {
         await subscription.cancel();
@@ -133,6 +164,8 @@ class StockfishAnalyzer {
     if (position.game_over) return const StockfishReview(0, '(none)');
 
     await _ensureStarted();
+    final engine = _engine;
+    if (engine == null) throw StateError('Stockfish did not start');
     if (!_queue.canRunActive) throw const AnalysisCancelled();
     final completer = Completer<int>();
     var latest = 0;
@@ -140,7 +173,7 @@ class StockfishAnalyzer {
     var bestMove = '';
     final lines = <int, StockfishLine>{};
     late StreamSubscription<String> subscription;
-    subscription = _engine.stdout.listen((line) {
+    subscription = engine.stdout.listen((line) {
       if (line.startsWith('info ') && line.contains(' score ')) {
         final multiPv =
             int.tryParse(
@@ -191,9 +224,9 @@ class StockfishAnalyzer {
       }
     });
     try {
-      _engine.stdin = 'position fen $fen';
+      engine.stdin = 'position fen $fen';
       _searching = true;
-      _engine.stdin =
+      engine.stdin =
           gameAnalysisQuality?.stockfishCommand ??
           (background
               ? 'go depth 16 movetime 1500'
@@ -218,7 +251,7 @@ class StockfishAnalyzer {
       // Keep consuming output until stop is acknowledged. A dead native
       // process can also reject stop, so reset it on either failure path.
       try {
-        _engine.stdin = 'stop';
+        engine.stdin = 'stop';
         await completer.future.timeout(drainTimeout);
       } catch (_) {
         await subscription.cancel();
@@ -237,8 +270,11 @@ class StockfishAnalyzer {
 
   Future<void> _resetEngine() async {
     _startup = null;
+    final engine = _engine;
+    _engine = null;
+    if (engine == null) return;
     try {
-      await _engine.quit().timeout(const Duration(seconds: 3));
+      await engine.dispose().timeout(const Duration(seconds: 6));
     } catch (error, stackTrace) {
       unawaited(AppDiagnostics.record('stockfish-reset', error, stackTrace));
     }
@@ -250,8 +286,10 @@ class StockfishAnalyzer {
   Future<void> _closeNow() async {
     try {
       await _queue.suspend();
-      if (_startup != null) {
-        await _engine.quit().timeout(const Duration(seconds: 3));
+      final engine = _engine;
+      _engine = null;
+      if (engine != null) {
+        await engine.dispose().timeout(const Duration(seconds: 6));
       }
     } finally {
       _startup = null;

@@ -24,7 +24,7 @@ subprojects {
 val stockfishProjects =
     setOf(
         "multistockfish_chess",
-        "multistockfish_sf16",
+        "multistockfish_light",
         "multistockfish_variant",
     )
 val nativeSourceDateEpoch =
