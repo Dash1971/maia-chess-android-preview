@@ -615,6 +615,53 @@ void main() {
     expect(find.text('Second Maia analysis rating: 2200'), findsOneWidget);
   });
 
+  final invalidEnginePreferences = <String, Object>{
+    maiaPlayEloPreferenceKey: '1500',
+    maiaPlaySidePreferenceKey: 1,
+    maiaTimePresetPreferenceKey: 'unsupported',
+    maiaCustomMinutesPreferenceKey: 0,
+    maiaCustomIncrementPreferenceKey: 31,
+    'humanTiming': 'false',
+    'premovesEnabled': 1,
+    'premovePenalty': 'false',
+    'multiplePremoves': 0,
+    'temperatureV2': -0.1,
+    'topPV2': 1.1,
+    'analysisElo': 2500,
+    secondMaiaEnabledPreferenceKey: 'true',
+    secondMaiaEloPreferenceKey: 400,
+    gameAnalysisQualityPreferenceKey: 'unsupported',
+    gameSoundsPreferenceKey: 'false',
+    gameHapticsPreferenceKey: 1,
+    'chessnutBoardSounds': 'true',
+  };
+  for (final entry in invalidEnginePreferences.entries) {
+    testWidgets('invalid ${entry.key} defaults without blocking startup', (
+      tester,
+    ) async {
+      SharedPreferences.setMockInitialValues({
+        entry.key: entry.value,
+        'unrelatedPreference': 'keep',
+      });
+      await tester.pumpWidget(const MaterialApp(home: GamePage()));
+      await tester.pumpAndSettle();
+
+      final startGame = tester.widget<FilledButton>(
+        find.widgetWithText(FilledButton, 'Start game'),
+      );
+      final analysisBoard = tester.widget<OutlinedButton>(
+        find.widgetWithText(OutlinedButton, 'Analysis Board'),
+      );
+      expect(startGame.onPressed, isNotNull);
+      expect(analysisBoard.onPressed, isNotNull);
+
+      final preferences = await SharedPreferences.getInstance();
+      expect(preferences.containsKey(entry.key), isFalse);
+      expect(preferences.getString('unrelatedPreference'), 'keep');
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets('home archives but reset erases the active game', (tester) async {
     tester.view.physicalSize = const Size(800, 1000);
     tester.view.devicePixelRatio = 1;
@@ -1203,7 +1250,13 @@ void main() {
     );
     expect(find.byKey(const ValueKey('analysis-engine-lines')), findsOneWidget);
 
-    await tester.tap(find.byKey(const ValueKey('analysis-engine-toggle')));
+    final toggle = find.byKey(const ValueKey('analysis-engine-toggle'));
+    expect(tester.getSize(toggle).width, greaterThanOrEqualTo(48));
+    expect(tester.getSize(toggle).height, greaterThanOrEqualTo(48));
+    expect(tester.widget<Text>(find.text('SF')).maxLines, 1);
+    expect(tester.widget<Text>(find.text('SF')).softWrap, isFalse);
+
+    await tester.tap(toggle);
     await tester.pump();
     expect(find.byKey(const ValueKey('analysis-engine-lines')), findsNothing);
     expect(
@@ -1215,6 +1268,39 @@ void main() {
     board.onMove!(dc.NormalMove.fromUci('e2e4'));
     await tester.pump();
     expect(board.controller.fen, isNot(chess.Chess.DEFAULT_POSITION));
+  });
+
+  testWidgets('analysis engine toggle stays on one line at 200% text scale', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(textScaler: TextScaler.linear(2)),
+        child: MaterialApp(
+          home: ReviewPage(
+            positions: const [chess.Chess.DEFAULT_POSITION],
+            uciMoves: const [],
+            sanMoves: const [],
+            playerIsWhite: true,
+            pgn: '*',
+            onHome: () {},
+            evaluator: (_) async => const StockfishReview(25, 'e2e4'),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final toggle = find.byKey(const ValueKey('analysis-engine-toggle'));
+    expect(tester.getSize(toggle).width, greaterThanOrEqualTo(48));
+    expect(tester.getSize(toggle).height, greaterThanOrEqualTo(48));
+    expect(find.text('SF'), findsOneWidget);
+    expect(tester.widget<Text>(find.text('SF')).maxLines, 1);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('full-game computer analysis can be stopped', (tester) async {
@@ -2080,56 +2166,55 @@ void main() {
     expect(find.text('c4 100%'), findsNothing);
   });
 
-  testWidgets(
-    'Maia probabilities wrap on compact large-text layouts',
-    (tester) async {
-      tester.view.physicalSize = const Size(320, 568);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      final policy = List<double>.filled(4352, 0);
-      policy[MaiaEncoding.moveIndex('e2e4', false)] = 4;
-      policy[MaiaEncoding.moveIndex('g1f3', false)] = 3;
-      policy[MaiaEncoding.moveIndex('d2d4', false)] = 2;
-      policy[MaiaEncoding.moveIndex('h2h3', false)] = 1;
-      await tester.pumpWidget(
-        MaterialApp(
-          builder: (context, child) => MediaQuery(
-            data: MediaQuery.of(context)
-                .copyWith(textScaler: const TextScaler.linear(1.6)),
-            child: child!,
-          ),
-          home: ReviewPage(
-            positions: const [chess.Chess.DEFAULT_POSITION],
-            uciMoves: const [],
-            sanMoves: const [],
-            playerIsWhite: true,
-            pgn: '*',
-            onHome: () {},
-            evaluator: (_) async => const StockfishReview(20, 'e2e4'),
-            maiaPolicyEvaluator: (_, _) async => policy,
-          ),
+  testWidgets('Maia probabilities wrap on compact large-text layouts', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 568);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final policy = List<double>.filled(4352, 0);
+    policy[MaiaEncoding.moveIndex('e2e4', false)] = 4;
+    policy[MaiaEncoding.moveIndex('g1f3', false)] = 3;
+    policy[MaiaEncoding.moveIndex('d2d4', false)] = 2;
+    policy[MaiaEncoding.moveIndex('h2h3', false)] = 1;
+    await tester.pumpWidget(
+      MaterialApp(
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.6)),
+          child: child!,
         ),
-      );
-      await tester.pumpAndSettle();
+        home: ReviewPage(
+          positions: const [chess.Chess.DEFAULT_POSITION],
+          uciMoves: const [],
+          sanMoves: const [],
+          playerIsWhite: true,
+          pgn: '*',
+          onHome: () {},
+          evaluator: (_) async => const StockfishReview(20, 'e2e4'),
+          maiaPolicyEvaluator: (_, _) async => policy,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
 
-      await tester.ensureVisible(
-        find.byKey(const ValueKey('analysis-engine-lines')),
-      );
-      expect(find.text('e4 54%'), findsOneWidget);
-      expect(find.text('Other 19%'), findsOneWidget);
-      final rowCenters = [
-        'M1600',
-        'e4 54%',
-        'Nf3 20%',
-        'd4 7%',
-        'Other 19%',
-      ].map((text) => tester.getCenter(find.text(text)).dy).toList();
-      rowCenters.sort();
-      expect(rowCenters.last - rowCenters.first, greaterThan(1));
-      expect(tester.takeException(), isNull);
-    },
-  );
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('analysis-engine-lines')),
+    );
+    expect(find.text('e4 54%'), findsOneWidget);
+    expect(find.text('Other 19%'), findsOneWidget);
+    final rowCenters = [
+      'M1600',
+      'e4 54%',
+      'Nf3 20%',
+      'd4 7%',
+      'Other 19%',
+    ].map((text) => tester.getCenter(find.text(text)).dy).toList();
+    rowCenters.sort();
+    expect(rowCenters.last - rowCenters.first, greaterThan(1));
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets(
     'optional second Maia engine shows an independent probability row',

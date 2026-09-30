@@ -36,11 +36,11 @@ libraries because the NDK otherwise gives byte-identical native code different
 inputs, preventing a stale native cache from retaining an older `__DATE__`
 value.
 
-The pinned `multistockfish_sf16` package downloads its Stockfish 16 NNUE network
-during CMake configuration. Before every release build, Mobile Maia applies a
-narrowly guarded patch to that exact package version and source line. CMake must
-verify SHA-256
-`5af11540bbfefcb54e38c5dd000cab4b469dfa7599a1d55be5d2722c20a8929b`
+The pinned `multistockfish_light` package downloads the Stockfish 19 Light NNUE
+network during CMake configuration. Before every release build, Mobile Maia
+applies a narrowly guarded patch to that exact package version and source line.
+CMake must verify SHA-256
+`61e7af4bb97d51eeeb25d322916f86513b5cd3a827ce189c98c6e31946f99e5b`
 and fail the build if the download is incomplete or different. This prevents a
 partial network response from being embedded into only one ABI's native
 library.

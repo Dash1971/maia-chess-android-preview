@@ -2532,7 +2532,9 @@ class _ReviewPageState extends State<ReviewPage>
       onNext: () => _step(1),
       onLast: _jumpToEnd,
       endTooltip: 'end position',
-      headerActionWidth: 56,
+      headerActionWidth: MediaQuery.textScalerOf(context).scale(1) > 1.3
+          ? 84
+          : 56,
       headerActions: [
         IconButton(
           key: const ValueKey('analysis-actions-menu'),
@@ -2548,23 +2550,36 @@ class _ReviewPageState extends State<ReviewPage>
         ),
         Tooltip(
           message: _engineEnabled ? 'Turn engine off' : 'Turn engine on',
-          child: TextButton.icon(
+          child: TextButton(
             key: const ValueKey('analysis-engine-toggle'),
             onPressed: _toggleAnalysisEngine,
-            icon: Icon(
-              Icons.power_settings_new,
-              color: _engineEnabled
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.onSurfaceVariant,
+            style: TextButton.styleFrom(
+              minimumSize: const Size(56, 48),
+              padding: const EdgeInsets.symmetric(horizontal: 2),
             ),
-            label: Text(
-              'SF',
-              style: TextStyle(
-                color: _engineEnabled
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w700,
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.power_settings_new,
+                  size: 18,
+                  color: _engineEnabled
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: 2),
+                Text(
+                  'SF',
+                  maxLines: 1,
+                  softWrap: false,
+                  style: TextStyle(
+                    color: _engineEnabled
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

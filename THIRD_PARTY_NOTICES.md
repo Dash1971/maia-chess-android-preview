@@ -79,9 +79,9 @@ from the links above. The conversion tool is included in
 - multistockfish: <https://github.com/lichess-org/dart-multistockfish>
 - Licence: GNU General Public License v3.0
 
-The Android application uses the Stockfish 16 engine provided by multistockfish.
-Corresponding source and build instructions are available in the linked
-repositories.
+The Android application uses Stockfish 19 Light through multistockfish 0.6.1
+and its multistockfish_light 0.1.0 native package. Corresponding source and
+build instructions are available in the linked repositories.
 
 ## Flutter Chessground
 
