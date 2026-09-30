@@ -181,8 +181,8 @@ Game Review's move-classification and sacrifice-detection heuristics are
 adapted and translated to Dart from
 [En Croissant](https://github.com/franciscoBSalgueiro/en-croissant), the
 open-source chess GUI by Francisco Salgueiro and contributors. Mobile Maia
-retains the upstream classification rules while adding bounded search,
-background-isolate execution, and its own review integration. The pinned
+retains the upstream classification rules while adding background-isolate
+execution and its own review integration. The pinned
 upstream revision and licence details are recorded in
 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 

@@ -39,12 +39,10 @@ class MoveClassifier {
   // Adapted and translated to Dart from En Croissant v0.15.0's GPL-3.0
   // move-annotation and sacrifice-detection code:
   // https://github.com/franciscoBSalgueiro/en-croissant
-  // Mobile Maia adds bounded search, background-isolate execution, and its
-  // own review data/UI integration. See THIRD_PARTY_NOTICES.md.
-  // This is a visual annotation heuristic, not the engine evaluation. Keep the
-  // quiescence probe deliberately small so a long review can never monopolize
-  // the UI; classification itself also runs outside the main isolate.
-  static const _captureSearchNodeLimit = 64;
+  // Mobile Maia adds background-isolate execution and its own review data/UI
+  // integration. The capture search must examine every legal root move, as in
+  // En Croissant; a shared node cap changes the sacrifice classification.
+  // See THIRD_PARTY_NOTICES.md.
 
   static Future<List<ClassifiedMove>> classifyOffMainIsolate({
     required List<StockfishReview> scores,
@@ -73,9 +71,7 @@ class MoveClassifier {
       min(max(0, scores.length - 1), max(0, positions.length - 1)),
     );
     final result = <ClassifiedMove>[];
-    final materialEvaluator = _NaiveMaterialEvaluator(
-      nodeLimit: _captureSearchNodeLimit,
-    );
+    final materialEvaluator = _NaiveMaterialEvaluator();
     for (var ply = 1; ply <= count; ply++) {
       final whiteMoved = positions[ply - 1].split(' ')[1] == 'w';
       final previous = _normalized(scores[ply - 1], whiteMoved);
@@ -158,21 +154,20 @@ class MoveClassifier {
     return before > after + 100;
   }
 
-  static int _materialForTurn(String fen) {
-    const values = {'p': 90, 'n': 300, 'b': 300, 'r': 500, 'q': 1000};
+  static int _materialForTurn(chess.Chess position) {
     var white = 0;
     var black = 0;
-    for (final rune in fen.split(' ').first.runes) {
-      final piece = String.fromCharCode(rune);
-      final value = values[piece.toLowerCase()] ?? 0;
-      if (piece == piece.toUpperCase()) {
+    for (final piece in position.board) {
+      if (piece == null) continue;
+      final value = _pieceValue(piece.type);
+      if (piece.color == chess.Color.WHITE) {
         white += value;
       } else {
         black += value;
       }
     }
     final score = white - black;
-    return fen.split(' ')[1] == 'w' ? score : -score;
+    return position.turn == chess.Color.WHITE ? score : -score;
   }
 
   static int _pieceValue(chess.PieceType piece) => switch (piece.name) {
@@ -185,9 +180,6 @@ class MoveClassifier {
 }
 
 class _NaiveMaterialEvaluator {
-  _NaiveMaterialEvaluator({required this.nodeLimit});
-
-  final int nodeLimit;
   final Map<String, int> _cache = {};
 
   int evaluate(String fen) => _cache.putIfAbsent(fen, () {
@@ -197,25 +189,20 @@ class _NaiveMaterialEvaluator {
         .cast<chess.Move>()
         .toList(growable: false);
     if (moves.isEmpty) return position.in_checkmate ? -10000 : 0;
-    final budget = _CaptureSearchBudget(nodeLimit);
     var best = -10000;
     for (final move in moves) {
-      final next = chess.Chess.fromFEN(position.fen)..move(move);
-      best = max(best, -_captureSearch(next, -10000, 10000, budget));
-      if (budget.exhausted) break;
+      // The move is already legal; avoid regenerating legal moves at each
+      // capture node. This is the chess.dart equivalent of play_unchecked.
+      position.make_move(move);
+      best = max(best, -_captureSearch(position, -10000, 10000));
+      position.undo_move();
     }
     return best;
   });
 
-  int _captureSearch(
-    chess.Chess position,
-    int alpha,
-    int beta,
-    _CaptureSearchBudget budget,
-  ) {
+  int _captureSearch(chess.Chess position, int alpha, int beta) {
     var lower = alpha;
-    final standPat = MoveClassifier._materialForTurn(position.fen);
-    if (!budget.takeNode()) return standPat;
+    final standPat = MoveClassifier._materialForTurn(position);
     if (standPat >= beta) return beta;
     lower = max(lower, standPat);
     final captures =
@@ -230,26 +217,13 @@ class _NaiveMaterialEvaluator {
                     .compareTo(MoveClassifier._pieceValue(a.captured!)),
           );
     for (final capture in captures) {
-      final next = chess.Chess.fromFEN(position.fen)..move(capture);
-      final value = -_captureSearch(next, -beta, -lower, budget);
+      position.make_move(capture);
+      final value = -_captureSearch(position, -beta, -lower);
+      position.undo_move();
       if (value >= beta) return beta;
       lower = max(lower, value);
-      if (budget.exhausted) break;
     }
     return lower;
-  }
-}
-
-class _CaptureSearchBudget {
-  _CaptureSearchBudget(this.remaining);
-
-  int remaining;
-  bool get exhausted => remaining <= 0;
-
-  bool takeNode() {
-    if (remaining <= 0) return false;
-    remaining--;
-    return true;
   }
 }
 

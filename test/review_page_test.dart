@@ -1083,6 +1083,59 @@ void main() {
     expect(classifications.single.classification, MoveClassification.brilliant);
   });
 
+  test('Fischer 17...Be6 queen offer is brilliant, as in En Croissant', () {
+    // Byrne–Fischer, 1956. The former 64-node capture limit stopped before
+    // examining most legal replies and misclassified this move as Good.
+    const before =
+        'r3r1k1/pp3pbp/1qp3p1/2B5/2BP2b1/Q1n2N2/P4PPP/3R1K1R b - - 3 17';
+    final game = chess.Chess.fromFEN(before);
+    final move = game
+        .moves({'asObjects': true})
+        .cast<chess.Move>()
+        .firstWhere((candidate) => MaiaEncoding.uci(candidate) == 'g4e6');
+    expect(game.move(move), isTrue);
+
+    final classifications = MoveClassifier.classify(
+      scores: const [
+        StockfishReview(
+          -305,
+          'g4e6',
+          lines: [
+            StockfishLine(evaluation: -305, moves: ['g4e6']),
+            StockfishLine(evaluation: 97, moves: ['c3b5']),
+          ],
+        ),
+        StockfishReview(-305, ''),
+      ],
+      positions: [before, game.fen],
+      uciMoves: const ['g4e6'],
+    );
+
+    expect(classifications.single.classification, MoveClassification.brilliant);
+  });
+
+  test('a unique best quiet move is not mislabeled brilliant', () {
+    const before = chess.Chess.DEFAULT_POSITION;
+    final game = chess.Chess()..move('e4');
+    final classifications = MoveClassifier.classify(
+      scores: const [
+        StockfishReview(
+          300,
+          'e2e4',
+          lines: [
+            StockfishLine(evaluation: 300, moves: ['e2e4']),
+            StockfishLine(evaluation: -300, moves: ['d2d4']),
+          ],
+        ),
+        StockfishReview(300, ''),
+      ],
+      positions: [before, game.fen],
+      uciMoves: const ['e2e4'],
+    );
+
+    expect(classifications.single.classification, MoveClassification.good);
+  });
+
   test('game phases use position features instead of fixed move numbers', () {
     const opening = chess.Chess.DEFAULT_POSITION;
     const middlegame = 'rn1qk1nr/pppppppp/8/8/8/8/PPPPPPPP/RN1QK1NR w - - 0 1';

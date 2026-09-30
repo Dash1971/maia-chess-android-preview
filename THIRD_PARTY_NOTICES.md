@@ -53,8 +53,8 @@ The EasyLinkSDK licence notice follows:
 
 Mobile Maia's Game Review move-classification and sacrifice-detection
 heuristics are adapted and translated to Dart from the linked En Croissant
-source. Mobile Maia modifies the upstream implementation with bounded search,
-background-isolate execution, and app-specific review integration. The
+source. Mobile Maia modifies the upstream implementation with
+background-isolate execution and app-specific review integration. The
 adapted code remains subject to GPL-3.0; Mobile Maia as a combined application
 is distributed under AGPL-3.0-only as permitted by section 13 of AGPL-3.0.
 
