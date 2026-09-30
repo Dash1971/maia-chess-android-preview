@@ -454,7 +454,14 @@ class ChessnutBridge(
     private fun handleNotification(uuid: UUID, value: ByteArray) {
         mainHandler.post {
             if (uuid == DATA_UUID && value.size >= 32) {
-                emit(mapOf("type" to "position", "data" to value.map { it.toInt() and 0xff }))
+                emit(
+                    mapOf(
+                        "type" to "position",
+                        "data" to value.map { it.toInt() and 0xff },
+                        "nativeReady" to ready,
+                        "gattPresent" to (gatt != null),
+                    )
+                )
             } else if (uuid == CONFIRM_UUID &&
                 value.size >= 4 && value[0] == 0x2a.toByte() && value[1] == 0x02.toByte()
             ) {
@@ -641,13 +648,30 @@ class ChessnutBridge(
     ) {
         state = newState
         stateMessage = message
+        val errorDiagnostic = if (newState == "error") {
+            // Only fixed categories enter exported diagnostics; exception text
+            // and Bluetooth device names remain in the UI event only.
+            val reason = when {
+                message.startsWith("Chessnut scan failed") -> "scan-failed"
+                message.startsWith("Chessnut connection failed") -> "connection-failed"
+                message.startsWith("Chessnut service discovery failed") -> "service-discovery-failed"
+                message.startsWith("Chessnut command failed") -> "command-failed"
+                message == "Could not send a command to Chessnut." -> "write-not-started"
+                message.startsWith("Could not enable Chessnut notifications") -> "notification-setup-failed"
+                else -> "other-native-error"
+            }
+            "errorSource=native reason=$reason nativeReady=$ready gattPresent=${gatt != null}"
+        } else {
+            null
+        }
         emit(
             buildMap<String, Any> {
                 put("type", "status")
                 put("state", newState)
                 put("message", message)
                 if (name != null) put("deviceName", name)
-                if (diagnostic != null) put("diagnostic", diagnostic)
+                val details = listOfNotNull(errorDiagnostic, diagnostic).joinToString(" ")
+                if (details.isNotEmpty()) put("diagnostic", details)
             }
         )
     }

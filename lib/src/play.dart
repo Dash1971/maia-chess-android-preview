@@ -1477,6 +1477,9 @@ class _GamePageState extends State<GamePage>
     if (nextState == null) return;
     if (nextState != _chessnutState) {
       _chessnutLeds.invalidate();
+    }
+    if (nextState != _chessnutState ||
+        nextState == ElectronicBoardConnectionState.error) {
       final detail = event.diagnostic;
       unawaited(
         AppDiagnostics.recordEvent(
