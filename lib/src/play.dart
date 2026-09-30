@@ -1,5 +1,54 @@
 part of '../main.dart';
 
+T _readValidatedPreference<T>(
+  SharedPreferences preferences,
+  String key, {
+  required T fallback,
+  required T? Function(Object value) decode,
+}) {
+  Object? stored;
+  try {
+    stored = preferences.get(key);
+  } catch (error, stackTrace) {
+    unawaited(
+      _removeInvalidPreference(
+        preferences,
+        key,
+        readError: error,
+        readStackTrace: stackTrace,
+      ),
+    );
+    return fallback;
+  }
+  if (stored == null) return fallback;
+
+  final decoded = decode(stored);
+  if (decoded != null) return decoded;
+  unawaited(_removeInvalidPreference(preferences, key));
+  return fallback;
+}
+
+Future<void> _removeInvalidPreference(
+  SharedPreferences preferences,
+  String key, {
+  Object? readError,
+  StackTrace? readStackTrace,
+}) async {
+  if (readError != null) {
+    await AppDiagnostics.record(
+      'preference-read:$key',
+      readError,
+      readStackTrace ?? StackTrace.current,
+    );
+  }
+  try {
+    await preferences.remove(key);
+  } catch (error, stackTrace) {
+    await AppDiagnostics.record('preference-remove:$key', error, stackTrace);
+  }
+  await AppDiagnostics.recordEvent('invalid-preference-reset:$key');
+}
+
 class GamePage extends StatefulWidget {
   const GamePage({
     this.startingFen,
@@ -735,34 +784,144 @@ class _GamePageState extends State<GamePage>
   Future<void> _loadEnginePreferences() async {
     final preferences = await SharedPreferences.getInstance();
     if (!mounted) return;
-    final savedPlayElo = preferences.getInt(maiaPlayEloPreferenceKey);
-    final savedSide = PlayerSide.values
-        .where(
-          (value) =>
-              value.name == preferences.getString(maiaPlaySidePreferenceKey),
-        )
-        .firstOrNull;
-    final savedTimePreset = TimePreset.values
-        .where(
-          (value) =>
-              value.name == preferences.getString(maiaTimePresetPreferenceKey),
-        )
-        .firstOrNull;
-    final savedCustomMinutes =
-        (preferences.getInt(maiaCustomMinutesPreferenceKey) ?? 10).clamp(1, 60);
-    final savedCustomIncrement =
-        (preferences.getInt(maiaCustomIncrementPreferenceKey) ?? 0).clamp(
-          0,
-          30,
-        );
+    final savedPlayElo = _readValidatedPreference<int>(
+      preferences,
+      maiaPlayEloPreferenceKey,
+      fallback: 1500,
+      decode: (value) =>
+          value is int && value >= 500 && value <= 2500 ? value : null,
+    );
+    final savedSide = _readValidatedPreference<PlayerSide>(
+      preferences,
+      maiaPlaySidePreferenceKey,
+      fallback: PlayerSide.white,
+      decode: (value) => value is String
+          ? PlayerSide.values.where((side) => side.name == value).firstOrNull
+          : null,
+    );
+    final savedTimePreset = _readValidatedPreference<TimePreset>(
+      preferences,
+      maiaTimePresetPreferenceKey,
+      fallback: TimePreset.unlimited,
+      decode: (value) => value is String
+          ? TimePreset.values
+                .where((preset) => preset.name == value)
+                .firstOrNull
+          : null,
+    );
+    final savedCustomMinutes = _readValidatedPreference<int>(
+      preferences,
+      maiaCustomMinutesPreferenceKey,
+      fallback: 10,
+      decode: (value) =>
+          value is int && value >= 1 && value <= 60 ? value : null,
+    );
+    final savedCustomIncrement = _readValidatedPreference<int>(
+      preferences,
+      maiaCustomIncrementPreferenceKey,
+      fallback: 0,
+      decode: (value) =>
+          value is int && value >= 0 && value <= 30 ? value : null,
+    );
+    final humanTiming = _readValidatedPreference<bool>(
+      preferences,
+      'humanTiming',
+      fallback: false,
+      decode: (value) => value is bool ? value : null,
+    );
+    final premovesEnabled = _readValidatedPreference<bool>(
+      preferences,
+      'premovesEnabled',
+      fallback: true,
+      decode: (value) => value is bool ? value : null,
+    );
+    final premovePenalty = _readValidatedPreference<bool>(
+      preferences,
+      'premovePenalty',
+      fallback: false,
+      decode: (value) => value is bool ? value : null,
+    );
+    final multiplePremoves = _readValidatedPreference<bool>(
+      preferences,
+      'multiplePremoves',
+      fallback: false,
+      decode: (value) => value is bool ? value : null,
+    );
+    final temperature = _readValidatedPreference<double>(
+      preferences,
+      'temperatureV2',
+      fallback: 0.5,
+      decode: (value) =>
+          value is double && value.isFinite && value >= 0.0 && value <= 1.0
+          ? value
+          : null,
+    );
+    final topP = _readValidatedPreference<double>(
+      preferences,
+      'topPV2',
+      fallback: 0.9,
+      decode: (value) =>
+          value is double && value.isFinite && value >= 0.0 && value <= 1.0
+          ? value
+          : null,
+    );
+    final analysisElo = _readValidatedPreference<int>(
+      preferences,
+      'analysisElo',
+      fallback: 1600,
+      decode: (value) =>
+          value is int && value >= 500 && value <= 2400 ? value : null,
+    );
+    final secondMaiaEnabled = _readValidatedPreference<bool>(
+      preferences,
+      secondMaiaEnabledPreferenceKey,
+      fallback: false,
+      decode: (value) => value is bool ? value : null,
+    );
+    final secondMaiaElo = _readValidatedPreference<int>(
+      preferences,
+      secondMaiaEloPreferenceKey,
+      fallback: 2400,
+      decode: (value) =>
+          value is int && value >= 500 && value <= 2400 ? value : null,
+    );
+    final gameAnalysisQuality = _readValidatedPreference<GameAnalysisQuality>(
+      preferences,
+      gameAnalysisQualityPreferenceKey,
+      fallback: GameAnalysisQuality.thorough,
+      decode: (value) => value is String
+          ? GameAnalysisQuality.values
+                .where((quality) => quality.name == value)
+                .firstOrNull
+          : null,
+    );
+    final gameSoundsEnabled = _readValidatedPreference<bool>(
+      preferences,
+      gameSoundsPreferenceKey,
+      fallback: false,
+      decode: (value) => value is bool ? value : null,
+    );
+    final gameHapticsEnabled = _readValidatedPreference<bool>(
+      preferences,
+      gameHapticsPreferenceKey,
+      fallback: true,
+      decode: (value) => value is bool ? value : null,
+    );
+    final chessnutSoundsEnabled = _readValidatedPreference<bool>(
+      preferences,
+      'chessnutBoardSounds',
+      fallback: true,
+      decode: (value) => value is bool ? value : null,
+    );
+    if (!mounted) return;
     setState(() {
       if (widget.startingElo == null && !_playEloChangedSinceLoad) {
-        _elo = (savedPlayElo ?? 1500).clamp(500, 2500);
+        _elo = savedPlayElo;
       }
       if (widget.startingSide == null) {
-        _sideChoice = savedSide ?? PlayerSide.white;
+        _sideChoice = savedSide;
       }
-      _preferredTimePreset = savedTimePreset ?? TimePreset.unlimited;
+      _preferredTimePreset = savedTimePreset;
       _preferredCustomMinutes = savedCustomMinutes;
       _preferredCustomIncrement = savedCustomIncrement;
       _timePreset = _useChessnutGo
@@ -770,29 +929,19 @@ class _GamePageState extends State<GamePage>
           : _preferredTimePreset;
       _customMinutes = _preferredCustomMinutes;
       _customIncrement = _preferredCustomIncrement;
-      _humanTiming = preferences.getBool('humanTiming') ?? false;
-      _premovesEnabled = preferences.getBool('premovesEnabled') ?? true;
-      _premovePenalty = preferences.getBool('premovePenalty') ?? false;
-      _multiplePremoves = preferences.getBool('multiplePremoves') ?? false;
-      _temperature = (preferences.getDouble('temperatureV2') ?? 0.5).clamp(
-        0.0,
-        1.0,
-      );
-      _topP = (preferences.getDouble('topPV2') ?? 0.9).clamp(0.0, 1.0);
-      _analysisElo = preferences.getInt('analysisElo') ?? 1600;
-      _secondMaiaEnabled =
-          preferences.getBool(secondMaiaEnabledPreferenceKey) ?? false;
-      _secondMaiaElo = (preferences.getInt(secondMaiaEloPreferenceKey) ?? 2400)
-          .clamp(500, 2400);
-      _gameAnalysisQuality = GameAnalysisQuality.fromStoredName(
-        preferences.getString(gameAnalysisQualityPreferenceKey),
-      );
-      _gameSoundsEnabled =
-          preferences.getBool(gameSoundsPreferenceKey) ?? false;
-      _gameHapticsEnabled =
-          preferences.getBool(gameHapticsPreferenceKey) ?? true;
-      _chessnutSoundsEnabled =
-          preferences.getBool('chessnutBoardSounds') ?? true;
+      _humanTiming = humanTiming;
+      _premovesEnabled = premovesEnabled;
+      _premovePenalty = premovePenalty;
+      _multiplePremoves = multiplePremoves;
+      _temperature = temperature;
+      _topP = topP;
+      _analysisElo = analysisElo;
+      _secondMaiaEnabled = secondMaiaEnabled;
+      _secondMaiaElo = secondMaiaElo;
+      _gameAnalysisQuality = gameAnalysisQuality;
+      _gameSoundsEnabled = gameSoundsEnabled;
+      _gameHapticsEnabled = gameHapticsEnabled;
+      _chessnutSoundsEnabled = chessnutSoundsEnabled;
     });
   }
 
