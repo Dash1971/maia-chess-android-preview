@@ -1403,6 +1403,56 @@ void main() {
     expect(find.byType(AnalysisGraph), findsNothing);
   });
 
+  testWidgets('graph-ready classification exposes Stop and keeps the graph', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final game = chess.Chess()..move('e4');
+    final stalled = Completer<List<ClassifiedMove>>();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ReviewPage(
+          positions: [chess.Chess.DEFAULT_POSITION, game.fen],
+          uciMoves: const ['e2e4'],
+          sanMoves: const ['e4'],
+          playerIsWhite: true,
+          pgn: '1. e4 *',
+          onHome: () {},
+          evaluator: (_) async => const StockfishReview(0, 'e2e4'),
+          classifier: ({
+            required scores,
+            required positions,
+            required uciMoves,
+          }) => stalled.future,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Computer analysis'));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('run-computer-analysis')));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.byType(AnalysisGraph), findsOneWidget);
+    expect(find.text('Graph ready · classifying moves…'), findsOneWidget);
+    final stop = find.byKey(const ValueKey('cancel-computer-analysis'));
+    expect(stop, findsOneWidget);
+    await tester.ensureVisible(stop);
+    await tester.pump();
+    await tester.tap(stop);
+    await tester.pump();
+    expect(find.byType(AnalysisGraph), findsOneWidget);
+    expect(find.text('Computer analysis stopped.'), findsWidgets);
+
+    stalled.complete(const []);
+    await tester.pumpAndSettle();
+    expect(find.byType(AnalysisGraph), findsOneWidget);
+  });
+
   test('accuracy is computed separately for White and Black', () {
     final accuracy = GameAccuracy.fromScores(const [
       StockfishReview(0, ''),

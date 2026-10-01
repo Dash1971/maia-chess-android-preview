@@ -35,6 +35,134 @@ class ClassifiedMove {
   bool get whiteMoved => moverIsWhite ?? ply.isOdd;
 }
 
+class MoveClassificationCancelled implements Exception {
+  const MoveClassificationCancelled();
+}
+
+class _MoveClassificationRequest {
+  const _MoveClassificationRequest(
+    this.reply,
+    this.scores,
+    this.positions,
+    this.uciMoves,
+  );
+
+  final SendPort reply;
+  final List<StockfishReview> scores;
+  final List<String> positions;
+  final List<String> uciMoves;
+}
+
+void _runMoveClassification(_MoveClassificationRequest request) {
+  final result = MoveClassifier.classify(
+    scores: request.scores,
+    positions: request.positions,
+    uciMoves: request.uciMoves,
+  );
+  request.reply.send([0, result]);
+}
+
+/// Owns an isolate so leaving Review can stop an unfinished capture search.
+class MoveClassificationJob {
+  MoveClassificationJob._(this._messages) {
+    _subscription = _messages?.listen(_onMessage);
+  }
+
+  final ReceivePort? _messages;
+  final Completer<List<ClassifiedMove>> _result = Completer();
+  final Completer<void> _started = Completer();
+  final Completer<void> _terminated = Completer();
+  StreamSubscription<dynamic>? _subscription;
+  Isolate? _isolate;
+  bool _cancelled = false;
+
+  Future<List<ClassifiedMove>> get result => _result.future;
+  Future<void> get started => _started.future;
+  Future<void> get terminated => _terminated.future;
+
+  static MoveClassificationJob completed(List<ClassifiedMove> result) {
+    final job = MoveClassificationJob._(null);
+    job._result.complete(result);
+    job._started.complete();
+    job._terminated.complete();
+    return job;
+  }
+
+  static MoveClassificationJob spawn({
+    required List<StockfishReview> scores,
+    required List<String> positions,
+    required List<String> uciMoves,
+  }) {
+    final job = MoveClassificationJob._(ReceivePort());
+    unawaited(job._spawn(scores, positions, uciMoves));
+    return job;
+  }
+
+  Future<void> _spawn(
+    List<StockfishReview> scores,
+    List<String> positions,
+    List<String> uciMoves,
+  ) async {
+    try {
+      final port = _messages!.sendPort;
+      final isolate = await Isolate.spawn<_MoveClassificationRequest>(
+        _runMoveClassification,
+        _MoveClassificationRequest(port, scores, positions, uciMoves),
+        onError: port,
+        onExit: port,
+      );
+      _isolate = isolate;
+      _started.complete();
+      if (_cancelled || _terminated.isCompleted) {
+        isolate.kill(priority: Isolate.immediate);
+      }
+    } catch (error, stackTrace) {
+      _started.complete();
+      if (!_result.isCompleted) _result.completeError(error, stackTrace);
+      _finish();
+    }
+  }
+
+  void _onMessage(dynamic message) {
+    if (message == null) {
+      if (!_result.isCompleted) {
+        _result.completeError(StateError('Move classifier exited early.'));
+      }
+      _finish();
+    } else if (message is List && message.length == 2 && message[0] == 0) {
+      if (!_result.isCompleted) {
+        _result.complete(
+          List<ClassifiedMove>.unmodifiable(
+            (message[1] as List).cast<ClassifiedMove>(),
+          ),
+        );
+      }
+    } else if (message is List && message.length == 2) {
+      if (!_result.isCompleted) {
+        _result.completeError(
+          StateError('Move classifier failed: ${message[0]}'),
+        );
+      }
+    }
+  }
+
+  void cancel() {
+    if (_terminated.isCompleted) return;
+    _cancelled = true;
+    if (!_result.isCompleted) {
+      _result.completeError(const MoveClassificationCancelled());
+    }
+    _isolate?.kill(priority: Isolate.immediate);
+  }
+
+  void _finish() {
+    _isolate = null;
+    _subscription?.cancel();
+    _messages?.close();
+    if (!_terminated.isCompleted) _terminated.complete();
+  }
+}
+
 class MoveClassifier {
   // Adapted and translated to Dart from En Croissant v0.15.0's GPL-3.0
   // move-annotation and sacrifice-detection code:
@@ -48,16 +176,28 @@ class MoveClassifier {
     required List<StockfishReview> scores,
     required List<String> positions,
     required List<String> uciMoves,
+  }) => startOffMainIsolate(
+    scores: scores,
+    positions: positions,
+    uciMoves: uciMoves,
+  ).result;
+
+  static MoveClassificationJob startOffMainIsolate({
+    required List<StockfishReview> scores,
+    required List<String> positions,
+    required List<String> uciMoves,
   }) {
     // Threshold-only classification is cheap and common in injected tests or
     // engines without MultiPV. The sacrifice heuristic is the expensive part.
     if (!scores.any((score) => score.lines.length > 1)) {
-      return Future.value(
+      return MoveClassificationJob.completed(
         classify(scores: scores, positions: positions, uciMoves: uciMoves),
       );
     }
-    return Isolate.run(
-      () => classify(scores: scores, positions: positions, uciMoves: uciMoves),
+    return MoveClassificationJob.spawn(
+      scores: scores,
+      positions: positions,
+      uciMoves: uciMoves,
     );
   }
 
