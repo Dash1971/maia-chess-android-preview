@@ -45,21 +45,28 @@ class _MoveClassificationRequest {
     this.scores,
     this.positions,
     this.uciMoves,
+    this.requireReliableComparisons,
+    this.materialCache,
   );
 
   final SendPort reply;
   final List<StockfishReview> scores;
   final List<String> positions;
   final List<String> uciMoves;
+  final bool requireReliableComparisons;
+  final Map<String, int> materialCache;
 }
 
 void _runMoveClassification(_MoveClassificationRequest request) {
+  final materialCache = Map<String, int>.of(request.materialCache);
   final result = MoveClassifier.classify(
     scores: request.scores,
     positions: request.positions,
     uciMoves: request.uciMoves,
+    requireReliableComparisons: request.requireReliableComparisons,
+    materialCache: materialCache,
   );
-  request.reply.send([0, result]);
+  request.reply.send([0, result, materialCache]);
 }
 
 /// Owns an isolate so leaving Review can stop an unfinished capture search.
@@ -75,13 +82,21 @@ class MoveClassificationJob {
   StreamSubscription<dynamic>? _subscription;
   Isolate? _isolate;
   bool _cancelled = false;
+  Map<String, int> _materialCache = const {};
 
   Future<List<ClassifiedMove>> get result => _result.future;
   Future<void> get started => _started.future;
   Future<void> get terminated => _terminated.future;
 
-  static MoveClassificationJob completed(List<ClassifiedMove> result) {
+  /// Per-run material values, available once [result] completes successfully.
+  Map<String, int> get materialCache => _materialCache;
+
+  static MoveClassificationJob completed(
+    List<ClassifiedMove> result, {
+    Map<String, int>? materialCache,
+  }) {
     final job = MoveClassificationJob._(null);
+    job._materialCache = Map.unmodifiable(materialCache ?? const {});
     job._result.complete(result);
     job._started.complete();
     job._terminated.complete();
@@ -92,9 +107,19 @@ class MoveClassificationJob {
     required List<StockfishReview> scores,
     required List<String> positions,
     required List<String> uciMoves,
+    bool requireReliableComparisons = true,
+    Map<String, int>? materialCache,
   }) {
     final job = MoveClassificationJob._(ReceivePort());
-    unawaited(job._spawn(scores, positions, uciMoves));
+    unawaited(
+      job._spawn(
+        scores,
+        positions,
+        uciMoves,
+        requireReliableComparisons,
+        Map.of(materialCache ?? const {}),
+      ),
+    );
     return job;
   }
 
@@ -102,12 +127,21 @@ class MoveClassificationJob {
     List<StockfishReview> scores,
     List<String> positions,
     List<String> uciMoves,
+    bool requireReliableComparisons,
+    Map<String, int> materialCache,
   ) async {
     try {
       final port = _messages!.sendPort;
       final isolate = await Isolate.spawn<_MoveClassificationRequest>(
         _runMoveClassification,
-        _MoveClassificationRequest(port, scores, positions, uciMoves),
+        _MoveClassificationRequest(
+          port,
+          scores,
+          positions,
+          uciMoves,
+          requireReliableComparisons,
+          materialCache,
+        ),
         onError: port,
         onExit: port,
       );
@@ -129,8 +163,11 @@ class MoveClassificationJob {
         _result.completeError(StateError('Move classifier exited early.'));
       }
       _finish();
-    } else if (message is List && message.length == 2 && message[0] == 0) {
+    } else if (message is List && message.length == 3 && message[0] == 0) {
       if (!_result.isCompleted) {
+        _materialCache = Map<String, int>.unmodifiable(
+          (message[2] as Map).cast<String, int>(),
+        );
         _result.complete(
           List<ClassifiedMove>.unmodifiable(
             (message[1] as List).cast<ClassifiedMove>(),
@@ -176,28 +213,43 @@ class MoveClassifier {
     required List<StockfishReview> scores,
     required List<String> positions,
     required List<String> uciMoves,
+    bool requireReliableComparisons = true,
+    Map<String, int>? materialCache,
   }) => startOffMainIsolate(
     scores: scores,
     positions: positions,
     uciMoves: uciMoves,
+    requireReliableComparisons: requireReliableComparisons,
+    materialCache: materialCache,
   ).result;
 
   static MoveClassificationJob startOffMainIsolate({
     required List<StockfishReview> scores,
     required List<String> positions,
     required List<String> uciMoves,
+    bool requireReliableComparisons = true,
+    Map<String, int>? materialCache,
   }) {
     // Threshold-only classification is cheap and common in injected tests or
     // engines without MultiPV. The sacrifice heuristic is the expensive part.
     if (!scores.any((score) => score.lines.length > 1)) {
       return MoveClassificationJob.completed(
-        classify(scores: scores, positions: positions, uciMoves: uciMoves),
+        classify(
+          scores: scores,
+          positions: positions,
+          uciMoves: uciMoves,
+          requireReliableComparisons: requireReliableComparisons,
+          materialCache: materialCache,
+        ),
+        materialCache: materialCache,
       );
     }
     return MoveClassificationJob.spawn(
       scores: scores,
       positions: positions,
       uciMoves: uciMoves,
+      requireReliableComparisons: requireReliableComparisons,
+      materialCache: materialCache,
     );
   }
 
@@ -205,19 +257,25 @@ class MoveClassifier {
     required List<StockfishReview> scores,
     required List<String> positions,
     required List<String> uciMoves,
+    void Function(Map<String, Object?>)? trace,
+    // Only the unpublished provisional pass disables the Fast confidence gate.
+    bool requireReliableComparisons = true,
+    Map<String, int>? materialCache,
   }) {
     final count = min(
       uciMoves.length,
       min(max(0, scores.length - 1), max(0, positions.length - 1)),
     );
     final result = <ClassifiedMove>[];
-    final materialEvaluator = _NaiveMaterialEvaluator();
+    final materialEvaluator = _NaiveMaterialEvaluator(cache: materialCache);
     for (var ply = 1; ply <= count; ply++) {
       final whiteMoved = positions[ply - 1].split(' ')[1] == 'w';
       final previous = _normalized(scores[ply - 1], whiteMoved);
       final next = _normalized(scores[ply], whiteMoved);
       final loss = _winChance(previous) - _winChance(next);
       MoveClassification? classification;
+      int? materialBefore;
+      int? materialAfter;
       if (loss > 20) {
         classification = MoveClassification.blunder;
       } else if (loss > 10) {
@@ -232,21 +290,24 @@ class MoveClassifier {
             lines[1].moves.isNotEmpty) {
           final best = _normalizedLine(lines[0], whiteMoved);
           final second = _normalizedLine(lines[1], whiteMoved);
-          final isSacrifice = _isSacrifice(
-            positions[ply - 1],
-            positions[ply],
-            materialEvaluator,
-          );
+          materialBefore = materialEvaluator.evaluate(positions[ply - 1]);
+          materialAfter = -materialEvaluator.evaluate(positions[ply]);
+          final isSacrifice =
+              !chess.Chess.fromFEN(positions[ply]).game_over &&
+              materialBefore > materialAfter + 100;
           if (_winChance(best) - _winChance(second) > 10 &&
               uciMoves[ply - 1] == lines[0].moves.first) {
-            if (isSacrifice) {
-              classification = MoveClassification.brilliant;
-            } else {
-              final beforePrevious = ply > 1
-                  ? _normalized(scores[ply - 2], whiteMoved)
-                  : 0;
-              if (_winChance(best) - _winChance(beforePrevious) > 5) {
-                classification = MoveClassification.good;
+            if (!requireReliableComparisons ||
+                hasReliableComparison(previousReview, whiteMoved)) {
+              if (isSacrifice) {
+                classification = MoveClassification.brilliant;
+              } else {
+                final beforePrevious = ply > 1
+                    ? _normalized(scores[ply - 2], whiteMoved)
+                    : 0;
+                if (_winChance(best) - _winChance(beforePrevious) > 5) {
+                  classification = MoveClassification.good;
+                }
               }
             }
           } else if (isSacrifice && next > -200) {
@@ -254,6 +315,22 @@ class MoveClassifier {
           }
         }
       }
+      trace?.call({
+        'ply': ply,
+        'move': uciMoves[ply - 1],
+        'beforeFen': positions[ply - 1],
+        'afterFen': positions[ply],
+        'previousCp': previous,
+        'nextCp': next,
+        'loss': loss,
+        'materialBefore': materialBefore,
+        'materialAfter': materialAfter,
+        'classification': classification?.name,
+        'comparisonReliable': hasReliableComparison(
+          scores[ply - 1],
+          whiteMoved,
+        ),
+      });
       if (classification != null) {
         result.add(
           ClassifiedMove(
@@ -265,6 +342,71 @@ class MoveClassifier {
       }
     }
     return List.unmodifiable(result);
+  }
+
+  /// Fast-only confidence guard. Injected/reference scores have no evidence
+  /// and retain the exact upstream annotation rules. Production Fast requires
+  /// agreement on the unique best move across two completed iterations or
+  /// across the original and an independent capped confirmation search.
+  static bool hasReliableComparison(StockfishReview review, bool whiteMoved) {
+    if (review.evidence?.quality != GameAnalysisQuality.fast) return true;
+    bool agrees(List<StockfishLine> other) =>
+        review.lines.length > 1 &&
+        review.lines[0].moves.isNotEmpty &&
+        other.length > 1 &&
+        other[0].moves.isNotEmpty &&
+        review.lines[0].moves.first == other[0].moves.first &&
+        _winChance(_normalizedLine(other[0], whiteMoved)) -
+                _winChance(_normalizedLine(other[1], whiteMoved)) >
+            10;
+    return review.evidence!.complete &&
+        (agrees(review.confirmationLines) ||
+            agrees(review.evidence!.previousLines));
+  }
+
+  /// At most three before/after pairs (six 500ms searches). Testable without
+  /// a native engine; supplied provisional labels keep non-awards out of the
+  /// cap. Sacrifice detection still runs in the owned worker.
+  static List<int> fastConfirmationPlies({
+    required List<StockfishReview> scores,
+    required List<String> positions,
+    required List<String> uciMoves,
+    List<ClassifiedMove>? classifiedMoves,
+  }) {
+    final standoutPlies = classifiedMoves
+        ?.where(
+          (move) =>
+              move.classification == MoveClassification.brilliant ||
+              move.classification == MoveClassification.good,
+        )
+        .map((move) => move.ply)
+        .toSet();
+    final candidates = <int>[];
+    final count = min(
+      uciMoves.length,
+      min(scores.length - 1, positions.length - 1),
+    );
+    for (var ply = 1; ply <= count; ply++) {
+      if (standoutPlies != null && !standoutPlies.contains(ply)) continue;
+      final review = scores[ply - 1];
+      final whiteMoved = positions[ply - 1].split(' ')[1] == 'w';
+      if (review.evidence?.quality != GameAnalysisQuality.fast ||
+          review.lines.length < 2 ||
+          review.lines[0].moves.isEmpty ||
+          review.lines[0].moves.first != uciMoves[ply - 1] ||
+          hasReliableComparison(review, whiteMoved)) {
+        continue;
+      }
+      final gap =
+          _winChance(_normalizedLine(review.lines[0], whiteMoved)) -
+          _winChance(_normalizedLine(review.lines[1], whiteMoved));
+      final loss =
+          _winChance(_normalized(review, whiteMoved)) -
+          _winChance(_normalized(scores[ply], whiteMoved));
+      if (gap > 10 && loss <= 5) candidates.add(ply);
+      if (candidates.length == 3) break;
+    }
+    return candidates;
   }
 
   static int _normalized(StockfishReview review, bool whiteMoved) {
@@ -284,15 +426,9 @@ class MoveClassifier {
   static double _winChance(int centipawns) =>
       50 + 50 * (2 / (1 + exp(-0.00368208 * centipawns)) - 1);
 
-  static bool _isSacrifice(
-    String beforeFen,
-    String afterFen,
-    _NaiveMaterialEvaluator evaluator,
-  ) {
-    final before = evaluator.evaluate(beforeFen);
-    final after = -evaluator.evaluate(afterFen);
-    return before > after + 100;
-  }
+  /// Used by the optional differential harness; never logs private game data.
+  static int materialEvaluation(String fen) =>
+      _NaiveMaterialEvaluator().evaluate(fen);
 
   static int _materialForTurn(chess.Chess position) {
     var white = 0;
@@ -320,7 +456,9 @@ class MoveClassifier {
 }
 
 class _NaiveMaterialEvaluator {
-  final Map<String, int> _cache = {};
+  _NaiveMaterialEvaluator({Map<String, int>? cache}) : _cache = cache ?? {};
+
+  final Map<String, int> _cache;
 
   int evaluate(String fen) => _cache.putIfAbsent(fen, () {
     final position = chess.Chess.fromFEN(fen);
@@ -342,7 +480,12 @@ class _NaiveMaterialEvaluator {
 
   int _captureSearch(chess.Chess position, int alpha, int beta) {
     var lower = alpha;
-    final standPat = MoveClassifier._materialForTurn(position);
+    // En Croissant treats mate as -10000 even inside a capture sequence.
+    // Check only when in check, avoiding a second legal-move generation at
+    // the overwhelmingly common non-check nodes.
+    final standPat = position.in_check && position.in_checkmate
+        ? -10000
+        : MoveClassifier._materialForTurn(position);
     if (standPat >= beta) return beta;
     lower = max(lower, standPat);
     final captures =
