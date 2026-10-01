@@ -29,7 +29,7 @@ class ReviewPage extends StatefulWidget {
     this.onPlayFromPosition,
     this.initialCurrentFen,
     this.initialFlipped = false,
-    this.gameAnalysisQuality = GameAnalysisQuality.thorough,
+    this.gameAnalysisQuality = GameAnalysisQuality.fast,
     this.onSessionChanged,
     super.key,
   });
