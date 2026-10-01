@@ -3,3 +3,4 @@ assets/models/maia3-5m.onnx filter=lfs diff=lfs merge=lfs -text
 
 # Deterministic generated engine/reference traces; reviewed through the generator.
 test/fixtures/classification/*.json linguist-generated=true
+tool/hardening/classification/qualification-*.json linguist-generated=true

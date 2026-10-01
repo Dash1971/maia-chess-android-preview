@@ -17,6 +17,7 @@ class ReviewPage extends StatefulWidget {
     required this.onHome,
     this.returnToGame = false,
     this.evaluator,
+    this.stockfishAnalyzer,
     this.maiaEvaluator,
     this.maiaPolicyEvaluator,
     this.classifier,
@@ -46,6 +47,9 @@ class ReviewPage extends StatefulWidget {
   final FutureOr<void> Function() onHome;
   final bool returnToGame;
   final Future<StockfishReview> Function(String fen)? evaluator;
+
+  /// Injectable engine boundary; preserves the complete production pipeline.
+  final StockfishAnalyzer? stockfishAnalyzer;
   final Future<String?> Function(List<String> positions, int elo)?
   maiaEvaluator;
   final Future<List<double>?> Function(List<String> positions, int elo)?
@@ -74,6 +78,9 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage>
     with WidgetsBindingObserver, RouteAware {
+  StockfishAnalyzer get _stockfish =>
+      widget.stockfishAnalyzer ?? StockfishAnalyzer.instance;
+
   int _ply = 0;
   bool _showGraph = false;
   bool _engineEnabled = true;
@@ -140,7 +147,7 @@ class _ReviewPageState extends State<ReviewPage>
 
   void _cancelSelectedWork() {
     _refinementTimer?.cancel();
-    StockfishAnalyzer.instance.cancel(_stockfishScope);
+    _stockfish.cancel(_stockfishScope);
     _maiaInferenceScope.invalidate();
     _secondMaiaInferenceScope.invalidate();
     // A revisit must enqueue fresh work instead of reusing a cancelled future.
@@ -186,7 +193,7 @@ class _ReviewPageState extends State<ReviewPage>
     _foreground = _appForeground && _routeVisible;
     if (!_foreground) {
       _cancelSelectedWork();
-      StockfishAnalyzer.instance.cancel(_batchScope);
+      _stockfish.cancel(_batchScope);
       _cancelClassificationJob();
       _fullAnalysisGeneration++;
       _fullAnalysisRunning = false;
@@ -208,7 +215,7 @@ class _ReviewPageState extends State<ReviewPage>
   Future<StockfishReview> _evaluateSelected(String fen) {
     if (!_foreground || !_engineEnabled) throw const AnalysisCancelled();
     return widget.evaluator?.call(fen) ??
-        StockfishAnalyzer.instance.evaluate(fen, scope: _stockfishScope);
+        _stockfish.evaluate(fen, scope: _stockfishScope);
   }
 
   void _refineSelected(String fen) {
@@ -219,7 +226,7 @@ class _ReviewPageState extends State<ReviewPage>
         return;
       }
       try {
-        final score = await StockfishAnalyzer.instance.evaluate(
+        final score = await _stockfish.evaluate(
           fen,
           scope: _stockfishScope,
           background: true,
@@ -409,8 +416,8 @@ class _ReviewPageState extends State<ReviewPage>
     maiaRouteObserver.unsubscribe(this);
     WidgetsBinding.instance.removeObserver(this);
     _refinementTimer?.cancel();
-    StockfishAnalyzer.instance.cancel(_stockfishScope);
-    StockfishAnalyzer.instance.cancel(_batchScope);
+    _stockfish.cancel(_stockfishScope);
+    _stockfish.cancel(_batchScope);
     _cancelClassificationJob();
     _maiaInferenceScope.invalidate();
     _secondMaiaInferenceScope.invalidate();
@@ -1453,7 +1460,7 @@ class _ReviewPageState extends State<ReviewPage>
     final analysisSession = Object();
     final evaluate =
         widget.evaluator ??
-        (String fen) => StockfishAnalyzer.instance.evaluate(
+        (String fen) => _stockfish.evaluate(
           fen,
           scope: _batchScope,
           background: true,
@@ -1509,9 +1516,7 @@ class _ReviewPageState extends State<ReviewPage>
     });
     try {
       var materialCache = <String, int>{};
-      if (widget.evaluator == null &&
-          widget.classifier == null &&
-          quality == GameAnalysisQuality.fast) {
+      if (widget.evaluator == null && widget.classifier == null) {
         // Identify actual provisional awards before spending the small engine
         // budget. Retain only deterministic material values for the final pass;
         // no worker or engine scores survive from a previous analysis run.
@@ -1533,15 +1538,15 @@ class _ReviewPageState extends State<ReviewPage>
           }
         }
         if (!mounted || generation != _fullAnalysisGeneration) return;
-        final confirmed = await StockfishAnalyzer.instance
-            .confirmFastAnnotations(
-              scores: scores,
-              positions: positions,
-              uciMoves: line.uciMoves,
-              classifiedMoves: provisional,
-              scope: _batchScope,
-              isCurrent: () => mounted && generation == _fullAnalysisGeneration,
-            );
+        final confirmed = await _stockfish.confirmAnnotations(
+          quality: quality,
+          scores: scores,
+          positions: positions,
+          uciMoves: line.uciMoves,
+          classifiedMoves: provisional,
+          scope: _batchScope,
+          isCurrent: () => mounted && generation == _fullAnalysisGeneration,
+        );
         if (!mounted || generation != _fullAnalysisGeneration) return;
         scores
           ..clear()
@@ -1594,7 +1599,7 @@ class _ReviewPageState extends State<ReviewPage>
 
   void _cancelFullAnalysis() {
     if (!_fullAnalysisRunning) return;
-    StockfishAnalyzer.instance.cancel(_batchScope);
+    _stockfish.cancel(_batchScope);
     _cancelClassificationJob();
     setState(() {
       _fullAnalysisGeneration++;
@@ -2504,10 +2509,10 @@ class _ReviewPageState extends State<ReviewPage>
     });
     if (!enabled) {
       _cancelSelectedWork();
-      StockfishAnalyzer.instance.cancel(_batchScope);
+      _stockfish.cancel(_batchScope);
       if (widget.evaluator == null) {
         unawaited(
-          StockfishAnalyzer.instance.close().catchError(
+          _stockfish.close().catchError(
             (Object error, StackTrace stackTrace) => AppDiagnostics.record(
               'stockfish-toggle-off',
               error,

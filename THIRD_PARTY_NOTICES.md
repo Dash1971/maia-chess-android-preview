@@ -55,7 +55,7 @@ The EasyLinkSDK licence notice follows:
 Mobile Maia's Game Review move-classification and sacrifice-detection
 heuristics are adapted and translated to Dart from the linked En Croissant
 source. Mobile Maia modifies the upstream implementation with
-background-isolate execution, conservative Fast-mode evidence checks and
+background-isolate execution, conservative annotation evidence checks in all analysis modes and
 app-specific review integration. The independent test reference under
 `tool/hardening/classification/reference` also includes the upstream scoring,
 annotation and material-search functions. The

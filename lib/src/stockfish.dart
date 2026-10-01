@@ -17,10 +17,12 @@ enum GameAnalysisQuality {
 
   String get stockfishCommand => 'go depth $depth movetime $moveTimeMs';
 
+  String get annotationCommand => 'go depth ${depth + 2} movetime $moveTimeMs';
+
   String get description => switch (this) {
     fast => 'Depth 12 · up to 0.5 seconds per position, plus up to 3 seconds checking standout moves.',
-    balanced => 'Depth 14 · up to 1 second per position.',
-    thorough => 'Depth 16 · up to 1.5 seconds per position. Most consistent.',
+    balanced => 'Depth 14 · up to 1 second per position, plus up to 6 seconds checking standout moves.',
+    thorough => 'Depth 16 · up to 1.5 seconds per position, plus up to 9 seconds checking standout moves.',
   };
 
   static GameAnalysisQuality fromStoredName(String? name) =>
@@ -155,10 +157,11 @@ class StockfishAnalyzer {
     ),
   );
 
-  /// At most six additional 500ms searches; a cancelled generation starts
-  /// no more work. Each pair is applied atomically, so a failed after-search
-  /// cannot combine a confirmation score with an unconfirmed successor.
-  Future<List<StockfishReview>> confirmFastAnnotations({
+  /// Verify whole annotation windows without changing baseline graph scores.
+  /// At most six searches, each with the selected mode's time limit and a
+  /// depth target two plies deeper. Good also depends on the preceding score.
+  Future<List<StockfishReview>> confirmAnnotations({
+    required GameAnalysisQuality quality,
     required List<StockfishReview> scores,
     required List<String> positions,
     required List<String> uciMoves,
@@ -167,37 +170,70 @@ class StockfishAnalyzer {
     required bool Function() isCurrent,
   }) async {
     final result = scores.toList();
-    final plies = MoveClassifier.fastConfirmationPlies(
+    final plies = MoveClassifier.confirmationPlies(
       scores: scores,
       positions: positions,
       uciMoves: uciMoves,
       classifiedMoves: classifiedMoves,
     );
+    final labels = {
+      for (final move in classifiedMoves) move.ply: move.classification,
+    };
     try {
       for (final ply in plies) {
         if (!isCurrent()) return result;
+        final needsPredecessor =
+            labels[ply] == MoveClassification.good && ply > 1;
+        final start = needsPredecessor ? ply - 2 : ply - 1;
+        // The caller's selected mode must agree with the original engine run.
+        if (scores
+            .sublist(start, ply + 1)
+            .any(
+              (score) =>
+                  score.evidence != null && score.evidence!.quality != quality,
+            )) {
+          continue;
+        }
         final session = Object();
-        final before = await evaluate(
-          positions[ply - 1],
-          scope: scope,
-          background: true,
-          gameAnalysisQuality: GameAnalysisQuality.fast,
-          analysisSession: session,
-          verifyAnnotation: true,
-        );
+        final window = <StockfishReview>[];
+        for (var index = start; index <= ply; index++) {
+          if (!isCurrent()) return result;
+          window.add(
+            await evaluate(
+              positions[index],
+              scope: scope,
+              background: true,
+              gameAnalysisQuality: quality,
+              analysisSession: session,
+              verifyAnnotation: true,
+            ),
+          );
+        }
         if (!isCurrent()) return result;
-        final after = await evaluate(
-          positions[ply],
-          scope: scope,
-          background: true,
-          gameAnalysisQuality: GameAnalysisQuality.fast,
-          analysisSession: session,
-          verifyAnnotation: true,
+        var complete = true;
+        for (var index = start; index <= ply; index++) {
+          final original = scores[index];
+          final checked = window[index - start];
+          if (original.evidence != null &&
+              (checked.evidence?.complete != true ||
+                  checked.evidence!.depth < original.evidence!.depth)) {
+            complete = false;
+          }
+        }
+        if (!complete) continue;
+        // Attach only a complete, sufficiently deep window. The original
+        // scalar/PVs, accuracy and neighboring annotations remain unchanged.
+        result[ply - 1] = scores[ply - 1].withAnnotationConfirmation(
+          StockfishAnnotationConfirmation(
+            beforePrevious: needsPredecessor ? window.first : null,
+            before: window[window.length - 2],
+            after: window.last,
+          ),
         );
-        if (!isCurrent()) return result;
-        result[ply - 1] = before.confirmedAgainst(scores[ply - 1]);
-        result[ply] = after;
       }
+    } on AnalysisCancelled {
+      // Cancellation/preemption is not an engine failure. The caller owns
+      // generation checks and publication of the eventual classifications.
     } catch (error, stackTrace) {
       if (isCurrent()) {
         unawaited(
@@ -208,8 +244,7 @@ class StockfishAnalyzer {
           ),
         );
       }
-      // Completed original scores remain useful. Unconfirmed standout labels
-      // are withheld by the classifier, including candidates beyond the cap.
+      // Keep baseline scores. Unverified standout labels remain withheld.
     }
     return result;
   }
@@ -288,7 +323,7 @@ class StockfishAnalyzer {
       _searching = true;
       engine.stdin =
           (request?.verifyAnnotation == true
-              ? 'go depth 14 movetime 500'
+              ? request!.quality!.annotationCommand
               : request?.quality?.stockfishCommand) ??
           (background
               ? 'go depth 16 movetime 1500'
@@ -414,7 +449,7 @@ class StockfishReview {
     this.mate,
     this.lines = const [],
     this.evidence,
-    this.confirmationLines = const [],
+    this.annotationConfirmation,
   });
 
   final int evaluation;
@@ -422,15 +457,17 @@ class StockfishReview {
   final int? mate;
   final List<StockfishLine> lines;
   final StockfishSearchEvidence? evidence;
-  final List<StockfishLine> confirmationLines;
+  final StockfishAnnotationConfirmation? annotationConfirmation;
 
-  StockfishReview confirmedAgainst(StockfishReview original) => StockfishReview(
+  StockfishReview withAnnotationConfirmation(
+    StockfishAnnotationConfirmation confirmation,
+  ) => StockfishReview(
     evaluation,
     bestMove,
     mate: mate,
     lines: lines,
     evidence: evidence,
-    confirmationLines: original.lines,
+    annotationConfirmation: confirmation,
   );
 
   double get whiteWinningChances {
@@ -459,6 +496,19 @@ class StockfishLine {
     mate: mate == null ? null : (blackToMove ? -mate! : mate),
     moves: moves,
   );
+}
+
+/// Independent evidence for one move. It never replaces graph evaluations or
+/// the baseline scores used to classify another move, including adjacent ones.
+class StockfishAnnotationConfirmation {
+  const StockfishAnnotationConfirmation({
+    this.beforePrevious,
+    required this.before,
+    required this.after,
+  });
+  final StockfishReview? beforePrevious;
+  final StockfishReview before;
+  final StockfishReview after;
 }
 
 class _StockfishRequest {
