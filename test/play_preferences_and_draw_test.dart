@@ -140,7 +140,7 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('home-settings-button')));
     await tester.pumpAndSettle();
     expect(field().initialValue, GameAnalysisQuality.fast);
-    expect(find.textContaining('Faster, but noisier'), findsOneWidget);
+    expect(find.textContaining('checking standout moves'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey('settings-back-button')));
     await tester.pumpAndSettle();

@@ -46,7 +46,8 @@ The EasyLinkSDK licence notice follows:
 
 - Project: <https://github.com/franciscoBSalgueiro/en-croissant>
 - Upstream release: [`v0.15.0`](https://github.com/franciscoBSalgueiro/en-croissant/tree/v0.15.0)
-- Pinned source commit: `3a3dbc5911dd0cd4997c30ea3e8932045e314830`
+- Annotated tag object: `3a3dbc5911dd0cd4997c30ea3e8932045e314830`
+- Pinned source commit: `6f2d2628f0fbe11cb62a7dd2f9c102bb52907d53`
 - Relevant source: [`src/utils/score.ts`](https://github.com/franciscoBSalgueiro/en-croissant/blob/v0.15.0/src/utils/score.ts) and [`src-tauri/src/chess.rs`](https://github.com/franciscoBSalgueiro/en-croissant/blob/v0.15.0/src-tauri/src/chess.rs)
 - Copyright: Francisco Salgueiro and En Croissant contributors
 - Licence: GNU General Public License v3.0
@@ -54,7 +55,10 @@ The EasyLinkSDK licence notice follows:
 Mobile Maia's Game Review move-classification and sacrifice-detection
 heuristics are adapted and translated to Dart from the linked En Croissant
 source. Mobile Maia modifies the upstream implementation with
-background-isolate execution and app-specific review integration. The
+background-isolate execution, conservative Fast-mode evidence checks and
+app-specific review integration. The independent test reference under
+`tool/hardening/classification/reference` also includes the upstream scoring,
+annotation and material-search functions. The
 adapted code remains subject to GPL-3.0; Mobile Maia as a combined application
 is distributed under AGPL-3.0-only as permitted by section 13 of AGPL-3.0.
 

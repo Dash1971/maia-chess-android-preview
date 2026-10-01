@@ -1450,6 +1450,7 @@ class _ReviewPageState extends State<ReviewPage>
       ),
     );
     final scores = <StockfishReview>[];
+    final analysisSession = Object();
     final evaluate =
         widget.evaluator ??
         (String fen) => StockfishAnalyzer.instance.evaluate(
@@ -1457,6 +1458,7 @@ class _ReviewPageState extends State<ReviewPage>
           scope: _batchScope,
           background: true,
           gameAnalysisQuality: quality,
+          analysisSession: analysisSession,
         );
     for (var i = 0; i < positions.length; i++) {
       if (!mounted || generation != _fullAnalysisGeneration) return;
@@ -1506,6 +1508,49 @@ class _ReviewPageState extends State<ReviewPage>
       _fullAnalysisClassifying = true;
     });
     try {
+      var materialCache = <String, int>{};
+      if (widget.evaluator == null &&
+          widget.classifier == null &&
+          quality == GameAnalysisQuality.fast) {
+        // Identify actual provisional awards before spending the small engine
+        // budget. Retain only deterministic material values for the final pass;
+        // no worker or engine scores survive from a previous analysis run.
+        final provisionalJob = MoveClassifier.startOffMainIsolate(
+          scores: scores,
+          positions: positions,
+          uciMoves: line.uciMoves,
+          requireReliableComparisons: false,
+        );
+        _classificationJob = provisionalJob;
+        final List<ClassifiedMove> provisional;
+        try {
+          provisional = await provisionalJob.result;
+          materialCache = provisionalJob.materialCache;
+        } finally {
+          await provisionalJob.terminated;
+          if (identical(_classificationJob, provisionalJob)) {
+            _classificationJob = null;
+          }
+        }
+        if (!mounted || generation != _fullAnalysisGeneration) return;
+        final confirmed = await StockfishAnalyzer.instance
+            .confirmFastAnnotations(
+              scores: scores,
+              positions: positions,
+              uciMoves: line.uciMoves,
+              classifiedMoves: provisional,
+              scope: _batchScope,
+              isCurrent: () => mounted && generation == _fullAnalysisGeneration,
+            );
+        if (!mounted || generation != _fullAnalysisGeneration) return;
+        scores
+          ..clear()
+          ..addAll(confirmed);
+        for (var i = 0; i < scores.length && i < widget.positions.length; i++) {
+          if (positions[i] == widget.positions[i]) _reviews[i] = scores[i];
+        }
+        setState(() => _graphScores = List.unmodifiable(scores));
+      }
       final customClassifier = widget.classifier;
       final List<ClassifiedMove> classifications;
       if (customClassifier != null) {
@@ -1519,6 +1564,7 @@ class _ReviewPageState extends State<ReviewPage>
           scores: scores,
           positions: positions,
           uciMoves: line.uciMoves,
+          materialCache: materialCache,
         );
         _classificationJob = job;
         try {

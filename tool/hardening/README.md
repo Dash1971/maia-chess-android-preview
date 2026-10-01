@@ -277,3 +277,12 @@ android/gradlew -p tool/hardening/sound_bridge_race run --console=plain
 This optional native check uses Kotlin 2.4.20 and does not add work to the
 ordinary Flutter/Python PR gate. Run it when changing sound registration,
 callbacks, or teardown. The doubles never ship in the app.
+
+## Move classification and Fast-mode reliability
+
+See [`classification/README.md`](classification/README.md) for the independently
+executed En Croissant reference, checked-in whole-game fixtures, complete MultiPV
+snapshot regressions, capped Fast confirmation policy, cold/warm live-engine
+comparisons, native Android test and actual VM worker-lifecycle qualification.
+The fixture regressions run in ordinary CI; Rust compilation and live-engine
+benchmarks are optional targeted/release checks.
