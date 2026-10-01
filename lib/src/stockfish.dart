@@ -24,7 +24,7 @@ enum GameAnalysisQuality {
   };
 
   static GameAnalysisQuality fromStoredName(String? name) =>
-      values.firstWhere((value) => value.name == name, orElse: () => thorough);
+      values.firstWhere((value) => value.name == name, orElse: () => fast);
 }
 
 abstract interface class StockfishEngineHandle {

@@ -54,7 +54,7 @@ class AnalysisBoardPage extends StatefulWidget {
     this.initialTreeIsAuthoritative = false,
     this.initialCurrentFen,
     this.initialFlipped = false,
-    this.gameAnalysisQuality = GameAnalysisQuality.thorough,
+    this.gameAnalysisQuality = GameAnalysisQuality.fast,
     this.evaluator,
     this.maiaEvaluator,
     this.maiaPolicyEvaluator,

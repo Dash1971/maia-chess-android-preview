@@ -96,7 +96,7 @@ class _GamePageState extends State<GamePage>
   int _analysisElo = 1600;
   bool _secondMaiaEnabled = false;
   int _secondMaiaElo = 2400;
-  GameAnalysisQuality _gameAnalysisQuality = GameAnalysisQuality.thorough;
+  GameAnalysisQuality _gameAnalysisQuality = GameAnalysisQuality.fast;
   late final cg.ChessboardController _gameBoardController;
   String _status = 'Choose your settings and start a game.';
   bool _started = false;
@@ -888,7 +888,7 @@ class _GamePageState extends State<GamePage>
     final gameAnalysisQuality = _readValidatedPreference<GameAnalysisQuality>(
       preferences,
       gameAnalysisQualityPreferenceKey,
-      fallback: GameAnalysisQuality.thorough,
+      fallback: GameAnalysisQuality.fast,
       decode: (value) => value is String
           ? GameAnalysisQuality.values
                 .where((quality) => quality.name == value)
@@ -3970,7 +3970,7 @@ class _GamePageState extends State<GamePage>
                           _analysisElo = 1600;
                           _secondMaiaEnabled = false;
                           _secondMaiaElo = 2400;
-                          _gameAnalysisQuality = GameAnalysisQuality.thorough;
+                          _gameAnalysisQuality = GameAnalysisQuality.fast;
                         });
                         unawaited(_saveEnginePreferences());
                       },

@@ -98,11 +98,11 @@ void main() {
     );
     expect(
       GameAnalysisQuality.fromStoredName('invalid'),
-      GameAnalysisQuality.thorough,
+      GameAnalysisQuality.fast,
     );
   });
 
-  testWidgets('game analysis quality persists and defaults to Thorough', (
+  testWidgets('game analysis quality persists and defaults to Fast', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(800, 1200);
@@ -118,7 +118,7 @@ void main() {
     DropdownButtonFormField<GameAnalysisQuality> field() => tester.widget(
       find.byType(DropdownButtonFormField<GameAnalysisQuality>),
     );
-    expect(field().initialValue, GameAnalysisQuality.thorough);
+    expect(field().initialValue, GameAnalysisQuality.fast);
     await tester.ensureVisible(
       find.byType(DropdownButtonFormField<GameAnalysisQuality>),
     );
@@ -150,6 +150,38 @@ void main() {
     expect(
       tester.widget<ReviewPage>(find.byType(ReviewPage)).gameAnalysisQuality,
       GameAnalysisQuality.fast,
+    );
+  });
+
+  testWidgets('an existing Thorough choice survives the default change', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      gameAnalysisQualityPreferenceKey: 'thorough',
+    });
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const MaterialApp(home: GamePage()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<DropdownButtonFormField<GameAnalysisQuality>>(
+        find.byType(DropdownButtonFormField<GameAnalysisQuality>),
+      ).initialValue,
+      GameAnalysisQuality.thorough,
+    );
+    await tester.ensureVisible(find.text('Reset engine defaults'));
+    await tester.tap(find.text('Reset engine defaults'));
+    await tester.pumpAndSettle();
+    expect(
+      (await SharedPreferences.getInstance()).getString(
+        gameAnalysisQualityPreferenceKey,
+      ),
+      'fast',
     );
   });
 
