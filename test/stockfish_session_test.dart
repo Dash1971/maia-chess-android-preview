@@ -204,12 +204,39 @@ void main() {
     },
   );
   test(
+    'slow reset readiness is not mistaken for a failed search drain',
+    () async {
+      final engine = SessionEngine()..holdReset = true;
+      final analyzer = StockfishAnalyzer.withFactory(
+        engine.create,
+        drainTimeout: const Duration(milliseconds: 10),
+        readyTimeout: const Duration(milliseconds: 100),
+      );
+      try {
+        final result = analyzer.evaluate(
+          chess.Chess.DEFAULT_POSITION,
+          analysisSession: Object(),
+        );
+        await until(() => engine.commands.contains('ucinewgame'));
+        await Future<void>.delayed(const Duration(milliseconds: 30));
+        engine.output.add('readyok');
+        expect((await result).evaluation, 42);
+        expect(engine.starts, 1);
+        expect(engine.quits, 0);
+      } finally {
+        await analyzer.close();
+        await engine.output.close();
+      }
+    },
+  );
+  test(
     'failed reset readiness resets native engine and permits retry',
     () async {
       final engine = SessionEngine()..holdReset = true;
       final analyzer = StockfishAnalyzer.withFactory(
         engine.create,
         drainTimeout: const Duration(milliseconds: 10),
+        readyTimeout: const Duration(milliseconds: 10),
       );
       try {
         await expectLater(
