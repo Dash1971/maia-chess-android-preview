@@ -136,6 +136,17 @@ class _FakeElectronicBoard implements ElectronicBoardTransport {
     );
   }
 
+  void error(String diagnostic) {
+    _events.add(
+      ElectronicBoardEvent(
+        type: 'status',
+        connectionState: ElectronicBoardConnectionState.error,
+        message: 'Chessnut position could not be decoded.',
+        diagnostic: diagnostic,
+      ),
+    );
+  }
+
   void ready(Map<String, String> pieces) {
     connected = true;
     _events.add(
@@ -183,6 +194,33 @@ void main() {
       () => ChessnutProtocol.decodePosition(const [0x01, 0x24]),
       throwsFormatException,
     );
+  });
+
+  testWidgets('repeated board errors retain diagnostic reasons', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final board = _FakeElectronicBoard();
+    await tester.pumpWidget(
+      MaterialApp(home: GamePage(electronicBoardTransport: board)),
+    );
+    await tester.pumpAndSettle();
+    await _enableChessnut(tester);
+
+    const detail =
+        'errorSource=position-decode reason=invalidPayload nativeReady=true gattPresent=true';
+    board.error(detail);
+    board.error(detail);
+    await tester.pumpAndSettle();
+    final entries = (await SharedPreferences.getInstance()).getStringList(
+      'diagnosticEntriesV1',
+    );
+    expect(
+      entries?.where((entry) => entry.contains('chessnut-state=error $detail')),
+      hasLength(2),
+    );
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    await board.close();
   });
 
   test('encodes move LEDs in Chessnut row order', () {
