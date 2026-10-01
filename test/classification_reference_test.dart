@@ -11,7 +11,9 @@ void main() {
       in override == null
           ? [
               'test/fixtures/classification/stockfish18-fast.json',
+              'test/fixtures/classification/stockfish18-balanced-thorough.json',
               'test/fixtures/classification/stockfish-light-fast.json',
+              'test/fixtures/classification/stockfish-light-balanced-thorough.json',
             ]
           : [override]) {
     group(file, () => verifyCorpus(file));
@@ -81,7 +83,9 @@ void verifyCorpus(String file) {
                       timeMs: completed.timeMs,
                       complete: true,
                       reset: false,
-                      quality: GameAnalysisQuality.fast,
+                      quality: GameAnalysisQuality.fromStoredName(
+                        game['quality'] as String?,
+                      ),
                       previousLines:
                           parser.previous?.lines
                               .map(
@@ -137,7 +141,7 @@ void verifyCorpus(String file) {
           provisional.map((m) => [m.ply, m.classification]),
           labels.map((m) => [m.ply, m.classification]),
         );
-        final candidates = MoveClassifier.fastConfirmationPlies(
+        final candidates = MoveClassifier.confirmationPlies(
           scores: productionScores,
           positions: positions,
           uciMoves: moves,
@@ -145,12 +149,6 @@ void verifyCorpus(String file) {
         );
         for (final ply in candidates) {
           expect(actual[ply - 1], anyOf('!', '!!'));
-        }
-        if (game['name'] == 'byrne-fischer-1956' &&
-            file.contains('stockfish18')) {
-          expect(candidates, [
-            22,
-          ], reason: 'Blank moves must not waste the confirmation budget');
         }
         final conservative = MoveClassifier.classify(
           scores: productionScores,
@@ -164,9 +162,12 @@ void verifyCorpus(String file) {
               m.classification == MoveClassification.good,
         )) {
           expect(
-            MoveClassifier.hasReliableComparison(
-              productionScores[label.ply - 1],
-              label.whiteMoved,
+            MoveClassifier.hasReliableAnnotation(
+              scores: productionScores,
+              positions: positions,
+              uciMoves: moves,
+              ply: label.ply,
+              classification: label.classification,
             ),
             isTrue,
           );

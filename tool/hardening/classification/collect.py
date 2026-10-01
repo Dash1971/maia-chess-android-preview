@@ -76,7 +76,7 @@ class Engine:
             mate = (-1 if board.turn else 1) if board.is_checkmate() else None
             return dict(raw=[], cp=0, mate=mate, lines=[], depth=0, nodes=0, timeMs=0)
         self.send('position fen '+fen)
-        depth, ms = {'fast': (12,500), 'thorough':(16,1500)}[quality]
+        depth, ms = {'fast': (12,500), 'balanced': (14,1000), 'thorough':(16,1500)}[quality]
         self.send(f'go depth {depth} movetime {ms}')
         raw = self.until('bestmove ')
         # Independent EC-style ordered complete-iteration reference collector.
@@ -94,7 +94,8 @@ class Engine:
             if rank != len(pending)+1: continue
             sign = 1 if board.turn else -1
             pending.append(dict(depth=d, cp=(cp or 0)*sign,
-                                mate=mate*sign if mate is not None else None, moves=pv))
+                                mate=mate*sign if mate is not None else None, moves=pv,
+                                nodes=num('nodes'), timeMs=num('time')))
             if rank == min(2, board.legal_moves.count()):
                 if all(p['depth']==d for p in pending) and d >= completed_depth:
                     completed, completed_depth = pending, d
@@ -104,7 +105,9 @@ class Engine:
         retained = [s for s in raw if not s.startswith('info ') or
                     (re.search(r' depth (\d+)',s) and int(re.search(r' depth (\d+)',s)[1]) >= completed_depth-1)]
         return dict(raw=retained, cp=completed[0]['cp'], mate=completed[0]['mate'],
-                    lines=completed, depth=completed_depth)
+                    lines=completed, depth=completed_depth,
+                    nodes=completed[0]['nodes'], timeMs=completed[0]['timeMs'],
+                    quality=quality, complete=True)
     def close(self):
         self.send('quit'); self.process.wait(timeout=10); self.reader.join(timeout=2)
         self.process.stdin.close(); self.process.stdout.close()
@@ -129,11 +132,21 @@ def main():
     parser.add_argument('--stockfish',required=True); parser.add_argument('--reference',required=True)
     parser.add_argument('--node',default='node'); parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--threads',type=int,default=1)
-    parser.add_argument('--sequence',default='fast',help='comma-separated qualities, e.g. fast,thorough,fast')
+    parser.add_argument('--sequence', default='fast,balanced,thorough,fast',
+                        help='ordered qualities; repeated modes expose run-order variation')
+    parser.add_argument('--fresh-process', action='store_true',
+                        help='start a fresh engine for each run (stronger than a hash reset)')
     parser.add_argument('--warm',action='store_true',help='omit run-boundary reset to reproduce old behaviour')
     parser.add_argument('--game',help='run only a named game'); parser.add_argument('--reverse',action='store_true')
     args=parser.parse_args(); games=corpus()
-    if args.game: games=[g for g in games if g['name']==args.game]
+    sequence=args.sequence.split(',')
+    if not sequence or any(q not in ('fast', 'balanced', 'thorough') for q in sequence):
+        parser.error('--sequence must contain fast, balanced or thorough')
+    if args.fresh_process and args.warm:
+        parser.error('--fresh-process and --warm are mutually exclusive')
+    if args.game:
+        games=[g for g in games if g['name']==args.game]
+        if not games: parser.error('unknown --game')
     if args.reverse: games.reverse()
     for game in games:
         # Terminal Rust MIN sentinel is kept in the reference data and compared
@@ -142,9 +155,12 @@ def main():
         game['material']=[int(v) for v in raw.splitlines()]
     engine=Engine(args.stockfish,args.threads); runs=[]
     try:
-        for quality in args.sequence.split(','):
+        for sequence_index, quality in enumerate(sequence):
             for original in games:
-                game=dict(original,quality=quality)
+                if args.fresh_process and runs:
+                    engine.close(); engine=Engine(args.stockfish,args.threads)
+                game=dict(original,quality=quality,sequenceIndex=sequence_index,
+                          scenario='fresh-process' if args.fresh_process else 'warm' if args.warm else 'cold')
                 if not args.warm: engine.reset()
                 start=time.monotonic()
                 game['scores']=[engine.search(fen,quality) for fen in game['positions']]
@@ -154,6 +170,18 @@ def main():
                 print(game['name'],quality,game['wallSeconds'],[(i+1,a) for i,a in enumerate(game['annotations']) if a],flush=True)
     finally: engine.close()
     args.output.parent.mkdir(parents=True,exist_ok=True)
+    observations=[]
+    for index, run in enumerate(runs):
+        previous=next((r for r in reversed(runs[:index])
+                       if r['name']==run['name'] and r['quality']==run['quality']), None)
+        if previous is not None:
+            observations.append(dict(name=run['name'], quality=run['quality'],
+                sequenceIndex=run['sequenceIndex'],
+                changedLabels=[i+1 for i,(a,b) in enumerate(zip(previous['annotations'],run['annotations'])) if a!=b],
+                changedScores=[i for i,(a,b) in enumerate(zip(previous['scores'],run['scores']))
+                               if (a['cp'],a['mate'],[(l['cp'],l['mate'],l['moves']) for l in a['lines']]) !=
+                                  (b['cp'],b['mate'],[(l['cp'],l['mate'],l['moves']) for l in b['lines']])]))
     args.output.write_text(json.dumps(dict(reference='En Croissant v0.15.0', engine=engine.identity,
-        threads=args.threads,hashMiB=64,reset=not args.warm,runs=runs),indent=2)+'\n')
+        threads=args.threads,hashMiB=64,reset=not args.warm,
+        freshProcess=args.fresh_process,sequence=sequence,observations=observations,runs=runs),indent=2)+'\n')
 if __name__=='__main__': main()

@@ -258,7 +258,7 @@ class MoveClassifier {
     required List<String> positions,
     required List<String> uciMoves,
     void Function(Map<String, Object?>)? trace,
-    // Only the unpublished provisional pass disables the Fast confidence gate.
+    // Only the unpublished provisional pass disables annotation verification.
     bool requireReliableComparisons = true,
     Map<String, int>? materialCache,
   }) {
@@ -297,23 +297,35 @@ class MoveClassifier {
               materialBefore > materialAfter + 100;
           if (_winChance(best) - _winChance(second) > 10 &&
               uciMoves[ply - 1] == lines[0].moves.first) {
-            if (!requireReliableComparisons ||
-                hasReliableComparison(previousReview, whiteMoved)) {
-              if (isSacrifice) {
-                classification = MoveClassification.brilliant;
-              } else {
-                final beforePrevious = ply > 1
-                    ? _normalized(scores[ply - 2], whiteMoved)
-                    : 0;
-                if (_winChance(best) - _winChance(beforePrevious) > 5) {
-                  classification = MoveClassification.good;
-                }
+            if (isSacrifice) {
+              classification = MoveClassification.brilliant;
+            } else {
+              final beforePrevious = ply > 1
+                  ? _normalized(scores[ply - 2], whiteMoved)
+                  : 0;
+              if (_winChance(best) - _winChance(beforePrevious) > 5) {
+                classification = MoveClassification.good;
               }
             }
           } else if (isSacrifice && next > -200) {
             classification = MoveClassification.interesting;
           }
         }
+      }
+      final standout =
+          classification == MoveClassification.brilliant ||
+          classification == MoveClassification.good;
+      final annotationReliable =
+          !standout ||
+          hasReliableAnnotation(
+            scores: scores,
+            positions: positions,
+            uciMoves: uciMoves,
+            ply: ply,
+            classification: classification!,
+          );
+      if (requireReliableComparisons && !annotationReliable) {
+        classification = null;
       }
       trace?.call({
         'ply': ply,
@@ -326,10 +338,7 @@ class MoveClassifier {
         'materialBefore': materialBefore,
         'materialAfter': materialAfter,
         'classification': classification?.name,
-        'comparisonReliable': hasReliableComparison(
-          scores[ply - 1],
-          whiteMoved,
-        ),
+        'comparisonReliable': annotationReliable,
       });
       if (classification != null) {
         result.add(
@@ -344,67 +353,200 @@ class MoveClassifier {
     return List.unmodifiable(result);
   }
 
-  /// Fast-only confidence guard. Injected/reference scores have no evidence
-  /// and retain the exact upstream annotation rules. Production Fast requires
-  /// agreement on the unique best move across two completed iterations or
-  /// across the original and an independent capped confirmation search.
-  static bool hasReliableComparison(StockfishReview review, bool whiteMoved) {
-    if (review.evidence?.quality != GameAnalysisQuality.fast) return true;
-    bool agrees(List<StockfishLine> other) =>
-        review.lines.length > 1 &&
-        review.lines[0].moves.isNotEmpty &&
-        other.length > 1 &&
-        other[0].moves.isNotEmpty &&
-        review.lines[0].moves.first == other[0].moves.first &&
-        _winChance(_normalizedLine(other[0], whiteMoved)) -
-                _winChance(_normalizedLine(other[1], whiteMoved)) >
-            10;
-    return review.evidence!.complete &&
-        (agrees(review.confirmationLines) ||
-            agrees(review.evidence!.previousLines));
-  }
-
-  /// At most three before/after pairs (six 500ms searches). Testable without
-  /// a native engine; supplied provisional labels keep non-awards out of the
-  /// cap. Sacrifice detection still runs in the owned worker.
-  static List<int> fastConfirmationPlies({
+  /// A quality setting or a stable best-move gap alone does not establish
+  /// an annotation: loss and, for Good, the preceding score also participate.
+  /// Raw reference inputs without engine evidence retain upstream semantics.
+  static bool hasReliableAnnotation({
     required List<StockfishReview> scores,
     required List<String> positions,
     required List<String> uciMoves,
-    List<ClassifiedMove>? classifiedMoves,
+    required int ply,
+    required MoveClassification classification,
   }) {
-    final standoutPlies = classifiedMoves
-        ?.where(
-          (move) =>
-              move.classification == MoveClassification.brilliant ||
-              move.classification == MoveClassification.good,
-        )
-        .map((move) => move.ply)
-        .toSet();
-    final candidates = <int>[];
-    final count = min(
-      uciMoves.length,
-      min(scores.length - 1, positions.length - 1),
+    if (classification != MoveClassification.brilliant &&
+        classification != MoveClassification.good) {
+      return true;
+    }
+    final before = scores[ply - 1];
+    if (before.evidence?.quality == null) return true;
+    final whiteMoved = positions[ply - 1].split(' ')[1] == 'w';
+    final needsPrevious = classification == MoveClassification.good && ply > 1;
+    final terminalAfter =
+        scores[ply].evidence == null &&
+        chess.Chess.fromFEN(positions[ply]).game_over;
+    final quality = before.evidence!.quality;
+    bool matchingQuality(StockfishReview review) =>
+        review.evidence?.quality == quality;
+    if ((!terminalAfter && !matchingQuality(scores[ply])) ||
+        (needsPrevious && !matchingQuality(scores[ply - 2]))) {
+      return false;
+    }
+    bool terminalMatches(StockfishReview review) =>
+        terminalAfter &&
+        review.evidence == null &&
+        review.evaluation == scores[ply].evaluation &&
+        review.mate == scores[ply].mate;
+    bool sufficient(StockfishReview checked, StockfishReview original) =>
+        _complete(checked) &&
+        matchingQuality(checked) &&
+        checked.evidence!.depth >= (original.evidence?.depth ?? 0);
+    bool agrees(
+      StockfishReview candidateBefore,
+      StockfishReview candidateAfter,
+      StockfishReview? candidatePrevious,
+    ) {
+      if (!_complete(candidateBefore) ||
+          !matchingQuality(candidateBefore) ||
+          (!terminalMatches(candidateAfter) &&
+              (!_complete(candidateAfter) ||
+                  !matchingQuality(candidateAfter))) ||
+          (needsPrevious &&
+              (candidatePrevious == null ||
+                  !_complete(candidatePrevious) ||
+                  !matchingQuality(candidatePrevious)))) {
+        return false;
+      }
+      return _standoutPredicate(
+            before: candidateBefore,
+            after: candidateAfter,
+            beforePrevious: candidatePrevious,
+            whiteMoved: whiteMoved,
+            move: uciMoves[ply - 1],
+            isSacrifice: classification == MoveClassification.brilliant,
+          ) ==
+          classification;
+    }
+
+    final confirmation = before.annotationConfirmation;
+    // An explicit counterexample overrides apparent iterative stability.
+    if (confirmation != null) {
+      if (!sufficient(confirmation.before, before) ||
+          (!terminalMatches(confirmation.after) &&
+              !sufficient(confirmation.after, scores[ply])) ||
+          (needsPrevious &&
+              (confirmation.beforePrevious == null ||
+                  !sufficient(
+                    confirmation.beforePrevious!,
+                    scores[ply - 2],
+                  )))) {
+        return false;
+      }
+      return agrees(
+        confirmation.before,
+        confirmation.after,
+        confirmation.beforePrevious,
+      );
+    }
+    final previousBefore = _previousIteration(before);
+    final previousAfter = terminalAfter
+        ? scores[ply]
+        : _previousIteration(scores[ply]);
+    final previousPrevious = needsPrevious
+        ? _previousIteration(scores[ply - 2])
+        : null;
+    return _complete(before) &&
+        (terminalAfter || _complete(scores[ply])) &&
+        (!needsPrevious || _complete(scores[ply - 2])) &&
+        previousBefore != null &&
+        previousAfter != null &&
+        agrees(previousBefore, previousAfter, previousPrevious);
+  }
+
+  static bool _complete(StockfishReview review) =>
+      review.evidence?.complete == true &&
+      review.lines.isNotEmpty &&
+      review.lines[0].moves.isNotEmpty;
+
+  static StockfishReview? _previousIteration(StockfishReview review) {
+    final lines = review.evidence?.previousLines;
+    if (lines == null || lines.isEmpty || lines[0].moves.isEmpty) return null;
+    return StockfishReview(
+      lines[0].evaluation,
+      lines[0].moves.first,
+      mate: lines[0].mate,
+      lines: lines,
+      evidence: StockfishSearchEvidence(
+        depth: 0,
+        nodes: null,
+        timeMs: null,
+        complete: true,
+        reset: false,
+        quality: review.evidence?.quality,
+      ),
     );
-    for (var ply = 1; ply <= count; ply++) {
-      if (standoutPlies != null && !standoutPlies.contains(ply)) continue;
-      final review = scores[ply - 1];
-      final whiteMoved = positions[ply - 1].split(' ')[1] == 'w';
-      if (review.evidence?.quality != GameAnalysisQuality.fast ||
-          review.lines.length < 2 ||
-          review.lines[0].moves.isEmpty ||
-          review.lines[0].moves.first != uciMoves[ply - 1] ||
-          hasReliableComparison(review, whiteMoved)) {
+  }
+
+  // Pure upstream standout predicate; sacrifice is deterministic for a fixed
+  // move/position and was already calculated once by the owned worker.
+  static MoveClassification? _standoutPredicate({
+    required StockfishReview before,
+    required StockfishReview after,
+    StockfishReview? beforePrevious,
+    required bool whiteMoved,
+    required String move,
+    required bool isSacrifice,
+  }) {
+    final loss =
+        _winChance(_normalized(before, whiteMoved)) -
+        _winChance(_normalized(after, whiteMoved));
+    final lines = before.lines;
+    if (loss > 5 ||
+        lines.length < 2 ||
+        lines[0].moves.isEmpty ||
+        lines[1].moves.isEmpty ||
+        lines[0].moves.first != move ||
+        _winChance(_normalizedLine(lines[0], whiteMoved)) -
+                _winChance(_normalizedLine(lines[1], whiteMoved)) <=
+            10) {
+      return null;
+    }
+    if (isSacrifice) return MoveClassification.brilliant;
+    final prior = beforePrevious == null
+        ? 0
+        : _normalized(beforePrevious, whiteMoved);
+    return _winChance(_normalizedLine(lines[0], whiteMoved)) -
+                _winChance(prior) >
+            5
+        ? MoveClassification.good
+        : null;
+  }
+
+  /// Six search units per run: Brilliant needs before/after, Good also needs
+  /// the predecessor except on the first ply. Skip a costly window when a
+  /// later cheaper candidate can still fit; never change baseline scores.
+  static List<int> confirmationPlies({
+    required List<StockfishReview> scores,
+    required List<String> positions,
+    required List<String> uciMoves,
+    required List<ClassifiedMove> classifiedMoves,
+  }) {
+    final candidates = <int>[];
+    var remaining = 6;
+    for (final classified in classifiedMoves) {
+      final label = classified.classification;
+      final ply = classified.ply;
+      if (label != MoveClassification.brilliant &&
+          label != MoveClassification.good) {
         continue;
       }
-      final gap =
-          _winChance(_normalizedLine(review.lines[0], whiteMoved)) -
-          _winChance(_normalizedLine(review.lines[1], whiteMoved));
-      final loss =
-          _winChance(_normalized(review, whiteMoved)) -
-          _winChance(_normalized(scores[ply], whiteMoved));
-      if (gap > 10 && loss <= 5) candidates.add(ply);
-      if (candidates.length == 3) break;
+      if (ply < 1 ||
+          ply >= scores.length ||
+          ply >= positions.length ||
+          ply > uciMoves.length ||
+          scores[ply - 1].evidence?.quality == null ||
+          hasReliableAnnotation(
+            scores: scores,
+            positions: positions,
+            uciMoves: uciMoves,
+            ply: ply,
+            classification: label,
+          )) {
+        continue;
+      }
+      final cost = label == MoveClassification.good && ply > 1 ? 3 : 2;
+      if (cost > remaining) continue;
+      candidates.add(ply);
+      remaining -= cost;
     }
     return candidates;
   }
