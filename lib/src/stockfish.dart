@@ -65,12 +65,14 @@ class StockfishAnalyzer {
     this._createEngine, {
     this.searchTimeout = const Duration(seconds: 20),
     this.drainTimeout = const Duration(seconds: 2),
+    this.readyTimeout = const Duration(seconds: 10),
   });
 
   static final instance = StockfishAnalyzer._();
   final StockfishEngineFactory _createEngine;
   final Duration searchTimeout;
   final Duration drainTimeout;
+  final Duration readyTimeout;
   StockfishEngineHandle? _engine;
   Future<void>? _startup;
   bool _searching = false;
@@ -404,7 +406,7 @@ class StockfishAnalyzer {
     );
     try {
       engine.stdin = 'isready';
-      await ready.future.timeout(drainTimeout);
+      await ready.future.timeout(readyTimeout);
     } finally {
       await subscription.cancel();
     }
