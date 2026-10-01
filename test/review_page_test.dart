@@ -1083,6 +1083,59 @@ void main() {
     expect(classifications.single.classification, MoveClassification.brilliant);
   });
 
+  test('Fischer 17...Be6 queen offer is brilliant, as in En Croissant', () {
+    // Byrne–Fischer, 1956. The former 64-node capture limit stopped before
+    // examining most legal replies and misclassified this move as Good.
+    const before =
+        'r3r1k1/pp3pbp/1qp3p1/2B5/2BP2b1/Q1n2N2/P4PPP/3R1K1R b - - 3 17';
+    final game = chess.Chess.fromFEN(before);
+    final move = game
+        .moves({'asObjects': true})
+        .cast<chess.Move>()
+        .firstWhere((candidate) => MaiaEncoding.uci(candidate) == 'g4e6');
+    expect(game.move(move), isTrue);
+
+    final classifications = MoveClassifier.classify(
+      scores: const [
+        StockfishReview(
+          -305,
+          'g4e6',
+          lines: [
+            StockfishLine(evaluation: -305, moves: ['g4e6']),
+            StockfishLine(evaluation: 97, moves: ['c3b5']),
+          ],
+        ),
+        StockfishReview(-305, ''),
+      ],
+      positions: [before, game.fen],
+      uciMoves: const ['g4e6'],
+    );
+
+    expect(classifications.single.classification, MoveClassification.brilliant);
+  });
+
+  test('a unique best quiet move is not mislabeled brilliant', () {
+    const before = chess.Chess.DEFAULT_POSITION;
+    final game = chess.Chess()..move('e4');
+    final classifications = MoveClassifier.classify(
+      scores: const [
+        StockfishReview(
+          300,
+          'e2e4',
+          lines: [
+            StockfishLine(evaluation: 300, moves: ['e2e4']),
+            StockfishLine(evaluation: -300, moves: ['d2d4']),
+          ],
+        ),
+        StockfishReview(300, ''),
+      ],
+      positions: [before, game.fen],
+      uciMoves: const ['e2e4'],
+    );
+
+    expect(classifications.single.classification, MoveClassification.good);
+  });
+
   test('game phases use position features instead of fixed move numbers', () {
     const opening = chess.Chess.DEFAULT_POSITION;
     const middlegame = 'rn1qk1nr/pppppppp/8/8/8/8/PPPPPPPP/RN1QK1NR w - - 0 1';
@@ -1348,6 +1401,56 @@ void main() {
     stalled.complete(const StockfishReview(0, 'e7e5'));
     await tester.pumpAndSettle();
     expect(find.byType(AnalysisGraph), findsNothing);
+  });
+
+  testWidgets('graph-ready classification exposes Stop and keeps the graph', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final game = chess.Chess()..move('e4');
+    final stalled = Completer<List<ClassifiedMove>>();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ReviewPage(
+          positions: [chess.Chess.DEFAULT_POSITION, game.fen],
+          uciMoves: const ['e2e4'],
+          sanMoves: const ['e4'],
+          playerIsWhite: true,
+          pgn: '1. e4 *',
+          onHome: () {},
+          evaluator: (_) async => const StockfishReview(0, 'e2e4'),
+          classifier: ({
+            required scores,
+            required positions,
+            required uciMoves,
+          }) => stalled.future,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Computer analysis'));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('run-computer-analysis')));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.byType(AnalysisGraph), findsOneWidget);
+    expect(find.text('Graph ready · classifying moves…'), findsOneWidget);
+    final stop = find.byKey(const ValueKey('cancel-computer-analysis'));
+    expect(stop, findsOneWidget);
+    await tester.ensureVisible(stop);
+    await tester.pump();
+    await tester.tap(stop);
+    await tester.pump();
+    expect(find.byType(AnalysisGraph), findsOneWidget);
+    expect(find.text('Computer analysis stopped.'), findsWidgets);
+
+    stalled.complete(const []);
+    await tester.pumpAndSettle();
+    expect(find.byType(AnalysisGraph), findsOneWidget);
   });
 
   test('accuracy is computed separately for White and Black', () {

@@ -86,6 +86,7 @@ class _ReviewPageState extends State<ReviewPage>
   bool _fullAnalysisClassifying = false;
   int _fullAnalysisCompleted = 0;
   int _fullAnalysisGeneration = 0;
+  MoveClassificationJob? _classificationJob;
   List<StockfishReview>? _graphScores;
   List<String> _graphPositions = const [];
   List<String> _graphMoves = const [];
@@ -186,6 +187,7 @@ class _ReviewPageState extends State<ReviewPage>
     if (!_foreground) {
       _cancelSelectedWork();
       StockfishAnalyzer.instance.cancel(_batchScope);
+      _cancelClassificationJob();
       _fullAnalysisGeneration++;
       _fullAnalysisRunning = false;
       _fullAnalysisClassifying = false;
@@ -409,6 +411,7 @@ class _ReviewPageState extends State<ReviewPage>
     _refinementTimer?.cancel();
     StockfishAnalyzer.instance.cancel(_stockfishScope);
     StockfishAnalyzer.instance.cancel(_batchScope);
+    _cancelClassificationJob();
     _maiaInferenceScope.invalidate();
     _secondMaiaInferenceScope.invalidate();
     _boardController.dispose();
@@ -1395,6 +1398,7 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   void _invalidateGraphAnalysisState() {
+    _cancelClassificationJob();
     _fullAnalysisGeneration++;
     _fullAnalysisRunning = false;
     _fullAnalysisClassifying = false;
@@ -1427,6 +1431,7 @@ class _ReviewPageState extends State<ReviewPage>
     final positions = line.positions;
     final quality = widget.gameAnalysisQuality;
     final generation = ++_fullAnalysisGeneration;
+    _cancelClassificationJob();
     setState(() {
       _fullAnalysisRunning = true;
       _fullAnalysisClassifying = false;
@@ -1501,15 +1506,32 @@ class _ReviewPageState extends State<ReviewPage>
       _fullAnalysisClassifying = true;
     });
     try {
-      final classify =
-          widget.classifier ?? MoveClassifier.classifyOffMainIsolate;
-      final classifications = await classify(
-        scores: scores,
-        positions: positions,
-        uciMoves: line.uciMoves,
-      );
+      final customClassifier = widget.classifier;
+      final List<ClassifiedMove> classifications;
+      if (customClassifier != null) {
+        classifications = await customClassifier(
+          scores: scores,
+          positions: positions,
+          uciMoves: line.uciMoves,
+        );
+      } else {
+        final job = MoveClassifier.startOffMainIsolate(
+          scores: scores,
+          positions: positions,
+          uciMoves: line.uciMoves,
+        );
+        _classificationJob = job;
+        try {
+          classifications = await job.result;
+        } finally {
+          await job.terminated;
+          if (identical(_classificationJob, job)) _classificationJob = null;
+        }
+      }
       if (!mounted || generation != _fullAnalysisGeneration) return;
       setState(() => _graphClassifications = classifications);
+    } on MoveClassificationCancelled {
+      // Stop, navigation, or a changed graph already owns the visible state.
     } catch (error, stackTrace) {
       if (!mounted || generation != _fullAnalysisGeneration) return;
       unawaited(
@@ -1527,12 +1549,18 @@ class _ReviewPageState extends State<ReviewPage>
   void _cancelFullAnalysis() {
     if (!_fullAnalysisRunning) return;
     StockfishAnalyzer.instance.cancel(_batchScope);
+    _cancelClassificationJob();
     setState(() {
       _fullAnalysisGeneration++;
       _fullAnalysisRunning = false;
       _fullAnalysisClassifying = false;
       _analysisError = 'Computer analysis stopped.';
     });
+  }
+
+  void _cancelClassificationJob() {
+    _classificationJob?.cancel();
+    _classificationJob = null;
   }
 
   MaiaPositionAnalysis? get _selectedMaiaAnalysis =>
@@ -2422,6 +2450,7 @@ class _ReviewPageState extends State<ReviewPage>
       _engineEnabled = enabled;
       if (!enabled) {
         _showGraph = false;
+        _cancelClassificationJob();
         _fullAnalysisGeneration++;
         _fullAnalysisRunning = false;
         _fullAnalysisClassifying = false;
@@ -2680,6 +2709,12 @@ class _ReviewPageState extends State<ReviewPage>
               const Text(
                 'Graph ready · classifying moves…',
                 textAlign: TextAlign.center,
+              ),
+              TextButton.icon(
+                key: const ValueKey('cancel-computer-analysis'),
+                onPressed: _cancelFullAnalysis,
+                icon: const Icon(Icons.stop_circle_outlined),
+                label: const Text('Stop analysis'),
               ),
             ] else
               MoveClassificationSummary(
