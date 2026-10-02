@@ -6,6 +6,7 @@ import 'package:chess/chess.dart' as chess;
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart' as dc;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/main.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -544,6 +545,15 @@ void main() {
 
   testWidgets('sampling help explains Temperature and Top-P', (tester) async {
     SharedPreferences.setMockInitialValues({});
+    final calls = <MethodCall>[];
+    final messenger = tester.binding.defaultBinaryMessenger;
+    messenger.setMockMethodCallHandler(maiaEngineChannel, (call) async {
+      calls.add(call);
+      return null;
+    });
+    addTearDown(
+      () => messenger.setMockMethodCallHandler(maiaEngineChannel, null),
+    );
     await tester.pumpWidget(const MaiaChessApp());
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('sampling-help')), findsNothing);
@@ -556,6 +566,146 @@ void main() {
     expect(find.text('Temperature and Top-P'), findsOneWidget);
     expect(find.textContaining('how adventurous Maia is'), findsOneWidget);
     expect(find.textContaining('smallest group of moves'), findsOneWidget);
+    expect(
+      find.textContaining('Temperature 1.00 and Top-P 1.00'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('tests at the 1600 setting'), findsOneWidget);
+    expect(
+      find.textContaining('rating-filtered Lichess games'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('can make Maia stronger'), findsOneWidget);
+    expect(
+      find.textContaining('a more human opening repertoire'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('rather than guaranteeing'), findsOneWidget);
+
+    final link = find.byKey(const ValueKey('sampling-research-link'));
+    await tester.ensureVisible(link);
+    await tester.tap(link);
+    await tester.pumpAndSettle();
+    final openUrl = calls.singleWhere((call) => call.method == 'openUrl');
+    expect(openUrl.arguments, {
+      'url':
+          'https://github.com/Dash1971/maia-chess-android/blob/'
+          'cd4841025c440c77af58b42ba3deaeba2ca10f94/'
+                    'docs/research/maia3-sampling/REPORT.md',
+    });
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('new engine settings default to Temperature and Top-P 1.00', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    await tester.pumpWidget(const MaiaChessApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Temperature: 1.00'), findsOneWidget);
+    expect(find.text('Top-P: 1.00'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('sampling-recommendation-warning')),
+      findsNothing,
+    );
+  });
+
+  for (final setting in [
+    ('temperatureV2', 'temperature-setting'),
+    ('topPV2', 'top-p-setting'),
+  ]) {
+    testWidgets('sampling warning follows ${setting.$1} alone', (tester) async {
+      SharedPreferences.setMockInitialValues({
+        'temperatureV2': 1.0,
+        'topPV2': 1.0,
+        setting.$1: 0.6,
+      });
+      await tester.pumpWidget(const MaiaChessApp());
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+      await tester.pumpAndSettle();
+
+      final warning = find.byKey(
+        const ValueKey('sampling-recommendation-warning'),
+      );
+      expect(warning, findsOneWidget);
+      final warningText = tester.widget<Text>(warning);
+      expect(warningText.data, contains('recommended 1.00'));
+      final theme = Theme.of(tester.element(warning));
+      expect(warningText.style?.color, theme.colorScheme.error);
+      expect(warningText.style?.fontSize, theme.textTheme.bodySmall?.fontSize);
+
+      final slider = tester.widget<Slider>(
+        find.descendant(
+          of: find.byKey(ValueKey(setting.$2)),
+          matching: find.byType(Slider),
+        ),
+      );
+      slider.onChanged!(1.0);
+      slider.onChangeEnd!(1.0);
+      await tester.pumpAndSettle();
+      expect(warning, findsNothing);
+      final preferences = await SharedPreferences.getInstance();
+      expect(preferences.getDouble('temperatureV2'), 1.0);
+      expect(preferences.getDouble('topPV2'), 1.0);
+
+      slider.onChanged!(0.6);
+      slider.onChangeEnd!(0.6);
+      await tester.pumpAndSettle();
+      expect(warning, findsOneWidget);
+      expect(preferences.getDouble(setting.$1), 0.6);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('existing sampling choices persist until engine reset', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      'temperatureV2': 0.5,
+      'topPV2': 0.9,
+    });
+    await tester.pumpWidget(const MaiaChessApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Temperature: 0.50'), findsOneWidget);
+    expect(find.text('Top-P: 0.90'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('sampling-recommendation-warning')),
+      findsOneWidget,
+    );
+    final preferences = await SharedPreferences.getInstance();
+    expect(preferences.getDouble('temperatureV2'), 0.5);
+    expect(preferences.getDouble('topPV2'), 0.9);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    await tester.pumpWidget(const MaiaChessApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+    await tester.pumpAndSettle();
+    expect(find.text('Temperature: 0.50'), findsOneWidget);
+    expect(find.text('Top-P: 0.90'), findsOneWidget);
+    final reset = find.text('Reset engine defaults');
+    await tester.ensureVisible(reset);
+    await tester.tap(reset);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Temperature: 1.00'), findsOneWidget);
+    expect(find.text('Top-P: 1.00'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('sampling-recommendation-warning')),
+      findsNothing,
+    );
+    expect(preferences.getDouble('temperatureV2'), 1.0);
+    expect(preferences.getDouble('topPV2'), 1.0);
   });
 
   testWidgets('Maia play rating persists across app restarts', (tester) async {
