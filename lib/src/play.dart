@@ -118,8 +118,8 @@ class _GamePageState extends State<GamePage>
       _isViewingLivePosition &&
       !_isPlayerTurn;
 
-  double _temperature = 0.5;
-  double _topP = 0.9;
+  double _temperature = 1.0;
+  double _topP = 1.0;
   TimePreset _timePreset = TimePreset.unlimited;
   TimePreset _preferredTimePreset = TimePreset.unlimited;
   int _customMinutes = 10;
@@ -850,7 +850,7 @@ class _GamePageState extends State<GamePage>
     final temperature = _readValidatedPreference<double>(
       preferences,
       'temperatureV2',
-      fallback: 0.5,
+      fallback: 1.0,
       decode: (value) =>
           value is double && value.isFinite && value >= 0.0 && value <= 1.0
           ? value
@@ -859,7 +859,7 @@ class _GamePageState extends State<GamePage>
     final topP = _readValidatedPreference<double>(
       preferences,
       'topPV2',
-      fallback: 0.9,
+      fallback: 1.0,
       decode: (value) =>
           value is double && value.isFinite && value >= 0.0 && value <= 1.0
           ? value
@@ -1079,26 +1079,50 @@ class _GamePageState extends State<GamePage>
     context: context,
     builder: (context) => AlertDialog(
       title: const Text('Temperature and Top-P'),
-      content: const SingleChildScrollView(
+      content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+              'Why Temperature 1.00 and Top-P 1.00?',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'These settings let Maia use its full range of predicted human '
+              'moves. In our tests at the 1600 setting, they produced opening '
+              'choices much closer to rating-filtered Lichess games.',
+            ),
+            const SizedBox(height: 14),
+            const Text(
+              'Lower settings reduce variety and can make Maia stronger. '
+              'We favor a more human opening repertoire over maximum strength. '
+              'Maia’s rating describes the players it models, rather than '
+              'guaranteeing an exact playing strength.',
+            ),
+            TextButton.icon(
+              key: const ValueKey('sampling-research-link'),
+              onPressed: () => maiaEngineChannel.invokeMethod<void>('openUrl', {
+                'url':
+                    'https://github.com/Dash1971/maia-chess-android/blob/'
+                    'cd4841025c440c77af58b42ba3deaeba2ca10f94/'
+                    'docs/research/maia3-sampling/REPORT.md',
+              }),
+              icon: const Icon(Icons.open_in_new),
+              label: const Text('Read the sampling research'),
+            ),
+            const SizedBox(height: 14),
+            const Text(
               'Temperature controls how adventurous Maia is. At 0, Maia '
               'always chooses its most likely human move. Higher values make '
               'less likely moves more common.',
             ),
-            SizedBox(height: 14),
-            Text(
+            const SizedBox(height: 14),
+            const Text(
               'Top-P limits Maia to the smallest group of moves whose '
               'combined probability reaches this value. Lower values narrow '
               'the choice to more likely moves; 1.00 keeps every legal move.',
-            ),
-            SizedBox(height: 14),
-            Text(
-              'The defaults (Temperature 0.50 and Top-P 0.90) give some '
-              'variety while keeping Maia close to its rating model.',
             ),
           ],
         ),
@@ -3859,6 +3883,7 @@ class _GamePageState extends State<GamePage>
                 ),
                 children: [
                   ListTile(
+                    key: const ValueKey('temperature-setting'),
                     title: Text(
                       'Temperature: ${_temperature.toStringAsFixed(2)}',
                     ),
@@ -3874,6 +3899,7 @@ class _GamePageState extends State<GamePage>
                     ),
                   ),
                   ListTile(
+                    key: const ValueKey('top-p-setting'),
                     title: Text('Top-P: ${_topP.toStringAsFixed(2)}'),
                     subtitle: Slider(
                       min: 0.00,
@@ -3885,6 +3911,18 @@ class _GamePageState extends State<GamePage>
                       onChangeEnd: (_) => unawaited(_saveEnginePreferences()),
                     ),
                   ),
+                  if (_temperature != 1.0 || _topP != 1.0)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                      child: Text(
+                        'Temperature or Top-P differs from the recommended '
+                        '1.00. See the information button for details.',
+                        key: const ValueKey('sampling-recommendation-warning'),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                    ),
                   ListTile(
                     title: Text('Maia analysis rating: $_analysisElo'),
                     subtitle: Slider(
@@ -3965,8 +4003,8 @@ class _GamePageState extends State<GamePage>
                           _premovesEnabled = true;
                           _premovePenalty = false;
                           _multiplePremoves = false;
-                          _temperature = 0.5;
-                          _topP = 0.9;
+                          _temperature = 1.0;
+                          _topP = 1.0;
                           _analysisElo = 1600;
                           _secondMaiaEnabled = false;
                           _secondMaiaElo = 2400;

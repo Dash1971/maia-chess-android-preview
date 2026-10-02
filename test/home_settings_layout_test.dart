@@ -126,6 +126,10 @@ void main() {
   testWidgets('compact large-text layouts keep all actions reachable', (
     tester,
   ) async {
+    SharedPreferences.setMockInitialValues({
+      'temperatureV2': 0.5,
+      'topPV2': 0.9,
+    });
     tester.view.physicalSize = const Size(320, 568);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -154,6 +158,34 @@ void main() {
     final diagnostics = find.text('Copy diagnostics');
     await tester.ensureVisible(diagnostics);
     expect(diagnostics.hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    final warning = find.byKey(
+      const ValueKey('sampling-recommendation-warning'),
+    );
+    await tester.ensureVisible(warning);
+    expect(warning, findsOneWidget);
+    final help = find.byKey(const ValueKey('sampling-help'));
+    await tester.ensureVisible(help);
+    await tester.tap(help);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    // Center this tall paragraph within the dialog's scroll viewport.
+    await Scrollable.ensureVisible(
+      tester.element(find.textContaining('smallest group of moves')),
+      alignment: 0.5,
+    );
+    await tester.pumpAndSettle();
+    expect(
+      find.textContaining('smallest group of moves').hitTestable(),
+      findsOneWidget,
+    );
+    final researchLink = find.byKey(const ValueKey('sampling-research-link'));
+    await tester.ensureVisible(researchLink);
+    expect(researchLink.hitTestable(), findsOneWidget);
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
     expect(tester.takeException(), isNull);
   });
 }
