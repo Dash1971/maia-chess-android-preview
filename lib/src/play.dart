@@ -3724,7 +3724,7 @@ class _GamePageState extends State<GamePage>
               const Padding(
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
-                  'The first preview supports standard-position, unlimited games only.',
+                  'Chessnut play supports standard-position, unlimited games only.',
                   style: TextStyle(fontSize: 12),
                 ),
               ),
