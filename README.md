@@ -18,7 +18,8 @@ screenshots, see the
 
 ## Next development cycle
 
-Preview 2.3.0-beta.1 starts from the Stable 2.2.1 application baseline. It
+Preview 2.3.0-beta.2 incorporates the Stable 2.2.2 application baseline,
+including the 600–2600 Maia rating controls and saved-setting migration. It
 retains the separate Preview package and release identity; new 2.3 features
 will be developed and qualified here before any Stable promotion. The in-app
 Temperature and Top-P help opens the same current
