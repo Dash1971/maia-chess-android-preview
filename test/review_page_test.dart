@@ -590,8 +590,7 @@ void main() {
     expect(openUrl.arguments, {
       'url':
           'https://github.com/Dash1971/maia-chess-android/blob/'
-          'cd4841025c440c77af58b42ba3deaeba2ca10f94/'
-          'docs/research/maia3-sampling/REPORT.md',
+          'main/docs/research/maia3-sampling/REPORT.md',
     });
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();

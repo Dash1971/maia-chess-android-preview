@@ -111,7 +111,7 @@ void main() {
     );
     expect(
       find.text(
-        'The first preview supports standard-position, unlimited games only.',
+        'Chessnut play supports standard-position, unlimited games only.',
       ),
       findsOneWidget,
     );
