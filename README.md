@@ -8,7 +8,9 @@
 Mobile Maia is an offline-first Android chess app for playing against
 [Maia-3](https://github.com/CSSLab/maia3), reviewing games with Maia and
 Stockfish, and exporting PGN. The Maia model and analysis engines run locally
-on the device.
+on the device. Play, both Maia analysis controls, and Continue from here offer
+target-player ratings from 600 to 2600. These describe the human moves Maia
+imitates, not a calibrated engine playing strength.
 
 For the current stable release, complete user guide, feature overview, and
 screenshots, see the
