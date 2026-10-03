@@ -14,14 +14,18 @@ For the current stable release, complete user guide, feature overview, and
 screenshots, see the
 [Mobile Maia repository](https://github.com/Dash1971/maia-chess-android).
 
-## Being considered for future release
+## Next development cycle
 
-These ideas are under consideration and do not yet have a committed release:
+Preview 2.3.0-beta.1 starts from the Stable 2.2.1 application baseline. It
+retains the separate Preview package and release identity; new 2.3 features
+will be developed and qualified here before any Stable promotion. The in-app
+Temperature and Top-P help opens the same current
+[sampling research](https://github.com/Dash1971/maia-chess-android/blob/main/docs/research/maia3-sampling/REPORT.md)
+as Stable.
 
-1. [Match the game sounds and haptic feedback of the Lichess app](https://github.com/Dash1971/maia-chess-android-preview/issues/18)
-2. [Multiple Maia engines in analysis](https://github.com/Dash1971/maia-chess-android-preview/issues/19)
-3. [Add support for more electronic boards](https://github.com/Dash1971/maia-chess-android-preview/issues/20)
-4. [Improve UI for browsing back and forth through moves](https://github.com/Dash1971/maia-chess-android-preview/issues/21)
+Development snapshots use the same Preview source with a separate Dev package,
+development signer, ARM64-only APK, and smaller 5M Maia model for rapid phone
+testing. They are not production-parity or qualified Preview releases.
 
 ## Install and update with Obtainium
 

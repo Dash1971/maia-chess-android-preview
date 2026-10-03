@@ -1113,8 +1113,7 @@ class _GamePageState extends State<GamePage>
               onPressed: () => maiaEngineChannel.invokeMethod<void>('openUrl', {
                 'url':
                     'https://github.com/Dash1971/maia-chess-android/blob/'
-                    'cd4841025c440c77af58b42ba3deaeba2ca10f94/'
-                    'docs/research/maia3-sampling/REPORT.md',
+                    'main/docs/research/maia3-sampling/REPORT.md',
               }),
               icon: const Icon(Icons.open_in_new),
               label: const Text('Read the sampling research'),
