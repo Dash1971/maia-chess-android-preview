@@ -58,7 +58,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recentGames => 'Partidas recientes';
 
   @override
-  String get resign => 'Rendirse';
+  String get resign => 'Abandonar';
 
   @override
   String get settings => 'Ajustes';
@@ -262,13 +262,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reset => 'Reiniciar';
 
   @override
-  String get flipBoard => 'Girar tablero';
+  String get flipBoard => 'Girar el tablero';
 
   @override
   String get offerDraw => 'Ofrecer tablas';
 
   @override
-  String get takeBackMove => 'Deshacer jugada';
+  String get takeBackMove => 'Deshacer';
 
   @override
   String get whiteIsVictorious => 'Ganan las blancas';
@@ -379,19 +379,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get backToGame => 'Volver a la partida';
 
   @override
-  String get expandVariations => 'Expandir variantes';
+  String get expandVariations => 'Abrir variantes';
 
   @override
-  String get collapseVariations => 'Contraer variantes';
+  String get collapseVariations => 'Cerrar variantes';
 
   @override
-  String get promoteVariation => 'Promover variante';
+  String get promoteVariation => 'Promocionar variante';
 
   @override
   String get makeMainLine => 'Convertir en línea principal';
 
   @override
-  String get deleteFromHere => 'Eliminar desde aquí';
+  String get deleteFromHere => 'Borrar a partir de aquí';
 
   @override
   String get analyzing => 'Analizando…';
@@ -439,7 +439,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get showRawProbabilities =>
-      'Mostrar todas las probabilidades originales';
+      'Mostrar todas las probabilidades originales del modelo';
 
   @override
   String get pasteFen => 'Pega un FEN completo de seis campos';
@@ -477,7 +477,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String maiaMoveProbabilities(int elo) {
-    return 'Probabilidades de jugada de Maia $elo';
+    return 'Probabilidades de las jugadas de Maia $elo';
   }
 
   @override
@@ -599,12 +599,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String materialAdvantage(String score) {
-    return 'Ventaja material $score';
+    return 'Ventaja material de $score';
   }
 
   @override
   String materialDescription(String side, String description) {
-    return 'Material de $side: $description';
+    return 'Diferencia material de $side: $description';
   }
 
   @override
@@ -814,7 +814,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get couldNotConnectChessnut => 'No se pudo conectar Chessnut.';
 
   @override
-  String get chessnutAndroidOnly => 'Chessnut está disponible en Android.';
+  String get chessnutAndroidOnly =>
+      'La conexión con Chessnut está disponible en Android.';
 
   @override
   String get chessnutIsDisconnected => 'Chessnut está desconectado.';
@@ -834,14 +835,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get takebackCompleteYourMove =>
-      'Jugada deshecha. Haz tu jugada en Chessnut.';
+      'Posición restaurada. Haz tu jugada en Chessnut.';
 
   @override
-  String get takebackCompleteThinking => 'Jugada deshecha. Maia está pensando…';
+  String get takebackCompleteThinking =>
+      'Posición restaurada. Maia está pensando…';
 
   @override
   String get restoreLitSquares =>
-      'Para deshacer la jugada, vuelve a colocar las piezas de las casillas iluminadas en Chessnut.';
+      'Para deshacer, vuelve a colocar las piezas en las casillas iluminadas de Chessnut.';
 
   @override
   String get completeMaiaLitMove =>
@@ -899,16 +901,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get consideringDraw => 'Maia está considerando la oferta de tablas…';
 
   @override
-  String get maiaDeclinedDraw => 'Maia rechazó las tablas.';
+  String get maiaDeclinedDraw => 'Maia rechazó la oferta de tablas.';
 
   @override
   String get couldNotEvaluateDraw => 'No se pudo evaluar la oferta de tablas.';
 
   @override
-  String get youResigned => 'Te rendiste: Maia gana.';
+  String get youResigned => 'Abandonaste: Maia gana.';
 
   @override
-  String get moveTakenBack => 'Jugada deshecha. Tu turno.';
+  String get moveTakenBack => 'Posición restaurada. Tu turno.';
 
   @override
   String get connectingChessnut => 'Conectando con Chessnut…';
@@ -936,7 +938,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get offerDrawQuestion => '¿Ofrecer tablas?';
 
   @override
-  String get resignGameQuestion => '¿Rendirse?';
+  String get resignGameQuestion => '¿Abandonar la partida?';
 
   @override
   String get resignEndsImmediately => 'La partida terminará inmediatamente.';
@@ -979,15 +981,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'Estos ajustes permiten a Maia usar toda su variedad de movimientos humanos predichos. En nuestras pruebas con el ajuste 1600, las aperturas se acercaron mucho más a las partidas de Lichess filtradas por nivel.';
+      'Estos ajustes permiten a Maia usar toda la gama de jugadas que predice para jugadores humanos. En nuestras pruebas con el ajuste 1600, las elecciones de apertura se parecieron mucho más a las de partidas de Lichess filtradas por nivel.';
 
   @override
   String get samplingStrength =>
-      'Los valores bajos reducen la variedad y pueden fortalecer a Maia. Preferimos aperturas más humanas a la máxima fuerza. Su nivel describe a los jugadores que modela y no garantiza una fuerza de juego exacta.';
+      'Los valores bajos reducen la variedad y pueden aumentar la fuerza de juego de Maia. Preferimos un repertorio de aperturas más humano a la máxima fuerza de juego. El Elo de Maia describe el nivel de los jugadores que modela y no garantiza una fuerza de juego exacta.';
 
   @override
   String get samplingTemperatureHelp =>
-      'La temperatura controla cuánto se concentra la probabilidad en las jugadas más frecuentes. Con 0, Maia siempre elige la jugada que el modelo predice como la más probable entre los humanos. Los valores positivos bajos favorecen más las jugadas más probables; los valores altos dan más oportunidades a las menos probables.';
+      'La temperatura controla cuánto se concentran las probabilidades de las jugadas de Maia. Con 0, Maia siempre elige la jugada que el modelo predice como más probable para los jugadores humanos. Los valores positivos bajos favorecen más las jugadas más probables; los valores altos dan más posibilidades a las menos probables.';
 
   @override
   String get samplingTopPHelp =>
@@ -1003,11 +1005,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aboutBoardCredits =>
-      'La interfaz del tablero, el tema marrón y las piezas Cburnett proceden de Lichess Flutter Chessground. El soporte local de Stockfish utiliza Lichess multistockfish.';
+      'La interfaz del tablero, el tema marrón predeterminado y las piezas Cburnett proceden de Lichess Flutter Chessground. El motor Stockfish local utiliza Lichess multistockfish.';
 
   @override
   String get aboutReviewCredits =>
-      'La clasificación de movimientos y la detección de sacrificios de la revisión de partidas se adaptan de la interfaz de ajedrez de código abierto En Croissant.';
+      'La clasificación de jugadas y los criterios de detección de sacrificios de la revisión de partidas se han adaptado de la interfaz de ajedrez de código abierto En Croissant.';
 
   @override
   String get aboutLicence =>
@@ -1019,7 +1021,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'La Temperatura o Top-P difiere del valor recomendado 1,00. Consulta el botón de información.';
+      'La temperatura o Top-P difiere del valor recomendado 1,00. Consulta el botón de información para más detalles.';
 
   @override
   String get couldNotOpenPgn => 'No se pudo abrir el PGN.';

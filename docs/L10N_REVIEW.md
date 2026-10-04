@@ -2,7 +2,15 @@
 
 Mobile Maia supplies English, Japanese, Simplified Chinese, Korean and Spanish UI catalogs. The catalogs currently contain **296 messages each** and cover game setup and play, settings and help, Chessnut connection/recovery, saved games, PGN import/export, analysis and move classifications, the board editor, and diagnostic recovery.
 
-The translations have received an editorial and automated review, but **have not been approved by native-speaking chess players**. Catalog completeness is not a claim of linguistic certification. Use `l10n_review.csv` alongside the Dev app to record corrections, awkward chess terminology, clipping, or unclear instructions. Fill in **Reviewer suggestion** with the language and proposed wording; a screenshot is useful for context. Do not publish reviewer identities or private game/device screenshots without permission.
+The translations have received an editorial and automated review, but **have not been approved by native-speaking chess players**. Catalog completeness is not a claim of linguistic certification. The preferred human-review handoff is the language ARB plus the [short reviewer guide](NATIVE_REVIEW.md). The existing `l10n_review.csv` remains a synchronized maintenance aid. Do not publish reviewer identities or private game/device screenshots without permission.
+
+For the chess terminology evidence and unresolved editorial choices, see [the chess-language review](CHESS_LANGUAGE_REVIEW.md).
+
+## Direct ARB review
+
+Flutter ARB files are the authoritative translation format, including for human review. A reviewer comfortable editing JSON can edit only the string values in their `lib/l10n/app_ja.arb`, `app_zh.arb`, `app_ko.arb`, or `app_es.arb`, consulting `app_en.arb` for the English text, `@message` translator descriptions and placeholder definitions. Keep message IDs, `@@locale`, placeholders, ICU branches and valid JSON intact. Submit the changed ARB or a pull request; a maintainer runs `flutter gen-l10n` and the localization checks. Do not edit generated Dart files or use Android XML for Flutter UI translations.
+
+An ARB-aware translation editor can be used if it preserves these contracts. Plain ARB editing is sufficient; a spreadsheet or translation service is not required.
 
 ## Source of truth and contributor workflow
 
@@ -40,6 +48,7 @@ Format displayed numbers and dates for the chosen locale, including Spanish deci
 - Takeback can undo different numbers of plies depending on turn and board mode. Do not promise exactly one ply.
 - Castling controls enable castling rights; kingside means short castling, queenside means long castling.
 - Classification names are chess annotations, not praise for the user. Keep them consistent between the move list, summaries and tooltips.
+- Prefer Lichess conventions for equivalent features, corroborated by native chess writing. Record justified deviations when semantics differ or a more explicit label is needed. Do not rename Maia's `!?` and `?!` annotations merely to match another site's analysis categories.
 - Use neutral Spanish and conventional international-chess vocabulary in CJK languages. Chinese here means international chess, not xiangqi; Japanese labels must not imply shogi rules.
 
 ## Regression coverage
