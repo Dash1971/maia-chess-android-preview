@@ -26,6 +26,8 @@ Temperature and Top-P help opens the same current
 [sampling research](https://github.com/Dash1971/maia-chess-android/blob/main/docs/research/maia3-sampling/REPORT.md)
 as Stable.
 
+We are looking to add multilingual support in a future release.
+
 Development snapshots use the same Preview source with a separate Dev package,
 development signer, ARM64-only APK, and smaller 5M Maia model for rapid phone
 testing. They are not production-parity or qualified Preview releases.
