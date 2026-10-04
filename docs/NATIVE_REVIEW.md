@@ -1,11 +1,15 @@
 # Native chess-player review
 
-Please review the wording in your language while using the Mobile Maia Preview app. All four translations are provisional. We need natural chess language as well as ordinary grammatical correctness.
+Please review the wording in your language while using the Mobile Maia Preview app. All eight translations are provisional. We need natural chess language as well as ordinary grammatical correctness.
 
 ## Files to edit
 
 | Language | Edit this file |
 | --- | --- |
+| German | [app_de.arb](../lib/l10n/app_de.arb) |
+| French | [app_fr.arb](../lib/l10n/app_fr.arb) |
+| Russian | [app_ru.arb](../lib/l10n/app_ru.arb) |
+| Hindi | [app_hi.arb](../lib/l10n/app_hi.arb) |
 | Japanese | [app_ja.arb](../lib/l10n/app_ja.arb) |
 | Simplified Chinese | [app_zh.arb](../lib/l10n/app_zh.arb) |
 | Korean | [app_ko.arb](../lib/l10n/app_ko.arb) |

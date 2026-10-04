@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:maia_chess/l10n/app_localizations.dart';
 import 'package:maia_chess/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,16 +30,12 @@ void main() {
     });
   }
 
-  for (final (code, start, system) in [
-    ('en', 'Start game', 'System default'),
-    ('ja', '対局開始', '端末の設定に従う'),
-    ('zh', '开始对局', '跟随系统'),
-    ('ko', '대국 시작', '시스템 기본값'),
-    ('es', 'Iniciar partida', 'Predeterminado del sistema'),
-  ]) {
+  for (final locale in AppLocalizations.supportedLocales) {
+    final code = locale.languageCode;
     testWidgets('$code compact large-text Home and language menu are usable', (
       tester,
     ) async {
+      final strings = await AppLocalizations.delegate.load(locale);
       SharedPreferences.setMockInitialValues({'appLanguageV1': code});
       tester.view.physicalSize = const Size(320, 568);
       tester.view.devicePixelRatio = 1;
@@ -49,7 +46,22 @@ void main() {
       await tester.pumpWidget(const MaiaChessApp());
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
-      final button = find.widgetWithText(FilledButton, start);
+      final sideControl = find.byType(SegmentedButton<PlayerSide>);
+      expect(
+        tester.widget<SegmentedButton<PlayerSide>>(sideControl).direction,
+        Axis.vertical,
+      );
+      final randomSide = find.descendant(
+        of: sideControl,
+        matching: find.text(strings.random),
+      );
+      await tester.ensureVisible(randomSide);
+      await tester.tap(randomSide);
+      await tester.pumpAndSettle();
+      expect(tester.widget<SegmentedButton<PlayerSide>>(sideControl).selected, {
+        PlayerSide.random,
+      });
+      final button = find.widgetWithText(FilledButton, strings.startGame);
       await tester.ensureVisible(button);
       expect(button.hitTestable(), findsOneWidget);
       await tester.tap(find.byKey(const ValueKey('home-settings-button')));
@@ -58,7 +70,8 @@ void main() {
       await tester.tap(find.byKey(ValueKey('app-language-$code')));
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
-      await tester.tap(find.text(system).last);
+      await tester.ensureVisible(find.text(strings.systemDefault).last);
+      await tester.tap(find.text(strings.systemDefault).last);
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
       expect(
@@ -80,7 +93,7 @@ void main() {
       tester.platformDispatcher.localesTestValue = const [Locale('es', 'MX')];
       await tester.pumpAndSettle();
       expect(find.text('Iniciar partida'), findsOneWidget);
-      tester.platformDispatcher.localesTestValue = const [Locale('fr', 'FR')];
+      tester.platformDispatcher.localesTestValue = const [Locale('it', 'IT')];
       await tester.pumpAndSettle();
       expect(find.text('Start game'), findsOneWidget);
       await tester.tap(find.byKey(const ValueKey('home-settings-button')));

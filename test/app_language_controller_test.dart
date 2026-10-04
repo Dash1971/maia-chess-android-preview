@@ -175,8 +175,23 @@ void main() {
       const Locale('ko'),
     );
     expect(
-      resolveAppLocale([const Locale('fr'), const Locale('es')], supported),
+      resolveAppLocale([const Locale('it'), const Locale('es')], supported),
       const Locale('es'),
     );
+    for (final locale in [
+      const Locale('de', 'DE'),
+      const Locale('de', 'AT'),
+      const Locale('de', 'CH'),
+      const Locale('fr', 'FR'),
+      const Locale('fr', 'CA'),
+      const Locale('ru', 'RU'),
+      const Locale('ru', 'KZ'),
+      const Locale('hi', 'IN'),
+    ]) {
+      expect(
+        resolveAppLocale([locale], supported),
+        Locale(locale.languageCode),
+      );
+    }
   });
 }

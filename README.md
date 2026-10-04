@@ -26,11 +26,12 @@ Temperature and Top-P help opens the same current
 [sampling research](https://github.com/Dash1971/maia-chess-android/blob/main/docs/research/maia3-sampling/REPORT.md)
 as Stable.
 
-This Preview beta includes Japanese, Simplified Chinese, Korean and
-Spanish UI catalogs alongside English. Choose a language in Settings or follow
+The source includes German, French, Russian, Hindi, Japanese, Simplified Chinese,
+Korean and Spanish UI catalogs alongside English. German, French, Russian and Hindi
+are new for the next Preview build. Choose a language in Settings or follow
 the device language. Native-speaker review is still pending; see the
 [localization guide](docs/L10N_REVIEW.md) for coverage, intentional technical-text
-exceptions, contributor instructions and the translation review sheet.
+exceptions, contributor instructions and the ARB reviewer guide.
 
 Development snapshots use the same Preview source with a separate Dev package,
 development signer, ARM64-only APK, and smaller 5M Maia model for rapid phone

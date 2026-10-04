@@ -11,20 +11,27 @@ import json
 import re
 from pathlib import Path
 
-LOCALES = ('en', 'ja', 'zh', 'ko', 'es')
+LOCALES = ('en', 'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi')
 COLUMNS = ('English source', 'Japanese (provisional)', 'Simplified Chinese (provisional)',
-           'Korean (provisional)', 'Spanish (provisional)')
+           'Korean (provisional)', 'Spanish (provisional)', 'German (provisional)',
+           'French (provisional)', 'Russian (provisional)', 'Hindi (provisional)')
 # Product/protocol names and deliberate technical terminology are not prose.
 IDENTICAL_ALLOWED = {
     # Shared technical names, brands, or templates containing no English prose.
-    'topP': {'ja', 'zh', 'ko', 'es'},
-    'topPValue': {'ja', 'zh', 'ko', 'es'},
-    'maiaOpponentRating': {'ja', 'zh', 'ko', 'es'},
-    'chessnutBattery': {'ja', 'zh', 'ko', 'es'},
-    'recentGameSummary': {'ja', 'zh', 'ko', 'es'},
-    'maiaProbabilitySemantics': {'ja', 'zh', 'ko', 'es'},
+    'topP': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
+    'topPValue': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
+    'maiaOpponentRating': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
+    'chessnutBattery': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
+    'recentGameSummary': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
+    'maiaProbabilitySemantics': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
     # “experimental” is spelled identically in Spanish and English.
     'chessnutExperimental': {'es'},
+    # Native words/initials that share their spelling with English.
+    'start': {'de'},
+    'whiteShort': {'de'},
+    'licence': {'fr'},
+    'minutes': {'fr'},
+    'positionNumber': {'fr'},
 }
 ARGUMENT = re.compile(r'\{([A-Za-z][A-Za-z0-9_]*)(?=\s*[,}])')
 

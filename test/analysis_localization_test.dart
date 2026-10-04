@@ -5,7 +5,7 @@ import 'package:maia_chess/l10n/app_localizations.dart';
 import 'package:maia_chess/main.dart';
 
 void main() {
-  for (final locale in ['ja', 'zh', 'ko', 'es']) {
+  for (final locale in ['ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi']) {
     testWidgets('board editor is localized at 200% in $locale', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
