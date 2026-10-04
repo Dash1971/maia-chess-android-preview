@@ -1,0 +1,479 @@
+{
+  "@@locale": "en",
+  "about": "About",
+  "@about": {
+    "description": "Home / game setup: About"
+  },
+  "analysisBoard": "Analysis Board",
+  "@analysisBoard": {
+    "description": "Home / game setup: Analysis Board"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Home / game setup: Back"
+  },
+  "black": "Black",
+  "@black": {
+    "description": "Home / game setup: Black"
+  },
+  "cancelPremoves": "Cancel premoves",
+  "@cancelPremoves": {
+    "description": "Home / game setup: Cancel premoves"
+  },
+  "chessnutExperimental": "Chessnut (experimental)",
+  "@chessnutExperimental": {
+    "description": "Home / game setup: Chessnut (experimental)"
+  },
+  "connectChessnut": "Connect Chessnut",
+  "@connectChessnut": {
+    "description": "Home / game setup: Connect Chessnut"
+  },
+  "disconnect": "Disconnect",
+  "@disconnect": {
+    "description": "Home / game setup: Disconnect"
+  },
+  "engineSettings": "Engine settings",
+  "@engineSettings": {
+    "description": "Home / game setup: Engine settings"
+  },
+  "gameMenu": "Game menu",
+  "@gameMenu": {
+    "description": "Home / game setup: Game menu"
+  },
+  "gameReady": "Game ready",
+  "@gameReady": {
+    "description": "Home / game setup: Game ready"
+  },
+  "gameSettings": "Game settings",
+  "@gameSettings": {
+    "description": "Home / game setup: Game settings"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Home / game setup: Home"
+  },
+  "playMaia": "Play Maia",
+  "@playMaia": {
+    "description": "Home / game setup: Play Maia"
+  },
+  "random": "Random",
+  "@random": {
+    "description": "Home / game setup: Random"
+  },
+  "recentGames": "Recent games",
+  "@recentGames": {
+    "description": "Home / game setup: Recent games"
+  },
+  "resign": "Resign",
+  "@resign": {
+    "description": "Home / game setup: Resign"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Home / game setup: Settings"
+  },
+  "startGame": "Start game",
+  "@startGame": {
+    "description": "Home / game setup: Start game"
+  },
+  "timeControl": "Time control",
+  "@timeControl": {
+    "description": "Home / game setup: Time control"
+  },
+  "white": "White",
+  "@white": {
+    "description": "Home / game setup: White"
+  },
+  "unlimited": "Unlimited",
+  "@unlimited": {
+    "description": "Home / game setup: Unlimited"
+  },
+  "custom": "Custom",
+  "@custom": {
+    "description": "Home / game setup: Custom"
+  },
+  "seconds": "seconds",
+  "@seconds": {
+    "description": "Home / game setup: seconds"
+  },
+  "yourSide": "Your side",
+  "@yourSide": {
+    "description": "Home / game setup: Your side"
+  },
+  "you": "You",
+  "@you": {
+    "description": "Home / game setup: You"
+  },
+  "systemDefault": "System default",
+  "@systemDefault": {
+    "description": "Settings: System default"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Settings: Language"
+  },
+  "playMaiaRating": "Play Maia rating",
+  "@playMaiaRating": {
+    "description": "Settings: Play Maia rating"
+  },
+  "minutes": "Minutes",
+  "@minutes": {
+    "description": "Settings: Minutes"
+  },
+  "increment": "Increment",
+  "@increment": {
+    "description": "Settings: Increment"
+  },
+  "gameSounds": "Game sounds",
+  "@gameSounds": {
+    "description": "Settings: Game sounds"
+  },
+  "movesCapturesErrorsAndGameEnd": "Moves, captures, errors, and game end",
+  "@movesCapturesErrorsAndGameEnd": {
+    "description": "Settings: Moves, captures, errors, and game end"
+  },
+  "hapticFeedback": "Haptic feedback",
+  "@hapticFeedback": {
+    "description": "Settings: Haptic feedback"
+  },
+  "touchFeedbackForMovesChecksErrorsAndGameEnd": "Touch feedback for moves, checks, errors, and game end",
+  "@touchFeedbackForMovesChecksErrorsAndGameEnd": {
+    "description": "Settings: Touch feedback for moves, checks, errors, and game end"
+  },
+  "premoves": "Premoves",
+  "@premoves": {
+    "description": "Settings: Premoves"
+  },
+  "queueAMoveWhileMaiaIsThinking": "Queue a move while Maia is thinking",
+  "@queueAMoveWhileMaiaIsThinking": {
+    "description": "Settings: Queue a move while Maia is thinking"
+  },
+  "oneHundredMsPremovePenalty": "100 ms premove penalty",
+  "@oneHundredMsPremovePenalty": {
+    "description": "Settings: 100 ms premove penalty"
+  },
+  "use01SecondsPerPremoveInTimedGames": "Use 0.1 seconds per premove in timed games",
+  "@use01SecondsPerPremoveInTimedGames": {
+    "description": "Settings: Use 0.1 seconds per premove in timed games"
+  },
+  "allowMultiplePremoves": "Allow multiple premoves",
+  "@allowMultiplePremoves": {
+    "description": "Settings: Allow multiple premoves"
+  },
+  "queueASequenceAnIllegalMoveCancelsTheRest": "Queue a sequence; an illegal move cancels the rest",
+  "@queueASequenceAnIllegalMoveCancelsTheRest": {
+    "description": "Settings: Queue a sequence; an illegal move cancels the rest"
+  },
+  "humanMoveTiming": "Human move timing",
+  "@humanMoveTiming": {
+    "description": "Settings: Human move timing"
+  },
+  "variableNaturalPausesBeforeMaiaMoves": "Variable natural pauses before Maia moves",
+  "@variableNaturalPausesBeforeMaiaMoves": {
+    "description": "Settings: Variable natural pauses before Maia moves"
+  },
+  "aboutTemperatureAndTopP": "About Temperature and Top-P",
+  "@aboutTemperatureAndTopP": {
+    "description": "Settings: About Temperature and Top-P"
+  },
+  "temperature": "Temperature",
+  "@temperature": {
+    "description": "Settings: Temperature"
+  },
+  "topP": "Top-P",
+  "@topP": {
+    "description": "Settings: Top-P"
+  },
+  "maiaAnalysisRating": "Maia analysis rating",
+  "@maiaAnalysisRating": {
+    "description": "Settings: Maia analysis rating"
+  },
+  "addSecondMaiaEngine": "Add second Maia engine",
+  "@addSecondMaiaEngine": {
+    "description": "Settings: Add second Maia engine"
+  },
+  "compareAnotherMaiaRatingInAnalysisAndReview": "Compare another Maia rating in analysis and review",
+  "@compareAnotherMaiaRatingInAnalysisAndReview": {
+    "description": "Settings: Compare another Maia rating in analysis and review"
+  },
+  "secondMaiaAnalysisRating": "Second Maia analysis rating",
+  "@secondMaiaAnalysisRating": {
+    "description": "Settings: Second Maia analysis rating"
+  },
+  "gameAnalysisQuality": "Game analysis quality",
+  "@gameAnalysisQuality": {
+    "description": "Settings: Game analysis quality"
+  },
+  "resetEngineDefaults": "Reset engine defaults",
+  "@resetEngineDefaults": {
+    "description": "Settings: Reset engine defaults"
+  },
+  "boardSounds": "Board sounds",
+  "@boardSounds": {
+    "description": "Settings: Board sounds"
+  },
+  "beepForCheckCheckmateAndCompletedIllegalMoves": "Beep for check, checkmate, and completed illegal moves.",
+  "@beepForCheckCheckmateAndCompletedIllegalMoves": {
+    "description": "Settings: Beep for check, checkmate, and completed illegal moves."
+  },
+  "copyDiagnostics": "Copy diagnostics",
+  "@copyDiagnostics": {
+    "description": "Settings: Copy diagnostics"
+  },
+  "diagnosticsCopied": "Diagnostics copied",
+  "@diagnosticsCopied": {
+    "description": "Settings: Diagnostics copied"
+  },
+  "newGame": "New game",
+  "@newGame": {
+    "description": "Live game: New game"
+  },
+  "resetGame": "Reset game",
+  "@resetGame": {
+    "description": "Live game: Reset game"
+  },
+  "shareAndExport": "Share and export",
+  "@shareAndExport": {
+    "description": "Live game: Share and export"
+  },
+  "savePgnFile": "Save PGN file",
+  "@savePgnFile": {
+    "description": "Live game: Save PGN file"
+  },
+  "sharePgn": "Share PGN",
+  "@sharePgn": {
+    "description": "Live game: Share PGN"
+  },
+  "copyPgn": "Copy PGN",
+  "@copyPgn": {
+    "description": "Live game: Copy PGN"
+  },
+  "copyFen": "Copy FEN",
+  "@copyFen": {
+    "description": "Live game: Copy FEN"
+  },
+  "maiaErrorRetry": "Maia error. Retry",
+  "@maiaErrorRetry": {
+    "description": "Live game: Maia error. Retry"
+  },
+  "maiaErrorPleaseRetry": "Maia error. Please retry.",
+  "@maiaErrorPleaseRetry": {
+    "description": "Live game: Maia error. Please retry."
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Live game: Retry"
+  },
+  "maiaIsThinking": "Maia is thinking…",
+  "@maiaIsThinking": {
+    "description": "Live game: Maia is thinking…"
+  },
+  "history": "HISTORY",
+  "@history": {
+    "description": "Live game: HISTORY"
+  },
+  "start": "START",
+  "@start": {
+    "description": "Live game: START"
+  },
+  "chessnutStatus": "Chessnut status",
+  "@chessnutStatus": {
+    "description": "Live game: Chessnut status"
+  },
+  "leaveCurrentGame": "Leave current game?",
+  "@leaveCurrentGame": {
+    "description": "Live game: Leave current game?"
+  },
+  "yourGameWillBeKeptInRecentGames": "Your game will be kept in Recent games.",
+  "@yourGameWillBeKeptInRecentGames": {
+    "description": "Live game: Your game will be kept in Recent games."
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Live game: Cancel"
+  },
+  "continueAction": "Continue",
+  "@continueAction": {
+    "description": "Live game: Continue"
+  },
+  "startANewGame": "Start a new game?",
+  "@startANewGame": {
+    "description": "Live game: Start a new game?"
+  },
+  "resetGameQuestion": "Reset game?",
+  "@resetGameQuestion": {
+    "description": "Live game: Reset game?"
+  },
+  "yourCompletedGameWillRemainInRecentGames": "Your completed game will remain in Recent Games.",
+  "@yourCompletedGameWillRemainInRecentGames": {
+    "description": "Live game: Your completed game will remain in Recent Games."
+  },
+  "thisGameWillBePermanentlyErased": "This game will be permanently erased.",
+  "@thisGameWillBePermanentlyErased": {
+    "description": "Live game: This game will be permanently erased."
+  },
+  "startNewGame": "Start new game",
+  "@startNewGame": {
+    "description": "Live game: Start new game"
+  },
+  "reset": "Reset",
+  "@reset": {
+    "description": "Live game: Reset"
+  },
+  "flipBoard": "Flip board",
+  "@flipBoard": {
+    "description": "Live game: Flip board"
+  },
+  "offerDraw": "Offer draw",
+  "@offerDraw": {
+    "description": "Live game: Offer draw"
+  },
+  "takeBackMove": "Take back move",
+  "@takeBackMove": {
+    "description": "Live game: Take back move"
+  },
+  "whiteIsVictorious": "White is victorious",
+  "@whiteIsVictorious": {
+    "description": "Live game: White is victorious"
+  },
+  "blackIsVictorious": "Black is victorious",
+  "@blackIsVictorious": {
+    "description": "Live game: Black is victorious"
+  },
+  "theGameIsADraw": "The game is a draw",
+  "@theGameIsADraw": {
+    "description": "Live game: The game is a draw"
+  },
+  "theGameHasEnded": "The game has ended",
+  "@theGameHasEnded": {
+    "description": "Live game: The game has ended"
+  },
+  "rematch": "Rematch",
+  "@rematch": {
+    "description": "Live game: Rematch"
+  },
+  "fast": "Fast",
+  "@fast": {
+    "description": "Analysis quality: Fast"
+  },
+  "balanced": "Balanced",
+  "@balanced": {
+    "description": "Analysis quality: Balanced"
+  },
+  "thorough": "Thorough",
+  "@thorough": {
+    "description": "Analysis quality: Thorough"
+  },
+  "continueFromHere": "Continue from here",
+  "@continueFromHere": {
+    "description": "Analysis Board / Review: Continue from here"
+  },
+  "load": "Load",
+  "@load": {
+    "description": "Analysis Board / Review: Load"
+  },
+  "editBoard": "Edit Board",
+  "@editBoard": {
+    "description": "Analysis Board / Review: Edit Board"
+  },
+  "done": "Done",
+  "@done": {
+    "description": "Analysis Board / Review: Done"
+  },
+  "whitePieces": "White pieces",
+  "@whitePieces": {
+    "description": "Analysis Board / Review: White pieces"
+  },
+  "blackPieces": "Black pieces",
+  "@blackPieces": {
+    "description": "Analysis Board / Review: Black pieces"
+  },
+  "whiteToMove": "White to move",
+  "@whiteToMove": {
+    "description": "Analysis Board / Review: White to move"
+  },
+  "blackToMove": "Black to move",
+  "@blackToMove": {
+    "description": "Analysis Board / Review: Black to move"
+  },
+  "castlingRights": "Castling rights",
+  "@castlingRights": {
+    "description": "Analysis Board / Review: Castling rights"
+  },
+  "whiteKingside": "White kingside",
+  "@whiteKingside": {
+    "description": "Analysis Board / Review: White kingside"
+  },
+  "whiteQueenside": "White queenside",
+  "@whiteQueenside": {
+    "description": "Analysis Board / Review: White queenside"
+  },
+  "blackKingside": "Black kingside",
+  "@blackKingside": {
+    "description": "Analysis Board / Review: Black kingside"
+  },
+  "blackQueenside": "Black queenside",
+  "@blackQueenside": {
+    "description": "Analysis Board / Review: Black queenside"
+  },
+  "enPassantTarget": "En-passant target",
+  "@enPassantTarget": {
+    "description": "Analysis Board / Review: En-passant target"
+  },
+  "startingPosition": "Starting position",
+  "@startingPosition": {
+    "description": "Analysis Board / Review: Starting position"
+  },
+  "clearBoard": "Clear board",
+  "@clearBoard": {
+    "description": "Analysis Board / Review: Clear board"
+  },
+  "loadFen": "Load FEN",
+  "@loadFen": {
+    "description": "Analysis Board / Review: Load FEN"
+  },
+  "loadPgn": "Load PGN",
+  "@loadPgn": {
+    "description": "Analysis Board / Review: Load PGN"
+  },
+  "openPgnFile": "Open PGN file",
+  "@openPgnFile": {
+    "description": "Analysis Board / Review: Open PGN file"
+  },
+  "clearMoves": "Clear moves",
+  "@clearMoves": {
+    "description": "Analysis Board / Review: Clear moves"
+  },
+  "boardEditor": "Board Editor",
+  "@boardEditor": {
+    "description": "Analysis Board / Review: Board Editor"
+  },
+  "endPosition": "end position",
+  "@endPosition": {
+    "description": "Analysis Board / Review: end position"
+  },
+  "analysisMenu": "Analysis menu",
+  "@analysisMenu": {
+    "description": "Analysis Board / Review: Analysis menu"
+  },
+  "turnEngineOff": "Turn engine off",
+  "@turnEngineOff": {
+    "description": "Analysis Board / Review: Turn engine off"
+  },
+  "turnEngineOn": "Turn engine on",
+  "@turnEngineOn": {
+    "description": "Analysis Board / Review: Turn engine on"
+  },
+  "moves": "Moves",
+  "@moves": {
+    "description": "Analysis Board / Review: Moves"
+  },
+  "computerAnalysis": "Computer analysis",
+  "@computerAnalysis": {
+    "description": "Analysis Board / Review: Computer analysis"
+  },
+  "backToGame": "Back to game",
+  "@backToGame": {
+    "description": "Analysis Board / Review: Back to game"
+  }
+}

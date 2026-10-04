@@ -3874,6 +3874,18 @@ class _GamePageState extends State<GamePage>
                             value: 'ja',
                             child: Text('日本語'),
                           ),
+                          const DropdownMenuItem(
+                            value: 'zh',
+                            child: Text('简体中文'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'ko',
+                            child: Text('한국어'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'es',
+                            child: Text('Español'),
+                          ),
                         ],
                         onChanged: (value) => language.onChanged(
                           value == 'system' ? null : value,

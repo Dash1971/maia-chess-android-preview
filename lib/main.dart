@@ -11,13 +11,14 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart' as dc;
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/foundation.dart'
     show LicenseRegistry, LicenseEntryWithLineBreaks, mapEquals, listEquals;
 import 'package:flutter/services.dart';
 import 'package:multistockfish/multistockfish.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'l10n/app_localizations.dart';
 
 part 'src/engine_queue.dart';
 part 'src/session_repository.dart';
@@ -145,7 +146,12 @@ class _MaiaChessAppState extends State<MaiaChessApp>
   Future<void> _loadLanguage() async {
     final preferences = await SharedPreferences.getInstance();
     final saved = preferences.getString(appLanguagePreferenceKey);
-    if (mounted && (saved == 'en' || saved == 'ja')) {
+    if (mounted &&
+        (saved == 'en' ||
+            saved == 'ja' ||
+            saved == 'zh' ||
+            saved == 'ko' ||
+            saved == 'es')) {
       setState(() => _languageOverride = saved);
     }
   }
@@ -208,8 +214,8 @@ class _MaiaChessAppState extends State<MaiaChessApp>
     return MaterialApp(
       title: 'Mobile Maia Preview',
       locale: _languageOverride == null ? null : Locale(_languageOverride!),
-      supportedLocales: const [Locale('en'), Locale('ja')],
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       navigatorObservers: [maiaRouteObserver],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
