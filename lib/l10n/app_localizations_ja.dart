@@ -1004,4 +1004,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get blackShort => '黒';
+
+  @override
+  String get dateUnknown => '対局日不明';
+
+  @override
+  String get savedGameVersionUnsupported =>
+      'この保存データは未対応の形式です。Mobile Maiaを更新してから開いてください。このデータは保持されています。';
+
+  @override
+  String get gameStorageFailed => '対局の保存先にアクセスできませんでした。もう一度お試しください。';
 }

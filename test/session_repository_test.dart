@@ -272,19 +272,19 @@ void main() {
           'type': 'game',
           'recentState': 'incomplete',
           'elo': 500,
-          'pgn': '[Event "First"]\n[Result "*"]\n\n*',
+          'pgn': '[Event "First"]\n[Date "2026.09.05"]\n[Result "*"]\n\n*',
         }),
         RecentSession('second', DateTime.utc(2026, 9, 4), {
           'type': 'game',
           'recentState': 'completed',
           'elo': 1500,
-          'pgn': '[Event "Second"]\n[Result "1-0"]\n\n1-0',
+          'pgn': '[Event "Second"]\n[Date "2026.09.04"]\n[Result "1-0"]\n\n1-0',
         }),
         RecentSession('third', DateTime.utc(2026, 9, 3), {
           'type': 'game',
           'recentState': 'completed',
           'elo': 2000,
-          'pgn': '[Event "Third"]\n[Result "0-1"]\n\n0-1',
+          'pgn': '[Event "Third"]\n[Date "2026.09.03"]\n[Result "0-1"]\n\n0-1',
         }),
       ];
       final deletionBatches = <Set<String>>[];
