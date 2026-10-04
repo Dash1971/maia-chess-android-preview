@@ -356,9 +356,9 @@ class _GamePageState extends State<GamePage>
                 maiaElo: _decodeMaiaRating(saved['maiaElo']) ?? _analysisElo,
                 secondMaiaElo: saved.containsKey('secondMaiaElo')
                     ? (saved['secondMaiaElo'] == null
-                        ? null
-                        : _decodeMaiaRating(saved['secondMaiaElo']) ??
-                              _secondMaiaElo)
+                          ? null
+                          : _decodeMaiaRating(saved['secondMaiaElo']) ??
+                                _secondMaiaElo)
                     : (_secondMaiaEnabled ? _secondMaiaElo : null),
                 gameAnalysisQuality: _gameAnalysisQuality,
                 initialVariations: variations,
@@ -411,7 +411,8 @@ class _GamePageState extends State<GamePage>
                     initialVariations: variations,
                     initialTreeIsAuthoritative:
                         saved['treeIsAuthoritative'] == true,
-                    maiaElo: _decodeMaiaRating(saved['maiaElo']) ?? _analysisElo,
+                    maiaElo:
+                        _decodeMaiaRating(saved['maiaElo']) ?? _analysisElo,
                     secondMaiaElo: saved.containsKey('secondMaiaElo')
                         ? (saved['secondMaiaElo'] == null
                               ? null
@@ -2809,16 +2810,18 @@ class _GamePageState extends State<GamePage>
       await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Leave current game?'),
-          content: const Text('Your game will be kept in Recent games.'),
+          title: Text(appText(context, 'Leave current game?')),
+          content: Text(
+            appText(context, 'Your game will be kept in Recent games.'),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child: Text(appText(context, 'Cancel')),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Continue'),
+              child: Text(appText(context, 'Continue')),
             ),
           ],
         ),
@@ -2842,20 +2845,27 @@ class _GamePageState extends State<GamePage>
         await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text(completed ? 'Start a new game?' : 'Reset game?'),
+            title: Text(
+              appText(context, completed ? 'Start a new game?' : 'Reset game?'),
+            ),
             content: Text(
-              completed
-                  ? 'Your completed game will remain in Recent Games.'
-                  : 'This game will be permanently erased.',
+              appText(
+                context,
+                completed
+                    ? 'Your completed game will remain in Recent Games.'
+                    : 'This game will be permanently erased.',
+              ),
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: const Text('Cancel'),
+                child: Text(appText(context, 'Cancel')),
               ),
               FilledButton(
                 onPressed: () => Navigator.pop(context, true),
-                child: Text(completed ? 'Start new game' : 'Reset'),
+                child: Text(
+                  appText(context, completed ? 'Start new game' : 'Reset'),
+                ),
               ),
             ],
           ),
@@ -3037,25 +3047,25 @@ class _GamePageState extends State<GamePage>
             children: [
               ListTile(
                 leading: const Icon(CupertinoIcons.arrow_2_squarepath),
-                title: const Text('Flip board'),
+                title: Text(appText(context, 'Flip board')),
                 onTap: () => Navigator.pop(context, 'flip'),
               ),
               ListTile(
                 leading: const Icon(Icons.analytics_outlined),
-                title: const Text('Analysis Board'),
+                title: Text(appText(context, 'Analysis Board')),
                 onTap: () => Navigator.pop(context, 'analysis'),
               ),
               if (_canOfferDraw)
                 ListTile(
                   leading: const Icon(Icons.handshake_outlined),
-                  title: const Text('Offer draw'),
+                  title: Text(appText(context, 'Offer draw')),
                   onTap: () => Navigator.pop(context, 'draw'),
                 ),
               ListTile(
                 enabled:
                     !_gameFinished && !_engineThinking && !_drawOfferEvaluating,
                 leading: const Icon(Icons.flag_outlined),
-                title: const Text('Resign'),
+                title: Text(appText(context, 'Resign')),
                 onTap:
                     !_gameFinished && !_engineThinking && !_drawOfferEvaluating
                     ? () => Navigator.pop(context, 'resign')
@@ -3064,14 +3074,16 @@ class _GamePageState extends State<GamePage>
               ListTile(
                 enabled: _canTakeBack,
                 leading: const Icon(CupertinoIcons.arrow_uturn_left),
-                title: const Text('Take back move'),
+                title: Text(appText(context, 'Take back move')),
                 onTap: _canTakeBack
                     ? () => Navigator.pop(context, 'takeback')
                     : null,
               ),
               ListTile(
                 leading: const Icon(Icons.refresh),
-                title: Text(_gameFinished ? 'New game' : 'Reset game'),
+                title: Text(
+                  appText(context, _gameFinished ? 'New game' : 'Reset game'),
+                ),
                 onTap: () => Navigator.pop(context, 'new'),
               ),
             ],
@@ -3129,15 +3141,15 @@ class _GamePageState extends State<GamePage>
       context: context,
       builder: (context) => AlertDialog(
         key: const ValueKey('game-conclusion-dialog'),
-        title: Text(title),
+        title: Text(appText(context, title)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, 'analysis'),
-            child: const Text('Analysis Board'),
+            child: Text(appText(context, 'Analysis Board')),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, 'rematch'),
-            child: const Text('Rematch'),
+            child: Text(appText(context, 'Rematch')),
           ),
         ],
       ),
@@ -3196,7 +3208,7 @@ class _GamePageState extends State<GamePage>
           secondMaiaElo: _secondMaiaEnabled ? _secondMaiaElo : null,
           gameAnalysisQuality: _gameAnalysisQuality,
           initialCurrentFen: session.positions.last,
-          title: 'Analysis Board',
+          title: appText(context, 'Analysis Board'),
           returnToGame: !_gameFinished,
           onSessionChanged: (fen, flipped, variations) =>
               _handleReviewSessionChanged(
@@ -3249,21 +3261,21 @@ class _GamePageState extends State<GamePage>
                 key: const ValueKey('settings-back-button'),
                 onPressed: () => setState(() => _settingsOpen = false),
                 icon: const Icon(Icons.arrow_back),
-                tooltip: 'Back',
+                tooltip: appText(context, 'Back'),
               )
             : _started
             ? IconButton(
                 key: const ValueKey('game-home-button'),
                 onPressed: _requestHome,
                 icon: const Icon(Icons.home_outlined),
-                tooltip: 'Home',
+                tooltip: appText(context, 'Home'),
               )
             : null,
         title: Text(
           _started
               ? ''
               : showingSettings
-              ? 'Settings'
+              ? appText(context, 'Settings')
               : 'Mobile Maia Preview',
         ),
         actions: [
@@ -3271,7 +3283,7 @@ class _GamePageState extends State<GamePage>
             IconButton(
               onPressed: _showAbout,
               icon: const Icon(Icons.info_outline),
-              tooltip: 'About',
+              tooltip: appText(context, 'About'),
             ),
           if (_started) ...[
             if (_chessnutGameActive)
@@ -3283,17 +3295,20 @@ class _GamePageState extends State<GamePage>
                       ? Icons.bluetooth_connected
                       : Icons.bluetooth_disabled,
                 ),
-                tooltip: 'Chessnut status',
+                tooltip: appText(context, 'Chessnut status'),
               ),
             IconButton(
               key: const ValueKey('new-game-button'),
               onPressed: _requestNewGame,
               icon: const Icon(Icons.refresh),
-              tooltip: _gameFinished ? 'New game' : 'Reset game',
+              tooltip: appText(
+                context,
+                _gameFinished ? 'New game' : 'Reset game',
+              ),
             ),
             PopupMenuButton<String>(
               key: const ValueKey('game-share-menu'),
-              tooltip: 'Share and export',
+              tooltip: appText(context, 'Share and export'),
               icon: const Icon(Icons.more_vert),
               onSelected: (value) async {
                 if (value == 'pgn') await _copyPgn();
@@ -3309,33 +3324,33 @@ class _GamePageState extends State<GamePage>
                   }
                 }
               },
-              itemBuilder: (_) => const [
+              itemBuilder: (_) => [
                 PopupMenuItem(
                   value: 'save',
                   child: ListTile(
                     leading: Icon(Icons.save_alt),
-                    title: Text('Save PGN file'),
+                    title: Text(appText(context, 'Save PGN file')),
                   ),
                 ),
                 PopupMenuItem(
                   value: 'share',
                   child: ListTile(
                     leading: Icon(Icons.share_outlined),
-                    title: Text('Share PGN'),
+                    title: Text(appText(context, 'Share PGN')),
                   ),
                 ),
                 PopupMenuItem(
                   value: 'pgn',
                   child: ListTile(
                     leading: Icon(Icons.description_outlined),
-                    title: Text('Copy PGN'),
+                    title: Text(appText(context, 'Copy PGN')),
                   ),
                 ),
                 PopupMenuItem(
                   value: 'fen',
                   child: ListTile(
                     leading: Icon(Icons.content_copy),
-                    title: Text('Copy FEN'),
+                    title: Text(appText(context, 'Copy FEN')),
                   ),
                 ),
               ],
@@ -3416,11 +3431,13 @@ class _GamePageState extends State<GamePage>
                                 _maiaFailed = false;
                                 _resumeGame();
                               },
-                              child: const Text('Maia error. Retry'),
+                              child: Text(
+                                appText(context, 'Maia error. Retry'),
+                              ),
                             )
                           else if (_engineThinking)
-                            const Text(
-                              'Maia is thinking…',
+                            Text(
+                              appText(context, 'Maia is thinking…'),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -3499,21 +3516,24 @@ class _GamePageState extends State<GamePage>
                 if (_maiaFailed)
                   Row(
                     children: [
-                      const Expanded(
-                        child: Text('Maia error. Please retry.', maxLines: 1),
+                      Expanded(
+                        child: Text(
+                          appText(context, 'Maia error. Please retry.'),
+                          maxLines: 1,
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
                           _maiaFailed = false;
                           _resumeGame();
                         },
-                        child: const Text('Retry'),
+                        child: Text(appText(context, 'Retry')),
                       ),
                     ],
                   )
                 else if (_engineThinking)
-                  const Text(
-                    'Maia is thinking…',
+                  Text(
+                    appText(context, 'Maia is thinking…'),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
@@ -3559,7 +3579,7 @@ class _GamePageState extends State<GamePage>
                       ),
                       onPressed: () => setState(() => _settingsOpen = true),
                       icon: const Icon(Icons.settings_outlined),
-                      label: const Text('Settings'),
+                      label: Text(appText(context, 'Settings')),
                     ),
                   ),
                 ),
@@ -3585,18 +3605,27 @@ class _GamePageState extends State<GamePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              'Play Maia',
+            Text(
+              appText(context, 'Play Maia'),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 16),
-            const Text('Your side'),
+            Text(appText(context, 'Your side')),
             const SizedBox(height: 8),
             SegmentedButton<PlayerSide>(
-              segments: const [
-                ButtonSegment(value: PlayerSide.white, label: Text('White')),
-                ButtonSegment(value: PlayerSide.black, label: Text('Black')),
-                ButtonSegment(value: PlayerSide.random, label: Text('Random')),
+              segments: [
+                ButtonSegment(
+                  value: PlayerSide.white,
+                  label: Text(appText(context, 'White')),
+                ),
+                ButtonSegment(
+                  value: PlayerSide.black,
+                  label: Text(appText(context, 'Black')),
+                ),
+                ButtonSegment(
+                  value: PlayerSide.random,
+                  label: Text(appText(context, 'Random')),
+                ),
               ],
               selected: {_sideChoice},
               onSelectionChanged: (value) {
@@ -3606,7 +3635,9 @@ class _GamePageState extends State<GamePage>
               },
             ),
             const SizedBox(height: 16),
-            Text('Play Maia rating: ${normalizeMaiaRating(_elo)}'),
+            Text(
+              '${appText(context, 'Play Maia rating')}: ${normalizeMaiaRating(_elo)}',
+            ),
             Slider(
               min: maiaMinimumRating.toDouble(),
               max: maiaMaximumRating.toDouble(),
@@ -3623,16 +3654,16 @@ class _GamePageState extends State<GamePage>
               key: ValueKey('time-preset-${_timePreset.name}'),
               isExpanded: true,
               initialValue: _timePreset,
-              decoration: const InputDecoration(
-                labelText: 'Time control',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: appText(context, 'Time control'),
+                border: const OutlineInputBorder(),
               ),
               items: TimePreset.values
                   .map(
                     (preset) => DropdownMenuItem(
                       value: preset,
                       child: Text(
-                        preset.label,
+                        appText(context, preset.label),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -3652,7 +3683,7 @@ class _GamePageState extends State<GamePage>
             ),
             if (_timePreset == TimePreset.custom) ...[
               const SizedBox(height: 8),
-              Text('Minutes: $_customMinutes'),
+              Text('${appText(context, 'Minutes')}: $_customMinutes'),
               Slider(
                 min: 1,
                 max: 60,
@@ -3665,7 +3696,9 @@ class _GamePageState extends State<GamePage>
                 }),
                 onChangeEnd: (_) => unawaited(_persistTimeControl()),
               ),
-              Text('Increment: $_customIncrement seconds'),
+              Text(
+                '${appText(context, 'Increment')}: $_customIncrement ${appText(context, 'seconds')}',
+              ),
               Slider(
                 min: 0,
                 max: 30,
@@ -3687,7 +3720,7 @@ class _GamePageState extends State<GamePage>
               visualDensity: VisualDensity.compact,
               secondary: const Icon(Icons.bluetooth_outlined, size: 22),
               value: _useChessnutGo,
-              title: const Text('Chessnut (experimental)'),
+              title: Text(appText(context, 'Chessnut (experimental)')),
               onChanged: (value) => unawaited(_setUseChessnutGo(value)),
             ),
             if (_useChessnutGo) ...[
@@ -3723,7 +3756,12 @@ class _GamePageState extends State<GamePage>
                 icon: Icon(
                   _chessnutReady ? Icons.bluetooth_disabled : Icons.bluetooth,
                 ),
-                label: Text(_chessnutReady ? 'Disconnect' : 'Connect Chessnut'),
+                label: Text(
+                  appText(
+                    context,
+                    _chessnutReady ? 'Disconnect' : 'Connect Chessnut',
+                  ),
+                ),
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 8),
@@ -3744,7 +3782,7 @@ class _GamePageState extends State<GamePage>
                   ? _startGame
                   : null,
               icon: const Icon(Icons.play_arrow),
-              label: const Text('Start game'),
+              label: Text(appText(context, 'Start game')),
             ),
             const SizedBox(height: 12),
             OutlinedButton.icon(
@@ -3753,7 +3791,7 @@ class _GamePageState extends State<GamePage>
               ),
               onPressed: _initialized ? _openAnalysisBoard : null,
               icon: const Icon(Icons.analytics_outlined),
-              label: const Text('Analysis Board'),
+              label: Text(appText(context, 'Analysis Board')),
             ),
             const SizedBox(height: 12),
             OutlinedButton.icon(
@@ -3762,7 +3800,7 @@ class _GamePageState extends State<GamePage>
               ),
               onPressed: _showRecentGames,
               icon: const Icon(Icons.history),
-              label: const Text('Recent games'),
+              label: Text(appText(context, 'Recent games')),
             ),
           ],
         ),
@@ -3805,15 +3843,56 @@ class _GamePageState extends State<GamePage>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              if (AppLanguageSettings.maybeOf(context)
+                  case final language?) ...[
+                _settingsSection(
+                  title: appText(context, 'Language'),
+                  icon: Icons.language,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                      child: DropdownButtonFormField<String>(
+                        key: ValueKey(
+                          'app-language-${language.selectedCode ?? 'system'}',
+                        ),
+                        isExpanded: true,
+                        initialValue: language.selectedCode ?? 'system',
+                        decoration: InputDecoration(
+                          labelText: appText(context, 'Language'),
+                          border: const OutlineInputBorder(),
+                        ),
+                        items: [
+                          DropdownMenuItem(
+                            value: 'system',
+                            child: Text(appText(context, 'System default')),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'en',
+                            child: Text('English'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'ja',
+                            child: Text('日本語'),
+                          ),
+                        ],
+                        onChanged: (value) => language.onChanged(
+                          value == 'system' ? null : value,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+              ],
               _settingsSection(
-                title: 'Game settings',
+                title: appText(context, 'Game settings'),
                 icon: Icons.sports_esports_outlined,
                 children: [
                   SwitchListTile(
                     key: const ValueKey('game-sounds-setting'),
-                    title: const Text('Game sounds'),
-                    subtitle: const Text(
-                      'Moves, captures, errors, and game end',
+                    title: Text(appText(context, 'Game sounds')),
+                    subtitle: Text(
+                      appText(context, 'Moves, captures, errors, and game end'),
                     ),
                     value: _gameSoundsEnabled,
                     onChanged: (value) =>
@@ -3821,9 +3900,12 @@ class _GamePageState extends State<GamePage>
                   ),
                   SwitchListTile(
                     key: const ValueKey('game-haptics-setting'),
-                    title: const Text('Haptic feedback'),
-                    subtitle: const Text(
-                      'Touch feedback for moves, checks, errors, and game end',
+                    title: Text(appText(context, 'Haptic feedback')),
+                    subtitle: Text(
+                      appText(
+                        context,
+                        'Touch feedback for moves, checks, errors, and game end',
+                      ),
                     ),
                     value: _gameHapticsEnabled,
                     onChanged: (value) =>
@@ -3831,8 +3913,10 @@ class _GamePageState extends State<GamePage>
                   ),
                   SwitchListTile(
                     key: const ValueKey('premoves-setting'),
-                    title: const Text('Premoves'),
-                    subtitle: const Text('Queue a move while Maia is thinking'),
+                    title: Text(appText(context, 'Premoves')),
+                    subtitle: Text(
+                      appText(context, 'Queue a move while Maia is thinking'),
+                    ),
                     value: _premovesEnabled,
                     onChanged: (value) {
                       setState(() => _premovesEnabled = value);
@@ -3841,9 +3925,12 @@ class _GamePageState extends State<GamePage>
                   ),
                   SwitchListTile(
                     key: const ValueKey('premove-penalty-setting'),
-                    title: const Text('100 ms premove penalty'),
-                    subtitle: const Text(
-                      'Use 0.1 seconds per premove in timed games',
+                    title: Text(appText(context, '100 ms premove penalty')),
+                    subtitle: Text(
+                      appText(
+                        context,
+                        'Use 0.1 seconds per premove in timed games',
+                      ),
                     ),
                     value: _premovePenalty,
                     onChanged: _premovesEnabled
@@ -3855,9 +3942,12 @@ class _GamePageState extends State<GamePage>
                   ),
                   SwitchListTile(
                     key: const ValueKey('multiple-premoves-setting'),
-                    title: const Text('Allow multiple premoves'),
-                    subtitle: const Text(
-                      'Queue a sequence; an illegal move cancels the rest',
+                    title: Text(appText(context, 'Allow multiple premoves')),
+                    subtitle: Text(
+                      appText(
+                        context,
+                        'Queue a sequence; an illegal move cancels the rest',
+                      ),
                     ),
                     value: _multiplePremoves,
                     onChanged: _premovesEnabled
@@ -3870,9 +3960,12 @@ class _GamePageState extends State<GamePage>
                   SwitchListTile(
                     key: const ValueKey('human-timing-setting'),
                     value: _humanTiming,
-                    title: const Text('Human move timing'),
-                    subtitle: const Text(
-                      'Variable natural pauses before Maia moves',
+                    title: Text(appText(context, 'Human move timing')),
+                    subtitle: Text(
+                      appText(
+                        context,
+                        'Variable natural pauses before Maia moves',
+                      ),
                     ),
                     onChanged: (value) {
                       setState(() => _humanTiming = value);
@@ -3883,11 +3976,11 @@ class _GamePageState extends State<GamePage>
               ),
               const SizedBox(height: 8),
               _settingsSection(
-                title: 'Engine settings',
+                title: appText(context, 'Engine settings'),
                 icon: Icons.memory_outlined,
                 trailing: IconButton(
                   key: const ValueKey('sampling-help'),
-                  tooltip: 'About Temperature and Top-P',
+                  tooltip: appText(context, 'About Temperature and Top-P'),
                   onPressed: _showSamplingHelp,
                   icon: const Icon(Icons.help_outline),
                 ),
@@ -3895,7 +3988,7 @@ class _GamePageState extends State<GamePage>
                   ListTile(
                     key: const ValueKey('temperature-setting'),
                     title: Text(
-                      'Temperature: ${_temperature.toStringAsFixed(2)}',
+                      '${appText(context, 'Temperature')}: ${_temperature.toStringAsFixed(2)}',
                     ),
                     subtitle: Slider(
                       min: 0.00,
@@ -3910,7 +4003,9 @@ class _GamePageState extends State<GamePage>
                   ),
                   ListTile(
                     key: const ValueKey('top-p-setting'),
-                    title: Text('Top-P: ${_topP.toStringAsFixed(2)}'),
+                    title: Text(
+                      '${appText(context, 'Top-P')}: ${_topP.toStringAsFixed(2)}',
+                    ),
                     subtitle: Slider(
                       min: 0.00,
                       max: 1.00,
@@ -3934,7 +4029,9 @@ class _GamePageState extends State<GamePage>
                       ),
                     ),
                   ListTile(
-                    title: Text('Maia analysis rating: $_analysisElo'),
+                    title: Text(
+                      '${appText(context, 'Maia analysis rating')}: $_analysisElo',
+                    ),
                     subtitle: Slider(
                       min: maiaMinimumRating.toDouble(),
                       max: maiaMaximumRating.toDouble(),
@@ -3948,9 +4045,12 @@ class _GamePageState extends State<GamePage>
                   ),
                   SwitchListTile(
                     key: const ValueKey('second-maia-engine-setting'),
-                    title: const Text('Add second Maia engine'),
-                    subtitle: const Text(
-                      'Compare another Maia rating in analysis and review',
+                    title: Text(appText(context, 'Add second Maia engine')),
+                    subtitle: Text(
+                      appText(
+                        context,
+                        'Compare another Maia rating in analysis and review',
+                      ),
                     ),
                     value: _secondMaiaEnabled,
                     onChanged: (value) {
@@ -3962,7 +4062,7 @@ class _GamePageState extends State<GamePage>
                     ListTile(
                       key: const ValueKey('second-maia-rating-setting'),
                       title: Text(
-                        'Second Maia analysis rating: $_secondMaiaElo',
+                        '${appText(context, 'Second Maia analysis rating')}: $_secondMaiaElo',
                       ),
                       subtitle: Slider(
                         min: maiaMinimumRating.toDouble(),
@@ -3984,8 +4084,11 @@ class _GamePageState extends State<GamePage>
                       isExpanded: true,
                       initialValue: _gameAnalysisQuality,
                       decoration: InputDecoration(
-                        labelText: 'Game analysis quality',
-                        helperText: _gameAnalysisQuality.description,
+                        labelText: appText(context, 'Game analysis quality'),
+                        helperText: appText(
+                          context,
+                          _gameAnalysisQuality.description,
+                        ),
                         helperMaxLines: 2,
                         border: const OutlineInputBorder(),
                       ),
@@ -3993,7 +4096,7 @@ class _GamePageState extends State<GamePage>
                           .map(
                             (quality) => DropdownMenuItem(
                               value: quality,
-                              child: Text(quality.label),
+                              child: Text(appText(context, quality.label)),
                             ),
                           )
                           .toList(),
@@ -4022,7 +4125,7 @@ class _GamePageState extends State<GamePage>
                         });
                         unawaited(_saveEnginePreferences());
                       },
-                      child: const Text('Reset engine defaults'),
+                      child: Text(appText(context, 'Reset engine defaults')),
                     ),
                   ),
                 ],
@@ -4035,9 +4138,12 @@ class _GamePageState extends State<GamePage>
                   SwitchListTile(
                     key: const ValueKey('chessnut-sounds-toggle'),
                     value: _chessnutSoundsEnabled,
-                    title: const Text('Board sounds'),
-                    subtitle: const Text(
-                      'Beep for check, checkmate, and completed illegal moves.',
+                    title: Text(appText(context, 'Board sounds')),
+                    subtitle: Text(
+                      appText(
+                        context,
+                        'Beep for check, checkmate, and completed illegal moves.',
+                      ),
                     ),
                     onChanged: (value) =>
                         unawaited(_setChessnutSoundsEnabled(value)),
@@ -4053,11 +4159,13 @@ class _GamePageState extends State<GamePage>
                   await AppDiagnostics.copyToClipboard();
                   if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Diagnostics copied')),
+                    SnackBar(
+                      content: Text(appText(context, 'Diagnostics copied')),
+                    ),
                   );
                 },
                 icon: const Icon(Icons.copy),
-                label: const Text('Copy diagnostics'),
+                label: Text(appText(context, 'Copy diagnostics')),
               ),
             ],
           ),
@@ -4067,7 +4175,7 @@ class _GamePageState extends State<GamePage>
   }
 
   String _playerLabel(chess.Color color) =>
-      color == _playerColor ? 'You' : 'Maia3 ${_elo}elo';
+      color == _playerColor ? appText(context, 'You') : 'Maia3 ${_elo}elo';
 
   Widget _liveMoveStrip() {
     final moves = _liveSanMoves;
@@ -4133,7 +4241,7 @@ class _GamePageState extends State<GamePage>
           ? Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
-                'Game ready',
+                appText(context, 'Game ready'),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -4154,7 +4262,7 @@ class _GamePageState extends State<GamePage>
                       ),
                     ),
                     child: Text(
-                      _displayPly == 0 ? 'START' : 'HISTORY',
+                      appText(context, _displayPly == 0 ? 'START' : 'HISTORY'),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 11,
@@ -4192,7 +4300,7 @@ class _GamePageState extends State<GamePage>
         key: const ValueKey('game-actions-menu'),
         onPressed: _drawOfferEvaluating ? null : _showGameMenu,
         icon: const Icon(Icons.menu),
-        tooltip: 'Game menu',
+        tooltip: appText(context, 'Game menu'),
       ),
       IconButton(
         key: const ValueKey('quick-resign-button'),
@@ -4200,7 +4308,7 @@ class _GamePageState extends State<GamePage>
             ? _resign
             : null,
         icon: const Icon(CupertinoIcons.flag),
-        tooltip: 'Resign',
+        tooltip: appText(context, 'Resign'),
       ),
     ],
   );
@@ -4319,7 +4427,7 @@ class _GamePageState extends State<GamePage>
               ),
               IconButton(
                 key: const ValueKey('cancel-premoves'),
-                tooltip: 'Cancel premoves',
+                tooltip: appText(context, 'Cancel premoves'),
                 onPressed: _cancelPremoves,
                 icon: const Icon(Icons.close),
               ),

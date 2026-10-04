@@ -35,7 +35,7 @@ class _ContinueFromHereDialogState extends State<_ContinueFromHereDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('Continue from here'),
+    title: Text(appText(context, 'Continue from here')),
     content: SizedBox(
       width: 400,
       child: SingleChildScrollView(
@@ -46,13 +46,21 @@ class _ContinueFromHereDialogState extends State<_ContinueFromHereDialog> {
             DropdownButtonFormField<PlayerSide>(
               key: const ValueKey('continuation-side'),
               initialValue: _side,
-              decoration: const InputDecoration(labelText: 'Your side'),
-              items: const [
-                DropdownMenuItem(value: PlayerSide.white, child: Text('White')),
-                DropdownMenuItem(value: PlayerSide.black, child: Text('Black')),
+              decoration: InputDecoration(
+                labelText: appText(context, 'Your side'),
+              ),
+              items: [
+                DropdownMenuItem(
+                  value: PlayerSide.white,
+                  child: Text(appText(context, 'White')),
+                ),
+                DropdownMenuItem(
+                  value: PlayerSide.black,
+                  child: Text(appText(context, 'Black')),
+                ),
                 DropdownMenuItem(
                   value: PlayerSide.random,
-                  child: Text('Random'),
+                  child: Text(appText(context, 'Random')),
                 ),
               ],
               onChanged: (value) {
@@ -60,7 +68,7 @@ class _ContinueFromHereDialogState extends State<_ContinueFromHereDialog> {
               },
             ),
             const SizedBox(height: 12),
-            Text('Play Maia rating: $_elo'),
+            Text('${appText(context, 'Play Maia rating')}: $_elo'),
             Slider(
               key: const ValueKey('continuation-rating'),
               min: maiaMinimumRating.toDouble(),
@@ -74,12 +82,14 @@ class _ContinueFromHereDialogState extends State<_ContinueFromHereDialog> {
               key: const ValueKey('continuation-time-control'),
               initialValue: _timePreset,
               isExpanded: true,
-              decoration: const InputDecoration(labelText: 'Time control'),
+              decoration: InputDecoration(
+                labelText: appText(context, 'Time control'),
+              ),
               items: TimePreset.values
                   .map(
                     (preset) => DropdownMenuItem(
                       value: preset,
-                      child: Text(preset.label),
+                      child: Text(appText(context, preset.label)),
                     ),
                   )
                   .toList(),
@@ -89,7 +99,7 @@ class _ContinueFromHereDialogState extends State<_ContinueFromHereDialog> {
             ),
             if (_timePreset == TimePreset.custom) ...[
               const SizedBox(height: 12),
-              Text('Minutes: $_customMinutes'),
+              Text('${appText(context, 'Minutes')}: $_customMinutes'),
               Slider(
                 key: const ValueKey('continuation-custom-minutes'),
                 min: 1,
@@ -100,7 +110,9 @@ class _ContinueFromHereDialogState extends State<_ContinueFromHereDialog> {
                 onChanged: (value) =>
                     setState(() => _customMinutes = value.round()),
               ),
-              Text('Increment: $_customIncrement seconds'),
+              Text(
+                '${appText(context, 'Increment')}: $_customIncrement ${appText(context, 'seconds')}',
+              ),
               Slider(
                 key: const ValueKey('continuation-custom-increment'),
                 min: 0,
@@ -119,7 +131,7 @@ class _ContinueFromHereDialogState extends State<_ContinueFromHereDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(appText(context, 'Cancel')),
       ),
       FilledButton(
         key: const ValueKey('continuation-start-game'),
@@ -133,7 +145,7 @@ class _ContinueFromHereDialogState extends State<_ContinueFromHereDialog> {
             customIncrement: _customIncrement,
           ),
         ),
-        child: const Text('Start game'),
+        child: Text(appText(context, 'Start game')),
       ),
     ],
   );
@@ -168,11 +180,11 @@ class _TextInputDialogState extends State<_TextInputDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+        child: Text(appText(context, 'Cancel')),
       ),
       FilledButton(
         onPressed: () => Navigator.pop(context, _controller.text),
-        child: const Text('Load'),
+        child: Text(appText(context, 'Load')),
       ),
     ],
   );
@@ -410,7 +422,7 @@ class _AnalysisBoardPageState extends State<AnalysisBoardPage> {
     evaluator: widget.evaluator,
     maiaEvaluator: widget.maiaEvaluator,
     maiaPolicyEvaluator: widget.maiaPolicyEvaluator,
-    title: 'Analysis Board',
+    title: appText(context, 'Analysis Board'),
     onHome: ActiveSessionStore.clear,
     onLoadFen: _loadFen,
     onLoadPgn: _loadPgn,
@@ -502,15 +514,15 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
     const labels = ['K', 'Q', 'R', 'B', 'N', 'P'];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Board'),
+        title: Text(appText(context, 'Edit Board')),
         actions: [
           IconButton(
             key: const ValueKey('board-editor-flip'),
-            tooltip: 'Flip board',
+            tooltip: appText(context, 'Flip board'),
             onPressed: () => setState(() => _flipped = !_flipped),
             icon: const Icon(CupertinoIcons.arrow_2_squarepath),
           ),
-          TextButton(onPressed: _finish, child: const Text('Done')),
+          TextButton(onPressed: _finish, child: Text(appText(context, 'Done'))),
         ],
       ),
       body: SafeArea(
@@ -539,14 +551,14 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
                   ),
                   const SizedBox(height: 12),
                   SegmentedButton<chess.Color>(
-                    segments: const [
+                    segments: [
                       ButtonSegment(
                         value: chess.Color.WHITE,
-                        label: Text('White pieces'),
+                        label: Text(appText(context, 'White pieces')),
                       ),
                       ButtonSegment(
                         value: chess.Color.BLACK,
-                        label: Text('Black pieces'),
+                        label: Text(appText(context, 'Black pieces')),
                       ),
                     ],
                     selected: {_color},
@@ -569,38 +581,43 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
                   SwitchListTile(
                     value: _whiteTurn,
                     onChanged: (value) => setState(() => _whiteTurn = value),
-                    title: Text(_whiteTurn ? 'White to move' : 'Black to move'),
+                    title: Text(
+                      appText(
+                        context,
+                        _whiteTurn ? 'White to move' : 'Black to move',
+                      ),
+                    ),
                   ),
                   ExpansionTile(
-                    title: const Text('Castling rights'),
+                    title: Text(appText(context, 'Castling rights')),
                     children: [
                       CheckboxListTile(
                         value: _wk,
                         onChanged: (v) => setState(() => _wk = v ?? false),
-                        title: const Text('White kingside'),
+                        title: Text(appText(context, 'White kingside')),
                       ),
                       CheckboxListTile(
                         value: _wq,
                         onChanged: (v) => setState(() => _wq = v ?? false),
-                        title: const Text('White queenside'),
+                        title: Text(appText(context, 'White queenside')),
                       ),
                       CheckboxListTile(
                         value: _bk,
                         onChanged: (v) => setState(() => _bk = v ?? false),
-                        title: const Text('Black kingside'),
+                        title: Text(appText(context, 'Black kingside')),
                       ),
                       CheckboxListTile(
                         value: _bq,
                         onChanged: (v) => setState(() => _bq = v ?? false),
-                        title: const Text('Black queenside'),
+                        title: Text(appText(context, 'Black queenside')),
                       ),
                     ],
                   ),
                   DropdownButtonFormField<String>(
                     initialValue: _enPassant,
-                    decoration: const InputDecoration(
-                      labelText: 'En-passant target',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: appText(context, 'En-passant target'),
+                      border: const OutlineInputBorder(),
                     ),
                     items:
                         [
@@ -630,7 +647,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
                           _wk = _wq = _bk = _bq = true;
                           _enPassant = '-';
                         }),
-                        child: const Text('Starting position'),
+                        child: Text(appText(context, 'Starting position')),
                       ),
                       TextButton(
                         onPressed: () => setState(() {
@@ -642,7 +659,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
                           _wk = _wq = _bk = _bq = false;
                           _enPassant = '-';
                         }),
-                        child: const Text('Clear board'),
+                        child: Text(appText(context, 'Clear board')),
                       ),
                     ],
                   ),

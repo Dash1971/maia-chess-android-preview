@@ -2544,38 +2544,38 @@ class _ReviewPageState extends State<ReviewPage>
               if (widget.onLoadFen != null)
                 ListTile(
                   leading: const Icon(Icons.content_paste),
-                  title: const Text('Load FEN'),
+                  title: Text(appText(context, 'Load FEN')),
                   onTap: () => Navigator.pop(context, 'fen'),
                 ),
               if (widget.onLoadPgn != null)
                 ListTile(
                   leading: const Icon(Icons.description_outlined),
-                  title: const Text('Load PGN'),
+                  title: Text(appText(context, 'Load PGN')),
                   onTap: () => Navigator.pop(context, 'pgn'),
                 ),
               if (widget.onLoadPgnFile != null)
                 ListTile(
                   leading: const Icon(Icons.folder_open),
-                  title: const Text('Open PGN file'),
+                  title: Text(appText(context, 'Open PGN file')),
                   onTap: () => Navigator.pop(context, 'file'),
                 ),
 
               if (widget.onClearMoves != null)
                 ListTile(
                   leading: const Icon(Icons.delete_sweep_outlined),
-                  title: const Text('Clear moves'),
+                  title: Text(appText(context, 'Clear moves')),
                   onTap: () => Navigator.pop(context, 'clear'),
                 ),
               if (widget.onEditBoard != null)
                 ListTile(
                   leading: const Icon(Icons.edit_outlined),
-                  title: const Text('Board Editor'),
+                  title: Text(appText(context, 'Board Editor')),
                   onTap: () => Navigator.pop(context, 'edit'),
                 ),
               if (widget.onPlayFromPosition != null)
                 ListTile(
                   leading: const Icon(Icons.play_arrow),
-                  title: const Text('Continue from here'),
+                  title: Text(appText(context, 'Continue from here')),
                   onTap: () => Navigator.pop(context, 'continue'),
                 ),
             ],
@@ -2611,7 +2611,7 @@ class _ReviewPageState extends State<ReviewPage>
       onPrevious: () => _step(-1),
       onNext: () => _step(1),
       onLast: _jumpToEnd,
-      endTooltip: 'end position',
+      endTooltip: appText(context, 'end position'),
       headerActionWidth: MediaQuery.textScalerOf(context).scale(1) > 1.3
           ? 84
           : 56,
@@ -2620,16 +2620,19 @@ class _ReviewPageState extends State<ReviewPage>
           key: const ValueKey('analysis-actions-menu'),
           onPressed: _hasAnalysisMenu ? _showAnalysisMenu : null,
           icon: const Icon(Icons.menu),
-          tooltip: 'Analysis menu',
+          tooltip: appText(context, 'Analysis menu'),
         ),
         IconButton(
           key: const ValueKey('analysis-flip-button'),
           onPressed: _flipAnalysisBoard,
           icon: const Icon(CupertinoIcons.arrow_2_squarepath),
-          tooltip: 'Flip board',
+          tooltip: appText(context, 'Flip board'),
         ),
         Tooltip(
-          message: _engineEnabled ? 'Turn engine off' : 'Turn engine on',
+          message: appText(
+            context,
+            _engineEnabled ? 'Turn engine off' : 'Turn engine on',
+          ),
           child: TextButton(
             key: const ValueKey('analysis-engine-toggle'),
             onPressed: _toggleAnalysisEngine,
@@ -2720,12 +2723,12 @@ class _ReviewPageState extends State<ReviewPage>
           tab(
             graph: false,
             icon: Icons.account_tree_outlined,
-            tooltip: 'Moves',
+            tooltip: appText(context, 'Moves'),
           ),
           tab(
             graph: true,
             icon: Icons.area_chart_outlined,
-            tooltip: 'Computer analysis',
+            tooltip: appText(context, 'Computer analysis'),
           ),
         ],
       ),
@@ -2880,13 +2883,16 @@ class _ReviewPageState extends State<ReviewPage>
           icon: Icon(
             widget.returnToGame ? Icons.arrow_back : Icons.home_outlined,
           ),
-          tooltip: widget.returnToGame ? 'Back to game' : 'Home',
+          tooltip: appText(
+            context,
+            widget.returnToGame ? 'Back to game' : 'Home',
+          ),
         ),
         title: Text(widget.title),
         actions: [
           PopupMenuButton<String>(
             key: const ValueKey('analysis-share-menu'),
-            tooltip: 'Share and export',
+            tooltip: appText(context, 'Share and export'),
             icon: const Icon(Icons.more_vert),
             onSelected: (value) async {
               if (value == 'pgn') await _copyPgn();
@@ -2906,33 +2912,33 @@ class _ReviewPageState extends State<ReviewPage>
                 }
               }
             },
-            itemBuilder: (_) => const [
+            itemBuilder: (_) => [
               PopupMenuItem(
                 value: 'save',
                 child: ListTile(
                   leading: Icon(Icons.save_alt),
-                  title: Text('Save PGN file'),
+                  title: Text(appText(context, 'Save PGN file')),
                 ),
               ),
               PopupMenuItem(
                 value: 'share',
                 child: ListTile(
                   leading: Icon(Icons.share_outlined),
-                  title: Text('Share PGN'),
+                  title: Text(appText(context, 'Share PGN')),
                 ),
               ),
               PopupMenuItem(
                 value: 'pgn',
                 child: ListTile(
                   leading: Icon(Icons.description_outlined),
-                  title: Text('Copy PGN'),
+                  title: Text(appText(context, 'Copy PGN')),
                 ),
               ),
               PopupMenuItem(
                 value: 'fen',
                 child: ListTile(
                   leading: Icon(Icons.content_copy),
-                  title: Text('Copy FEN'),
+                  title: Text(appText(context, 'Copy FEN')),
                 ),
               ),
             ],

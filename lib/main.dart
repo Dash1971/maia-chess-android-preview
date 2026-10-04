@@ -11,6 +11,7 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart' as dc;
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/foundation.dart'
     show LicenseRegistry, LicenseEntryWithLineBreaks, mapEquals, listEquals;
 import 'package:flutter/services.dart';
@@ -41,6 +42,7 @@ part 'src/review.dart';
 part 'src/review_widgets.dart';
 part 'src/stockfish.dart';
 part 'src/maia.dart';
+part 'src/app_language.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -132,10 +134,32 @@ class MaiaChessApp extends StatefulWidget {
 class _MaiaChessAppState extends State<MaiaChessApp>
     with WidgetsBindingObserver {
   Timer? _maiaReleaseTimer;
+  String? _languageOverride;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    unawaited(_loadLanguage());
+  }
+
+  Future<void> _loadLanguage() async {
+    final preferences = await SharedPreferences.getInstance();
+    final saved = preferences.getString(appLanguagePreferenceKey);
+    if (mounted && (saved == 'en' || saved == 'ja')) {
+      setState(() => _languageOverride = saved);
+    }
+  }
+
+  void _setLanguage(String? languageCode) {
+    setState(() => _languageOverride = languageCode);
+    unawaited(() async {
+      final preferences = await SharedPreferences.getInstance();
+      if (languageCode == null) {
+        await preferences.remove(appLanguagePreferenceKey);
+      } else {
+        await preferences.setString(appLanguagePreferenceKey, languageCode);
+      }
+    }());
   }
 
   @override
@@ -183,6 +207,9 @@ class _MaiaChessAppState extends State<MaiaChessApp>
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Mobile Maia Preview',
+      locale: _languageOverride == null ? null : Locale(_languageOverride!),
+      supportedLocales: const [Locale('en'), Locale('ja')],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       navigatorObservers: [maiaRouteObserver],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -193,7 +220,11 @@ class _MaiaChessAppState extends State<MaiaChessApp>
         scaffoldBackgroundColor: const Color(0xff171a18),
         useMaterial3: true,
       ),
-      home: const GamePage(),
+      home: AppLanguageSettings(
+        selectedCode: _languageOverride,
+        onChanged: _setLanguage,
+        child: const GamePage(),
+      ),
     );
   }
 }
