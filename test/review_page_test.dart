@@ -564,8 +564,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Temperature and Top-P'), findsOneWidget);
-    expect(find.textContaining('how adventurous Maia is'), findsOneWidget);
-    expect(find.textContaining('smallest group of moves'), findsOneWidget);
+    expect(
+      find.textContaining('how concentrated Maia’s move probabilities are'),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining('smallest leading group whose combined probability'),
+      findsOneWidget,
+    );
     expect(
       find.textContaining('Temperature 1.00 and Top-P 1.00'),
       findsOneWidget,

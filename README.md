@@ -18,7 +18,7 @@ screenshots, see the
 
 ## Next development cycle
 
-Preview 2.3.0-beta.2 incorporates the Stable 2.2.2 application baseline,
+Preview 2.3.0-beta.3 incorporates the Stable 2.2.2 application baseline,
 including the 600–2600 Maia rating controls and saved-setting migration. It
 retains the separate Preview package and release identity; new 2.3 features
 will be developed and qualified here before any Stable promotion. The in-app
@@ -26,7 +26,11 @@ Temperature and Top-P help opens the same current
 [sampling research](https://github.com/Dash1971/maia-chess-android/blob/main/docs/research/maia3-sampling/REPORT.md)
 as Stable.
 
-We are looking to add multilingual support in a future release.
+This Preview beta includes Japanese, Simplified Chinese, Korean and
+Spanish UI catalogs alongside English. Choose a language in Settings or follow
+the device language. Native-speaker review is still pending; see the
+[localization guide](docs/L10N_REVIEW.md) for coverage, intentional technical-text
+exceptions, contributor instructions and the translation review sheet.
 
 Development snapshots use the same Preview source with a separate Dev package,
 development signer, ARM64-only APK, and smaller 5M Maia model for rapid phone
