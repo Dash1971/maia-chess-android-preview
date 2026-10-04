@@ -23,11 +23,11 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('対局設定'), findsOneWidget);
-    expect(find.text('人間らしい指し手の間'), findsOneWidget);
+    expect(find.text('人間らしい思考時間'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('settings-back-button')));
     await tester.pumpAndSettle();
     expect(find.text('対局開始'), findsOneWidget);
-    expect(find.text('解析盤'), findsOneWidget);
+    expect(find.text('解析ボード'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpWidget(const MaiaChessApp());

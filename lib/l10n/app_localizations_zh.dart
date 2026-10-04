@@ -82,7 +82,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get seconds => '秒';
 
   @override
-  String get yourSide => '你的执棋方';
+  String get yourSide => '执棋颜色';
 
   @override
   String get you => '你';
@@ -94,7 +94,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get language => '语言';
 
   @override
-  String get playMaiaRating => '对局 Maia 等级分';
+  String get playMaiaRating => '对手 Maia 的等级分';
 
   @override
   String get minutes => '分钟';
@@ -118,7 +118,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premoves => '预走';
 
   @override
-  String get queueAMoveWhileMaiaIsThinking => '在 Maia 思考时预先指定下一步';
+  String get queueAMoveWhileMaiaIsThinking => '在 Maia 思考时预设下一步棋';
 
   @override
   String get oneHundredMsPremovePenalty => '预走扣除 100 毫秒';
@@ -130,19 +130,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get allowMultiplePremoves => '允许连续预走';
 
   @override
-  String get queueASequenceAnIllegalMoveCancelsTheRest => '可连续预设；非法着法会取消后续预走';
+  String get queueASequenceAnIllegalMoveCancelsTheRest =>
+      '可预设多步棋；若某一步无法合法走出，将取消该步及之后的预走';
 
   @override
-  String get humanMoveTiming => '模拟人类走棋时间';
+  String get humanMoveTiming => '模拟思考时间';
 
   @override
   String get variableNaturalPausesBeforeMaiaMoves => 'Maia 走棋前加入时长不一的自然停顿';
 
   @override
-  String get aboutTemperatureAndTopP => '关于 Temperature 和 Top-P';
+  String get aboutTemperatureAndTopP => '关于温度和 Top-P';
 
   @override
-  String get temperature => 'Temperature';
+  String get temperature => '温度';
 
   @override
   String get topP => 'Top-P';
@@ -158,7 +159,7 @@ class AppLocalizationsZh extends AppLocalizations {
       '在分析和复盘中比较另一等级分的 Maia';
 
   @override
-  String get secondMaiaAnalysisRating => '第二个 Maia 分析等级分';
+  String get secondMaiaAnalysisRating => '第二个 Maia 的分析等级分';
 
   @override
   String get gameAnalysisQuality => '对局分析质量';
@@ -167,11 +168,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get resetEngineDefaults => '恢复引擎默认设置';
 
   @override
-  String get boardSounds => '棋盘音效';
+  String get boardSounds => '电子棋盘提示音';
 
   @override
   String get beepForCheckCheckmateAndCompletedIllegalMoves =>
-      '将军、将死和非法着法完成时发出提示音。';
+      '将军、将死或走出不合法的棋步时发出提示音。';
 
   @override
   String get copyDiagnostics => '复制诊断信息';
@@ -210,7 +211,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get retry => '重试';
 
   @override
-  String get maiaIsThinking => 'Maia 正在选择着法…';
+  String get maiaIsThinking => 'Maia 正在思考…';
 
   @override
   String get history => '历史记录';
@@ -258,7 +259,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get offerDraw => '提议和棋';
 
   @override
-  String get takeBackMove => '悔一步棋';
+  String get takeBackMove => '悔棋';
 
   @override
   String get whiteIsVictorious => '白方获胜';
@@ -267,7 +268,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get blackIsVictorious => '黑方获胜';
 
   @override
-  String get theGameIsADraw => '对局和棋';
+  String get theGameIsADraw => '和棋';
 
   @override
   String get theGameHasEnded => '对局已结束';
@@ -312,16 +313,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get castlingRights => '王车易位权利';
 
   @override
-  String get whiteKingside => '白方王翼';
+  String get whiteKingside => '白方短易位';
 
   @override
-  String get whiteQueenside => '白方后翼';
+  String get whiteQueenside => '白方长易位';
 
   @override
-  String get blackKingside => '黑方王翼';
+  String get blackKingside => '黑方短易位';
 
   @override
-  String get blackQueenside => '黑方后翼';
+  String get blackQueenside => '黑方长易位';
 
   @override
   String get enPassantTarget => '吃过路兵目标格';
@@ -348,7 +349,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get boardEditor => '棋盘编辑器';
 
   @override
-  String get endPosition => '结束局面';
+  String get endPosition => '最后局面';
 
   @override
   String get analysisMenu => '分析菜单';
@@ -367,4 +368,628 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get backToGame => '返回对局';
+
+  @override
+  String get expandVariations => '展开变化';
+
+  @override
+  String get collapseVariations => '折叠变化';
+
+  @override
+  String get promoteVariation => '提升变化';
+
+  @override
+  String get makeMainLine => '设为主线';
+
+  @override
+  String get deleteFromHere => '从此处删除';
+
+  @override
+  String get analyzing => '分析中…';
+
+  @override
+  String get noLegalMoves => '无合法着法';
+
+  @override
+  String get unavailable => '不可用';
+
+  @override
+  String get analysisFailed => '分析失败，请重试。';
+
+  @override
+  String get analysisStopped => '电脑分析已停止。';
+
+  @override
+  String get classifyingMoves => '正在分类着法…';
+
+  @override
+  String get graphReadyClassifying => '图表已就绪 · 正在分类着法…';
+
+  @override
+  String get stopAnalysis => '停止分析';
+
+  @override
+  String get runAnalysisAgain => '重新运行电脑分析';
+
+  @override
+  String get runAnalysis => '运行电脑分析';
+
+  @override
+  String get analysisExplanation => '运行电脑分析以生成评估图表和白方、黑方的准确度。';
+
+  @override
+  String get pgnCopied => '已复制PGN';
+
+  @override
+  String get fenCopied => '已复制FEN';
+
+  @override
+  String get rawProbabilitiesExplanation => '模型原始概率已在所有合法着法间归一化，未应用温度和 Top-P。';
+
+  @override
+  String get showRawProbabilities => '显示所有模型原始概率';
+
+  @override
+  String get pasteFen => '粘贴完整的六字段FEN';
+
+  @override
+  String get pastePgn => '粘贴PGN棋谱';
+
+  @override
+  String get invalidPosition => '局面无效，请检查棋盘和FEN。';
+
+  @override
+  String get pgnLoadFailed => '无法加载PGN棋谱，请检查文件或粘贴的文本。';
+
+  @override
+  String get goToNext => '转到下一个';
+
+  @override
+  String tapForNext(String label) {
+    return '$label · 点击转到下一个';
+  }
+
+  @override
+  String get notEnoughMoves => '着法数量不足';
+
+  @override
+  String get gameAccuracy => '对局准确度';
+
+  @override
+  String get accuracy => '准确度';
+
+  @override
+  String get analysisGraph => '电脑分析图表';
+
+  @override
+  String maiaMoveProbabilities(int elo) {
+    return 'Maia $elo着法概率';
+  }
+
+  @override
+  String otherProbability(String probability) {
+    return '其他 $probability';
+  }
+
+  @override
+  String otherLegalProbability(String probability) {
+    return '其他合法着法 $probability';
+  }
+
+  @override
+  String maiaProbabilitySemantics(String title, String moves) {
+    return '$title。$moves。';
+  }
+
+  @override
+  String analysisProgress(int completed, int total) {
+    return '正在分析…已完成 $completed/$total 个局面';
+  }
+
+  @override
+  String graphPosition(int position, int total, String score) {
+    return '局面 $position/$total，$score';
+  }
+
+  @override
+  String positionNumber(int position) {
+    return '局面 $position';
+  }
+
+  @override
+  String classificationCount(int count, String side, String classification) {
+    return '$side的$classification：$count步';
+  }
+
+  @override
+  String get classificationBrilliant => '妙着';
+
+  @override
+  String get classificationGood => '好着';
+
+  @override
+  String get classificationInteresting => '有趣的着法';
+
+  @override
+  String get classificationDubious => '可疑着法';
+
+  @override
+  String get classificationMistake => '失误';
+
+  @override
+  String get classificationBlunder => '严重失误';
+
+  @override
+  String get gameReview => '对局复盘';
+
+  @override
+  String materialPawn(int count) {
+    return '$count个兵';
+  }
+
+  @override
+  String materialKnight(int count) {
+    return '$count个马';
+  }
+
+  @override
+  String materialBishop(int count) {
+    return '$count个象';
+  }
+
+  @override
+  String materialRook(int count) {
+    return '$count个车';
+  }
+
+  @override
+  String materialQueen(int count) {
+    return '$count个后';
+  }
+
+  @override
+  String materialAdvantage(String score) {
+    return '子力优势 $score';
+  }
+
+  @override
+  String materialDescription(String side, String description) {
+    return '$side子力：$description';
+  }
+
+  @override
+  String get previousMove => '上一步';
+
+  @override
+  String get nextMove => '下一步';
+
+  @override
+  String get beginning => '起始局面';
+
+  @override
+  String get latestPosition => '最新局面';
+
+  @override
+  String holdForDestination(String destination) {
+    return '长按前往$destination';
+  }
+
+  @override
+  String get phaseOpening => '开局';
+
+  @override
+  String get phaseMiddlegame => '中局';
+
+  @override
+  String get phaseEndgame => '残局';
+
+  @override
+  String get pieceKing => '王';
+
+  @override
+  String get pieceQueen => '后';
+
+  @override
+  String get pieceRook => '车';
+
+  @override
+  String get pieceBishop => '象';
+
+  @override
+  String get pieceKnight => '马';
+
+  @override
+  String get piecePawn => '兵';
+
+  @override
+  String recentPlayerMaia(String rating) {
+    return '玩家 — Maia $rating';
+  }
+
+  @override
+  String recentMaiaPlayer(String rating) {
+    return 'Maia $rating — 玩家';
+  }
+
+  @override
+  String get recentIncomplete => '未完成';
+
+  @override
+  String get recentCompleted => '已完成';
+
+  @override
+  String get recentDeleteFailed => '无法删除已保存的对局。请重试。';
+
+  @override
+  String get recentOpenFailed => '无法打开已保存的对局。请重试。';
+
+  @override
+  String recentDeleteTitle(num count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '删除 $countString 局已保存的对局？';
+  }
+
+  @override
+  String recentDeleteWarning(num count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '这 $countString 局已保存的对局将被永久删除。';
+  }
+
+  @override
+  String get deleteAction => '删除';
+
+  @override
+  String get recentUpdating => '正在更新已保存的对局';
+
+  @override
+  String get recentCancelSelection => '取消选择';
+
+  @override
+  String get recentClearSelection => '清除选择';
+
+  @override
+  String get recentSelectAll => '选择所有对局';
+
+  @override
+  String get recentDeleteSelected => '删除所选对局';
+
+  @override
+  String get recentSelectGames => '选择对局';
+
+  @override
+  String get recentDeleteAll => '删除所有对局';
+
+  @override
+  String get recentDeleteOne => '删除已保存的对局';
+
+  @override
+  String recentSelectedCount(num count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '已选择 $countString 局';
+  }
+
+  @override
+  String get recentLoadFailed => '无法加载已保存的对局。请重试。';
+
+  @override
+  String get recentEmpty => '已完成的对局，以及返回主页时保存的未完成对局，会显示在这里。';
+
+  @override
+  String recentGameSummary(String result, String date) {
+    return '$result · $date';
+  }
+
+  @override
+  String get diagnosticsScreenError => 'Mobile Maia 的界面出现了错误。';
+
+  @override
+  String get diagnosticsScreenInstructions => '请复制诊断信息，并在发送时说明出现此界面前点击了什么。';
+
+  @override
+  String get pgnSaved => 'PGN 已保存';
+
+  @override
+  String get pgnExportFailed => '无法导出 PGN。你的对局仍保存在本机。';
+
+  @override
+  String get languagePreferenceError => '无法保存或恢复语言设置。对局数据不受影响，请重新选择语言。';
+
+  @override
+  String playRatingValue(String rating) {
+    return 'Maia对局等级分：$rating';
+  }
+
+  @override
+  String minutesValue(String minutes) {
+    return '分钟：$minutes';
+  }
+
+  @override
+  String incrementSecondsValue(String seconds) {
+    return '每步加秒：$seconds秒';
+  }
+
+  @override
+  String get chooseSettings => '选择设置并开始对局。';
+
+  @override
+  String get gameRestored => '已恢复对局。';
+
+  @override
+  String get reconnectChessnut => '请重新连接Chessnut以继续。';
+
+  @override
+  String get chessnutConnectionError => 'Chessnut连接出错。';
+
+  @override
+  String get searchingChessnut => '正在搜索Chessnut…';
+
+  @override
+  String get couldNotConnectChessnut => '无法连接Chessnut。';
+
+  @override
+  String get chessnutAndroidOnly => 'Android支持Chessnut。';
+
+  @override
+  String get chessnutIsDisconnected => 'Chessnut未连接。';
+
+  @override
+  String get yourMove => '轮到你走棋。';
+
+  @override
+  String get yourMoveChessnut => '请在Chessnut上走棋。';
+
+  @override
+  String get chessnutReady => 'Chessnut已就绪。';
+
+  @override
+  String get chessnutStartingPosition => '请在Chessnut上摆好标准初始局面。';
+
+  @override
+  String get takebackCompleteYourMove => '悔棋完成。请在Chessnut上走棋。';
+
+  @override
+  String get takebackCompleteThinking => '悔棋完成。Maia正在思考…';
+
+  @override
+  String get restoreLitSquares => '悔棋：请还原Chessnut亮灯格上的棋子。';
+
+  @override
+  String get completeMaiaLitMove => '请在Chessnut上完成亮灯指示的Maia走法。';
+
+  @override
+  String get illegalChessnutPosition => '这不是合法走棋后的局面。请纠正亮灯格上的棋子。';
+
+  @override
+  String get completeYourChessnutMove => '请在Chessnut上完成你的走棋。';
+
+  @override
+  String get connectChessnutFirst => '开始前请连接Chessnut。';
+
+  @override
+  String get gameInProgress => '对局进行中。';
+
+  @override
+  String get timeoutInsufficientMaterial => '和棋——虽然超时，但对方子力不足以将死。';
+
+  @override
+  String get whiteOutOfTime => '白方超时。';
+
+  @override
+  String get blackOutOfTime => '黑方超时。';
+
+  @override
+  String get makeMaiaLitMove => '请在Chessnut上执行亮灯指示的Maia走法。';
+
+  @override
+  String get checkmateMaiaWins => '将死——Maia获胜。';
+
+  @override
+  String get checkmateYouWin => '将死——你获胜！';
+
+  @override
+  String get drawResult => '和棋。';
+
+  @override
+  String get drawByAgreement => '协议和棋。';
+
+  @override
+  String get youWin => '你获胜。';
+
+  @override
+  String get maiaWins => 'Maia获胜。';
+
+  @override
+  String get gameEnded => '对局已结束。';
+
+  @override
+  String get consideringDraw => 'Maia正在考虑和棋提议…';
+
+  @override
+  String get maiaDeclinedDraw => 'Maia拒绝了和棋。';
+
+  @override
+  String get couldNotEvaluateDraw => '无法评估和棋提议。';
+
+  @override
+  String get youResigned => '你已认输——Maia获胜。';
+
+  @override
+  String get moveTakenBack => '已悔棋。轮到你走棋。';
+
+  @override
+  String get connectingChessnut => '正在连接Chessnut…';
+
+  @override
+  String get chessnutUnavailable => 'Chessnut不可用';
+
+  @override
+  String get chessnutDisconnected => 'Chessnut已断开';
+
+  @override
+  String get reconnect => '重新连接';
+
+  @override
+  String get playInApp => '在应用中下棋';
+
+  @override
+  String get continueGameOnScreen => '在屏幕上继续此对局';
+
+  @override
+  String get checkCheckmateIllegalMoves => '将军、将死和非法走法';
+
+  @override
+  String get offerDrawQuestion => '提议和棋？';
+
+  @override
+  String get resignGameQuestion => '认输？';
+
+  @override
+  String get resignEndsImmediately => '这将立即结束对局。';
+
+  @override
+  String get premoveLimit => '最多可预设64步走法。';
+
+  @override
+  String get chessnutGameRestriction => 'Chessnut仅支持标准初始局面、无时限的对局。';
+
+  @override
+  String get samplingTitle => '温度和Top-P';
+
+  @override
+  String get samplingDefaultsQuestion => '为什么温度和Top-P都设为1.00？';
+
+  @override
+  String get samplingResearch => '阅读采样研究';
+
+  @override
+  String get close => '关闭';
+
+  @override
+  String get unknownVersion => '版本未知';
+
+  @override
+  String get maiaProjectSource => 'Maia-3项目与源代码';
+
+  @override
+  String get enCroissantProjectSource => 'En Croissant项目与源代码';
+
+  @override
+  String get licence => '许可证';
+
+  @override
+  String get mobileMaiaSource => 'Mobile Maia源代码';
+
+  @override
+  String get samplingFullRange =>
+      '这些设置让Maia使用完整的人类走法预测范围。在1600档位的测试中，其开局选择更接近按等级分筛选的Lichess对局。';
+
+  @override
+  String get samplingStrength =>
+      '较低的设置会减少变化，并可能让Maia更强。我们更重视人类风格的开局选择，而不是最大棋力。Maia的等级分表示其模拟的玩家群体，并不保证精确的实战水平。';
+
+  @override
+  String get samplingTemperatureHelp =>
+      '温度控制 Maia 的走法概率有多集中。设为 0 时，Maia 总是选择模型预测人类最可能走的一步。大于 0 的较低值会使选择更集中于高概率走法；较高值则让低概率走法有更多机会被选中。';
+
+  @override
+  String get samplingTopPHelp =>
+      'Top-P 将走法按概率从高到低排序，保留累计概率达到设定值的最小一组走法。较低值会将选择限制在高概率走法中；1.00 则保留所有合法走法。';
+
+  @override
+  String get aboutPoweredBy => '由多伦多大学计算社会科学实验室开发的人类风格国际象棋引擎Maia-3提供支持。';
+
+  @override
+  String get aboutOffline => 'Maia-3完全在手机上运行，无需账户或网络连接。';
+
+  @override
+  String get aboutBoardCredits =>
+      '棋盘界面、默认棕色主题和Cburnett棋子由Lichess Flutter Chessground提供。本地Stockfish支持使用Lichess multistockfish。';
+
+  @override
+  String get aboutReviewCredits =>
+      '对局复盘中的走法分类和弃子检测启发式算法改编自开源国际象棋界面En Croissant。';
+
+  @override
+  String get aboutLicence =>
+      'Mobile Maia是依照AGPL-3.0-only分发的自由软件，不提供任何担保。你可以按照该许可证的条款重新分发和修改。完整源代码可在项目仓库中获取。';
+
+  @override
+  String get aboutIndependent =>
+      '这是一款独立的社区应用，并非Maia-3、多伦多大学、Lichess或En Croissant的官方应用。';
+
+  @override
+  String get samplingRecommendationWarning => '温度或Top-P与推荐值1.00不同。详情请点击信息按钮。';
+
+  @override
+  String get couldNotOpenPgn => '无法打开PGN。';
+
+  @override
+  String temperatureValue(String value) {
+    return '温度：$value';
+  }
+
+  @override
+  String topPValue(String value) {
+    return 'Top-P：$value';
+  }
+
+  @override
+  String analysisRatingValue(String rating) {
+    return 'Maia分析等级分：$rating';
+  }
+
+  @override
+  String secondAnalysisRatingValue(String rating) {
+    return '第二个Maia分析等级分：$rating';
+  }
+
+  @override
+  String premovesList(String moves) {
+    return '预走棋：$moves';
+  }
+
+  @override
+  String maiaOpponentRating(String rating) {
+    return 'Maia3 $rating Elo';
+  }
+
+  @override
+  String analysisQualityDetails(
+    String depth,
+    String seconds,
+    String extraSeconds,
+  ) {
+    return '深度$depth · 每个局面最多$seconds秒，另用最多$extraSeconds秒检查亮眼走法。';
+  }
+
+  @override
+  String chessnutBattery(String percent, String charging) {
+    String _temp0 = intl.Intl.selectLogic(charging, {'yes': ' ⚡', 'other': ''});
+    return '$percent%$_temp0';
+  }
+
+  @override
+  String get chessnutBluetoothUnavailable => '此设备不支持蓝牙。';
+
+  @override
+  String get chessnutPermissionPending => '请允许蓝牙权限，然后重新连接Chessnut。';
+
+  @override
+  String get chessnutBluetoothDisabled => '请开启蓝牙，然后重新连接Chessnut。';
+
+  @override
+  String get whiteShort => '白';
+
+  @override
+  String get blackShort => '黑';
 }

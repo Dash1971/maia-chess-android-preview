@@ -28,6 +28,27 @@ class RecentSession {
         : '$maia — Player';
   }
 
+  String localizedTitle(BuildContext context) {
+    final strings = l10n(context);
+    final rating = data['elo'];
+    final displayRating = NumberFormat(
+      '0',
+      strings.localeName,
+    ).format(rating is num ? rating : 1600);
+    return data['playerIsWhite'] is! bool || data['playerIsWhite'] == true
+        ? strings.recentPlayerMaia(displayRating)
+        : strings.recentMaiaPlayer(displayRating);
+  }
+
+  String localizedResult(BuildContext context) {
+    final result = resultLabel;
+    return result == 'Incomplete'
+        ? l10n(context).recentIncomplete
+        : result == 'Completed'
+        ? l10n(context).recentCompleted
+        : result;
+  }
+
   String get resultLabel {
     if (isIncomplete) return 'Incomplete';
     final forcedResult = data['forcedResult'];
@@ -335,7 +356,8 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
         _selected.removeWhere((id) => !games.any((game) => game.id == id));
         if (games.isEmpty) _selecting = false;
       });
-    } catch (error) {
+    } catch (error, stackTrace) {
+      unawaited(AppDiagnostics.record('recent-games-load', error, stackTrace));
       if (!mounted) return;
       setState(() => _loadError = error);
     }
@@ -354,9 +376,12 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
     setState(() => _busy = true);
     try {
       await _confirmAndDeleteGames(games);
-    } catch (_) {
+    } catch (error, stackTrace) {
+      unawaited(
+        AppDiagnostics.record('recent-games-delete', error, stackTrace),
+      );
       if (mounted) {
-        _showOperationError('Could not delete saved games. Please try again.');
+        _showOperationError(l10n(context).recentDeleteFailed);
         // A batch can fail after deleting some entries. Refresh the list so a
         // retry targets the records that actually remain.
         await _reload();
@@ -391,14 +416,15 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
               ActiveSessionStore.open(game.id));
       if (!mounted) return;
       if (data == null) {
-        _showOperationError('Could not open saved game. Please try again.');
+        _showOperationError(l10n(context).recentOpenFailed);
       } else {
         Navigator.pop(context, data);
         opened = true;
       }
-    } catch (_) {
+    } catch (error, stackTrace) {
+      unawaited(AppDiagnostics.record('recent-games-open', error, stackTrace));
       if (mounted) {
-        _showOperationError('Could not open saved game. Please try again.');
+        _showOperationError(l10n(context).recentOpenFailed);
       }
     } finally {
       // Keep rejecting callbacks while a successfully opened page exits.
@@ -416,20 +442,16 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(count == 1 ? 'Delete saved game?' : 'Delete $count games?'),
-        content: Text(
-          count == 1
-              ? 'This saved game will be permanently deleted.'
-              : 'These $count saved games will be permanently deleted.',
-        ),
+        title: Text(l10n(context).recentDeleteTitle(count)),
+        content: Text(l10n(context).recentDeleteWarning(count)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(l10n(context).cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+            child: Text(l10n(context).deleteAction),
           ),
         ],
       ),
@@ -457,17 +479,17 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
     final page = Scaffold(
       appBar: AppBar(
         bottom: _updatingFiles
-            ? const PreferredSize(
-                preferredSize: Size.fromHeight(2),
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(2),
                 child: LinearProgressIndicator(
                   minHeight: 2,
-                  semanticsLabel: 'Updating saved games',
+                  semanticsLabel: l10n(context).recentUpdating,
                 ),
               )
             : null,
         leading: _selecting
             ? IconButton(
-                tooltip: 'Cancel selection',
+                tooltip: l10n(context).recentCancelSelection,
                 onPressed: () => setState(() {
                   _selecting = false;
                   _selected.clear();
@@ -476,15 +498,17 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
               )
             : null,
         title: Text(
-          _selecting ? '${_selected.length} selected' : 'Recent games',
+          _selecting
+              ? l10n(context).recentSelectedCount(_selected.length)
+              : l10n(context).recentGames,
         ),
         actions: [
           if (_selecting && games != null) ...[
             IconButton(
               key: const ValueKey('select-all-games'),
               tooltip: _selected.length == games.length
-                  ? 'Clear selection'
-                  : 'Select all games',
+                  ? l10n(context).recentClearSelection
+                  : l10n(context).recentSelectAll,
               onPressed: () => setState(() {
                 if (_selected.length == games.length) {
                   _selected.clear();
@@ -496,7 +520,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
             ),
             IconButton(
               key: const ValueKey('delete-selected-games'),
-              tooltip: 'Delete selected games',
+              tooltip: l10n(context).recentDeleteSelected,
               onPressed: _selected.isEmpty
                   ? null
                   : () => _deleteGames(
@@ -513,11 +537,14 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                 if (action == 'select') setState(() => _selecting = true);
                 if (action == 'delete-all') unawaited(_deleteGames(games));
               },
-              itemBuilder: (_) => const [
-                PopupMenuItem(value: 'select', child: Text('Select games')),
+              itemBuilder: (_) => [
+                PopupMenuItem(
+                  value: 'select',
+                  child: Text(l10n(context).recentSelectGames),
+                ),
                 PopupMenuItem(
                   value: 'delete-all',
-                  child: Text('Delete all games'),
+                  child: Text(l10n(context).recentDeleteAll),
                 ),
               ],
             ),
@@ -526,17 +553,15 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
       body: Builder(
         builder: (context) {
           if (_loadError != null) {
-            return const Center(
-              child: Text('Could not load saved games. Please try again.'),
-            );
+            return Center(child: Text(l10n(context).recentLoadFailed));
           }
           if (games == null) {
             return const Center(child: CircularProgressIndicator());
           }
           if (games.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
-                'Completed games and incomplete games saved from Home will appear here.',
+                l10n(context).recentEmpty,
                 textAlign: TextAlign.center,
               ),
             );
@@ -555,10 +580,12 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                         onChanged: (_) => _toggleSelection(game.id),
                       )
                     : null,
-                title: Text(game.title),
+                title: Text(game.localizedTitle(context)),
                 subtitle: Text(
-                  '${game.resultLabel} · '
-                  '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
+                  l10n(context).recentGameSummary(
+                    game.localizedResult(context),
+                    MaterialLocalizations.of(context).formatCompactDate(date),
+                  ),
                 ),
                 onTap: () {
                   if (_busy) return;
@@ -573,7 +600,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                     ? null
                     : IconButton(
                         icon: const Icon(Icons.delete_outline),
-                        tooltip: 'Delete saved game',
+                        tooltip: l10n(context).recentDeleteOne,
                         onPressed: () => _deleteGames([game]),
                       ),
               );
