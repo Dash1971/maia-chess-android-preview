@@ -142,10 +142,10 @@ class AppLocalizationsJa extends AppLocalizations {
       'Maiaが指すまでの待ち時間に自然なばらつきを加えます';
 
   @override
-  String get aboutTemperatureAndTopP => 'TemperatureとTop-Pについて';
+  String get aboutTemperatureAndTopP => '温度とTop-Pについて';
 
   @override
-  String get temperature => 'Temperature';
+  String get temperature => '温度';
 
   @override
   String get topP => 'Top-P';
@@ -370,4 +370,637 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get backToGame => '対局に戻る';
+
+  @override
+  String get expandVariations => '変化を展開';
+
+  @override
+  String get collapseVariations => '変化を折りたたむ';
+
+  @override
+  String get promoteVariation => '変化を昇格';
+
+  @override
+  String get makeMainLine => '本譜にする';
+
+  @override
+  String get deleteFromHere => 'ここから削除';
+
+  @override
+  String get analyzing => '解析中…';
+
+  @override
+  String get noLegalMoves => '合法手なし';
+
+  @override
+  String get unavailable => '利用できません';
+
+  @override
+  String get analysisFailed => '解析に失敗しました。再試行してください。';
+
+  @override
+  String get analysisStopped => 'コンピューター解析を停止しました。';
+
+  @override
+  String get classifyingMoves => '指し手を分類中…';
+
+  @override
+  String get graphReadyClassifying => 'グラフ完了 · 指し手を分類中…';
+
+  @override
+  String get stopAnalysis => '解析を停止';
+
+  @override
+  String get runAnalysisAgain => '再度コンピューター解析';
+
+  @override
+  String get runAnalysis => 'コンピューター解析を実行';
+
+  @override
+  String get analysisExplanation => 'コンピューター解析で評価グラフと白・黒の精度を表示します。';
+
+  @override
+  String get pgnCopied => 'PGNをコピーしました';
+
+  @override
+  String get fenCopied => 'FENをコピーしました';
+
+  @override
+  String get rawProbabilitiesExplanation =>
+      '全合法手で正規化したモデルの生の確率です。温度とTop-Pは適用されません。';
+
+  @override
+  String get showRawProbabilities => 'モデルの全確率を表示';
+
+  @override
+  String get pasteFen => '6項目すべてを含むFENを貼り付け';
+
+  @override
+  String get pastePgn => 'PGNの棋譜を貼り付け';
+
+  @override
+  String get invalidPosition => '無効な局面です。盤面とFENを確認してください。';
+
+  @override
+  String get pgnLoadFailed => 'PGNを読み込めませんでした。ファイルや貼り付けた棋譜を確認してください。';
+
+  @override
+  String get goToNext => '次へ移動';
+
+  @override
+  String tapForNext(String label) {
+    return '$label · タップで次へ';
+  }
+
+  @override
+  String get notEnoughMoves => '指し手が不足しています';
+
+  @override
+  String get gameAccuracy => '対局の精度';
+
+  @override
+  String get accuracy => '精度';
+
+  @override
+  String get analysisGraph => 'コンピューター解析グラフ';
+
+  @override
+  String maiaMoveProbabilities(int elo) {
+    return 'Maia $eloの指し手の確率';
+  }
+
+  @override
+  String otherProbability(String probability) {
+    return 'その他 $probability';
+  }
+
+  @override
+  String otherLegalProbability(String probability) {
+    return 'その他の合法手 $probability';
+  }
+
+  @override
+  String maiaProbabilitySemantics(String title, String moves) {
+    return '$title。$moves。';
+  }
+
+  @override
+  String analysisProgress(int completed, int total) {
+    return '解析中… $total局面中$completed局面が完了';
+  }
+
+  @override
+  String graphPosition(int position, int total, String score) {
+    return '局面 $position / $total、$score';
+  }
+
+  @override
+  String positionNumber(int position) {
+    return '局面 $position';
+  }
+
+  @override
+  String classificationCount(int count, String side, String classification) {
+    return '$sideの$classification：$count手';
+  }
+
+  @override
+  String get classificationBrilliant => '妙手';
+
+  @override
+  String get classificationGood => '好手';
+
+  @override
+  String get classificationInteresting => '興味深い手';
+
+  @override
+  String get classificationDubious => '疑問手';
+
+  @override
+  String get classificationMistake => '悪手';
+
+  @override
+  String get classificationBlunder => '大悪手';
+
+  @override
+  String get gameReview => '対局レビュー';
+
+  @override
+  String materialPawn(int count) {
+    return 'ポーン$count個';
+  }
+
+  @override
+  String materialKnight(int count) {
+    return 'ナイト$count個';
+  }
+
+  @override
+  String materialBishop(int count) {
+    return 'ビショップ$count個';
+  }
+
+  @override
+  String materialRook(int count) {
+    return 'ルーク$count個';
+  }
+
+  @override
+  String materialQueen(int count) {
+    return 'クイーン$count個';
+  }
+
+  @override
+  String materialAdvantage(String score) {
+    return '駒得 $score';
+  }
+
+  @override
+  String materialDescription(String side, String description) {
+    return '$sideの駒：$description';
+  }
+
+  @override
+  String get previousMove => '前の手';
+
+  @override
+  String get nextMove => '次の手';
+
+  @override
+  String get beginning => '開始局面';
+
+  @override
+  String get latestPosition => '最新の局面';
+
+  @override
+  String holdForDestination(String destination) {
+    return '長押しで$destinationへ';
+  }
+
+  @override
+  String get phaseOpening => '序盤';
+
+  @override
+  String get phaseMiddlegame => '中盤';
+
+  @override
+  String get phaseEndgame => '終盤';
+
+  @override
+  String get pieceKing => 'キング';
+
+  @override
+  String get pieceQueen => 'クイーン';
+
+  @override
+  String get pieceRook => 'ルーク';
+
+  @override
+  String get pieceBishop => 'ビショップ';
+
+  @override
+  String get pieceKnight => 'ナイト';
+
+  @override
+  String get piecePawn => 'ポーン';
+
+  @override
+  String recentPlayerMaia(String rating) {
+    return 'プレイヤー — Maia $rating';
+  }
+
+  @override
+  String recentMaiaPlayer(String rating) {
+    return 'Maia $rating — プレイヤー';
+  }
+
+  @override
+  String get recentIncomplete => '未完了';
+
+  @override
+  String get recentCompleted => '完了';
+
+  @override
+  String get recentDeleteFailed => '保存した対局を削除できませんでした。もう一度お試しください。';
+
+  @override
+  String get recentOpenFailed => '保存した対局を開けませんでした。もう一度お試しください。';
+
+  @override
+  String recentDeleteTitle(num count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '保存した対局を$countString件削除しますか？';
+  }
+
+  @override
+  String recentDeleteWarning(num count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '保存した対局$countString件が完全に削除されます。';
+  }
+
+  @override
+  String get deleteAction => '削除';
+
+  @override
+  String get recentUpdating => '保存した対局を更新中';
+
+  @override
+  String get recentCancelSelection => '選択をキャンセル';
+
+  @override
+  String get recentClearSelection => '選択を解除';
+
+  @override
+  String get recentSelectAll => 'すべての対局を選択';
+
+  @override
+  String get recentDeleteSelected => '選択した対局を削除';
+
+  @override
+  String get recentSelectGames => '対局を選択';
+
+  @override
+  String get recentDeleteAll => 'すべての対局を削除';
+
+  @override
+  String get recentDeleteOne => '保存した対局を削除';
+
+  @override
+  String recentSelectedCount(num count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString件を選択中';
+  }
+
+  @override
+  String get recentLoadFailed => '保存した対局を読み込めませんでした。もう一度お試しください。';
+
+  @override
+  String get recentEmpty => '終了した対局と、ホームに戻る際に保存した未完了の対局がここに表示されます。';
+
+  @override
+  String recentGameSummary(String result, String date) {
+    return '$result · $date';
+  }
+
+  @override
+  String get diagnosticsScreenError => 'Mobile Maiaの画面でエラーが発生しました。';
+
+  @override
+  String get diagnosticsScreenInstructions =>
+      '診断情報をコピーし、この画面が表示される直前にタップした操作の説明と一緒に送信してください。';
+
+  @override
+  String get pgnSaved => 'PGNを保存しました';
+
+  @override
+  String get pgnExportFailed => 'PGNをエクスポートできませんでした。対局は引き続き端末に保存されています。';
+
+  @override
+  String get languagePreferenceError =>
+      '言語設定を保存または復元できませんでした。対局データに影響はありません。もう一度言語を選択してください。';
+
+  @override
+  String playRatingValue(String rating) {
+    return '対局するMaiaのレーティング：$rating';
+  }
+
+  @override
+  String minutesValue(String minutes) {
+    return '持ち時間（分）：$minutes';
+  }
+
+  @override
+  String incrementSecondsValue(String seconds) {
+    return '加算時間：$seconds秒';
+  }
+
+  @override
+  String get chooseSettings => '設定を選んで対局を始めましょう。';
+
+  @override
+  String get gameRestored => '対局を復元しました。';
+
+  @override
+  String get reconnectChessnut => '続けるにはChessnutに再接続してください。';
+
+  @override
+  String get chessnutConnectionError => 'Chessnutの接続エラー。';
+
+  @override
+  String get searchingChessnut => 'Chessnutを検索中…';
+
+  @override
+  String get couldNotConnectChessnut => 'Chessnutに接続できませんでした。';
+
+  @override
+  String get chessnutAndroidOnly => 'ChessnutはAndroidで利用できます。';
+
+  @override
+  String get chessnutIsDisconnected => 'Chessnutは未接続です。';
+
+  @override
+  String get yourMove => 'あなたの手番です。';
+
+  @override
+  String get yourMoveChessnut => 'Chessnutで指してください。';
+
+  @override
+  String get chessnutReady => 'Chessnutの準備ができました。';
+
+  @override
+  String get chessnutStartingPosition => 'Chessnutに標準の初期配置を並べてください。';
+
+  @override
+  String get takebackCompleteYourMove => '手を戻しました。Chessnutで指してください。';
+
+  @override
+  String get takebackCompleteThinking => '手を戻しました。Maiaが思考中…';
+
+  @override
+  String get restoreLitSquares => '手を戻すには、Chessnutの点灯したマスの駒を元に戻してください。';
+
+  @override
+  String get completeMaiaLitMove => 'Chessnutの点灯したマスに従って、Maiaの指し手を完了してください。';
+
+  @override
+  String get illegalChessnutPosition =>
+      '合法な手を指した後の局面ではありません。点灯したマスの駒を修正してください。';
+
+  @override
+  String get completeYourChessnutMove => 'Chessnutであなたの手を完了してください。';
+
+  @override
+  String get connectChessnutFirst => '開始前にChessnutを接続してください。';
+
+  @override
+  String get gameInProgress => '対局中。';
+
+  @override
+  String get timeoutInsufficientMaterial =>
+      '引き分け — 相手にチェックメイトに必要な駒がないため、時間切れでも負けにはなりません。';
+
+  @override
+  String get whiteOutOfTime => '白の時間が切れました。';
+
+  @override
+  String get blackOutOfTime => '黒の時間が切れました。';
+
+  @override
+  String get makeMaiaLitMove => 'Chessnutの点灯したマスに従って、Maiaの指し手を盤上で再現してください。';
+
+  @override
+  String get checkmateMaiaWins => 'チェックメイト — Maiaの勝ちです。';
+
+  @override
+  String get checkmateYouWin => 'チェックメイト — あなたの勝ちです！';
+
+  @override
+  String get drawResult => '引き分け。';
+
+  @override
+  String get drawByAgreement => '合意による引き分け。';
+
+  @override
+  String get youWin => 'あなたの勝ちです。';
+
+  @override
+  String get maiaWins => 'Maiaの勝ちです。';
+
+  @override
+  String get gameEnded => '対局が終了しました。';
+
+  @override
+  String get consideringDraw => 'Maiaが引き分けの提案を検討中…';
+
+  @override
+  String get maiaDeclinedDraw => 'Maiaは引き分けを断りました。';
+
+  @override
+  String get couldNotEvaluateDraw => '引き分けの提案を評価できませんでした。';
+
+  @override
+  String get youResigned => '投了しました — Maiaの勝ちです。';
+
+  @override
+  String get moveTakenBack => '手を戻しました。あなたの手番です。';
+
+  @override
+  String get connectingChessnut => 'Chessnutに接続中…';
+
+  @override
+  String get chessnutUnavailable => 'Chessnutを利用できません';
+
+  @override
+  String get chessnutDisconnected => 'Chessnut未接続';
+
+  @override
+  String get reconnect => '再接続';
+
+  @override
+  String get playInApp => 'アプリで対局';
+
+  @override
+  String get continueGameOnScreen => '画面でこの対局を続ける';
+
+  @override
+  String get checkCheckmateIllegalMoves => 'チェック・チェックメイト・非合法な手';
+
+  @override
+  String get offerDrawQuestion => '引き分けを提案しますか？';
+
+  @override
+  String get resignGameQuestion => '投了しますか？';
+
+  @override
+  String get resignEndsImmediately => '対局は直ちに終了します。';
+
+  @override
+  String get premoveLimit => 'プレムーブは64手まで予約できます。';
+
+  @override
+  String get chessnutGameRestriction => 'Chessnutでは標準の初期配置・時間無制限の対局のみ対応しています。';
+
+  @override
+  String get samplingTitle => 'TemperatureとTop-P';
+
+  @override
+  String get samplingDefaultsQuestion => 'なぜTemperatureとTop-Pは1.00？';
+
+  @override
+  String get samplingResearch => 'サンプリングの研究を読む';
+
+  @override
+  String get close => '閉じる';
+
+  @override
+  String get unknownVersion => 'バージョン不明';
+
+  @override
+  String get maiaProjectSource => 'Maia-3のプロジェクトとソースコード';
+
+  @override
+  String get enCroissantProjectSource => 'En Croissantのプロジェクトとソースコード';
+
+  @override
+  String get licence => 'ライセンス';
+
+  @override
+  String get mobileMaiaSource => 'Mobile Maiaのソースコード';
+
+  @override
+  String get samplingFullRange =>
+      'これらの設定では、Maiaが予測する人間の手を幅広く使えます。1600設定でのテストでは、レーティングで絞ったLichessの対局に、序盤の手の選択がより近くなりました。';
+
+  @override
+  String get samplingStrength =>
+      '設定を下げると多様性が減り、Maiaが強くなることがあります。私たちは最大の強さより、人間らしい序盤の選択を重視しています。Maiaのレーティングはモデルの対象となるプレイヤーを示すもので、正確な棋力を保証するものではありません。';
+
+  @override
+  String get samplingTemperatureHelp =>
+      '温度は、Maiaが選ぶ手の確率の集中度を調整します。0では、モデルが人間に最も選ばれやすいと予測した手を常に選びます。0より大きい低い値では確率の高い手に選択が集中し、高い値では確率の低い手も選ばれやすくなります。';
+
+  @override
+  String get samplingTopPHelp =>
+      'Top-Pは手を確率の高い順に並べ、合計確率が設定値に達するまでの最小のグループを候補にします。低い値では確率の高い手に選択が絞られ、1.00ではすべての合法手が候補に残ります。';
+
+  @override
+  String get aboutPoweredBy =>
+      'トロント大学の計算社会科学研究室が開発した、人間らしく指すチェスエンジンMaia-3を使用しています。';
+
+  @override
+  String get aboutOffline => 'Maia-3はスマートフォン上で完結して動作します。アカウントやネットワーク接続は不要です。';
+
+  @override
+  String get aboutBoardCredits =>
+      '盤面インターフェース、標準の茶色テーマ、Cburnettの駒はLichess Flutter Chessgroundが提供しています。端末上のStockfishにはLichess multistockfishを使用しています。';
+
+  @override
+  String get aboutReviewCredits =>
+      '対局レビューの手の分類と駒の犠牲を検出する手法は、オープンソースのチェスGUI「En Croissant」を基にしています。';
+
+  @override
+  String get aboutLicence =>
+      'Mobile MaiaはAGPL-3.0-onlyで配布される自由ソフトウェアで、いかなる保証もありません。このライセンスの条件に従って再配布・改変できます。完全なソースコードはプロジェクトのリポジトリで公開されています。';
+
+  @override
+  String get aboutIndependent =>
+      'このアプリはコミュニティによる独立したアプリです。Maia-3、トロント大学、Lichess、En Croissantの公式アプリではありません。';
+
+  @override
+  String get samplingRecommendationWarning =>
+      'TemperatureまたはTop-Pが推奨値の1.00と異なります。詳細は情報ボタンをご覧ください。';
+
+  @override
+  String get couldNotOpenPgn => 'PGNを開けませんでした。';
+
+  @override
+  String temperatureValue(String value) {
+    return '温度：$value';
+  }
+
+  @override
+  String topPValue(String value) {
+    return 'Top-P：$value';
+  }
+
+  @override
+  String analysisRatingValue(String rating) {
+    return '解析用Maiaのレーティング：$rating';
+  }
+
+  @override
+  String secondAnalysisRatingValue(String rating) {
+    return '2つ目のMaiaの解析レーティング：$rating';
+  }
+
+  @override
+  String premovesList(String moves) {
+    return 'プレムーブ：$moves';
+  }
+
+  @override
+  String maiaOpponentRating(String rating) {
+    return 'Maia3 $rating Elo';
+  }
+
+  @override
+  String analysisQualityDetails(
+    String depth,
+    String seconds,
+    String extraSeconds,
+  ) {
+    return '深さ$depth・1局面あたり最大$seconds秒、注目すべき手の確認にさらに最大$extraSeconds秒。';
+  }
+
+  @override
+  String chessnutBattery(String percent, String charging) {
+    String _temp0 = intl.Intl.selectLogic(charging, {'yes': ' ⚡', 'other': ''});
+    return '$percent%$_temp0';
+  }
+
+  @override
+  String get chessnutBluetoothUnavailable => 'この端末ではBluetoothを利用できません。';
+
+  @override
+  String get chessnutPermissionPending =>
+      'Bluetoothの権限を許可してからChessnutに再接続してください。';
+
+  @override
+  String get chessnutBluetoothDisabled =>
+      'BluetoothをオンにしてからChessnutに再接続してください。';
+
+  @override
+  String get whiteShort => '白';
+
+  @override
+  String get blackShort => '黒';
 }

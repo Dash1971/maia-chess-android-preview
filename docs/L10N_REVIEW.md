@@ -1,35 +1,49 @@
-# Dev language review
+# Localization and translation review
 
-This is a **provisional** UI translation of the same 119-message first slice into Japanese, Simplified Chinese for mainland China, Korean, and Spanish. Native-speaker review has not yet happened. Screens outside this slice still show English.
+Mobile Maia supplies English, Japanese, Simplified Chinese, Korean and Spanish UI catalogs. The catalogs currently contain **296 messages each** and cover game setup and play, settings and help, Chessnut connection/recovery, saved games, PGN import/export, analysis and move classifications, the board editor, and diagnostic recovery.
 
-Review `l10n_review.csv` alongside the Dev app. Each row has a stable message ID, English source, proposed translations, and source location. For a correction, fill in **Reviewer suggestion** and identify the language; a screenshot link and a short explanation are especially useful when wording depends on chess context or available space. Leave the English source and ID unchanged. Report missing English text, clipping, unclear chess terms, or wrong context even if the proposed translation itself is grammatical.
+The translations have received an editorial and automated review, but **have not been approved by native-speaking chess players**. Catalog completeness is not a claim of linguistic certification. Use `l10n_review.csv` alongside the Dev app to record corrections, awkward chess terminology, clipping, or unclear instructions. Fill in **Reviewer suggestion** with the language and proposed wording; a screenshot is useful for context. Do not publish reviewer identities or private game/device screenshots without permission.
 
-The app's source of truth is `lib/l10n/app_en.arb`, `app_ja.arb`, `app_zh.arb`, `app_ko.arb`, and `app_es.arb`. The CSV is a review aid, not a second translation source. Approved suggestions should be applied to the ARB files and checked in the Dev app before the language is described as complete.
+## Source of truth and contributor workflow
 
-Keep PGN, FEN, move notation, model names, and engine protocol data untranslated. Do not put reviewer identities or private phone screenshots into this public repository without permission.
+The source of truth is `lib/l10n/app_{en,ja,zh,ko,es}.arb`. The CSV is a review aid, not another translation source. Generated Dart files are checked in so the app's typed localization API is available to all tools.
 
-## Editorial review of Dev beta.4 (2026-10-04)
+For every UI text change:
 
-Reviewed the 119 source messages and all four translation catalogs at source commit `0c8bc529ce117e993bcc186f6d5d0d29a68fdd62`. This pass improves phrasing; it is **not native-speaker approval or a physical-device visual review**. The translations remain provisional.
+1. Add or update a stable message ID in all five ARBs. Describe the screen, chess meaning and placeholder purpose in the English `@message` metadata. Do not use English sentences as lookup keys.
+2. Use generated getters/methods through `l10n(context)` at the point of rendering. Translate complete messages, with placeholders and ICU plurals/selects where appropriate. Do not concatenate translated sentence fragments or persist translated status text.
+3. Run `flutter gen-l10n`, then `python3 tool/check_localization.py --write-review`. This refreshes the CSV and source-location hints, preserves reviewer notes, and marks changed messages as needing review.
+4. Run `flutter analyze`, `flutter test`, and `python3 -m unittest discover -s tool -p '*_test.py'` in a Python environment with `tool/hardening/requirements.txt` installed. Commit ARBs, generated Dart, the updated CSV, and relevant regression tests together.
+5. Inspect changed screens in the Dev app, including a compact screen and 200% text. Host widget tests use test fonts; they cannot establish real CJK glyph quality. Request native-speaker review before describing a translation as approved.
 
-The editorial patch makes timing labels describe pauses rather than move strength, uses Spanish **Elo** for ratings, replaces Korean **증분** with the clearer clock label **추가 시간**, and makes Spanish/Chinese castling checkboxes explicitly describe short/long castling. It also improves error messages, physical-board sound descriptions, and premove cancellation wording. PGN/FEN, moves, engine names, and engine behavior remain unchanged. ARB descriptions now explain the ambiguous concepts for future translators.
+CI checks catalog parity, nonempty messages, duplicate JSON keys, placeholder preservation, translator descriptions, unexpected identical English text, CSV synchronization, generated-file drift, and removal of the old English-string lookup. It also runs the regression suite. These checks catch structural errors, not incorrect grammar or every possible untranslated runtime message. Review new UI call sites as part of code review.
 
-### Terminology and context
+## Language selection and state
 
-- Human timing affects artificial waiting only. Avoid wording that promises better human-like move selection or a trained prediction of thinking time.
-- Increment is time added after a move, not an abstract numeric increment.
-- “Completed illegal moves” distinguishes a finished physical-board move from a piece in transit. A literal translation of “completed” often sounds unnatural; retain the behavioral distinction in translator context.
-- Takeback can undo different numbers of plies depending on turn and board mode. Avoid labels that promise exactly one ply.
-- Castling controls enable the right to castle; kingside means short castling, queenside means long castling.
-- Keep timing/strength, analysis/review, and phone/electronic-board terminology consistent across screens. Let native chess players review these choices in context.
+- English is the fallback. The language menu lists languages in their own names so users can recover from an accidental selection.
+- The system setting follows the first supported language in the device preference list. Spanish regional locales share a neutral Spanish catalog.
+- Only **Simplified Chinese** is supplied. Traditional Chinese system preferences (`zh-Hant`, or Taiwan/Hong Kong/Macao without explicit `Hans`) are skipped in favor of the next supported preference, or English. Users may explicitly select 简体中文 on any device. Add a separate Traditional catalog before advertising that support.
+- Language changes apply immediately, including open result and About dialogs, and persist independently of game data. Preference writes are serialized; a slow initial read cannot overwrite a newer choice. Unsupported/corrupt preferences are cleared without deleting other settings. Storage failures leave the app usable and show a localized warning.
+- Saved game statuses use stable codes with backward-compatible canonical English legacy fields. Display text is translated when rendered. Switching language must not change a position, clock, engine strength, saved game, or PGN.
 
-### Priorities before promoting localization
+## Deliberately untranslated content
 
-1. **Finish whole user flows.** Recent Games and its deletion confirmation, resignation/draw dialogs, Chessnut connection/recovery instructions, analysis results/classifications, and help still contain English. Translate destructive warnings and recovery instructions before less critical prose. Partial coverage is already declared in the Dev release; it must remain visible to reviewers.
-2. **Use stable IDs at call sites.** The temporary `appText(context, english)` switch silently returns English for an unrecognized string. An English copy edit can therefore disable translation without a compile error. Move call sites to generated localization getters/methods as the slice expands.
-3. **Localize complete messages.** Use ARB placeholders and ICU plurals for counts, ratings, increments, progress, and errors instead of concatenating translated fragments. Format displayed decimals by locale (Spanish uses a comma); leave engine protocol, FEN, PGN, and SAN unchanged. Store state independently of translated text and translate status messages when rendering.
-4. **Define Chinese script fallback.** The current generic `zh` locale contains Simplified Chinese and also matches Traditional-Chinese device locales. Decide explicitly whether that fallback is intended; do not present it as a Traditional translation. Spanish regional locales currently share one neutral Spanish catalog.
-5. **Broaden validation.** Keep language-selection/restart tests; add system-locale changes, unsupported/corrupt saved values, saved-game continuity, and compact/large-text navigation tests. Run layout checks with actual CJK fonts and test TalkBack on a device. Host widget tests use test fonts and cannot establish real glyph quality or every truncation condition.
-6. **Keep catalogs synchronized.** Generate Dart from ARB, verify every supported catalog contains the same IDs, and keep this CSV synchronized. Translation review should also check placeholder preservation and flag unexpected English fallback. When source lines move, refresh the CSV's location hints.
+Keep SAN/UCI moves, PGN/FEN data and headers, result tokens (`1-0`, `0-1`, `1/2-1/2`), engine protocols, URLs, product/model names, and diagnostic logs canonical. Opening names currently come from the existing English opening dataset; translating that dataset is separate from UI localization. Original third-party license texts remain intact. Android system permission/file-picker UI follows the system's own localization; the app supplies localized share-sheet titles.
 
-The patch includes a reproduced and corrected malformed-language-preference exception, reusing the existing preference-validation helper rather than deleting unrelated settings or saved games. Additional async load/save failure and rapid-change ordering tests would be useful when extending the settings architecture; the present tests do not qualify those paths.
+Format displayed numbers and dates for the chosen locale, including Spanish decimal commas. Chess ratings and move numbers omit thousands separators. Never send locale-formatted numbers to engines or serialize them into game data.
+
+## Terminology and review guidance
+
+- Human timing adds an optional pause; it does not change Maia's strength or predict human thinking time.
+- Increment is time added after a move. Korean uses **추가 시간** rather than the abstract numeric term 증분.
+- A completed illegal board move differs from a piece still in transit. Retain that distinction in the translator description even when the UI wording is concise.
+- Takeback can undo different numbers of plies depending on turn and board mode. Do not promise exactly one ply.
+- Castling controls enable castling rights; kingside means short castling, queenside means long castling.
+- Classification names are chess annotations, not praise for the user. Keep them consistent between the move list, summaries and tooltips.
+- Use neutral Spanish and conventional international-chess vocabulary in CJK languages. Chinese here means international chess, not xiangqi; Japanese labels must not imply shogi rules.
+
+## Regression coverage
+
+`test/localization_regression_test.dart` checks catalog/rendering contracts and constrained layouts. `test/language_selection_test.dart` and `test/app_language_controller_test.dart` cover selection, restart, malformed preferences, system/script fallback, slow initialization, rapid changes, failures and disposal. `test/play_localization_test.dart` covers status changes, saved-game continuity, result/About dialogs, help/recovery and localized clock decimals. `test/analysis_localization_test.dart` covers the board editor at 200% text and classification labels in all four translations. `test/storage_localization_test.dart` covers recent games, delete confirmation/plurals, diagnostics and PGN export/share behavior. `tool/check_localization_test.py` verifies the CI guard itself.
+
+Native-speaker review, TalkBack behavior and physical-device font/layout acceptance remain release acceptance tasks. Hardware Chessnut behavior is covered separately; localization must not alter its protocol or game rules.

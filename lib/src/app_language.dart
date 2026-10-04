@@ -2,16 +2,148 @@ part of '../main.dart';
 
 const appLanguagePreferenceKey = 'appLanguageV1';
 
+/// Catalog IDs are also the persisted choices. Never persist translated names.
+bool isSupportedAppLanguage(Object? code) =>
+    code is String &&
+    AppLocalizations.supportedLocales.any(
+      (locale) => locale.languageCode == code,
+    );
+
+/// Only Simplified Chinese is supplied. Do not silently substitute it for a
+/// Traditional-Chinese system preference; try the next preferred language.
+/// Explicitly selecting 简体中文 still works on every device.
+Locale resolveAppLocale(List<Locale>? preferred, Iterable<Locale> supported) {
+  for (final requested in preferred ?? const <Locale>[]) {
+    if (requested.languageCode == 'zh') {
+      final traditional =
+          requested.scriptCode == 'Hant' ||
+          (requested.scriptCode != 'Hans' &&
+              const {'TW', 'HK', 'MO'}.contains(requested.countryCode));
+      if (traditional) continue;
+    }
+    for (final available in supported) {
+      if (available.languageCode == requested.languageCode) return available;
+    }
+  }
+  return const Locale('en');
+}
+
+/// Tests and embedders may build a page without the app's delegates. Production
+/// uses generated catalogs; this fallback never performs an English-text lookup.
+AppLocalizations l10n(BuildContext context) =>
+    AppLocalizations.of(context) ?? lookupAppLocalizations(const Locale('en'));
+
+String displayNumber(BuildContext context, num value, {int? decimalDigits}) {
+  final format = NumberFormat.decimalPattern(l10n(context).localeName);
+  // Chess ratings, move numbers and clocks conventionally omit grouping.
+  format.turnOffGrouping();
+  if (decimalDigits != null) {
+    format.minimumFractionDigits = decimalDigits;
+    format.maximumFractionDigits = decimalDigits;
+  }
+  return format.format(value);
+}
+
+/// Serializes preference writes and prevents a slow initial read from replacing
+/// a language the user has already selected. Storage failures never escape into
+/// the UI error handler or touch saved games.
+class AppLanguageController extends ChangeNotifier {
+  AppLanguageController({
+    Future<Object?> Function()? read,
+    Future<void> Function(String?)? write,
+  }) : _read = read ?? _readPreference,
+       _write = write ?? _writePreference;
+
+  final Future<Object?> Function() _read;
+  final Future<void> Function(String?) _write;
+  String? selectedCode;
+  bool persistenceFailed = false;
+  int _revision = 0;
+  bool _disposed = false;
+  Future<void> _pendingWrite = Future<void>.value();
+
+  static Future<Object?> _readPreference() async =>
+      (await SharedPreferences.getInstance()).get(appLanguagePreferenceKey);
+
+  static Future<void> _writePreference(String? code) async {
+    final preferences = await SharedPreferences.getInstance();
+    final saved = code == null
+        ? await preferences.remove(appLanguagePreferenceKey)
+        : await preferences.setString(appLanguagePreferenceKey, code);
+    if (!saved) throw StateError('Language preference write failed');
+  }
+
+  Future<void> initialize() async {
+    final revision = _revision;
+    try {
+      final stored = await _read();
+      if (_disposed || revision != _revision) return;
+      selectedCode = isSupportedAppLanguage(stored) ? stored as String : null;
+      _notify();
+      if (stored != null && selectedCode == null) {
+        await _enqueueWrite(null, revision);
+      }
+    } catch (error, stack) {
+      _failure(revision, error, stack);
+    }
+  }
+
+  Future<void> select(String? code) {
+    if (_disposed || (code != null && !isSupportedAppLanguage(code))) {
+      return Future<void>.value();
+    }
+    final revision = ++_revision;
+    selectedCode = code;
+    persistenceFailed = false;
+    _notify();
+    return _enqueueWrite(code, revision);
+  }
+
+  Future<void> _enqueueWrite(String? code, int revision) {
+    return _pendingWrite = _pendingWrite.then((_) async {
+      try {
+        await _write(code);
+        if (!_disposed && revision == _revision) {
+          persistenceFailed = false;
+          _notify();
+        }
+      } catch (error, stack) {
+        _failure(revision, error, stack);
+      }
+    });
+  }
+
+  void _failure(int revision, Object error, StackTrace stack) {
+    unawaited(AppDiagnostics.record('language-preference', error, stack));
+    if (!_disposed && revision == _revision) {
+      persistenceFailed = true;
+      _notify();
+    }
+  }
+
+  void _notify() {
+    if (!_disposed) notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+}
+
 class AppLanguageSettings extends InheritedWidget {
   const AppLanguageSettings({
     required this.selectedCode,
     required this.onChanged,
+    this.persistenceFailed = false,
     required super.child,
     super.key,
   });
 
   final String? selectedCode;
   final ValueChanged<String?> onChanged;
+  final bool persistenceFailed;
 
   static AppLanguageSettings? maybeOf(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<AppLanguageSettings>();
@@ -19,143 +151,6 @@ class AppLanguageSettings extends InheritedWidget {
   @override
   bool updateShouldNotify(AppLanguageSettings oldWidget) =>
       selectedCode != oldWidget.selectedCode ||
+      persistenceFailed != oldWidget.persistenceFailed ||
       onChanged != oldWidget.onChanged;
-}
-
-// Dev localization bridge. Call sites are being migrated to stable ARB IDs.
-String appText(BuildContext context, String english) {
-  final l10n = AppLocalizations.of(context);
-  if (l10n == null) return english;
-  return switch (english) {
-    "About" => l10n.about,
-    "Analysis Board" => l10n.analysisBoard,
-    "Back" => l10n.back,
-    "Black" => l10n.black,
-    "Cancel premoves" => l10n.cancelPremoves,
-    "Chessnut (experimental)" => l10n.chessnutExperimental,
-    "Connect Chessnut" => l10n.connectChessnut,
-    "Disconnect" => l10n.disconnect,
-    "Engine settings" => l10n.engineSettings,
-    "Game menu" => l10n.gameMenu,
-    "Game ready" => l10n.gameReady,
-    "Game settings" => l10n.gameSettings,
-    "Home" => l10n.home,
-    "Play Maia" => l10n.playMaia,
-    "Random" => l10n.random,
-    "Recent games" => l10n.recentGames,
-    "Resign" => l10n.resign,
-    "Settings" => l10n.settings,
-    "Start game" => l10n.startGame,
-    "Time control" => l10n.timeControl,
-    "White" => l10n.white,
-    "Unlimited" => l10n.unlimited,
-    "Custom" => l10n.custom,
-    "seconds" => l10n.seconds,
-    "Your side" => l10n.yourSide,
-    "You" => l10n.you,
-    "System default" => l10n.systemDefault,
-    "Language" => l10n.language,
-    "Play Maia rating" => l10n.playMaiaRating,
-    "Minutes" => l10n.minutes,
-    "Increment" => l10n.increment,
-    "Game sounds" => l10n.gameSounds,
-    "Moves, captures, errors, and game end" =>
-      l10n.movesCapturesErrorsAndGameEnd,
-    "Haptic feedback" => l10n.hapticFeedback,
-    "Touch feedback for moves, checks, errors, and game end" =>
-      l10n.touchFeedbackForMovesChecksErrorsAndGameEnd,
-    "Premoves" => l10n.premoves,
-    "Queue a move while Maia is thinking" => l10n.queueAMoveWhileMaiaIsThinking,
-    "100 ms premove penalty" => l10n.oneHundredMsPremovePenalty,
-    "Use 0.1 seconds per premove in timed games" =>
-      l10n.use01SecondsPerPremoveInTimedGames,
-    "Allow multiple premoves" => l10n.allowMultiplePremoves,
-    "Queue a sequence; an illegal move cancels the rest" =>
-      l10n.queueASequenceAnIllegalMoveCancelsTheRest,
-    "Human move timing" => l10n.humanMoveTiming,
-    "Variable natural pauses before Maia moves" =>
-      l10n.variableNaturalPausesBeforeMaiaMoves,
-    "About Temperature and Top-P" => l10n.aboutTemperatureAndTopP,
-    "Temperature" => l10n.temperature,
-    "Top-P" => l10n.topP,
-    "Maia analysis rating" => l10n.maiaAnalysisRating,
-    "Add second Maia engine" => l10n.addSecondMaiaEngine,
-    "Compare another Maia rating in analysis and review" =>
-      l10n.compareAnotherMaiaRatingInAnalysisAndReview,
-    "Second Maia analysis rating" => l10n.secondMaiaAnalysisRating,
-    "Game analysis quality" => l10n.gameAnalysisQuality,
-    "Reset engine defaults" => l10n.resetEngineDefaults,
-    "Board sounds" => l10n.boardSounds,
-    "Beep for check, checkmate, and completed illegal moves." =>
-      l10n.beepForCheckCheckmateAndCompletedIllegalMoves,
-    "Copy diagnostics" => l10n.copyDiagnostics,
-    "Diagnostics copied" => l10n.diagnosticsCopied,
-    "New game" => l10n.newGame,
-    "Reset game" => l10n.resetGame,
-    "Share and export" => l10n.shareAndExport,
-    "Save PGN file" => l10n.savePgnFile,
-    "Share PGN" => l10n.sharePgn,
-    "Copy PGN" => l10n.copyPgn,
-    "Copy FEN" => l10n.copyFen,
-    "Maia error. Retry" => l10n.maiaErrorRetry,
-    "Maia error. Please retry." => l10n.maiaErrorPleaseRetry,
-    "Retry" => l10n.retry,
-    "Maia is thinking…" => l10n.maiaIsThinking,
-    "HISTORY" => l10n.history,
-    "START" => l10n.start,
-    "Chessnut status" => l10n.chessnutStatus,
-    "Leave current game?" => l10n.leaveCurrentGame,
-    "Your game will be kept in Recent games." =>
-      l10n.yourGameWillBeKeptInRecentGames,
-    "Cancel" => l10n.cancel,
-    "Continue" => l10n.continueAction,
-    "Start a new game?" => l10n.startANewGame,
-    "Reset game?" => l10n.resetGameQuestion,
-    "Your completed game will remain in Recent Games." =>
-      l10n.yourCompletedGameWillRemainInRecentGames,
-    "This game will be permanently erased." =>
-      l10n.thisGameWillBePermanentlyErased,
-    "Start new game" => l10n.startNewGame,
-    "Reset" => l10n.reset,
-    "Flip board" => l10n.flipBoard,
-    "Offer draw" => l10n.offerDraw,
-    "Take back move" => l10n.takeBackMove,
-    "White is victorious" => l10n.whiteIsVictorious,
-    "Black is victorious" => l10n.blackIsVictorious,
-    "The game is a draw" => l10n.theGameIsADraw,
-    "The game has ended" => l10n.theGameHasEnded,
-    "Rematch" => l10n.rematch,
-    "Fast" => l10n.fast,
-    "Balanced" => l10n.balanced,
-    "Thorough" => l10n.thorough,
-    "Continue from here" => l10n.continueFromHere,
-    "Load" => l10n.load,
-    "Edit Board" => l10n.editBoard,
-    "Done" => l10n.done,
-    "White pieces" => l10n.whitePieces,
-    "Black pieces" => l10n.blackPieces,
-    "White to move" => l10n.whiteToMove,
-    "Black to move" => l10n.blackToMove,
-    "Castling rights" => l10n.castlingRights,
-    "White kingside" => l10n.whiteKingside,
-    "White queenside" => l10n.whiteQueenside,
-    "Black kingside" => l10n.blackKingside,
-    "Black queenside" => l10n.blackQueenside,
-    "En-passant target" => l10n.enPassantTarget,
-    "Starting position" => l10n.startingPosition,
-    "Clear board" => l10n.clearBoard,
-    "Load FEN" => l10n.loadFen,
-    "Load PGN" => l10n.loadPgn,
-    "Open PGN file" => l10n.openPgnFile,
-    "Clear moves" => l10n.clearMoves,
-    "Board Editor" => l10n.boardEditor,
-    "end position" => l10n.endPosition,
-    "Analysis menu" => l10n.analysisMenu,
-    "Turn engine off" => l10n.turnEngineOff,
-    "Turn engine on" => l10n.turnEngineOn,
-    "Moves" => l10n.moves,
-    "Computer analysis" => l10n.computerAnalysis,
-    "Back to game" => l10n.backToGame,
-    _ => english,
-  };
 }

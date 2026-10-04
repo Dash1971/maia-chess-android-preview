@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'
     show LicenseRegistry, LicenseEntryWithLineBreaks, mapEquals, listEquals;
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart' show NumberFormat;
 import 'package:multistockfish/multistockfish.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,6 +39,7 @@ part 'src/history_navigation.dart';
 part 'src/sound_effect.dart';
 part 'src/game_feedback.dart';
 part 'src/play.dart';
+part 'src/play_localization.dart';
 part 'src/analysis_board.dart';
 part 'src/review.dart';
 part 'src/review_widgets.dart';
@@ -135,44 +137,20 @@ class MaiaChessApp extends StatefulWidget {
 class _MaiaChessAppState extends State<MaiaChessApp>
     with WidgetsBindingObserver {
   Timer? _maiaReleaseTimer;
-  String? _languageOverride;
+  final AppLanguageController _language = AppLanguageController();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    unawaited(_loadLanguage());
+    _language.addListener(_languageChanged);
+    unawaited(_language.initialize());
   }
 
-  Future<void> _loadLanguage() async {
-    final preferences = await SharedPreferences.getInstance();
-    final saved = _readValidatedPreference<String?>(
-      preferences,
-      appLanguagePreferenceKey,
-      fallback: null,
-      decode: (value) =>
-          value is String &&
-              AppLocalizations.supportedLocales.any(
-                (locale) => locale.languageCode == value,
-              )
-          ? value
-          : null,
-    );
-    if (mounted && saved != null) {
-      setState(() => _languageOverride = saved);
-    }
+  void _languageChanged() {
+    if (mounted) setState(() {});
   }
 
-  void _setLanguage(String? languageCode) {
-    setState(() => _languageOverride = languageCode);
-    unawaited(() async {
-      final preferences = await SharedPreferences.getInstance();
-      if (languageCode == null) {
-        await preferences.remove(appLanguagePreferenceKey);
-      } else {
-        await preferences.setString(appLanguagePreferenceKey, languageCode);
-      }
-    }());
-  }
+  void _setLanguage(String? code) => unawaited(_language.select(code));
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -211,6 +189,8 @@ class _MaiaChessAppState extends State<MaiaChessApp>
   @override
   void dispose() {
     _maiaReleaseTimer?.cancel();
+    _language.removeListener(_languageChanged);
+    _language.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -219,7 +199,10 @@ class _MaiaChessAppState extends State<MaiaChessApp>
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Mobile Maia Preview',
-      locale: _languageOverride == null ? null : Locale(_languageOverride!),
+      locale: _language.selectedCode == null
+          ? null
+          : Locale(_language.selectedCode!),
+      localeListResolutionCallback: resolveAppLocale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       navigatorObservers: [maiaRouteObserver],
@@ -233,7 +216,8 @@ class _MaiaChessAppState extends State<MaiaChessApp>
         useMaterial3: true,
       ),
       home: AppLanguageSettings(
-        selectedCode: _languageOverride,
+        selectedCode: _language.selectedCode,
+        persistenceFailed: _language.persistenceFailed,
         onChanged: _setLanguage,
         child: const GamePage(),
       ),

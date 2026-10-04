@@ -142,10 +142,10 @@ class AppLocalizationsKo extends AppLocalizations {
       'Maia가 수를 두기 전 대기 시간을 자연스럽게 조절합니다';
 
   @override
-  String get aboutTemperatureAndTopP => 'Temperature와 Top-P 정보';
+  String get aboutTemperatureAndTopP => '온도와 Top-P 정보';
 
   @override
-  String get temperature => 'Temperature';
+  String get temperature => '온도';
 
   @override
   String get topP => 'Top-P';
@@ -370,4 +370,638 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get backToGame => '대국으로 돌아가기';
+
+  @override
+  String get expandVariations => '변화 펼치기';
+
+  @override
+  String get collapseVariations => '변화 접기';
+
+  @override
+  String get promoteVariation => '변화 승격';
+
+  @override
+  String get makeMainLine => '주 변화로 설정';
+
+  @override
+  String get deleteFromHere => '여기부터 삭제';
+
+  @override
+  String get analyzing => '분석 중…';
+
+  @override
+  String get noLegalMoves => '합법적인 수 없음';
+
+  @override
+  String get unavailable => '사용 불가';
+
+  @override
+  String get analysisFailed => '분석에 실패했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get analysisStopped => '컴퓨터 분석이 중지되었습니다.';
+
+  @override
+  String get classifyingMoves => '수를 분류하는 중…';
+
+  @override
+  String get graphReadyClassifying => '그래프 준비 완료 · 수 분류 중…';
+
+  @override
+  String get stopAnalysis => '분석 중지';
+
+  @override
+  String get runAnalysisAgain => '컴퓨터 분석 다시 실행';
+
+  @override
+  String get runAnalysis => '컴퓨터 분석 실행';
+
+  @override
+  String get analysisExplanation => '컴퓨터 분석을 실행하면 평가 그래프와 백·흑의 정확도가 표시됩니다.';
+
+  @override
+  String get pgnCopied => 'PGN 복사됨';
+
+  @override
+  String get fenCopied => 'FEN 복사됨';
+
+  @override
+  String get rawProbabilitiesExplanation =>
+      '모든 합법적인 수에 대해 정규화한 모델의 원시 확률입니다. 온도와 Top-P 설정은 적용되지 않습니다.';
+
+  @override
+  String get showRawProbabilities => '전체 모델 원시 확률 표시';
+
+  @override
+  String get pasteFen => '6개 필드가 모두 포함된 FEN 붙여넣기';
+
+  @override
+  String get pastePgn => 'PGN 기보 붙여넣기';
+
+  @override
+  String get invalidPosition => '유효하지 않은 포지션입니다. 보드와 FEN을 확인해 주세요.';
+
+  @override
+  String get pgnLoadFailed => 'PGN 기보를 불러올 수 없습니다. 파일 또는 붙여넣은 텍스트를 확인해 주세요.';
+
+  @override
+  String get goToNext => '다음으로 이동';
+
+  @override
+  String tapForNext(String label) {
+    return '$label · 탭하여 다음으로';
+  }
+
+  @override
+  String get notEnoughMoves => '수가 부족합니다';
+
+  @override
+  String get gameAccuracy => '대국 정확도';
+
+  @override
+  String get accuracy => '정확도';
+
+  @override
+  String get analysisGraph => '컴퓨터 분석 그래프';
+
+  @override
+  String maiaMoveProbabilities(int elo) {
+    return 'Maia $elo 수 확률';
+  }
+
+  @override
+  String otherProbability(String probability) {
+    return '기타 $probability';
+  }
+
+  @override
+  String otherLegalProbability(String probability) {
+    return '기타 합법적인 수 $probability';
+  }
+
+  @override
+  String maiaProbabilitySemantics(String title, String moves) {
+    return '$title. $moves.';
+  }
+
+  @override
+  String analysisProgress(int completed, int total) {
+    return '$total개 포지션 중 $completed개 분석 중…';
+  }
+
+  @override
+  String graphPosition(int position, int total, String score) {
+    return '포지션 $position/$total, $score';
+  }
+
+  @override
+  String positionNumber(int position) {
+    return '포지션 $position';
+  }
+
+  @override
+  String classificationCount(int count, String side, String classification) {
+    return '$side $classification: $count수';
+  }
+
+  @override
+  String get classificationBrilliant => '훌륭한 수';
+
+  @override
+  String get classificationGood => '좋은 수';
+
+  @override
+  String get classificationInteresting => '흥미로운 수';
+
+  @override
+  String get classificationDubious => '의심스러운 수';
+
+  @override
+  String get classificationMistake => '실수';
+
+  @override
+  String get classificationBlunder => '큰 실수';
+
+  @override
+  String get gameReview => '대국 복기';
+
+  @override
+  String materialPawn(int count) {
+    return '폰 $count개';
+  }
+
+  @override
+  String materialKnight(int count) {
+    return '나이트 $count개';
+  }
+
+  @override
+  String materialBishop(int count) {
+    return '비숍 $count개';
+  }
+
+  @override
+  String materialRook(int count) {
+    return '룩 $count개';
+  }
+
+  @override
+  String materialQueen(int count) {
+    return '퀸 $count개';
+  }
+
+  @override
+  String materialAdvantage(String score) {
+    return '기물 우위 $score';
+  }
+
+  @override
+  String materialDescription(String side, String description) {
+    return '$side 기물: $description';
+  }
+
+  @override
+  String get previousMove => '이전 수';
+
+  @override
+  String get nextMove => '다음 수';
+
+  @override
+  String get beginning => '시작';
+
+  @override
+  String get latestPosition => '최신 포지션';
+
+  @override
+  String holdForDestination(String destination) {
+    return '길게 누르면 $destination 위치로 이동합니다';
+  }
+
+  @override
+  String get phaseOpening => '오프닝';
+
+  @override
+  String get phaseMiddlegame => '미들게임';
+
+  @override
+  String get phaseEndgame => '엔드게임';
+
+  @override
+  String get pieceKing => '킹';
+
+  @override
+  String get pieceQueen => '퀸';
+
+  @override
+  String get pieceRook => '룩';
+
+  @override
+  String get pieceBishop => '비숍';
+
+  @override
+  String get pieceKnight => '나이트';
+
+  @override
+  String get piecePawn => '폰';
+
+  @override
+  String recentPlayerMaia(String rating) {
+    return '플레이어 — Maia $rating';
+  }
+
+  @override
+  String recentMaiaPlayer(String rating) {
+    return 'Maia $rating — 플레이어';
+  }
+
+  @override
+  String get recentIncomplete => '미완료';
+
+  @override
+  String get recentCompleted => '완료';
+
+  @override
+  String get recentDeleteFailed => '저장된 대국을 삭제하지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get recentOpenFailed => '저장된 대국을 열지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String recentDeleteTitle(num count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '저장된 대국 $countString개를 삭제할까요?';
+  }
+
+  @override
+  String recentDeleteWarning(num count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '저장된 대국 $countString개가 영구적으로 삭제됩니다.';
+  }
+
+  @override
+  String get deleteAction => '삭제';
+
+  @override
+  String get recentUpdating => '저장된 대국 업데이트 중';
+
+  @override
+  String get recentCancelSelection => '선택 취소';
+
+  @override
+  String get recentClearSelection => '선택 해제';
+
+  @override
+  String get recentSelectAll => '모든 대국 선택';
+
+  @override
+  String get recentDeleteSelected => '선택한 대국 삭제';
+
+  @override
+  String get recentSelectGames => '대국 선택';
+
+  @override
+  String get recentDeleteAll => '모든 대국 삭제';
+
+  @override
+  String get recentDeleteOne => '저장된 대국 삭제';
+
+  @override
+  String recentSelectedCount(num count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString개 선택됨';
+  }
+
+  @override
+  String get recentLoadFailed => '저장된 대국을 불러오지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get recentEmpty => '완료된 대국과 홈으로 돌아갈 때 저장한 미완료 대국이 여기에 표시됩니다.';
+
+  @override
+  String recentGameSummary(String result, String date) {
+    return '$result · $date';
+  }
+
+  @override
+  String get diagnosticsScreenError => 'Mobile Maia 화면에 오류가 발생했습니다.';
+
+  @override
+  String get diagnosticsScreenInstructions =>
+      '진단 정보를 복사하고 이 화면이 나타나기 직전에 무엇을 눌렀는지 설명과 함께 보내 주세요.';
+
+  @override
+  String get pgnSaved => 'PGN 저장됨';
+
+  @override
+  String get pgnExportFailed => 'PGN을 내보내지 못했습니다. 대국은 기기에 계속 저장되어 있습니다.';
+
+  @override
+  String get languagePreferenceError =>
+      '언어 설정을 저장하거나 복원하지 못했습니다. 대국 데이터에는 영향이 없습니다. 언어를 다시 선택해 주세요.';
+
+  @override
+  String playRatingValue(String rating) {
+    return '상대 Maia 레이팅: $rating';
+  }
+
+  @override
+  String minutesValue(String minutes) {
+    return '분: $minutes';
+  }
+
+  @override
+  String incrementSecondsValue(String seconds) {
+    return '추가 시간: $seconds초';
+  }
+
+  @override
+  String get chooseSettings => '설정을 선택하고 대국을 시작하세요.';
+
+  @override
+  String get gameRestored => '대국을 복원했습니다.';
+
+  @override
+  String get reconnectChessnut => '계속하려면 Chessnut에 다시 연결하세요.';
+
+  @override
+  String get chessnutConnectionError => 'Chessnut 연결 오류입니다.';
+
+  @override
+  String get searchingChessnut => 'Chessnut 검색 중…';
+
+  @override
+  String get couldNotConnectChessnut => 'Chessnut에 연결할 수 없습니다.';
+
+  @override
+  String get chessnutAndroidOnly => 'Chessnut은 Android에서 사용할 수 있습니다.';
+
+  @override
+  String get chessnutIsDisconnected => 'Chessnut이 연결되지 않았습니다.';
+
+  @override
+  String get yourMove => '당신 차례입니다.';
+
+  @override
+  String get yourMoveChessnut => 'Chessnut에서 수를 두세요.';
+
+  @override
+  String get chessnutReady => 'Chessnut이 준비되었습니다.';
+
+  @override
+  String get chessnutStartingPosition => 'Chessnut에 표준 시작 포지션을 배치하세요.';
+
+  @override
+  String get takebackCompleteYourMove => '무르기가 완료되었습니다. Chessnut에서 수를 두세요.';
+
+  @override
+  String get takebackCompleteThinking => '무르기가 완료되었습니다. Maia가 생각 중…';
+
+  @override
+  String get restoreLitSquares => '무르기: Chessnut에서 불이 켜진 칸의 기물을 원래 위치로 되돌리세요.';
+
+  @override
+  String get completeMaiaLitMove => 'Chessnut에서 불빛으로 표시된 Maia의 수를 완료하세요.';
+
+  @override
+  String get illegalChessnutPosition =>
+      '규칙에 맞는 수가 아닙니다. 불이 켜진 칸의 기물 배치를 바로잡으세요.';
+
+  @override
+  String get completeYourChessnutMove => 'Chessnut에서 두던 수를 마저 두세요.';
+
+  @override
+  String get connectChessnutFirst => '시작하기 전에 Chessnut을 연결하세요.';
+
+  @override
+  String get gameInProgress => '대국 진행 중입니다.';
+
+  @override
+  String get timeoutInsufficientMaterial =>
+      '무승부 — 시간이 초과되었지만 시간이 남은 쪽에 체크메이트할 기물이 부족합니다.';
+
+  @override
+  String get whiteOutOfTime => '백의 시간이 끝났습니다.';
+
+  @override
+  String get blackOutOfTime => '흑의 시간이 끝났습니다.';
+
+  @override
+  String get makeMaiaLitMove => 'Chessnut에서 불빛으로 표시된 Maia의 수를 두세요.';
+
+  @override
+  String get checkmateMaiaWins => '체크메이트 — Maia가 이겼습니다.';
+
+  @override
+  String get checkmateYouWin => '체크메이트 — 당신이 이겼습니다!';
+
+  @override
+  String get drawResult => '무승부입니다.';
+
+  @override
+  String get drawByAgreement => '합의에 따른 무승부입니다.';
+
+  @override
+  String get youWin => '당신이 이겼습니다.';
+
+  @override
+  String get maiaWins => 'Maia가 이겼습니다.';
+
+  @override
+  String get gameEnded => '대국이 끝났습니다.';
+
+  @override
+  String get consideringDraw => 'Maia가 무승부 제안을 검토 중…';
+
+  @override
+  String get maiaDeclinedDraw => 'Maia가 무승부 제안을 거절했습니다.';
+
+  @override
+  String get couldNotEvaluateDraw => '무승부 제안을 평가할 수 없습니다.';
+
+  @override
+  String get youResigned => '기권했습니다 — Maia가 이겼습니다.';
+
+  @override
+  String get moveTakenBack => '수를 물렀습니다. 당신 차례입니다.';
+
+  @override
+  String get connectingChessnut => 'Chessnut 연결 중…';
+
+  @override
+  String get chessnutUnavailable => 'Chessnut을 사용할 수 없음';
+
+  @override
+  String get chessnutDisconnected => 'Chessnut 연결 끊김';
+
+  @override
+  String get reconnect => '다시 연결';
+
+  @override
+  String get playInApp => '앱에서 대국';
+
+  @override
+  String get continueGameOnScreen => '화면에서 이 대국 계속하기';
+
+  @override
+  String get checkCheckmateIllegalMoves => '체크, 체크메이트, 잘못된 수';
+
+  @override
+  String get offerDrawQuestion => '무승부를 제안할까요?';
+
+  @override
+  String get resignGameQuestion => '기권할까요?';
+
+  @override
+  String get resignEndsImmediately => '대국이 즉시 종료됩니다.';
+
+  @override
+  String get premoveLimit => '예약 수는 최대 64개까지 입력할 수 있습니다.';
+
+  @override
+  String get chessnutGameRestriction =>
+      'Chessnut 대국은 표준 시작 포지션과 시간 무제한만 지원합니다.';
+
+  @override
+  String get samplingTitle => '온도와 Top-P';
+
+  @override
+  String get samplingDefaultsQuestion => '왜 온도와 Top-P를 1.00으로 설정하나요?';
+
+  @override
+  String get samplingResearch => '샘플링 연구 읽기';
+
+  @override
+  String get close => '닫기';
+
+  @override
+  String get unknownVersion => '버전 알 수 없음';
+
+  @override
+  String get maiaProjectSource => 'Maia-3 프로젝트 및 소스 코드';
+
+  @override
+  String get enCroissantProjectSource => 'En Croissant 프로젝트 및 소스 코드';
+
+  @override
+  String get licence => '라이선스';
+
+  @override
+  String get mobileMaiaSource => 'Mobile Maia 소스 코드';
+
+  @override
+  String get samplingFullRange =>
+      '이 설정은 Maia가 예측한 사람의 수를 폭넓게 사용하도록 합니다. 1600 설정의 테스트에서는 오프닝 선택이 같은 레이팅 범위의 Lichess 대국에 훨씬 가까웠습니다.';
+
+  @override
+  String get samplingStrength =>
+      '설정을 낮추면 다양성이 줄고 Maia가 더 강해질 수 있습니다. 우리는 최대 기력보다 사람다운 오프닝 선택을 중시합니다. Maia의 레이팅은 모델링하는 플레이어의 수준을 뜻하며 정확한 기력을 보장하지 않습니다.';
+
+  @override
+  String get samplingTemperatureHelp =>
+      '온도는 Maia의 수 선택 확률이 얼마나 집중되는지 조절합니다. 0이면 모델이 사람이 둘 가능성이 가장 높다고 예측한 수를 항상 선택합니다. 0보다 큰 낮은 값은 가능성이 높은 수에 확률을 더 집중시키고, 높은 값은 가능성이 낮은 수에도 더 많은 기회를 줍니다.';
+
+  @override
+  String get samplingTopPHelp =>
+      'Top-P는 수를 확률이 높은 순서로 정렬한 뒤, 확률의 합이 설정값에 도달할 때까지 선택 후보에 포함합니다. 값이 낮으면 확률이 높은 수로 선택이 좁혀지고, 1.00이면 모든 합법적인 수를 유지합니다.';
+
+  @override
+  String get aboutPoweredBy =>
+      '토론토 대학교 계산사회과학 연구실이 개발한 사람처럼 두는 체스 엔진 Maia-3를 사용합니다.';
+
+  @override
+  String get aboutOffline =>
+      'Maia-3는 휴대폰에서 완전히 실행됩니다. 계정이나 네트워크 연결이 필요하지 않습니다.';
+
+  @override
+  String get aboutBoardCredits =>
+      '보드 인터페이스, 기본 갈색 테마와 Cburnett 기물은 Lichess Flutter Chessground에서 제공합니다. 로컬 Stockfish 지원에는 Lichess multistockfish를 사용합니다.';
+
+  @override
+  String get aboutReviewCredits =>
+      '대국 복기의 수 분류와 희생 감지 휴리스틱은 오픈 소스 체스 GUI En Croissant를 기반으로 합니다.';
+
+  @override
+  String get aboutLicence =>
+      'Mobile Maia는 AGPL-3.0-only로 배포되는 자유 소프트웨어이며 어떠한 보증도 없습니다. 해당 라이선스에 따라 재배포하고 수정할 수 있습니다. 전체 소스 코드는 프로젝트 저장소에서 확인할 수 있습니다.';
+
+  @override
+  String get aboutIndependent =>
+      '이 앱은 독립적인 커뮤니티 앱이며 Maia-3, 토론토 대학교, Lichess 또는 En Croissant의 공식 앱이 아닙니다.';
+
+  @override
+  String get samplingRecommendationWarning =>
+      '온도 또는 Top-P가 권장값 1.00과 다릅니다. 자세한 내용은 정보 버튼을 확인하세요.';
+
+  @override
+  String get couldNotOpenPgn => 'PGN을 열 수 없습니다.';
+
+  @override
+  String temperatureValue(String value) {
+    return '온도: $value';
+  }
+
+  @override
+  String topPValue(String value) {
+    return 'Top-P: $value';
+  }
+
+  @override
+  String analysisRatingValue(String rating) {
+    return 'Maia 분석 레이팅: $rating';
+  }
+
+  @override
+  String secondAnalysisRatingValue(String rating) {
+    return '두 번째 Maia 분석 레이팅: $rating';
+  }
+
+  @override
+  String premovesList(String moves) {
+    return '예약 수: $moves';
+  }
+
+  @override
+  String maiaOpponentRating(String rating) {
+    return 'Maia3 $rating Elo';
+  }
+
+  @override
+  String analysisQualityDetails(
+    String depth,
+    String seconds,
+    String extraSeconds,
+  ) {
+    return '깊이 $depth · 포지션당 최대 $seconds초, 눈에 띄는 수 확인에 추가로 최대 $extraSeconds초.';
+  }
+
+  @override
+  String chessnutBattery(String percent, String charging) {
+    String _temp0 = intl.Intl.selectLogic(charging, {'yes': ' ⚡', 'other': ''});
+    return '$percent%$_temp0';
+  }
+
+  @override
+  String get chessnutBluetoothUnavailable => '이 기기에서 Bluetooth를 사용할 수 없습니다.';
+
+  @override
+  String get chessnutPermissionPending =>
+      'Bluetooth 권한을 허용한 다음 Chessnut에 다시 연결하세요.';
+
+  @override
+  String get chessnutBluetoothDisabled => 'Bluetooth를 켠 다음 Chessnut에 다시 연결하세요.';
+
+  @override
+  String get whiteShort => '백';
+
+  @override
+  String get blackShort => '흑';
 }
