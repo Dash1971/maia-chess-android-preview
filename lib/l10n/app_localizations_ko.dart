@@ -22,7 +22,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get black => '흑';
 
   @override
-  String get cancelPremoves => '예약 수 취소';
+  String get cancelPremoves => '미리두기 취소';
 
   @override
   String get chessnutExperimental => 'Chessnut(실험 기능)';
@@ -116,23 +116,24 @@ class AppLocalizationsKo extends AppLocalizations {
       '수, 체크, 오류 및 대국 종료 시 진동';
 
   @override
-  String get premoves => '예약 수';
+  String get premoves => '미리두기';
 
   @override
   String get queueAMoveWhileMaiaIsThinking => 'Maia가 생각하는 동안 다음 수를 미리 입력';
 
   @override
-  String get oneHundredMsPremovePenalty => '예약 수 100ms 시간 차감';
+  String get oneHundredMsPremovePenalty => '미리두기 1회당 100ms 차감';
 
   @override
-  String get use01SecondsPerPremoveInTimedGames => '시간제 대국에서 예약 수마다 0.1초 차감';
+  String get use01SecondsPerPremoveInTimedGames =>
+      '시간 제한이 있는 대국에서 미리두기 1회당 0.1초 차감';
 
   @override
-  String get allowMultiplePremoves => '여러 예약 수 허용';
+  String get allowMultiplePremoves => '여러 수 미리두기 허용';
 
   @override
   String get queueASequenceAnIllegalMoveCancelsTheRest =>
-      '여러 수를 미리 입력합니다. 둘 수 없는 수부터 나머지 예약이 취소됩니다';
+      '여러 수를 미리 입력합니다. 규칙에 맞지 않는 수가 나오면 그 수와 이후의 수가 취소됩니다';
 
   @override
   String get humanMoveTiming => '자연스러운 착수 간격';
@@ -255,7 +256,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get reset => '초기화';
 
   @override
-  String get flipBoard => '보드 뒤집기';
+  String get flipBoard => '보드 돌리기';
 
   @override
   String get offerDraw => '무승부 제안';
@@ -330,7 +331,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get enPassantTarget => '앙파상 대상 칸';
 
   @override
-  String get startingPosition => '초기 배치';
+  String get startingPosition => '시작 포지션';
 
   @override
   String get clearBoard => '보드 비우기';
@@ -351,7 +352,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get boardEditor => '보드 편집기';
 
   @override
-  String get endPosition => '마지막 국면';
+  String get endPosition => '마지막 포지션';
 
   @override
   String get analysisMenu => '분석 메뉴';
@@ -372,16 +373,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backToGame => '대국으로 돌아가기';
 
   @override
-  String get expandVariations => '변화 펼치기';
+  String get expandVariations => '라인 펼치기';
 
   @override
-  String get collapseVariations => '변화 접기';
+  String get collapseVariations => '라인 접기';
 
   @override
-  String get promoteVariation => '변화 승격';
+  String get promoteVariation => '라인 승격하기';
 
   @override
-  String get makeMainLine => '주 변화로 설정';
+  String get makeMainLine => '주 라인으로 설정';
 
   @override
   String get deleteFromHere => '여기부터 삭제';
@@ -505,7 +506,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get classificationBrilliant => '훌륭한 수';
+  String get classificationBrilliant => '매우 좋은 수';
 
   @override
   String get classificationGood => '좋은 수';
@@ -514,13 +515,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get classificationInteresting => '흥미로운 수';
 
   @override
-  String get classificationDubious => '의심스러운 수';
+  String get classificationDubious => '애매한 수';
 
   @override
   String get classificationMistake => '실수';
 
   @override
-  String get classificationBlunder => '큰 실수';
+  String get classificationBlunder => '블런더';
 
   @override
   String get gameReview => '대국 복기';
@@ -557,7 +558,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String materialDescription(String side, String description) {
-    return '$side 기물: $description';
+    return '$side 기물 차이: $description';
   }
 
   @override
@@ -757,7 +758,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chessnutReady => 'Chessnut이 준비되었습니다.';
 
   @override
-  String get chessnutStartingPosition => 'Chessnut에 표준 시작 포지션을 배치하세요.';
+  String get chessnutStartingPosition => 'Chessnut에 표준 시작 포지션대로 기물을 배치하세요.';
 
   @override
   String get takebackCompleteYourMove => '무르기가 완료되었습니다. Chessnut에서 수를 두세요.';
@@ -852,7 +853,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get continueGameOnScreen => '화면에서 이 대국 계속하기';
 
   @override
-  String get checkCheckmateIllegalMoves => '체크, 체크메이트, 잘못된 수';
+  String get checkCheckmateIllegalMoves => '체크, 체크메이트, 규칙에 맞지 않는 수';
 
   @override
   String get offerDrawQuestion => '무승부를 제안할까요?';
@@ -864,11 +865,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get resignEndsImmediately => '대국이 즉시 종료됩니다.';
 
   @override
-  String get premoveLimit => '예약 수는 최대 64개까지 입력할 수 있습니다.';
+  String get premoveLimit => '최대 64수까지 미리 입력할 수 있습니다.';
 
   @override
   String get chessnutGameRestriction =>
-      'Chessnut 대국은 표준 시작 포지션과 시간 무제한만 지원합니다.';
+      'Chessnut 대국은 표준 시작 포지션에서 시작하는 시간 무제한 대국만 지원합니다.';
 
   @override
   String get samplingTitle => '온도와 Top-P';
@@ -903,7 +904,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingStrength =>
-      '설정을 낮추면 다양성이 줄고 Maia가 더 강해질 수 있습니다. 우리는 최대 기력보다 사람다운 오프닝 선택을 중시합니다. Maia의 레이팅은 모델링하는 플레이어의 수준을 뜻하며 정확한 기력을 보장하지 않습니다.';
+      '설정값을 낮추면 수의 다양성이 줄고 Maia가 더 강해질 수 있습니다. 우리는 최대한 강한 플레이보다 사람다운 오프닝 레퍼토리를 중시합니다. Maia의 레이팅은 모델링 대상 플레이어의 수준을 나타내며, 정확한 경기력을 보장하지 않습니다.';
 
   @override
   String get samplingTemperatureHelp =>
@@ -966,7 +967,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String premovesList(String moves) {
-    return '예약 수: $moves';
+    return '미리 입력한 수: $moves';
   }
 
   @override

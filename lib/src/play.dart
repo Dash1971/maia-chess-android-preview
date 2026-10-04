@@ -3832,7 +3832,7 @@ class _GamePageState extends State<GamePage>
                   icon: Icons.language,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
                       child: DropdownButtonFormField<String>(
                         key: ValueKey(
                           'app-language-${language.selectedCode ?? 'system'}',

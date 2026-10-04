@@ -22,7 +22,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get black => '黒';
 
   @override
-  String get cancelPremoves => 'プレムーブを取り消す';
+  String get cancelPremoves => 'プリムーブを取り消す';
 
   @override
   String get chessnutExperimental => 'Chessnut（試験的機能）';
@@ -116,19 +116,19 @@ class AppLocalizationsJa extends AppLocalizations {
       '指し手、チェック、エラー、対局終了時の振動';
 
   @override
-  String get premoves => 'プレムーブ';
+  String get premoves => 'プリムーブ';
 
   @override
   String get queueAMoveWhileMaiaIsThinking => 'Maiaの手番中に次の手を予約';
 
   @override
-  String get oneHundredMsPremovePenalty => 'プレムーブの0.1秒消費';
+  String get oneHundredMsPremovePenalty => 'プリムーブの0.1秒消費';
 
   @override
-  String get use01SecondsPerPremoveInTimedGames => '持ち時間ありの対局でプレムーブごとに0.1秒消費';
+  String get use01SecondsPerPremoveInTimedGames => '持ち時間ありの対局でプリムーブごとに0.1秒消費';
 
   @override
-  String get allowMultiplePremoves => '複数のプレムーブを許可';
+  String get allowMultiplePremoves => '複数のプリムーブを許可';
 
   @override
   String get queueASequenceAnIllegalMoveCancelsTheRest =>
@@ -255,7 +255,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reset => 'リセット';
 
   @override
-  String get flipBoard => '盤を反転';
+  String get flipBoard => '盤の上下反転';
 
   @override
   String get offerDraw => '引き分けを提案';
@@ -312,7 +312,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get blackToMove => '黒の手番';
 
   @override
-  String get castlingRights => 'キャスリングの可否';
+  String get castlingRights => 'キャスリングの権利';
 
   @override
   String get whiteKingside => '白のキングサイド';
@@ -327,7 +327,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get blackQueenside => '黒のクイーンサイド';
 
   @override
-  String get enPassantTarget => 'アンパッサン対象マス';
+  String get enPassantTarget => 'アンパッサンの対象マス';
 
   @override
   String get startingPosition => '初期配置';
@@ -372,16 +372,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get backToGame => '対局に戻る';
 
   @override
-  String get expandVariations => '変化を展開';
+  String get expandVariations => '変化手順を表示する';
 
   @override
-  String get collapseVariations => '変化を折りたたむ';
+  String get collapseVariations => '変化手順をかくす';
 
   @override
-  String get promoteVariation => '変化を昇格';
+  String get promoteVariation => '変化を上位の手順にする';
 
   @override
-  String get makeMainLine => '本譜にする';
+  String get makeMainLine => '主手順にする';
 
   @override
   String get deleteFromHere => 'ここから削除';
@@ -405,19 +405,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get classifyingMoves => '指し手を分類中…';
 
   @override
-  String get graphReadyClassifying => 'グラフ完了 · 指し手を分類中…';
+  String get graphReadyClassifying => 'グラフ生成完了 · 指し手を分類中…';
 
   @override
   String get stopAnalysis => '解析を停止';
 
   @override
-  String get runAnalysisAgain => '再度コンピューター解析';
+  String get runAnalysisAgain => 'コンピューター解析を再実行';
 
   @override
   String get runAnalysis => 'コンピューター解析を実行';
 
   @override
-  String get analysisExplanation => 'コンピューター解析で評価グラフと白・黒の精度を表示します。';
+  String get analysisExplanation => 'コンピューター解析で評価値グラフと白・黒それぞれの指し手の正確度を表示します。';
 
   @override
   String get pgnCopied => 'PGNをコピーしました';
@@ -430,7 +430,7 @@ class AppLocalizationsJa extends AppLocalizations {
       '全合法手で正規化したモデルの生の確率です。温度とTop-Pは適用されません。';
 
   @override
-  String get showRawProbabilities => 'モデルの全確率を表示';
+  String get showRawProbabilities => 'モデルの生の確率をすべて表示';
 
   @override
   String get pasteFen => '6項目すべてを含むFENを貼り付け';
@@ -456,10 +456,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get notEnoughMoves => '指し手が不足しています';
 
   @override
-  String get gameAccuracy => '対局の精度';
+  String get gameAccuracy => '対局の正確度';
 
   @override
-  String get accuracy => '精度';
+  String get accuracy => '正確度';
 
   @override
   String get analysisGraph => 'コンピューター解析グラフ';
@@ -511,7 +511,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get classificationGood => '好手';
 
   @override
-  String get classificationInteresting => '興味深い手';
+  String get classificationInteresting => '面白い手';
 
   @override
   String get classificationDubious => '疑問手';
@@ -557,7 +557,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String materialDescription(String side, String description) {
-    return '$sideの駒：$description';
+    return '$sideの駒の差：$description';
   }
 
   @override
@@ -632,7 +632,7 @@ class AppLocalizationsJa extends AppLocalizations {
         intl.NumberFormat.decimalPattern(localeName);
     final String countString = countNumberFormat.format(count);
 
-    return '保存した対局を$countString件削除しますか？';
+    return '保存した対局を$countString局削除しますか？';
   }
 
   @override
@@ -641,7 +641,7 @@ class AppLocalizationsJa extends AppLocalizations {
         intl.NumberFormat.decimalPattern(localeName);
     final String countString = countNumberFormat.format(count);
 
-    return '保存した対局$countString件が完全に削除されます。';
+    return '保存した対局$countString局が完全に削除されます。';
   }
 
   @override
@@ -677,7 +677,7 @@ class AppLocalizationsJa extends AppLocalizations {
         intl.NumberFormat.decimalPattern(localeName);
     final String countString = countNumberFormat.format(count);
 
-    return '$countString件を選択中';
+    return '$countString局を選択中';
   }
 
   @override
@@ -720,7 +720,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String incrementSecondsValue(String seconds) {
-    return '加算時間：$seconds秒';
+    return '追加時間：$seconds秒';
   }
 
   @override
@@ -742,7 +742,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get couldNotConnectChessnut => 'Chessnutに接続できませんでした。';
 
   @override
-  String get chessnutAndroidOnly => 'ChessnutはAndroidで利用できます。';
+  String get chessnutAndroidOnly => 'Chessnutへの接続機能はAndroidで利用できます。';
 
   @override
   String get chessnutIsDisconnected => 'Chessnutは未接続です。';
@@ -786,7 +786,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get timeoutInsufficientMaterial =>
-      '引き分け — 相手にチェックメイトに必要な駒がないため、時間切れでも負けにはなりません。';
+      '引き分け — 時間切れですが、相手は残りの駒でチェックメイトできません。';
 
   @override
   String get whiteOutOfTime => '白の時間が切れました。';
@@ -852,7 +852,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get continueGameOnScreen => '画面でこの対局を続ける';
 
   @override
-  String get checkCheckmateIllegalMoves => 'チェック・チェックメイト・非合法な手';
+  String get checkCheckmateIllegalMoves => 'チェック・チェックメイト・反則手';
 
   @override
   String get offerDrawQuestion => '引き分けを提案しますか？';
@@ -864,16 +864,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get resignEndsImmediately => '対局は直ちに終了します。';
 
   @override
-  String get premoveLimit => 'プレムーブは64手まで予約できます。';
+  String get premoveLimit => 'プリムーブは64手まで予約できます。';
 
   @override
-  String get chessnutGameRestriction => 'Chessnutでは標準の初期配置・時間無制限の対局のみ対応しています。';
+  String get chessnutGameRestriction =>
+      'Chessnutでの対局は、標準の初期配置・持ち時間無制限の場合のみ対応しています。';
 
   @override
-  String get samplingTitle => 'TemperatureとTop-P';
+  String get samplingTitle => '温度とTop-P';
 
   @override
-  String get samplingDefaultsQuestion => 'なぜTemperatureとTop-Pは1.00？';
+  String get samplingDefaultsQuestion => 'なぜ温度とTop-Pの推奨値は1.00なのですか？';
 
   @override
   String get samplingResearch => 'サンプリングの研究を読む';
@@ -898,11 +899,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'これらの設定では、Maiaが予測する人間の手を幅広く使えます。1600設定でのテストでは、レーティングで絞ったLichessの対局に、序盤の手の選択がより近くなりました。';
+      'これらの設定では、Maiaが予測する人間の指し手を幅広く選べます。レーティング1600の設定でのテストでは、序盤の指し手の選択が、レーティングで絞り込んだLichessの対局により近くなりました。';
 
   @override
   String get samplingStrength =>
-      '設定を下げると多様性が減り、Maiaが強くなることがあります。私たちは最大の強さより、人間らしい序盤の選択を重視しています。Maiaのレーティングはモデルの対象となるプレイヤーを示すもので、正確な棋力を保証するものではありません。';
+      '設定値を下げると指し手の多様性が減り、Maiaが強くなることがあります。私たちは強さを最大にすることより、人間らしいオープニングのレパートリーを重視しています。Maiaのレーティングは、モデルが模倣するプレイヤーのレーティングを示すもので、対局時の正確な棋力を保証するものではありません。';
 
   @override
   String get samplingTemperatureHelp =>
@@ -937,7 +938,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'TemperatureまたはTop-Pが推奨値の1.00と異なります。詳細は情報ボタンをご覧ください。';
+      '温度またはTop-Pが推奨値の1.00と異なります。詳細は情報ボタンをご覧ください。';
 
   @override
   String get couldNotOpenPgn => 'PGNを開けませんでした。';
@@ -959,12 +960,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String secondAnalysisRatingValue(String rating) {
-    return '2つ目のMaiaの解析レーティング：$rating';
+    return '2つ目の解析用Maiaのレーティング：$rating';
   }
 
   @override
   String premovesList(String moves) {
-    return 'プレムーブ：$moves';
+    return 'プリムーブ：$moves';
   }
 
   @override

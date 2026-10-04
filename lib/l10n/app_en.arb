@@ -398,7 +398,7 @@
   },
   "castlingRights": "Castling rights",
   "@castlingRights": {
-    "description": "Analysis Board / Review: Castling rights"
+    "description": "Board editor heading for FEN castling rights retained by king/rooks. Rights do not mean castling is legal immediately: blocked squares or check may still prevent it."
   },
   "whiteKingside": "White kingside",
   "@whiteKingside": {
@@ -486,11 +486,11 @@
   },
   "promoteVariation": "Promote variation",
   "@promoteVariation": {
-    "description": "Analysis and review UI: Promote variation"
+    "description": "Review-tree action: promote a variation one parent level; a top-level variation moves to the first position. Not pawn promotion. Distinct from Make main line, which promotes repeatedly to the top."
   },
   "makeMainLine": "Make main line",
   "@makeMainLine": {
-    "description": "Analysis and review UI: Make main line"
+    "description": "Review-tree action: promote a variation repeatedly until it becomes the main line. This changes the displayed analysis tree, not the historical moves actually played."
   },
   "deleteFromHere": "Delete from here",
   "@deleteFromHere": {
@@ -693,27 +693,27 @@
   },
   "classificationBrilliant": "Brilliant",
   "@classificationBrilliant": {
-    "description": "Analysis and review UI: Brilliant"
+    "description": "Chess annotation !! (brilliant move). Describes the move, not praise addressed to the player. Keep distinct from good (!)."
   },
   "classificationGood": "Good",
   "@classificationGood": {
-    "description": "Analysis and review UI: Good"
+    "description": "Chess annotation ! (good move). Keep distinct from brilliant (!!)."
   },
   "classificationInteresting": "Interesting",
   "@classificationInteresting": {
-    "description": "Analysis and review UI: Interesting"
+    "description": "Chess annotation !? (interesting move, deserving attention). Not a claim that the move is entertaining, and not the dubious ?! category."
   },
   "classificationDubious": "Dubious",
   "@classificationDubious": {
-    "description": "Analysis and review UI: Dubious"
+    "description": "Chess annotation ?! (dubious or questionable move). Keep distinct from interesting (!?), mistake (?) and blunder (??)."
   },
   "classificationMistake": "Mistake",
   "@classificationMistake": {
-    "description": "Analysis and review UI: Mistake"
+    "description": "Chess annotation ? (mistake). Less severe than blunder (??)."
   },
   "classificationBlunder": "Blunder",
   "@classificationBlunder": {
-    "description": "Analysis and review UI: Blunder"
+    "description": "Chess annotation ?? (blunder, serious mistake). More severe than mistake (?)."
   },
   "gameReview": "Game review",
   "@gameReview": {
@@ -775,7 +775,7 @@
   },
   "materialDescription": "{side} material: {description}",
   "@materialDescription": {
-    "description": "Analysis and review UI: {side} material: {description}",
+    "description": "Spoken board label for this side's material difference relative to the opponent, not its entire remaining army. {side} is White/Black; {description} lists extra pieces and any material advantage score.",
     "placeholders": {
       "side": {
         "type": "String"

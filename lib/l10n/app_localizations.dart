@@ -698,7 +698,7 @@ abstract class AppLocalizations {
   /// **'Black to move'**
   String get blackToMove;
 
-  /// Analysis Board / Review: Castling rights
+  /// Board editor heading for FEN castling rights retained by king/rooks. Rights do not mean castling is legal immediately: blocked squares or check may still prevent it.
   ///
   /// In en, this message translates to:
   /// **'Castling rights'**
@@ -830,13 +830,13 @@ abstract class AppLocalizations {
   /// **'Collapse variations'**
   String get collapseVariations;
 
-  /// Analysis and review UI: Promote variation
+  /// Review-tree action: promote a variation one parent level; a top-level variation moves to the first position. Not pawn promotion. Distinct from Make main line, which promotes repeatedly to the top.
   ///
   /// In en, this message translates to:
   /// **'Promote variation'**
   String get promoteVariation;
 
-  /// Analysis and review UI: Make main line
+  /// Review-tree action: promote a variation repeatedly until it becomes the main line. This changes the displayed analysis tree, not the historical moves actually played.
   ///
   /// In en, this message translates to:
   /// **'Make main line'**
@@ -1046,37 +1046,37 @@ abstract class AppLocalizations {
   /// **'{count, plural, one{{count} {side} {classification} move} other{{count} {side} {classification} moves}}'**
   String classificationCount(int count, String side, String classification);
 
-  /// Analysis and review UI: Brilliant
+  /// Chess annotation !! (brilliant move). Describes the move, not praise addressed to the player. Keep distinct from good (!).
   ///
   /// In en, this message translates to:
   /// **'Brilliant'**
   String get classificationBrilliant;
 
-  /// Analysis and review UI: Good
+  /// Chess annotation ! (good move). Keep distinct from brilliant (!!).
   ///
   /// In en, this message translates to:
   /// **'Good'**
   String get classificationGood;
 
-  /// Analysis and review UI: Interesting
+  /// Chess annotation !? (interesting move, deserving attention). Not a claim that the move is entertaining, and not the dubious ?! category.
   ///
   /// In en, this message translates to:
   /// **'Interesting'**
   String get classificationInteresting;
 
-  /// Analysis and review UI: Dubious
+  /// Chess annotation ?! (dubious or questionable move). Keep distinct from interesting (!?), mistake (?) and blunder (??).
   ///
   /// In en, this message translates to:
   /// **'Dubious'**
   String get classificationDubious;
 
-  /// Analysis and review UI: Mistake
+  /// Chess annotation ? (mistake). Less severe than blunder (??).
   ///
   /// In en, this message translates to:
   /// **'Mistake'**
   String get classificationMistake;
 
-  /// Analysis and review UI: Blunder
+  /// Chess annotation ?? (blunder, serious mistake). More severe than mistake (?).
   ///
   /// In en, this message translates to:
   /// **'Blunder'**
@@ -1124,7 +1124,7 @@ abstract class AppLocalizations {
   /// **'{score} material advantage'**
   String materialAdvantage(String score);
 
-  /// Analysis and review UI: {side} material: {description}
+  /// Spoken board label for this side's material difference relative to the opponent, not its entire remaining army. {side} is White/Black; {description} lists extra pieces and any material advantage score.
   ///
   /// In en, this message translates to:
   /// **'{side} material: {description}'**
