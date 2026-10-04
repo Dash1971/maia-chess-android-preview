@@ -284,7 +284,7 @@ abstract class AppLocalizations {
   /// **'Minutes'**
   String get minutes;
 
-  /// Settings: Increment
+  /// Time added to a player’s chess clock after each move, in seconds. Not a generic numeric increment.
   ///
   /// In en, this message translates to:
   /// **'Increment'**
@@ -350,7 +350,7 @@ abstract class AppLocalizations {
   /// **'Queue a sequence; an illegal move cancels the rest'**
   String get queueASequenceAnIllegalMoveCancelsTheRest;
 
-  /// Settings: Human move timing
+  /// Toggle for optional random pauses before Maia moves. Changes timing only, not move selection, strength, or a learned human-time model.
   ///
   /// In en, this message translates to:
   /// **'Human move timing'**
@@ -422,7 +422,7 @@ abstract class AppLocalizations {
   /// **'Board sounds'**
   String get boardSounds;
 
-  /// Settings: Beep for check, checkmate, and completed illegal moves.
+  /// Chessnut sound setting. Illegal-move feedback occurs only after the physical move is completed, not while a piece is being lifted or moved. Describe the user-facing event naturally rather than literally translating "completed illegal moves".
   ///
   /// In en, this message translates to:
   /// **'Beep for check, checkmate, and completed illegal moves.'**
@@ -596,7 +596,7 @@ abstract class AppLocalizations {
   /// **'Offer draw'**
   String get offerDraw;
 
-  /// Live game: Take back move
+  /// Undo action. Depending on turn and board mode, this can undo one or two plies; avoid promising exactly one ply.
   ///
   /// In en, this message translates to:
   /// **'Take back move'**
@@ -704,25 +704,25 @@ abstract class AppLocalizations {
   /// **'Castling rights'**
   String get castlingRights;
 
-  /// Analysis Board / Review: White kingside
+  /// Board Editor castling-rights checkbox: whiteKingside. Kingside is short castling (O-O); queenside is long castling (O-O-O).
   ///
   /// In en, this message translates to:
   /// **'White kingside'**
   String get whiteKingside;
 
-  /// Analysis Board / Review: White queenside
+  /// Board Editor castling-rights checkbox: whiteQueenside. Kingside is short castling (O-O); queenside is long castling (O-O-O).
   ///
   /// In en, this message translates to:
   /// **'White queenside'**
   String get whiteQueenside;
 
-  /// Analysis Board / Review: Black kingside
+  /// Board Editor castling-rights checkbox: blackKingside. Kingside is short castling (O-O); queenside is long castling (O-O-O).
   ///
   /// In en, this message translates to:
   /// **'Black kingside'**
   String get blackKingside;
 
-  /// Analysis Board / Review: Black queenside
+  /// Board Editor castling-rights checkbox: blackQueenside. Kingside is short castling (O-O); queenside is long castling (O-O-O).
   ///
   /// In en, this message translates to:
   /// **'Black queenside'**

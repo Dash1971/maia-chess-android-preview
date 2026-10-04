@@ -82,7 +82,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get seconds => '秒';
 
   @override
-  String get yourSide => '你的执棋方';
+  String get yourSide => '执棋颜色';
 
   @override
   String get you => '你';
@@ -94,7 +94,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get language => '语言';
 
   @override
-  String get playMaiaRating => '对局 Maia 等级分';
+  String get playMaiaRating => '对手 Maia 的等级分';
 
   @override
   String get minutes => '分钟';
@@ -118,7 +118,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premoves => '预走';
 
   @override
-  String get queueAMoveWhileMaiaIsThinking => '在 Maia 思考时预先指定下一步';
+  String get queueAMoveWhileMaiaIsThinking => '在 Maia 思考时预设下一步棋';
 
   @override
   String get oneHundredMsPremovePenalty => '预走扣除 100 毫秒';
@@ -130,10 +130,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get allowMultiplePremoves => '允许连续预走';
 
   @override
-  String get queueASequenceAnIllegalMoveCancelsTheRest => '可连续预设；非法着法会取消后续预走';
+  String get queueASequenceAnIllegalMoveCancelsTheRest =>
+      '可预设多步棋；若某一步无法合法走出，将取消该步及之后的预走';
 
   @override
-  String get humanMoveTiming => '模拟人类走棋时间';
+  String get humanMoveTiming => '模拟思考时间';
 
   @override
   String get variableNaturalPausesBeforeMaiaMoves => 'Maia 走棋前加入时长不一的自然停顿';
@@ -158,7 +159,7 @@ class AppLocalizationsZh extends AppLocalizations {
       '在分析和复盘中比较另一等级分的 Maia';
 
   @override
-  String get secondMaiaAnalysisRating => '第二个 Maia 分析等级分';
+  String get secondMaiaAnalysisRating => '第二个 Maia 的分析等级分';
 
   @override
   String get gameAnalysisQuality => '对局分析质量';
@@ -167,11 +168,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get resetEngineDefaults => '恢复引擎默认设置';
 
   @override
-  String get boardSounds => '棋盘音效';
+  String get boardSounds => '电子棋盘提示音';
 
   @override
   String get beepForCheckCheckmateAndCompletedIllegalMoves =>
-      '将军、将死和非法着法完成时发出提示音。';
+      '将军、将死或走出不合法的棋步时发出提示音。';
 
   @override
   String get copyDiagnostics => '复制诊断信息';
@@ -210,7 +211,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get retry => '重试';
 
   @override
-  String get maiaIsThinking => 'Maia 正在选择着法…';
+  String get maiaIsThinking => 'Maia 正在思考…';
 
   @override
   String get history => '历史记录';
@@ -258,7 +259,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get offerDraw => '提议和棋';
 
   @override
-  String get takeBackMove => '悔一步棋';
+  String get takeBackMove => '悔棋';
 
   @override
   String get whiteIsVictorious => '白方获胜';
@@ -267,7 +268,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get blackIsVictorious => '黑方获胜';
 
   @override
-  String get theGameIsADraw => '对局和棋';
+  String get theGameIsADraw => '和棋';
 
   @override
   String get theGameHasEnded => '对局已结束';
@@ -312,16 +313,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get castlingRights => '王车易位权利';
 
   @override
-  String get whiteKingside => '白方王翼';
+  String get whiteKingside => '白方短易位';
 
   @override
-  String get whiteQueenside => '白方后翼';
+  String get whiteQueenside => '白方长易位';
 
   @override
-  String get blackKingside => '黑方王翼';
+  String get blackKingside => '黑方短易位';
 
   @override
-  String get blackQueenside => '黑方后翼';
+  String get blackQueenside => '黑方长易位';
 
   @override
   String get enPassantTarget => '吃过路兵目标格';
@@ -348,7 +349,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get boardEditor => '棋盘编辑器';
 
   @override
-  String get endPosition => '结束局面';
+  String get endPosition => '最后局面';
 
   @override
   String get analysisMenu => '分析菜单';

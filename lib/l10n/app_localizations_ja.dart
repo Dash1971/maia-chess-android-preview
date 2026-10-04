@@ -13,7 +13,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get about => 'アプリについて';
 
   @override
-  String get analysisBoard => '解析盤';
+  String get analysisBoard => '解析ボード';
 
   @override
   String get back => '戻る';
@@ -25,7 +25,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cancelPremoves => 'プレムーブを取り消す';
 
   @override
-  String get chessnutExperimental => 'Chessnut（試験中）';
+  String get chessnutExperimental => 'Chessnut（試験的機能）';
 
   @override
   String get connectChessnut => 'Chessnutに接続';
@@ -82,7 +82,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get seconds => '秒';
 
   @override
-  String get yourSide => '自分の駒色';
+  String get yourSide => '駒の色';
 
   @override
   String get you => 'あなた';
@@ -94,13 +94,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get language => '言語';
 
   @override
-  String get playMaiaRating => '対局用Maiaレート';
+  String get playMaiaRating => '対局用Maiaのレーティング';
 
   @override
   String get minutes => '分';
 
   @override
-  String get increment => '追加秒';
+  String get increment => '1手ごとの追加時間';
 
   @override
   String get gameSounds => '対局の効果音';
@@ -113,7 +113,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get touchFeedbackForMovesChecksErrorsAndGameEnd =>
-      '指し手、王手、エラー、対局終了時の振動';
+      '指し手、チェック、エラー、対局終了時の振動';
 
   @override
   String get premoves => 'プレムーブ';
@@ -132,13 +132,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get queueASequenceAnIllegalMoveCancelsTheRest =>
-      '連続して予約できます。違法手以降は取り消されます';
+      '複数の手を予約できます。指せない手があると、そこから先の予約は取り消されます';
 
   @override
-  String get humanMoveTiming => '人間らしい指し手の間';
+  String get humanMoveTiming => '人間らしい思考時間';
 
   @override
-  String get variableNaturalPausesBeforeMaiaMoves => 'Maiaの着手前に自然な長さの間を入れます';
+  String get variableNaturalPausesBeforeMaiaMoves =>
+      'Maiaが指すまでの待ち時間に自然なばらつきを加えます';
 
   @override
   String get aboutTemperatureAndTopP => 'TemperatureとTop-Pについて';
@@ -150,17 +151,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get topP => 'Top-P';
 
   @override
-  String get maiaAnalysisRating => '解析用Maiaレート';
+  String get maiaAnalysisRating => '解析用Maiaのレーティング';
 
   @override
   String get addSecondMaiaEngine => '2つ目のMaiaエンジンを追加';
 
   @override
   String get compareAnotherMaiaRatingInAnalysisAndReview =>
-      '解析と棋譜レビューで別のレートと比較';
+      '解析や棋譜レビューで、異なるレーティングのMaiaを比較します';
 
   @override
-  String get secondMaiaAnalysisRating => '2つ目の解析用Maiaレート';
+  String get secondMaiaAnalysisRating => '2つ目のMaiaのレーティング';
 
   @override
   String get gameAnalysisQuality => '対局解析の品質';
@@ -169,11 +170,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get resetEngineDefaults => 'エンジン設定を初期化';
 
   @override
-  String get boardSounds => '盤の効果音';
+  String get boardSounds => '電子盤の通知音';
 
   @override
   String get beepForCheckCheckmateAndCompletedIllegalMoves =>
-      '王手、詰み、完了した違法手でビープ音を鳴らします。';
+      'チェック、チェックメイト、反則手を指したときに音で知らせます。';
 
   @override
   String get copyDiagnostics => '診断情報をコピー';
@@ -203,16 +204,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get copyFen => 'FENをコピー';
 
   @override
-  String get maiaErrorRetry => 'Maiaのエラー。再試行';
+  String get maiaErrorRetry => 'Maiaエラー：再試行';
 
   @override
-  String get maiaErrorPleaseRetry => 'Maiaのエラー。再試行してください。';
+  String get maiaErrorPleaseRetry => 'Maiaでエラーが発生しました。再試行してください。';
 
   @override
   String get retry => '再試行';
 
   @override
-  String get maiaIsThinking => 'Maiaが手を選んでいます…';
+  String get maiaIsThinking => 'Maiaが思考中…';
 
   @override
   String get history => '履歴';
@@ -260,7 +261,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get offerDraw => '引き分けを提案';
 
   @override
-  String get takeBackMove => '一手戻す';
+  String get takeBackMove => '手を戻す';
 
   @override
   String get whiteIsVictorious => '白の勝ち';
@@ -311,7 +312,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get blackToMove => '黒の手番';
 
   @override
-  String get castlingRights => 'キャスリングの権利';
+  String get castlingRights => 'キャスリングの可否';
 
   @override
   String get whiteKingside => '白のキングサイド';
@@ -332,7 +333,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get startingPosition => '初期配置';
 
   @override
-  String get clearBoard => '盤面をクリア';
+  String get clearBoard => '駒をすべて取り除く';
 
   @override
   String get loadFen => 'FENを読み込む';

@@ -145,13 +145,19 @@ class _MaiaChessAppState extends State<MaiaChessApp>
 
   Future<void> _loadLanguage() async {
     final preferences = await SharedPreferences.getInstance();
-    final saved = preferences.getString(appLanguagePreferenceKey);
-    if (mounted &&
-        (saved == 'en' ||
-            saved == 'ja' ||
-            saved == 'zh' ||
-            saved == 'ko' ||
-            saved == 'es')) {
+    final saved = _readValidatedPreference<String?>(
+      preferences,
+      appLanguagePreferenceKey,
+      fallback: null,
+      decode: (value) =>
+          value is String &&
+              AppLocalizations.supportedLocales.any(
+                (locale) => locale.languageCode == value,
+              )
+          ? value
+          : null,
+    );
+    if (mounted && saved != null) {
       setState(() => _languageOverride = saved);
     }
   }

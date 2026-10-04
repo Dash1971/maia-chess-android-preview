@@ -82,7 +82,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get seconds => '초';
 
   @override
-  String get yourSide => '내 진영';
+  String get yourSide => '내 기물 색';
 
   @override
   String get you => '나';
@@ -94,19 +94,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get language => '언어';
 
   @override
-  String get playMaiaRating => '대국 Maia 레이팅';
+  String get playMaiaRating => '상대 Maia 레이팅';
 
   @override
   String get minutes => '분';
 
   @override
-  String get increment => '증분';
+  String get increment => '추가 시간';
 
   @override
   String get gameSounds => '대국 소리';
 
   @override
-  String get movesCapturesErrorsAndGameEnd => '수, 기물 잡기, 오류 및 대국 종료 소리';
+  String get movesCapturesErrorsAndGameEnd => '기물 이동, 잡기, 오류 및 대국 종료 시 소리';
 
   @override
   String get hapticFeedback => '햅틱 피드백';
@@ -119,7 +119,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premoves => '예약 수';
 
   @override
-  String get queueAMoveWhileMaiaIsThinking => 'Maia 차례에 다음 수 예약';
+  String get queueAMoveWhileMaiaIsThinking => 'Maia가 생각하는 동안 다음 수를 미리 입력';
 
   @override
   String get oneHundredMsPremovePenalty => '예약 수 100ms 시간 차감';
@@ -132,14 +132,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get queueASequenceAnIllegalMoveCancelsTheRest =>
-      '연속 예약 가능. 불법 수가 나오면 나머지는 취소됩니다';
+      '여러 수를 미리 입력합니다. 둘 수 없는 수부터 나머지 예약이 취소됩니다';
 
   @override
-  String get humanMoveTiming => '사람처럼 두기';
+  String get humanMoveTiming => '자연스러운 착수 간격';
 
   @override
   String get variableNaturalPausesBeforeMaiaMoves =>
-      'Maia가 두기 전 자연스러운 대기 시간 추가';
+      'Maia가 수를 두기 전 대기 시간을 자연스럽게 조절합니다';
 
   @override
   String get aboutTemperatureAndTopP => 'Temperature와 Top-P 정보';
@@ -170,11 +170,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get resetEngineDefaults => '엔진 기본값 복원';
 
   @override
-  String get boardSounds => '보드 소리';
+  String get boardSounds => '전자 보드 알림음';
 
   @override
   String get beepForCheckCheckmateAndCompletedIllegalMoves =>
-      '체크, 체크메이트 및 완료된 불법 수에 알림음을 냅니다.';
+      '체크, 체크메이트 또는 규칙에 어긋나는 수를 뒀을 때 알림음을 냅니다.';
 
   @override
   String get copyDiagnostics => '진단 정보 복사';
@@ -204,16 +204,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get copyFen => 'FEN 복사';
 
   @override
-  String get maiaErrorRetry => 'Maia 오류. 다시 시도';
+  String get maiaErrorRetry => 'Maia 오류: 다시 시도';
 
   @override
-  String get maiaErrorPleaseRetry => 'Maia 오류. 다시 시도해 주세요.';
+  String get maiaErrorPleaseRetry => 'Maia에 오류가 발생했습니다. 다시 시도해 주세요.';
 
   @override
   String get retry => '다시 시도';
 
   @override
-  String get maiaIsThinking => 'Maia가 수를 고르는 중…';
+  String get maiaIsThinking => 'Maia가 생각하는 중…';
 
   @override
   String get history => '기록';
@@ -261,7 +261,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get offerDraw => '무승부 제안';
 
   @override
-  String get takeBackMove => '한 수 무르기';
+  String get takeBackMove => '무르기';
 
   @override
   String get whiteIsVictorious => '백 승리';
@@ -330,7 +330,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get enPassantTarget => '앙파상 대상 칸';
 
   @override
-  String get startingPosition => '시작 위치';
+  String get startingPosition => '초기 배치';
 
   @override
   String get clearBoard => '보드 비우기';
@@ -351,7 +351,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get boardEditor => '보드 편집기';
 
   @override
-  String get endPosition => '마지막 위치';
+  String get endPosition => '마지막 국면';
 
   @override
   String get analysisMenu => '분석 메뉴';

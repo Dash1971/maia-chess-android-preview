@@ -122,7 +122,7 @@
   },
   "increment": "Increment",
   "@increment": {
-    "description": "Settings: Increment"
+    "description": "Time added to a player’s chess clock after each move, in seconds. Not a generic numeric increment."
   },
   "gameSounds": "Game sounds",
   "@gameSounds": {
@@ -166,7 +166,7 @@
   },
   "humanMoveTiming": "Human move timing",
   "@humanMoveTiming": {
-    "description": "Settings: Human move timing"
+    "description": "Toggle for optional random pauses before Maia moves. Changes timing only, not move selection, strength, or a learned human-time model."
   },
   "variableNaturalPausesBeforeMaiaMoves": "Variable natural pauses before Maia moves",
   "@variableNaturalPausesBeforeMaiaMoves": {
@@ -214,7 +214,7 @@
   },
   "beepForCheckCheckmateAndCompletedIllegalMoves": "Beep for check, checkmate, and completed illegal moves.",
   "@beepForCheckCheckmateAndCompletedIllegalMoves": {
-    "description": "Settings: Beep for check, checkmate, and completed illegal moves."
+    "description": "Chessnut sound setting. Illegal-move feedback occurs only after the physical move is completed, not while a piece is being lifted or moved. Describe the user-facing event naturally rather than literally translating \"completed illegal moves\"."
   },
   "copyDiagnostics": "Copy diagnostics",
   "@copyDiagnostics": {
@@ -330,7 +330,7 @@
   },
   "takeBackMove": "Take back move",
   "@takeBackMove": {
-    "description": "Live game: Take back move"
+    "description": "Undo action. Depending on turn and board mode, this can undo one or two plies; avoid promising exactly one ply."
   },
   "whiteIsVictorious": "White is victorious",
   "@whiteIsVictorious": {
@@ -402,19 +402,19 @@
   },
   "whiteKingside": "White kingside",
   "@whiteKingside": {
-    "description": "Analysis Board / Review: White kingside"
+    "description": "Board Editor castling-rights checkbox: whiteKingside. Kingside is short castling (O-O); queenside is long castling (O-O-O)."
   },
   "whiteQueenside": "White queenside",
   "@whiteQueenside": {
-    "description": "Analysis Board / Review: White queenside"
+    "description": "Board Editor castling-rights checkbox: whiteQueenside. Kingside is short castling (O-O); queenside is long castling (O-O-O)."
   },
   "blackKingside": "Black kingside",
   "@blackKingside": {
-    "description": "Analysis Board / Review: Black kingside"
+    "description": "Board Editor castling-rights checkbox: blackKingside. Kingside is short castling (O-O); queenside is long castling (O-O-O)."
   },
   "blackQueenside": "Black queenside",
   "@blackQueenside": {
-    "description": "Analysis Board / Review: Black queenside"
+    "description": "Board Editor castling-rights checkbox: blackQueenside. Kingside is short castling (O-O); queenside is long castling (O-O-O)."
   },
   "enPassantTarget": "En-passant target",
   "@enPassantTarget": {

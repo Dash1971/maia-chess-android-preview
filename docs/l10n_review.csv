@@ -1,10 +1,10 @@
 ID,Screen / context,English source,Japanese (provisional),Simplified Chinese (provisional),Korean (provisional),Spanish (provisional),Used in source,Screenshot link,Reviewer suggestion,Review status
 about,Home / game setup,About,アプリについて,关于,앱 정보,Acerca de,play.dart:3286,,,Needs native review
-analysisBoard,Home / game setup,Analysis Board,解析盤,分析棋盘,분석 보드,Tablero de análisis,play.dart:3055; play.dart:3148; play.dart:3211; play.dart:3794; analysis_board.dart:425,,,Needs native review
+analysisBoard,Home / game setup,Analysis Board,解析ボード,分析棋盘,분석 보드,Tablero de análisis,play.dart:3055; play.dart:3148; play.dart:3211; play.dart:3794; analysis_board.dart:425,,,Needs native review
 back,Home / game setup,Back,戻る,返回,뒤로,Volver,play.dart:3264,,,Needs native review
 black,Home / game setup,Black,黒,黑方,흑,Negras,play.dart:2217; play.dart:3623; analysis_board.dart:59,,,Needs native review
 cancelPremoves,Home / game setup,Cancel premoves,プレムーブを取り消す,取消预走,예약 수 취소,Cancelar jugadas anticipadas,play.dart:4442,,,Needs native review
-chessnutExperimental,Home / game setup,Chessnut (experimental),Chessnut（試験中）,Chessnut（实验性）,Chessnut(실험 기능),Chessnut (experimental),play.dart:3723,,,Needs native review
+chessnutExperimental,Home / game setup,Chessnut (experimental),Chessnut（試験的機能）,Chessnut（实验性）,Chessnut(실험 기능),Chessnut (experimental),play.dart:3723,,,Needs native review
 connectChessnut,Home / game setup,Connect Chessnut,Chessnutに接続,连接 Chessnut,Chessnut 연결,Conectar Chessnut,play.dart:3762,,,Needs native review
 disconnect,Home / game setup,Disconnect,切断,断开连接,연결 해제,Desconectar,play.dart:1856; play.dart:3762,,,Needs native review
 engineSettings,Home / game setup,Engine settings,エンジン設定,引擎设置,엔진 설정,Ajustes del motor,play.dart:3991,,,Needs native review
@@ -23,38 +23,38 @@ white,Home / game setup,White,白,白方,백,Blancas,play.dart:2215; play.dart:3
 unlimited,Home / game setup,Unlimited,無制限,无限制,무제한,Sin límite,Dynamic label; find in Dev app,,,Needs native review
 custom,Home / game setup,Custom,カスタム,自定义,사용자 지정,Personalizado,Dynamic label; find in Dev app,,,Needs native review
 seconds,Home / game setup,seconds,秒,秒,초,segundos,play.dart:3700; analysis_board.dart:114,,,Needs native review
-yourSide,Home / game setup,Your side,自分の駒色,你的执棋方,내 진영,Tu bando,play.dart:3613; analysis_board.dart:50,,,Needs native review
+yourSide,Home / game setup,Your side,駒の色,执棋颜色,내 기물 색,Tu color,play.dart:3613; analysis_board.dart:50,,,Needs native review
 you,Home / game setup,You,あなた,你,나,Tú,play.dart:4190,,,Needs native review
 systemDefault,Settings,System default,端末の設定に従う,跟随系统,시스템 기본값,Predeterminado del sistema,play.dart:3867,,,Needs native review
 language,Settings,Language,言語,语言,언어,Idioma,play.dart:3849; play.dart:3861,,,Needs native review
-playMaiaRating,Settings,Play Maia rating,対局用Maiaレート,对局 Maia 等级分,대국 Maia 레이팅,Puntuación de Maia en partida,play.dart:3639; analysis_board.dart:71,,,Needs native review
+playMaiaRating,Settings,Play Maia rating,対局用Maiaのレーティング,对手 Maia 的等级分,상대 Maia 레이팅,Elo de Maia para jugar,play.dart:3639; analysis_board.dart:71,,,Needs native review
 minutes,Settings,Minutes,分,分钟,분,Minutos,play.dart:3686; analysis_board.dart:102,,,Needs native review
-increment,Settings,Increment,追加秒,每步加秒,증분,Incremento,play.dart:3700; analysis_board.dart:114,,,Needs native review
+increment,Settings,Increment,1手ごとの追加時間,每步加秒,추가 시간,Incremento,play.dart:3700; analysis_board.dart:114,,,Needs native review
 gameSounds,Settings,Game sounds,対局の効果音,对局音效,대국 소리,Sonidos de partida,play.dart:3905,,,Needs native review
-movesCapturesErrorsAndGameEnd,Settings,"Moves, captures, errors, and game end",指し手、駒取り、エラー、対局終了時の音,走棋、吃子、错误及对局结束时的音效,"수, 기물 잡기, 오류 및 대국 종료 소리","Jugadas, capturas, errores y final de partida",play.dart:3907,,,Needs native review
+movesCapturesErrorsAndGameEnd,Settings,"Moves, captures, errors, and game end",指し手、駒取り、エラー、対局終了時の音,走棋、吃子、错误及对局结束时的音效,"기물 이동, 잡기, 오류 및 대국 종료 시 소리","Jugadas, capturas, errores y final de partida",play.dart:3907,,,Needs native review
 hapticFeedback,Settings,Haptic feedback,振動フィードバック,触觉反馈,햅틱 피드백,Respuesta háptica,play.dart:3915,,,Needs native review
-touchFeedbackForMovesChecksErrorsAndGameEnd,Settings,"Touch feedback for moves, checks, errors, and game end",指し手、王手、エラー、対局終了時の振動,走棋、将军、错误及对局结束时的振动,"수, 체크, 오류 및 대국 종료 시 진동","Vibración para jugadas, jaques, errores y final de partida",play.dart:3919,,,Needs native review
+touchFeedbackForMovesChecksErrorsAndGameEnd,Settings,"Touch feedback for moves, checks, errors, and game end",指し手、チェック、エラー、対局終了時の振動,走棋、将军、错误及对局结束时的振动,"수, 체크, 오류 및 대국 종료 시 진동","Vibración para jugadas, jaques, errores y final de partida",play.dart:3919,,,Needs native review
 premoves,Settings,Premoves,プレムーブ,预走,예약 수,Jugadas anticipadas,play.dart:3928,,,Needs native review
-queueAMoveWhileMaiaIsThinking,Settings,Queue a move while Maia is thinking,Maiaの手番中に次の手を予約,在 Maia 思考时预先指定下一步,Maia 차례에 다음 수 예약,Prepara una jugada mientras Maia elige,play.dart:3930,,,Needs native review
-oneHundredMsPremovePenalty,Settings,100 ms premove penalty,プレムーブの0.1秒消費,预走扣除 100 毫秒,예약 수 100ms 시간 차감,Penalización de 100 ms por jugada anticipada,play.dart:3940,,,Needs native review
-use01SecondsPerPremoveInTimedGames,Settings,Use 0.1 seconds per premove in timed games,持ち時間ありの対局でプレムーブごとに0.1秒消費,计时对局中每次预走扣除 0.1 秒,시간제 대국에서 예약 수마다 0.1초 차감,"Restar 0,1 segundos por jugada anticipada en partidas cronometradas",play.dart:3944,,,Needs native review
+queueAMoveWhileMaiaIsThinking,Settings,Queue a move while Maia is thinking,Maiaの手番中に次の手を予約,在 Maia 思考时预设下一步棋,Maia가 생각하는 동안 다음 수를 미리 입력,Prepara una jugada mientras Maia piensa,play.dart:3930,,,Needs native review
+oneHundredMsPremovePenalty,Settings,100 ms premove penalty,プレムーブの0.1秒消費,预走扣除 100 毫秒,예약 수 100ms 시간 차감,"Descontar 0,1 s por jugada anticipada",play.dart:3940,,,Needs native review
+use01SecondsPerPremoveInTimedGames,Settings,Use 0.1 seconds per premove in timed games,持ち時間ありの対局でプレムーブごとに0.1秒消費,计时对局中每次预走扣除 0.1 秒,시간제 대국에서 예약 수마다 0.1초 차감,"Cada jugada anticipada consume 0,1 segundos de tu reloj",play.dart:3944,,,Needs native review
 allowMultiplePremoves,Settings,Allow multiple premoves,複数のプレムーブを許可,允许连续预走,여러 예약 수 허용,Permitir varias jugadas anticipadas,play.dart:3957,,,Needs native review
-queueASequenceAnIllegalMoveCancelsTheRest,Settings,Queue a sequence; an illegal move cancels the rest,連続して予約できます。違法手以降は取り消されます,可连续预设；非法着法会取消后续预走,연속 예약 가능. 불법 수가 나오면 나머지는 취소됩니다,Prepara una secuencia; una jugada ilegal cancela el resto,play.dart:3961,,,Needs native review
-humanMoveTiming,Settings,Human move timing,人間らしい指し手の間,模拟人类走棋时间,사람처럼 두기,Tiempo de jugada humano,play.dart:3975,,,Needs native review
-variableNaturalPausesBeforeMaiaMoves,Settings,Variable natural pauses before Maia moves,Maiaの着手前に自然な長さの間を入れます,Maia 走棋前加入时长不一的自然停顿,Maia가 두기 전 자연스러운 대기 시간 추가,Pausas naturales variables antes de que Maia juegue,play.dart:3979,,,Needs native review
+queueASequenceAnIllegalMoveCancelsTheRest,Settings,Queue a sequence; an illegal move cancels the rest,複数の手を予約できます。指せない手があると、そこから先の予約は取り消されます,可预设多步棋；若某一步无法合法走出，将取消该步及之后的预走,여러 수를 미리 입력합니다. 둘 수 없는 수부터 나머지 예약이 취소됩니다,"Prepara varias jugadas; si una no es legal, se cancela junto con las siguientes",play.dart:3961,,,Needs native review
+humanMoveTiming,Settings,Human move timing,人間らしい思考時間,模拟思考时间,자연스러운 착수 간격,Pausas naturales,play.dart:3975,,,Needs native review
+variableNaturalPausesBeforeMaiaMoves,Settings,Variable natural pauses before Maia moves,Maiaが指すまでの待ち時間に自然なばらつきを加えます,Maia 走棋前加入时长不一的自然停顿,Maia가 수를 두기 전 대기 시간을 자연스럽게 조절합니다,Maia hace pausas de distinta duración antes de jugar,play.dart:3979,,,Needs native review
 aboutTemperatureAndTopP,Settings,About Temperature and Top-P,TemperatureとTop-Pについて,关于 Temperature 和 Top-P,Temperature와 Top-P 정보,Acerca de Temperature y Top-P,play.dart:3995,,,Needs native review
 temperature,Settings,Temperature,Temperature,Temperature,Temperature,Temperature,play.dart:4003,,,Needs native review
 topP,Settings,Top-P,Top-P,Top-P,Top-P,Top-P,play.dart:4019,,,Needs native review
-maiaAnalysisRating,Settings,Maia analysis rating,解析用Maiaレート,Maia 分析等级分,Maia 분석 레이팅,Puntuación de Maia en análisis,play.dart:4045,,,Needs native review
+maiaAnalysisRating,Settings,Maia analysis rating,解析用Maiaのレーティング,Maia 分析等级分,Maia 분석 레이팅,Elo de Maia para analizar,play.dart:4045,,,Needs native review
 addSecondMaiaEngine,Settings,Add second Maia engine,2つ目のMaiaエンジンを追加,添加第二个 Maia 引擎,두 번째 Maia 엔진 추가,Añadir un segundo motor Maia,play.dart:4060,,,Needs native review
-compareAnotherMaiaRatingInAnalysisAndReview,Settings,Compare another Maia rating in analysis and review,解析と棋譜レビューで別のレートと比較,在分析和复盘中比较另一等级分的 Maia,분석과 복기에서 다른 Maia 레이팅 비교,Compara otra puntuación de Maia en análisis y revisión,play.dart:4064,,,Needs native review
-secondMaiaAnalysisRating,Settings,Second Maia analysis rating,2つ目の解析用Maiaレート,第二个 Maia 分析等级分,두 번째 Maia 분석 레이팅,Segunda puntuación de Maia en análisis,play.dart:4077,,,Needs native review
+compareAnotherMaiaRatingInAnalysisAndReview,Settings,Compare another Maia rating in analysis and review,解析や棋譜レビューで、異なるレーティングのMaiaを比較します,在分析和复盘中比较另一等级分的 Maia,분석과 복기에서 다른 Maia 레이팅 비교,Compara dos niveles de Maia al analizar posiciones y revisar partidas,play.dart:4064,,,Needs native review
+secondMaiaAnalysisRating,Settings,Second Maia analysis rating,2つ目のMaiaのレーティング,第二个 Maia 的分析等级分,두 번째 Maia 분석 레이팅,Elo del segundo Maia,play.dart:4077,,,Needs native review
 gameAnalysisQuality,Settings,Game analysis quality,対局解析の品質,对局分析质量,대국 분석 품질,Calidad del análisis de partida,play.dart:4099,,,Needs native review
 resetEngineDefaults,Settings,Reset engine defaults,エンジン設定を初期化,恢复引擎默认设置,엔진 기본값 복원,Restablecer ajustes del motor,play.dart:4140,,,Needs native review
-boardSounds,Settings,Board sounds,盤の効果音,棋盘音效,보드 소리,Sonidos del tablero,play.dart:1846; play.dart:4153,,,Needs native review
-beepForCheckCheckmateAndCompletedIllegalMoves,Settings,"Beep for check, checkmate, and completed illegal moves.",王手、詰み、完了した違法手でビープ音を鳴らします。,将军、将死和非法着法完成时发出提示音。,"체크, 체크메이트 및 완료된 불법 수에 알림음을 냅니다.","Emitir un sonido al dar jaque, mate o completar una jugada ilegal.",play.dart:4157,,,Needs native review
-copyDiagnostics,Settings,Copy diagnostics,診断情報をコピー,复制诊断信息,진단 정보 복사,Copiar diagnósticos,play.dart:4180,,,Needs native review
-diagnosticsCopied,Settings,Diagnostics copied,診断情報をコピーしました,已复制诊断信息,진단 정보가 복사되었습니다,Diagnósticos copiados,play.dart:4175,,,Needs native review
+boardSounds,Settings,Board sounds,電子盤の通知音,电子棋盘提示音,전자 보드 알림음,Avisos del tablero electrónico,play.dart:1846; play.dart:4153,,,Needs native review
+beepForCheckCheckmateAndCompletedIllegalMoves,Settings,"Beep for check, checkmate, and completed illegal moves.",チェック、チェックメイト、反則手を指したときに音で知らせます。,将军、将死或走出不合法的棋步时发出提示音。,"체크, 체크메이트 또는 규칙에 어긋나는 수를 뒀을 때 알림음을 냅니다.","Avisos de jaque, jaque mate y jugadas ilegales.",play.dart:4157,,,Needs native review
+copyDiagnostics,Settings,Copy diagnostics,診断情報をコピー,复制诊断信息,진단 정보 복사,Copiar información de diagnóstico,play.dart:4180,,,Needs native review
+diagnosticsCopied,Settings,Diagnostics copied,診断情報をコピーしました,已复制诊断信息,진단 정보가 복사되었습니다,Información de diagnóstico copiada,play.dart:4175,,,Needs native review
 newGame,Live game,New game,新しい対局,新对局,새 대국,Nueva partida,play.dart:3085; play.dart:3306,,,Needs native review
 resetGame,Live game,Reset game,対局をリセット,重置对局,대국 초기화,Reiniciar partida,play.dart:3085; play.dart:3306,,,Needs native review
 shareAndExport,Live game,Share and export,共有とエクスポート,分享与导出,공유 및 내보내기,Compartir y exportar,play.dart:3311; review.dart:2895,,,Needs native review
@@ -62,10 +62,10 @@ savePgnFile,Live game,Save PGN file,PGNファイルを保存,保存 PGN 文件,P
 sharePgn,Live game,Share PGN,PGNを共有,分享 PGN,PGN 공유,Compartir PGN,play.dart:3339; review.dart:2927,,,Needs native review
 copyPgn,Live game,Copy PGN,PGNをコピー,复制 PGN,PGN 복사,Copiar PGN,play.dart:3346; review.dart:2934,,,Needs native review
 copyFen,Live game,Copy FEN,FENをコピー,复制 FEN,FEN 복사,Copiar FEN,play.dart:3353; review.dart:2941,,,Needs native review
-maiaErrorRetry,Live game,Maia error. Retry,Maiaのエラー。再試行,Maia 出错。重试,Maia 오류. 다시 시도,Error de Maia. Reintentar,play.dart:3435,,,Needs native review
-maiaErrorPleaseRetry,Live game,Maia error. Please retry.,Maiaのエラー。再試行してください。,Maia 出错。请重试。,Maia 오류. 다시 시도해 주세요.,Error de Maia. Vuelve a intentarlo.,play.dart:1476; play.dart:2568; play.dart:3521,,,Needs native review
+maiaErrorRetry,Live game,Maia error. Retry,Maiaエラー：再試行,Maia 出错。重试,Maia 오류: 다시 시도,Error de Maia. Reintentar,play.dart:3435,,,Needs native review
+maiaErrorPleaseRetry,Live game,Maia error. Please retry.,Maiaでエラーが発生しました。再試行してください。,Maia 出错。请重试。,Maia에 오류가 발생했습니다. 다시 시도해 주세요.,Error de Maia. Vuelve a intentarlo.,play.dart:1476; play.dart:2568; play.dart:3521,,,Needs native review
 retry,Live game,Retry,再試行,重试,다시 시도,Reintentar,play.dart:3530,,,Needs native review
-maiaIsThinking,Live game,Maia is thinking…,Maiaが手を選んでいます…,Maia 正在选择着法…,Maia가 수를 고르는 중…,Maia está eligiendo una jugada…,play.dart:1479; play.dart:1650; play.dart:2199; play.dart:2412; play.dart:3440; play.dart:3536,,,Needs native review
+maiaIsThinking,Live game,Maia is thinking…,Maiaが思考中…,Maia 正在思考…,Maia가 생각하는 중…,Maia está pensando…,play.dart:1479; play.dart:1650; play.dart:2199; play.dart:2412; play.dart:3440; play.dart:3536,,,Needs native review
 history,Live game,HISTORY,履歴,历史记录,기록,HISTORIAL,play.dart:4277,,,Needs native review
 start,Live game,START,開始,开始,시작,INICIO,play.dart:4277,,,Needs native review
 chessnutStatus,Live game,Chessnut status,Chessnutの状態,Chessnut 状态,Chessnut 상태,Estado de Chessnut,play.dart:3298,,,Needs native review
@@ -81,10 +81,10 @@ startNewGame,Live game,Start new game,新しい対局を開始,开始新对局,�
 reset,Live game,Reset,リセット,重置,초기화,Reiniciar,play.dart:2867,,,Needs native review
 flipBoard,Live game,Flip board,盤を反転,翻转棋盘,보드 뒤집기,Girar tablero,play.dart:3050; review.dart:2629; analysis_board.dart:521,,,Needs native review
 offerDraw,Live game,Offer draw,引き分けを提案,提议和棋,무승부 제안,Ofrecer tablas,play.dart:2631; play.dart:3061,,,Needs native review
-takeBackMove,Live game,Take back move,一手戻す,悔一步棋,한 수 무르기,Deshacer jugada,play.dart:3077,,,Needs native review
+takeBackMove,Live game,Take back move,手を戻す,悔棋,무르기,Deshacer jugada,play.dart:3077,,,Needs native review
 whiteIsVictorious,Live game,White is victorious,白の勝ち,白方获胜,백 승리,Ganan las blancas,play.dart:3135,,,Needs native review
 blackIsVictorious,Live game,Black is victorious,黒の勝ち,黑方获胜,흑 승리,Ganan las negras,play.dart:3136,,,Needs native review
-theGameIsADraw,Live game,The game is a draw,引き分け,对局和棋,무승부,La partida es tablas,play.dart:3137,,,Needs native review
+theGameIsADraw,Live game,The game is a draw,引き分け,和棋,무승부,Tablas,play.dart:3137,,,Needs native review
 theGameHasEnded,Live game,The game has ended,対局終了,对局已结束,대국 종료,La partida ha terminado,play.dart:3138,,,Needs native review
 rematch,Live game,Rematch,再対局,再来一局,재대국,Revancha,play.dart:3152,,,Needs native review
 fast,Analysis quality,Fast,高速,快速,빠름,Rápido,Dynamic label; find in Dev app,,,Needs native review
@@ -98,20 +98,20 @@ whitePieces,Analysis Board / Review,White pieces,白の駒,白方棋子,백 기�
 blackPieces,Analysis Board / Review,Black pieces,黒の駒,黑方棋子,흑 기물,Piezas negras,analysis_board.dart:561,,,Needs native review
 whiteToMove,Analysis Board / Review,White to move,白の手番,白方走棋,백 차례,Juegan las blancas,analysis_board.dart:587,,,Needs native review
 blackToMove,Analysis Board / Review,Black to move,黒の手番,黑方走棋,흑 차례,Juegan las negras,analysis_board.dart:587,,,Needs native review
-castlingRights,Analysis Board / Review,Castling rights,キャスリングの権利,王车易位权利,캐슬링 권리,Derechos de enroque,analysis_board.dart:592,,,Needs native review
-whiteKingside,Analysis Board / Review,White kingside,白のキングサイド,白方王翼,백 킹사이드,Flanco de rey blanco,analysis_board.dart:597,,,Needs native review
-whiteQueenside,Analysis Board / Review,White queenside,白のクイーンサイド,白方后翼,백 퀸사이드,Flanco de dama blanco,analysis_board.dart:602,,,Needs native review
-blackKingside,Analysis Board / Review,Black kingside,黒のキングサイド,黑方王翼,흑 킹사이드,Flanco de rey negro,analysis_board.dart:607,,,Needs native review
-blackQueenside,Analysis Board / Review,Black queenside,黒のクイーンサイド,黑方后翼,흑 퀸사이드,Flanco de dama negro,analysis_board.dart:612,,,Needs native review
+castlingRights,Analysis Board / Review,Castling rights,キャスリングの可否,王车易位权利,캐슬링 권리,Derechos de enroque,analysis_board.dart:592,,,Needs native review
+whiteKingside,Analysis Board / Review,White kingside,白のキングサイド,白方短易位,백 킹사이드,Enroque corto de blancas,analysis_board.dart:597,,,Needs native review
+whiteQueenside,Analysis Board / Review,White queenside,白のクイーンサイド,白方长易位,백 퀸사이드,Enroque largo de blancas,analysis_board.dart:602,,,Needs native review
+blackKingside,Analysis Board / Review,Black kingside,黒のキングサイド,黑方短易位,흑 킹사이드,Enroque corto de negras,analysis_board.dart:607,,,Needs native review
+blackQueenside,Analysis Board / Review,Black queenside,黒のクイーンサイド,黑方长易位,흑 퀸사이드,Enroque largo de negras,analysis_board.dart:612,,,Needs native review
 enPassantTarget,Analysis Board / Review,En-passant target,アンパッサン対象マス,吃过路兵目标格,앙파상 대상 칸,Casilla de captura al paso,analysis_board.dart:619,,,Needs native review
-startingPosition,Analysis Board / Review,Starting position,初期配置,初始局面,시작 위치,Posición inicial,analysis_board.dart:650,,,Needs native review
-clearBoard,Analysis Board / Review,Clear board,盤面をクリア,清空棋盘,보드 비우기,Vaciar tablero,analysis_board.dart:662,,,Needs native review
+startingPosition,Analysis Board / Review,Starting position,初期配置,初始局面,초기 배치,Posición inicial,analysis_board.dart:650,,,Needs native review
+clearBoard,Analysis Board / Review,Clear board,駒をすべて取り除く,清空棋盘,보드 비우기,Vaciar tablero,analysis_board.dart:662,,,Needs native review
 loadFen,Analysis Board / Review,Load FEN,FENを読み込む,加载 FEN,FEN 불러오기,Cargar FEN,review.dart:2547; analysis_board.dart:297,,,Needs native review
 loadPgn,Analysis Board / Review,Load PGN,PGNを読み込む,加载 PGN,PGN 불러오기,Cargar PGN,review.dart:2553; analysis_board.dart:321,,,Needs native review
 openPgnFile,Analysis Board / Review,Open PGN file,PGNファイルを開く,打开 PGN 文件,PGN 파일 열기,Abrir archivo PGN,review.dart:2559,,,Needs native review
 clearMoves,Analysis Board / Review,Clear moves,指し手を消去,清除着法,수 삭제,Borrar jugadas,review.dart:2566,,,Needs native review
 boardEditor,Analysis Board / Review,Board Editor,盤面エディター,棋盘编辑器,보드 편집기,Editor de tablero,review.dart:2572,,,Needs native review
-endPosition,Analysis Board / Review,end position,最後の局面,结束局面,마지막 위치,posición final,review.dart:2614,,,Needs native review
+endPosition,Analysis Board / Review,end position,最後の局面,最后局面,마지막 국면,posición final,review.dart:2614,,,Needs native review
 analysisMenu,Analysis Board / Review,Analysis menu,解析メニュー,分析菜单,분석 메뉴,Menú de análisis,review.dart:2623,,,Needs native review
 turnEngineOff,Analysis Board / Review,Turn engine off,エンジンをオフ,关闭引擎,엔진 끄기,Desactivar motor,review.dart:2634,,,Needs native review
 turnEngineOn,Analysis Board / Review,Turn engine on,エンジンをオン,开启引擎,엔진 켜기,Activar motor,review.dart:2634,,,Needs native review

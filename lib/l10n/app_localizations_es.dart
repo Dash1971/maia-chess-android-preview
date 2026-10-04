@@ -82,7 +82,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get seconds => 'segundos';
 
   @override
-  String get yourSide => 'Tu bando';
+  String get yourSide => 'Tu color';
 
   @override
   String get you => 'Tú';
@@ -94,7 +94,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get language => 'Idioma';
 
   @override
-  String get playMaiaRating => 'Puntuación de Maia en partida';
+  String get playMaiaRating => 'Elo de Maia para jugar';
 
   @override
   String get minutes => 'Minutos';
@@ -121,29 +121,29 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get queueAMoveWhileMaiaIsThinking =>
-      'Prepara una jugada mientras Maia elige';
+      'Prepara una jugada mientras Maia piensa';
 
   @override
   String get oneHundredMsPremovePenalty =>
-      'Penalización de 100 ms por jugada anticipada';
+      'Descontar 0,1 s por jugada anticipada';
 
   @override
   String get use01SecondsPerPremoveInTimedGames =>
-      'Restar 0,1 segundos por jugada anticipada en partidas cronometradas';
+      'Cada jugada anticipada consume 0,1 segundos de tu reloj';
 
   @override
   String get allowMultiplePremoves => 'Permitir varias jugadas anticipadas';
 
   @override
   String get queueASequenceAnIllegalMoveCancelsTheRest =>
-      'Prepara una secuencia; una jugada ilegal cancela el resto';
+      'Prepara varias jugadas; si una no es legal, se cancela junto con las siguientes';
 
   @override
-  String get humanMoveTiming => 'Tiempo de jugada humano';
+  String get humanMoveTiming => 'Pausas naturales';
 
   @override
   String get variableNaturalPausesBeforeMaiaMoves =>
-      'Pausas naturales variables antes de que Maia juegue';
+      'Maia hace pausas de distinta duración antes de jugar';
 
   @override
   String get aboutTemperatureAndTopP => 'Acerca de Temperature y Top-P';
@@ -155,18 +155,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get topP => 'Top-P';
 
   @override
-  String get maiaAnalysisRating => 'Puntuación de Maia en análisis';
+  String get maiaAnalysisRating => 'Elo de Maia para analizar';
 
   @override
   String get addSecondMaiaEngine => 'Añadir un segundo motor Maia';
 
   @override
   String get compareAnotherMaiaRatingInAnalysisAndReview =>
-      'Compara otra puntuación de Maia en análisis y revisión';
+      'Compara dos niveles de Maia al analizar posiciones y revisar partidas';
 
   @override
-  String get secondMaiaAnalysisRating =>
-      'Segunda puntuación de Maia en análisis';
+  String get secondMaiaAnalysisRating => 'Elo del segundo Maia';
 
   @override
   String get gameAnalysisQuality => 'Calidad del análisis de partida';
@@ -175,17 +174,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get resetEngineDefaults => 'Restablecer ajustes del motor';
 
   @override
-  String get boardSounds => 'Sonidos del tablero';
+  String get boardSounds => 'Avisos del tablero electrónico';
 
   @override
   String get beepForCheckCheckmateAndCompletedIllegalMoves =>
-      'Emitir un sonido al dar jaque, mate o completar una jugada ilegal.';
+      'Avisos de jaque, jaque mate y jugadas ilegales.';
 
   @override
-  String get copyDiagnostics => 'Copiar diagnósticos';
+  String get copyDiagnostics => 'Copiar información de diagnóstico';
 
   @override
-  String get diagnosticsCopied => 'Diagnósticos copiados';
+  String get diagnosticsCopied => 'Información de diagnóstico copiada';
 
   @override
   String get newGame => 'Nueva partida';
@@ -218,7 +217,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get retry => 'Reintentar';
 
   @override
-  String get maiaIsThinking => 'Maia está eligiendo una jugada…';
+  String get maiaIsThinking => 'Maia está pensando…';
 
   @override
   String get history => 'HISTORIAL';
@@ -278,7 +277,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get blackIsVictorious => 'Ganan las negras';
 
   @override
-  String get theGameIsADraw => 'La partida es tablas';
+  String get theGameIsADraw => 'Tablas';
 
   @override
   String get theGameHasEnded => 'La partida ha terminado';
@@ -323,16 +322,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get castlingRights => 'Derechos de enroque';
 
   @override
-  String get whiteKingside => 'Flanco de rey blanco';
+  String get whiteKingside => 'Enroque corto de blancas';
 
   @override
-  String get whiteQueenside => 'Flanco de dama blanco';
+  String get whiteQueenside => 'Enroque largo de blancas';
 
   @override
-  String get blackKingside => 'Flanco de rey negro';
+  String get blackKingside => 'Enroque corto de negras';
 
   @override
-  String get blackQueenside => 'Flanco de dama negro';
+  String get blackQueenside => 'Enroque largo de negras';
 
   @override
   String get enPassantTarget => 'Casilla de captura al paso';
