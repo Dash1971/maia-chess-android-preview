@@ -30,12 +30,6 @@ Development snapshots use the same Preview source with a separate Dev package,
 development signer, ARM64-only APK, and smaller 5M Maia model for rapid phone
 testing. They are not production-parity or qualified Preview releases.
 
-## Human move timing
-
-Human move timing is optional and off by default. When enabled, the app picks a
-new, variable move-time target for each Maia move—usually 0.55–4.5 seconds,
-with about a 6% chance of an extra 1.5–4.5 seconds.
-
 ## Install and update with Obtainium
 
 [Obtainium](https://github.com/ImranR98/Obtainium) installs Android apps directly
