@@ -4012,46 +4012,11 @@ class _GamePageState extends State<GamePage>
                             value: 'system',
                             child: Text(l10n(context).systemDefault),
                           ),
-                          const DropdownMenuItem(
-                            value: 'en',
-                            child: Text('English'),
-                          ),
-                          const DropdownMenuItem(
-                            value: 'de',
-                            child: Text('Deutsch'),
-                          ),
-                          const DropdownMenuItem(
-                            value: 'fr',
-                            child: Text('Français'),
-                          ),
-                          const DropdownMenuItem(
-                            value: 'ru',
-                            child: Text('Русский'),
-                          ),
-                          const DropdownMenuItem(
-                            value: 'pt',
-                            child: Text('Português (Brasil)'),
-                          ),
-                          const DropdownMenuItem(
-                            value: 'hi',
-                            child: Text('हिन्दी'),
-                          ),
-                          const DropdownMenuItem(
-                            value: 'ja',
-                            child: Text('日本語'),
-                          ),
-                          const DropdownMenuItem(
-                            value: 'zh',
-                            child: Text('简体中文'),
-                          ),
-                          const DropdownMenuItem(
-                            value: 'ko',
-                            child: Text('한국어'),
-                          ),
-                          const DropdownMenuItem(
-                            value: 'es',
-                            child: Text('Español'),
-                          ),
+                          for (final choice in sortedAppLanguageChoices())
+                            DropdownMenuItem(
+                              value: choice.key,
+                              child: Text(choice.value),
+                            ),
                         ],
                         onChanged: (value) => language.onChanged(
                           value == 'system' ? null : value,

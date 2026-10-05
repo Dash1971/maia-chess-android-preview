@@ -2,6 +2,25 @@ part of '../main.dart';
 
 const appLanguagePreferenceKey = 'appLanguageV1';
 
+/// Native names shown in the language picker. Keep the stored codes stable;
+/// sort the display names at presentation time, as in Lichess.
+const appLanguageNativeNames = <String, String>{
+  'en': 'English',
+  'de': 'Deutsch',
+  'fr': 'Français',
+  'ru': 'Русский',
+  'pt': 'Português (Brasil)',
+  'hi': 'हिन्दी',
+  'ja': '日本語',
+  'zh': '简体中文',
+  'ko': '한국어',
+  'es': 'Español',
+};
+
+List<MapEntry<String, String>> sortedAppLanguageChoices() =>
+    appLanguageNativeNames.entries.toList()
+      ..sort((a, b) => a.value.compareTo(b.value));
+
 /// Catalog IDs are also the persisted choices. Never persist translated names.
 bool isSupportedAppLanguage(Object? code) =>
     code is String &&

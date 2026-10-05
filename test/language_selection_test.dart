@@ -9,6 +9,54 @@ void main() {
 
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
+  testWidgets('language picker sorts native names like Lichess', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaiaChessApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('home-settings-button')));
+    await tester.pumpAndSettle();
+
+    final dropdown = tester.widget<DropdownButton<String>>(
+      find.descendant(
+        of: find.byKey(const ValueKey('app-language-system')),
+        matching: find.byType(DropdownButton<String>),
+      ),
+    );
+    final items = dropdown.items!;
+    expect(items.first.value, 'system');
+    expect(items.skip(1).map((item) => item.value), [
+      'de',
+      'en',
+      'es',
+      'fr',
+      'pt',
+      'ru',
+      'hi',
+      'ja',
+      'zh',
+      'ko',
+    ]);
+    expect(items.skip(1).map((item) => (item.child as Text).data), [
+      'Deutsch',
+      'English',
+      'Español',
+      'Français',
+      'Português (Brasil)',
+      'Русский',
+      'हिन्दी',
+      '日本語',
+      '简体中文',
+      '한국어',
+    ]);
+    expect(
+      items.skip(1).map((item) => item.value).toSet(),
+      AppLocalizations.supportedLocales
+          .map((locale) => locale.languageCode)
+          .toSet(),
+    );
+  });
+
   testWidgets('Japanese can be selected and is retained on restart', (
     tester,
   ) async {
