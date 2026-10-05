@@ -298,5 +298,8 @@
   "blackShort": "P",
   "dateUnknown": "Data desconhecida",
   "savedGameVersionUnsupported": "Estes dados salvos usam um formato não compatível. Atualize o Mobile Maia para abri-los. Os dados foram preservados.",
-  "gameStorageFailed": "Não foi possível acessar o armazenamento das partidas salvas. Tente novamente."
+  "gameStorageFailed": "Não foi possível acessar o armazenamento das partidas salvas. Tente novamente.",
+  "recentWinResult": "Vitória ({result})",
+  "recentLossResult": "Derrota ({result})",
+  "recentDrawResult": "Empate ({result})"
 }

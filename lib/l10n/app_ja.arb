@@ -298,5 +298,8 @@
   "blackShort": "黒",
   "dateUnknown": "対局日不明",
   "savedGameVersionUnsupported": "この保存データは未対応の形式です。Mobile Maiaを更新してから開いてください。このデータは保持されています。",
-  "gameStorageFailed": "対局の保存先にアクセスできませんでした。もう一度お試しください。"
+  "gameStorageFailed": "対局の保存先にアクセスできませんでした。もう一度お試しください。",
+  "recentWinResult": "勝ち（{result}）",
+  "recentLossResult": "負け（{result}）",
+  "recentDrawResult": "引き分け（{result}）"
 }

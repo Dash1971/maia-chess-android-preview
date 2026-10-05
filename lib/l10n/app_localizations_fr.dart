@@ -1097,4 +1097,19 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get gameStorageFailed =>
       'Impossible d’accéder au stockage des parties sauvegardées. Veuillez réessayer.';
+
+  @override
+  String recentWinResult(String result) {
+    return 'Victoire ($result)';
+  }
+
+  @override
+  String recentLossResult(String result) {
+    return 'Défaite ($result)';
+  }
+
+  @override
+  String recentDrawResult(String result) {
+    return 'Nulle ($result)';
+  }
 }

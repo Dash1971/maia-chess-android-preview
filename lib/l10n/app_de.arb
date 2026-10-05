@@ -298,5 +298,8 @@
   "blackShort": "S",
   "dateUnknown": "Datum unbekannt",
   "savedGameVersionUnsupported": "Diese gespeicherten Daten verwenden ein nicht unterstütztes Format. Aktualisiere Mobile Maia, um sie zu öffnen. Die Daten wurden beibehalten.",
-  "gameStorageFailed": "Auf den Speicher für gespeicherte Partien konnte nicht zugegriffen werden. Bitte versuche es erneut."
+  "gameStorageFailed": "Auf den Speicher für gespeicherte Partien konnte nicht zugegriffen werden. Bitte versuche es erneut.",
+  "recentWinResult": "Sieg ({result})",
+  "recentLossResult": "Niederlage ({result})",
+  "recentDrawResult": "Remis ({result})"
 }

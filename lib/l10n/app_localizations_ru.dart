@@ -1116,4 +1116,19 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get gameStorageFailed =>
       'Не удалось получить доступ к хранилищу сохранённых партий. Повторите попытку.';
+
+  @override
+  String recentWinResult(String result) {
+    return 'Победа ($result)';
+  }
+
+  @override
+  String recentLossResult(String result) {
+    return 'Поражение ($result)';
+  }
+
+  @override
+  String recentDrawResult(String result) {
+    return 'Ничья ($result)';
+  }
 }

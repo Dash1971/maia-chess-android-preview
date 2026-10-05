@@ -1107,4 +1107,19 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get gameStorageFailed =>
       'Não foi possível acessar o armazenamento das partidas salvas. Tente novamente.';
+
+  @override
+  String recentWinResult(String result) {
+    return 'Vitória ($result)';
+  }
+
+  @override
+  String recentLossResult(String result) {
+    return 'Derrota ($result)';
+  }
+
+  @override
+  String recentDrawResult(String result) {
+    return 'Empate ($result)';
+  }
 }

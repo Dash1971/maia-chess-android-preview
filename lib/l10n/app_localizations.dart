@@ -1911,6 +1911,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not access saved-game storage. Please try again.'**
   String get gameStorageFailed;
+
+  /// Screen-reader description of a saved game result, from the human player's perspective. Only spoken; visible text remains standard chess result notation.
+  ///
+  /// In en, this message translates to:
+  /// **'Win ({result})'**
+  String recentWinResult(String result);
+
+  /// Screen-reader description of a saved game result, from the human player's perspective. Only spoken; visible text remains standard chess result notation.
+  ///
+  /// In en, this message translates to:
+  /// **'Loss ({result})'**
+  String recentLossResult(String result);
+
+  /// Screen-reader description of a saved game result, from the human player's perspective. Only spoken; visible text remains standard chess result notation.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw ({result})'**
+  String recentDrawResult(String result);
 }
 
 class _AppLocalizationsDelegate

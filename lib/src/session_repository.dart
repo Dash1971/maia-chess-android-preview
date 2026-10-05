@@ -7,19 +7,38 @@ class RecentSession {
   final String id;
   final DateTime updatedAt;
   final Map<String, dynamic> data;
-  bool get isIncomplete =>
-      data['recentState'] == 'incomplete' ||
-      (data['recentState'] == null &&
-          (data['forcedResult'] == null) &&
-          !_pgnHasFinalResult(data['pgn'] as String?));
+  bool get isIncomplete => resultLabel == 'Incomplete';
 
-  static bool _pgnHasFinalResult(String? pgn) {
-    if (pgn == null) return false;
-    final result = RegExp(
-      r'^\[Result\s+"(1-0|0-1|1/2-1/2)"\]\s*$',
-      multiLine: true,
-    ).firstMatch(pgn);
-    return result != null;
+  /// Read only the header block, never Result-like text in comments/variations.
+  /// Null means ambiguous/malformed; '*' means no completed result is known.
+  String? get _pgnResult {
+    final session = data['session'];
+    final source = data['pgn'] ?? (session is Map ? session['pgn'] : null);
+    if (source == null) return '*';
+    if (source is! String) return null;
+    final headers = source.substring(0, min(source.length, 8192));
+    final tag = RegExp(r'\s*\[([A-Za-z0-9_]+)\s+"((?:[^"\\]|\\.)*)"\s*\]');
+    var offset = headers.startsWith('\uFEFF') ? 1 : 0;
+    String? result;
+    while (true) {
+      final match = tag.matchAsPrefix(headers, offset);
+      if (match == null) break;
+      offset = match.end;
+      if (match[1] == 'Result') {
+        if (result != null) {
+          return null; // Duplicate tags are not authoritative.
+        }
+        result = match[2];
+      }
+    }
+    final remainder = headers.substring(offset).trimLeft();
+    if (remainder.startsWith('[') ||
+        (remainder.isEmpty && source.length > headers.length)) {
+      return null; // Malformed or truncated header block.
+    }
+    return result == null || result == '*' || _isFinalResult(result)
+        ? result ?? '*'
+        : null;
   }
 
   String get title {
@@ -52,25 +71,97 @@ class RecentSession {
   }
 
   String get resultLabel {
-    if (isIncomplete) return 'Incomplete';
+    if (data['recentState'] == 'incomplete') return 'Incomplete';
     final forcedResult = data['forcedResult'];
-    if (forcedResult is String && _isFinalResult(forcedResult)) {
-      return forcedResult;
+    // Resignation/timeouts can override an unfinished PGN. Invalid forced data
+    // must not silently fall back to a different historical result.
+    if (forcedResult != null) {
+      return forcedResult is String && _isFinalResult(forcedResult)
+          ? forcedResult
+          : 'Completed';
     }
-    final pgn = data['pgn'] ?? (data['session'] as Map?)?['pgn'];
-    if (pgn is String) {
-      final headers = pgn.substring(0, min(pgn.length, 8192));
-      final match = RegExp(
-        r'^\[Result\s+"(1-0|0-1|1/2-1/2)"\]\s*$',
-        multiLine: true,
-      ).firstMatch(headers);
-      if (match != null) return match.group(1)!;
-    }
-    return 'Completed';
+    final result = _pgnResult;
+    if (result != null && _isFinalResult(result)) return result;
+    return data['recentState'] == null && result == '*'
+        ? 'Incomplete'
+        : 'Completed';
   }
+
+  RecentGameOutcome get outcome => switch (resultLabel) {
+    'Incomplete' => RecentGameOutcome.incomplete,
+    '1/2-1/2' => RecentGameOutcome.draw,
+    '1-0' => switch (data['playerIsWhite']) {
+      true => RecentGameOutcome.win,
+      false => RecentGameOutcome.loss,
+      _ => RecentGameOutcome.unknown,
+    },
+    '0-1' => switch (data['playerIsWhite']) {
+      false => RecentGameOutcome.win,
+      true => RecentGameOutcome.loss,
+      _ => RecentGameOutcome.unknown,
+    },
+    _ => RecentGameOutcome.unknown,
+  };
 
   static bool _isFinalResult(String result) =>
       result == '1-0' || result == '0-1' || result == '1/2-1/2';
+}
+
+/// Presentation only: no mutation of saved games or persisted statistics.
+enum RecentGameOutcome {
+  win,
+  loss,
+  draw,
+  incomplete,
+  unknown;
+
+  Color? colorFor(Brightness brightness) {
+    final dark = brightness == Brightness.dark;
+    return switch (this) {
+      win => Color(dark ? 0xff81c784 : 0xff286332),
+      loss => Color(dark ? 0xffe99b98 : 0xffa13232),
+      draw => Color(dark ? 0xffd6bd69 : 0xff705900),
+      incomplete => Color(dark ? 0xff8cbbd9 : 0xff326480),
+      unknown => null,
+    };
+  }
+}
+
+/// Insert a styled result through the localization placeholder, so translated
+/// date/result order and punctuation remain owned by the existing message.
+Widget _recentResultSubtitle(
+  BuildContext context,
+  RecentSession game,
+  String date,
+) {
+  final strings = l10n(context);
+  final result = game.localizedResult(context);
+  final outcome = game.outcome;
+  final description = switch (outcome) {
+    RecentGameOutcome.win => strings.recentWinResult(result),
+    RecentGameOutcome.loss => strings.recentLossResult(result),
+    RecentGameOutcome.draw => strings.recentDrawResult(result),
+    _ => result,
+  };
+  const marker = '\uFFFC';
+  final parts = strings.recentGameSummary(marker, date).split(marker);
+  return Text.rich(
+    TextSpan(
+      children: [
+        for (var index = 0; index < parts.length; index++) ...[
+          if (index > 0)
+            TextSpan(
+              text: result,
+              style: TextStyle(
+                color: outcome.colorFor(Theme.of(context).brightness),
+              ),
+            ),
+          TextSpan(text: parts[index]),
+        ],
+      ],
+    ),
+    semanticsLabel: strings.recentGameSummary(description, date),
+  );
 }
 
 /// App-private, transactional files. Each successful write retains the previous
@@ -673,14 +764,13 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                       )
                     : null,
                 title: Text(game.localizedTitle(context)),
-                subtitle: Text(
-                  l10n(context).recentGameSummary(
-                    game.localizedResult(context),
-                    date == null
-                        ? l10n(context).dateUnknown
-                        : MaterialLocalizations.of(context)
-                              .formatCompactDate(date),
-                  ),
+                subtitle: _recentResultSubtitle(
+                  context,
+                  game,
+                  date == null
+                      ? l10n(context).dateUnknown
+                      : MaterialLocalizations.of(context)
+                            .formatCompactDate(date),
                 ),
                 onTap: () {
                   if (_busy) return;

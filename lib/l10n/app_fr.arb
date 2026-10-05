@@ -298,5 +298,8 @@
   "blackShort": "N",
   "dateUnknown": "Date inconnue",
   "savedGameVersionUnsupported": "Ces données sauvegardées utilisent un format non pris en charge. Mettez Mobile Maia à jour pour les ouvrir. Les données ont été conservées.",
-  "gameStorageFailed": "Impossible d’accéder au stockage des parties sauvegardées. Veuillez réessayer."
+  "gameStorageFailed": "Impossible d’accéder au stockage des parties sauvegardées. Veuillez réessayer.",
+  "recentWinResult": "Victoire ({result})",
+  "recentLossResult": "Défaite ({result})",
+  "recentDrawResult": "Nulle ({result})"
 }

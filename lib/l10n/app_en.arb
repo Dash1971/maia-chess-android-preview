@@ -1422,5 +1422,35 @@
   },
   "@gameStorageFailed": {
     "description": "Recoverable saved-game storage access/write failure. Do not promise the current game was written successfully; starting a new game is aborted."
+  },
+  "recentWinResult": "Win ({result})",
+  "@recentWinResult": {
+    "description": "Screen-reader description of a saved game result, from the human player's perspective. Only spoken; visible text remains standard chess result notation.",
+    "placeholders": {
+      "result": {
+        "type": "String",
+        "description": "Canonical chess result: 1-0, 0-1 or 1/2-1/2; preserve notation."
+      }
+    }
+  },
+  "recentLossResult": "Loss ({result})",
+  "@recentLossResult": {
+    "description": "Screen-reader description of a saved game result, from the human player's perspective. Only spoken; visible text remains standard chess result notation.",
+    "placeholders": {
+      "result": {
+        "type": "String",
+        "description": "Canonical chess result: 1-0, 0-1 or 1/2-1/2; preserve notation."
+      }
+    }
+  },
+  "recentDrawResult": "Draw ({result})",
+  "@recentDrawResult": {
+    "description": "Screen-reader description of a saved game result, from the human player's perspective. Only spoken; visible text remains standard chess result notation.",
+    "placeholders": {
+      "result": {
+        "type": "String",
+        "description": "Canonical chess result: 1-0, 0-1 or 1/2-1/2; preserve notation."
+      }
+    }
   }
 }
