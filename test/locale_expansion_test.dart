@@ -4,6 +4,21 @@ import 'package:maia_chess/l10n/app_localizations.dart';
 import 'package:maia_chess/main.dart';
 
 void main() {
+  test(
+    'Brazilian Portuguese zero and one counts use natural agreement',
+    () async {
+      final strings = await AppLocalizations.delegate.load(const Locale('pt'));
+      for (final (count, pawn, selected) in [
+        (0, 'peões', 'selecionadas'),
+        (1, 'peão', 'selecionada'),
+        (2, 'peões', 'selecionadas'),
+      ]) {
+        expect(strings.materialPawn(count), '$count $pawn');
+        expect(strings.recentSelectedCount(count), '$count $selected');
+      }
+    },
+  );
+
   test('Hindi zero counts do not use singular pawn wording', () async {
     final strings = await AppLocalizations.delegate.load(const Locale('hi'));
     for (final (count, pawn) in [(0, 'प्यादे'), (1, 'प्यादा'), (2, 'प्यादे')]) {
@@ -39,6 +54,7 @@ void main() {
     ('fr', '0,95'),
     ('ru', '0,95'),
     ('hi', '0.95'),
+    ('pt', '0,95'),
   ]) {
     testWidgets('$code displays locale decimals and ungrouped chess ratings', (
       tester,

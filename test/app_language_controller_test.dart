@@ -187,6 +187,9 @@ void main() {
       const Locale('ru', 'RU'),
       const Locale('ru', 'KZ'),
       const Locale('hi', 'IN'),
+      const Locale('pt'),
+      const Locale('pt', 'BR'),
+      const Locale('pt', 'PT'),
     ]) {
       expect(
         resolveAppLocale([locale], supported),

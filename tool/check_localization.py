@@ -11,21 +11,22 @@ import json
 import re
 from pathlib import Path
 
-LOCALES = ('en', 'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi')
+LOCALES = ('en', 'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi', 'pt')
 COLUMNS = ('English source', 'Japanese (provisional)', 'Simplified Chinese (provisional)',
            'Korean (provisional)', 'Spanish (provisional)', 'German (provisional)',
-           'French (provisional)', 'Russian (provisional)', 'Hindi (provisional)')
+           'French (provisional)', 'Russian (provisional)', 'Hindi (provisional)',
+           'Brazilian Portuguese (provisional)')
 # Product/protocol names and deliberate technical terminology are not prose.
 IDENTICAL_ALLOWED = {
     # Shared technical names, brands, or templates containing no English prose.
-    'topP': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
-    'topPValue': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
-    'maiaOpponentRating': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
-    'chessnutBattery': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
-    'recentGameSummary': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
-    'maiaProbabilitySemantics': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi'},
-    # “experimental” is spelled identically in Spanish and English.
-    'chessnutExperimental': {'es'},
+    'topP': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi', 'pt'},
+    'topPValue': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi', 'pt'},
+    'maiaOpponentRating': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi', 'pt'},
+    'chessnutBattery': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi', 'pt'},
+    'recentGameSummary': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi', 'pt'},
+    'maiaProbabilitySemantics': {'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi', 'pt'},
+    # “experimental” shares its spelling in Spanish, Portuguese and English.
+    'chessnutExperimental': {'es', 'pt'},
     # Native words/initials that share their spelling with English.
     'start': {'de'},
     'whiteShort': {'de'},

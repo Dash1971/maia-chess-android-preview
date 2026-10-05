@@ -19,7 +19,18 @@ void main() {
     home: home,
   );
 
-  for (final language in ['en', 'ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi']) {
+  for (final language in [
+    'en',
+    'ja',
+    'zh',
+    'ko',
+    'es',
+    'de',
+    'fr',
+    'ru',
+    'hi',
+    'pt',
+  ]) {
     testWidgets(
       'Recent Games $language localizes deletion and original metadata',
       (tester) async {

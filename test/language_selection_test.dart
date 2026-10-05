@@ -52,6 +52,7 @@ void main() {
     ('fr', 'Français'),
     ('ru', 'Русский'),
     ('hi', 'हिन्दी'),
+    ('pt', 'Português (Brasil)'),
   ]) {
     testWidgets('$label can be selected and is retained on restart', (
       tester,
@@ -63,7 +64,12 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('app-language-system')));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text(label).last);
+      await tester.scrollUntilVisible(
+        find.text(label),
+        100,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text(label).last);
       await tester.pumpAndSettle();
       expect(find.text(strings.gameSettings), findsOneWidget);

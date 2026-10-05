@@ -70,7 +70,12 @@ void main() {
       await tester.tap(find.byKey(ValueKey('app-language-$code')));
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
-      await tester.ensureVisible(find.text(strings.systemDefault).last);
+      await tester.scrollUntilVisible(
+        find.text(strings.systemDefault),
+        -100,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text(strings.systemDefault).last);
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
@@ -93,6 +98,19 @@ void main() {
       tester.platformDispatcher.localesTestValue = const [Locale('es', 'MX')];
       await tester.pumpAndSettle();
       expect(find.text('Iniciar partida'), findsOneWidget);
+      tester.platformDispatcher.localesTestValue = const [Locale('pt', 'BR')];
+      await tester.pumpAndSettle();
+      final portuguese = await AppLocalizations.delegate.load(
+        const Locale('pt'),
+      );
+      expect(find.text(portuguese.startGame), findsOneWidget);
+      final context = tester.element(find.byType(GamePage));
+      expect(MaterialLocalizations.of(context).saveButtonLabel, 'Salvar');
+      expect(
+        MaterialLocalizations.of(context)
+            .formatCompactDate(DateTime(2026, 7, 14)),
+        '14/07/2026',
+      );
       tester.platformDispatcher.localesTestValue = const [Locale('it', 'IT')];
       await tester.pumpAndSettle();
       expect(find.text('Start game'), findsOneWidget);

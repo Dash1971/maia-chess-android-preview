@@ -227,7 +227,7 @@ void main() {
     },
   );
 
-  for (final code in ['ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi']) {
+  for (final code in ['ja', 'zh', 'ko', 'es', 'de', 'fr', 'ru', 'hi', 'pt']) {
     testWidgets('setup, sampling help and native errors use $code', (
       tester,
     ) async {

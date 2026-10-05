@@ -26,10 +26,10 @@ Temperature and Top-P help opens the same current
 [sampling research](https://github.com/Dash1971/maia-chess-android/blob/main/docs/research/maia3-sampling/REPORT.md)
 as Stable.
 
-The source includes German, French, Russian, Hindi, Japanese, Simplified Chinese,
-Korean and Spanish UI catalogs alongside English. German, French, Russian and Hindi
-are new for the next Preview build. Choose a language in Settings or follow
-the device language. Native-speaker review is still pending; see the
+The source includes German, French, Russian, Hindi, Brazilian Portuguese, Japanese,
+Simplified Chinese, Korean and Spanish UI catalogs alongside English. German,
+French, Russian, Hindi and Brazilian Portuguese are new for the next Preview
+build. Choose a language in Settings or follow the device language. Native-speaker review is still pending; see the
 [localization guide](docs/L10N_REVIEW.md) for coverage, intentional technical-text
 exceptions, contributor instructions and the ARB reviewer guide.
 

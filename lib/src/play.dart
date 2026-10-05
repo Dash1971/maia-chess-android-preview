@@ -3858,6 +3858,9 @@ class _GamePageState extends State<GamePage>
                           'app-language-${language.selectedCode ?? 'system'}',
                         ),
                         isExpanded: true,
+                        // Native language names may wrap at large text sizes.
+                        itemHeight: null,
+                        isDense: false,
                         initialValue: language.selectedCode ?? 'system',
                         decoration: InputDecoration(
                           labelText: l10n(context).language,
@@ -3883,6 +3886,10 @@ class _GamePageState extends State<GamePage>
                           const DropdownMenuItem(
                             value: 'ru',
                             child: Text('Русский'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'pt',
+                            child: Text('Português (Brasil)'),
                           ),
                           const DropdownMenuItem(
                             value: 'hi',
