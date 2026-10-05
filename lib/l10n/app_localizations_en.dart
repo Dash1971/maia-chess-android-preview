@@ -1071,4 +1071,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get blackShort => 'B';
+
+  @override
+  String get dateUnknown => 'Date unknown';
+
+  @override
+  String get savedGameVersionUnsupported =>
+      'This saved data uses an unsupported format. Update Mobile Maia to open it. This data has been preserved.';
+
+  @override
+  String get gameStorageFailed =>
+      'Could not access saved-game storage. Please try again.';
 }

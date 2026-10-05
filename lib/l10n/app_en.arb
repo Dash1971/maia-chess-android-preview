@@ -1410,5 +1410,17 @@
   "blackShort": "B",
   "@blackShort": {
     "description": "Compact chess-side column header in classification summary. White/black initials or one-character labels; full localized side names remain in accessibility labels."
+  },
+  "dateUnknown": "Date unknown",
+  "@dateUnknown": {
+    "description": "Recent Games date when no trustworthy original calendar date can be recovered. Do not imply today or last saved."
+  },
+  "savedGameVersionUnsupported": "This saved data uses an unsupported format. Update Mobile Maia to open it. This data has been preserved.",
+  "gameStorageFailed": "Could not access saved-game storage. Please try again.",
+  "@savedGameVersionUnsupported": {
+    "description": "Persistent warning when a saved session or its backup uses an unsupported format. Creation is blocked to protect the files; update the app, never delete or overwrite automatically."
+  },
+  "@gameStorageFailed": {
+    "description": "Recoverable saved-game storage access/write failure. Do not promise the current game was written successfully; starting a new game is aborted."
   }
 }

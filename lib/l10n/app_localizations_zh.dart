@@ -993,4 +993,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get blackShort => '黑';
+
+  @override
+  String get dateUnknown => '对局日期未知';
+
+  @override
+  String get savedGameVersionUnsupported =>
+      '此保存数据使用尚不支持的格式。请更新 Mobile Maia 后再打开。此数据已保留。';
+
+  @override
+  String get gameStorageFailed => '无法访问对局存储。请重试。';
 }

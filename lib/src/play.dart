@@ -279,13 +279,15 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _initialize() async {
+    if (_storageBlocked || !mounted) return;
+    setState(() => _storageFailed = false);
     await _loadEnginePreferences();
     if (!mounted) return;
     if (widget.startingFen != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _startGame());
     } else {
       await _restoreActiveSession();
-      if (!mounted) return;
+      if (!mounted || _storageFailed) return;
       setState(() => _initialized = true);
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => unawaited(_checkIncomingPgn()),
@@ -309,7 +311,14 @@ class _GamePageState extends State<GamePage>
   @override
   void didPopNext() {
     _feedbackRouteVisible = true;
+    if (_resumeStartedGameWhenVisible && _gameCanRun) _resumeGame();
   }
+
+  bool get _gameCanRun =>
+      (WidgetsBinding.instance.lifecycleState == null ||
+          WidgetsBinding.instance.lifecycleState ==
+              AppLifecycleState.resumed) &&
+      ModalRoute.of(context)?.isCurrent != false;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -333,7 +342,15 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _restoreActiveSession([Map<String, dynamic>? selected]) async {
-    final saved = selected ?? await ActiveSessionStore.load();
+    if (_startingGame) return;
+    Map<String, dynamic>? loaded;
+    try {
+      loaded = selected ?? await ActiveSessionStore.load();
+    } catch (error, stackTrace) {
+      _handleStorageFailure(error, stackTrace);
+      return;
+    }
+    final saved = loaded;
     if (!mounted || saved == null) return;
     if (saved['type'] == 'analysis') {
       try {
@@ -664,17 +681,33 @@ class _GamePageState extends State<GamePage>
   void _resumeGame() {
     if (!mounted ||
         !_started ||
+        _startingGame ||
+        _storageBlocked ||
+        (WidgetsBinding.instance.lifecycleState != null &&
+            WidgetsBinding.instance.lifecycleState !=
+                AppLifecycleState.resumed) ||
+        (_resumeStartedGameWhenVisible &&
+            ModalRoute.of(context)?.isCurrent == false) ||
         _reviewOpen ||
         _gameFinished ||
         _maiaFailed ||
         !_clockPaused) {
       return;
     }
+    final resumedNewGame = _resumeStartedGameWhenVisible;
+    _resumeStartedGameWhenVisible = false;
     _clockPaused = false;
     _turnStartedAt = _clockEnabled
         ? ((widget.clockFactory?.call() ?? Stopwatch())..start())
         : null;
     _tickClock();
+    if (resumedNewGame) {
+      unawaited(
+        _saveGameState().catchError((Object error, StackTrace stackTrace) {
+          _handleStorageFailure(error, stackTrace);
+        }),
+      );
+    }
     if (!_isPlayerTurn && !_gameFinished) unawaited(_playMaiaMove());
     if (_chessnutGameActive &&
         (_pendingPhysicalMaiaMove != null || _chessnutTakebackRestoreActive)) {
@@ -683,8 +716,10 @@ class _GamePageState extends State<GamePage>
     setState(() {});
   }
 
-  Future<void> _saveGameState() async {
-    if (!_started || _reviewOpen) return;
+  Future<void> _saveGameState({bool allowDuringStart = false}) async {
+    if (!_started || _reviewOpen || (_startingGame && !allowDuringStart)) {
+      return;
+    }
     await ActiveSessionStore.save(_gameSnapshot());
   }
 
@@ -1204,9 +1239,45 @@ class _GamePageState extends State<GamePage>
 
   bool _importing = false;
   bool _initialized = false;
+  bool _startingGame = false;
+  bool _resumeStartedGameWhenVisible = false;
+  bool _storageBlocked = false;
+  bool _storageFailed = false;
+
+  void _handleStorageFailure(Object error, StackTrace stackTrace) {
+    unawaited(AppDiagnostics.record('game-storage', error, stackTrace));
+    if (!mounted) return;
+    setState(() {
+      _storageBlocked =
+          _storageBlocked || error is UnsupportedSessionFormatException;
+      _storageFailed = true;
+    });
+  }
+
+  Widget _storageWarning() => Semantics(
+    liveRegion: true,
+    child: Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            _storageBlocked
+                ? l10n(context).savedGameVersionUnsupported
+                : l10n(context).gameStorageFailed,
+          ),
+          if (!_storageBlocked && !_initialized && !_startingGame)
+            TextButton(
+              onPressed: _initialize,
+              child: Text(l10n(context).retry),
+            ),
+        ],
+      ),
+    ),
+  );
   bool _incomingPgnCheckRequested = false;
   Future<void> _checkIncomingPgn() async {
-    if (!_initialized || !mounted) return;
+    if (!_initialized || !mounted || _storageBlocked || _startingGame) return;
     if (_importing) {
       _incomingPgnCheckRequested = true;
       return;
@@ -1251,9 +1322,17 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _openImportedSession(AnalysisSession session) async {
+    if (_storageBlocked || _startingGame) return;
+    final wasRunning = _started && !_clockPaused && !_gameFinished;
     _pauseGame();
-    await _saveGameState();
-    await ActiveSessionStore.startNew();
+    try {
+      await _saveGameState();
+      await ActiveSessionStore.startNew();
+    } catch (error, stackTrace) {
+      _handleStorageFailure(error, stackTrace);
+      if (wasRunning) _resumeGame();
+      return;
+    }
     if (!mounted) return;
     _reviewOpen = false;
     _clockTimer?.cancel();
@@ -1279,6 +1358,7 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _showRecentGames() async {
+    if (_startingGame) return;
     final selected = await Navigator.of(context).push<Map<String, dynamic>>(
       MaterialPageRoute(builder: (_) => const RecentGamesPage()),
     );
@@ -1286,7 +1366,13 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _openAnalysisBoard() async {
-    await ActiveSessionStore.startNew();
+    if (_storageBlocked || _startingGame) return;
+    try {
+      await ActiveSessionStore.startNew();
+    } catch (error, stackTrace) {
+      _handleStorageFailure(error, stackTrace);
+      return;
+    }
     if (!mounted) return;
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -2084,7 +2170,8 @@ class _GamePageState extends State<GamePage>
     );
   }
 
-  void _startGame({bool archiveCurrent = true}) {
+  Future<void> _startGame({bool archiveCurrent = true}) async {
+    if (_storageBlocked || _startingGame || !mounted) return;
     if (_useChessnutGo && !_chessnutStartPositionReady) {
       final message = !_chessnutReady
           ? _PlayMessage.connectChessnutFirst
@@ -2111,103 +2198,130 @@ class _GamePageState extends State<GamePage>
     if (_useChessnutGo && _timePreset != TimePreset.unlimited) {
       setState(() => _timePreset = TimePreset.unlimited);
     }
+    setState(() => _startingGame = true);
+    final gameStartedAt = DateTime.now();
+    final wasRunning = _started && !_clockPaused && !_gameFinished;
     _pauseGame();
-    if (archiveCurrent) {
-      unawaited(_saveGameState());
-      unawaited(ActiveSessionStore.startNew());
-    }
-    // Preserve the archived opponent rating; only the new game uses current bounds.
-    _elo = normalizeMaiaRating(_elo);
-    _gameGeneration++;
-    _gameInferenceScope.invalidate();
-    _clockTimer?.cancel();
-    _gameEndFeedbackTimer?.cancel();
-    _stopChessnutLedRefresh();
-    final randomWhite = Random().nextBool();
-    _playerColor = switch (_sideChoice) {
-      PlayerSide.white => chess.Color.WHITE,
-      PlayerSide.black => chess.Color.BLACK,
-      PlayerSide.random => randomWhite ? chess.Color.WHITE : chess.Color.BLACK,
-    };
-    setState(() {
-      _game = widget.startingFen == null
-          ? chess.Chess()
-          : chess.Chess.fromFEN(widget.startingFen!);
-      _positionHistory
-        ..clear()
-        ..add(_game.fen);
-      _uciMoves.clear();
-      _takebackVariations.clear();
-      _mainlineAnnotations.clear();
-      _pgnComments = null;
-      _reviewVariationSnapshot = null;
-      _forcedResult = null;
-      _naturalGameOver = false;
-      _engineThinking = false;
-      _maiaFailed = false;
-      _clockPaused = false;
-      _boardFlipped = false;
-      _resultDialogShown = false;
-      _drawOfferEvaluating = false;
-      _lastDrawOfferFen = null;
-      _savedAsIncomplete = false;
-      _viewedPly = null;
-      _chessnutGameActive = _useChessnutGo;
-      _pendingPhysicalMaiaMove = null;
-      _chessnutTakebackRestoreActive = false;
-      _lastChessnutIllegalPosition = null;
-      _started = true;
-      final startingMillis = _baseMinutes * 60 * 1000;
-      _whiteMillis = startingMillis;
-      _blackMillis = startingMillis;
-      _turnStartedAt = _clockEnabled
-          ? ((widget.clockFactory?.call() ?? Stopwatch())..start())
-          : null;
-      _clockHistory
-        ..clear()
-        ..add(ClockSnapshot(_whiteMillis, _blackMillis));
-      _status = _chessnutGameActive
-          ? (_isPlayerTurn
-                ? _PlayMessage.yourMoveChessnut
-                : _PlayMessage.maiaIsThinking)
-          : (_isPlayerTurn
-                ? _PlayMessage.yourMove
-                : _PlayMessage.gameInProgress);
-      final date = DateTime.now();
-      final dateTag =
-          '${date.year.toString().padLeft(4, '0')}.'
-          '${date.month.toString().padLeft(2, '0')}.'
-          '${date.day.toString().padLeft(2, '0')}';
-      _game.set_header([
-        'Event',
-        'Mobile Maia Game',
-        'Site',
-        'Mobile Maia',
-        'Date',
-        dateTag,
-        'Round',
-        '-',
-        'White',
-        _playerIsWhite ? 'Player' : 'Maia-3 79M ($_elo)',
-        'Black',
-        _playerIsWhite ? 'Maia-3 79M ($_elo)' : 'Player',
-        'Result',
-        '*',
-      ]);
-      if (widget.startingFen != null &&
-          widget.startingFen != chess.Chess.DEFAULT_POSITION) {
-        _game.set_header(['SetUp', '1', 'FEN', widget.startingFen!]);
+    final generation = _gameGeneration;
+    try {
+      // A reset has already discarded its checkpoint. Saving it again here
+      // would resurrect the discarded game before the new one starts.
+      if (archiveCurrent) await _saveGameState(allowDuringStart: true);
+      if (!mounted || generation != _gameGeneration) return;
+      await ActiveSessionStore.startNew(gameStartedAt: gameStartedAt);
+      // Storage has committed the new identity. Finish this transition even
+      // if a dialog or a lifecycle event changed the current route meanwhile.
+      if (!mounted) return;
+      setState(() => _storageFailed = false);
+      // Preserve the archived opponent rating; only the new game uses current bounds.
+      _elo = normalizeMaiaRating(_elo);
+      _gameGeneration++;
+      _gameInferenceScope.invalidate();
+      _clockTimer?.cancel();
+      _gameEndFeedbackTimer?.cancel();
+      _stopChessnutLedRefresh();
+      final randomWhite = Random().nextBool();
+      _playerColor = switch (_sideChoice) {
+        PlayerSide.white => chess.Color.WHITE,
+        PlayerSide.black => chess.Color.BLACK,
+        PlayerSide.random =>
+          randomWhite ? chess.Color.WHITE : chess.Color.BLACK,
+      };
+      setState(() {
+        _game = widget.startingFen == null
+            ? chess.Chess()
+            : chess.Chess.fromFEN(widget.startingFen!);
+        _positionHistory
+          ..clear()
+          ..add(_game.fen);
+        _uciMoves.clear();
+        _takebackVariations.clear();
+        _mainlineAnnotations.clear();
+        _pgnComments = null;
+        _reviewVariationSnapshot = null;
+        _forcedResult = null;
+        _naturalGameOver = false;
+        _engineThinking = false;
+        _maiaFailed = false;
+        _clockPaused = true;
+        _boardFlipped = false;
+        _resultDialogShown = false;
+        _drawOfferEvaluating = false;
+        _lastDrawOfferFen = null;
+        _savedAsIncomplete = false;
+        _viewedPly = null;
+        _chessnutGameActive = _useChessnutGo;
+        _pendingPhysicalMaiaMove = null;
+        _chessnutTakebackRestoreActive = false;
+        _lastChessnutIllegalPosition = null;
+        _started = true;
+        final startingMillis = _baseMinutes * 60 * 1000;
+        _whiteMillis = startingMillis;
+        _blackMillis = startingMillis;
+        _turnStartedAt = _clockEnabled && !_clockPaused
+            ? ((widget.clockFactory?.call() ?? Stopwatch())..start())
+            : null;
+        _clockHistory
+          ..clear()
+          ..add(ClockSnapshot(_whiteMillis, _blackMillis));
+        _status = _chessnutGameActive
+            ? (_isPlayerTurn
+                  ? _PlayMessage.yourMoveChessnut
+                  : _PlayMessage.maiaIsThinking)
+            : (_isPlayerTurn
+                  ? _PlayMessage.yourMove
+                  : _PlayMessage.gameInProgress);
+        final date = gameStartedAt;
+        final dateTag =
+            '${date.year.toString().padLeft(4, '0')}.'
+            '${date.month.toString().padLeft(2, '0')}.'
+            '${date.day.toString().padLeft(2, '0')}';
+        _game.set_header([
+          'Event',
+          'Mobile Maia Game',
+          'Site',
+          'Mobile Maia',
+          'Date',
+          dateTag,
+          'Round',
+          '-',
+          'White',
+          _playerIsWhite ? 'Player' : 'Maia-3 79M ($_elo)',
+          'Black',
+          _playerIsWhite ? 'Maia-3 79M ($_elo)' : 'Player',
+          'Result',
+          '*',
+        ]);
+        if (widget.startingFen != null &&
+            widget.startingFen != chess.Chess.DEFAULT_POSITION) {
+          _game.set_header(['SetUp', '1', 'FEN', widget.startingFen!]);
+        }
+      });
+      _syncGameBoard(animate: false, resetPremove: true);
+      if (_clockEnabled) {
+        _clockTimer = Timer.periodic(
+          const Duration(milliseconds: 200),
+          (_) => _tickClock(),
+        );
       }
-    });
-    _syncGameBoard(animate: false, resetPremove: true);
-    if (_clockEnabled) {
-      _clockTimer = Timer.periodic(
-        const Duration(milliseconds: 200),
-        (_) => _tickClock(),
-      );
+      await _saveGameState(allowDuringStart: true);
+    } catch (error, stackTrace) {
+      _handleStorageFailure(error, stackTrace);
+      if (wasRunning &&
+          mounted &&
+          generation == _gameGeneration &&
+          _gameCanRun) {
+        setState(() => _startingGame = false);
+        _resumeGame();
+      }
+      return;
+    } finally {
+      if (mounted) setState(() => _startingGame = false);
     }
-    if (!_isPlayerTurn) unawaited(_playMaiaMove());
-    unawaited(_saveGameState());
+    if (mounted && !_storageFailed) {
+      _resumeStartedGameWhenVisible = true;
+      if (_gameCanRun) _resumeGame();
+    }
   }
 
   int _liveMillis(chess.Color color) {
@@ -2594,6 +2708,7 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _offerDraw() async {
+    if (_startingGame) return;
     if (!_canOfferDraw) return;
     final confirmed = await showDialog<bool>(
       context: context,
@@ -2706,6 +2821,7 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _resign() async {
+    if (_startingGame) return;
     if (!_started || _gameFinished || _engineThinking || _drawOfferEvaluating) {
       return;
     }
@@ -2753,6 +2869,7 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _goHome() async {
+    if (_startingGame) return;
     _pauseGame();
     _savedAsIncomplete = !_gameFinished;
     final snapshot = _gameSnapshot();
@@ -2805,6 +2922,7 @@ class _GamePageState extends State<GamePage>
       false;
 
   Future<void> _requestHome() async {
+    if (_startingGame) return;
     if (!_gameFinished) {
       final confirmed = await _confirmEraseCurrentGame();
       if (!confirmed || !mounted) return;
@@ -2815,6 +2933,7 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _requestNewGame() async {
+    if (_storageBlocked || _startingGame) return;
     final completed = _gameFinished;
     final generation = _gameGeneration;
     final confirmed =
@@ -2847,13 +2966,26 @@ class _GamePageState extends State<GamePage>
         ) ??
         false;
     if (!confirmed || !mounted || generation != _gameGeneration) return;
+    final wasRunning = !_clockPaused && !_gameFinished;
     _pauseGame();
-    // A game can finish while the confirmation is open. Never erase a result.
-    if (_gameFinished) {
-      await _saveGameState();
-      await ActiveSessionStore.startNew();
-    } else {
-      await ActiveSessionStore.discardActive();
+    setState(() => _startingGame = true);
+    try {
+      // A game can finish while the confirmation is open. Never erase a result.
+      if (_gameFinished) {
+        await _saveGameState(allowDuringStart: true);
+        await ActiveSessionStore.startNew();
+      } else {
+        await ActiveSessionStore.discardActive();
+      }
+    } catch (error, stackTrace) {
+      _handleStorageFailure(error, stackTrace);
+      if (wasRunning && mounted && _gameCanRun) {
+        setState(() => _startingGame = false);
+        _resumeGame();
+      }
+      return;
+    } finally {
+      if (mounted) setState(() => _startingGame = false);
     }
     if (!mounted) return;
     if (_chessnutGameActive) {
@@ -2880,10 +3012,11 @@ class _GamePageState extends State<GamePage>
       if (position != null) _queueChessnutPosition(position);
       return;
     }
-    _startGame(archiveCurrent: false);
+    await _startGame(archiveCurrent: false);
   }
 
   Future<void> _takeBack() async {
+    if (_startingGame) return;
     if (!_started || !_canTakeBack) return;
     final chessnutTakeback = _chessnutGameActive;
     // Legacy records may lack the target snapshot. Retain current clock values
@@ -3137,7 +3270,7 @@ class _GamePageState extends State<GamePage>
         final position = _chessnutPosition;
         if (position != null) _queueChessnutPosition(position);
       } else {
-        _startGame();
+        await _startGame();
       }
     } else if (action == 'analysis') {
       await _analyzeGame();
@@ -3145,6 +3278,7 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _analyzeGame() async {
+    if (_startingGame || _storageBlocked) return;
     _pauseGame();
     _reviewOpen = true;
     final moves = _game
@@ -3242,7 +3376,7 @@ class _GamePageState extends State<GamePage>
             : _started
             ? IconButton(
                 key: const ValueKey('game-home-button'),
-                onPressed: _requestHome,
+                onPressed: _startingGame ? null : _requestHome,
                 icon: const Icon(Icons.home_outlined),
                 tooltip: l10n(context).home,
               )
@@ -3275,7 +3409,9 @@ class _GamePageState extends State<GamePage>
               ),
             IconButton(
               key: const ValueKey('new-game-button'),
-              onPressed: _requestNewGame,
+              onPressed: _storageBlocked || _startingGame
+                  ? null
+                  : _requestNewGame,
               icon: const Icon(Icons.refresh),
               tooltip: _gameFinished
                   ? l10n(context).newGame
@@ -3333,6 +3469,7 @@ class _GamePageState extends State<GamePage>
           ],
         ],
       ),
+      persistentFooterButtons: _storageFailed ? [_storageWarning()] : null,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -3759,7 +3896,9 @@ class _GamePageState extends State<GamePage>
                 minimumSize: const Size.fromHeight(52),
               ),
               onPressed:
-                  (_initialized || widget.startingFen != null) &&
+                  !_storageBlocked &&
+                      !_startingGame &&
+                      (_initialized || widget.startingFen != null) &&
                       (!_useChessnutGo || _chessnutStartPositionReady)
                   ? _startGame
                   : null,
@@ -3771,7 +3910,9 @@ class _GamePageState extends State<GamePage>
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size.fromHeight(52),
               ),
-              onPressed: _initialized ? _openAnalysisBoard : null,
+              onPressed: _initialized && !_storageBlocked && !_startingGame
+                  ? _openAnalysisBoard
+                  : null,
               icon: const Icon(Icons.analytics_outlined),
               label: Text(l10n(context).analysisBoard),
             ),

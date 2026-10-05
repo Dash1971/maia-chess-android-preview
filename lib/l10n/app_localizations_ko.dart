@@ -1005,4 +1005,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get blackShort => '흑';
+
+  @override
+  String get dateUnknown => '대국 날짜 알 수 없음';
+
+  @override
+  String get savedGameVersionUnsupported =>
+      '지원하지 않는 형식의 저장 데이터입니다. Mobile Maia를 업데이트한 후 열어 주세요. 이 데이터는 보존되어 있습니다.';
+
+  @override
+  String get gameStorageFailed => '저장된 대국에 접근할 수 없습니다. 다시 시도해 주세요.';
 }
