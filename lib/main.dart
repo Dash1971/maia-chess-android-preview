@@ -36,6 +36,7 @@ part 'src/diagnostics.dart';
 part 'src/session_types.dart';
 part 'src/variation_tree.dart';
 part 'src/game_clocks.dart';
+part 'src/human_timing.dart';
 part 'src/premoves.dart';
 part 'src/active_session_store.dart';
 part 'src/session_model.dart';

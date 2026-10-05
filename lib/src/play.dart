@@ -61,6 +61,7 @@ class GamePage extends StatefulWidget {
     this.drawEvaluator,
     this.electronicBoardTransport,
     this.clockFactory,
+    this.humanTimingRandom,
     this.gameFeedbackPlayer,
     this.gameFeedbackService,
     super.key,
@@ -68,6 +69,8 @@ class GamePage extends StatefulWidget {
 
   final GameFeedbackService? gameFeedbackService;
   final Stopwatch Function()? clockFactory;
+  // Independent of move sampling; injectable for deterministic timing tests.
+  final Random? humanTimingRandom;
   final String? startingFen;
   final PlayerSide? startingSide;
   final int? startingElo;
@@ -165,7 +168,7 @@ class _GamePageState extends State<GamePage>
   int? _viewedPly;
   final ScrollController _liveMovesController = ScrollController();
   final Map<int, GlobalKey> _liveMoveKeys = {};
-  final Random _timingRandom = Random();
+  late final Random _timingRandom = widget.humanTimingRandom ?? Random();
   late final ElectronicBoardTransport _chessnut;
   late final ChessnutLedController _chessnutLeds;
   StreamSubscription<ElectronicBoardEvent>? _chessnutSubscription;
@@ -2597,7 +2600,11 @@ class _GamePageState extends State<GamePage>
         topP: _topP,
       );
       if (_humanTiming) {
-        final target = _humanThinkDuration();
+        final target = sampleHumanMoveTime(
+          _timingRandom,
+          baseSeconds: _clockEnabled ? _baseMinutes * 60 : null,
+          incrementSeconds: _incrementSeconds,
+        );
         final remaining = target - thinkingTimer.elapsed;
         if (remaining > Duration.zero) await Future<void>.delayed(remaining);
       }
@@ -2662,17 +2669,6 @@ class _GamePageState extends State<GamePage>
       _pauseGame();
       unawaited(_saveGameState());
     }
-  }
-
-  Duration _humanThinkDuration() {
-    final u1 = max(_timingRandom.nextDouble(), 0.000001);
-    final u2 = _timingRandom.nextDouble();
-    final gaussian = sqrt(-2 * log(u1)) * cos(2 * pi * u2);
-    var seconds = exp(0.50 + gaussian * 0.44).clamp(0.55, 4.5);
-    if (_timingRandom.nextDouble() < 0.06) {
-      seconds += 1.5 + _timingRandom.nextDouble() * 3;
-    }
-    return Duration(milliseconds: (seconds * 1000).round());
   }
 
   _PlayMessage _resultText() {
