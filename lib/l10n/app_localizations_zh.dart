@@ -1003,4 +1003,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get gameStorageFailed => '无法访问对局存储。请重试。';
+
+  @override
+  String recentWinResult(String result) {
+    return '获胜（$result）';
+  }
+
+  @override
+  String recentLossResult(String result) {
+    return '落败（$result）';
+  }
+
+  @override
+  String recentDrawResult(String result) {
+    return '和棋（$result）';
+  }
 }

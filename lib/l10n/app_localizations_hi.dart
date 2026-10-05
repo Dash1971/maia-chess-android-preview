@@ -1094,4 +1094,19 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get gameStorageFailed =>
       'सहेजे गए खेलों के संग्रहण तक पहुँचा नहीं जा सका। कृपया दोबारा कोशिश करें।';
+
+  @override
+  String recentWinResult(String result) {
+    return 'जीत ($result)';
+  }
+
+  @override
+  String recentLossResult(String result) {
+    return 'हार ($result)';
+  }
+
+  @override
+  String recentDrawResult(String result) {
+    return 'ड्रॉ ($result)';
+  }
 }

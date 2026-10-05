@@ -1082,4 +1082,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get gameStorageFailed =>
       'Could not access saved-game storage. Please try again.';
+
+  @override
+  String recentWinResult(String result) {
+    return 'Win ($result)';
+  }
+
+  @override
+  String recentLossResult(String result) {
+    return 'Loss ($result)';
+  }
+
+  @override
+  String recentDrawResult(String result) {
+    return 'Draw ($result)';
+  }
 }

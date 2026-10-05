@@ -1014,4 +1014,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get gameStorageFailed => '対局の保存先にアクセスできませんでした。もう一度お試しください。';
+
+  @override
+  String recentWinResult(String result) {
+    return '勝ち（$result）';
+  }
+
+  @override
+  String recentLossResult(String result) {
+    return '負け（$result）';
+  }
+
+  @override
+  String recentDrawResult(String result) {
+    return '引き分け（$result）';
+  }
 }

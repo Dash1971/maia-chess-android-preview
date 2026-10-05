@@ -298,5 +298,8 @@
   "blackShort": "흑",
   "dateUnknown": "대국 날짜 알 수 없음",
   "savedGameVersionUnsupported": "지원하지 않는 형식의 저장 데이터입니다. Mobile Maia를 업데이트한 후 열어 주세요. 이 데이터는 보존되어 있습니다.",
-  "gameStorageFailed": "저장된 대국에 접근할 수 없습니다. 다시 시도해 주세요."
+  "gameStorageFailed": "저장된 대국에 접근할 수 없습니다. 다시 시도해 주세요.",
+  "recentWinResult": "승리 ({result})",
+  "recentLossResult": "패배 ({result})",
+  "recentDrawResult": "무승부 ({result})"
 }

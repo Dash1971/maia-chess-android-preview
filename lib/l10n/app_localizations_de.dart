@@ -1101,4 +1101,19 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get gameStorageFailed =>
       'Auf den Speicher für gespeicherte Partien konnte nicht zugegriffen werden. Bitte versuche es erneut.';
+
+  @override
+  String recentWinResult(String result) {
+    return 'Sieg ($result)';
+  }
+
+  @override
+  String recentLossResult(String result) {
+    return 'Niederlage ($result)';
+  }
+
+  @override
+  String recentDrawResult(String result) {
+    return 'Remis ($result)';
+  }
 }

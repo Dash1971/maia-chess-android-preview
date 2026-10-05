@@ -298,5 +298,8 @@
   "blackShort": "黑",
   "dateUnknown": "对局日期未知",
   "savedGameVersionUnsupported": "此保存数据使用尚不支持的格式。请更新 Mobile Maia 后再打开。此数据已保留。",
-  "gameStorageFailed": "无法访问对局存储。请重试。"
+  "gameStorageFailed": "无法访问对局存储。请重试。",
+  "recentWinResult": "获胜（{result}）",
+  "recentLossResult": "落败（{result}）",
+  "recentDrawResult": "和棋（{result}）"
 }

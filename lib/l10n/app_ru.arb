@@ -298,5 +298,8 @@
   "blackShort": "Ч",
   "dateUnknown": "Дата неизвестна",
   "savedGameVersionUnsupported": "Эти сохранённые данные имеют неподдерживаемый формат. Обновите Mobile Maia, чтобы открыть их. Данные сохранены.",
-  "gameStorageFailed": "Не удалось получить доступ к хранилищу сохранённых партий. Повторите попытку."
+  "gameStorageFailed": "Не удалось получить доступ к хранилищу сохранённых партий. Повторите попытку.",
+  "recentWinResult": "Победа ({result})",
+  "recentLossResult": "Поражение ({result})",
+  "recentDrawResult": "Ничья ({result})"
 }

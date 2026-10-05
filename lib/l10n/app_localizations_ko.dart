@@ -1015,4 +1015,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get gameStorageFailed => '저장된 대국에 접근할 수 없습니다. 다시 시도해 주세요.';
+
+  @override
+  String recentWinResult(String result) {
+    return '승리 ($result)';
+  }
+
+  @override
+  String recentLossResult(String result) {
+    return '패배 ($result)';
+  }
+
+  @override
+  String recentDrawResult(String result) {
+    return '무승부 ($result)';
+  }
 }
