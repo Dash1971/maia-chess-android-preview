@@ -28,15 +28,24 @@ void main() {
         '5 + 0',
         '5 + 3',
         '10 + 0',
+        '10 + 5',
         '15 + 10',
+        '30 + 0',
+        '30 + 20',
         'Custom',
       ]);
       for (final (name, minutes, increment) in [
         ('bullet', 1, 0),
+        ('bulletTwo', 2, 1),
+        ('blitzThree', 3, 0),
+        ('blitzFiveZero', 5, 0),
         ('blitz', 3, 2),
         ('blitzFive', 5, 3),
         ('rapid', 10, 0),
         ('classical', 15, 10),
+        ('rapidFive', 10, 5),
+        ('classicalThirty', 30, 0),
+        ('classicalThirtyTwenty', 30, 20),
       ]) {
         final preset = TimePreset.values.byName(name);
         expect((preset.minutes, preset.increment), (minutes, increment));
@@ -44,10 +53,45 @@ void main() {
     },
   );
 
+  testWidgets('long dropdown scrolls to 30+20 on a small phone', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      MaterialApp(home: GamePage(maiaEvaluator: ControlledMaia().call)),
+    );
+    await tester.pumpAndSettle();
+    final control = find.byType(DropdownButtonFormField<TimePreset>);
+    await tester.ensureVisible(control);
+    await tester.pumpAndSettle();
+    await tester.tap(control);
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('30 + 20'),
+      80,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('30 + 20').last);
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('time-preset-classicalThirtyTwenty')),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+    await disposeGame(tester);
+  });
+
   for (final preset in [
     TimePreset.bulletTwo,
     TimePreset.blitzThree,
     TimePreset.blitzFiveZero,
+    TimePreset.rapidFive,
+    TimePreset.classicalThirty,
+    TimePreset.classicalThirtyTwenty,
   ]) {
     testWidgets(
       '${preset.label} selects, persists, applies increment and restores',
@@ -72,7 +116,12 @@ void main() {
         await open();
         await tester.tap(find.byType(DropdownButtonFormField<TimePreset>));
         await tester.pumpAndSettle();
-        await tester.ensureVisible(find.text(preset.label).last);
+        await tester.scrollUntilVisible(
+          find.text(preset.label),
+          80,
+          scrollable: find.byType(Scrollable).last,
+        );
+        await tester.pumpAndSettle();
         await tester.tap(find.text(preset.label).last);
         await tester.pumpAndSettle();
         expect(
@@ -131,7 +180,12 @@ void main() {
       final control = find.byKey(const ValueKey('continuation-time-control'));
       await tester.tap(control);
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text(preset.label).last);
+      await tester.scrollUntilVisible(
+        find.text(preset.label),
+        80,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text(preset.label).last);
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('continuation-start-game')));

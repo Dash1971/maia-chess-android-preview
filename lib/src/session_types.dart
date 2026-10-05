@@ -11,7 +11,10 @@ enum TimePreset {
   blitzFiveZero,
   blitzFive,
   rapid,
+  rapidFive,
   classical,
+  classicalThirty,
+  classicalThirtyTwenty,
   custom,
 }
 
@@ -25,7 +28,10 @@ extension TimePresetDetails on TimePreset {
     TimePreset.blitzFiveZero => '5 + 0',
     TimePreset.blitzFive => '5 + 3',
     TimePreset.rapid => '10 + 0',
+    TimePreset.rapidFive => '10 + 5',
     TimePreset.classical => '15 + 10',
+    TimePreset.classicalThirty => '30 + 0',
+    TimePreset.classicalThirtyTwenty => '30 + 20',
     TimePreset.custom => 'Custom',
   };
 
@@ -37,7 +43,10 @@ extension TimePresetDetails on TimePreset {
     TimePreset.blitzFiveZero => 5,
     TimePreset.blitzFive => 5,
     TimePreset.rapid => 10,
+    TimePreset.rapidFive => 10,
     TimePreset.classical => 15,
+    TimePreset.classicalThirty => 30,
+    TimePreset.classicalThirtyTwenty => 30,
     _ => 0,
   };
 
@@ -45,7 +54,9 @@ extension TimePresetDetails on TimePreset {
     TimePreset.bulletTwo => 1,
     TimePreset.blitz => 2,
     TimePreset.blitzFive => 3,
+    TimePreset.rapidFive => 5,
     TimePreset.classical => 10,
+    TimePreset.classicalThirtyTwenty => 20,
     _ => 0,
   };
 }
