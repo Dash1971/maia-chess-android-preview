@@ -3722,26 +3722,46 @@ class _GamePageState extends State<GamePage>
             const SizedBox(height: 16),
             Text(l10n(context).yourSide),
             const SizedBox(height: 8),
-            SegmentedButton<PlayerSide>(
-              segments: [
-                ButtonSegment(
-                  value: PlayerSide.white,
-                  label: Text(l10n(context).white),
-                ),
-                ButtonSegment(
-                  value: PlayerSide.black,
-                  label: Text(l10n(context).black),
-                ),
-                ButtonSegment(
-                  value: PlayerSide.random,
-                  label: Text(l10n(context).random),
-                ),
-              ],
-              selected: {_sideChoice},
-              onSelectionChanged: (value) {
-                final selected = value.first;
-                setState(() => _sideChoice = selected);
-                unawaited(_persistSideChoice(selected));
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final stackSides =
+                    constraints.maxWidth /
+                        (MediaQuery.textScalerOf(context).scale(14) / 14) <
+                    280;
+                return SegmentedButton<PlayerSide>(
+                  // Three narrow segments can clip translated labels inside their
+                  // rounded outline even when no RenderFlex overflow is reported.
+                  direction: stackSides ? Axis.vertical : Axis.horizontal,
+                  style: stackSides
+                      ? ButtonStyle(
+                          shape: WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        )
+                      : null,
+                  segments: [
+                    ButtonSegment(
+                      value: PlayerSide.white,
+                      label: Text(l10n(context).white),
+                    ),
+                    ButtonSegment(
+                      value: PlayerSide.black,
+                      label: Text(l10n(context).black),
+                    ),
+                    ButtonSegment(
+                      value: PlayerSide.random,
+                      label: Text(l10n(context).random),
+                    ),
+                  ],
+                  selected: {_sideChoice},
+                  onSelectionChanged: (value) {
+                    final selected = value.first;
+                    setState(() => _sideChoice = selected);
+                    unawaited(_persistSideChoice(selected));
+                  },
+                );
               },
             ),
             const SizedBox(height: 16),
@@ -3979,6 +3999,9 @@ class _GamePageState extends State<GamePage>
                           'app-language-${language.selectedCode ?? 'system'}',
                         ),
                         isExpanded: true,
+                        // Native language names may wrap at large text sizes.
+                        itemHeight: null,
+                        isDense: false,
                         initialValue: language.selectedCode ?? 'system',
                         decoration: InputDecoration(
                           labelText: l10n(context).language,
@@ -3992,6 +4015,26 @@ class _GamePageState extends State<GamePage>
                           const DropdownMenuItem(
                             value: 'en',
                             child: Text('English'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'de',
+                            child: Text('Deutsch'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'fr',
+                            child: Text('Français'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'ru',
+                            child: Text('Русский'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'pt',
+                            child: Text('Português (Brasil)'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'hi',
+                            child: Text('हिन्दी'),
                           ),
                           const DropdownMenuItem(
                             value: 'ja',
