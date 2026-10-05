@@ -295,5 +295,8 @@
   "chessnutPermissionPending": "Bluetooth की अनुमति दें, फिर Chessnut दोबारा जोड़ें।",
   "chessnutBluetoothDisabled": "Bluetooth चालू करें, फिर Chessnut दोबारा जोड़ें।",
   "whiteShort": "स",
-  "blackShort": "क"
+  "blackShort": "क",
+  "dateUnknown": "तारीख अज्ञात",
+  "savedGameVersionUnsupported": "यह सहेजा गया डेटा असमर्थित प्रारूप में है। इसे खोलने के लिए Mobile Maia को अपडेट करें। डेटा सुरक्षित रखा गया है।",
+  "gameStorageFailed": "सहेजे गए खेलों के संग्रहण तक पहुँचा नहीं जा सका। कृपया दोबारा कोशिश करें।"
 }

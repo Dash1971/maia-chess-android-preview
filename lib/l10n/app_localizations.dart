@@ -1893,6 +1893,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'B'**
   String get blackShort;
+
+  /// Recent Games date when no trustworthy original calendar date can be recovered. Do not imply today or last saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Date unknown'**
+  String get dateUnknown;
+
+  /// Persistent warning when a saved session or its backup uses an unsupported format. Creation is blocked to protect the files; update the app, never delete or overwrite automatically.
+  ///
+  /// In en, this message translates to:
+  /// **'This saved data uses an unsupported format. Update Mobile Maia to open it. This data has been preserved.'**
+  String get savedGameVersionUnsupported;
+
+  /// Recoverable saved-game storage access/write failure. Do not promise the current game was written successfully; starting a new game is aborted.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not access saved-game storage. Please try again.'**
+  String get gameStorageFailed;
 }
 
 class _AppLocalizationsDelegate

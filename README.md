@@ -143,6 +143,11 @@ and CI artifact retention. See the
 [hardening guide](tool/hardening/README.md) for the full regression suites and
 independent chess/variation corpora.
 
+Before changing saved-game formats, dates, or migration behavior, follow the
+[saved-game history and compatibility contract](docs/session-storage.md).
+It documents the required regression tests and the rules for preserving older
+users' games.
+
 Official releases are signed with the dedicated Mobile Maia app-signing key.
 The build reads `MOBILE_MAIA_KEYSTORE`, `MOBILE_MAIA_STORE_PASSWORD`, and
 `MOBILE_MAIA_KEY_PASSWORD` from the environment; no signing secrets belong in

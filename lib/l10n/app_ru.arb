@@ -295,5 +295,8 @@
   "chessnutPermissionPending": "Разрешите доступ к Bluetooth, затем подключите Chessnut заново.",
   "chessnutBluetoothDisabled": "Включите Bluetooth, затем подключите Chessnut заново.",
   "whiteShort": "Б",
-  "blackShort": "Ч"
+  "blackShort": "Ч",
+  "dateUnknown": "Дата неизвестна",
+  "savedGameVersionUnsupported": "Эти сохранённые данные имеют неподдерживаемый формат. Обновите Mobile Maia, чтобы открыть их. Данные сохранены.",
+  "gameStorageFailed": "Не удалось получить доступ к хранилищу сохранённых партий. Повторите попытку."
 }

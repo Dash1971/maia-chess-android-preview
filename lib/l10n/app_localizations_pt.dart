@@ -1096,4 +1096,15 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get blackShort => 'P';
+
+  @override
+  String get dateUnknown => 'Data desconhecida';
+
+  @override
+  String get savedGameVersionUnsupported =>
+      'Estes dados salvos usam um formato não compatível. Atualize o Mobile Maia para abri-los. Os dados foram preservados.';
+
+  @override
+  String get gameStorageFailed =>
+      'Não foi possível acessar o armazenamento das partidas salvas. Tente novamente.';
 }

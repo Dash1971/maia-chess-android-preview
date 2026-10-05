@@ -295,5 +295,8 @@
   "chessnutPermissionPending": "请授予蓝牙权限，然后重新连接 Chessnut。",
   "chessnutBluetoothDisabled": "请开启蓝牙，然后重新连接 Chessnut。",
   "whiteShort": "白",
-  "blackShort": "黑"
+  "blackShort": "黑",
+  "dateUnknown": "对局日期未知",
+  "savedGameVersionUnsupported": "此保存数据使用尚不支持的格式。请更新 Mobile Maia 后再打开。此数据已保留。",
+  "gameStorageFailed": "无法访问对局存储。请重试。"
 }

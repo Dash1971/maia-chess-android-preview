@@ -1105,4 +1105,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get blackShort => 'Ч';
+
+  @override
+  String get dateUnknown => 'Дата неизвестна';
+
+  @override
+  String get savedGameVersionUnsupported =>
+      'Эти сохранённые данные имеют неподдерживаемый формат. Обновите Mobile Maia, чтобы открыть их. Данные сохранены.';
+
+  @override
+  String get gameStorageFailed =>
+      'Не удалось получить доступ к хранилищу сохранённых партий. Повторите попытку.';
 }

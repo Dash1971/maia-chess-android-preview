@@ -1083,4 +1083,15 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get blackShort => 'क';
+
+  @override
+  String get dateUnknown => 'तारीख अज्ञात';
+
+  @override
+  String get savedGameVersionUnsupported =>
+      'यह सहेजा गया डेटा असमर्थित प्रारूप में है। इसे खोलने के लिए Mobile Maia को अपडेट करें। डेटा सुरक्षित रखा गया है।';
+
+  @override
+  String get gameStorageFailed =>
+      'सहेजे गए खेलों के संग्रहण तक पहुँचा नहीं जा सका। कृपया दोबारा कोशिश करें।';
 }

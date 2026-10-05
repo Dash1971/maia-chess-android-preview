@@ -1088,4 +1088,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get blackShort => 'N';
+
+  @override
+  String get dateUnknown => 'Fecha desconocida';
+
+  @override
+  String get savedGameVersionUnsupported =>
+      'Estos datos guardados usan un formato no compatible. Actualiza Mobile Maia para abrirlos. Estos datos se han conservado.';
+
+  @override
+  String get gameStorageFailed =>
+      'No se pudo acceder al almacenamiento de partidas. Vuelve a intentarlo.';
 }

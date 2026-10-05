@@ -295,5 +295,8 @@
   "chessnutPermissionPending": "Permite el acceso a Bluetooth y vuelve a conectar Chessnut.",
   "chessnutBluetoothDisabled": "Activa Bluetooth y vuelve a conectar Chessnut.",
   "whiteShort": "B",
-  "blackShort": "N"
+  "blackShort": "N",
+  "dateUnknown": "Fecha desconocida",
+  "savedGameVersionUnsupported": "Estos datos guardados usan un formato no compatible. Actualiza Mobile Maia para abrirlos. Estos datos se han conservado.",
+  "gameStorageFailed": "No se pudo acceder al almacenamiento de partidas. Vuelve a intentarlo."
 }

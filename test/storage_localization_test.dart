@@ -35,10 +35,11 @@ void main() {
       'Recent Games $language localizes deletion and original metadata',
       (tester) async {
         final data = <String, dynamic>{
+          'type': 'game',
           'playerIsWhite': false,
           'elo': 500,
           'recentState': 'incomplete',
-          'pgn': '[Black "Maia 500"]\n[Result "*"]\n\n1. e4 *',
+          'pgn': '[Black "Maia 500"]\n[Date "2026.09.05"]\n[Result "*"]\n\n1. e4 *',
         };
         final original = Map<String, dynamic>.from(data);
         final date = DateTime(2026, 9, 5);
