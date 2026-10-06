@@ -66,11 +66,11 @@ single game, not a list of completed tournaments.
 
 Reviewed all 302 messages in each of the ten catalogs again, including app-specific
 sampling help, Chessnut recovery, saved-game messages and accessibility text. This
-is an editorial review, not native-speaker approval. The follow-up makes 41 small
-message corrections across the nine non-English catalogs; English is unchanged.
+is an editorial review, not native-speaker approval. The follow-up makes 51 small
+message corrections across the ten catalogs, including six English labels/statuses.
 
 - Added missing direct equivalents for White/Black running out of time and the
-  PGN-copied confirmation to the pinned reference (now 69 concepts). Missing
+  PGN-copied confirmation to the pinned reference (now 70 concepts). Missing
   upstream translations retain documented fallbacks.
 - Matched Portuguese draw/resignation confirmations and Russian increment
   accessibility text to the terminology already used by their controls.
@@ -79,6 +79,12 @@ message corrections across the nine non-English catalogs; English is unchanged.
   a physical-board move and Korean analysis progress wording for completed positions.
 - Corrected the Hindi grammar and chess-variation meanings described above; the
   game-phase labels now use the more directly applicable upstream keys.
+
+The final pre-publication pass also aligned English Touch feedback and Takeback,
+and English/French turn announcements. Existing punctuation, screen titles,
+piece-picker articles and compact category headings have explicit context reasons
+in the reference. Chinese turn messages retain the app’s consistent 你 form, and
+Korean status messages address the player rather than copying a first-person label.
 
 The Temperature/Top-P explanations were reviewed and retained. No gameplay,
 engine behavior, saved-data formats, language selection or analysis logic changed.

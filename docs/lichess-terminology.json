@@ -61,7 +61,7 @@
       "adaptations": {
         "en": {
           "value": "Analysis Board",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Use title capitalization consistently with the named Analysis Board screen."
         }
       }
     },
@@ -455,7 +455,7 @@
       "adaptations": {
         "en": {
           "value": "The game is a draw",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "This is a result-dialog heading; omit the sentence-ending full stop."
         }
       }
     },
@@ -568,10 +568,6 @@
           "value": "王车易位权",
           "reason": "This editor label explicitly describes castling rights, not the move itself; same chess term with the required qualifier."
         },
-        "ko": {
-          "value": "캐슬링 권리",
-          "reason": "This editor label explicitly describes castling rights, not the move itself; same chess term with the required qualifier."
-        },
         "es": {
           "value": "Derechos de enroque",
           "reason": "This editor label explicitly describes castling rights, not the move itself; same chess term with the required qualifier."
@@ -652,7 +648,7 @@
       "adaptations": {
         "en": {
           "value": "Board Editor",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Use title capitalization consistently with the named Board Editor screen."
         }
       }
     },
@@ -934,12 +930,7 @@
         "hi": "स्पर्श पर प्रतिक्रिया",
         "pt": "Feedback por toque"
       },
-      "adaptations": {
-        "en": {
-          "value": "Haptic feedback",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
-        }
-      }
+      "adaptations": {}
     },
     "takeBackMove": {
       "upstream_key": "takeback",
@@ -955,12 +946,7 @@
         "hi": "चाल को वापस लें",
         "pt": "Voltar jogada"
       },
-      "adaptations": {
-        "en": {
-          "value": "Take back move",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
-        }
-      }
+      "adaptations": {}
     },
     "whiteToMove": {
       "upstream_key": "whitePlays",
@@ -979,7 +965,7 @@
       "adaptations": {
         "en": {
           "value": "White to move",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Use the conventional FEN/board-editor side-to-move wording for the position being edited."
         }
       }
     },
@@ -1000,7 +986,7 @@
       "adaptations": {
         "en": {
           "value": "Black to move",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Use the conventional FEN/board-editor side-to-move wording for the position being edited."
         }
       }
     },
@@ -1021,7 +1007,7 @@
       "adaptations": {
         "en": {
           "value": "Brilliant",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Use the annotation name as a category heading in the compact move-count table; move is supplied by the surrounding context and accessibility message."
         },
         "hi": {
           "value": "अद्भुत चाल",
@@ -1046,7 +1032,7 @@
       "adaptations": {
         "en": {
           "value": "Good",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Use the annotation name as a category heading in the compact move-count table; move is supplied by the surrounding context and accessibility message."
         },
         "hi": {
           "value": "अच्छी चाल",
@@ -1071,7 +1057,7 @@
       "adaptations": {
         "en": {
           "value": "Interesting",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Use the annotation name as a category heading in the compact move-count table; move is supplied by the surrounding context and accessibility message."
         },
         "hi": {
           "value": "दिलचस्प चाल",
@@ -1096,7 +1082,7 @@
       "adaptations": {
         "en": {
           "value": "Dubious",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Use the annotation name as a category heading in the compact move-count table; move is supplied by the surrounding context and accessibility message."
         }
       }
     },
@@ -1117,7 +1103,7 @@
       "adaptations": {
         "en": {
           "value": "Random",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "The adjacent Your side control supplies the noun; the compact choice only needs Random."
         }
       }
     },
@@ -1138,7 +1124,7 @@
       "adaptations": {
         "en": {
           "value": "Draw by agreement.",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "This is an in-game status sentence; retain its ending full stop."
         }
       }
     },
@@ -1159,7 +1145,7 @@
       "adaptations": {
         "en": {
           "value": "Draw.",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "This is an in-game status sentence; retain its ending full stop."
         }
       }
     },
@@ -1180,7 +1166,7 @@
       "adaptations": {
         "en": {
           "value": "Premoves",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Use the upstream term as the setting heading; explanatory text is shown separately."
         },
         "ja": {
           "value": "プリムーブ",
@@ -1233,7 +1219,7 @@
       "adaptations": {
         "en": {
           "value": "King",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Piece-picker noun; omit the article used in the upstream lesson title."
         },
         "es": {
           "value": "Rey",
@@ -1270,7 +1256,7 @@
       "adaptations": {
         "en": {
           "value": "Queen",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Piece-picker noun; omit the article used in the upstream lesson title."
         },
         "es": {
           "value": "Dama",
@@ -1307,7 +1293,7 @@
       "adaptations": {
         "en": {
           "value": "Rook",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Piece-picker noun; omit the article used in the upstream lesson title."
         },
         "es": {
           "value": "Torre",
@@ -1344,7 +1330,7 @@
       "adaptations": {
         "en": {
           "value": "Bishop",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Piece-picker noun; omit the article used in the upstream lesson title."
         },
         "es": {
           "value": "Alfil",
@@ -1381,7 +1367,7 @@
       "adaptations": {
         "en": {
           "value": "Knight",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Piece-picker noun; omit the article used in the upstream lesson title."
         },
         "es": {
           "value": "Caballo",
@@ -1418,7 +1404,7 @@
       "adaptations": {
         "en": {
           "value": "Pawn",
-          "reason": "Existing concise English label for the same concept; preserves Mobile Maia screen context."
+          "reason": "Piece-picker noun; omit the article used in the upstream lesson title."
         },
         "es": {
           "value": "Peón",
@@ -1514,6 +1500,63 @@
         "hi": {
           "value": "PGN कॉपी हो गया",
           "reason": "No translation for this key in the pinned upstream catalog; retain the native-language fallback."
+        }
+      }
+    },
+    "yourMove": {
+      "upstream_key": "yourTurn",
+      "upstream": {
+        "en": "Your turn",
+        "ja": "あなたの手番です",
+        "zh": "轮到您走棋",
+        "ko": "내 차례",
+        "es": "Tu turno",
+        "de": "Du bist am Zug",
+        "fr": "À votre tour",
+        "ru": "Ваш ход",
+        "hi": "आपकी चाल",
+        "pt": "Sua vez"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Your turn.",
+          "reason": "Add sentence punctuation to the upstream turn announcement, matching in-game status messages."
+        },
+        "ja": {
+          "value": "あなたの手番です。",
+          "reason": "Add sentence punctuation to the upstream turn announcement, matching in-game status messages."
+        },
+        "zh": {
+          "value": "轮到你走棋。",
+          "reason": "Use 你 consistently with the app’s direct player instructions instead of switching to the formal 您; retain the same turn announcement and sentence punctuation."
+        },
+        "ko": {
+          "value": "당신 차례입니다.",
+          "reason": "Address the player in this status message; upstream 내 차례 means my turn and is a first-person label. Preserve the turn meaning in a sentence addressed to the user."
+        },
+        "es": {
+          "value": "Tu turno.",
+          "reason": "Add sentence punctuation to the upstream turn announcement, matching in-game status messages."
+        },
+        "de": {
+          "value": "Du bist am Zug.",
+          "reason": "Add sentence punctuation to the upstream turn announcement, matching in-game status messages."
+        },
+        "fr": {
+          "value": "À votre tour.",
+          "reason": "Add sentence punctuation to the upstream turn announcement, matching in-game status messages."
+        },
+        "ru": {
+          "value": "Ваш ход.",
+          "reason": "Add sentence punctuation to the upstream turn announcement, matching in-game status messages."
+        },
+        "hi": {
+          "value": "आपकी चाल।",
+          "reason": "Add sentence punctuation to the upstream turn announcement, matching in-game status messages."
+        },
+        "pt": {
+          "value": "Sua vez.",
+          "reason": "Add sentence punctuation to the upstream turn announcement, matching in-game status messages."
         }
       }
     }

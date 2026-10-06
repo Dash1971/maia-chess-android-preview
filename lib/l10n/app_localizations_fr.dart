@@ -819,10 +819,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get chessnutIsDisconnected => 'Chessnut est déconnecté.';
 
   @override
-  String get yourMove => 'À vous de jouer.';
+  String get yourMove => 'À votre tour.';
 
   @override
-  String get yourMoveChessnut => 'À vous de jouer sur Chessnut.';
+  String get yourMoveChessnut => 'À votre tour sur Chessnut.';
 
   @override
   String get chessnutReady => 'Chessnut est prêt.';
@@ -833,7 +833,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get takebackCompleteYourMove =>
-      'Retour effectué. À vous de jouer sur Chessnut.';
+      'Retour effectué. À votre tour sur Chessnut.';
 
   @override
   String get takebackCompleteThinking => 'Retour effectué. Maia réfléchit…';
@@ -908,7 +908,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get youResigned => 'Vous avez abandonné — Maia gagne.';
 
   @override
-  String get moveTakenBack => 'Retour effectué. À vous de jouer.';
+  String get moveTakenBack => 'Retour effectué. À votre tour.';
 
   @override
   String get connectingChessnut => 'Connexion à Chessnut…';
