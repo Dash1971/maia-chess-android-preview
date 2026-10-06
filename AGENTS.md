@@ -1,5 +1,9 @@
 # Mobile Maia development
 
+Mobile Maia follows Lichess as its baseline for clear, uncluttered chess UI/UX
+and free/open-source design philosophy. Shared terminology is part of that
+approach; Maia-specific capabilities retain their own meaning.
+
 
 Lichess is authoritative in **every supported language** where the chess concept
 or UI action has a direct equivalent. Read `docs/LICHESS_TERMINOLOGY.md` and use

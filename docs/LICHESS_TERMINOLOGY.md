@@ -1,6 +1,8 @@
 # Lichess terminology baseline — 2026-10-06
 
-Lichess is authoritative for direct equivalents in **all ten supported languages**.
+Mobile Maia follows Lichess as its baseline for clear, uncluttered chess UI/UX
+and free/open-source design philosophy. Consistent terminology is part of that
+approach. Lichess is authoritative for direct equivalents in **all ten supported languages**.
 This applies to chess terms and matching UI actions, not to Mobile Maia's engine
 behavior or analysis algorithms. Maia-specific text still needs its own translation.
 
