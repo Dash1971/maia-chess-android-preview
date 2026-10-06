@@ -278,7 +278,13 @@ void main() {
     await tester.pump();
     await tester.tap(find.byKey(const ValueKey('graph-tab')));
     await tester.pump();
-    await tester.tap(find.byKey(const ValueKey('run-computer-analysis')));
+    final runAnalysis = find.byKey(const ValueKey('run-computer-analysis'));
+    // The graph panel scrolls independently of the fixed bottom toolbar.
+    // A laid-out button may still be clipped on a phone-sized viewport.
+    await Scrollable.ensureVisible(tester.element(runAnalysis), alignment: 0.5);
+    await tester.pump();
+    expect(runAnalysis.hitTestable(), findsOneWidget);
+    await tester.tap(runAnalysis);
     for (var i = 0; i < 600; i++) {
       await tester.pump(const Duration(milliseconds: 100));
       if (find.byType(AnalysisGraph).evaluate().isNotEmpty) break;
@@ -367,7 +373,13 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('graph-tab')));
     await tester.pump();
-    await tester.tap(find.byKey(const ValueKey('run-computer-analysis')));
+    final runAnalysis = find.byKey(const ValueKey('run-computer-analysis'));
+    // The graph panel scrolls independently of the fixed bottom toolbar.
+    // A laid-out button may still be clipped on a phone-sized viewport.
+    await Scrollable.ensureVisible(tester.element(runAnalysis), alignment: 0.5);
+    await tester.pump();
+    expect(runAnalysis.hitTestable(), findsOneWidget);
+    await tester.tap(runAnalysis);
     await tester.pumpAndSettle();
     expect(find.byType(AnalysisGraph), findsOneWidget);
     await tester.tapAt(tester.getCenter(find.byType(AnalysisGraph)));
