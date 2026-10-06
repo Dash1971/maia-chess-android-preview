@@ -689,8 +689,8 @@ void main() {
       }
 
       await open();
-      await action('Take back move');
-      await action('Take back move');
+      await action('Takeback');
+      await action('Takeback');
       expect((await ActiveSessionStore.load())!['uciMoves'], hasLength(23));
       boardOf(tester).onMove!(dc.NormalMove.fromUci('d8e7'));
       await waitFor(tester, () => maia.requests.isNotEmpty);

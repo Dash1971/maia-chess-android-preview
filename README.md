@@ -18,8 +18,8 @@ screenshots, see the
 
 ## Next development cycle
 
-Beta.8 aligns shared chess and UI terminology with Lichess across all supported
-languages. It changes wording, not gameplay, engines, or saved formats. See the
+Beta.9 completes the shared chess/UI terminology and app-specific prose review
+against Lichess across all supported languages. It changes wording, not gameplay, engines, or saved formats. See the
 [terminology review](docs/LICHESS_TERMINOLOGY.md) for scope and context adaptations.
 
 Preview 2.3.0-beta.4 incorporates the Stable 2.2.2 application baseline,
