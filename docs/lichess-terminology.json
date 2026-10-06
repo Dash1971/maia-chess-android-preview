@@ -489,7 +489,12 @@
         "hi": "यहा से जारी करें",
         "pt": "Continuar daqui"
       },
-      "adaptations": {}
+      "adaptations": {
+        "hi": {
+          "value": "यहाँ से जारी करें",
+          "reason": "Correct the upstream Hindi spelling यहा to यहाँ; the action is unchanged."
+        }
+      }
     },
     "done": {
       "upstream_key": "done",
@@ -697,7 +702,12 @@
         "hi": "विविधताओं का विस्तार करें",
         "pt": "Expandir variações"
       },
-      "adaptations": {}
+      "adaptations": {
+        "hi": {
+          "value": "वैकल्पिक चालक्रम दिखाएँ",
+          "reason": "Describe showing folded alternative chess lines, not expanding diversity; use the same term as collapseVariations."
+        }
+      }
     },
     "collapseVariations": {
       "upstream_key": "collapseVariations",
@@ -738,6 +748,10 @@
         "ja": {
           "value": "変化を上位の手順にする",
           "reason": "Promotes one level; making the main line is a separate action."
+        },
+        "hi": {
+          "value": "वैकल्पिक चालक्रम का स्तर बढ़ाएँ",
+          "reason": "Describe promoting an alternative chess line by one level, not encouraging diversity; making it the main line is a separate action."
         }
       }
     },
@@ -827,31 +841,31 @@
       "adaptations": {}
     },
     "phaseOpening": {
-      "upstream_key": "puzzleThemeOpening",
+      "upstream_key": "opening",
       "upstream": {
         "en": "Opening",
-        "ja": "オープニング",
+        "ja": "序盤",
         "zh": "开局",
         "ko": "오프닝",
         "es": "Apertura",
         "de": "Eröffnung",
         "fr": "Ouverture",
         "ru": "Дебют",
-        "hi": "प्रारंभिक",
+        "hi": "ओपनिंग",
         "pt": "Abertura"
       },
       "adaptations": {}
     },
     "phaseMiddlegame": {
-      "upstream_key": "puzzleThemeMiddlegame",
+      "upstream_key": "middlegame",
       "upstream": {
         "en": "Middlegame",
-        "ja": "ミドルゲーム",
+        "ja": "中盤",
         "zh": "中局",
         "ko": "미들게임",
         "es": "Medio juego",
         "de": "Mittelspiel",
-        "fr": "Milieu de jeu",
+        "fr": "Milieu de partie",
         "ru": "Миттельшпиль",
         "hi": "मिडलगेम",
         "pt": "Meio-jogo"
@@ -859,15 +873,15 @@
       "adaptations": {}
     },
     "phaseEndgame": {
-      "upstream_key": "puzzleThemeEndgame",
+      "upstream_key": "endgame",
       "upstream": {
         "en": "Endgame",
-        "ja": "エンドゲーム",
+        "ja": "終盤",
         "zh": "残局",
         "ko": "엔드게임",
         "es": "Final",
         "de": "Endspiel",
-        "fr": "Finale",
+        "fr": "Fin de partie",
         "ru": "Эндшпиль",
         "hi": "एंडगेम",
         "pt": "Finais"
@@ -1421,6 +1435,85 @@
         "pt": {
           "value": "Peão",
           "reason": "Piece-picker noun; omit the article used in the upstream lesson title."
+        }
+      }
+    },
+    "whiteOutOfTime": {
+      "upstream_key": "whiteRanOutOfTime",
+      "upstream": {
+        "en": "White ran out of time",
+        "ja": "白が時間切れになりました",
+        "zh": "白方超时",
+        "ko": "백 시간 초과",
+        "es": "Las blancas se quedaron sin tiempo",
+        "de": "Zeitüberschreitung von Weiß",
+        "fr": "Les blancs sont tombés au temps",
+        "ru": "Белые просрочили время",
+        "hi": null,
+        "pt": "Brancas ficaram sem tempo"
+      },
+      "adaptations": {
+        "en": {
+          "value": "White ran out of time.",
+          "reason": "Retain existing English status-message punctuation."
+        },
+        "hi": {
+          "value": "सफ़ेद का समय समाप्त हो गया।",
+          "reason": "No translation for this key in the pinned upstream catalog; retain the native-language fallback."
+        }
+      }
+    },
+    "blackOutOfTime": {
+      "upstream_key": "blackRanOutOfTime",
+      "upstream": {
+        "en": "Black ran out of time",
+        "ja": "黒が時間切れになりました",
+        "zh": "黑方超时",
+        "ko": "흑 시간 초과",
+        "es": "Las negras se quedaron sin tiempo",
+        "de": "Zeitüberschreitung von Schwarz",
+        "fr": "Les noirs sont tombés au temps",
+        "ru": "У черных закончилось время",
+        "hi": null,
+        "pt": "Pretas ficaram sem tempo"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Black ran out of time.",
+          "reason": "Retain existing English status-message punctuation."
+        },
+        "hi": {
+          "value": "काले का समय समाप्त हो गया।",
+          "reason": "No translation for this key in the pinned upstream catalog; retain the native-language fallback."
+        }
+      }
+    },
+    "pgnCopied": {
+      "upstream_key": "mobilePgnCopied",
+      "upstream": {
+        "en": "PGN copied.",
+        "ja": "PGNをコピーしました。",
+        "zh": "PGN 复制成功！",
+        "ko": "PGN 복사 완료.",
+        "es": "PGN copiado.",
+        "de": "PGN kopiert.",
+        "fr": "PGN copié.",
+        "ru": null,
+        "hi": null,
+        "pt": "PGN copiado."
+      },
+      "adaptations": {
+        "en": {
+          "value": "PGN copied",
+          "reason": "Retain existing English status-message punctuation."
+        },
+        "ru": {
+          "value": "PGN скопирован",
+          "reason": "No translation for this key in the pinned upstream catalog; retain the native-language fallback."
+        },
+        "hi": {
+          "value": "PGN कॉपी हो गया",
+          "reason": "No translation for this key in the pinned upstream catalog; retain the native-language fallback."
         }
       }
     }

@@ -431,7 +431,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Lancez l’analyse de l’ordinateur pour obtenir le graphique d’évaluation et la précision des Blancs et des Noirs.';
 
   @override
-  String get pgnCopied => 'PGN copié';
+  String get pgnCopied => 'PGN copié.';
 
   @override
   String get fenCopied => 'FEN copiée';
@@ -631,10 +631,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get phaseOpening => 'Ouverture';
 
   @override
-  String get phaseMiddlegame => 'Milieu de jeu';
+  String get phaseMiddlegame => 'Milieu de partie';
 
   @override
-  String get phaseEndgame => 'Finale';
+  String get phaseEndgame => 'Fin de partie';
 
   @override
   String get pieceKing => 'Roi';
@@ -864,10 +864,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Partie nulle — temps écoulé, matériel adverse insuffisant pour mater.';
 
   @override
-  String get whiteOutOfTime => 'Les Blancs ont épuisé leur temps.';
+  String get whiteOutOfTime => 'Les blancs sont tombés au temps';
 
   @override
-  String get blackOutOfTime => 'Les Noirs ont épuisé leur temps.';
+  String get blackOutOfTime => 'Les noirs sont tombés au temps';
 
   @override
   String get makeMaiaLitMove =>
