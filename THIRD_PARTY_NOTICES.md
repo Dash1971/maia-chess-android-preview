@@ -65,17 +65,16 @@ is distributed under AGPL-3.0-only as permitted by section 13 of AGPL-3.0.
 ## Maia-3
 
 - Project: <https://github.com/CSSLab/maia3>
-- Models: <https://huggingface.co/UofTCSSLab/Maia3-5M> and
-  <https://huggingface.co/UofTCSSLab/Maia3-79M>
+- Model: <https://huggingface.co/UofTCSSLab/Maia3-79M>
 - Copyright: University of Toronto CSSLab contributors
 - Licence: GNU Affero General Public License v3.0
 
-`assets/models/maia3-5m.onnx` and `assets/models/maia3-79m.onnx` are converted
-forms of the released Maia-3 5M and 79M checkpoints. The Dev flavor uses 5M for
-fast UI iteration; qualified Preview releases use 79M. The corresponding
-architecture, original checkpoints, inference source, and licence are available
-from the links above. The conversion tool is included in
-`tool/export_maia3_onnx.py`.
+`assets/models/maia3-79m.onnx` is a converted form of the released Maia-3 79M
+checkpoint. The corresponding architecture, original checkpoint, inference
+source, and licence are available from the link above. The conversion tool is
+included in `tool/export_maia3_onnx.py`. Exact source revisions, checkpoint and
+conversion hashes, and reproduction instructions are recorded in
+`MODEL_PROVENANCE.md`.
 
 ## Stockfish and multistockfish
 
@@ -159,3 +158,18 @@ A–E source files. The bundled CC0 legal text is retained beside the dataset.
 
 - Project: <https://github.com/flutter/flutter>
 - Licence: BSD 3-Clause
+
+## Lichess UI translations
+
+- Project: <https://github.com/lichess-org/mobile>
+- Pinned source: `99dd3e0e4859afc7de37290b3f1905045af92004`
+- Source catalogs: `lib/l10n/app_{en,ja,zh,ko,es,de,fr,ru,hi,pt_BR}.arb`
+- Copyright: Lichess contributors and community translators
+- Licence: GNU General Public License v3.0 or later
+
+Shared chess and UI terminology is adapted from these catalogs. The exact
+reference strings and context adaptations are recorded in
+`docs/lichess-terminology.json`; review and maintenance are documented in
+`docs/LICHESS_TERMINOLOGY.md`. The adapted material remains subject to GPL-3.0;
+Mobile Maia as a combined application is distributed under AGPL-3.0-only as
+permitted by section 13 of AGPL-3.0.
