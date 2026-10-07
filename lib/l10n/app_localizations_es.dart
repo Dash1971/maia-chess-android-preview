@@ -1115,4 +1115,103 @@ class AppLocalizationsEs extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'Tablas ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental =>
+      'Tablero electrónico (experimental)';
+
+  @override
+  String get connectBoard => 'Conectar tablero';
+
+  @override
+  String get chooseBoard => 'Elegir un tablero';
+
+  @override
+  String get chooseAnotherBoard => 'Elegir otro tablero';
+
+  @override
+  String get boardSearching => 'Buscando tableros…';
+
+  @override
+  String get boardConnecting => 'Conectando al tablero…';
+
+  @override
+  String get boardDisconnected => 'Tablero desconectado';
+
+  @override
+  String get boardConnectionError =>
+      'No se pudo conectar. Comprueba el Bluetooth y el tablero e inténtalo de nuevo.';
+
+  @override
+  String get boardStartingPosition =>
+      'Coloca la posición inicial estándar en tu tablero.';
+
+  @override
+  String get boardReady => 'Tablero listo';
+
+  @override
+  String get boardExperimentalNotice =>
+      'La compatibilidad con nuevos tableros es experimental. Verifica las jugadas en ambas pantallas e informa de los problemas de conexión.';
+
+  @override
+  String get boardGameRestriction =>
+      'Las partidas con tablero electrónico empiezan desde la posición inicial estándar y sin límite de tiempo.';
+
+  @override
+  String get boardConfirmSetup => 'He colocado la posición inicial';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'Comprueba todas las piezas antes de empezar. Este tablero no puede identificar el tipo de pieza.';
+
+  @override
+  String get boardChooseMove => 'Confirma tu jugada en el tablero';
+
+  @override
+  String get boardAmbiguousMove =>
+      'El tablero no puede distinguir estas jugadas. Elige la que has realizado.';
+
+  @override
+  String get boardUnavailable =>
+      'El tablero no está listo. Vuelve a conectarlo o continúa en tu teléfono.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'Pulsa NEW GAME otra vez antes de 2,5 segundos para confirmar o usa los botones de abajo.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'Para confirmar en el tablero, pulsa NEW GAME dos veces en 2,5 segundos.';
+
+  @override
+  String get boardPhysicalMove => 'Completa la jugada en tu tablero.';
+
+  @override
+  String get boardResetPhysical =>
+      'Restablece en el tablero la posición que aparece en pantalla antes de continuar.';
+
+  @override
+  String get boardNoResults =>
+      'No se ha encontrado ningún tablero compatible. Activa tu tablero e inténtalo de nuevo.';
+
+  @override
+  String get boardWaitingForSelection => 'Elige un tablero para conectar.';
+
+  @override
+  String get boardReconnect => 'Reconectar tablero';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus está bloqueado. Esta versión Dev no incluye la clave de inicialización del fabricante.';
+
+  @override
+  String get boardMotorRecovery =>
+      'Continúa en tu teléfono. Este adaptador experimental no puede restablecer con seguridad el estado del motor del tablero.';
+
+  @override
+  String get boardConfirmPosition => 'Confirmar la posición del tablero físico';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'Comprueba que todas las piezas coincidan con la posición en pantalla.';
 }

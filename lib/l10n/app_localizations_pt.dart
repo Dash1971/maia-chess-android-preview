@@ -1123,4 +1123,103 @@ class AppLocalizationsPt extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'Empate ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental =>
+      'Tabuleiro eletrônico (experimental)';
+
+  @override
+  String get connectBoard => 'Conectar tabuleiro';
+
+  @override
+  String get chooseBoard => 'Escolher um tabuleiro';
+
+  @override
+  String get chooseAnotherBoard => 'Escolher outro tabuleiro';
+
+  @override
+  String get boardSearching => 'Procurando tabuleiros…';
+
+  @override
+  String get boardConnecting => 'Conectando ao tabuleiro…';
+
+  @override
+  String get boardDisconnected => 'Tabuleiro desconectado';
+
+  @override
+  String get boardConnectionError =>
+      'Não foi possível conectar. Verifique o Bluetooth e o tabuleiro e tente novamente.';
+
+  @override
+  String get boardStartingPosition =>
+      'Monte a posição inicial padrão no seu tabuleiro.';
+
+  @override
+  String get boardReady => 'Tabuleiro pronto';
+
+  @override
+  String get boardExperimentalNotice =>
+      'O suporte a novos tabuleiros é experimental. Confira os lances nas duas telas e relate problemas de conexão.';
+
+  @override
+  String get boardGameRestriction =>
+      'As partidas com tabuleiro eletrônico começam na posição inicial padrão e sem limite de tempo.';
+
+  @override
+  String get boardConfirmSetup => 'Montei a posição inicial';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'Confira cada peça antes de começar. Este tabuleiro não consegue identificar o tipo de peça.';
+
+  @override
+  String get boardChooseMove => 'Confirme seu lance no tabuleiro';
+
+  @override
+  String get boardAmbiguousMove =>
+      'O tabuleiro não consegue distinguir esses lances. Escolha o lance que você fez.';
+
+  @override
+  String get boardUnavailable =>
+      'O tabuleiro não está pronto. Reconecte ou continue no celular.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'Pressione NEW GAME novamente em até 2,5 segundos para confirmar ou use os botões abaixo.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'Para confirmar no tabuleiro, pressione NEW GAME duas vezes em até 2,5 segundos.';
+
+  @override
+  String get boardPhysicalMove => 'Complete o lance no seu tabuleiro.';
+
+  @override
+  String get boardResetPhysical =>
+      'Antes de continuar, restaure no tabuleiro a posição exibida na tela.';
+
+  @override
+  String get boardNoResults =>
+      'Nenhum tabuleiro compatível encontrado. Ative seu tabuleiro e tente novamente.';
+
+  @override
+  String get boardWaitingForSelection => 'Escolha um tabuleiro para conectar.';
+
+  @override
+  String get boardReconnect => 'Reconectar tabuleiro';
+
+  @override
+  String get boardLockedPegasus =>
+      'O Pegasus está bloqueado. Esta versão Dev não inclui a chave de inicialização do fabricante.';
+
+  @override
+  String get boardMotorRecovery =>
+      'Continue no celular. Este adaptador experimental não consegue restaurar com segurança o estado do motor do tabuleiro.';
+
+  @override
+  String get boardConfirmPosition => 'Confirmar a posição do tabuleiro físico';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'Confira se todas as peças correspondem à posição na tela.';
 }

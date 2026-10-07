@@ -1018,4 +1018,89 @@ class AppLocalizationsZh extends AppLocalizations {
   String recentDrawResult(String result) {
     return '和棋（$result）';
   }
+
+  @override
+  String get electronicBoardExperimental => '电子棋盘（实验性功能）';
+
+  @override
+  String get connectBoard => '连接棋盘';
+
+  @override
+  String get chooseBoard => '选择棋盘';
+
+  @override
+  String get chooseAnotherBoard => '选择其他棋盘';
+
+  @override
+  String get boardSearching => '正在搜索棋盘…';
+
+  @override
+  String get boardConnecting => '正在连接棋盘…';
+
+  @override
+  String get boardDisconnected => '棋盘连接已断开';
+
+  @override
+  String get boardConnectionError => '无法连接。请检查蓝牙和棋盘，然后重试。';
+
+  @override
+  String get boardStartingPosition => '请在棋盘上摆好标准起始局面。';
+
+  @override
+  String get boardReady => '棋盘已就绪';
+
+  @override
+  String get boardExperimentalNotice => '新棋盘支持仍处于实验阶段。请核对两个屏幕上的走法，并报告连接问题。';
+
+  @override
+  String get boardGameRestriction => '电子棋盘对局从标准起始局面开始，时间不限。';
+
+  @override
+  String get boardConfirmSetup => '我已摆好起始局面';
+
+  @override
+  String get boardConfirmSetupHelp => '开始前请检查每个棋子。此棋盘无法识别棋子种类。';
+
+  @override
+  String get boardChooseMove => '确认棋盘上的走法';
+
+  @override
+  String get boardAmbiguousMove => '棋盘无法区分这些走法。请选择你实际走出的那一步。';
+
+  @override
+  String get boardUnavailable => '棋盘尚未就绪。请重新连接，或在手机上继续。';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      '请在2.5秒内再次按下NEW GAME以确认，或使用下方按钮。';
+
+  @override
+  String get boardNewGameConfirmationExpired => '如需在棋盘上确认，请在2.5秒内按两次NEW GAME。';
+
+  @override
+  String get boardPhysicalMove => '请在棋盘上完成这一步。';
+
+  @override
+  String get boardResetPhysical => '继续前，请将棋盘恢复为屏幕上显示的局面。';
+
+  @override
+  String get boardNoResults => '未找到支持的棋盘。请唤醒棋盘后重试。';
+
+  @override
+  String get boardWaitingForSelection => '请选择要连接的棋盘。';
+
+  @override
+  String get boardReconnect => '重新连接棋盘';
+
+  @override
+  String get boardLockedPegasus => 'Pegasus已锁定。此Dev版本未包含厂商的初始化密钥。';
+
+  @override
+  String get boardMotorRecovery => '请在手机上继续。此实验性连接功能无法安全恢复棋盘的电机状态。';
+
+  @override
+  String get boardConfirmPosition => '确认实体棋盘局面';
+
+  @override
+  String get boardConfirmPositionHelp => '请确认每个棋子的位置都与屏幕上显示的局面一致。';
 }

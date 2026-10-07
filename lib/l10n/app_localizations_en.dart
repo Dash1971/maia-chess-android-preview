@@ -1097,4 +1097,102 @@ class AppLocalizationsEn extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'Draw ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental => 'Electronic board (experimental)';
+
+  @override
+  String get connectBoard => 'Connect board';
+
+  @override
+  String get chooseBoard => 'Choose a board';
+
+  @override
+  String get chooseAnotherBoard => 'Choose another board';
+
+  @override
+  String get boardSearching => 'Searching for boards…';
+
+  @override
+  String get boardConnecting => 'Connecting to board…';
+
+  @override
+  String get boardDisconnected => 'Board disconnected';
+
+  @override
+  String get boardConnectionError =>
+      'Could not connect. Check Bluetooth and the board, then retry.';
+
+  @override
+  String get boardStartingPosition =>
+      'Set up the standard starting position on your board.';
+
+  @override
+  String get boardReady => 'Board ready';
+
+  @override
+  String get boardExperimentalNotice =>
+      'New board support is experimental. Please verify moves on both screens and report connection problems.';
+
+  @override
+  String get boardGameRestriction =>
+      'Electronic-board games start from the standard position and use unlimited time.';
+
+  @override
+  String get boardConfirmSetup => 'I have set up the starting position';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'Check every piece before starting. This board cannot verify piece identity.';
+
+  @override
+  String get boardChooseMove => 'Confirm your board move';
+
+  @override
+  String get boardAmbiguousMove =>
+      'The board cannot distinguish these moves. Choose the move you played.';
+
+  @override
+  String get boardUnavailable =>
+      'This board is not ready. Reconnect, or continue on your phone.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'Press NEW GAME again within 2.5 seconds to confirm, or use the buttons below.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'To confirm on the board, press NEW GAME twice within 2.5 seconds.';
+
+  @override
+  String get boardPhysicalMove => 'Complete the move on your board.';
+
+  @override
+  String get boardResetPhysical =>
+      'Restore the position shown on screen before continuing.';
+
+  @override
+  String get boardNoResults =>
+      'No supported board found. Wake your board and try again.';
+
+  @override
+  String get boardWaitingForSelection => 'Choose a board to connect.';
+
+  @override
+  String get boardReconnect => 'Reconnect board';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus is locked. This Dev build does not include its manufacturer initialization key.';
+
+  @override
+  String get boardMotorRecovery =>
+      'Continue on your phone. This experimental adapter cannot safely restore the board’s motor state.';
+
+  @override
+  String get boardConfirmPosition => 'Confirm the physical position';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'Check that every piece matches the position on screen.';
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -111,7 +112,9 @@ void main() {
     );
     expect(
       find.text(
-        'Chessnut play supports standard-position, unlimited games only.',
+        appFlavor == 'dev'
+            ? 'Electronic-board games start from the standard position and use unlimited time.'
+            : 'Chessnut play supports standard-position, unlimited games only.',
       ),
       findsOneWidget,
     );
