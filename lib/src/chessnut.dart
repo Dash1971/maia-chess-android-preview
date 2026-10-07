@@ -92,12 +92,23 @@ class ChessnutPlatformTransport implements ElectronicBoardTransport {
   static const EventChannel _nativeEvents = EventChannel(
     'maia_chess/chessnut/events',
   );
-  static final _decoder = ChessnutEventDecoder(
-    detailed: appFlavor == 'dev' || appFlavor == 'preview',
-  );
-  static final Stream<ElectronicBoardEvent> _events = _nativeEvents
-      .receiveBroadcastStream()
-      .map(_decoder.decode);
+  static final _rawEvents = _nativeEvents.receiveBroadcastStream();
+  // Each listener owns its decoder history. Mapping a broadcast stream with a
+  // shared stateful decoder would process each frame twice with two listeners,
+  // consuming recovery evidence before the game screen could receive it.
+  static final Stream<ElectronicBoardEvent> _events = Stream.multi((
+    controller,
+  ) {
+    final decoder = ChessnutEventDecoder(
+      detailed: appFlavor == 'dev' || appFlavor == 'preview',
+    );
+    final subscription = _rawEvents.listen(
+      (value) => controller.addSync(decoder.decode(value)),
+      onError: controller.addErrorSync,
+      onDone: controller.closeSync,
+    );
+    controller.onCancel = subscription.cancel;
+  }, isBroadcast: true);
 
   @override
   Stream<ElectronicBoardEvent> get events => _events;
