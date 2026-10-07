@@ -413,11 +413,12 @@ extension _ElectronicBoardFlow on _GamePageState {
         session != _boardConnectionSession) {
       return;
     }
-    final generation = _gameGeneration;
+    final sourceGame = _game;
     _physicalMoveInProgress = true;
     try {
       await transport.acknowledgeMove(true, session);
       if (!mounted ||
+          !identical(sourceGame, _game) ||
           fen != _game.fen ||
           session != _boardConnectionSession ||
           !_chessnutGameActive) {
@@ -436,13 +437,15 @@ extension _ElectronicBoardFlow on _GamePageState {
       _chessnutPosition = ChessnutProtocol.pieceMapFromFen(_game.fen);
     } catch (e, s) {
       if (mounted &&
-          generation == _gameGeneration &&
+          identical(sourceGame, _game) &&
           fen == _game.fen &&
           _chessnutGameActive) {
         _boardFailure(e, s, session: session);
       }
     } finally {
-      if (generation == _gameGeneration) _physicalMoveInProgress = false;
+      if (identical(sourceGame, _game) && session == _boardConnectionSession) {
+        _physicalMoveInProgress = false;
+      }
     }
   }
 
@@ -483,6 +486,7 @@ extension _ElectronicBoardFlow on _GamePageState {
   }
 
   Future<void> _sendMotorMove(String uci) async {
+    final sourceGame = _game;
     final session = _boardConnectionSession;
     final epoch = _boardInteractionEpoch;
     if (session == null || _discovery == null) return;
@@ -493,6 +497,7 @@ extension _ElectronicBoardFlow on _GamePageState {
         !_chessnutGameActive ||
         !_chessnutReady ||
         session != _boardConnectionSession ||
+        !identical(sourceGame, _game) ||
         _pendingPhysicalMaiaMove != uci) {
       return;
     }
@@ -514,7 +519,9 @@ extension _ElectronicBoardFlow on _GamePageState {
     try {
       await _discovery!.movePiece(uci, session);
     } catch (e, s) {
-      _boardFailure(e, s, epoch: epoch, session: session);
+      if (mounted && identical(sourceGame, _game) && _chessnutGameActive) {
+        _boardFailure(e, s, session: session);
+      }
     }
   }
 
