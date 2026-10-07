@@ -1556,6 +1556,23 @@ class _GamePageState extends State<GamePage>
       return;
     }
     if (event.type == 'position') {
+      if (event.diagnostic != null) {
+        unawaited(
+          AppDiagnostics.recordEvent('chessnut-position ${event.diagnostic}'),
+        );
+      }
+      if (event.connectionState == ElectronicBoardConnectionState.ready &&
+          _chessnutState == ElectronicBoardConnectionState.error) {
+        // Discard the pre-error board snapshot before restoring readiness.
+        // The fresh position below is the only one that may drive game input.
+        _chessnutPosition = null;
+        _handleChessnutEvent(
+          const ElectronicBoardEvent(
+            type: 'status',
+            connectionState: ElectronicBoardConnectionState.ready,
+          ),
+        );
+      }
       final position = event.position;
       if (position == null) return;
       setState(() => _chessnutPosition = position);
@@ -1567,8 +1584,7 @@ class _GamePageState extends State<GamePage>
     if (nextState != _chessnutState) {
       _chessnutLeds.invalidate();
     }
-    if (nextState != _chessnutState ||
-        nextState == ElectronicBoardConnectionState.error) {
+    if (nextState != _chessnutState || event.diagnostic != null) {
       final detail = event.diagnostic;
       unawaited(
         AppDiagnostics.recordEvent(

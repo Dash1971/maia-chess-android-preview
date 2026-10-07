@@ -322,7 +322,7 @@ class ChessnutBridge(
             characteristic: BluetoothGattCharacteristic,
         ) {
             if (this@ChessnutBridge.gatt === gatt) {
-                handleNotification(characteristic.uuid, characteristic.value ?: byteArrayOf())
+                handleNotification(gatt, characteristic.uuid, characteristic.value ?: byteArrayOf())
             }
         }
 
@@ -332,7 +332,7 @@ class ChessnutBridge(
             value: ByteArray,
         ) {
             if (this@ChessnutBridge.gatt === gatt) {
-                handleNotification(characteristic.uuid, value)
+                handleNotification(gatt, characteristic.uuid, value)
             }
         }
 
@@ -451,16 +451,22 @@ class ChessnutBridge(
         enqueueWrite(BATTERY_COMMAND)
     }
 
-    private fun handleNotification(uuid: UUID, value: ByteArray) {
+    private fun handleNotification(source: BluetoothGatt, uuid: UUID, value: ByteArray) {
+        val snapshot = value.copyOf()
         mainHandler.post {
-            if (uuid == DATA_UUID && value.size >= 32) {
+            if (gatt !== source) return@post
+            val value = snapshot
+            val looksLikePosition = value.size >= 32 ||
+                (value.size >= 2 && value[0] == 0x01.toByte() && value[1] == 0x24.toByte())
+            if (uuid == DATA_UUID && looksLikePosition) {
                 emit(
                     mapOf(
                         "type" to "position",
                         "data" to value.map { it.toInt() and 0xff },
                         "nativeReady" to ready,
                         "gattPresent" to (gatt != null),
-                    )
+                    ),
+                    expectedGatt = source,
                 )
             } else if (uuid == CONFIRM_UUID &&
                 value.size >= 4 && value[0] == 0x2a.toByte() && value[1] == 0x02.toByte()
@@ -473,7 +479,8 @@ class ChessnutBridge(
                             "type" to "battery",
                             "percent" to percent,
                             "charging" to ((raw and 0x80) != 0),
-                        )
+                        ),
+                        expectedGatt = source,
                     )
                 }
             }
@@ -683,8 +690,11 @@ class ChessnutBridge(
         emitError(message)
     }
 
-    private fun emit(event: Map<String, Any>) {
-        mainHandler.post { eventSink?.success(event) }
+    private fun emit(event: Map<String, Any>, expectedGatt: BluetoothGatt? = null) {
+        mainHandler.post {
+            if (expectedGatt != null && gatt !== expectedGatt) return@post
+            eventSink?.success(event)
+        }
     }
 
     fun diagnosticsSnapshot(): Map<String, Any> {
