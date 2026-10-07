@@ -3,6 +3,7 @@ part of '../main.dart';
 enum ElectronicBoardConnectionState {
   disconnected,
   scanning,
+  choosing,
   connecting,
   connected,
   ready,
@@ -19,6 +20,11 @@ class ElectronicBoardEvent {
     this.batteryPercent,
     this.charging,
     this.diagnostic,
+    this.boardKind,
+    this.boardId,
+    this.connectionSession,
+    this.candidates,
+    this.data,
   });
 
   final String type;
@@ -29,6 +35,11 @@ class ElectronicBoardEvent {
   final int? batteryPercent;
   final bool? charging;
   final String? diagnostic;
+  final BoardKind? boardKind;
+  final String? boardId;
+  final String? connectionSession;
+  final List<BoardCandidate>? candidates;
+  final List<int>? data;
 }
 
 abstract interface class ElectronicBoardTransport {
@@ -83,7 +94,7 @@ class ChessnutLedController {
   }
 }
 
-class ChessnutPlatformTransport implements ElectronicBoardTransport {
+class ChessnutPlatformTransport implements DiscoverableBoardTransport {
   ChessnutPlatformTransport._();
 
   static final ChessnutPlatformTransport instance =
@@ -114,6 +125,48 @@ class ChessnutPlatformTransport implements ElectronicBoardTransport {
   Stream<ElectronicBoardEvent> get events => _events;
 
   int _connectionGeneration = 0;
+
+  @override
+  Future<void> discoverBoards() {
+    _connectionGeneration++;
+    return _methods.invokeMethod<void>('discover');
+  }
+
+  @override
+  Future<void> selectBoard(String id) {
+    _connectionGeneration++;
+    return _methods.invokeMethod<void>('selectBoard', {'candidateId': id});
+  }
+
+  @override
+  Future<void> reconnectBoard(String? boardId) {
+    _connectionGeneration++;
+    return _methods.invokeMethod<void>('connect', {
+      'mode': 'reconnect',
+      'boardId': ?boardId,
+    });
+  }
+
+  @override
+  Future<void> startBoardGame(String player, String connectionSession) =>
+      _sendCommand('startBoardGame', {
+        'player': player,
+        'connectionSession': connectionSession,
+      });
+  @override
+  Future<void> movePiece(String uci, String connectionSession) => _sendCommand(
+    'movePiece',
+    {'uci': uci, 'connectionSession': connectionSession},
+  );
+  @override
+  Future<void> confirmPosition(String connectionSession) =>
+      _sendCommand('confirmPosition', {'connectionSession': connectionSession});
+  @override
+  Future<void> acknowledgeMove(bool accepted, String connectionSession) =>
+      _sendCommand('acknowledgeMove', {
+        'accepted': accepted,
+        'connectionSession': connectionSession,
+      });
 
   @override
   Future<void> connect() {
@@ -162,6 +215,9 @@ class ChessnutPlatformTransport implements ElectronicBoardTransport {
   @override
   Future<void> setLeds(Iterable<String> squares) => _sendCommand('setLeds', {
     'command': ChessnutProtocol.encodeLedCommand(squares),
+    'squares': [
+      for (final s in squares) (8 - int.parse(s[1])) * 8 + s.codeUnitAt(0) - 97,
+    ],
   });
 
   @override
@@ -205,6 +261,48 @@ class ChessnutEventDecoder {
     final event = value;
     final type = event['type'];
     final now = _elapsedMs();
+    final boardKind = BoardKind.values
+        .where((k) => k.name == event['boardKind'])
+        .firstOrNull;
+    final boardId = event['boardId'] is String
+        ? event['boardId'] as String
+        : null;
+    final connectionSession = event['connectionSession'] is String
+        ? event['connectionSession'] as String
+        : null;
+    if (type == 'newGame' || type == 'boardData' || type == 'candidates') {
+      final raw = event['data'];
+      final rows = event['candidates'];
+      return ElectronicBoardEvent(
+        type: type as String,
+        boardKind: boardKind,
+        boardId: boardId,
+        connectionSession: connectionSession,
+        data:
+            raw is List &&
+                raw.length <= 512 &&
+                raw.every((v) => v is int && v >= 0 && v <= 255)
+            ? raw.cast<int>()
+            : null,
+        candidates: rows is List && rows.length <= 32
+            ? [
+                for (final row in rows)
+                  if (row is Map &&
+                      row['id'] is String &&
+                      row['name'] is String &&
+                      BoardKind.values.any((k) => k.name == row['kind']))
+                    BoardCandidate(
+                      row['id'] as String,
+                      (row['name'] as String).substring(
+                        0,
+                        min(64, (row['name'] as String).length),
+                      ),
+                      BoardKind.values.firstWhere((k) => k.name == row['kind']),
+                    ),
+              ]
+            : null,
+      );
+    }
     if (type == 'position') {
       final rawData = event['data'];
       try {
@@ -232,6 +330,9 @@ class ChessnutEventDecoder {
         _reconnectAfterFailure = false;
         return ElectronicBoardEvent(
           type: 'position',
+          boardKind: boardKind,
+          boardId: boardId,
+          connectionSession: connectionSession,
           position: position,
           // Parsing a position is not proof that GATT is ready. Only recover
           // application readiness when the native bridge confirms both flags.
@@ -268,6 +369,9 @@ class ChessnutEventDecoder {
       final percent = event['percent'];
       return ElectronicBoardEvent(
         type: 'battery',
+        boardKind: boardKind,
+        boardId: boardId,
+        connectionSession: connectionSession,
         batteryPercent: percent is int && percent >= 0 && percent <= 100
             ? percent
             : null,
@@ -286,6 +390,9 @@ class ChessnutEventDecoder {
     }
     return ElectronicBoardEvent(
       type: 'status',
+      boardKind: boardKind,
+      boardId: boardId,
+      connectionSession: connectionSession,
       connectionState: state,
       message: event['message'] is String ? event['message'] as String : null,
       deviceName: event['deviceName'] is String

@@ -17,6 +17,7 @@ import 'package:flutter/foundation.dart'
         LicenseEntryWithLineBreaks,
         mapEquals,
         listEquals,
+        setEquals,
         visibleForTesting;
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' show NumberFormat;
@@ -42,6 +43,9 @@ part 'src/active_session_store.dart';
 part 'src/session_model.dart';
 part 'src/openings.dart';
 part 'src/chessnut.dart';
+part 'src/electronic_board.dart';
+part 'src/board_reset.dart';
+part 'src/board_flow.dart';
 part 'src/history_navigation.dart';
 part 'src/sound_effect.dart';
 part 'src/game_feedback.dart';

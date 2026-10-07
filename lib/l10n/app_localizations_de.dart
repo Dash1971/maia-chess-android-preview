@@ -1116,4 +1116,104 @@ class AppLocalizationsDe extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'Remis ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental =>
+      'Elektronisches Schachbrett (experimentell)';
+
+  @override
+  String get connectBoard => 'Brett verbinden';
+
+  @override
+  String get chooseBoard => 'Brett auswählen';
+
+  @override
+  String get chooseAnotherBoard => 'Anderes Brett auswählen';
+
+  @override
+  String get boardSearching => 'Bretter werden gesucht…';
+
+  @override
+  String get boardConnecting => 'Verbindung zum Brett wird hergestellt…';
+
+  @override
+  String get boardDisconnected => 'Brett getrennt';
+
+  @override
+  String get boardConnectionError =>
+      'Verbindung fehlgeschlagen. Prüfe Bluetooth und das Brett und versuche es erneut.';
+
+  @override
+  String get boardStartingPosition =>
+      'Baue die normale Anfangsposition auf deinem Brett auf.';
+
+  @override
+  String get boardReady => 'Brett bereit';
+
+  @override
+  String get boardExperimentalNotice =>
+      'Die Unterstützung neuer Bretter ist experimentell. Prüfe die Züge auf beiden Bildschirmen und melde Verbindungsprobleme.';
+
+  @override
+  String get boardGameRestriction =>
+      'Partien mit elektronischem Brett beginnen in der normalen Anfangsposition und ohne Zeitlimit.';
+
+  @override
+  String get boardConfirmSetup => 'Ich habe die Anfangsposition aufgebaut';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'Prüfe vor dem Start jede Figur. Dieses Brett kann die Figurenart nicht erkennen.';
+
+  @override
+  String get boardChooseMove => 'Brettzug bestätigen';
+
+  @override
+  String get boardAmbiguousMove =>
+      'Das Brett kann diese Züge nicht unterscheiden. Wähle den Zug, den du gespielt hast.';
+
+  @override
+  String get boardUnavailable =>
+      'Das Brett ist nicht bereit. Verbinde es erneut oder spiele auf deinem Smartphone weiter.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'Drücke zur Bestätigung innerhalb von 2,5 Sekunden erneut NEW GAME oder nutze die Schaltflächen unten.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'Drücke zur Bestätigung am Brett zweimal innerhalb von 2,5 Sekunden NEW GAME.';
+
+  @override
+  String get boardPhysicalMove =>
+      'Führe den Zug auf deinem Brett vollständig aus.';
+
+  @override
+  String get boardResetPhysical =>
+      'Stelle vor dem Fortsetzen die auf dem Bildschirm angezeigte Stellung auf dem Brett wieder her.';
+
+  @override
+  String get boardNoResults =>
+      'Kein unterstütztes Brett gefunden. Wecke dein Brett auf und versuche es erneut.';
+
+  @override
+  String get boardWaitingForSelection => 'Wähle ein Brett zum Verbinden.';
+
+  @override
+  String get boardReconnect => 'Brett erneut verbinden';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus ist gesperrt. Diese Dev-Version enthält keinen Initialisierungsschlüssel des Herstellers.';
+
+  @override
+  String get boardMotorRecovery =>
+      'Spiele auf deinem Smartphone weiter. Dieser experimentelle Adapter kann den Motorzustand des Bretts nicht sicher wiederherstellen.';
+
+  @override
+  String get boardConfirmPosition => 'Stellung auf dem Brett bestätigen';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'Prüfe, ob jede Figur mit der Stellung auf dem Bildschirm übereinstimmt.';
 }

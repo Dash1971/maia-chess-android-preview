@@ -116,3 +116,23 @@ fonts and native-language acceptance still require human review.
 
 Lichess translation attribution is included in `THIRD_PARTY_NOTICES.md`, which is
 bundled in the app's license information.
+
+## Experimental electronic-board Dev messages
+
+Added 28 electronic-board messages in all ten catalogs for device selection,
+connection recovery, physical setup, ambiguous moves and hardware-button
+confirmation. These are app-specific device operations; the pinned Lichess
+reference has no direct equivalent for the complete messages. They reuse the
+existing chess vocabulary for moves, positions, pieces and unlimited time where
+the meaning applies. The standard physical starting arrangement is described
+explicitly rather than copying a board-editor action label. Japanese uses the
+established physical-setup term 初期配置; Hindi uses a natural sentence form
+for the starting arrangement, rather than the upstream standalone label with
+a trailing colon. Unlimited-time prose describes the absence of a clock; it
+does not mechanically insert a standalone adjective into an instruction.
+
+`NEW GAME` remains unchanged in every language because it names the physical
+button printed on supported hardware. The surrounding instructions are translated,
+including the two-press confirmation window. Bluetooth likewise retains its
+protocol name. No new placeholders or English prose fallbacks were introduced.
+The translations and review CSV remain provisional pending native-speaker review.

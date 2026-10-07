@@ -1452,5 +1452,117 @@
         "description": "Canonical chess result: 1-0, 0-1 or 1/2-1/2; preserve notation."
       }
     }
+  },
+  "electronicBoardExperimental": "Electronic board (experimental)",
+  "@electronicBoardExperimental": {
+    "description": "Electronic board Dev support: Experimental electronic-board settings section title; includes occupancy-only and motorized boards."
+  },
+  "connectBoard": "Connect board",
+  "@connectBoard": {
+    "description": "Electronic board Dev support: Button that opens electronic-board scan and connection flow."
+  },
+  "chooseBoard": "Choose a board",
+  "@chooseBoard": {
+    "description": "Electronic board Dev support: Discovered-board picker title."
+  },
+  "chooseAnotherBoard": "Choose another board",
+  "@chooseAnotherBoard": {
+    "description": "Electronic board Dev support: Button to rescan and select a different board."
+  },
+  "boardSearching": "Searching for boards…",
+  "@boardSearching": {
+    "description": "Electronic board Dev support: Bluetooth board scan in progress."
+  },
+  "boardConnecting": "Connecting to board…",
+  "@boardConnecting": {
+    "description": "Electronic board Dev support: Bluetooth board connection in progress."
+  },
+  "boardDisconnected": "Board disconnected",
+  "@boardDisconnected": {
+    "description": "Electronic board Dev support: Board connection lost status."
+  },
+  "boardConnectionError": "Could not connect. Check Bluetooth and the board, then retry.",
+  "@boardConnectionError": {
+    "description": "Electronic board Dev support: Connection failure recovery instruction; Bluetooth is a product/protocol name."
+  },
+  "boardStartingPosition": "Set up the standard starting position on your board.",
+  "@boardStartingPosition": {
+    "description": "Electronic board Dev support: Physical standard initial-position setup instruction."
+  },
+  "boardReady": "Board ready",
+  "@boardReady": {
+    "description": "Electronic board Dev support: Physical board synchronization complete status."
+  },
+  "boardExperimentalNotice": "New board support is experimental. Please verify moves on both screens and report connection problems.",
+  "@boardExperimentalNotice": {
+    "description": "Electronic board Dev support: Experimental support notice; compare the app screens and report connection issues."
+  },
+  "boardGameRestriction": "Electronic-board games start from the standard position and use unlimited time.",
+  "@boardGameRestriction": {
+    "description": "Electronic board Dev support: Physical-board game constraint: standard initial position and no clock."
+  },
+  "boardConfirmSetup": "I have set up the starting position",
+  "@boardConfirmSetup": {
+    "description": "Electronic board Dev support: User confirmation of physical standard initial-position setup."
+  },
+  "boardConfirmSetupHelp": "Check every piece before starting. This board cannot verify piece identity.",
+  "@boardConfirmSetupHelp": {
+    "description": "Electronic board Dev support: Occupancy-only board limitation: it senses presence, not piece identity."
+  },
+  "boardChooseMove": "Confirm your board move",
+  "@boardChooseMove": {
+    "description": "Electronic board Dev support: Title of legal-move ambiguity picker."
+  },
+  "boardAmbiguousMove": "The board cannot distinguish these moves. Choose the move you played.",
+  "@boardAmbiguousMove": {
+    "description": "Electronic board Dev support: Occupancy-only ambiguity explanation; player chooses the move actually made."
+  },
+  "boardUnavailable": "This board is not ready. Reconnect, or continue on your phone.",
+  "@boardUnavailable": {
+    "description": "Electronic board Dev support: Board unavailable recovery: reconnect or continue with phone input."
+  },
+  "boardNewGameConfirmInstruction": "Press NEW GAME again within 2.5 seconds to confirm, or use the buttons below.",
+  "@boardNewGameConfirmInstruction": {
+    "description": "Electronic board Dev support: Physical NEW GAME button second-press confirmation within 2.5 seconds; retain NEW GAME hardware marking."
+  },
+  "boardNewGameConfirmationExpired": "To confirm on the board, press NEW GAME twice within 2.5 seconds.",
+  "@boardNewGameConfirmationExpired": {
+    "description": "Electronic board Dev support: Expired physical NEW GAME confirmation instruction; retain NEW GAME hardware marking."
+  },
+  "boardPhysicalMove": "Complete the move on your board.",
+  "@boardPhysicalMove": {
+    "description": "Electronic board Dev support: Instruction to finish a physical move before proceeding."
+  },
+  "boardResetPhysical": "Restore the position shown on screen before continuing.",
+  "@boardResetPhysical": {
+    "description": "Electronic board Dev support: Instruction to restore physical board to the app position before proceeding."
+  },
+  "boardNoResults": "No supported board found. Wake your board and try again.",
+  "@boardNoResults": {
+    "description": "Electronic board Dev support: Empty supported Bluetooth board scan result and recovery instruction."
+  },
+  "boardWaitingForSelection": "Choose a board to connect.",
+  "@boardWaitingForSelection": {
+    "description": "Electronic board Dev support: Disconnected status while waiting for player to select a board."
+  },
+  "boardReconnect": "Reconnect board",
+  "@boardReconnect": {
+    "description": "Electronic board Dev support: Button to reconnect selected physical board."
+  },
+  "boardLockedPegasus": "Pegasus is locked. This Dev build does not include its manufacturer initialization key.",
+  "@boardLockedPegasus": {
+    "description": "Electronic board Dev support: Manufacturer initialization missing/locked state; Dev means the separate development build."
+  },
+  "boardMotorRecovery": "Continue on your phone. This experimental adapter cannot safely restore the board’s motor state.",
+  "@boardMotorRecovery": {
+    "description": "Electronic board Dev support: Motorized-board safety recovery instruction; continue with phone input because firmware motor state cannot be restored."
+  },
+  "boardConfirmPosition": "Confirm the physical position",
+  "@boardConfirmPosition": {
+    "description": "Electronic board Dev support: Button to explicitly confirm physical-board setup matches the current logical position."
+  },
+  "boardConfirmPositionHelp": "Check that every piece matches the position on screen.",
+  "@boardConfirmPositionHelp": {
+    "description": "Electronic board Dev support: Help for explicit physical-position confirmation, including piece identities."
   }
 }

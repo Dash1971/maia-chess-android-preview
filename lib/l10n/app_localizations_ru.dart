@@ -1132,4 +1132,103 @@ class AppLocalizationsRu extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'Ничья ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental =>
+      'Электронная доска (экспериментально)';
+
+  @override
+  String get connectBoard => 'Подключить доску';
+
+  @override
+  String get chooseBoard => 'Выбрать доску';
+
+  @override
+  String get chooseAnotherBoard => 'Выбрать другую доску';
+
+  @override
+  String get boardSearching => 'Поиск досок…';
+
+  @override
+  String get boardConnecting => 'Подключение к доске…';
+
+  @override
+  String get boardDisconnected => 'Доска отключена';
+
+  @override
+  String get boardConnectionError =>
+      'Не удалось подключиться. Проверьте Bluetooth и доску и повторите попытку.';
+
+  @override
+  String get boardStartingPosition =>
+      'Расставьте фигуры на доске в стандартной начальной позиции.';
+
+  @override
+  String get boardReady => 'Доска готова';
+
+  @override
+  String get boardExperimentalNotice =>
+      'Поддержка новых досок экспериментальная. Проверяйте ходы на обоих экранах и сообщайте о проблемах с подключением.';
+
+  @override
+  String get boardGameRestriction =>
+      'Партии на электронной доске начинаются со стандартной начальной позиции и идут без ограничения времени.';
+
+  @override
+  String get boardConfirmSetup => 'Я расставил фигуры в начальной позиции';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'Перед началом проверьте каждую фигуру. Эта доска не может определять тип фигуры.';
+
+  @override
+  String get boardChooseMove => 'Подтвердите ход на доске';
+
+  @override
+  String get boardAmbiguousMove =>
+      'Доска не может различить эти ходы. Выберите ход, который вы сделали.';
+
+  @override
+  String get boardUnavailable =>
+      'Доска не готова. Подключите её заново или продолжите на телефоне.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'Для подтверждения нажмите NEW GAME ещё раз в течение 2,5 секунды или используйте кнопки ниже.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'Для подтверждения на доске нажмите NEW GAME дважды в течение 2,5 секунды.';
+
+  @override
+  String get boardPhysicalMove => 'Завершите ход на доске.';
+
+  @override
+  String get boardResetPhysical =>
+      'Прежде чем продолжить, восстановите на доске позицию, показанную на экране.';
+
+  @override
+  String get boardNoResults =>
+      'Совместимая доска не найдена. Разбудите доску и повторите попытку.';
+
+  @override
+  String get boardWaitingForSelection => 'Выберите доску для подключения.';
+
+  @override
+  String get boardReconnect => 'Подключить доску заново';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus заблокирован. Эта Dev-сборка не содержит ключ инициализации производителя.';
+
+  @override
+  String get boardMotorRecovery =>
+      'Продолжите на телефоне. Этот экспериментальный адаптер не может безопасно восстановить состояние мотора доски.';
+
+  @override
+  String get boardConfirmPosition => 'Подтвердить позицию на физической доске';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'Проверьте, что каждая фигура соответствует позиции на экране.';
 }

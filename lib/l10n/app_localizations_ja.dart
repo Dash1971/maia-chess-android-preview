@@ -1029,4 +1029,94 @@ class AppLocalizationsJa extends AppLocalizations {
   String recentDrawResult(String result) {
     return '引き分け（$result）';
   }
+
+  @override
+  String get electronicBoardExperimental => '電子チェス盤（試験的機能）';
+
+  @override
+  String get connectBoard => 'チェス盤に接続';
+
+  @override
+  String get chooseBoard => 'チェス盤を選択';
+
+  @override
+  String get chooseAnotherBoard => '別のチェス盤を選択';
+
+  @override
+  String get boardSearching => 'チェス盤を検索中…';
+
+  @override
+  String get boardConnecting => 'チェス盤に接続中…';
+
+  @override
+  String get boardDisconnected => 'チェス盤との接続が切れました';
+
+  @override
+  String get boardConnectionError =>
+      '接続できませんでした。Bluetoothとチェス盤を確認して、もう一度お試しください。';
+
+  @override
+  String get boardStartingPosition => 'チェス盤に標準の初期配置を並べてください。';
+
+  @override
+  String get boardReady => 'チェス盤の準備ができました';
+
+  @override
+  String get boardExperimentalNotice =>
+      '新しいチェス盤への対応は試験段階です。両方の画面で指し手を確認し、接続の問題をご報告ください。';
+
+  @override
+  String get boardGameRestriction => '電子チェス盤での対局は、標準の初期配置・持ち時間無制限で開始します。';
+
+  @override
+  String get boardConfirmSetup => '初期配置を並べました';
+
+  @override
+  String get boardConfirmSetupHelp => '開始前にすべての駒を確認してください。このチェス盤は駒の種類を識別できません。';
+
+  @override
+  String get boardChooseMove => 'チェス盤での指し手を確定';
+
+  @override
+  String get boardAmbiguousMove => 'チェス盤ではこれらの指し手を区別できません。実際に指した手を選んでください。';
+
+  @override
+  String get boardUnavailable => 'チェス盤の準備ができていません。再接続するか、スマートフォンで続けてください。';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      '確定するには2.5秒以内にNEW GAMEをもう一度押すか、下のボタンを使ってください。';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'チェス盤で確定するには、2.5秒以内にNEW GAMEを2回押してください。';
+
+  @override
+  String get boardPhysicalMove => 'チェス盤で指し手を完了してください。';
+
+  @override
+  String get boardResetPhysical => '続ける前に、チェス盤を画面に表示された局面に戻してください。';
+
+  @override
+  String get boardNoResults => '対応するチェス盤が見つかりません。チェス盤を起動して、もう一度お試しください。';
+
+  @override
+  String get boardWaitingForSelection => '接続するチェス盤を選んでください。';
+
+  @override
+  String get boardReconnect => 'チェス盤に再接続';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasusはロックされています。このDev版にはメーカーの初期化キーが含まれていません。';
+
+  @override
+  String get boardMotorRecovery =>
+      'スマートフォンで続けてください。この試験的な接続機能では、チェス盤のモーターの状態を安全に復元できません。';
+
+  @override
+  String get boardConfirmPosition => 'チェス盤の局面を確認';
+
+  @override
+  String get boardConfirmPositionHelp => 'すべての駒が画面の局面と一致していることを確認してください。';
 }

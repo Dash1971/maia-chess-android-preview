@@ -1109,4 +1109,103 @@ class AppLocalizationsHi extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'ड्रॉ ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental =>
+      'इलेक्ट्रॉनिक शतरंज बोर्ड (प्रायोगिक)';
+
+  @override
+  String get connectBoard => 'बोर्ड कनेक्ट करें';
+
+  @override
+  String get chooseBoard => 'बोर्ड चुनें';
+
+  @override
+  String get chooseAnotherBoard => 'दूसरा बोर्ड चुनें';
+
+  @override
+  String get boardSearching => 'बोर्ड खोजे जा रहे हैं…';
+
+  @override
+  String get boardConnecting => 'बोर्ड से कनेक्ट हो रहा है…';
+
+  @override
+  String get boardDisconnected => 'बोर्ड का कनेक्शन टूट गया';
+
+  @override
+  String get boardConnectionError =>
+      'कनेक्ट नहीं हो पाया। ब्लूटूथ और बोर्ड की जाँच करके फिर कोशिश करें।';
+
+  @override
+  String get boardStartingPosition =>
+      'अपने बोर्ड पर मानक शुरुआती स्थिति में मोहरे रखें।';
+
+  @override
+  String get boardReady => 'बोर्ड तैयार है';
+
+  @override
+  String get boardExperimentalNotice =>
+      'नए बोर्ड का समर्थन प्रायोगिक है। दोनों स्क्रीन पर चालों की जाँच करें और कनेक्शन की समस्याएँ बताएँ।';
+
+  @override
+  String get boardGameRestriction =>
+      'इलेक्ट्रॉनिक बोर्ड पर खेल मानक शुरुआती स्थिति से और बिना समय सीमा के शुरू होते हैं।';
+
+  @override
+  String get boardConfirmSetup => 'मैंने शुरुआती स्थिति में मोहरे रख दिए हैं';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'शुरू करने से पहले हर मोहरे की जाँच करें। यह बोर्ड मोहरे का प्रकार नहीं पहचान सकता।';
+
+  @override
+  String get boardChooseMove => 'बोर्ड पर चली गई चाल की पुष्टि करें';
+
+  @override
+  String get boardAmbiguousMove =>
+      'बोर्ड इन चालों में अंतर नहीं कर सकता। अपनी चली हुई चाल चुनें।';
+
+  @override
+  String get boardUnavailable =>
+      'बोर्ड तैयार नहीं है। फिर से कनेक्ट करें या फ़ोन पर खेल जारी रखें।';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'पुष्टि के लिए 2.5 सेकंड के भीतर NEW GAME दोबारा दबाएँ या नीचे दिए बटन इस्तेमाल करें।';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'बोर्ड पर पुष्टि के लिए 2.5 सेकंड के भीतर NEW GAME दो बार दबाएँ।';
+
+  @override
+  String get boardPhysicalMove => 'अपने बोर्ड पर चाल पूरी करें।';
+
+  @override
+  String get boardResetPhysical =>
+      'आगे बढ़ने से पहले बोर्ड पर स्क्रीन में दिखाई गई स्थिति बहाल करें।';
+
+  @override
+  String get boardNoResults =>
+      'कोई समर्थित बोर्ड नहीं मिला। बोर्ड को सक्रिय करके फिर कोशिश करें।';
+
+  @override
+  String get boardWaitingForSelection => 'कनेक्ट करने के लिए बोर्ड चुनें।';
+
+  @override
+  String get boardReconnect => 'बोर्ड फिर से कनेक्ट करें';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus लॉक है। इस Dev संस्करण में निर्माता की शुरुआती सेटअप कुंजी शामिल नहीं है।';
+
+  @override
+  String get boardMotorRecovery =>
+      'फ़ोन पर खेल जारी रखें। यह प्रायोगिक अडैप्टर बोर्ड की मोटर की स्थिति सुरक्षित रूप से बहाल नहीं कर सकता।';
+
+  @override
+  String get boardConfirmPosition => 'वास्तविक बोर्ड की स्थिति की पुष्टि करें';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'जाँचें कि हर मोहरा स्क्रीन पर दिखाई गई स्थिति से मेल खाता है।';
 }

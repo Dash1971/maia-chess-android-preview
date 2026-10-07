@@ -1112,4 +1112,104 @@ class AppLocalizationsFr extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'Nulle ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental =>
+      'Échiquier électronique (expérimental)';
+
+  @override
+  String get connectBoard => 'Connecter l’échiquier';
+
+  @override
+  String get chooseBoard => 'Choisir un échiquier';
+
+  @override
+  String get chooseAnotherBoard => 'Choisir un autre échiquier';
+
+  @override
+  String get boardSearching => 'Recherche d’échiquiers…';
+
+  @override
+  String get boardConnecting => 'Connexion à l’échiquier…';
+
+  @override
+  String get boardDisconnected => 'Échiquier déconnecté';
+
+  @override
+  String get boardConnectionError =>
+      'Connexion impossible. Vérifiez le Bluetooth et l’échiquier, puis réessayez.';
+
+  @override
+  String get boardStartingPosition =>
+      'Placez la position de départ standard sur votre échiquier.';
+
+  @override
+  String get boardReady => 'Échiquier prêt';
+
+  @override
+  String get boardExperimentalNotice =>
+      'La prise en charge de nouveaux échiquiers est expérimentale. Vérifiez les coups sur les deux écrans et signalez les problèmes de connexion.';
+
+  @override
+  String get boardGameRestriction =>
+      'Les parties sur échiquier électronique commencent depuis la position de départ standard et sans limite de temps.';
+
+  @override
+  String get boardConfirmSetup => 'J’ai placé la position de départ';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'Vérifiez chaque pièce avant de commencer. Cet échiquier ne peut pas identifier le type de pièce.';
+
+  @override
+  String get boardChooseMove => 'Confirmer votre coup sur l’échiquier';
+
+  @override
+  String get boardAmbiguousMove =>
+      'L’échiquier ne peut pas distinguer ces coups. Choisissez celui que vous avez joué.';
+
+  @override
+  String get boardUnavailable =>
+      'L’échiquier n’est pas prêt. Reconnectez-le ou continuez sur votre téléphone.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'Appuyez à nouveau sur NEW GAME dans les 2,5 secondes pour confirmer, ou utilisez les boutons ci-dessous.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'Pour confirmer sur l’échiquier, appuyez deux fois sur NEW GAME en 2,5 secondes.';
+
+  @override
+  String get boardPhysicalMove => 'Terminez le coup sur votre échiquier.';
+
+  @override
+  String get boardResetPhysical =>
+      'Avant de continuer, rétablissez sur l’échiquier la position affichée à l’écran.';
+
+  @override
+  String get boardNoResults =>
+      'Aucun échiquier compatible trouvé. Réveillez votre échiquier et réessayez.';
+
+  @override
+  String get boardWaitingForSelection => 'Choisissez un échiquier à connecter.';
+
+  @override
+  String get boardReconnect => 'Reconnecter l’échiquier';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus est verrouillé. Cette version Dev ne contient pas la clé d’initialisation du fabricant.';
+
+  @override
+  String get boardMotorRecovery =>
+      'Continuez sur votre téléphone. Cet adaptateur expérimental ne peut pas rétablir en toute sécurité l’état du moteur de l’échiquier.';
+
+  @override
+  String get boardConfirmPosition =>
+      'Confirmer la position sur l’échiquier physique';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'Vérifiez que chaque pièce correspond à la position affichée à l’écran.';
 }

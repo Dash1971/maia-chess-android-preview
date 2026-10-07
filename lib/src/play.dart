@@ -175,6 +175,21 @@ class _GamePageState extends State<GamePage>
   ElectronicBoardConnectionState _chessnutState =
       ElectronicBoardConnectionState.disconnected;
   _PlayMessage _chessnutMessage = _PlayMessage.chessnutIsDisconnected;
+  void _updateBoardUi(VoidCallback action) => setState(action);
+  BoardKind _boardKind = BoardKind.chessnut;
+  String? _selectedBoardId;
+  String? _boardConnectionSession;
+  final Set<String> _retiredBoardSessions = {};
+  final PegasusDecoder _pegasusDecoder = PegasusDecoder();
+  final OccupancyMoveResolver _occupancyResolver = OccupancyMoveResolver();
+  Set<String>? _physicalOccupancy;
+  final SquareOffDecoder _squareOffDecoder = SquareOffDecoder();
+  String? _deferredSquareOffMove;
+  Timer? _boardSettleTimer;
+  BuildContext? _boardDialogContext;
+  int _boardInteractionEpoch = 0;
+  bool _boardSetupConfirmed = false;
+  BoardProblem? _boardProblem;
   String? _chessnutDeviceName;
   int? _chessnutBatteryPercent;
   bool _chessnutCharging = false;
@@ -205,6 +220,11 @@ class _GamePageState extends State<GamePage>
   bool get _chessnutStartPositionReady {
     final observed = _chessnutPosition;
     if (!_chessnutReady || observed == null) return false;
+    if (_genericBoards &&
+        _boardKind != BoardKind.chessnut &&
+        !_boardSetupConfirmed) {
+      return false;
+    }
     return ChessnutProtocol.positionsMatch(
       observed,
       ChessnutProtocol.pieceMapFromFen(chess.Chess.DEFAULT_POSITION),
@@ -307,6 +327,7 @@ class _GamePageState extends State<GamePage>
 
   @override
   void didPushNext() {
+    _cancelBoardInteractions();
     _feedbackRouteVisible = false;
     _cancelGameFeedback();
   }
@@ -315,6 +336,7 @@ class _GamePageState extends State<GamePage>
   void didPopNext() {
     _feedbackRouteVisible = true;
     if (_resumeStartedGameWhenVisible && _gameCanRun) _resumeGame();
+    _resumeBoardInput();
   }
 
   bool get _gameCanRun =>
@@ -330,12 +352,14 @@ class _GamePageState extends State<GamePage>
         state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached ||
         state == AppLifecycleState.hidden) {
+      _cancelBoardInteractions();
       _gameEndFeedbackTimer?.cancel();
       _pauseGame();
       if (!_reviewOpen) unawaited(_saveGameState());
     }
     if (state == AppLifecycleState.resumed) {
       _resumeGame();
+      _resumeBoardInput();
       final position = _chessnutPosition;
       if (_chessnutGameActive && position != null) {
         _queueChessnutPosition(position);
@@ -516,9 +540,12 @@ class _GamePageState extends State<GamePage>
       // Chessnut games never run a clock. Repair older or interrupted records
       // before applying wall-clock correction so stale timed metadata cannot
       // turn a physical-board game into a timeout loss.
-      final preset = saved['electronicBoard'] == 'chessnut-go'
-          ? TimePreset.unlimited
-          : storedPreset;
+      final savedBoard = saved['electronicBoard'];
+      final isBoardSave =
+          savedBoard == 'chessnut-go' ||
+          (_genericBoards &&
+              (savedBoard == 'pegasus' || savedBoard == 'squareOff'));
+      final preset = isBoardSave ? TimePreset.unlimited : storedPreset;
       if (savedAt != null &&
           preset != TimePreset.unlimited &&
           saved['clockPaused'] != true &&
@@ -621,8 +648,16 @@ class _GamePageState extends State<GamePage>
         _viewedPly = null;
         // Board metadata describes how the game was played. Only an unfinished
         // game needs physical move input when it is reopened.
-        _chessnutGameActive =
-            !_gameFinished && saved['electronicBoard'] == 'chessnut-go';
+        _chessnutGameActive = !_gameFinished && isBoardSave;
+        _boardKind = savedBoard == 'pegasus'
+            ? BoardKind.pegasus
+            : savedBoard == 'squareOff'
+            ? BoardKind.squareOff
+            : BoardKind.chessnut;
+        _selectedBoardId = saved['electronicBoardId'] is String
+            ? saved['electronicBoardId'] as String
+            : null;
+        _resetBoardProtocol();
         _useChessnutGo = _chessnutGameActive;
         if (_chessnutGameActive) _timePreset = TimePreset.unlimited;
         _pendingPhysicalMaiaMove = _chessnutGameActive
@@ -638,7 +673,14 @@ class _GamePageState extends State<GamePage>
         }
         _started = true;
       });
-      if (_chessnutGameActive) _ensureChessnutListening();
+      if (_chessnutGameActive) {
+        _ensureChessnutListening();
+        if (_genericBoards) {
+          _chessnutState = ElectronicBoardConnectionState.disconnected;
+          _chessnutPosition = null;
+          unawaited(_disconnectChessnut());
+        }
+      }
       if (wasUsingChessnut && !_useChessnutGo) unawaited(_disconnectChessnut());
       _syncGameBoard(animate: false, resetPremove: true);
       if (_clockEnabled && !_gameFinished) {
@@ -761,7 +803,12 @@ class _GamePageState extends State<GamePage>
     'clockPaused': _clockPaused,
     'maiaFailed': _maiaFailed,
     'flipped': _boardFlipped,
-    if (_chessnutGameActive) 'electronicBoard': 'chessnut-go',
+    if (_chessnutGameActive)
+      'electronicBoard': _boardKind == BoardKind.chessnut
+          ? 'chessnut-go'
+          : _boardKind.name,
+    if (_chessnutGameActive && _selectedBoardId != null)
+      'electronicBoardId': _selectedBoardId,
     if (_pendingPhysicalMaiaMove != null)
       'pendingPhysicalMaiaMove': _pendingPhysicalMaiaMove,
     if (_chessnutTakebackRestoreActive) 'chessnutTakebackRestore': true,
@@ -1425,6 +1472,18 @@ class _GamePageState extends State<GamePage>
 
   Future<void> _connectChessnut() async {
     if (!mounted || !_useChessnutGo) return;
+    _resetBoardProtocol();
+    if (_genericBoards &&
+        _chessnutGameActive &&
+        _boardKind == BoardKind.squareOff) {
+      _boardFailure(
+        StateError(
+          "Square Off cannot safely restore an in-progress motor session",
+        ),
+        StackTrace.current,
+      );
+      return;
+    }
     final generation = ++_chessnutConnectionGeneration;
     _ensureChessnutListening();
     unawaited(
@@ -1442,7 +1501,11 @@ class _GamePageState extends State<GamePage>
       });
     }
     try {
-      await _chessnut.connect();
+      if (_discovery != null && _chessnutGameActive) {
+        await _discovery!.reconnectBoard(_selectedBoardId);
+      } else {
+        await _chessnut.connect();
+      }
     } on PlatformException catch (error, stackTrace) {
       unawaited(AppDiagnostics.record('chessnut-connect', error, stackTrace));
       if (!mounted ||
@@ -1472,6 +1535,11 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _disconnectChessnut() async {
+    _resetBoardProtocol();
+    if (_boardConnectionSession != null) {
+      _retiredBoardSessions.add(_boardConnectionSession!);
+    }
+    _boardConnectionSession = null;
     final generation = ++_chessnutConnectionGeneration;
     _stopChessnutLedRefresh();
     _chessnutLeds.invalidate();
@@ -1507,6 +1575,7 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _playInApp() async {
+    _cancelBoardInteractions();
     if (!mounted || !_started || !_chessnutGameActive) return;
     // The app position already includes Maia's pending physical move. Switching
     // input must neither replay it nor wait for the board to acknowledge it.
@@ -1548,6 +1617,42 @@ class _GamePageState extends State<GamePage>
 
   void _handleChessnutEvent(ElectronicBoardEvent event) {
     if (!mounted || !_useChessnutGo) return;
+    if (event.connectionSession != null &&
+        _retiredBoardSessions.contains(event.connectionSession)) {
+      return;
+    }
+    if (_chessnutGameActive &&
+        _selectedBoardId != null &&
+        event.boardId != null &&
+        event.boardId != _selectedBoardId) {
+      return;
+    }
+    if (event.type != 'status' &&
+        event.type != 'candidates' &&
+        event.connectionSession != null &&
+        event.connectionSession != _boardConnectionSession) {
+      return;
+    }
+    if (event.type == 'candidates') {
+      if (_genericBoards) {
+        unawaited(_showBoardCandidates(event.candidates ?? const []));
+      }
+      return;
+    }
+    if (event.type == 'boardData') {
+      _receiveBoardData(event);
+      return;
+    }
+    if (event.type == 'newGame') {
+      if (event.connectionSession != null &&
+          event.connectionSession == _boardConnectionSession &&
+          _chessnutReady &&
+          _feedbackForeground &&
+          _feedbackRouteVisible) {
+        _onBoardNewGame(connectionSession: event.connectionSession!);
+      }
+      return;
+    }
     if (event.type == 'battery') {
       setState(() {
         _chessnutBatteryPercent = event.batteryPercent;
@@ -1581,6 +1686,26 @@ class _GamePageState extends State<GamePage>
     }
     final nextState = event.connectionState;
     if (nextState == null) return;
+    if (event.connectionSession != null &&
+        event.connectionSession != _boardConnectionSession) {
+      if (_boardConnectionSession != null) {
+        _retiredBoardSessions.add(_boardConnectionSession!);
+        if (_retiredBoardSessions.length > 16) {
+          _retiredBoardSessions.remove(_retiredBoardSessions.first);
+        }
+      }
+      _resetBoardProtocol();
+      _boardConnectionSession = event.connectionSession;
+      _chessnutPosition = null;
+      _queuedChessnutPosition = null;
+      _chessnutBatteryPercent = null;
+    }
+    if (event.boardKind != null) _boardKind = event.boardKind!;
+    if (event.boardId != null) _selectedBoardId = event.boardId;
+    if (nextState == ElectronicBoardConnectionState.disconnected ||
+        nextState == ElectronicBoardConnectionState.error) {
+      _cancelBoardInteractions();
+    }
     if (nextState != _chessnutState) {
       _chessnutLeds.invalidate();
     }
@@ -1646,8 +1771,15 @@ class _GamePageState extends State<GamePage>
   Future<void> _handleChessnutPosition(Map<String, String> observed) async {
     if (!_useChessnutGo || !_chessnutReady) return;
     final generation = _gameGeneration;
+    final epoch = _boardInteractionEpoch;
+    final sourceFen = _game.fen;
     bool isCurrent() =>
-        mounted && _useChessnutGo && generation == _gameGeneration;
+        mounted &&
+        _useChessnutGo &&
+        _chessnutReady &&
+        generation == _gameGeneration &&
+        epoch == _boardInteractionEpoch &&
+        sourceFen == _game.fen;
     if (!_started) {
       final expected = ChessnutProtocol.pieceMapFromFen(
         chess.Chess.DEFAULT_POSITION,
@@ -1700,7 +1832,7 @@ class _GamePageState extends State<GamePage>
       await _setChessnutLeds(const []);
       // A Bluetooth completion can arrive after Maia advances the game.
       // Only acknowledge the position and pending move that we matched.
-      if (!mounted ||
+      if (!isCurrent() ||
           generation != _gameGeneration ||
           matchedFen != _game.fen ||
           matchedPendingMove != _pendingPhysicalMaiaMove) {
@@ -1792,7 +1924,10 @@ class _GamePageState extends State<GamePage>
     Iterable<String> squares, {
     bool refresh = false,
   }) async {
-    if (!_chessnutReady) return;
+    if (!_chessnutReady ||
+        (_genericBoards && _boardKind == BoardKind.squareOff)) {
+      return;
+    }
     try {
       await _chessnutLeds.setLeds(squares, refresh: refresh);
     } on PlatformException catch (error, stackTrace) {
@@ -1801,7 +1936,10 @@ class _GamePageState extends State<GamePage>
   }
 
   Future<void> _beepChessnut({int count = 1}) async {
-    if (!_chessnutGameActive || !_chessnutReady || !_chessnutSoundsEnabled) {
+    if ((_genericBoards && _boardKind != BoardKind.chessnut) ||
+        !_chessnutGameActive ||
+        !_chessnutReady ||
+        !_chessnutSoundsEnabled) {
       return;
     }
     final generation = _gameGeneration;
@@ -1902,8 +2040,13 @@ class _GamePageState extends State<GamePage>
                 leading: Icon(
                   _chessnutReady ? Icons.bluetooth_connected : Icons.bluetooth,
                 ),
-                title: Text(_chessnutDeviceName ?? 'Chessnut'),
-                subtitle: Text(_chessnutMessage.text(context)),
+                title: Text(
+                  _chessnutDeviceName ??
+                      (_genericBoards
+                          ? l10n(context).electronicBoardExperimental
+                          : 'Chessnut'),
+                ),
+                subtitle: Text(_boardText(_chessnutMessage)),
                 trailing: _chessnutBatteryPercent == null
                     ? null
                     : Text(
@@ -1913,16 +2056,17 @@ class _GamePageState extends State<GamePage>
                         ),
                       ),
               ),
-              SwitchListTile(
-                secondary: const Icon(Icons.volume_up_outlined),
-                value: _chessnutSoundsEnabled,
-                title: Text(l10n(context).boardSounds),
-                subtitle: Text(l10n(context).checkCheckmateIllegalMoves),
-                onChanged: (enabled) => Navigator.pop(
-                  context,
-                  enabled ? 'sounds-on' : 'sounds-off',
+              if (!_genericBoards || _boardKind == BoardKind.chessnut)
+                SwitchListTile(
+                  secondary: const Icon(Icons.volume_up_outlined),
+                  value: _chessnutSoundsEnabled,
+                  title: Text(l10n(context).boardSounds),
+                  subtitle: Text(l10n(context).checkCheckmateIllegalMoves),
+                  onChanged: (enabled) => Navigator.pop(
+                    context,
+                    enabled ? 'sounds-on' : 'sounds-off',
+                  ),
                 ),
-              ),
               if (_chessnutReady)
                 ListTile(
                   leading: const Icon(Icons.bluetooth_disabled),
@@ -1974,12 +2118,18 @@ class _GamePageState extends State<GamePage>
         _chessnutState == ElectronicBoardConnectionState.connecting ||
         _chessnutState == ElectronicBoardConnectionState.connected;
     final message = _chessnutReady
-        ? _status.text(context)
+        ? _boardText(_status)
         : connecting
-        ? l10n(context).connectingChessnut
+        ? (_genericBoards
+              ? l10n(context).boardConnecting
+              : l10n(context).connectingChessnut)
         : _chessnutState == ElectronicBoardConnectionState.error
-        ? l10n(context).chessnutUnavailable
-        : l10n(context).chessnutDisconnected;
+        ? (_genericBoards
+              ? l10n(context).boardUnavailable
+              : l10n(context).chessnutUnavailable)
+        : (_genericBoards
+              ? l10n(context).boardDisconnected
+              : l10n(context).chessnutDisconnected);
     return Container(
       key: const ValueKey('chessnut-status-banner'),
       height: _chessnutBannerHeight,
@@ -2010,6 +2160,16 @@ class _GamePageState extends State<GamePage>
                       style: const TextStyle(fontSize: 12),
                     ),
                   ),
+                  if (_genericBoards &&
+                      _boardKind == BoardKind.squareOff &&
+                      _chessnutReady &&
+                      _pendingPhysicalMaiaMove != null)
+                    IconButton(
+                      key: const ValueKey('board-confirm-motor'),
+                      icon: const Icon(Icons.check, size: 18),
+                      tooltip: l10n(context).boardConfirmPosition,
+                      onPressed: _confirmMotorPosition,
+                    ),
                   if (_chessnutReady && _chessnutBatteryPercent != null)
                     Text(
                       l10n(context).chessnutBattery(
@@ -2324,6 +2484,7 @@ class _GamePageState extends State<GamePage>
         );
       }
       await _saveGameState(allowDuringStart: true);
+      if (!await _startSquareOffGame()) return;
     } catch (error, stackTrace) {
       _handleStorageFailure(error, stackTrace);
       if (wasRunning &&
@@ -2644,6 +2805,10 @@ class _GamePageState extends State<GamePage>
           _engineThinking = false;
           _status = _PlayMessage.makeMaiaLitMove;
         });
+        if (_boardKind == BoardKind.squareOff && _genericBoards) {
+          await _sendMotorMove(maiaUci);
+          return;
+        }
         await _setChessnutLeds([
           maiaUci.substring(0, 2),
           maiaUci.substring(2, 4),
@@ -2716,6 +2881,7 @@ class _GamePageState extends State<GamePage>
     _clockTimer?.cancel();
     _forcedResult = null;
     _game.set_header(['Result', result]);
+    if (_resetDialogOpen) _resetDialogRevision.value++;
     return _resultText();
   }
 
@@ -2882,6 +3048,8 @@ class _GamePageState extends State<GamePage>
 
   Future<void> _goHome() async {
     if (_startingGame) return;
+    _cancelBoardInteractions();
+    _boardSetupConfirmed = false;
     _pauseGame();
     _savedAsIncomplete = !_gameFinished;
     final snapshot = _gameSnapshot();
@@ -2944,43 +3112,152 @@ class _GamePageState extends State<GamePage>
     if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
-  Future<void> _requestNewGame() async {
-    if (_storageBlocked || _startingGame) return;
-    final completed = _gameFinished;
+  final _boardReset = BoardResetConfirmation();
+  final _resetDialogRevision = ValueNotifier<int>(0);
+  BuildContext? _resetDialogContext;
+  bool _resetDialogOpen = false;
+  bool _resetDialogAccepting = false;
+  bool _resetDialogHardware = false;
+  Timer? _resetExpiryTimer;
+
+  void _disarmBoardReset() {
+    _boardReset.disarm();
+    _resetExpiryTimer?.cancel();
+    if (mounted) _resetDialogRevision.value++;
+  }
+
+  void _onBoardNewGame({required String connectionSession}) {
+    if (!mounted ||
+        !_started ||
+        !_useChessnutGo ||
+        !_chessnutReady ||
+        _storageBlocked ||
+        _startingGame ||
+        _resetDialogAccepting) {
+      return;
+    }
+    final press = _boardReset.press(
+      generation: _gameGeneration,
+      connection: connectionSession,
+    );
+    if (press == BoardResetPress.ignored) return;
+    if (press == BoardResetPress.confirmed) {
+      final dialog = _resetDialogContext;
+      if (_resetDialogOpen && dialog != null) {
+        _resetDialogAccepting = true;
+        Navigator.of(dialog).pop(true);
+      }
+      return;
+    }
+    _resetDialogHardware = true;
+    _resetExpiryTimer?.cancel();
+    _resetExpiryTimer = Timer(
+      BoardResetConfirmation.window + const Duration(milliseconds: 1),
+      () {
+        if (mounted) _resetDialogRevision.value++;
+      },
+    );
+    _resetDialogRevision.value++;
+    if (!_resetDialogOpen) unawaited(_requestNewGame(fromBoard: true));
+  }
+
+  Future<void> _requestNewGame({bool fromBoard = false}) async {
+    if (_storageBlocked || _startingGame || _resetDialogOpen) return;
     final generation = _gameGeneration;
-    final confirmed =
-        await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(
-              completed
-                  ? l10n(context).startANewGame
-                  : l10n(context).resetGameQuestion,
-            ),
-            content: Text(
-              completed
-                  ? l10n(context).yourCompletedGameWillRemainInRecentGames
-                  : l10n(context).thisGameWillBePermanentlyErased,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(l10n(context).cancel),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(
-                  completed ? l10n(context).startNewGame : l10n(context).reset,
-                ),
-              ),
-            ],
-          ),
-        ) ??
-        false;
-    if (!confirmed || !mounted || generation != _gameGeneration) return;
+    _resetDialogOpen = true;
+    _resetDialogAccepting = false;
+    if (!fromBoard) _resetDialogHardware = false;
+    bool confirmed;
+    try {
+      confirmed =
+          await showDialog<bool>(
+            context: context,
+            builder: (dialogContext) {
+              _resetDialogContext = dialogContext;
+              return ValueListenableBuilder<int>(
+                valueListenable: _resetDialogRevision,
+                builder: (context, _, _) {
+                  final completed = _gameFinished;
+                  return AlertDialog(
+                    scrollable: true,
+                    title: Text(
+                      completed
+                          ? l10n(context).startANewGame
+                          : l10n(context).resetGameQuestion,
+                    ),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          completed
+                              ? l10n(context)
+                                    .yourCompletedGameWillRemainInRecentGames
+                              : l10n(context).thisGameWillBePermanentlyErased,
+                        ),
+                        if (_resetDialogHardware) ...[
+                          const SizedBox(height: 12),
+                          Text(
+                            _boardReset.armed
+                                ? l10n(context).boardNewGameConfirmInstruction
+                                : l10n(context).boardNewGameConfirmationExpired,
+                          ),
+                        ],
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          _disarmBoardReset();
+                          Navigator.pop(dialogContext, false);
+                        },
+                        child: Text(l10n(context).cancel),
+                      ),
+                      FilledButton(
+                        onPressed: () {
+                          if (_resetDialogAccepting) return;
+                          _resetDialogAccepting = true;
+                          Navigator.pop(dialogContext, true);
+                        },
+                        child: Text(
+                          completed
+                              ? l10n(context).startNewGame
+                              : l10n(context).reset,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ) ??
+          false;
+    } finally {
+      _resetDialogContext = null;
+      _resetDialogOpen = false;
+      _resetDialogAccepting = false;
+      _disarmBoardReset();
+    }
+    if (!confirmed || !mounted || generation != _gameGeneration) {
+      if (mounted && _gameFinished) {
+        _scheduleGameConclusion(playFeedback: false);
+      }
+      return;
+    }
     final wasRunning = !_clockPaused && !_gameFinished;
     _pauseGame();
-    setState(() => _startingGame = true);
+    // Supersede old inference before storage yields; a completion must never
+    // race the discard and mutate the snapshot being reset.
+    _gameGeneration++;
+    _gameInferenceScope.invalidate();
+    _clearPremoves();
+    _drawOfferRequest = null;
+    _stopChessnutLedRefresh();
+    setState(() {
+      _startingGame = true;
+      _engineThinking = false;
+      _drawOfferEvaluating = false;
+    });
     try {
       // A game can finish while the confirmation is open. Never erase a result.
       if (_gameFinished) {
@@ -3001,9 +3278,27 @@ class _GamePageState extends State<GamePage>
     }
     if (!mounted) return;
     if (_chessnutGameActive) {
+      _boardSetupConfirmed = false;
+      _cancelBoardInteractions();
+      _occupancyResolver.reset();
+      _physicalMoveInProgress = false;
+      _queuedChessnutPosition = null;
       _stopChessnutLedRefresh();
-      await _setChessnutLeds(const []);
       setState(() {
+        _game = chess.Chess();
+        _positionHistory
+          ..clear()
+          ..add(_game.fen);
+        _uciMoves.clear();
+        _takebackVariations.clear();
+        _mainlineAnnotations.clear();
+        _pgnComments = null;
+        _reviewVariationSnapshot = null;
+        _forcedResult = null;
+        _naturalGameOver = false;
+        _savedAsIncomplete = false;
+        _resultDialogShown = false;
+        _viewedPly = null;
         _started = false;
         _engineThinking = false;
         _drawOfferEvaluating = false;
@@ -3020,6 +3315,8 @@ class _GamePageState extends State<GamePage>
         _status = _PlayMessage.chooseSettings;
       });
       _syncGameBoard(animate: false, resetPremove: true);
+      await _setChessnutLeds(const []);
+      if (!mounted) return;
       final position = _chessnutPosition;
       if (position != null) _queueChessnutPosition(position);
       return;
@@ -3029,6 +3326,16 @@ class _GamePageState extends State<GamePage>
 
   Future<void> _takeBack() async {
     if (_startingGame) return;
+    if (_genericBoards &&
+        _chessnutGameActive &&
+        _boardKind == BoardKind.squareOff) {
+      _boardFailure(
+        StateError('Square Off motor history cannot safely take back'),
+        StackTrace.current,
+      );
+      return;
+    }
+    _cancelBoardInteractions();
     if (!_started || !_canTakeBack) return;
     final chessnutTakeback = _chessnutGameActive;
     // Legacy records may lack the target snapshot. Retain current clock values
@@ -3232,6 +3539,10 @@ class _GamePageState extends State<GamePage>
   }
 
   void _scheduleGameConclusion({bool playFeedback = true}) {
+    if (_resetDialogOpen) {
+      _resetDialogRevision.value++;
+      return;
+    }
     if (!_gameFinished || _resultDialogShown) return;
     _resultDialogShown = true;
     if (playFeedback && !_chessnutGameActive) {
@@ -3869,7 +4180,11 @@ class _GamePageState extends State<GamePage>
               visualDensity: VisualDensity.compact,
               secondary: const Icon(Icons.bluetooth_outlined, size: 22),
               value: _useChessnutGo,
-              title: Text(l10n(context).chessnutExperimental),
+              title: Text(
+                _genericBoards
+                    ? l10n(context).electronicBoardExperimental
+                    : l10n(context).chessnutExperimental,
+              ),
               onChanged: (value) => unawaited(_setUseChessnutGo(value)),
             ),
             if (_useChessnutGo) ...[
@@ -3888,7 +4203,7 @@ class _GamePageState extends State<GamePage>
                           : Icons.bluetooth_searching,
                     ),
                     const SizedBox(width: 10),
-                    Expanded(child: Text(_chessnutMessage.text(context))),
+                    Expanded(child: Text(_boardText(_chessnutMessage))),
                     if (_chessnutBatteryPercent != null)
                       Text(
                         l10n(context).chessnutBattery(
@@ -3902,7 +4217,15 @@ class _GamePageState extends State<GamePage>
               const SizedBox(height: 8),
               OutlinedButton.icon(
                 key: const ValueKey('chessnut-connect-button'),
-                onPressed: _chessnutReady
+                onPressed:
+                    (_chessnutState ==
+                            ElectronicBoardConnectionState.scanning ||
+                        _chessnutState ==
+                            ElectronicBoardConnectionState.connecting ||
+                        _chessnutState ==
+                            ElectronicBoardConnectionState.connected)
+                    ? null
+                    : _chessnutReady
                     ? _disconnectChessnut
                     : _connectChessnut,
                 icon: Icon(
@@ -3911,13 +4234,47 @@ class _GamePageState extends State<GamePage>
                 label: Text(
                   _chessnutReady
                       ? l10n(context).disconnect
+                      : _genericBoards
+                      ? l10n(context).connectBoard
                       : l10n(context).connectChessnut,
                 ),
               ),
+              if (_genericBoards) ...[
+                TextButton.icon(
+                  key: const ValueKey('choose-another-board'),
+                  onPressed: _chooseOtherBoard,
+                  icon: const Icon(Icons.devices_other),
+                  label: Text(l10n(context).chooseAnotherBoard),
+                ),
+                if (_boardKind != BoardKind.chessnut && _chessnutReady)
+                  CheckboxListTile(
+                    key: const ValueKey('board-confirm-setup'),
+                    contentPadding: EdgeInsets.zero,
+                    value: _boardSetupConfirmed,
+                    title: Text(l10n(context).boardConfirmSetup),
+                    subtitle: Text(l10n(context).boardConfirmSetupHelp),
+                    onChanged: (value) => setState(() {
+                      _boardSetupConfirmed = value ?? false;
+                      if (_boardKind == BoardKind.squareOff &&
+                          _boardSetupConfirmed) {
+                        _chessnutPosition = ChessnutProtocol.pieceMapFromFen(
+                          chess.Chess.DEFAULT_POSITION,
+                        );
+                      }
+                    }),
+                  ),
+                if (_boardKind != BoardKind.chessnut)
+                  Text(
+                    l10n(context).boardExperimentalNotice,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+              ],
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
-                  l10n(context).chessnutGameRestriction,
+                  _genericBoards
+                      ? l10n(context).boardGameRestriction
+                      : l10n(context).chessnutGameRestriction,
                   style: TextStyle(fontSize: 12),
                 ),
               ),
@@ -4639,6 +4996,9 @@ class _GamePageState extends State<GamePage>
 
   @override
   void dispose() {
+    _boardSettleTimer?.cancel();
+    _resetExpiryTimer?.cancel();
+    _resetDialogRevision.dispose();
     WidgetsBinding.instance.removeObserver(this);
     maiaRouteObserver.unsubscribe(this);
     _cancelGameFeedback();
