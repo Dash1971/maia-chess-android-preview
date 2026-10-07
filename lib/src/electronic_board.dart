@@ -52,7 +52,10 @@ class SquareOffDecoder {
     }
     if (bytes.isEmpty) return null;
     final notification = String.fromCharCodes(bytes).trim();
-    if (notification.isEmpty) return null;
+    if (notification.isEmpty) {
+      reset();
+      return null;
+    }
     if (notification == 'ERR') {
       reset();
       throw const FormatException('Board rejected move');
