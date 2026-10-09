@@ -52,7 +52,7 @@ History also improved average human-move prediction, so this is a gameplay
 tradeoff, not a claim that disabling it makes Maia stronger. It is our design
 decision; upstream supports optional history and defaults it off, but we found
 no explicit recommendation against using it.
-[Read the research, limitations and reproducible results](https://github.com/Dash1971/maia-chess-android/blob/main/docs/research/maia3-history/REPORT.md).
+[Read the research, limitations and reproducible results](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/move-history-2026-10-09/REPORT.md).
 
 ## Install and update with Obtainium
 
