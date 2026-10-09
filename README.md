@@ -41,6 +41,19 @@ Development snapshots use the same Preview source with a separate Dev package,
 development signer, ARM64-only APK, and smaller 5M Maia model for rapid phone
 testing. They are not production-parity or qualified Preview releases.
 
+## Why move-history input is off
+
+Mobile Maia supplies the current position to Maia rather than the preceding
+positions, to reduce repetitive copying in low-Elo openings. In our Stonewall
+test at 600, after `1.d4 d5 2.e3 e6 3.Bd3 Bd6`, history raised the probability
+of copying all five next moves through castling from **0.0084% to 34.2%**.
+
+History also improved average human-move prediction, so this is a gameplay
+tradeoff, not a claim that disabling it makes Maia stronger. It is our design
+decision; upstream supports optional history and defaults it off, but we found
+no explicit recommendation against using it.
+[Read the research, limitations and reproducible results](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/move-history-2026-10-09/REPORT.md).
+
 ## Install and update with Obtainium
 
 [Obtainium](https://github.com/ImranR98/Obtainium) installs Android apps directly
