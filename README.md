@@ -26,9 +26,19 @@ Preview 2.3.0-beta.4 incorporates the Stable 2.2.2 application baseline,
 including the 600–2600 Maia rating controls and saved-setting migration. It
 retains the separate Preview package and release identity; new 2.3 features
 will be developed and qualified here before any Stable promotion. The in-app
-Temperature and Top-P help opens the same current
-[sampling research](https://github.com/Dash1971/maia-chess-android/blob/main/docs/research/maia3-sampling/REPORT.md)
-as Stable.
+Temperature and Top-P help in this Dev review points to the dedicated
+[sampling research](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/maia3-sampling/REPORT.md).
+The original Stable publication stays available for installed app versions.
+Publish the research-copy PR before distributing this updated link.
+
+This Dev review also adds **Use move history (experimental)**, off by default.
+It lets Maia consider up to seven earlier positions without changing the sampling
+settings. New sessions use the preference; saved sessions retain their original
+choice. See the [behavior and test contract](docs/MAIA_MOVE_HISTORY.md) and the
+[79M move-history research](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/move-history-2026-10-09/REPORT.md).
+The study found better human-move prediction but more repeated copying in a
+specific low-rated opening; it does not establish a strength gain. The smaller
+5M Dev model still needs separate device qualification before promotion.
 
 The source includes German, French, Russian, Hindi, Brazilian Portuguese, Japanese,
 Simplified Chinese, Korean and Spanish UI catalogs alongside English. German,

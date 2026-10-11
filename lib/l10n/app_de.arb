@@ -333,5 +333,11 @@
   "samplingExamplesTitle": "Beispiele (Temperatur / Top-P)",
   "samplingExampleLikely": "0 / 0 — Am vorhersehbarsten. Maia wählt immer den wahrscheinlichsten Zug.",
   "samplingExampleReduced": "0,5 / 0,9 — Etwas Abwechslung. Bevorzugt häufige Züge und kann Maia zu einem stärkeren Gegner machen.",
-  "samplingExampleFull": "1 / 1 — Volle Vielfalt (Standard). Alle legalen Züge bleiben möglich, wahrscheinliche Züge werden aber weiterhin häufiger gespielt."
+  "samplingExampleFull": "1 / 1 — Volle Vielfalt (Standard). Alle legalen Züge bleiben möglich, wahrscheinliche Züge werden aber weiterhin häufiger gespielt.",
+  "maiaHistorySetting": "Stellungsverlauf verwenden (experimentell)",
+  "maiaHistoryScope": "Aus wird empfohlen. Gilt für neue Partien und Analysebretter; gespeicherte Sitzungen behalten ihre ursprüngliche Auswahl.",
+  "maiaHistoryHelp": "Maia berücksichtigt neben der aktuellen Stellung bis zu sieben vorherige Stellungen. In unseren Tests mit dem 79M-Modell verbesserte das die Vorhersage menschlicher Züge, begünstigte aber manchmal wiederholtes Nachahmen in Eröffnungen bei niedrigen Wertungszahlen. Eine höhere Spielstärke ist nicht nachgewiesen. Vorerst empfehlen wir, dies ausgeschaltet zu lassen. Bei einer einzeln geladenen Stellung sind keine früheren Züge verfügbar.",
+  "maiaHistoryResearch": "Studie zum Stellungsverlauf lesen",
+  "maiaHistoryOn": "Stellungsverlauf: an (experimentell)",
+  "maiaHistoryOff": "Stellungsverlauf: aus"
 }

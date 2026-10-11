@@ -1210,4 +1210,24 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get samplingExampleFull =>
       '1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.';
+
+  @override
+  String get maiaHistorySetting => 'Use move history (experimental)';
+
+  @override
+  String get maiaHistoryScope =>
+      'Off is recommended. New games and analysis boards use this setting; saved sessions keep their original choice.';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use.';
+
+  @override
+  String get maiaHistoryResearch => 'Read the move-history research';
+
+  @override
+  String get maiaHistoryOn => 'Move history: on (experimental)';
+
+  @override
+  String get maiaHistoryOff => 'Move history: off';
 }

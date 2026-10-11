@@ -49,9 +49,51 @@ Future<void> _removeInvalidPreference(
   await AppDiagnostics.recordEvent('invalid-preference-reset:$key');
 }
 
+/// A continuation may retain at most seven real positions before its start.
+/// Invalid optional context is dropped without making an otherwise valid save
+/// unreadable. Validate legal adjacency so unrelated/future boards cannot leak
+/// into inference through malformed session metadata.
+List<String> restoreMaiaHistoryPrefix(Object? value, String initialFen) {
+  if (value is! List ||
+      value.isEmpty ||
+      value.length > 7 ||
+      value.any((fen) => fen is! String)) {
+    return const [];
+  }
+  try {
+    final prefix = value.cast<String>();
+    final chain = [...prefix, initialFen];
+    for (final fen in chain) {
+      AnalysisSession.validateFen(fen);
+    }
+    for (var index = 0; index < chain.length - 1; index++) {
+      final game = chess.Chess.fromFEN(chain[index]);
+      final legal = game.moves({'asObjects': true}).cast<chess.Move>();
+      var connected = false;
+      for (final move in legal) {
+        final candidate = chess.Chess.fromFEN(chain[index]);
+        candidate.move(move);
+        if (PgnVariationExporter._samePosition(
+          candidate.fen,
+          chain[index + 1],
+        )) {
+          connected = true;
+          break;
+        }
+      }
+      if (!connected) return const [];
+    }
+    return List.unmodifiable(prefix);
+  } catch (_) {
+    return const [];
+  }
+}
+
 class GamePage extends StatefulWidget {
   const GamePage({
     this.startingFen,
+    this.startingUseMoveHistory,
+    this.startingPositionHistory,
     this.startingSide,
     this.startingElo,
     this.startingTimePreset,
@@ -72,6 +114,8 @@ class GamePage extends StatefulWidget {
   // Independent of move sampling; injectable for deterministic timing tests.
   final Random? humanTimingRandom;
   final String? startingFen;
+  final bool? startingUseMoveHistory;
+  final List<String>? startingPositionHistory;
   final PlayerSide? startingSide;
   final int? startingElo;
   final TimePreset? startingTimePreset;
@@ -112,6 +156,11 @@ class _GamePageState extends State<GamePage>
   bool _engineThinking = false;
   String? _forcedResult;
   bool _humanTiming = false;
+  bool _useMoveHistory = false;
+  bool _gameUseMoveHistory = false;
+  List<String> _gameHistoryPrefix = const [];
+  bool _reviewUseMoveHistory = false;
+  List<String> _reviewHistoryPrefix = const [];
   bool _premovesEnabled = true;
   bool _premovePenalty = false;
   bool _multiplePremoves = false;
@@ -397,6 +446,11 @@ class _GamePageState extends State<GamePage>
             MaterialPageRoute<void>(
               builder: (_) => AnalysisBoardPage(
                 initialSession: session,
+                useMoveHistory: saved['maiaUseMoveHistory'] == true,
+                historyPrefix: restoreMaiaHistoryPrefix(
+                  saved['historyPrefix'],
+                  session.positions.first,
+                ),
                 maiaElo: _decodeMaiaRating(saved['maiaElo']) ?? _analysisElo,
                 secondMaiaElo: saved.containsKey('secondMaiaElo')
                     ? (saved['secondMaiaElo'] == null
@@ -426,12 +480,17 @@ class _GamePageState extends State<GamePage>
     }
     if (saved['type'] == 'review') {
       try {
+        _reviewUseMoveHistory = saved['maiaUseMoveHistory'] == true;
         if (saved['activeGame'] case final Map game) {
           _reviewOpen = true;
           await _restoreGame(Map<String, dynamic>.from(game), paused: true);
         }
         final session = AnalysisSession.fromJson(
           Map<String, dynamic>.from(saved['session'] as Map),
+        );
+        _reviewHistoryPrefix = restoreMaiaHistoryPrefix(
+          saved['historyPrefix'],
+          session.positions.first,
         );
         final variations = (saved['variations'] as List? ?? const [])
             .map(
@@ -448,6 +507,8 @@ class _GamePageState extends State<GamePage>
                 MaterialPageRoute<void>(
                   builder: (_) => ReviewPage(
                     positions: session.positions,
+                    useMoveHistory: _reviewUseMoveHistory,
+                    historyPrefix: _reviewHistoryPrefix,
                     uciMoves: session.uciMoves,
                     sanMoves: session.sanMoves,
                     playerIsWhite: saved['playerIsWhite'] as bool? ?? true,
@@ -569,6 +630,11 @@ class _GamePageState extends State<GamePage>
       _stopChessnutLedRefresh();
       setState(() {
         _game = restored;
+        _gameUseMoveHistory = saved['maiaUseMoveHistory'] == true;
+        _gameHistoryPrefix = restoreMaiaHistoryPrefix(
+          saved['historyPrefix'],
+          restoredSession.positions.first,
+        );
         _engineThinking = false;
         _resultDialogShown = false;
         _naturalGameOver = restored.game_over;
@@ -783,6 +849,8 @@ class _GamePageState extends State<GamePage>
     'variations': _takebackVariations.map((item) => item.toJson()).toList(),
     'playerIsWhite': _playerIsWhite,
     'elo': _elo,
+    'maiaUseMoveHistory': _gameUseMoveHistory,
+    'historyPrefix': _gameHistoryPrefix,
     'timePreset': _timePreset.name,
     'customMinutes': _customMinutes,
     'customIncrement': _customIncrement,
@@ -830,6 +898,8 @@ class _GamePageState extends State<GamePage>
     'flipped': flipped,
     'playerIsWhite': playerIsWhite,
     'maiaElo': _analysisElo,
+    'maiaUseMoveHistory': _reviewUseMoveHistory,
+    'historyPrefix': _reviewHistoryPrefix,
     if (_secondMaiaEnabled) 'secondMaiaElo': _secondMaiaElo,
   });
 
@@ -921,6 +991,12 @@ class _GamePageState extends State<GamePage>
       fallback: 0,
       decode: (value) =>
           value is int && value >= 0 && value <= 30 ? value : null,
+    );
+    final useMoveHistory = _readValidatedPreference<bool>(
+      preferences,
+      'maiaUseMoveHistoryV1',
+      fallback: false,
+      decode: (value) => value is bool ? value : null,
     );
     final humanTiming = _readValidatedPreference<bool>(
       preferences,
@@ -1026,6 +1102,7 @@ class _GamePageState extends State<GamePage>
       _customIncrement =
           widget.startingCustomIncrement ?? _preferredCustomIncrement;
       _humanTiming = humanTiming;
+      _useMoveHistory = useMoveHistory;
       _premovesEnabled = premovesEnabled;
       _premovePenalty = premovePenalty;
       _multiplePremoves = multiplePremoves;
@@ -1085,6 +1162,7 @@ class _GamePageState extends State<GamePage>
       preferences.setBool('premovesEnabled', _premovesEnabled),
       preferences.setBool('premovePenalty', _premovePenalty),
       preferences.setBool('multiplePremoves', _multiplePremoves),
+      preferences.setBool('maiaUseMoveHistoryV1', _useMoveHistory),
       preferences.setDouble('temperatureV2', _temperature),
       preferences.setDouble('topPV2', _topP),
       preferences.setInt('analysisElo', _analysisElo),
@@ -1174,47 +1252,63 @@ class _GamePageState extends State<GamePage>
   Future<void> _showSamplingHelp() => showDialog<void>(
     context: context,
     builder: (context) => AlertDialog(
+      scrollable: true,
       title: Text(l10n(context).samplingTitle),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n(context).samplingDefaultsQuestion,
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            const SizedBox(height: 8),
-            Text(l10n(context).samplingFullRange),
-            const SizedBox(height: 14),
-            Text(
-              l10n(context).samplingExamplesTitle,
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            const SizedBox(height: 8),
-            Text(l10n(context).samplingExampleLikely),
-            const SizedBox(height: 8),
-            Text(l10n(context).samplingExampleReduced),
-            const SizedBox(height: 8),
-            Text(l10n(context).samplingExampleFull),
-            const SizedBox(height: 14),
-            Text(l10n(context).samplingStrength),
-            TextButton.icon(
-              key: const ValueKey('sampling-research-link'),
-              onPressed: () => maiaEngineChannel.invokeMethod<void>('openUrl', {
-                'url':
-                    'https://github.com/Dash1971/mobile-maia-research/blob/'
-                    'main/studies/maia3-sampling/REPORT.md',
-              }),
-              icon: const Icon(Icons.open_in_new),
-              label: Text(l10n(context).samplingResearch),
-            ),
-            const SizedBox(height: 14),
-            Text(l10n(context).samplingTemperatureHelp),
-            const SizedBox(height: 14),
-            Text(l10n(context).samplingTopPHelp),
-          ],
-        ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n(context).samplingDefaultsQuestion,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: 8),
+          Text(l10n(context).samplingFullRange),
+          const SizedBox(height: 14),
+          Text(
+            l10n(context).samplingExamplesTitle,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: 8),
+          Text(l10n(context).samplingExampleLikely),
+          const SizedBox(height: 8),
+          Text(l10n(context).samplingExampleReduced),
+          const SizedBox(height: 8),
+          Text(l10n(context).samplingExampleFull),
+          const SizedBox(height: 14),
+          Text(l10n(context).samplingStrength),
+          TextButton.icon(
+            key: const ValueKey('sampling-research-link'),
+            onPressed: () => maiaEngineChannel.invokeMethod<void>('openUrl', {
+              'url':
+                  'https://github.com/Dash1971/mobile-maia-research/blob/'
+                  'main/studies/maia3-sampling/REPORT.md',
+            }),
+            icon: const Icon(Icons.open_in_new),
+            label: Text(l10n(context).samplingResearch),
+          ),
+          const SizedBox(height: 14),
+          Text(l10n(context).samplingTemperatureHelp),
+          const SizedBox(height: 14),
+          Text(l10n(context).samplingTopPHelp),
+          const SizedBox(height: 14),
+          Text(
+            l10n(context).maiaHistorySetting,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: 8),
+          Text(l10n(context).maiaHistoryHelp),
+          TextButton.icon(
+            key: const ValueKey('history-research-link'),
+            onPressed: () => maiaEngineChannel.invokeMethod<void>('openUrl', {
+              'url':
+                  'https://github.com/Dash1971/mobile-maia-research/blob/'
+                  'main/studies/move-history-2026-10-09/REPORT.md',
+            }),
+            icon: const Icon(Icons.open_in_new),
+            label: Text(l10n(context).maiaHistoryResearch),
+          ),
+        ],
       ),
       actions: [
         TextButton(
@@ -1408,6 +1502,7 @@ class _GamePageState extends State<GamePage>
         MaterialPageRoute<void>(
           builder: (_) => AnalysisBoardPage(
             initialSession: session,
+            useMoveHistory: _useMoveHistory,
             maiaElo: _analysisElo,
             secondMaiaElo: _secondMaiaEnabled ? _secondMaiaElo : null,
             gameAnalysisQuality: _gameAnalysisQuality,
@@ -1439,6 +1534,7 @@ class _GamePageState extends State<GamePage>
       MaterialPageRoute<void>(
         builder: (context) => AnalysisBoardPage(
           initialSession: AnalysisSession.start(),
+          useMoveHistory: _useMoveHistory,
           maiaElo: _analysisElo,
           secondMaiaElo: _secondMaiaEnabled ? _secondMaiaElo : null,
           gameAnalysisQuality: _gameAnalysisQuality,
@@ -2421,6 +2517,23 @@ class _GamePageState extends State<GamePage>
         _game = widget.startingFen == null
             ? chess.Chess()
             : chess.Chess.fromFEN(widget.startingFen!);
+        _gameUseMoveHistory = widget.startingUseMoveHistory ?? _useMoveHistory;
+        final startingHistory = widget.startingPositionHistory;
+        _gameHistoryPrefix =
+            startingHistory != null &&
+                startingHistory.isNotEmpty &&
+                PgnVariationExporter._samePosition(
+                  startingHistory.last,
+                  _game.fen,
+                )
+            ? restoreMaiaHistoryPrefix(
+                startingHistory.sublist(
+                  max(0, startingHistory.length - 8),
+                  startingHistory.length - 1,
+                ),
+                _game.fen,
+              )
+            : const [];
         _positionHistory
           ..clear()
           ..add(_game.fen);
@@ -2763,12 +2876,16 @@ class _GamePageState extends State<GamePage>
       _maiaFailed = false;
     });
     try {
-      final tokens = MaiaEncoding.historicalTokens(_positionHistory);
+      final positions = List<String>.unmodifiable([
+        ..._gameHistoryPrefix,
+        ..._positionHistory,
+      ]);
+      final tokens = MaiaEncoding.historicalTokens(
+        positions,
+        useMoveHistory: _gameUseMoveHistory,
+      );
       final response = widget.maiaEvaluator != null
-          ? await widget.maiaEvaluator!(
-              List.unmodifiable(_positionHistory),
-              _elo,
-            )
+          ? await widget.maiaEvaluator!(positions, _elo)
           : await MaiaInferenceQueue.predict({
               'tokens': tokens,
               'selfElo': _elo,
@@ -3630,6 +3747,8 @@ class _GamePageState extends State<GamePage>
     final initialVariations = List<RecordedVariation>.unmodifiable(
       _takebackVariations,
     );
+    _reviewUseMoveHistory = _gameUseMoveHistory;
+    _reviewHistoryPrefix = _gameHistoryPrefix;
     await _saveReviewState(
       session,
       _playerIsWhite,
@@ -3643,6 +3762,8 @@ class _GamePageState extends State<GamePage>
       MaterialPageRoute<void>(
         builder: (context) => ReviewPage(
           positions: session.positions,
+          useMoveHistory: _reviewUseMoveHistory,
+          historyPrefix: _reviewHistoryPrefix,
           uciMoves: session.uciMoves,
           sanMoves: session.sanMoves,
           playerIsWhite: _playerIsWhite,
@@ -4550,6 +4671,16 @@ class _GamePageState extends State<GamePage>
                         ),
                       ),
                     ),
+                  SwitchListTile(
+                    key: const ValueKey('maia-history-setting'),
+                    value: _useMoveHistory,
+                    title: Text(l10n(context).maiaHistorySetting),
+                    subtitle: Text(l10n(context).maiaHistoryScope),
+                    onChanged: (value) {
+                      setState(() => _useMoveHistory = value);
+                      unawaited(_saveEnginePreferences());
+                    },
+                  ),
                   ListTile(
                     title: Text(
                       l10n(context).analysisRatingValue(
@@ -4638,6 +4769,7 @@ class _GamePageState extends State<GamePage>
                       onPressed: () {
                         setState(() {
                           _humanTiming = false;
+                          _useMoveHistory = false;
                           _premovesEnabled = true;
                           _premovePenalty = false;
                           _multiplePremoves = false;

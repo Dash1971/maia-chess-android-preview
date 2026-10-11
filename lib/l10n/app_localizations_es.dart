@@ -1228,4 +1228,26 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get samplingExampleFull =>
       '1 / 1 — Toda la variedad (predeterminado). Incluye todas las jugadas legales, aunque las más probables siguen apareciendo más a menudo.';
+
+  @override
+  String get maiaHistorySetting =>
+      'Usar el historial de jugadas (experimental)';
+
+  @override
+  String get maiaHistoryScope =>
+      'Se recomienda desactivarlo. Se aplica a nuevas partidas y tableros de análisis; las sesiones guardadas conservan su elección original.';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Permite que Maia tenga en cuenta hasta siete posiciones anteriores, además de la actual. Esto mejoró la predicción de jugadas humanas en nuestras pruebas con el modelo 79M, pero a veces favoreció la copia repetida de jugadas en aperturas de nivel bajo. No se ha demostrado que aumente la fuerza de juego. Por ahora, se recomienda desactivarlo. Una posición cargada por sí sola no tiene jugadas anteriores disponibles.';
+
+  @override
+  String get maiaHistoryResearch =>
+      'Leer la investigación sobre el historial de jugadas';
+
+  @override
+  String get maiaHistoryOn => 'Historial de jugadas: activado (experimental)';
+
+  @override
+  String get maiaHistoryOff => 'Historial de jugadas: desactivado';
 }

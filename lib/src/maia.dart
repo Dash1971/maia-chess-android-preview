@@ -71,19 +71,45 @@ class MaiaPositionAnalysis {
 class MaiaEncoding {
   static final Random _random = Random();
 
-  static Float32List historicalTokens(List<String> positions) {
-    // Maia-3 exposes reconstructed move history as an optional UCI mode. Its
-    // released engine default repeats the current position in all eight board
-    // slots. Alternating independently mirrored historical FENs can otherwise
-    // create a strong false copy-the-opponent signal when Maia plays Black.
-    final current = tokenizeFen(positions.last);
+  /// Effective eight-board input, oldest first. Each board uses its own
+  /// side-to-move orientation, matching the validated upstream encoder.
+  static List<String> historyWindow(
+    List<String> positions, {
+    bool useMoveHistory = false,
+  }) {
+    if (positions.isEmpty) throw ArgumentError.value(positions, 'positions');
+    final window = useMoveHistory
+        ? positions.skip(max(0, positions.length - 8)).toList()
+        : <String>[positions.last];
+    return List.unmodifiable([
+      ...List<String>.filled(8 - window.length, window.first),
+      ...window,
+    ]);
+  }
+
+  static String historyKey(
+    List<String> positions, {
+    bool useMoveHistory = false,
+  }) =>
+      '${useMoveHistory ? "history" : "current"}\n${historyWindow(positions, useMoveHistory: useMoveHistory).join("\n")}';
+
+  static Float32List historicalTokens(
+    List<String> positions, {
+    bool useMoveHistory = false,
+  }) {
+    // History is an experimental input choice; off retains the released
+    // engine's current-board repetition. Observed opening copying with history
+    // is model behavior, not evidence of an orientation bug.
+    final encoded = <String, List<double>>{};
+    final boards = historyWindow(positions, useMoveHistory: useMoveHistory)
+        .map((fen) => encoded.putIfAbsent(fen, () => tokenizeFen(fen)))
+        .toList(growable: false);
     return Float32List.fromList(
       List<double>.generate(64 * 97, (index) {
         final square = index ~/ 97;
         final channel = index % 97;
         if (channel == 96) return 0;
-        final pieceChannel = channel % 12;
-        return current[square * 12 + pieceChannel];
+        return boards[channel ~/ 12][square * 12 + channel % 12];
       }),
     );
   }

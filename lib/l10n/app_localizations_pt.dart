@@ -1236,4 +1236,25 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get samplingExampleFull =>
       '1 / 1 — Variedade completa (padrão). Todos os lances legais continuam possíveis, mas os mais prováveis ainda são jogados com mais frequência.';
+
+  @override
+  String get maiaHistorySetting => 'Usar histórico de posições (experimental)';
+
+  @override
+  String get maiaHistoryScope =>
+      'Recomendamos deixar desativado. Vale para novas partidas e tabuleiros de análise; sessões salvas mantêm a escolha original.';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Permite que Maia considere até sete posições anteriores além da atual. Isso melhorou a previsão de lances humanos nos nossos testes com o modelo 79M, mas às vezes incentivou a cópia repetida de lances em aberturas de jogadores com rating baixo. Não foi comprovado um aumento de força de jogo. Por enquanto, recomendamos deixar desativado. Uma posição carregada sozinha não tem lances anteriores disponíveis.';
+
+  @override
+  String get maiaHistoryResearch =>
+      'Ler a pesquisa sobre o histórico de posições';
+
+  @override
+  String get maiaHistoryOn => 'Histórico de posições: ativado (experimental)';
+
+  @override
+  String get maiaHistoryOff => 'Histórico de posições: desativado';
 }

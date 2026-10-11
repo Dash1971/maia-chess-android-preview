@@ -1580,5 +1580,29 @@
   "samplingExampleFull": "1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.",
   "@samplingExampleFull": {
     "description": "Maia-specific sampling help: 1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often."
+  },
+  "maiaHistorySetting": "Use move history (experimental)",
+  "@maiaHistorySetting": {
+    "description": "Maia-specific experimental history setting/help: Use move history (experimental)"
+  },
+  "maiaHistoryScope": "Off is recommended. New games and analysis boards use this setting; saved sessions keep their original choice.",
+  "@maiaHistoryScope": {
+    "description": "Maia-specific experimental history setting/help: Off is recommended. New games and analysis boards use this setting; saved sessions keep their original choice."
+  },
+  "maiaHistoryHelp": "Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use.",
+  "@maiaHistoryHelp": {
+    "description": "Maia-specific experimental history setting/help: Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use."
+  },
+  "maiaHistoryResearch": "Read the move-history research",
+  "@maiaHistoryResearch": {
+    "description": "Maia-specific experimental history setting/help: Read the move-history research"
+  },
+  "maiaHistoryOn": "Move history: on (experimental)",
+  "@maiaHistoryOn": {
+    "description": "Maia-specific experimental history setting/help: Move history: on (experimental)"
+  },
+  "maiaHistoryOff": "Move history: off",
+  "@maiaHistoryOff": {
+    "description": "Maia-specific experimental history setting/help: Move history: off"
   }
 }
