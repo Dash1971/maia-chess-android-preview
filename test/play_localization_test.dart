@@ -272,6 +272,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text(strings.samplingFullRange), findsOneWidget);
       expect(find.text(strings.samplingTopPHelp), findsOneWidget);
+      expect(find.text(strings.samplingExampleLikely), findsOneWidget);
+      expect(find.text(strings.samplingExampleReduced), findsOneWidget);
+      expect(find.text(strings.samplingExampleFull), findsOneWidget);
       expect(find.text('Temperature and Top-P'), findsNothing);
       await tester.tap(find.text(strings.close));
       await tester.pumpAndSettle();

@@ -1187,13 +1187,24 @@ class _GamePageState extends State<GamePage>
             const SizedBox(height: 8),
             Text(l10n(context).samplingFullRange),
             const SizedBox(height: 14),
+            Text(
+              l10n(context).samplingExamplesTitle,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            const SizedBox(height: 8),
+            Text(l10n(context).samplingExampleLikely),
+            const SizedBox(height: 8),
+            Text(l10n(context).samplingExampleReduced),
+            const SizedBox(height: 8),
+            Text(l10n(context).samplingExampleFull),
+            const SizedBox(height: 14),
             Text(l10n(context).samplingStrength),
             TextButton.icon(
               key: const ValueKey('sampling-research-link'),
               onPressed: () => maiaEngineChannel.invokeMethod<void>('openUrl', {
                 'url':
-                    'https://github.com/Dash1971/maia-chess-android/blob/'
-                    'main/docs/research/maia3-sampling/REPORT.md',
+                    'https://github.com/Dash1971/mobile-maia-research/blob/'
+                    'main/studies/maia3-sampling/REPORT.md',
               }),
               icon: const Icon(Icons.open_in_new),
               label: Text(l10n(context).samplingResearch),
@@ -4486,7 +4497,7 @@ class _GamePageState extends State<GamePage>
                   key: const ValueKey('sampling-help'),
                   tooltip: l10n(context).aboutTemperatureAndTopP,
                   onPressed: _showSamplingHelp,
-                  icon: const Icon(Icons.help_outline),
+                  icon: const Icon(Icons.info_outline),
                 ),
                 children: [
                   ListTile(
@@ -4535,7 +4546,7 @@ class _GamePageState extends State<GamePage>
                         l10n(context).samplingRecommendationWarning,
                         key: const ValueKey('sampling-recommendation-warning'),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.error,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ),

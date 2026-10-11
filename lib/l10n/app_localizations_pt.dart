@@ -964,8 +964,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get samplingTitle => 'Temperatura e Top-P';
 
   @override
-  String get samplingDefaultsQuestion =>
-      'Por que temperatura 1,00 e Top-P 1,00?';
+  String get samplingDefaultsQuestion => 'Escolha quanta variedade você quer';
 
   @override
   String get samplingResearch => 'Ler a pesquisa sobre amostragem';
@@ -990,19 +989,19 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'Estas configurações permitem que o Maia use toda a variedade de lances humanos previstos pelo modelo. Nos nossos testes com o rating 1600, elas produziram escolhas de abertura muito mais próximas das partidas do Lichess filtradas por rating.';
+      'Maia prevê quais lances pessoas da força escolhida fariam. A temperatura e o Top-P controlam como ele escolhe entre esses lances.';
 
   @override
   String get samplingStrength =>
-      'Valores menores reduzem a variedade e podem tornar o Maia mais forte. Preferimos um repertório de aberturas mais humano à força máxima. O rating do Maia descreve os jogadores que o modelo representa, sem garantir uma força de jogo exata.';
+      'Valores mais baixos podem tornar Maia mais difícil de vencer, mas também mais repetitivo. Nos nossos testes com a configuração 1600, 1 / 1 produziu aberturas mais próximas de partidas humanas, enquanto valores mais baixos venceram com mais frequência. Isso não garante o melhor lance nem uma força de jogo exata.';
 
   @override
   String get samplingTemperatureHelp =>
-      'A temperatura controla o quanto as probabilidades dos lances do Maia ficam concentradas. Com 0, o Maia sempre escolhe o lance que o modelo prevê ser o mais provável entre jogadores humanos. Valores positivos menores favorecem mais os lances mais prováveis; valores maiores dão mais chance aos lances menos prováveis.';
+      'Temperatura: com 0, Maia sempre escolhe seu lance mais provável. Valores baixos favorecem os lances mais prováveis; valores altos dão mais chances aos menos prováveis.';
 
   @override
   String get samplingTopPHelp =>
-      'O Top-P ordena os lances do mais provável ao menos provável e mantém o menor grupo inicial cuja soma das probabilidades atinge esse valor. Valores menores restringem a escolha aos lances mais prováveis; 1,00 mantém todos os lances legais.';
+      'Top-P: valores mais baixos mantêm um grupo menor de lances prováveis; 1 mantém todos os lances legais. Não tem efeito quando a temperatura é 0.';
 
   @override
   String get aboutPoweredBy =>
@@ -1030,7 +1029,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'A temperatura ou o Top-P está diferente do valor recomendado de 1,00. Consulte o botão de informações para saber mais.';
+      'Reduzir a temperatura ou o Top-P pode tornar Maia mais forte no meio-jogo, mas diminui a variedade nas aberturas. Veja o botão de informação para saber mais.';
 
   @override
   String get couldNotOpenPgn => 'Não foi possível abrir o PGN.';
@@ -1222,4 +1221,19 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get boardConfirmPositionHelp =>
       'Confira se todas as peças correspondem à posição na tela.';
+
+  @override
+  String get samplingExamplesTitle => 'Exemplos (Temperatura / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — Mais previsível. Maia sempre escolhe seu lance mais provável.';
+
+  @override
+  String get samplingExampleReduced =>
+      '0,5 / 0,9 — Alguma variedade. Favorece escolhas comuns e pode tornar Maia mais difícil de vencer.';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — Variedade completa (padrão). Todos os lances legais continuam possíveis, mas os mais prováveis ainda são jogados com mais frequência.';
 }

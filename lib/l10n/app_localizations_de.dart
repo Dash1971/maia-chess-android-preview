@@ -957,7 +957,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingDefaultsQuestion =>
-      'Warum Temperatur 1,00 und Top-P 1,00?';
+      'Wähle, wie abwechslungsreich Maia spielen soll';
 
   @override
   String get samplingResearch => 'Forschung zur Zugauswahl lesen';
@@ -983,19 +983,19 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'Mit diesen Einstellungen kann Maia die gesamte Bandbreite vorhergesagter menschlicher Züge nutzen. In unseren Tests mit der Einstellung 1600 ähnelte die Eröffnungswahl dadurch deutlich stärker der von Lichess-Partien, die nach Wertungszahl gefiltert wurden.';
+      'Maia sagt voraus, welche Züge Menschen mit der gewählten Wertungszahl spielen würden. Temperatur und Top-P steuern, wie Maia zwischen diesen Zügen auswählt.';
 
   @override
   String get samplingStrength =>
-      'Niedrigere Werte verringern die Vielfalt und können Maia stärker machen. Wir bevorzugen ein menschlicheres Eröffnungsrepertoire gegenüber maximaler Spielstärke. Maias Rating beschreibt die Spieler, deren Verhalten das Modell nachbildet, und garantiert keine exakte Spielstärke.';
+      'Niedrigere Werte können Maia schwerer zu schlagen machen, führen aber auch zu mehr Wiederholungen. In unseren Tests bei der Einstellung 1600 ähnelten die Eröffnungen mit 1 / 1 stärker menschlichen Partien, während niedrigere Werte häufiger gewannen. Das garantiert weder den besten Zug noch eine genaue Spielstärke.';
 
   @override
   String get samplingTemperatureHelp =>
-      'Die Temperatur steuert, wie stark sich Maias Zugwahrscheinlichkeiten auf einzelne Züge konzentrieren. Bei 0 wählt Maia immer den Zug, den Menschen laut Modell am ehesten spielen würden. Niedrigere positive Werte bevorzugen die wahrscheinlichsten Züge stärker; höhere Werte geben weniger wahrscheinlichen Zügen mehr Chancen, gewählt zu werden.';
+      'Temperatur: Bei 0 wählt Maia immer den wahrscheinlichsten Zug. Niedrige Werte bevorzugen wahrscheinliche Züge; höhere Werte geben selteneren Zügen mehr Chancen.';
 
   @override
   String get samplingTopPHelp =>
-      'Top-P sortiert Züge von der höchsten zur niedrigsten Wahrscheinlichkeit und behält dann die kleinste Gruppe der wahrscheinlichsten Züge bei, deren summierte Wahrscheinlichkeit diesen Wert erreicht. Niedrigere Werte beschränken die Auswahl auf wahrscheinlichere Züge; 1,00 behält alle regelgerechten Züge bei.';
+      'Top-P: Niedrigere Werte beschränken die Auswahl auf eine kleinere Gruppe wahrscheinlicher Züge; 1 behält alle legalen Züge bei. Bei Temperatur 0 hat Top-P keine Wirkung.';
 
   @override
   String get aboutPoweredBy =>
@@ -1023,7 +1023,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'Temperatur oder Top-P weicht vom empfohlenen Wert 1,00 ab. Weitere Informationen findest du über die Info-Schaltfläche.';
+      'Niedrigere Werte für Temperatur oder Top-P können Maia im Mittelspiel stärker machen, verringern aber die Eröffnungsvielfalt. Näheres steht unter dem Infosymbol.';
 
   @override
   String get couldNotOpenPgn => 'PGN konnte nicht geöffnet werden.';
@@ -1216,4 +1216,19 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get boardConfirmPositionHelp =>
       'Prüfe, ob jede Figur mit der Stellung auf dem Bildschirm übereinstimmt.';
+
+  @override
+  String get samplingExamplesTitle => 'Beispiele (Temperatur / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — Am vorhersehbarsten. Maia wählt immer den wahrscheinlichsten Zug.';
+
+  @override
+  String get samplingExampleReduced =>
+      '0,5 / 0,9 — Etwas Abwechslung. Bevorzugt häufige Züge und kann Maia zu einem stärkeren Gegner machen.';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — Volle Vielfalt (Standard). Alle legalen Züge bleiben möglich, wahrscheinliche Züge werden aber weiterhin häufiger gespielt.';
 }

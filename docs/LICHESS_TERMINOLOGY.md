@@ -136,3 +136,17 @@ button printed on supported hardware. The surrounding instructions are translate
 including the two-press confirmation window. Bluetooth likewise retains its
 protocol name. No new placeholders or English prose fallbacks were introduced.
 The translations and review CSV remain provisional pending native-speaker review.
+
+## Plain-language sampling guidance (Dev review)
+
+Temperature, Top-P and Maia's human-move predictions are app-specific concepts.
+The revised help uses examples rather than new preset controls, and distinguishes
+likely human moves from objectively best moves. All ten catalogs retain the same
+meaning. Decimal commas are used in the European-language examples where customary.
+The Spanish temperature paragraph follows the native-speaker suggestion in
+Stable #23; timed-premove help restores the missing clock condition while retaining
+Lichess's existing “movimiento anticipado” terminology.
+
+The source of truth for the evidence remains the sampling study (1600 setting),
+not a claim of guaranteed strength at every rating. No sampling defaults, saved
+settings or algorithms change with this copy update.

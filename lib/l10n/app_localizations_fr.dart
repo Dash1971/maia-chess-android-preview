@@ -954,7 +954,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingDefaultsQuestion =>
-      'Pourquoi une température de 1,00 et un Top-P de 1,00 ?';
+      'Choisissez la variété de jeu souhaitée';
 
   @override
   String get samplingResearch => 'Lire l’étude sur l’échantillonnage';
@@ -979,19 +979,19 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'Ces paramètres permettent à Maia d’utiliser toute la gamme des coups humains prédits. Lors de nos tests avec le réglage 1600, ils ont produit des choix d’ouverture beaucoup plus proches de ceux des parties Lichess filtrées par classement.';
+      'Maia prédit les coups que joueraient des personnes du niveau choisi. La température et Top-P déterminent comment elle choisit parmi ces coups.';
 
   @override
   String get samplingStrength =>
-      'Des valeurs plus faibles réduisent la variété et peuvent rendre Maia plus fort. Nous privilégions un répertoire d’ouvertures plus humain plutôt qu’une force maximale. Le classement de Maia décrit les joueurs qu’il modélise, sans garantir un niveau de jeu exact.';
+      'Des valeurs plus basses peuvent rendre Maia plus difficile à battre, mais aussi plus répétitive. Dans nos tests au réglage 1600, 1 / 1 donnait des ouvertures plus proches des parties humaines, tandis que les valeurs plus basses gagnaient plus souvent. Cela ne garantit ni le meilleur coup ni une force de jeu précise.';
 
   @override
   String get samplingTemperatureHelp =>
-      'La température contrôle la concentration des probabilités des coups de Maia. À 0, Maia choisit toujours le coup que le modèle prédit comme le plus susceptible d’être joué par un humain. Les valeurs positives plus faibles favorisent davantage les coups les plus probables ; les valeurs plus élevées donnent plus de chances aux coups moins probables.';
+      'Température : à 0, Maia choisit toujours son coup le plus probable. Les valeurs basses favorisent les coups probables ; les valeurs hautes donnent plus de chances aux coups moins probables.';
 
   @override
   String get samplingTopPHelp =>
-      'Le Top-P classe les coups du plus au moins probable, puis conserve le plus petit groupe en tête de liste dont la probabilité cumulée atteint cette valeur. Des valeurs plus faibles limitent le choix aux coups les plus probables ; 1,00 conserve tous les coups légaux.';
+      'Top-P : les valeurs basses limitent le choix à un plus petit groupe de coups probables ; 1 conserve tous les coups légaux. Ce réglage est sans effet lorsque la température vaut 0.';
 
   @override
   String get aboutPoweredBy =>
@@ -1019,7 +1019,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'La température ou le Top-P diffère de la valeur recommandée de 1,00. Consultez le bouton d’information pour en savoir plus.';
+      'Baisser la température ou Top-P peut renforcer Maia en milieu de partie, mais réduit la variété des ouvertures. Consultez le bouton d’information pour en savoir plus.';
 
   @override
   String get couldNotOpenPgn => 'Impossible d’ouvrir le PGN.';
@@ -1212,4 +1212,19 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get boardConfirmPositionHelp =>
       'Vérifiez que chaque pièce correspond à la position affichée à l’écran.';
+
+  @override
+  String get samplingExamplesTitle => 'Exemples (Température / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — Le plus prévisible. Maia choisit toujours son coup le plus probable.';
+
+  @override
+  String get samplingExampleReduced =>
+      '0,5 / 0,9 — Un peu de variété. Favorise les choix courants et peut rendre Maia plus difficile à battre.';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — Toute la variété (par défaut). Tous les coups légaux restent possibles, mais les plus probables sont toujours joués plus souvent.';
 }

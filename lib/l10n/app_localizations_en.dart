@@ -939,7 +939,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get samplingTitle => 'Temperature and Top-P';
 
   @override
-  String get samplingDefaultsQuestion => 'Why Temperature 1.00 and Top-P 1.00?';
+  String get samplingDefaultsQuestion => 'Choose how much variety you want';
 
   @override
   String get samplingResearch => 'Read the sampling research';
@@ -964,19 +964,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'These settings let Maia use its full range of predicted human moves. In our tests at the 1600 setting, they produced opening choices much closer to rating-filtered Lichess games.';
+      'Maia predicts which moves people at your chosen rating would play. Temperature and Top-P control how it chooses between those moves.';
 
   @override
   String get samplingStrength =>
-      'Lower settings reduce variety and can make Maia stronger. We favor a more human opening repertoire over maximum strength. Maia’s rating describes the players it models, rather than guaranteeing an exact playing strength.';
+      'Lower settings can make Maia tougher to beat, but also more repetitive. In our tests at the 1600 setting, 1 / 1 gave an opening mix closer to human games, while lower settings won more often. This does not guarantee the best move or an exact playing strength.';
 
   @override
   String get samplingTemperatureHelp =>
-      'Temperature controls how concentrated Maia’s move probabilities are. At 0, Maia always chooses the move the model predicts humans are most likely to play. Lower positive values favor the most likely moves more strongly; higher values give less likely moves more chance.';
+      'Temperature: at 0, Maia always chooses its most likely move. Low values favor likely moves; higher values give less likely moves more chance.';
 
   @override
   String get samplingTopPHelp =>
-      'Top-P ranks moves from most to least likely, then keeps the smallest leading group whose combined probability reaches this value. Lower values restrict the choice to more likely moves; 1.00 keeps every legal move.';
+      'Top-P: lower values keep a smaller group of likely moves; 1 keeps every legal move. It has no effect when Temperature is 0.';
 
   @override
   String get aboutPoweredBy =>
@@ -1004,7 +1004,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'Temperature or Top-P differs from the recommended 1.00. See the information button for details.';
+      'Lowering Temperature or Top-P may make Maia stronger in the middlegame, but reduce opening variety. See the information button for details.';
 
   @override
   String get couldNotOpenPgn => 'Could not open PGN.';
@@ -1195,4 +1195,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get boardConfirmPositionHelp =>
       'Check that every piece matches the position on screen.';
+
+  @override
+  String get samplingExamplesTitle => 'Examples (Temperature / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — Most predictable. Always choose Maia’s most likely move.';
+
+  @override
+  String get samplingExampleReduced =>
+      '0.5 / 0.9 — Some variety. Favor common choices for a potentially tougher opponent.';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.';
 }

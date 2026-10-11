@@ -129,7 +129,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get use01SecondsPerPremoveInTimedGames =>
-      'Cada movimiento anticipado consume 0,1 segundos de tu reloj';
+      'En partidas con tiempo, cada movimiento anticipado consume 0,1 segundos de tu reloj.';
 
   @override
   String get allowMultiplePremoves => 'Permitir varios movimientos anticipados';
@@ -955,8 +955,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get samplingTitle => 'Temperatura y Top-P';
 
   @override
-  String get samplingDefaultsQuestion =>
-      '¿Por qué Temperatura 1,00 y Top-P 1,00?';
+  String get samplingDefaultsQuestion => 'Elige cuánta variedad quieres';
 
   @override
   String get samplingResearch => 'Leer la investigación sobre muestreo';
@@ -982,19 +981,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'Estos ajustes permiten a Maia usar toda la gama de jugadas que predice para jugadores humanos. En nuestras pruebas con el ajuste 1600, las elecciones de apertura se parecieron mucho más a las de partidas de Lichess filtradas por nivel.';
+      'Maia predice qué jugadas harían personas del nivel que has elegido. La temperatura y Top-P controlan cómo elige entre esas jugadas.';
 
   @override
   String get samplingStrength =>
-      'Los valores bajos reducen la variedad y pueden aumentar la fuerza de juego de Maia. Preferimos un repertorio de aperturas más humano a la máxima fuerza de juego. El Elo de Maia describe el nivel de los jugadores que modela y no garantiza una fuerza de juego exacta.';
+      'Los valores bajos pueden hacer que Maia sea más difícil de vencer, pero también más repetitiva. En nuestras pruebas con el ajuste 1600, 1 / 1 produjo aperturas más parecidas a las de partidas humanas, mientras que los valores bajos ganaron más a menudo. Esto no garantiza la mejor jugada ni una fuerza de juego exacta.';
 
   @override
   String get samplingTemperatureHelp =>
-      'La temperatura controla cuánto se concentran las probabilidades de las jugadas de Maia. Con 0, Maia siempre elige la jugada que el modelo predice como más probable para los jugadores humanos. Los valores positivos bajos favorecen más las jugadas más probables; los valores altos dan más posibilidades a las menos probables.';
+      'Temperatura: con 0, Maia siempre elige su jugada más probable. Los valores bajos favorecen las jugadas más probables; los valores altos dan más posibilidades a las menos probables.';
 
   @override
   String get samplingTopPHelp =>
-      'Top-P ordena las jugadas de mayor a menor probabilidad y conserva el grupo mínimo, empezando por las más probables, cuya probabilidad acumulada alcanza ese valor. Los valores bajos restringen la elección a las jugadas más probables; 1,00 conserva todas las jugadas legales.';
+      'Top-P: los valores bajos conservan un grupo más pequeño de jugadas probables; 1 conserva todas las jugadas legales. No tiene efecto cuando la temperatura es 0.';
 
   @override
   String get aboutPoweredBy =>
@@ -1022,7 +1021,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'La temperatura o Top-P difiere del valor recomendado 1,00. Consulta el botón de información para más detalles.';
+      'Bajar la temperatura o Top-P puede hacer que Maia juegue mejor en el medio juego, pero reduce la variedad en las aperturas. Consulta el botón de información para más detalles.';
 
   @override
   String get couldNotOpenPgn => 'No se pudo abrir el PGN.';
@@ -1214,4 +1213,19 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get boardConfirmPositionHelp =>
       'Comprueba que todas las piezas coincidan con la posición en pantalla.';
+
+  @override
+  String get samplingExamplesTitle => 'Ejemplos (Temperatura / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — Máxima previsibilidad. Maia siempre elige su jugada más probable.';
+
+  @override
+  String get samplingExampleReduced =>
+      '0,5 / 0,9 — Algo de variedad. Favorece las opciones habituales y puede resultar más difícil de vencer.';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — Toda la variedad (predeterminado). Incluye todas las jugadas legales, aunque las más probables siguen apareciendo más a menudo.';
 }
