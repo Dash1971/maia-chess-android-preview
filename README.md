@@ -18,7 +18,11 @@ screenshots, see the
 
 [Build-channel status and testing scope](docs/BUILD_CHANNELS.md)
 
-## Preview 2.4.0-beta.1
+## Preview 2.4.0-beta.2
+
+Beta.2 shortens fresh Chessnut discovery to three seconds and keeps confirmed
+NEW GAME resets on the play screen. Colors and settings stay the same; LEDs
+guide piece replacement, and play starts automatically when the board is ready.
 
 This Preview promotes the reviewed Maia settings and Chessnut improvements for
 broader testing, retaining Preview's separate package, signing identity and

@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published 2.3.0; unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.1](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.1), code 2403; updates beta.9 in place | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.2](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.2), code 2404; updates beta.1 in place | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -57,10 +57,13 @@ actual 79M model. History is experimental and does not promise greater strength.
 - The release's verification bundle records APK packaging/signature checks, byte-identical signature reconstruction, beta.9 upgrade checks and native 79M qualification. The separate harness source is provided for reproduction; the harness is not in the app.
 - Stable 2.3.0 and Dev alpha.2 were not rebuilt or republished. Physical Chessnut acceptance remains outstanding with the owner/testers; this publication does not claim Grand Kingdom/DGT support.
 
-## Preview 2.4.0-beta.2 candidate (not yet published)
+## Preview 2.4.0-beta.2 publication record
 
-The Chessnut reset follow-up reduces fresh discovery from four to three seconds.
-After reset confirmation it stays in-game, preserves colors/settings, and waits
-for LED-guided physical setup before automatically starting. This source change
-is **not** in the published beta.1 APK above; update this record when the next
-verified APK is published. Grand Kingdom/DGT remain Dev-only.
+- Source: `0f4f2400b1f8cedcbe925deb233ad6700cba4bfa` ([fix #108](https://github.com/Dash1971/maia-chess-android-preview/pull/108), [release #109](https://github.com/Dash1971/maia-chess-android-preview/pull/109)). Later documentation commits do not rebuild this APK.
+- Fresh discovery is three seconds. Confirmed Chessnut NEW GAME stays in-game, retains colors/settings and waits for LED-guided physical setup before automatically starting. Pending setup supports restore, reconnect and phone fallback.
+- [Release CI](https://github.com/Dash1971/maia-chess-android-preview/actions/runs/38317124534): 895 Flutter tests, 28 explicit Preview tests, 51 release-tool tests, native board policies, localization, analysis and Android packaging passed.
+- GitHub Linux and independent Linux unsigned APK SHA-256: `f2f09e3bf094b54f4e19ffef06d1a5f881d392716ddbbbd5e44d0b70e34d155d`.
+- Signed APK SHA-256: `2bebe91bea2440feb7b37caa9ebfe5c4925135d010ec0cbb600da89efac670d4`. Preview certificate remains `cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e`. Signature reconstruction is byte-identical.
+- The release verification bundle records the actual signed beta.1 upgrade, real Maia opening move with the player Black, and saved-game regressions for variations, unfinished games, checkmate, archive restoration and force-stop/restart. Additional fixture upgrades use temporary test signatures; the published-certificate upgrade is recorded separately.
+- Model/engine dependencies are unchanged; beta.1's native tensor qualification is historical evidence, not a newly repeated beta.2 run. Physical discovery, LEDs and NEW GAME behavior still need owner/tester acceptance.
+- Grand Kingdom/DGT remain Dev-only. Stable 2.3.0 and Dev alpha.2 were not rebuilt or republished; no Stable app-store changes.
