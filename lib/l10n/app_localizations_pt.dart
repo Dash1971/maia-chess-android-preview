@@ -964,8 +964,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get samplingTitle => 'Temperatura e Top-P';
 
   @override
-  String get samplingDefaultsQuestion =>
-      'Por que temperatura 1,00 e Top-P 1,00?';
+  String get samplingDefaultsQuestion => 'Escolha quanta variedade você quer';
 
   @override
   String get samplingResearch => 'Ler a pesquisa sobre amostragem';
@@ -990,19 +989,19 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'Estas configurações permitem que o Maia use toda a variedade de lances humanos previstos pelo modelo. Nos nossos testes com o rating 1600, elas produziram escolhas de abertura muito mais próximas das partidas do Lichess filtradas por rating.';
+      'Maia prevê quais lances pessoas da força escolhida fariam. A temperatura e o Top-P controlam como ele escolhe entre esses lances.';
 
   @override
   String get samplingStrength =>
-      'Valores menores reduzem a variedade e podem tornar o Maia mais forte. Preferimos um repertório de aberturas mais humano à força máxima. O rating do Maia descreve os jogadores que o modelo representa, sem garantir uma força de jogo exata.';
+      'Valores mais baixos podem tornar Maia mais difícil de vencer, mas também mais repetitivo. Nos nossos testes com a configuração 1600, 1 / 1 produziu aberturas mais próximas de partidas humanas, enquanto valores mais baixos venceram com mais frequência. Isso não garante o melhor lance nem uma força de jogo exata.';
 
   @override
   String get samplingTemperatureHelp =>
-      'A temperatura controla o quanto as probabilidades dos lances do Maia ficam concentradas. Com 0, o Maia sempre escolhe o lance que o modelo prevê ser o mais provável entre jogadores humanos. Valores positivos menores favorecem mais os lances mais prováveis; valores maiores dão mais chance aos lances menos prováveis.';
+      'Temperatura: com 0, Maia sempre escolhe seu lance mais provável. Valores baixos favorecem os lances mais prováveis; valores altos dão mais chances aos menos prováveis.';
 
   @override
   String get samplingTopPHelp =>
-      'O Top-P ordena os lances do mais provável ao menos provável e mantém o menor grupo inicial cuja soma das probabilidades atinge esse valor. Valores menores restringem a escolha aos lances mais prováveis; 1,00 mantém todos os lances legais.';
+      'Top-P: valores mais baixos mantêm um grupo menor de lances prováveis; 1 mantém todos os lances legais. Não tem efeito quando a temperatura é 0.';
 
   @override
   String get aboutPoweredBy =>
@@ -1030,7 +1029,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'A temperatura ou o Top-P está diferente do valor recomendado de 1,00. Consulte o botão de informações para saber mais.';
+      'Reduzir a temperatura ou o Top-P pode tornar Maia mais forte no meio-jogo, mas diminui a variedade nas aberturas. Veja o botão de informação para saber mais.';
 
   @override
   String get couldNotOpenPgn => 'Não foi possível abrir o PGN.';
@@ -1123,4 +1122,139 @@ class AppLocalizationsPt extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'Empate ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental =>
+      'Tabuleiro eletrônico (experimental)';
+
+  @override
+  String get connectBoard => 'Conectar tabuleiro';
+
+  @override
+  String get chooseBoard => 'Escolher um tabuleiro';
+
+  @override
+  String get chooseAnotherBoard => 'Escolher outro tabuleiro';
+
+  @override
+  String get boardSearching => 'Procurando tabuleiros…';
+
+  @override
+  String get boardConnecting => 'Conectando ao tabuleiro…';
+
+  @override
+  String get boardDisconnected => 'Tabuleiro desconectado';
+
+  @override
+  String get boardConnectionError =>
+      'Não foi possível conectar. Verifique o Bluetooth e o tabuleiro e tente novamente.';
+
+  @override
+  String get boardStartingPosition =>
+      'Monte a posição inicial padrão no seu tabuleiro.';
+
+  @override
+  String get boardReady => 'Tabuleiro pronto';
+
+  @override
+  String get boardExperimentalNotice =>
+      'O suporte a novos tabuleiros é experimental. Confira os lances nas duas telas e relate problemas de conexão.';
+
+  @override
+  String get boardGameRestriction =>
+      'As partidas com tabuleiro eletrônico começam na posição inicial padrão e sem limite de tempo.';
+
+  @override
+  String get boardConfirmSetup => 'Montei a posição inicial';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'Confira cada peça antes de começar. Este tabuleiro não consegue identificar o tipo de peça.';
+
+  @override
+  String get boardChooseMove => 'Confirme seu lance no tabuleiro';
+
+  @override
+  String get boardAmbiguousMove =>
+      'O tabuleiro não consegue distinguir esses lances. Escolha o lance que você fez.';
+
+  @override
+  String get boardUnavailable =>
+      'O tabuleiro não está pronto. Reconecte ou continue no celular.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'Pressione NEW GAME novamente em até 2,5 segundos para confirmar ou use os botões abaixo.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'Para confirmar no tabuleiro, pressione NEW GAME duas vezes em até 2,5 segundos.';
+
+  @override
+  String get boardPhysicalMove => 'Complete o lance no seu tabuleiro.';
+
+  @override
+  String get boardResetPhysical =>
+      'Antes de continuar, restaure no tabuleiro a posição exibida na tela.';
+
+  @override
+  String get boardNoResults =>
+      'Nenhum tabuleiro compatível encontrado. Ative seu tabuleiro e tente novamente.';
+
+  @override
+  String get boardWaitingForSelection => 'Escolha um tabuleiro para conectar.';
+
+  @override
+  String get boardReconnect => 'Reconectar tabuleiro';
+
+  @override
+  String get boardLockedPegasus =>
+      'O Pegasus está bloqueado. Esta versão Dev não inclui a chave de inicialização do fabricante.';
+
+  @override
+  String get boardMotorRecovery =>
+      'Continue no celular. Este adaptador experimental não consegue restaurar com segurança o estado do motor do tabuleiro.';
+
+  @override
+  String get boardConfirmPosition => 'Confirmar a posição do tabuleiro físico';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'Confira se todas as peças correspondem à posição na tela.';
+
+  @override
+  String get samplingExamplesTitle => 'Exemplos (Temperatura / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — Mais previsível. Maia sempre escolhe seu lance mais provável.';
+
+  @override
+  String get samplingExampleReduced =>
+      '0,5 / 0,9 — Alguma variedade. Favorece escolhas comuns e pode tornar Maia mais difícil de vencer.';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — Variedade completa (padrão). Todos os lances legais continuam possíveis, mas os mais prováveis ainda são jogados com mais frequência.';
+
+  @override
+  String get maiaHistorySetting => 'Usar histórico de posições (experimental)';
+
+  @override
+  String get maiaHistoryScope =>
+      'Recomendamos deixar desativado. Toque no botão de informações para saber mais.';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Permite que Maia considere até sete posições anteriores além da atual. Isso melhorou a previsão de lances humanos nos nossos testes com o modelo 79M, mas às vezes incentivou a cópia repetida de lances em aberturas de jogadores com rating baixo. Não foi comprovado um aumento de força de jogo. Por enquanto, recomendamos deixar desativado. Uma posição carregada sozinha não tem lances anteriores disponíveis. Vale para novas partidas e tabuleiros de análise; sessões salvas mantêm a escolha original.';
+
+  @override
+  String get maiaHistoryResearch =>
+      'Ler a pesquisa sobre o histórico de posições';
+
+  @override
+  String get maiaHistoryOn => 'Histórico de posições: ativado (experimental)';
+
+  @override
+  String get maiaHistoryOff => 'Histórico de posições: desativado';
 }

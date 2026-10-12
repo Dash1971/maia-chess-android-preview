@@ -569,29 +569,20 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Temperature and Top-P'), findsOneWidget);
+    expect(find.textContaining('at 0, Maia always chooses'), findsOneWidget);
     expect(
-      find.textContaining('how concentrated Maia’s move probabilities are'),
+      find.textContaining('It has no effect when Temperature is 0'),
       findsOneWidget,
     );
-    expect(
-      find.textContaining('smallest leading group whose combined probability'),
-      findsOneWidget,
-    );
-    expect(
-      find.textContaining('Temperature 1.00 and Top-P 1.00'),
-      findsOneWidget,
-    );
+    expect(find.text('Choose how much variety you want'), findsOneWidget);
     expect(find.textContaining('tests at the 1600 setting'), findsOneWidget);
     expect(
-      find.textContaining('rating-filtered Lichess games'),
+      find.textContaining('does not guarantee the best move'),
       findsOneWidget,
     );
-    expect(find.textContaining('can make Maia stronger'), findsOneWidget);
-    expect(
-      find.textContaining('a more human opening repertoire'),
-      findsOneWidget,
-    );
-    expect(find.textContaining('rather than guaranteeing'), findsOneWidget);
+    expect(find.textContaining('0 / 0 — Most predictable'), findsOneWidget);
+    expect(find.textContaining('0.5 / 0.9 — Some variety'), findsOneWidget);
+    expect(find.textContaining('1 / 1 — Full variety'), findsOneWidget);
 
     final link = find.byKey(const ValueKey('sampling-research-link'));
     await tester.ensureVisible(link);
@@ -600,8 +591,8 @@ void main() {
     final openUrl = calls.singleWhere((call) => call.method == 'openUrl');
     expect(openUrl.arguments, {
       'url':
-          'https://github.com/Dash1971/maia-chess-android/blob/'
-          'main/docs/research/maia3-sampling/REPORT.md',
+          'https://github.com/Dash1971/mobile-maia-research/blob/'
+          'main/studies/maia3-sampling/REPORT.md',
     });
     await tester.tap(find.text('Close'));
     await tester.pumpAndSettle();
@@ -630,7 +621,9 @@ void main() {
     ('temperatureV2', 'temperature-setting'),
     ('topPV2', 'top-p-setting'),
   ]) {
-    testWidgets('sampling warning follows ${setting.$1} alone', (tester) async {
+    testWidgets('neutral sampling guidance follows ${setting.$1} alone', (
+      tester,
+    ) async {
       SharedPreferences.setMockInitialValues({
         'temperatureV2': 1.0,
         'topPV2': 1.0,
@@ -646,9 +639,9 @@ void main() {
       );
       expect(warning, findsOneWidget);
       final warningText = tester.widget<Text>(warning);
-      expect(warningText.data, contains('recommended 1.00'));
+      expect(warningText.data, contains('reduce opening variety'));
       final theme = Theme.of(tester.element(warning));
-      expect(warningText.style?.color, theme.colorScheme.error);
+      expect(warningText.style?.color, theme.colorScheme.onSurfaceVariant);
       expect(warningText.style?.fontSize, theme.textTheme.bodySmall?.fontSize);
 
       final slider = tester.widget<Slider>(

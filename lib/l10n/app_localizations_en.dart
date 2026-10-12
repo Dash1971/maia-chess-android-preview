@@ -939,7 +939,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get samplingTitle => 'Temperature and Top-P';
 
   @override
-  String get samplingDefaultsQuestion => 'Why Temperature 1.00 and Top-P 1.00?';
+  String get samplingDefaultsQuestion => 'Choose how much variety you want';
 
   @override
   String get samplingResearch => 'Read the sampling research';
@@ -964,19 +964,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'These settings let Maia use its full range of predicted human moves. In our tests at the 1600 setting, they produced opening choices much closer to rating-filtered Lichess games.';
+      'Maia predicts which moves people at your chosen rating would play. Temperature and Top-P control how it chooses between those moves.';
 
   @override
   String get samplingStrength =>
-      'Lower settings reduce variety and can make Maia stronger. We favor a more human opening repertoire over maximum strength. Maia’s rating describes the players it models, rather than guaranteeing an exact playing strength.';
+      'Lower settings can make Maia tougher to beat, but also more repetitive. In our tests at the 1600 setting, 1 / 1 gave an opening mix closer to human games, while lower settings won more often. This does not guarantee the best move or an exact playing strength.';
 
   @override
   String get samplingTemperatureHelp =>
-      'Temperature controls how concentrated Maia’s move probabilities are. At 0, Maia always chooses the move the model predicts humans are most likely to play. Lower positive values favor the most likely moves more strongly; higher values give less likely moves more chance.';
+      'Temperature: at 0, Maia always chooses its most likely move. Low values favor likely moves; higher values give less likely moves more chance.';
 
   @override
   String get samplingTopPHelp =>
-      'Top-P ranks moves from most to least likely, then keeps the smallest leading group whose combined probability reaches this value. Lower values restrict the choice to more likely moves; 1.00 keeps every legal move.';
+      'Top-P: lower values keep a smaller group of likely moves; 1 keeps every legal move. It has no effect when Temperature is 0.';
 
   @override
   String get aboutPoweredBy =>
@@ -1004,7 +1004,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'Temperature or Top-P differs from the recommended 1.00. See the information button for details.';
+      'Lowering Temperature or Top-P may make Maia stronger in the middlegame, but reduce opening variety. See the information button for details.';
 
   @override
   String get couldNotOpenPgn => 'Could not open PGN.';
@@ -1097,4 +1097,137 @@ class AppLocalizationsEn extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'Draw ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental => 'Electronic board (experimental)';
+
+  @override
+  String get connectBoard => 'Connect board';
+
+  @override
+  String get chooseBoard => 'Choose a board';
+
+  @override
+  String get chooseAnotherBoard => 'Choose another board';
+
+  @override
+  String get boardSearching => 'Searching for boards…';
+
+  @override
+  String get boardConnecting => 'Connecting to board…';
+
+  @override
+  String get boardDisconnected => 'Board disconnected';
+
+  @override
+  String get boardConnectionError =>
+      'Could not connect. Check Bluetooth and the board, then retry.';
+
+  @override
+  String get boardStartingPosition =>
+      'Set up the standard starting position on your board.';
+
+  @override
+  String get boardReady => 'Board ready';
+
+  @override
+  String get boardExperimentalNotice =>
+      'New board support is experimental. Please verify moves on both screens and report connection problems.';
+
+  @override
+  String get boardGameRestriction =>
+      'Electronic-board games start from the standard position and use unlimited time.';
+
+  @override
+  String get boardConfirmSetup => 'I have set up the starting position';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'Check every piece before starting. This board cannot verify piece identity.';
+
+  @override
+  String get boardChooseMove => 'Confirm your board move';
+
+  @override
+  String get boardAmbiguousMove =>
+      'The board cannot distinguish these moves. Choose the move you played.';
+
+  @override
+  String get boardUnavailable =>
+      'This board is not ready. Reconnect, or continue on your phone.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'Press NEW GAME again within 2.5 seconds to confirm, or use the buttons below.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'To confirm on the board, press NEW GAME twice within 2.5 seconds.';
+
+  @override
+  String get boardPhysicalMove => 'Complete the move on your board.';
+
+  @override
+  String get boardResetPhysical =>
+      'Restore the position shown on screen before continuing.';
+
+  @override
+  String get boardNoResults =>
+      'No supported board found. Wake your board and try again.';
+
+  @override
+  String get boardWaitingForSelection => 'Choose a board to connect.';
+
+  @override
+  String get boardReconnect => 'Reconnect board';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus is locked. This Dev build does not include its manufacturer initialization key.';
+
+  @override
+  String get boardMotorRecovery =>
+      'Continue on your phone. This experimental adapter cannot safely restore the board’s motor state.';
+
+  @override
+  String get boardConfirmPosition => 'Confirm the physical position';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'Check that every piece matches the position on screen.';
+
+  @override
+  String get samplingExamplesTitle => 'Examples (Temperature / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — Most predictable. Always choose Maia’s most likely move.';
+
+  @override
+  String get samplingExampleReduced =>
+      '0.5 / 0.9 — Some variety. Favor common choices for a potentially tougher opponent.';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.';
+
+  @override
+  String get maiaHistorySetting => 'Use move history (experimental)';
+
+  @override
+  String get maiaHistoryScope =>
+      'Off is recommended. See information button for details.';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use. New games and analysis boards use this setting; saved sessions keep their original choice.';
+
+  @override
+  String get maiaHistoryResearch => 'Read the move-history research';
+
+  @override
+  String get maiaHistoryOn => 'Move history: on (experimental)';
+
+  @override
+  String get maiaHistoryOff => 'Move history: off';
 }

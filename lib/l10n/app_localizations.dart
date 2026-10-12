@@ -1692,10 +1692,10 @@ abstract class AppLocalizations {
   /// **'Temperature and Top-P'**
   String get samplingTitle;
 
-  /// Play screen: Why Temperature 1.00 and Top-P 1.00?
+  /// Maia-specific sampling help: Choose how much variety you want
   ///
   /// In en, this message translates to:
-  /// **'Why Temperature 1.00 and Top-P 1.00?'**
+  /// **'Choose how much variety you want'**
   String get samplingDefaultsQuestion;
 
   /// Play screen: Read the sampling research
@@ -1740,28 +1740,28 @@ abstract class AppLocalizations {
   /// **'Mobile Maia source code'**
   String get mobileMaiaSource;
 
-  /// Play help, about or error message: These settings let Maia use its full range of predicted human moves. In our tests at the 1600 setting, they produced opening choices much closer to rating-filtered Lichess games.
+  /// Maia-specific sampling help: Maia predicts which moves people at your chosen rating would play. Temperature and Top-P control how it chooses between those moves.
   ///
   /// In en, this message translates to:
-  /// **'These settings let Maia use its full range of predicted human moves. In our tests at the 1600 setting, they produced opening choices much closer to rating-filtered Lichess games.'**
+  /// **'Maia predicts which moves people at your chosen rating would play. Temperature and Top-P control how it chooses between those moves.'**
   String get samplingFullRange;
 
-  /// Play help, about or error message: Lower settings reduce variety and can make Maia stronger. We favor a more human opening repertoire over maximum strength. Maia’s rating describes the players it models, rather than guaranteeing an exact playing strength.
+  /// Maia-specific sampling help: Lower settings can make Maia tougher to beat, but also more repetitive. In our tests at the 1600 setting, 1 / 1 gave an opening mix closer to human games, while lower settings won more often. This does not guarantee the best move or an exact playing strength.
   ///
   /// In en, this message translates to:
-  /// **'Lower settings reduce variety and can make Maia stronger. We favor a more human opening repertoire over maximum strength. Maia’s rating describes the players it models, rather than guaranteeing an exact playing strength.'**
+  /// **'Lower settings can make Maia tougher to beat, but also more repetitive. In our tests at the 1600 setting, 1 / 1 gave an opening mix closer to human games, while lower settings won more often. This does not guarantee the best move or an exact playing strength.'**
   String get samplingStrength;
 
-  /// Play help, about or error message: Temperature controls how adventurous Maia is. At 0, Maia always chooses its most likely human move. Higher values make less likely moves more common.
+  /// Maia-specific sampling help: Temperature: at 0, Maia always chooses its most likely move. Low values favor likely moves; higher values give less likely moves more chance.
   ///
   /// In en, this message translates to:
-  /// **'Temperature controls how concentrated Maia’s move probabilities are. At 0, Maia always chooses the move the model predicts humans are most likely to play. Lower positive values favor the most likely moves more strongly; higher values give less likely moves more chance.'**
+  /// **'Temperature: at 0, Maia always chooses its most likely move. Low values favor likely moves; higher values give less likely moves more chance.'**
   String get samplingTemperatureHelp;
 
-  /// Play help, about or error message: Top-P limits Maia to the smallest group of moves whose combined probability reaches this value. Lower values narrow the choice to more likely moves; 1.00 keeps every legal move.
+  /// Maia-specific sampling help: Top-P: lower values keep a smaller group of likely moves; 1 keeps every legal move. It has no effect when Temperature is 0.
   ///
   /// In en, this message translates to:
-  /// **'Top-P ranks moves from most to least likely, then keeps the smallest leading group whose combined probability reaches this value. Lower values restrict the choice to more likely moves; 1.00 keeps every legal move.'**
+  /// **'Top-P: lower values keep a smaller group of likely moves; 1 keeps every legal move. It has no effect when Temperature is 0.'**
   String get samplingTopPHelp;
 
   /// Play help, about or error message: Powered by Maia-3, the human-like chess engine developed by the University of Toronto Computational Social Science Lab.
@@ -1800,10 +1800,10 @@ abstract class AppLocalizations {
   /// **'This independent community app is not an official Maia-3 or University of Toronto, Lichess, or En Croissant application.'**
   String get aboutIndependent;
 
-  /// Play help, about or error message: Temperature or Top-P differs from the recommended 1.00. See the information button for details.
+  /// Maia-specific sampling help: Lowering Temperature or Top-P may make Maia stronger in the middlegame, but reduce opening variety. See the information button for details.
   ///
   /// In en, this message translates to:
-  /// **'Temperature or Top-P differs from the recommended 1.00. See the information button for details.'**
+  /// **'Lowering Temperature or Top-P may make Maia stronger in the middlegame, but reduce opening variety. See the information button for details.'**
   String get samplingRecommendationWarning;
 
   /// Play help, about or error message: Could not open PGN.
@@ -1929,6 +1929,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Draw ({result})'**
   String recentDrawResult(String result);
+
+  /// Electronic board Dev support: Experimental electronic-board settings section title; includes occupancy-only and motorized boards.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronic board (experimental)'**
+  String get electronicBoardExperimental;
+
+  /// Electronic board Dev support: Button that opens electronic-board scan and connection flow.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect board'**
+  String get connectBoard;
+
+  /// Electronic board Dev support: Discovered-board picker title.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a board'**
+  String get chooseBoard;
+
+  /// Electronic board Dev support: Button to rescan and select a different board.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose another board'**
+  String get chooseAnotherBoard;
+
+  /// Electronic board Dev support: Bluetooth board scan in progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching for boards…'**
+  String get boardSearching;
+
+  /// Electronic board Dev support: Bluetooth board connection in progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to board…'**
+  String get boardConnecting;
+
+  /// Electronic board Dev support: Board connection lost status.
+  ///
+  /// In en, this message translates to:
+  /// **'Board disconnected'**
+  String get boardDisconnected;
+
+  /// Electronic board Dev support: Connection failure recovery instruction; Bluetooth is a product/protocol name.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect. Check Bluetooth and the board, then retry.'**
+  String get boardConnectionError;
+
+  /// Electronic board Dev support: Physical standard initial-position setup instruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up the standard starting position on your board.'**
+  String get boardStartingPosition;
+
+  /// Electronic board Dev support: Physical board synchronization complete status.
+  ///
+  /// In en, this message translates to:
+  /// **'Board ready'**
+  String get boardReady;
+
+  /// Electronic board Dev support: Experimental support notice; compare the app screens and report connection issues.
+  ///
+  /// In en, this message translates to:
+  /// **'New board support is experimental. Please verify moves on both screens and report connection problems.'**
+  String get boardExperimentalNotice;
+
+  /// Electronic board Dev support: Physical-board game constraint: standard initial position and no clock.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronic-board games start from the standard position and use unlimited time.'**
+  String get boardGameRestriction;
+
+  /// Electronic board Dev support: User confirmation of physical standard initial-position setup.
+  ///
+  /// In en, this message translates to:
+  /// **'I have set up the starting position'**
+  String get boardConfirmSetup;
+
+  /// Electronic board Dev support: Occupancy-only board limitation: it senses presence, not piece identity.
+  ///
+  /// In en, this message translates to:
+  /// **'Check every piece before starting. This board cannot verify piece identity.'**
+  String get boardConfirmSetupHelp;
+
+  /// Electronic board Dev support: Title of legal-move ambiguity picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your board move'**
+  String get boardChooseMove;
+
+  /// Electronic board Dev support: Occupancy-only ambiguity explanation; player chooses the move actually made.
+  ///
+  /// In en, this message translates to:
+  /// **'The board cannot distinguish these moves. Choose the move you played.'**
+  String get boardAmbiguousMove;
+
+  /// Electronic board Dev support: Board unavailable recovery: reconnect or continue with phone input.
+  ///
+  /// In en, this message translates to:
+  /// **'This board is not ready. Reconnect, or continue on your phone.'**
+  String get boardUnavailable;
+
+  /// Electronic board Dev support: Physical NEW GAME button second-press confirmation within 2.5 seconds; retain NEW GAME hardware marking.
+  ///
+  /// In en, this message translates to:
+  /// **'Press NEW GAME again within 2.5 seconds to confirm, or use the buttons below.'**
+  String get boardNewGameConfirmInstruction;
+
+  /// Electronic board Dev support: Expired physical NEW GAME confirmation instruction; retain NEW GAME hardware marking.
+  ///
+  /// In en, this message translates to:
+  /// **'To confirm on the board, press NEW GAME twice within 2.5 seconds.'**
+  String get boardNewGameConfirmationExpired;
+
+  /// Electronic board Dev support: Instruction to finish a physical move before proceeding.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete the move on your board.'**
+  String get boardPhysicalMove;
+
+  /// Electronic board Dev support: Instruction to restore physical board to the app position before proceeding.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore the position shown on screen before continuing.'**
+  String get boardResetPhysical;
+
+  /// Electronic board Dev support: Empty supported Bluetooth board scan result and recovery instruction.
+  ///
+  /// In en, this message translates to:
+  /// **'No supported board found. Wake your board and try again.'**
+  String get boardNoResults;
+
+  /// Electronic board Dev support: Disconnected status while waiting for player to select a board.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a board to connect.'**
+  String get boardWaitingForSelection;
+
+  /// Electronic board Dev support: Button to reconnect selected physical board.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnect board'**
+  String get boardReconnect;
+
+  /// Electronic board Dev support: Manufacturer initialization missing/locked state; Dev means the separate development build.
+  ///
+  /// In en, this message translates to:
+  /// **'Pegasus is locked. This Dev build does not include its manufacturer initialization key.'**
+  String get boardLockedPegasus;
+
+  /// Electronic board Dev support: Motorized-board safety recovery instruction; continue with phone input because firmware motor state cannot be restored.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue on your phone. This experimental adapter cannot safely restore the board’s motor state.'**
+  String get boardMotorRecovery;
+
+  /// Electronic board Dev support: Button to explicitly confirm physical-board setup matches the current logical position.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm the physical position'**
+  String get boardConfirmPosition;
+
+  /// Electronic board Dev support: Help for explicit physical-position confirmation, including piece identities.
+  ///
+  /// In en, this message translates to:
+  /// **'Check that every piece matches the position on screen.'**
+  String get boardConfirmPositionHelp;
+
+  /// Maia-specific sampling help: Examples (Temperature / Top-P)
+  ///
+  /// In en, this message translates to:
+  /// **'Examples (Temperature / Top-P)'**
+  String get samplingExamplesTitle;
+
+  /// Maia-specific sampling help: 0 / 0 — Most predictable. Always choose Maia’s most likely move.
+  ///
+  /// In en, this message translates to:
+  /// **'0 / 0 — Most predictable. Always choose Maia’s most likely move.'**
+  String get samplingExampleLikely;
+
+  /// Maia-specific sampling help: 0.5 / 0.9 — Some variety. Favor common choices for a potentially tougher opponent.
+  ///
+  /// In en, this message translates to:
+  /// **'0.5 / 0.9 — Some variety. Favor common choices for a potentially tougher opponent.'**
+  String get samplingExampleReduced;
+
+  /// Maia-specific sampling help: 1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.
+  ///
+  /// In en, this message translates to:
+  /// **'1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.'**
+  String get samplingExampleFull;
+
+  /// Maia-specific experimental history setting/help: Use move history (experimental)
+  ///
+  /// In en, this message translates to:
+  /// **'Use move history (experimental)'**
+  String get maiaHistorySetting;
+
+  /// Short recommendation beneath the experimental move-history switch; detailed scope is in the information dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Off is recommended. See information button for details.'**
+  String get maiaHistoryScope;
+
+  /// Maia-specific move-history explanation, research limitations, and new versus saved session behavior.
+  ///
+  /// In en, this message translates to:
+  /// **'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use. New games and analysis boards use this setting; saved sessions keep their original choice.'**
+  String get maiaHistoryHelp;
+
+  /// Maia-specific experimental history setting/help: Read the move-history research
+  ///
+  /// In en, this message translates to:
+  /// **'Read the move-history research'**
+  String get maiaHistoryResearch;
+
+  /// Maia-specific experimental history setting/help: Move history: on (experimental)
+  ///
+  /// In en, this message translates to:
+  /// **'Move history: on (experimental)'**
+  String get maiaHistoryOn;
+
+  /// Maia-specific experimental history setting/help: Move history: off
+  ///
+  /// In en, this message translates to:
+  /// **'Move history: off'**
+  String get maiaHistoryOff;
 }
 
 class _AppLocalizationsDelegate

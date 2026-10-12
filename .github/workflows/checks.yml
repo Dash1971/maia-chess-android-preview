@@ -20,6 +20,13 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Test native electronic board transport policies
+        timeout-minutes: 5
+        run: tool/test_board_native.sh
       - name: Install pinned Flutter
         run: |
           git clone --depth 1 --branch 3.47.5 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
@@ -34,6 +41,8 @@ jobs:
           git diff --exit-code -- lib/l10n pubspec.lock
       - run: flutter analyze
       - run: flutter test --reporter expanded
+      - name: Verify Preview board restrictions and settings
+        run: flutter test --flavor preview test/preview_board_channel_test.dart test/board_reset_widget_test.dart test/home_settings_layout_test.dart test/maia_settings_help_layout_test.dart --reporter expanded
       - name: Test release verification tools
         run: |
           python3 -m venv "$RUNNER_TEMP/release-checks-venv"

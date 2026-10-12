@@ -129,7 +129,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get use01SecondsPerPremoveInTimedGames =>
-      'Cada movimiento anticipado consume 0,1 segundos de tu reloj';
+      'En partidas con tiempo, cada movimiento anticipado consume 0,1 segundos de tu reloj.';
 
   @override
   String get allowMultiplePremoves => 'Permitir varios movimientos anticipados';
@@ -955,8 +955,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get samplingTitle => 'Temperatura y Top-P';
 
   @override
-  String get samplingDefaultsQuestion =>
-      '¿Por qué Temperatura 1,00 y Top-P 1,00?';
+  String get samplingDefaultsQuestion => 'Elige cuánta variedad quieres';
 
   @override
   String get samplingResearch => 'Leer la investigación sobre muestreo';
@@ -982,19 +981,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'Estos ajustes permiten a Maia usar toda la gama de jugadas que predice para jugadores humanos. En nuestras pruebas con el ajuste 1600, las elecciones de apertura se parecieron mucho más a las de partidas de Lichess filtradas por nivel.';
+      'Maia predice qué jugadas harían personas del nivel que has elegido. La temperatura y Top-P controlan cómo elige entre esas jugadas.';
 
   @override
   String get samplingStrength =>
-      'Los valores bajos reducen la variedad y pueden aumentar la fuerza de juego de Maia. Preferimos un repertorio de aperturas más humano a la máxima fuerza de juego. El Elo de Maia describe el nivel de los jugadores que modela y no garantiza una fuerza de juego exacta.';
+      'Los valores bajos pueden hacer que Maia sea más difícil de vencer, pero también más repetitiva. En nuestras pruebas con el ajuste 1600, 1 / 1 produjo aperturas más parecidas a las de partidas humanas, mientras que los valores bajos ganaron más a menudo. Esto no garantiza la mejor jugada ni una fuerza de juego exacta.';
 
   @override
   String get samplingTemperatureHelp =>
-      'La temperatura controla cuánto se concentran las probabilidades de las jugadas de Maia. Con 0, Maia siempre elige la jugada que el modelo predice como más probable para los jugadores humanos. Los valores positivos bajos favorecen más las jugadas más probables; los valores altos dan más posibilidades a las menos probables.';
+      'Temperatura: con 0, Maia siempre elige su jugada más probable. Los valores bajos favorecen las jugadas más probables; los valores altos dan más posibilidades a las menos probables.';
 
   @override
   String get samplingTopPHelp =>
-      'Top-P ordena las jugadas de mayor a menor probabilidad y conserva el grupo mínimo, empezando por las más probables, cuya probabilidad acumulada alcanza ese valor. Los valores bajos restringen la elección a las jugadas más probables; 1,00 conserva todas las jugadas legales.';
+      'Top-P: los valores bajos conservan un grupo más pequeño de jugadas probables; 1 conserva todas las jugadas legales. No tiene efecto cuando la temperatura es 0.';
 
   @override
   String get aboutPoweredBy =>
@@ -1022,7 +1021,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'La temperatura o Top-P difiere del valor recomendado 1,00. Consulta el botón de información para más detalles.';
+      'Bajar la temperatura o Top-P puede hacer que Maia juegue mejor en el medio juego, pero reduce la variedad en las aperturas. Consulta el botón de información para más detalles.';
 
   @override
   String get couldNotOpenPgn => 'No se pudo abrir el PGN.';
@@ -1115,4 +1114,140 @@ class AppLocalizationsEs extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'Tablas ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental =>
+      'Tablero electrónico (experimental)';
+
+  @override
+  String get connectBoard => 'Conectar tablero';
+
+  @override
+  String get chooseBoard => 'Elegir un tablero';
+
+  @override
+  String get chooseAnotherBoard => 'Elegir otro tablero';
+
+  @override
+  String get boardSearching => 'Buscando tableros…';
+
+  @override
+  String get boardConnecting => 'Conectando al tablero…';
+
+  @override
+  String get boardDisconnected => 'Tablero desconectado';
+
+  @override
+  String get boardConnectionError =>
+      'No se pudo conectar. Comprueba el Bluetooth y el tablero e inténtalo de nuevo.';
+
+  @override
+  String get boardStartingPosition =>
+      'Coloca la posición inicial estándar en tu tablero.';
+
+  @override
+  String get boardReady => 'Tablero listo';
+
+  @override
+  String get boardExperimentalNotice =>
+      'La compatibilidad con nuevos tableros es experimental. Verifica las jugadas en ambas pantallas e informa de los problemas de conexión.';
+
+  @override
+  String get boardGameRestriction =>
+      'Las partidas con tablero electrónico empiezan desde la posición inicial estándar y sin límite de tiempo.';
+
+  @override
+  String get boardConfirmSetup => 'He colocado la posición inicial';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'Comprueba todas las piezas antes de empezar. Este tablero no puede identificar el tipo de pieza.';
+
+  @override
+  String get boardChooseMove => 'Confirma tu jugada en el tablero';
+
+  @override
+  String get boardAmbiguousMove =>
+      'El tablero no puede distinguir estas jugadas. Elige la que has realizado.';
+
+  @override
+  String get boardUnavailable =>
+      'El tablero no está listo. Vuelve a conectarlo o continúa en tu teléfono.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'Pulsa NEW GAME otra vez antes de 2,5 segundos para confirmar o usa los botones de abajo.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'Para confirmar en el tablero, pulsa NEW GAME dos veces en 2,5 segundos.';
+
+  @override
+  String get boardPhysicalMove => 'Completa la jugada en tu tablero.';
+
+  @override
+  String get boardResetPhysical =>
+      'Restablece en el tablero la posición que aparece en pantalla antes de continuar.';
+
+  @override
+  String get boardNoResults =>
+      'No se ha encontrado ningún tablero compatible. Activa tu tablero e inténtalo de nuevo.';
+
+  @override
+  String get boardWaitingForSelection => 'Elige un tablero para conectar.';
+
+  @override
+  String get boardReconnect => 'Reconectar tablero';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus está bloqueado. Esta versión Dev no incluye la clave de inicialización del fabricante.';
+
+  @override
+  String get boardMotorRecovery =>
+      'Continúa en tu teléfono. Este adaptador experimental no puede restablecer con seguridad el estado del motor del tablero.';
+
+  @override
+  String get boardConfirmPosition => 'Confirmar la posición del tablero físico';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'Comprueba que todas las piezas coincidan con la posición en pantalla.';
+
+  @override
+  String get samplingExamplesTitle => 'Ejemplos (Temperatura / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — Máxima previsibilidad. Maia siempre elige su jugada más probable.';
+
+  @override
+  String get samplingExampleReduced =>
+      '0,5 / 0,9 — Algo de variedad. Favorece las opciones habituales y puede resultar más difícil de vencer.';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — Toda la variedad (predeterminado). Incluye todas las jugadas legales, aunque las más probables siguen apareciendo más a menudo.';
+
+  @override
+  String get maiaHistorySetting =>
+      'Usar el historial de jugadas (experimental)';
+
+  @override
+  String get maiaHistoryScope =>
+      'Se recomienda desactivarlo. Consulta el botón de información para más detalles.';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Permite que Maia tenga en cuenta hasta siete posiciones anteriores, además de la actual. Esto mejoró la predicción de jugadas humanas en nuestras pruebas con el modelo 79M, pero a veces favoreció la copia repetida de jugadas en aperturas de nivel bajo. No se ha demostrado que aumente la fuerza de juego. Por ahora, se recomienda desactivarlo. Una posición cargada por sí sola no tiene jugadas anteriores disponibles. Se aplica a nuevas partidas y tableros de análisis; las sesiones guardadas conservan su elección original.';
+
+  @override
+  String get maiaHistoryResearch =>
+      'Leer la investigación sobre el historial de jugadas';
+
+  @override
+  String get maiaHistoryOn => 'Historial de jugadas: activado (experimental)';
+
+  @override
+  String get maiaHistoryOff => 'Historial de jugadas: desactivado';
 }

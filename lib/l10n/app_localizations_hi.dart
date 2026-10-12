@@ -951,7 +951,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get samplingTitle => 'टेम्परेचर और Top-P';
 
   @override
-  String get samplingDefaultsQuestion => 'टेम्परेचर 1.00 और Top-P 1.00 क्यों?';
+  String get samplingDefaultsQuestion =>
+      'तय करें कि चालों में कितनी विविधता चाहिए';
 
   @override
   String get samplingResearch => 'चाल चुनने की विधि पर शोध पढ़ें';
@@ -976,19 +977,19 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'इन सेटिंग्स से Maia इंसानों द्वारा खेली जाने वाली चालों के अपने पूरे अनुमानित दायरे से चुन सकता है। 1600 की सेटिंग पर हमारे परीक्षणों में, इनसे चुनी गई ओपनिंग चालें समान रेटिंग वाले Lichess खेलों की चालों के अधिक करीब थीं।';
+      'Maia अनुमान लगाता है कि आपकी चुनी हुई रेटिंग के लोग कौन-सी चालें चलेंगे। टेम्परेचर और Top-P तय करते हैं कि इन चालों में से कैसे चुना जाए।';
 
   @override
   String get samplingStrength =>
-      'कम मानों से चालों में विविधता घटती है और Maia अधिक मज़बूत हो सकता है। हम अधिकतम ताकत के बजाय इंसानों जैसी विविध ओपनिंग पसंद करते हैं। Maia की रेटिंग उन खिलाड़ियों की रेटिंग बताती है जिनके खेल का वह मॉडल बनाता है; यह ठीक उतनी ही खेल क्षमता की गारंटी नहीं है।';
+      'कम मानों पर Maia को हराना कठिन हो सकता है, लेकिन खेल में दोहराव भी बढ़ सकता है। 1600 रेटिंग पर हमारे परीक्षणों में 1 / 1 की शुरुआती चालें मानव खेलों से अधिक मिलती थीं, जबकि कम मानों वाली सेटिंग अधिक बार जीती। इससे न तो सर्वश्रेष्ठ चाल की गारंटी मिलती है, न किसी निश्चित खेल-क्षमता की।';
 
   @override
   String get samplingTemperatureHelp =>
-      'टेम्परेचर तय करता है कि Maia की चाल-चयन प्रायिकताएँ कितनी केंद्रित हों। 0 पर Maia हमेशा वह चाल चुनता है जिसे मॉडल के अनुसार इंसान सबसे अधिक चुनेंगे। शून्य से ऊपर के कम मान सबसे संभावित चालों को और अधिक प्राथमिकता देते हैं; अधिक मान कम संभावित चालों को अधिक मौका देते हैं।';
+      'टेम्परेचर: 0 पर Maia हमेशा अपनी सबसे संभावित चाल चुनता है। कम मान अधिक संभावित चालों को प्राथमिकता देते हैं; अधिक मान कम संभावित चालों को भी ज़्यादा अवसर देते हैं।';
 
   @override
   String get samplingTopPHelp =>
-      'Top-P चालों को सबसे अधिक से सबसे कम संभावित क्रम में रखता है, फिर शुरुआत का सबसे छोटा समूह रखता है जिसकी कुल प्रायिकता इस मान तक पहुँचती है। कम मान चयन को अधिक संभावित चालों तक सीमित करते हैं; 1.00 पर सभी वैध चालें रहती हैं।';
+      'Top-P: कम मानों पर अधिक संभावित चालों का छोटा समूह रखा जाता है; 1 पर सभी वैध चालें बनी रहती हैं। टेम्परेचर 0 होने पर इसका कोई प्रभाव नहीं पड़ता।';
 
   @override
   String get aboutPoweredBy =>
@@ -1016,7 +1017,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'टेम्परेचर या Top-P सुझाए गए 1.00 से अलग है। विवरण के लिए जानकारी बटन देखें।';
+      'टेम्परेचर या Top-P घटाने से Maia मिडलगेम में बेहतर खेल सकता है, लेकिन शुरुआती चालों की विविधता घटती है। विवरण के लिए जानकारी बटन देखें।';
 
   @override
   String get couldNotOpenPgn => 'PGN खुल नहीं सका।';
@@ -1109,4 +1110,139 @@ class AppLocalizationsHi extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'ड्रॉ ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental =>
+      'इलेक्ट्रॉनिक शतरंज बोर्ड (प्रायोगिक)';
+
+  @override
+  String get connectBoard => 'बोर्ड कनेक्ट करें';
+
+  @override
+  String get chooseBoard => 'बोर्ड चुनें';
+
+  @override
+  String get chooseAnotherBoard => 'दूसरा बोर्ड चुनें';
+
+  @override
+  String get boardSearching => 'बोर्ड खोजे जा रहे हैं…';
+
+  @override
+  String get boardConnecting => 'बोर्ड से कनेक्ट हो रहा है…';
+
+  @override
+  String get boardDisconnected => 'बोर्ड का कनेक्शन टूट गया';
+
+  @override
+  String get boardConnectionError =>
+      'कनेक्ट नहीं हो पाया। ब्लूटूथ और बोर्ड की जाँच करके फिर कोशिश करें।';
+
+  @override
+  String get boardStartingPosition =>
+      'अपने बोर्ड पर मानक शुरुआती स्थिति में मोहरे रखें।';
+
+  @override
+  String get boardReady => 'बोर्ड तैयार है';
+
+  @override
+  String get boardExperimentalNotice =>
+      'नए बोर्ड का समर्थन प्रायोगिक है। दोनों स्क्रीन पर चालों की जाँच करें और कनेक्शन की समस्याएँ बताएँ।';
+
+  @override
+  String get boardGameRestriction =>
+      'इलेक्ट्रॉनिक बोर्ड पर खेल मानक शुरुआती स्थिति से और बिना समय सीमा के शुरू होते हैं।';
+
+  @override
+  String get boardConfirmSetup => 'मैंने शुरुआती स्थिति में मोहरे रख दिए हैं';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'शुरू करने से पहले हर मोहरे की जाँच करें। यह बोर्ड मोहरे का प्रकार नहीं पहचान सकता।';
+
+  @override
+  String get boardChooseMove => 'बोर्ड पर चली गई चाल की पुष्टि करें';
+
+  @override
+  String get boardAmbiguousMove =>
+      'बोर्ड इन चालों में अंतर नहीं कर सकता। अपनी चली हुई चाल चुनें।';
+
+  @override
+  String get boardUnavailable =>
+      'बोर्ड तैयार नहीं है। फिर से कनेक्ट करें या फ़ोन पर खेल जारी रखें।';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'पुष्टि के लिए 2.5 सेकंड के भीतर NEW GAME दोबारा दबाएँ या नीचे दिए बटन इस्तेमाल करें।';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'बोर्ड पर पुष्टि के लिए 2.5 सेकंड के भीतर NEW GAME दो बार दबाएँ।';
+
+  @override
+  String get boardPhysicalMove => 'अपने बोर्ड पर चाल पूरी करें।';
+
+  @override
+  String get boardResetPhysical =>
+      'आगे बढ़ने से पहले बोर्ड पर स्क्रीन में दिखाई गई स्थिति बहाल करें।';
+
+  @override
+  String get boardNoResults =>
+      'कोई समर्थित बोर्ड नहीं मिला। बोर्ड को सक्रिय करके फिर कोशिश करें।';
+
+  @override
+  String get boardWaitingForSelection => 'कनेक्ट करने के लिए बोर्ड चुनें।';
+
+  @override
+  String get boardReconnect => 'बोर्ड फिर से कनेक्ट करें';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus लॉक है। इस Dev संस्करण में निर्माता की शुरुआती सेटअप कुंजी शामिल नहीं है।';
+
+  @override
+  String get boardMotorRecovery =>
+      'फ़ोन पर खेल जारी रखें। यह प्रायोगिक अडैप्टर बोर्ड की मोटर की स्थिति सुरक्षित रूप से बहाल नहीं कर सकता।';
+
+  @override
+  String get boardConfirmPosition => 'वास्तविक बोर्ड की स्थिति की पुष्टि करें';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'जाँचें कि हर मोहरा स्क्रीन पर दिखाई गई स्थिति से मेल खाता है।';
+
+  @override
+  String get samplingExamplesTitle => 'उदाहरण (टेम्परेचर / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — सबसे अधिक अनुमान योग्य। Maia हमेशा अपनी सबसे संभावित चाल चुनता है।';
+
+  @override
+  String get samplingExampleReduced =>
+      '0.5 / 0.9 — कुछ विविधता। आम चालों को प्राथमिकता मिलती है और Maia को हराना कठिन हो सकता है।';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — पूरी विविधता (डिफ़ॉल्ट)। सभी वैध चालों को अवसर मिलता है, लेकिन अधिक संभावित चालें फिर भी ज़्यादा खेली जाती हैं।';
+
+  @override
+  String get maiaHistorySetting =>
+      'पिछली स्थितियों का उपयोग करें (प्रयोगात्मक)';
+
+  @override
+  String get maiaHistoryScope =>
+      'इसे बंद रखने की सलाह दी जाती है। अधिक जानकारी के लिए जानकारी बटन देखें।';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Maia को वर्तमान स्थिति के साथ पिछली अधिकतम सात स्थितियों पर भी विचार करने दें। 79M मॉडल के हमारे परीक्षणों में इससे मानव चालों का अनुमान बेहतर हुआ, लेकिन कम रेटिंग की शुरुआती चालों में कभी-कभी बार-बार नकल करने की प्रवृत्ति बढ़ी। खेल-क्षमता बढ़ने का प्रमाण नहीं मिला है। फ़िलहाल इसे बंद रखना सुझाया जाता है। अकेले लोड की गई स्थिति में उससे पहले की चालें उपलब्ध नहीं होतीं। यह नई बाज़ियों और विश्लेषण बोर्डों पर लागू होता है; सहेजे गए सत्र अपना मूल विकल्प रखते हैं।';
+
+  @override
+  String get maiaHistoryResearch => 'पिछली स्थितियों पर शोध पढ़ें';
+
+  @override
+  String get maiaHistoryOn => 'पिछली स्थितियाँ: चालू (प्रयोगात्मक)';
+
+  @override
+  String get maiaHistoryOff => 'पिछली स्थितियाँ: बंद';
 }

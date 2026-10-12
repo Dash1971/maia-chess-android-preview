@@ -292,3 +292,13 @@ snapshot regressions, capped Fast confirmation policy, cold/warm live-engine
 comparisons, native Android test and actual VM worker-lifecycle qualification.
 The fixture regressions run in ordinary CI; Rust compilation and live-engine
 benchmarks are optional targeted/release checks.
+
+## Electronic-board diagnostics and replay
+
+See [`../board_capture/README.md`](../board_capture/README.md) for the explicit,
+local developer recorder, strict reviewed-fixture format and privacy boundaries.
+Ordinary CI runs `tool/board_capture_test.py` and
+`test/chessnut_decode_recovery_test.dart` without BLE or optional dependencies.
+The game-screen regression in `test/chessnut_continuation_test.dart` verifies that
+a corrupt frame followed by a valid native-ready position resumes play, commits
+one player move, requests one Maia reply, restores LEDs and records recovery.

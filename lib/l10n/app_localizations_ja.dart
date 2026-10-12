@@ -874,7 +874,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get samplingTitle => '温度とTop-P';
 
   @override
-  String get samplingDefaultsQuestion => 'なぜ温度とTop-Pの推奨値は1.00なのですか？';
+  String get samplingDefaultsQuestion => '指し手の多様さを選ぶ';
 
   @override
   String get samplingResearch => 'サンプリングの研究を読む';
@@ -899,19 +899,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'これらの設定では、Maiaが予測する人間の指し手を幅広く選べます。レーティング1600の設定でのテストでは、序盤の指し手の選択が、レーティングで絞り込んだLichessの対局により近くなりました。';
+      'Maiaは、選んだレーティングの人がどの手を指すかを予測します。温度とTop-Pは、その候補から手を選ぶ方法を調整します。';
 
   @override
   String get samplingStrength =>
-      '設定値を下げると指し手の多様性が減り、Maiaが強くなることがあります。私たちは強さを最大にすることより、人間らしいオープニングのレパートリーを重視しています。Maiaのレーティングは、モデルが模倣するプレイヤーのレーティングを示すもので、対局時の正確な棋力を保証するものではありません。';
+      '値を下げるとMaiaが手ごわくなる場合がありますが、同じ展開も増えます。レーティング1600でのテストでは、1 / 1の序盤の選択が人間の対局に近く、低い値の設定はより多く勝ちました。最善手や一定の棋力を保証するものではありません。';
 
   @override
   String get samplingTemperatureHelp =>
-      '温度は、Maiaが選ぶ手の確率の集中度を調整します。0では、モデルが人間に最も選ばれやすいと予測した手を常に選びます。0より大きい低い値では確率の高い手に選択が集中し、高い値では確率の低い手も選ばれやすくなります。';
+      '温度：0では、Maiaが最も指されやすいと予測した手を必ず選びます。低い値はよく指される手を優先し、高い値は珍しい手も選びやすくします。';
 
   @override
   String get samplingTopPHelp =>
-      'Top-Pは手を確率の高い順に並べ、合計確率が設定値に達するまでの最小のグループを候補にします。低い値では確率の高い手に選択が絞られ、1.00ではすべての合法手が候補に残ります。';
+      'Top-P：値を下げると、よく指される手に候補を絞ります。1ではすべての合法手が候補に入ります。温度が0のときは影響しません。';
 
   @override
   String get aboutPoweredBy =>
@@ -938,7 +938,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      '温度またはTop-Pが推奨値の1.00と異なります。詳細は情報ボタンをご覧ください。';
+      '温度やTop-Pを下げると、中盤でMaiaが強くなる可能性がありますが、序盤の多様さは減ります。詳しくは情報ボタンをご覧ください。';
 
   @override
   String get couldNotOpenPgn => 'PGNを開けませんでした。';
@@ -1029,4 +1029,128 @@ class AppLocalizationsJa extends AppLocalizations {
   String recentDrawResult(String result) {
     return '引き分け（$result）';
   }
+
+  @override
+  String get electronicBoardExperimental => '電子チェス盤（試験的機能）';
+
+  @override
+  String get connectBoard => 'チェス盤に接続';
+
+  @override
+  String get chooseBoard => 'チェス盤を選択';
+
+  @override
+  String get chooseAnotherBoard => '別のチェス盤を選択';
+
+  @override
+  String get boardSearching => 'チェス盤を検索中…';
+
+  @override
+  String get boardConnecting => 'チェス盤に接続中…';
+
+  @override
+  String get boardDisconnected => 'チェス盤との接続が切れました';
+
+  @override
+  String get boardConnectionError =>
+      '接続できませんでした。Bluetoothとチェス盤を確認して、もう一度お試しください。';
+
+  @override
+  String get boardStartingPosition => 'チェス盤に標準の初期配置を並べてください。';
+
+  @override
+  String get boardReady => 'チェス盤の準備ができました';
+
+  @override
+  String get boardExperimentalNotice =>
+      '新しいチェス盤への対応は試験段階です。両方の画面で指し手を確認し、接続の問題をご報告ください。';
+
+  @override
+  String get boardGameRestriction => '電子チェス盤での対局は、標準の初期配置・持ち時間無制限で開始します。';
+
+  @override
+  String get boardConfirmSetup => '初期配置を並べました';
+
+  @override
+  String get boardConfirmSetupHelp => '開始前にすべての駒を確認してください。このチェス盤は駒の種類を識別できません。';
+
+  @override
+  String get boardChooseMove => 'チェス盤での指し手を確定';
+
+  @override
+  String get boardAmbiguousMove => 'チェス盤ではこれらの指し手を区別できません。実際に指した手を選んでください。';
+
+  @override
+  String get boardUnavailable => 'チェス盤の準備ができていません。再接続するか、スマートフォンで続けてください。';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      '確定するには2.5秒以内にNEW GAMEをもう一度押すか、下のボタンを使ってください。';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'チェス盤で確定するには、2.5秒以内にNEW GAMEを2回押してください。';
+
+  @override
+  String get boardPhysicalMove => 'チェス盤で指し手を完了してください。';
+
+  @override
+  String get boardResetPhysical => '続ける前に、チェス盤を画面に表示された局面に戻してください。';
+
+  @override
+  String get boardNoResults => '対応するチェス盤が見つかりません。チェス盤を起動して、もう一度お試しください。';
+
+  @override
+  String get boardWaitingForSelection => '接続するチェス盤を選んでください。';
+
+  @override
+  String get boardReconnect => 'チェス盤に再接続';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasusはロックされています。このDev版にはメーカーの初期化キーが含まれていません。';
+
+  @override
+  String get boardMotorRecovery =>
+      'スマートフォンで続けてください。この試験的な接続機能では、チェス盤のモーターの状態を安全に復元できません。';
+
+  @override
+  String get boardConfirmPosition => 'チェス盤の局面を確認';
+
+  @override
+  String get boardConfirmPositionHelp => 'すべての駒が画面の局面と一致していることを確認してください。';
+
+  @override
+  String get samplingExamplesTitle => '設定例（温度 / Top-P）';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — 最も予測しやすい設定。Maiaが最も指されやすいと予測した手を必ず選びます。';
+
+  @override
+  String get samplingExampleReduced =>
+      '0.5 / 0.9 — 適度な多様さ。よく指される手を優先し、より手ごわい相手になる可能性があります。';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — 最大の多様さ（初期設定）。すべての合法手が候補になりますが、指されやすい手ほど多く選ばれます。';
+
+  @override
+  String get maiaHistorySetting => '過去の局面を使う（実験的機能）';
+
+  @override
+  String get maiaHistoryScope => 'オフを推奨します。詳しくは情報ボタンをご覧ください。';
+
+  @override
+  String get maiaHistoryHelp =>
+      '現在の局面に加え、最大7つ前までの局面をMaiaに渡します。79Mモデルでのテストでは人間の指し手の予測精度が上がりましたが、低レーティングの序盤では相手の手を繰り返し真似しやすくなる場合がありました。棋力の向上は確認されていません。当面はオフを推奨します。単独で読み込んだ局面では、それ以前の手は利用できません。 新しい対局と解析盤に適用されます。保存済みのセッションは元の設定を保持します。';
+
+  @override
+  String get maiaHistoryResearch => '過去の局面に関する研究を読む';
+
+  @override
+  String get maiaHistoryOn => '過去の局面：使用（実験的機能）';
+
+  @override
+  String get maiaHistoryOff => '過去の局面：不使用';
 }

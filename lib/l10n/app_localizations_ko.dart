@@ -875,7 +875,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get samplingTitle => '온도와 Top-P';
 
   @override
-  String get samplingDefaultsQuestion => '왜 온도와 Top-P를 1.00으로 설정하나요?';
+  String get samplingDefaultsQuestion => '원하는 수의 다양성을 선택하세요';
 
   @override
   String get samplingResearch => '샘플링 연구 읽기';
@@ -900,19 +900,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      '이 설정은 Maia가 예측한 사람의 수를 폭넓게 사용하도록 합니다. 1600 설정의 테스트에서는 오프닝 선택이 같은 레이팅 범위의 Lichess 대국에 훨씬 가까웠습니다.';
+      'Maia는 선택한 레이팅의 사람이 어떤 수를 둘지 예측합니다. 온도와 Top-P는 그중에서 수를 고르는 방식을 조절합니다.';
 
   @override
   String get samplingStrength =>
-      '설정값을 낮추면 수의 다양성이 줄고 Maia가 더 강해질 수 있습니다. 우리는 최대한 강한 플레이보다 사람다운 오프닝 레퍼토리를 중시합니다. Maia의 레이팅은 모델링 대상 플레이어의 수준을 나타내며, 정확한 경기력을 보장하지 않습니다.';
+      '설정값을 낮추면 Maia가 더 상대하기 어려워질 수 있지만, 같은 진행도 늘어납니다. 레이팅 1600 테스트에서는 1 / 1의 오프닝 선택이 사람의 대국에 더 가까웠고, 낮은 설정값은 더 많이 이겼습니다. 최선의 수나 정확한 실력을 보장하는 것은 아닙니다.';
 
   @override
   String get samplingTemperatureHelp =>
-      '온도는 Maia의 수 선택 확률이 얼마나 집중되는지 조절합니다. 0이면 모델이 사람이 둘 가능성이 가장 높다고 예측한 수를 항상 선택합니다. 0보다 큰 낮은 값은 가능성이 높은 수에 확률을 더 집중시키고, 높은 값은 가능성이 낮은 수에도 더 많은 기회를 줍니다.';
+      '온도: 0이면 Maia가 가장 가능성이 높다고 예측한 수를 항상 선택합니다. 낮은 값은 흔한 수를 선호하고, 높은 값은 드문 수에도 더 많은 기회를 줍니다.';
 
   @override
   String get samplingTopPHelp =>
-      'Top-P는 수를 확률이 높은 순서로 정렬한 뒤, 확률의 합이 설정값에 도달할 때까지 선택 후보에 포함합니다. 값이 낮으면 확률이 높은 수로 선택이 좁혀지고, 1.00이면 모든 합법적인 수를 유지합니다.';
+      'Top-P: 값을 낮추면 가능성이 높은 소수의 수로 선택지를 좁힙니다. 1이면 모든 합법적인 수를 유지합니다. 온도가 0이면 영향을 주지 않습니다.';
 
   @override
   String get aboutPoweredBy =>
@@ -940,7 +940,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      '온도 또는 Top-P가 권장값 1.00과 다릅니다. 자세한 내용은 정보 버튼을 확인하세요.';
+      '온도나 Top-P를 낮추면 미들게임에서 Maia가 더 강해질 수 있지만, 오프닝의 다양성은 줄어듭니다. 자세한 내용은 정보 버튼을 확인하세요.';
 
   @override
   String get couldNotOpenPgn => 'PGN을 열 수 없습니다.';
@@ -1030,4 +1030,128 @@ class AppLocalizationsKo extends AppLocalizations {
   String recentDrawResult(String result) {
     return '무승부 ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental => '전자 체스보드(실험 기능)';
+
+  @override
+  String get connectBoard => '체스보드 연결';
+
+  @override
+  String get chooseBoard => '체스보드 선택';
+
+  @override
+  String get chooseAnotherBoard => '다른 체스보드 선택';
+
+  @override
+  String get boardSearching => '체스보드 검색 중…';
+
+  @override
+  String get boardConnecting => '체스보드 연결 중…';
+
+  @override
+  String get boardDisconnected => '체스보드 연결이 끊어졌습니다';
+
+  @override
+  String get boardConnectionError => '연결하지 못했습니다. 블루투스와 체스보드를 확인한 뒤 다시 시도하세요.';
+
+  @override
+  String get boardStartingPosition => '체스보드에 표준 시작 포지션을 배치하세요.';
+
+  @override
+  String get boardReady => '체스보드가 준비되었습니다';
+
+  @override
+  String get boardExperimentalNotice =>
+      '새 체스보드 지원은 실험 단계입니다. 두 화면에서 수를 확인하고 연결 문제를 알려 주세요.';
+
+  @override
+  String get boardGameRestriction => '전자 체스보드 대국은 표준 시작 포지션에서 무제한 시간으로 시작합니다.';
+
+  @override
+  String get boardConfirmSetup => '시작 포지션을 배치했습니다';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      '시작 전에 모든 기물을 확인하세요. 이 체스보드는 기물의 종류를 식별할 수 없습니다.';
+
+  @override
+  String get boardChooseMove => '체스보드에서 둔 수 확인';
+
+  @override
+  String get boardAmbiguousMove => '체스보드가 이 수들을 구별할 수 없습니다. 실제로 둔 수를 선택하세요.';
+
+  @override
+  String get boardUnavailable => '체스보드가 준비되지 않았습니다. 다시 연결하거나 휴대전화에서 계속하세요.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      '2.5초 안에 NEW GAME을 다시 눌러 확인하거나 아래 버튼을 사용하세요.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      '체스보드에서 확인하려면 2.5초 안에 NEW GAME을 두 번 누르세요.';
+
+  @override
+  String get boardPhysicalMove => '체스보드에서 수를 완성하세요.';
+
+  @override
+  String get boardResetPhysical => '계속하기 전에 체스보드를 화면에 표시된 포지션으로 되돌리세요.';
+
+  @override
+  String get boardNoResults => '지원되는 체스보드를 찾지 못했습니다. 체스보드를 깨운 뒤 다시 시도하세요.';
+
+  @override
+  String get boardWaitingForSelection => '연결할 체스보드를 선택하세요.';
+
+  @override
+  String get boardReconnect => '체스보드 다시 연결';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus가 잠겨 있습니다. 이 Dev 빌드에는 제조사의 초기화 키가 포함되어 있지 않습니다.';
+
+  @override
+  String get boardMotorRecovery =>
+      '휴대전화에서 계속하세요. 이 실험용 연결 기능은 체스보드의 모터 상태를 안전하게 복원할 수 없습니다.';
+
+  @override
+  String get boardConfirmPosition => '실제 체스보드 포지션 확인';
+
+  @override
+  String get boardConfirmPositionHelp => '모든 기물이 화면에 표시된 포지션과 일치하는지 확인하세요.';
+
+  @override
+  String get samplingExamplesTitle => '설정 예시 (온도 / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — 가장 예측하기 쉬움. Maia가 가장 가능성이 높다고 예측한 수를 항상 선택합니다.';
+
+  @override
+  String get samplingExampleReduced =>
+      '0.5 / 0.9 — 어느 정도의 다양성. 흔한 선택을 선호하며 더 상대하기 어려워질 수 있습니다.';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — 전체 다양성 (기본값). 모든 합법적인 수를 고려하되, 가능성이 높은 수를 더 자주 둡니다.';
+
+  @override
+  String get maiaHistorySetting => '이전 포지션 사용 (실험적)';
+
+  @override
+  String get maiaHistoryScope => '끄기를 권장합니다. 자세한 내용은 정보 버튼을 누르세요.';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Maia가 현재 포지션과 최대 7개의 이전 포지션을 함께 고려하게 합니다. 79M 모델 테스트에서는 사람의 수를 예측하는 정확도가 높아졌지만, 낮은 레이팅의 오프닝에서 상대의 수를 반복해서 따라 두는 경우도 있었습니다. 실력이 향상된다고 입증된 것은 아닙니다. 현재는 끄기를 권장합니다. 포지션 하나만 불러오면 그 이전 수는 사용할 수 없습니다. 새 대국과 분석 보드에 적용되며, 저장된 세션은 원래 선택을 유지합니다.';
+
+  @override
+  String get maiaHistoryResearch => '이전 포지션 연구 읽기';
+
+  @override
+  String get maiaHistoryOn => '이전 포지션: 켜짐 (실험적)';
+
+  @override
+  String get maiaHistoryOff => '이전 포지션: 꺼짐';
 }

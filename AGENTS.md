@@ -22,3 +22,12 @@ Publish research reports, datasets and reproduction tools in the separate
 [Mobile Maia research repository](https://github.com/Dash1971/mobile-maia-research).
 Keep only brief decision summaries and links in app documentation. Do not add
 research bundles or datasets to application source or release distributions.
+
+## Distribution channels
+
+Read `docs/BUILD_CHANNELS.md` before promoting or publishing a build. Update
+its channel status and the release PR's evidence when publishing. Grand Kingdom
+and DGT adapters remain Dev-only: preserve both Dart and native flavor gates
+and the Preview restriction tests. Stable releases use the Stable repository's
+authoritative release procedure, including its Zapstore and F-Droid follow-up.
+Preview/Dev publication does not authorize a Stable or app-store release.

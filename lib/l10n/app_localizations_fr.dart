@@ -954,7 +954,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingDefaultsQuestion =>
-      'Pourquoi une température de 1,00 et un Top-P de 1,00 ?';
+      'Choisissez la variété de jeu souhaitée';
 
   @override
   String get samplingResearch => 'Lire l’étude sur l’échantillonnage';
@@ -979,19 +979,19 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'Ces paramètres permettent à Maia d’utiliser toute la gamme des coups humains prédits. Lors de nos tests avec le réglage 1600, ils ont produit des choix d’ouverture beaucoup plus proches de ceux des parties Lichess filtrées par classement.';
+      'Maia prédit les coups que joueraient des personnes du niveau choisi. La température et Top-P déterminent comment elle choisit parmi ces coups.';
 
   @override
   String get samplingStrength =>
-      'Des valeurs plus faibles réduisent la variété et peuvent rendre Maia plus fort. Nous privilégions un répertoire d’ouvertures plus humain plutôt qu’une force maximale. Le classement de Maia décrit les joueurs qu’il modélise, sans garantir un niveau de jeu exact.';
+      'Des valeurs plus basses peuvent rendre Maia plus difficile à battre, mais aussi plus répétitive. Dans nos tests au réglage 1600, 1 / 1 donnait des ouvertures plus proches des parties humaines, tandis que les valeurs plus basses gagnaient plus souvent. Cela ne garantit ni le meilleur coup ni une force de jeu précise.';
 
   @override
   String get samplingTemperatureHelp =>
-      'La température contrôle la concentration des probabilités des coups de Maia. À 0, Maia choisit toujours le coup que le modèle prédit comme le plus susceptible d’être joué par un humain. Les valeurs positives plus faibles favorisent davantage les coups les plus probables ; les valeurs plus élevées donnent plus de chances aux coups moins probables.';
+      'Température : à 0, Maia choisit toujours son coup le plus probable. Les valeurs basses favorisent les coups probables ; les valeurs hautes donnent plus de chances aux coups moins probables.';
 
   @override
   String get samplingTopPHelp =>
-      'Le Top-P classe les coups du plus au moins probable, puis conserve le plus petit groupe en tête de liste dont la probabilité cumulée atteint cette valeur. Des valeurs plus faibles limitent le choix aux coups les plus probables ; 1,00 conserve tous les coups légaux.';
+      'Top-P : les valeurs basses limitent le choix à un plus petit groupe de coups probables ; 1 conserve tous les coups légaux. Ce réglage est sans effet lorsque la température vaut 0.';
 
   @override
   String get aboutPoweredBy =>
@@ -1019,7 +1019,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'La température ou le Top-P diffère de la valeur recommandée de 1,00. Consultez le bouton d’information pour en savoir plus.';
+      'Baisser la température ou Top-P peut renforcer Maia en milieu de partie, mais réduit la variété des ouvertures. Consultez le bouton d’information pour en savoir plus.';
 
   @override
   String get couldNotOpenPgn => 'Impossible d’ouvrir le PGN.';
@@ -1112,4 +1112,142 @@ class AppLocalizationsFr extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'Nulle ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental =>
+      'Échiquier électronique (expérimental)';
+
+  @override
+  String get connectBoard => 'Connecter l’échiquier';
+
+  @override
+  String get chooseBoard => 'Choisir un échiquier';
+
+  @override
+  String get chooseAnotherBoard => 'Choisir un autre échiquier';
+
+  @override
+  String get boardSearching => 'Recherche d’échiquiers…';
+
+  @override
+  String get boardConnecting => 'Connexion à l’échiquier…';
+
+  @override
+  String get boardDisconnected => 'Échiquier déconnecté';
+
+  @override
+  String get boardConnectionError =>
+      'Connexion impossible. Vérifiez le Bluetooth et l’échiquier, puis réessayez.';
+
+  @override
+  String get boardStartingPosition =>
+      'Placez la position de départ standard sur votre échiquier.';
+
+  @override
+  String get boardReady => 'Échiquier prêt';
+
+  @override
+  String get boardExperimentalNotice =>
+      'La prise en charge de nouveaux échiquiers est expérimentale. Vérifiez les coups sur les deux écrans et signalez les problèmes de connexion.';
+
+  @override
+  String get boardGameRestriction =>
+      'Les parties sur échiquier électronique commencent depuis la position de départ standard et sans limite de temps.';
+
+  @override
+  String get boardConfirmSetup => 'J’ai placé la position de départ';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'Vérifiez chaque pièce avant de commencer. Cet échiquier ne peut pas identifier le type de pièce.';
+
+  @override
+  String get boardChooseMove => 'Confirmer votre coup sur l’échiquier';
+
+  @override
+  String get boardAmbiguousMove =>
+      'L’échiquier ne peut pas distinguer ces coups. Choisissez celui que vous avez joué.';
+
+  @override
+  String get boardUnavailable =>
+      'L’échiquier n’est pas prêt. Reconnectez-le ou continuez sur votre téléphone.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'Appuyez à nouveau sur NEW GAME dans les 2,5 secondes pour confirmer, ou utilisez les boutons ci-dessous.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'Pour confirmer sur l’échiquier, appuyez deux fois sur NEW GAME en 2,5 secondes.';
+
+  @override
+  String get boardPhysicalMove => 'Terminez le coup sur votre échiquier.';
+
+  @override
+  String get boardResetPhysical =>
+      'Avant de continuer, rétablissez sur l’échiquier la position affichée à l’écran.';
+
+  @override
+  String get boardNoResults =>
+      'Aucun échiquier compatible trouvé. Réveillez votre échiquier et réessayez.';
+
+  @override
+  String get boardWaitingForSelection => 'Choisissez un échiquier à connecter.';
+
+  @override
+  String get boardReconnect => 'Reconnecter l’échiquier';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus est verrouillé. Cette version Dev ne contient pas la clé d’initialisation du fabricant.';
+
+  @override
+  String get boardMotorRecovery =>
+      'Continuez sur votre téléphone. Cet adaptateur expérimental ne peut pas rétablir en toute sécurité l’état du moteur de l’échiquier.';
+
+  @override
+  String get boardConfirmPosition =>
+      'Confirmer la position sur l’échiquier physique';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'Vérifiez que chaque pièce correspond à la position affichée à l’écran.';
+
+  @override
+  String get samplingExamplesTitle => 'Exemples (Température / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — Le plus prévisible. Maia choisit toujours son coup le plus probable.';
+
+  @override
+  String get samplingExampleReduced =>
+      '0,5 / 0,9 — Un peu de variété. Favorise les choix courants et peut rendre Maia plus difficile à battre.';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — Toute la variété (par défaut). Tous les coups légaux restent possibles, mais les plus probables sont toujours joués plus souvent.';
+
+  @override
+  String get maiaHistorySetting =>
+      'Utiliser l’historique des positions (expérimental)';
+
+  @override
+  String get maiaHistoryScope =>
+      'Nous recommandons de laisser cette option désactivée. Consultez le bouton d’information pour en savoir plus.';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Permet à Maia de prendre en compte jusqu’à sept positions précédentes en plus de la position actuelle. Cela a amélioré la prédiction des coups humains dans nos tests avec le modèle 79M, mais a parfois favorisé l’imitation répétée des coups adverses dans les ouvertures à faible classement. Aucun gain de force de jeu n’est établi. Nous conseillons de laisser cette option désactivée pour le moment. Une position chargée seule n’a pas de coups antérieurs disponibles. Elle s’applique aux nouvelles parties et aux nouveaux échiquiers d’analyse ; les sessions enregistrées conservent leur choix initial.';
+
+  @override
+  String get maiaHistoryResearch =>
+      'Lire l’étude sur l’historique des positions';
+
+  @override
+  String get maiaHistoryOn =>
+      'Historique des positions : activé (expérimental)';
+
+  @override
+  String get maiaHistoryOff => 'Historique des positions : désactivé';
 }

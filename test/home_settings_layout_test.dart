@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -111,7 +112,9 @@ void main() {
     );
     expect(
       find.text(
-        'Chessnut play supports standard-position, unlimited games only.',
+        (appFlavor == 'dev' || appFlavor == 'preview')
+            ? 'Electronic-board games start from the standard position and use unlimited time.'
+            : 'Chessnut play supports standard-position, unlimited games only.',
       ),
       findsOneWidget,
     );
@@ -173,16 +176,14 @@ void main() {
     // Center this tall paragraph within the dialog's scroll viewport.
     await Scrollable.ensureVisible(
       tester.element(
-        find.textContaining(
-          'smallest leading group whose combined probability',
-        ),
+        find.textContaining('Top-P: lower values keep a smaller group'),
       ),
       alignment: 0.5,
     );
     await tester.pumpAndSettle();
     expect(
       find
-          .textContaining('smallest leading group whose combined probability')
+          .textContaining('Top-P: lower values keep a smaller group')
           .hitTestable(),
       findsOneWidget,
     );

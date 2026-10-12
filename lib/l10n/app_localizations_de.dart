@@ -957,7 +957,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingDefaultsQuestion =>
-      'Warum Temperatur 1,00 und Top-P 1,00?';
+      'Wähle, wie abwechslungsreich Maia spielen soll';
 
   @override
   String get samplingResearch => 'Forschung zur Zugauswahl lesen';
@@ -983,19 +983,19 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'Mit diesen Einstellungen kann Maia die gesamte Bandbreite vorhergesagter menschlicher Züge nutzen. In unseren Tests mit der Einstellung 1600 ähnelte die Eröffnungswahl dadurch deutlich stärker der von Lichess-Partien, die nach Wertungszahl gefiltert wurden.';
+      'Maia sagt voraus, welche Züge Menschen mit der gewählten Wertungszahl spielen würden. Temperatur und Top-P steuern, wie Maia zwischen diesen Zügen auswählt.';
 
   @override
   String get samplingStrength =>
-      'Niedrigere Werte verringern die Vielfalt und können Maia stärker machen. Wir bevorzugen ein menschlicheres Eröffnungsrepertoire gegenüber maximaler Spielstärke. Maias Rating beschreibt die Spieler, deren Verhalten das Modell nachbildet, und garantiert keine exakte Spielstärke.';
+      'Niedrigere Werte können Maia schwerer zu schlagen machen, führen aber auch zu mehr Wiederholungen. In unseren Tests bei der Einstellung 1600 ähnelten die Eröffnungen mit 1 / 1 stärker menschlichen Partien, während niedrigere Werte häufiger gewannen. Das garantiert weder den besten Zug noch eine genaue Spielstärke.';
 
   @override
   String get samplingTemperatureHelp =>
-      'Die Temperatur steuert, wie stark sich Maias Zugwahrscheinlichkeiten auf einzelne Züge konzentrieren. Bei 0 wählt Maia immer den Zug, den Menschen laut Modell am ehesten spielen würden. Niedrigere positive Werte bevorzugen die wahrscheinlichsten Züge stärker; höhere Werte geben weniger wahrscheinlichen Zügen mehr Chancen, gewählt zu werden.';
+      'Temperatur: Bei 0 wählt Maia immer den wahrscheinlichsten Zug. Niedrige Werte bevorzugen wahrscheinliche Züge; höhere Werte geben selteneren Zügen mehr Chancen.';
 
   @override
   String get samplingTopPHelp =>
-      'Top-P sortiert Züge von der höchsten zur niedrigsten Wahrscheinlichkeit und behält dann die kleinste Gruppe der wahrscheinlichsten Züge bei, deren summierte Wahrscheinlichkeit diesen Wert erreicht. Niedrigere Werte beschränken die Auswahl auf wahrscheinlichere Züge; 1,00 behält alle regelgerechten Züge bei.';
+      'Top-P: Niedrigere Werte beschränken die Auswahl auf eine kleinere Gruppe wahrscheinlicher Züge; 1 behält alle legalen Züge bei. Bei Temperatur 0 hat Top-P keine Wirkung.';
 
   @override
   String get aboutPoweredBy =>
@@ -1023,7 +1023,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'Temperatur oder Top-P weicht vom empfohlenen Wert 1,00 ab. Weitere Informationen findest du über die Info-Schaltfläche.';
+      'Niedrigere Werte für Temperatur oder Top-P können Maia im Mittelspiel stärker machen, verringern aber die Eröffnungsvielfalt. Näheres steht unter dem Infosymbol.';
 
   @override
   String get couldNotOpenPgn => 'PGN konnte nicht geöffnet werden.';
@@ -1116,4 +1116,139 @@ class AppLocalizationsDe extends AppLocalizations {
   String recentDrawResult(String result) {
     return 'Remis ($result)';
   }
+
+  @override
+  String get electronicBoardExperimental =>
+      'Elektronisches Schachbrett (experimentell)';
+
+  @override
+  String get connectBoard => 'Brett verbinden';
+
+  @override
+  String get chooseBoard => 'Brett auswählen';
+
+  @override
+  String get chooseAnotherBoard => 'Anderes Brett auswählen';
+
+  @override
+  String get boardSearching => 'Bretter werden gesucht…';
+
+  @override
+  String get boardConnecting => 'Verbindung zum Brett wird hergestellt…';
+
+  @override
+  String get boardDisconnected => 'Brett getrennt';
+
+  @override
+  String get boardConnectionError =>
+      'Verbindung fehlgeschlagen. Prüfe Bluetooth und das Brett und versuche es erneut.';
+
+  @override
+  String get boardStartingPosition =>
+      'Baue die normale Anfangsposition auf deinem Brett auf.';
+
+  @override
+  String get boardReady => 'Brett bereit';
+
+  @override
+  String get boardExperimentalNotice =>
+      'Die Unterstützung neuer Bretter ist experimentell. Prüfe die Züge auf beiden Bildschirmen und melde Verbindungsprobleme.';
+
+  @override
+  String get boardGameRestriction =>
+      'Partien mit elektronischem Brett beginnen in der normalen Anfangsposition und ohne Zeitlimit.';
+
+  @override
+  String get boardConfirmSetup => 'Ich habe die Anfangsposition aufgebaut';
+
+  @override
+  String get boardConfirmSetupHelp =>
+      'Prüfe vor dem Start jede Figur. Dieses Brett kann die Figurenart nicht erkennen.';
+
+  @override
+  String get boardChooseMove => 'Brettzug bestätigen';
+
+  @override
+  String get boardAmbiguousMove =>
+      'Das Brett kann diese Züge nicht unterscheiden. Wähle den Zug, den du gespielt hast.';
+
+  @override
+  String get boardUnavailable =>
+      'Das Brett ist nicht bereit. Verbinde es erneut oder spiele auf deinem Smartphone weiter.';
+
+  @override
+  String get boardNewGameConfirmInstruction =>
+      'Drücke zur Bestätigung innerhalb von 2,5 Sekunden erneut NEW GAME oder nutze die Schaltflächen unten.';
+
+  @override
+  String get boardNewGameConfirmationExpired =>
+      'Drücke zur Bestätigung am Brett zweimal innerhalb von 2,5 Sekunden NEW GAME.';
+
+  @override
+  String get boardPhysicalMove =>
+      'Führe den Zug auf deinem Brett vollständig aus.';
+
+  @override
+  String get boardResetPhysical =>
+      'Stelle vor dem Fortsetzen die auf dem Bildschirm angezeigte Stellung auf dem Brett wieder her.';
+
+  @override
+  String get boardNoResults =>
+      'Kein unterstütztes Brett gefunden. Wecke dein Brett auf und versuche es erneut.';
+
+  @override
+  String get boardWaitingForSelection => 'Wähle ein Brett zum Verbinden.';
+
+  @override
+  String get boardReconnect => 'Brett erneut verbinden';
+
+  @override
+  String get boardLockedPegasus =>
+      'Pegasus ist gesperrt. Diese Dev-Version enthält keinen Initialisierungsschlüssel des Herstellers.';
+
+  @override
+  String get boardMotorRecovery =>
+      'Spiele auf deinem Smartphone weiter. Dieser experimentelle Adapter kann den Motorzustand des Bretts nicht sicher wiederherstellen.';
+
+  @override
+  String get boardConfirmPosition => 'Stellung auf dem Brett bestätigen';
+
+  @override
+  String get boardConfirmPositionHelp =>
+      'Prüfe, ob jede Figur mit der Stellung auf dem Bildschirm übereinstimmt.';
+
+  @override
+  String get samplingExamplesTitle => 'Beispiele (Temperatur / Top-P)';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — Am vorhersehbarsten. Maia wählt immer den wahrscheinlichsten Zug.';
+
+  @override
+  String get samplingExampleReduced =>
+      '0,5 / 0,9 — Etwas Abwechslung. Bevorzugt häufige Züge und kann Maia zu einem stärkeren Gegner machen.';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — Volle Vielfalt (Standard). Alle legalen Züge bleiben möglich, wahrscheinliche Züge werden aber weiterhin häufiger gespielt.';
+
+  @override
+  String get maiaHistorySetting => 'Stellungsverlauf verwenden (experimentell)';
+
+  @override
+  String get maiaHistoryScope =>
+      'Wir empfehlen, diese Option ausgeschaltet zu lassen. Einzelheiten findest du über die Info-Schaltfläche.';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Maia berücksichtigt neben der aktuellen Stellung bis zu sieben vorherige Stellungen. In unseren Tests mit dem 79M-Modell verbesserte das die Vorhersage menschlicher Züge, begünstigte aber manchmal wiederholtes Nachahmen in Eröffnungen bei niedrigen Wertungszahlen. Eine höhere Spielstärke ist nicht nachgewiesen. Vorerst empfehlen wir, dies ausgeschaltet zu lassen. Bei einer einzeln geladenen Stellung sind keine früheren Züge verfügbar. Gilt für neue Partien und Analysebretter; gespeicherte Sitzungen behalten ihre ursprüngliche Auswahl.';
+
+  @override
+  String get maiaHistoryResearch => 'Studie zum Stellungsverlauf lesen';
+
+  @override
+  String get maiaHistoryOn => 'Stellungsverlauf: an (experimentell)';
+
+  @override
+  String get maiaHistoryOff => 'Stellungsverlauf: aus';
 }
