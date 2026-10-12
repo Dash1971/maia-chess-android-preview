@@ -176,16 +176,14 @@ void main() {
     // Center this tall paragraph within the dialog's scroll viewport.
     await Scrollable.ensureVisible(
       tester.element(
-        find.textContaining(
-          'smallest leading group whose combined probability',
-        ),
+        find.textContaining('Top-P: lower values keep a smaller group'),
       ),
       alignment: 0.5,
     );
     await tester.pumpAndSettle();
     expect(
       find
-          .textContaining('smallest leading group whose combined probability')
+          .textContaining('Top-P: lower values keep a smaller group')
           .hitTestable(),
       findsOneWidget,
     );

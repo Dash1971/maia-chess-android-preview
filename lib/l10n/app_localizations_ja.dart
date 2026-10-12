@@ -874,7 +874,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get samplingTitle => '温度とTop-P';
 
   @override
-  String get samplingDefaultsQuestion => 'なぜ温度とTop-Pの推奨値は1.00なのですか？';
+  String get samplingDefaultsQuestion => '指し手の多様さを選ぶ';
 
   @override
   String get samplingResearch => 'サンプリングの研究を読む';
@@ -899,19 +899,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      'これらの設定では、Maiaが予測する人間の指し手を幅広く選べます。レーティング1600の設定でのテストでは、序盤の指し手の選択が、レーティングで絞り込んだLichessの対局により近くなりました。';
+      'Maiaは、選んだレーティングの人がどの手を指すかを予測します。温度とTop-Pは、その候補から手を選ぶ方法を調整します。';
 
   @override
   String get samplingStrength =>
-      '設定値を下げると指し手の多様性が減り、Maiaが強くなることがあります。私たちは強さを最大にすることより、人間らしいオープニングのレパートリーを重視しています。Maiaのレーティングは、モデルが模倣するプレイヤーのレーティングを示すもので、対局時の正確な棋力を保証するものではありません。';
+      '値を下げるとMaiaが手ごわくなる場合がありますが、同じ展開も増えます。レーティング1600でのテストでは、1 / 1の序盤の選択が人間の対局に近く、低い値の設定はより多く勝ちました。最善手や一定の棋力を保証するものではありません。';
 
   @override
   String get samplingTemperatureHelp =>
-      '温度は、Maiaが選ぶ手の確率の集中度を調整します。0では、モデルが人間に最も選ばれやすいと予測した手を常に選びます。0より大きい低い値では確率の高い手に選択が集中し、高い値では確率の低い手も選ばれやすくなります。';
+      '温度：0では、Maiaが最も指されやすいと予測した手を必ず選びます。低い値はよく指される手を優先し、高い値は珍しい手も選びやすくします。';
 
   @override
   String get samplingTopPHelp =>
-      'Top-Pは手を確率の高い順に並べ、合計確率が設定値に達するまでの最小のグループを候補にします。低い値では確率の高い手に選択が絞られ、1.00ではすべての合法手が候補に残ります。';
+      'Top-P：値を下げると、よく指される手に候補を絞ります。1ではすべての合法手が候補に入ります。温度が0のときは影響しません。';
 
   @override
   String get aboutPoweredBy =>
@@ -938,7 +938,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      '温度またはTop-Pが推奨値の1.00と異なります。詳細は情報ボタンをご覧ください。';
+      '温度やTop-Pを下げると、中盤でMaiaが強くなる可能性がありますが、序盤の多様さは減ります。詳しくは情報ボタンをご覧ください。';
 
   @override
   String get couldNotOpenPgn => 'PGNを開けませんでした。';
@@ -1119,4 +1119,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get boardConfirmPositionHelp => 'すべての駒が画面の局面と一致していることを確認してください。';
+
+  @override
+  String get samplingExamplesTitle => '設定例（温度 / Top-P）';
+
+  @override
+  String get samplingExampleLikely =>
+      '0 / 0 — 最も予測しやすい設定。Maiaが最も指されやすいと予測した手を必ず選びます。';
+
+  @override
+  String get samplingExampleReduced =>
+      '0.5 / 0.9 — 適度な多様さ。よく指される手を優先し、より手ごわい相手になる可能性があります。';
+
+  @override
+  String get samplingExampleFull =>
+      '1 / 1 — 最大の多様さ（初期設定）。すべての合法手が候補になりますが、指されやすい手ほど多く選ばれます。';
 }

@@ -866,7 +866,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingTitle => '温度和 Top-P';
 
   @override
-  String get samplingDefaultsQuestion => '为什么温度和 Top-P 都设为 1.00？';
+  String get samplingDefaultsQuestion => '选择你想要的变化程度';
 
   @override
   String get samplingResearch => '阅读采样研究';
@@ -891,19 +891,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingFullRange =>
-      '这些设置让 Maia 可在模型预测的完整人类着法范围内选择。在等级分设为 1600 的测试中，其开局选择更接近按等级分筛选的 Lichess 对局。';
+      'Maia会预测你所选等级分的棋手可能走哪些棋。温度和Top-P决定它如何从这些走法中选择。';
 
   @override
   String get samplingStrength =>
-      '较低的设置会减少着法的多样性，并可能让 Maia 更强。我们更重视接近人类棋手的开局选择，而不是追求最大棋力。Maia 的等级分表示其模拟的棋手群体，并不保证相同的实战棋力。';
+      '较低的设置可能让Maia更难战胜，但也更容易重复相同的走法。在等级分1600的测试中，1 / 1的开局选择更接近人类对局，而较低设置的获胜次数更多。这并不保证每步都是最佳走法，也不保证准确对应某个棋力水平。';
 
   @override
   String get samplingTemperatureHelp =>
-      '温度控制 Maia 的走法概率有多集中。设为 0 时，Maia 总是选择模型预测人类最可能走的一步。大于 0 的较低值会使选择更集中于高概率走法；较高值则让低概率走法有更多机会被选中。';
+      '温度：设为0时，Maia总是选择它预测概率最高的走法。较低的值偏向常见走法；较高的值让不常见的走法也有更多机会。';
 
   @override
   String get samplingTopPHelp =>
-      'Top-P 将走法按概率从高到低排序，保留累计概率达到设定值的最小一组走法。较低值会将选择限制在高概率走法中；1.00 则保留所有合法走法。';
+      'Top-P：较低的值只保留较小的一组高概率走法；1保留所有合法走法。温度为0时，此设置不起作用。';
 
   @override
   String get aboutPoweredBy => '由多伦多大学计算社会科学实验室开发、模仿人类棋风的国际象棋引擎 Maia-3 提供支持。';
@@ -929,7 +929,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      '温度或 Top-P 与推荐值 1.00 不同。详情请点击信息按钮。';
+      '降低温度或Top-P可能让Maia在中局更强，但会减少开局变化。详情请查看信息按钮。';
 
   @override
   String get couldNotOpenPgn => '无法打开 PGN。';
@@ -1103,4 +1103,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get boardConfirmPositionHelp => '请确认每个棋子的位置都与屏幕上显示的局面一致。';
+
+  @override
+  String get samplingExamplesTitle => '示例（温度 / Top-P）';
+
+  @override
+  String get samplingExampleLikely => '0 / 0 — 最容易预测。总是选择Maia预测概率最高的走法。';
+
+  @override
+  String get samplingExampleReduced => '0.5 / 0.9 — 保留一些变化。偏向常见走法，可能更难战胜。';
+
+  @override
+  String get samplingExampleFull => '1 / 1 — 完整变化（默认）。所有合法走法都有机会，但高概率走法仍然更常出现。';
 }

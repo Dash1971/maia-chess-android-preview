@@ -1692,10 +1692,10 @@ abstract class AppLocalizations {
   /// **'Temperature and Top-P'**
   String get samplingTitle;
 
-  /// Play screen: Why Temperature 1.00 and Top-P 1.00?
+  /// Maia-specific sampling help: Choose how much variety you want
   ///
   /// In en, this message translates to:
-  /// **'Why Temperature 1.00 and Top-P 1.00?'**
+  /// **'Choose how much variety you want'**
   String get samplingDefaultsQuestion;
 
   /// Play screen: Read the sampling research
@@ -1740,28 +1740,28 @@ abstract class AppLocalizations {
   /// **'Mobile Maia source code'**
   String get mobileMaiaSource;
 
-  /// Play help, about or error message: These settings let Maia use its full range of predicted human moves. In our tests at the 1600 setting, they produced opening choices much closer to rating-filtered Lichess games.
+  /// Maia-specific sampling help: Maia predicts which moves people at your chosen rating would play. Temperature and Top-P control how it chooses between those moves.
   ///
   /// In en, this message translates to:
-  /// **'These settings let Maia use its full range of predicted human moves. In our tests at the 1600 setting, they produced opening choices much closer to rating-filtered Lichess games.'**
+  /// **'Maia predicts which moves people at your chosen rating would play. Temperature and Top-P control how it chooses between those moves.'**
   String get samplingFullRange;
 
-  /// Play help, about or error message: Lower settings reduce variety and can make Maia stronger. We favor a more human opening repertoire over maximum strength. Maia’s rating describes the players it models, rather than guaranteeing an exact playing strength.
+  /// Maia-specific sampling help: Lower settings can make Maia tougher to beat, but also more repetitive. In our tests at the 1600 setting, 1 / 1 gave an opening mix closer to human games, while lower settings won more often. This does not guarantee the best move or an exact playing strength.
   ///
   /// In en, this message translates to:
-  /// **'Lower settings reduce variety and can make Maia stronger. We favor a more human opening repertoire over maximum strength. Maia’s rating describes the players it models, rather than guaranteeing an exact playing strength.'**
+  /// **'Lower settings can make Maia tougher to beat, but also more repetitive. In our tests at the 1600 setting, 1 / 1 gave an opening mix closer to human games, while lower settings won more often. This does not guarantee the best move or an exact playing strength.'**
   String get samplingStrength;
 
-  /// Play help, about or error message: Temperature controls how adventurous Maia is. At 0, Maia always chooses its most likely human move. Higher values make less likely moves more common.
+  /// Maia-specific sampling help: Temperature: at 0, Maia always chooses its most likely move. Low values favor likely moves; higher values give less likely moves more chance.
   ///
   /// In en, this message translates to:
-  /// **'Temperature controls how concentrated Maia’s move probabilities are. At 0, Maia always chooses the move the model predicts humans are most likely to play. Lower positive values favor the most likely moves more strongly; higher values give less likely moves more chance.'**
+  /// **'Temperature: at 0, Maia always chooses its most likely move. Low values favor likely moves; higher values give less likely moves more chance.'**
   String get samplingTemperatureHelp;
 
-  /// Play help, about or error message: Top-P limits Maia to the smallest group of moves whose combined probability reaches this value. Lower values narrow the choice to more likely moves; 1.00 keeps every legal move.
+  /// Maia-specific sampling help: Top-P: lower values keep a smaller group of likely moves; 1 keeps every legal move. It has no effect when Temperature is 0.
   ///
   /// In en, this message translates to:
-  /// **'Top-P ranks moves from most to least likely, then keeps the smallest leading group whose combined probability reaches this value. Lower values restrict the choice to more likely moves; 1.00 keeps every legal move.'**
+  /// **'Top-P: lower values keep a smaller group of likely moves; 1 keeps every legal move. It has no effect when Temperature is 0.'**
   String get samplingTopPHelp;
 
   /// Play help, about or error message: Powered by Maia-3, the human-like chess engine developed by the University of Toronto Computational Social Science Lab.
@@ -1800,10 +1800,10 @@ abstract class AppLocalizations {
   /// **'This independent community app is not an official Maia-3 or University of Toronto, Lichess, or En Croissant application.'**
   String get aboutIndependent;
 
-  /// Play help, about or error message: Temperature or Top-P differs from the recommended 1.00. See the information button for details.
+  /// Maia-specific sampling help: Lowering Temperature or Top-P may make Maia stronger in the middlegame, but reduce opening variety. See the information button for details.
   ///
   /// In en, this message translates to:
-  /// **'Temperature or Top-P differs from the recommended 1.00. See the information button for details.'**
+  /// **'Lowering Temperature or Top-P may make Maia stronger in the middlegame, but reduce opening variety. See the information button for details.'**
   String get samplingRecommendationWarning;
 
   /// Play help, about or error message: Could not open PGN.
@@ -2097,6 +2097,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check that every piece matches the position on screen.'**
   String get boardConfirmPositionHelp;
+
+  /// Maia-specific sampling help: Examples (Temperature / Top-P)
+  ///
+  /// In en, this message translates to:
+  /// **'Examples (Temperature / Top-P)'**
+  String get samplingExamplesTitle;
+
+  /// Maia-specific sampling help: 0 / 0 — Most predictable. Always choose Maia’s most likely move.
+  ///
+  /// In en, this message translates to:
+  /// **'0 / 0 — Most predictable. Always choose Maia’s most likely move.'**
+  String get samplingExampleLikely;
+
+  /// Maia-specific sampling help: 0.5 / 0.9 — Some variety. Favor common choices for a potentially tougher opponent.
+  ///
+  /// In en, this message translates to:
+  /// **'0.5 / 0.9 — Some variety. Favor common choices for a potentially tougher opponent.'**
+  String get samplingExampleReduced;
+
+  /// Maia-specific sampling help: 1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.
+  ///
+  /// In en, this message translates to:
+  /// **'1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.'**
+  String get samplingExampleFull;
 }
 
 class _AppLocalizationsDelegate
