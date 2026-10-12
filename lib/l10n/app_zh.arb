@@ -333,5 +333,11 @@
   "samplingExamplesTitle": "示例（温度 / Top-P）",
   "samplingExampleLikely": "0 / 0 — 最容易预测。总是选择Maia预测概率最高的走法。",
   "samplingExampleReduced": "0.5 / 0.9 — 保留一些变化。偏向常见走法，可能更难战胜。",
-  "samplingExampleFull": "1 / 1 — 完整变化（默认）。所有合法走法都有机会，但高概率走法仍然更常出现。"
+  "samplingExampleFull": "1 / 1 — 完整变化（默认）。所有合法走法都有机会，但高概率走法仍然更常出现。",
+  "maiaHistorySetting": "使用历史局面（实验性）",
+  "maiaHistoryScope": "建议关闭。此设置用于新对局和新分析棋盘；已保存的会话保留原来的选择。",
+  "maiaHistoryHelp": "让Maia在当前局面之外，参考最多七个先前局面。在79M模型的测试中，这提高了对人类走法的预测准确率，但有时也让低等级分的开局更容易反复模仿对手。尚未证实它能提高棋力。目前建议关闭。单独载入的局面没有更早的走法可供使用。",
+  "maiaHistoryResearch": "阅读历史局面研究",
+  "maiaHistoryOn": "历史局面：开启（实验性）",
+  "maiaHistoryOff": "历史局面：关闭"
 }

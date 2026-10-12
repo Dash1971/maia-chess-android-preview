@@ -2121,6 +2121,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.'**
   String get samplingExampleFull;
+
+  /// Maia-specific experimental history setting/help: Use move history (experimental)
+  ///
+  /// In en, this message translates to:
+  /// **'Use move history (experimental)'**
+  String get maiaHistorySetting;
+
+  /// Maia-specific experimental history setting/help: Off is recommended. New games and analysis boards use this setting; saved sessions keep their original choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Off is recommended. New games and analysis boards use this setting; saved sessions keep their original choice.'**
+  String get maiaHistoryScope;
+
+  /// Maia-specific experimental history setting/help: Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use.
+  ///
+  /// In en, this message translates to:
+  /// **'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use.'**
+  String get maiaHistoryHelp;
+
+  /// Maia-specific experimental history setting/help: Read the move-history research
+  ///
+  /// In en, this message translates to:
+  /// **'Read the move-history research'**
+  String get maiaHistoryResearch;
+
+  /// Maia-specific experimental history setting/help: Move history: on (experimental)
+  ///
+  /// In en, this message translates to:
+  /// **'Move history: on (experimental)'**
+  String get maiaHistoryOn;
+
+  /// Maia-specific experimental history setting/help: Move history: off
+  ///
+  /// In en, this message translates to:
+  /// **'Move history: off'**
+  String get maiaHistoryOff;
 }
 
 class _AppLocalizationsDelegate

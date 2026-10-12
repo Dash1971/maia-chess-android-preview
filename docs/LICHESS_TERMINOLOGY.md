@@ -150,3 +150,11 @@ Lichess's existing “movimiento anticipado” terminology.
 The source of truth for the evidence remains the sampling study (1600 setting),
 not a claim of guaranteed strength at every rating. No sampling defaults, saved
 settings or algorithms change with this copy update.
+
+The experimental move-history setting adds six messages in every language.
+“History” here means previous board positions supplied to Maia, not the move-list
+navigation action; languages may explicitly say previous positions to avoid that
+ambiguity. The help limits its research claim to the 79M tests, keeps the option
+experimental and off by default, and explains saved-session behavior. This is
+app-specific prose, not an upstream Lichess translation. Both Maia probability
+sheets and accessible engine-label tooltips identify the effective input mode.

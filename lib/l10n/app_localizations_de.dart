@@ -1231,4 +1231,24 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get samplingExampleFull =>
       '1 / 1 — Volle Vielfalt (Standard). Alle legalen Züge bleiben möglich, wahrscheinliche Züge werden aber weiterhin häufiger gespielt.';
+
+  @override
+  String get maiaHistorySetting => 'Stellungsverlauf verwenden (experimentell)';
+
+  @override
+  String get maiaHistoryScope =>
+      'Aus wird empfohlen. Gilt für neue Partien und Analysebretter; gespeicherte Sitzungen behalten ihre ursprüngliche Auswahl.';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Maia berücksichtigt neben der aktuellen Stellung bis zu sieben vorherige Stellungen. In unseren Tests mit dem 79M-Modell verbesserte das die Vorhersage menschlicher Züge, begünstigte aber manchmal wiederholtes Nachahmen in Eröffnungen bei niedrigen Wertungszahlen. Eine höhere Spielstärke ist nicht nachgewiesen. Vorerst empfehlen wir, dies ausgeschaltet zu lassen. Bei einer einzeln geladenen Stellung sind keine früheren Züge verfügbar.';
+
+  @override
+  String get maiaHistoryResearch => 'Studie zum Stellungsverlauf lesen';
+
+  @override
+  String get maiaHistoryOn => 'Stellungsverlauf: an (experimentell)';
+
+  @override
+  String get maiaHistoryOff => 'Stellungsverlauf: aus';
 }

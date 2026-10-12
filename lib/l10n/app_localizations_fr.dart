@@ -1227,4 +1227,27 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get samplingExampleFull =>
       '1 / 1 — Toute la variété (par défaut). Tous les coups légaux restent possibles, mais les plus probables sont toujours joués plus souvent.';
+
+  @override
+  String get maiaHistorySetting =>
+      'Utiliser l’historique des positions (expérimental)';
+
+  @override
+  String get maiaHistoryScope =>
+      'Nous recommandons de laisser cette option désactivée. Elle s’applique aux nouvelles parties et aux nouveaux échiquiers d’analyse ; les sessions enregistrées conservent leur choix initial.';
+
+  @override
+  String get maiaHistoryHelp =>
+      'Permet à Maia de prendre en compte jusqu’à sept positions précédentes en plus de la position actuelle. Cela a amélioré la prédiction des coups humains dans nos tests avec le modèle 79M, mais a parfois favorisé l’imitation répétée des coups adverses dans les ouvertures à faible classement. Aucun gain de force de jeu n’est établi. Nous conseillons de laisser cette option désactivée pour le moment. Une position chargée seule n’a pas de coups antérieurs disponibles.';
+
+  @override
+  String get maiaHistoryResearch =>
+      'Lire l’étude sur l’historique des positions';
+
+  @override
+  String get maiaHistoryOn =>
+      'Historique des positions : activé (expérimental)';
+
+  @override
+  String get maiaHistoryOff => 'Historique des positions : désactivé';
 }
