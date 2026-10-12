@@ -4,9 +4,15 @@ enum BoardProblem { locked, motor, generic }
 
 extension _ElectronicBoardFlow on _GamePageState {
   bool get _genericBoards =>
-      (_chessnut is ChessnutPlatformTransport && appFlavor == 'dev') ||
+      (_chessnut is ChessnutPlatformTransport &&
+          (appFlavor == 'dev' || appFlavor == 'preview')) ||
       (_chessnut is DiscoverableBoardTransport &&
           _chessnut is! ChessnutPlatformTransport);
+  bool get _legacyChessnutSelection =>
+      _chessnutGameActive &&
+      _boardKind == BoardKind.chessnut &&
+      _selectedBoardId == null;
+
   DiscoverableBoardTransport? get _discovery =>
       _genericBoards && _chessnut is DiscoverableBoardTransport
       ? _chessnut
@@ -97,9 +103,17 @@ extension _ElectronicBoardFlow on _GamePageState {
   }
 
   Future<void> _showBoardCandidates(List<BoardCandidate> candidates) async {
+    candidates = candidates
+        .where(
+          (candidate) =>
+              BoardChannelPolicy.supports(appFlavor, candidate.kind) &&
+              (!_legacyChessnutSelection ||
+                  candidate.kind == BoardKind.chessnut),
+        )
+        .toList();
     if (!_feedbackForeground ||
         !_feedbackRouteVisible ||
-        _started ||
+        (_started && !_legacyChessnutSelection) ||
         !_useChessnutGo ||
         candidates.isEmpty ||
         _discovery == null) {
@@ -146,7 +160,7 @@ extension _ElectronicBoardFlow on _GamePageState {
     if (epoch != _boardInteractionEpoch ||
         !mounted ||
         !_useChessnutGo ||
-        _started) {
+        (_started && !_legacyChessnutSelection)) {
       return;
     }
     _boardDialogContext = null;

@@ -1585,13 +1585,13 @@
   "@maiaHistorySetting": {
     "description": "Maia-specific experimental history setting/help: Use move history (experimental)"
   },
-  "maiaHistoryScope": "Off is recommended. New games and analysis boards use this setting; saved sessions keep their original choice.",
+  "maiaHistoryScope": "Off is recommended. See information button for details.",
   "@maiaHistoryScope": {
-    "description": "Maia-specific experimental history setting/help: Off is recommended. New games and analysis boards use this setting; saved sessions keep their original choice."
+    "description": "Short recommendation beneath the experimental move-history switch; detailed scope is in the information dialog."
   },
-  "maiaHistoryHelp": "Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use.",
+  "maiaHistoryHelp": "Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use. New games and analysis boards use this setting; saved sessions keep their original choice.",
   "@maiaHistoryHelp": {
-    "description": "Maia-specific experimental history setting/help: Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use."
+    "description": "Maia-specific move-history explanation, research limitations, and new versus saved session behavior."
   },
   "maiaHistoryResearch": "Read the move-history research",
   "@maiaHistoryResearch": {

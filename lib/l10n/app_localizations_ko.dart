@@ -1140,12 +1140,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get maiaHistorySetting => '이전 포지션 사용 (실험적)';
 
   @override
-  String get maiaHistoryScope =>
-      '끄기를 권장합니다. 새 대국과 분석 보드에 적용되며, 저장된 세션은 원래 선택을 유지합니다.';
+  String get maiaHistoryScope => '끄기를 권장합니다. 자세한 내용은 정보 버튼을 누르세요.';
 
   @override
   String get maiaHistoryHelp =>
-      'Maia가 현재 포지션과 최대 7개의 이전 포지션을 함께 고려하게 합니다. 79M 모델 테스트에서는 사람의 수를 예측하는 정확도가 높아졌지만, 낮은 레이팅의 오프닝에서 상대의 수를 반복해서 따라 두는 경우도 있었습니다. 실력이 향상된다고 입증된 것은 아닙니다. 현재는 끄기를 권장합니다. 포지션 하나만 불러오면 그 이전 수는 사용할 수 없습니다.';
+      'Maia가 현재 포지션과 최대 7개의 이전 포지션을 함께 고려하게 합니다. 79M 모델 테스트에서는 사람의 수를 예측하는 정확도가 높아졌지만, 낮은 레이팅의 오프닝에서 상대의 수를 반복해서 따라 두는 경우도 있었습니다. 실력이 향상된다고 입증된 것은 아닙니다. 현재는 끄기를 권장합니다. 포지션 하나만 불러오면 그 이전 수는 사용할 수 없습니다. 새 대국과 분석 보드에 적용되며, 저장된 세션은 원래 선택을 유지합니다.';
 
   @override
   String get maiaHistoryResearch => '이전 포지션 연구 읽기';

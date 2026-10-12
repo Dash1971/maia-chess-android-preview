@@ -2,6 +2,12 @@ part of '../main.dart';
 
 enum BoardKind { chessnut, pegasus, squareOff }
 
+/// Channel restriction independent of discovered devices or persisted preferences.
+class BoardChannelPolicy {
+  static bool supports(String? flavor, BoardKind kind) =>
+      kind == BoardKind.chessnut || flavor == 'dev';
+}
+
 class BoardCandidate {
   const BoardCandidate(this.id, this.name, this.kind);
   final String id;

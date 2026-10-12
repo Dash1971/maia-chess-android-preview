@@ -1,8 +1,14 @@
 # Electronic-board development snapshot
 
-This work is intentionally isolated on `codex/eboard-dev-integration`. It is not
-Preview or Stable support qualification. The installable channel is
-[Mobile Maia Preview Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases).
+Preview 2.4 promotes only the Chessnut improvements. Grand Kingdom and DGT
+remain Dev-only experiments in the shared source tree. Build-flavor restrictions
+in Dart and Kotlin exclude them from Preview discovery, selection, reconnection
+and command handling, including remembered devices. Do not remove these gates
+without a separately reviewed promotion and physical-board acceptance.
+
+Use [Preview releases](https://github.com/Dash1971/maia-chess-android-preview/releases)
+for Chessnut testing and [Dev releases](https://github.com/Dash1971/maia-chess-android-preview-dev/releases)
+for prototype board testing. See [channel status](BUILD_CHANNELS.md).
 
 ## What to try
 
@@ -51,8 +57,7 @@ castling, en passant, captures, promotions, Maia playing White, takebacks,
 background/resume, saved-game restoration and continuing on the phone. Verify
 LEDs physically and never infer motor completion from a successful write alone.
 
-The owner first reviews the Dev UI. Promotion into Preview and distribution to
-Pegasus/Grand Kingdom testers happen only after that separate approval. Keep
+The owner approved only Chessnut promotion into Preview after reviewing Dev. Keep
 issues #27, #38, #40 and #68 open until their relevant acceptance is complete.
 
 See `ELECTRONIC_BOARD_NATIVE_PROTOCOL.md` for pinned upstream wire references,

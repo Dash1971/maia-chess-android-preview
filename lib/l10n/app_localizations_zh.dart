@@ -1120,11 +1120,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get maiaHistorySetting => '使用历史局面（实验性）';
 
   @override
-  String get maiaHistoryScope => '建议关闭。此设置用于新对局和新分析棋盘；已保存的会话保留原来的选择。';
+  String get maiaHistoryScope => '建议关闭。详情请查看信息按钮。';
 
   @override
   String get maiaHistoryHelp =>
-      '让Maia在当前局面之外，参考最多七个先前局面。在79M模型的测试中，这提高了对人类走法的预测准确率，但有时也让低等级分的开局更容易反复模仿对手。尚未证实它能提高棋力。目前建议关闭。单独载入的局面没有更早的走法可供使用。';
+      '让Maia在当前局面之外，参考最多七个先前局面。在79M模型的测试中，这提高了对人类走法的预测准确率，但有时也让低等级分的开局更容易反复模仿对手。尚未证实它能提高棋力。目前建议关闭。单独载入的局面没有更早的走法可供使用。 此设置用于新对局和新分析棋盘；已保存的会话保留原来的选择。';
 
   @override
   String get maiaHistoryResearch => '阅读历史局面研究';

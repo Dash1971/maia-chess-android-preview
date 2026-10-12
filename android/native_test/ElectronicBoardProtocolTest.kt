@@ -4,6 +4,19 @@ private fun bytes(vararg values: Int) = values.map { it.toByte() }.toByteArray()
 private fun rejects(block: () -> Unit) { check(runCatching(block).isFailure) }
 
 fun main() {
+    for (flavor in listOf("preview", "", "stable")) {
+        check(BoardChannelPolicy.supports(flavor, "chessnut"))
+        check(!BoardChannelPolicy.supports(flavor, "pegasus"))
+        check(!BoardChannelPolicy.supports(flavor, "squareOff"))
+        check(BoardChannelPolicy.discover(flavor, "DGT Pegasus") == null)
+        check(BoardChannelPolicy.discover(flavor, "Square Off") == null)
+        check(BoardChannelPolicy.discover(flavor, "Chessnut Go") == "chessnut")
+        check(BoardChannelPolicy.discover(flavor, "Smart Chess") == "chessnut")
+    }
+    check(BoardChannelPolicy.discover("dev", "DGT Pegasus") == "pegasus")
+    check(BoardChannelPolicy.discover("dev", "Square Off") == "squareOff")
+    check(!BoardChannelPolicy.supports("dev", "unknown"))
+
     val discovery = BoardDiscoveryWindow<String>(2)
     discovery.add("private-address-1", "first")
     discovery.add("private-address-1", "duplicate")

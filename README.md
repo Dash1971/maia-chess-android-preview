@@ -16,29 +16,27 @@ For the current stable release, complete user guide, feature overview, and
 screenshots, see the
 [Mobile Maia repository](https://github.com/Dash1971/maia-chess-android).
 
-## Next development cycle
+[Build-channel status and testing scope](docs/BUILD_CHANNELS.md)
 
-Beta.9 completes the shared chess/UI terminology and app-specific prose review
-against Lichess across all supported languages. It changes wording, not gameplay, engines, or saved formats. See the
-[terminology review](docs/LICHESS_TERMINOLOGY.md) for scope and context adaptations.
+## Preview 2.4.0-beta.1
 
-Preview 2.3.0-beta.4 incorporates the Stable 2.2.2 application baseline,
-including the 600–2600 Maia rating controls and saved-setting migration. It
-retains the separate Preview package and release identity; new 2.3 features
-will be developed and qualified here before any Stable promotion. The in-app
-Temperature and Top-P help in this Dev review points to the dedicated
-[sampling research](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/maia3-sampling/REPORT.md).
-The original Stable publication stays available for installed app versions.
-Publish the research-copy PR before distributing this updated link.
+This Preview promotes the reviewed Maia settings and Chessnut improvements for
+broader testing, retaining Preview's separate package, signing identity and
+79M Maia model. Grand Kingdom and DGT remain Dev experiments, not Preview support.
 
-This Dev review also adds **Use move history (experimental)**, off by default.
+Temperature and Top-P help now uses plain-language examples and neutral guidance.
+Research links point to the dedicated
+[research repository](https://github.com/Dash1971/mobile-maia-research).
+Existing Stable research URLs remain available for older app versions.
+
+Preview 2.4 also adds **Use move history (experimental)**, off by default.
 It lets Maia consider up to seven earlier positions without changing the sampling
 settings. New sessions use the preference; saved sessions retain their original
 choice. See the [behavior and test contract](docs/MAIA_MOVE_HISTORY.md) and the
 [79M move-history research](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/move-history-2026-10-09/REPORT.md).
 The study found better human-move prediction but more repeated copying in a
-specific low-rated opening; it does not establish a strength gain. The smaller
-5M Dev model still needs separate device qualification before promotion.
+specific low-rated opening; it does not establish a strength gain. Preview uses
+the 79M model; Dev snapshots use the smaller 5M model.
 
 The source includes German, French, Russian, Hindi, Brazilian Portuguese, Japanese,
 Simplified Chinese, Korean and Spanish UI catalogs alongside English. German,
@@ -51,9 +49,9 @@ Development snapshots use the same Preview source with a separate Dev package,
 development signer, ARM64-only APK, and smaller 5M Maia model for rapid phone
 testing. They are not production-parity or qualified Preview releases.
 
-## Why move-history input is off
+## Why move-history input defaults to off
 
-Mobile Maia supplies the current position to Maia rather than the preceding
+By default, Mobile Maia supplies the current position to Maia rather than the preceding
 positions, to reduce repetitive copying in low-Elo openings. In our Stonewall
 test at 600, after `1.d4 d5 2.e3 e6 3.Bd3 Bd6`, history raised the probability
 of copying all five next moves through castling from **0.0084% to 34.2%**.

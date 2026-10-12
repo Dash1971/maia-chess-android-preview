@@ -1237,11 +1237,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get maiaHistoryScope =>
-      'Aus wird empfohlen. Gilt für neue Partien und Analysebretter; gespeicherte Sitzungen behalten ihre ursprüngliche Auswahl.';
+      'Wir empfehlen, diese Option ausgeschaltet zu lassen. Einzelheiten findest du über die Info-Schaltfläche.';
 
   @override
   String get maiaHistoryHelp =>
-      'Maia berücksichtigt neben der aktuellen Stellung bis zu sieben vorherige Stellungen. In unseren Tests mit dem 79M-Modell verbesserte das die Vorhersage menschlicher Züge, begünstigte aber manchmal wiederholtes Nachahmen in Eröffnungen bei niedrigen Wertungszahlen. Eine höhere Spielstärke ist nicht nachgewiesen. Vorerst empfehlen wir, dies ausgeschaltet zu lassen. Bei einer einzeln geladenen Stellung sind keine früheren Züge verfügbar.';
+      'Maia berücksichtigt neben der aktuellen Stellung bis zu sieben vorherige Stellungen. In unseren Tests mit dem 79M-Modell verbesserte das die Vorhersage menschlicher Züge, begünstigte aber manchmal wiederholtes Nachahmen in Eröffnungen bei niedrigen Wertungszahlen. Eine höhere Spielstärke ist nicht nachgewiesen. Vorerst empfehlen wir, dies ausgeschaltet zu lassen. Bei einer einzeln geladenen Stellung sind keine früheren Züge verfügbar. Gilt für neue Partien und Analysebretter; gespeicherte Sitzungen behalten ihre ursprüngliche Auswahl.';
 
   @override
   String get maiaHistoryResearch => 'Studie zum Stellungsverlauf lesen';

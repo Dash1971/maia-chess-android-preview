@@ -41,6 +41,8 @@ jobs:
           git diff --exit-code -- lib/l10n pubspec.lock
       - run: flutter analyze
       - run: flutter test --reporter expanded
+      - name: Verify Preview board restrictions and settings
+        run: flutter test --flavor preview test/preview_board_channel_test.dart test/board_reset_widget_test.dart test/home_settings_layout_test.dart test/maia_settings_help_layout_test.dart --reporter expanded
       - name: Test release verification tools
         run: |
           python3 -m venv "$RUNNER_TEMP/release-checks-venv"

@@ -2,6 +2,18 @@ package com.dash1971.maia_chess
 
 import java.util.UUID
 
+/** Preview permits Chessnut only; prototype adapters must stay in the Dev APK. */
+internal object BoardChannelPolicy {
+    fun supports(flavor: String, kind: String): Boolean =
+        kind == "chessnut" || (flavor == "dev" && kind in setOf("pegasus", "squareOff"))
+    fun discover(flavor: String, name: String): String? = when {
+        name.contains("Chessnut", true) || name.contains("Smart Chess", true) -> "chessnut"
+        supports(flavor, "pegasus") && name.contains("Pegasus", true) -> "pegasus"
+        supports(flavor, "squareOff") && name.equals("Square Off", true) -> "squareOff"
+        else -> null
+    }
+}
+
 /** Pure transport policy: no platform dependencies and no public device addresses. */
 internal class BoardDiscoveryWindow<T>(private val capacity: Int = 32) {
     private val tokens = linkedMapOf<String, T>()

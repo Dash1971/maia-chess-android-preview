@@ -335,8 +335,8 @@
   "samplingExampleReduced": "0,5 / 0,9 — Alguma variedade. Favorece escolhas comuns e pode tornar Maia mais difícil de vencer.",
   "samplingExampleFull": "1 / 1 — Variedade completa (padrão). Todos os lances legais continuam possíveis, mas os mais prováveis ainda são jogados com mais frequência.",
   "maiaHistorySetting": "Usar histórico de posições (experimental)",
-  "maiaHistoryScope": "Recomendamos deixar desativado. Vale para novas partidas e tabuleiros de análise; sessões salvas mantêm a escolha original.",
-  "maiaHistoryHelp": "Permite que Maia considere até sete posições anteriores além da atual. Isso melhorou a previsão de lances humanos nos nossos testes com o modelo 79M, mas às vezes incentivou a cópia repetida de lances em aberturas de jogadores com rating baixo. Não foi comprovado um aumento de força de jogo. Por enquanto, recomendamos deixar desativado. Uma posição carregada sozinha não tem lances anteriores disponíveis.",
+  "maiaHistoryScope": "Recomendamos deixar desativado. Toque no botão de informações para saber mais.",
+  "maiaHistoryHelp": "Permite que Maia considere até sete posições anteriores além da atual. Isso melhorou a previsão de lances humanos nos nossos testes com o modelo 79M, mas às vezes incentivou a cópia repetida de lances em aberturas de jogadores com rating baixo. Não foi comprovado um aumento de força de jogo. Por enquanto, recomendamos deixar desativado. Uma posição carregada sozinha não tem lances anteriores disponíveis. Vale para novas partidas e tabuleiros de análise; sessões salvas mantêm a escolha original.",
   "maiaHistoryResearch": "Ler a pesquisa sobre o histórico de posições",
   "maiaHistoryOn": "Histórico de posições: ativado (experimental)",
   "maiaHistoryOff": "Histórico de posições: desativado"

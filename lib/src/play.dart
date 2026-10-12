@@ -604,7 +604,7 @@ class _GamePageState extends State<GamePage>
       final savedBoard = saved['electronicBoard'];
       final isBoardSave =
           savedBoard == 'chessnut-go' ||
-          (_genericBoards &&
+          (appFlavor == 'dev' &&
               (savedBoard == 'pegasus' || savedBoard == 'squareOff'));
       final preset = isBoardSave ? TimePreset.unlimited : storedPreset;
       if (savedAt != null &&
@@ -1724,6 +1724,12 @@ class _GamePageState extends State<GamePage>
 
   void _handleChessnutEvent(ElectronicBoardEvent event) {
     if (!mounted || !_useChessnutGo) return;
+    if (!BoardChannelPolicy.supports(
+      appFlavor,
+      event.boardKind ?? BoardKind.chessnut,
+    )) {
+      return;
+    }
     if (event.connectionSession != null &&
         _retiredBoardSessions.contains(event.connectionSession)) {
       return;

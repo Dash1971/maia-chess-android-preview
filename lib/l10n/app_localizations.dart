@@ -2128,16 +2128,16 @@ abstract class AppLocalizations {
   /// **'Use move history (experimental)'**
   String get maiaHistorySetting;
 
-  /// Maia-specific experimental history setting/help: Off is recommended. New games and analysis boards use this setting; saved sessions keep their original choice.
+  /// Short recommendation beneath the experimental move-history switch; detailed scope is in the information dialog.
   ///
   /// In en, this message translates to:
-  /// **'Off is recommended. New games and analysis boards use this setting; saved sessions keep their original choice.'**
+  /// **'Off is recommended. See information button for details.'**
   String get maiaHistoryScope;
 
-  /// Maia-specific experimental history setting/help: Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use.
+  /// Maia-specific move-history explanation, research limitations, and new versus saved session behavior.
   ///
   /// In en, this message translates to:
-  /// **'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use.'**
+  /// **'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use. New games and analysis boards use this setting; saved sessions keep their original choice.'**
   String get maiaHistoryHelp;
 
   /// Maia-specific experimental history setting/help: Read the move-history research

@@ -112,7 +112,7 @@ void main() {
     );
     expect(
       find.text(
-        appFlavor == 'dev'
+        (appFlavor == 'dev' || appFlavor == 'preview')
             ? 'Electronic-board games start from the standard position and use unlimited time.'
             : 'Chessnut play supports standard-position, unlimited games only.',
       ),

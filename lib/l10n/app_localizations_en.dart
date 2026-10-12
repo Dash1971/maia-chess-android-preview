@@ -1216,11 +1216,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get maiaHistoryScope =>
-      'Off is recommended. New games and analysis boards use this setting; saved sessions keep their original choice.';
+      'Off is recommended. See information button for details.';
 
   @override
   String get maiaHistoryHelp =>
-      'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use.';
+      'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use. New games and analysis boards use this setting; saved sessions keep their original choice.';
 
   @override
   String get maiaHistoryResearch => 'Read the move-history research';

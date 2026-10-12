@@ -1234,11 +1234,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get maiaHistoryScope =>
-      'Nous recommandons de laisser cette option désactivée. Elle s’applique aux nouvelles parties et aux nouveaux échiquiers d’analyse ; les sessions enregistrées conservent leur choix initial.';
+      'Nous recommandons de laisser cette option désactivée. Consultez le bouton d’information pour en savoir plus.';
 
   @override
   String get maiaHistoryHelp =>
-      'Permet à Maia de prendre en compte jusqu’à sept positions précédentes en plus de la position actuelle. Cela a amélioré la prédiction des coups humains dans nos tests avec le modèle 79M, mais a parfois favorisé l’imitation répétée des coups adverses dans les ouvertures à faible classement. Aucun gain de force de jeu n’est établi. Nous conseillons de laisser cette option désactivée pour le moment. Une position chargée seule n’a pas de coups antérieurs disponibles.';
+      'Permet à Maia de prendre en compte jusqu’à sept positions précédentes en plus de la position actuelle. Cela a amélioré la prédiction des coups humains dans nos tests avec le modèle 79M, mais a parfois favorisé l’imitation répétée des coups adverses dans les ouvertures à faible classement. Aucun gain de force de jeu n’est établi. Nous conseillons de laisser cette option désactivée pour le moment. Une position chargée seule n’a pas de coups antérieurs disponibles. Elle s’applique aux nouvelles parties et aux nouveaux échiquiers d’analyse ; les sessions enregistrées conservent leur choix initial.';
 
   @override
   String get maiaHistoryResearch =>

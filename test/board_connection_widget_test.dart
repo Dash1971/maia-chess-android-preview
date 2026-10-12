@@ -252,6 +252,34 @@ void main() {
     await dispose(tester);
   });
 
+  testWidgets(
+    'legacy Chessnut save can explicitly select its board after reconnect',
+    (tester) async {
+      await ActiveSessionStore.save({
+        'type': 'game',
+        'pgn': '1. e4 e5 *',
+        'electronicBoard': 'chessnut-go',
+        'playerIsWhite': true,
+        'clockPaused': true,
+      });
+      await launch(tester);
+      await tester.tap(find.byKey(const ValueKey('chessnut-inline-reconnect')));
+      await tester.pumpAndSettle();
+      expect(board.reconnects, [null]);
+      board.candidates();
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('board-candidate-board-two')),
+        findsNothing,
+      );
+      await tester.tap(find.byKey(const ValueKey('board-candidate-board-one')));
+      await tester.pumpAndSettle();
+      expect(board.selected, ['board-one']);
+      expect((await ActiveSessionStore.load())!['pgn'], contains('e4'));
+      await dispose(tester);
+    },
+  );
+
   testWidgets('completed board archive has no automatic connection', (
     tester,
   ) async {

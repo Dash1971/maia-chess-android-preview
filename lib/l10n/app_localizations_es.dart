@@ -1235,11 +1235,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get maiaHistoryScope =>
-      'Se recomienda desactivarlo. Se aplica a nuevas partidas y tableros de análisis; las sesiones guardadas conservan su elección original.';
+      'Se recomienda desactivarlo. Consulta el botón de información para más detalles.';
 
   @override
   String get maiaHistoryHelp =>
-      'Permite que Maia tenga en cuenta hasta siete posiciones anteriores, además de la actual. Esto mejoró la predicción de jugadas humanas en nuestras pruebas con el modelo 79M, pero a veces favoreció la copia repetida de jugadas en aperturas de nivel bajo. No se ha demostrado que aumente la fuerza de juego. Por ahora, se recomienda desactivarlo. Una posición cargada por sí sola no tiene jugadas anteriores disponibles.';
+      'Permite que Maia tenga en cuenta hasta siete posiciones anteriores, además de la actual. Esto mejoró la predicción de jugadas humanas en nuestras pruebas con el modelo 79M, pero a veces favoreció la copia repetida de jugadas en aperturas de nivel bajo. No se ha demostrado que aumente la fuerza de juego. Por ahora, se recomienda desactivarlo. Una posición cargada por sí sola no tiene jugadas anteriores disponibles. Se aplica a nuevas partidas y tableros de análisis; las sesiones guardadas conservan su elección original.';
 
   @override
   String get maiaHistoryResearch =>

@@ -1,4 +1,4 @@
-# Experimental Maia move-history input (Dev)
+# Experimental Maia move-history input (Preview and Dev)
 
 This opt-in setting changes the positions supplied to Maia. It does not change
 model weights, Temperature/Top-P, rating preferences, clocks or Stockfish review.
