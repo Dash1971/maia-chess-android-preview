@@ -90,6 +90,7 @@ void main() {
         'playerIsWhite': playerIsWhite,
         'elo': 1800,
         'maiaUseMoveHistory': true,
+        'flipped': true,
         'electronicBoard': 'chessnut-go',
         'clockPaused': true,
       }),
@@ -459,6 +460,8 @@ void main() {
         expect(saved['playerIsWhite'], playerIsWhite);
         expect(saved['elo'], 1800);
         expect(saved['maiaUseMoveHistory'], true);
+        expect(saved['historyPrefix'], isEmpty);
+        expect(saved['flipped'], true);
         expect(saved['chessnutResetPending'], true);
         expect(saved['clockPaused'], true);
         expect(saved['timePreset'], 'unlimited');
@@ -603,6 +606,39 @@ void main() {
       expect(requests, 0);
       expect(board.leds.last.toSet(), {'e2', 'e4'});
       board.position(chess.Chess.DEFAULT_POSITION);
+      await flush(tester);
+      expect(requests, 1);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await flush(tester);
+    },
+  );
+
+  testWidgets(
+    'setup completed behind a menu starts after dismissal without another board packet',
+    (tester) async {
+      var requests = 0;
+      await launch(
+        tester,
+        playerIsWhite: false,
+        evaluator: (_, _) async {
+          requests++;
+          return Float32List(4352);
+        },
+      );
+      board.newGame();
+      await flush(tester);
+      await tester.pumpAndSettle();
+      board.newGame();
+      await flush(tester);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('game-actions-menu')));
+      await tester.pumpAndSettle();
+      board.position(chess.Chess.DEFAULT_POSITION);
+      await flush(tester);
+      expect(requests, 0);
+      tester.state<NavigatorState>(find.byType(Navigator)).pop();
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 2));
       await flush(tester);
       expect(requests, 1);
       await tester.pumpWidget(const SizedBox.shrink());

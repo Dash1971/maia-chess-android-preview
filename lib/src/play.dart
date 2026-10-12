@@ -2195,6 +2195,16 @@ class _GamePageState extends State<GamePage>
       if (squares.isNotEmpty && generation == _chessnutLedRefreshGeneration) {
         await _setChessnutLeds(squares, refresh: true);
       }
+      // Popup routes do not notify the PageRoute observer on dismissal. Retry a
+      // matched pending setup using the existing LED timer, without requiring
+      // another physical move/notification after closing a menu or dialog.
+      if (_chessnutResetPending &&
+          observed != null &&
+          squares.isEmpty &&
+          _gameCanRun &&
+          generation == _chessnutLedRefreshGeneration) {
+        _queueChessnutPosition(observed);
+      }
     } finally {
       if (_chessnutLedRefreshInFlightGeneration == generation) {
         _chessnutLedRefreshInFlightGeneration = null;
