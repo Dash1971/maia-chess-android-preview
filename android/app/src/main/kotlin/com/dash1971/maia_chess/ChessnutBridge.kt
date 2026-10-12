@@ -36,7 +36,7 @@ class ChessnutBridge(
         private const val METHOD_CHANNEL = "maia_chess/chessnut"
         private const val EVENT_CHANNEL = "maia_chess/chessnut/events"
         private const val PERMISSION_REQUEST = 7103
-        private const val SCAN_TIMEOUT_MS = 4_000L
+        private const val SCAN_TIMEOUT_MS = 3_000L
         private const val WRITE_GAP_MS = 100L
 
         private val WRITE_UUID = UUID.fromString("1B7E8272-2877-41C3-B46E-CF057C562023")

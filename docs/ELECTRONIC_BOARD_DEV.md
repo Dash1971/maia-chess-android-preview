@@ -10,10 +10,13 @@ Use [Preview releases](https://github.com/Dash1971/maia-chess-android-preview/re
 for Chessnut testing and [Dev releases](https://github.com/Dash1971/maia-chess-android-preview-dev/releases)
 for prototype board testing. See [channel status](BUILD_CHANNELS.md).
 
+The behavior below describes current source. See channel status for what is
+published; the three-second scan and in-game reset follow-up are not in beta.1.
+
 ## What to try
 
 - Enable Electronic board on the new-game screen and connect. Discovery collects
-  recognized nearby boards for four seconds: one connects automatically, multiple
+  recognized nearby boards for three seconds: one connects automatically, multiple
   boards open a chooser. A remembered board retains the quick connection path;
   Choose another board explicitly scans again. Bluetooth addresses are not shown
   or included in diagnostics.
@@ -21,7 +24,12 @@ for prototype board testing. See [channel status](BUILD_CHANNELS.md).
   phone continuation. In a game, NEW GAME opens the normal reset confirmation;
   a second deliberate press within 2.5 seconds confirms it. Cancellation,
   backgrounding, disconnection and game changes disarm confirmation. Unfinished
-  reset games are discarded; completed games remain in Recent Games.
+  reset games are discarded; completed games remain in Recent Games. Chessnut
+  resets stay on the play screen, retain the actual player color and current
+  engine settings, and show the standard starting position. LED guidance updates
+  while the pieces are replaced; no moves run until the board matches. The game
+  then starts automatically (Maia moves first if the player is Black). Pending
+  setup survives reconnects/restarts; Play in the app explicitly exits board setup.
 - Pegasus is an occupancy-only protocol prototype. Confirm physical piece identity
   at setup; ambiguous captures/promotions need phone confirmation. **Locked
   firmware is not supported:** the manufacturer initialization key has not been

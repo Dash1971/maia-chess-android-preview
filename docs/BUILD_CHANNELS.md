@@ -1,6 +1,6 @@
 # Build channels and promotion status
 
-Updated 2026-10-12. Release pages are authoritative for published artifacts;
+Updated 2026-10-13. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
@@ -56,3 +56,11 @@ actual 79M model. History is experimental and does not promise greater strength.
 - Signed APK SHA-256: `2864afa54044908f39635f39a00b3ffb9272d3634802d1350c769c6cff3ff9c7`. Established Preview certificate SHA-256: `cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e`.
 - The release's verification bundle records APK packaging/signature checks, byte-identical signature reconstruction, beta.9 upgrade checks and native 79M qualification. The separate harness source is provided for reproduction; the harness is not in the app.
 - Stable 2.3.0 and Dev alpha.2 were not rebuilt or republished. Physical Chessnut acceptance remains outstanding with the owner/testers; this publication does not claim Grand Kingdom/DGT support.
+
+## Next Preview correction (source only; not yet published)
+
+The Chessnut reset follow-up reduces fresh discovery from four to three seconds.
+After reset confirmation it stays in-game, preserves colors/settings, and waits
+for LED-guided physical setup before automatically starting. This source change
+is **not** in the published beta.1 APK above; update this record when the next
+verified APK is published. Grand Kingdom/DGT remain Dev-only.
