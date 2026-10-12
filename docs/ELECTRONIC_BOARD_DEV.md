@@ -10,8 +10,8 @@ Use [Preview releases](https://github.com/Dash1971/maia-chess-android-preview/re
 for Chessnut testing and [Dev releases](https://github.com/Dash1971/maia-chess-android-preview-dev/releases)
 for prototype board testing. See [channel status](BUILD_CHANNELS.md).
 
-The behavior below describes current source. See channel status for what is
-published; the three-second scan and in-game reset follow-up are not in beta.1.
+The three-second scan and in-game Chessnut reset below are included in Preview
+2.4.0-beta.2. They are not in beta.1. See channel status for exact release evidence.
 
 ## What to try
 
