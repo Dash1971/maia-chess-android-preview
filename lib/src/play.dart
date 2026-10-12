@@ -248,6 +248,7 @@ class _GamePageState extends State<GamePage>
   bool _chessnutGameActive = false;
   int _chessnutConnectionGeneration = 0;
   bool _chessnutTakebackRestoreActive = false;
+  bool _chessnutResetPending = false;
   bool _physicalMoveInProgress = false;
   String? _pendingPhysicalMaiaMove;
   String? _lastChessnutIllegalPosition;
@@ -386,6 +387,9 @@ class _GamePageState extends State<GamePage>
     _feedbackRouteVisible = true;
     if (_resumeStartedGameWhenVisible && _gameCanRun) _resumeGame();
     _resumeBoardInput();
+    if (_chessnutResetPending && _chessnutPosition != null) {
+      _queueChessnutPosition(_chessnutPosition!);
+    }
   }
 
   bool get _gameCanRun =>
@@ -731,6 +735,9 @@ class _GamePageState extends State<GamePage>
             : null;
         _chessnutTakebackRestoreActive =
             _chessnutGameActive && saved['chessnutTakebackRestore'] == true;
+        _chessnutResetPending =
+            _chessnutGameActive && saved['chessnutResetPending'] == true;
+        if (_chessnutResetPending) _clockPaused = true;
         _queuedChessnutPosition = null;
         _physicalMoveInProgress = false;
         _lastChessnutIllegalPosition = null;
@@ -793,6 +800,7 @@ class _GamePageState extends State<GamePage>
     if (!mounted ||
         !_started ||
         _startingGame ||
+        _chessnutResetPending ||
         _storageBlocked ||
         (WidgetsBinding.instance.lifecycleState != null &&
             WidgetsBinding.instance.lifecycleState !=
@@ -880,6 +888,7 @@ class _GamePageState extends State<GamePage>
     if (_pendingPhysicalMaiaMove != null)
       'pendingPhysicalMaiaMove': _pendingPhysicalMaiaMove,
     if (_chessnutTakebackRestoreActive) 'chessnutTakebackRestore': true,
+    if (_chessnutResetPending) 'chessnutResetPending': true,
   };
 
   Future<void> _saveReviewState(
@@ -1553,6 +1562,10 @@ class _GamePageState extends State<GamePage>
         if (!mounted || !_useChessnutGo) return;
         setState(() {
           _chessnutState = ElectronicBoardConnectionState.error;
+          if (_chessnutResetPending) {
+            _chessnutPosition = null;
+            _queuedChessnutPosition = null;
+          }
           _chessnutMessage = _PlayMessage.chessnutConnectionError;
           if (_chessnutGameActive) _status = _chessnutMessage;
         });
@@ -1683,7 +1696,8 @@ class _GamePageState extends State<GamePage>
 
   Future<void> _playInApp() async {
     _cancelBoardInteractions();
-    if (!mounted || !_started || !_chessnutGameActive) return;
+    if (!mounted || !_started || !_chessnutGameActive || _startingGame) return;
+    final wasResetPending = _chessnutResetPending;
     // The app position already includes Maia's pending physical move. Switching
     // input must neither replay it nor wait for the board to acknowledge it.
     _gameGeneration++;
@@ -1694,6 +1708,7 @@ class _GamePageState extends State<GamePage>
       _chessnutGameActive = false;
       _pendingPhysicalMaiaMove = null;
       _chessnutTakebackRestoreActive = false;
+      _chessnutResetPending = false;
       _physicalMoveInProgress = false;
       _queuedChessnutPosition = null;
       _lastChessnutIllegalPosition = null;
@@ -1714,6 +1729,10 @@ class _GamePageState extends State<GamePage>
     // Board shutdown is best effort; a missing Bluetooth callback must not
     // block on-screen play or saving the user's input-mode choice.
     unawaited(_disconnectChessnut());
+    if (wasResetPending) {
+      _resumeStartedGameWhenVisible = true;
+      _resumeGame();
+    }
     unawaited(_saveGameState());
     if (_gameFinished) {
       _scheduleGameConclusion(playFeedback: false);
@@ -1791,6 +1810,8 @@ class _GamePageState extends State<GamePage>
           ),
         );
       }
+      // A late notification from a lost connection cannot satisfy reset setup.
+      if (_chessnutResetPending && !_chessnutReady) return;
       final position = event.position;
       if (position == null) return;
       setState(() => _chessnutPosition = position);
@@ -1818,6 +1839,10 @@ class _GamePageState extends State<GamePage>
     if (nextState == ElectronicBoardConnectionState.disconnected ||
         nextState == ElectronicBoardConnectionState.error) {
       _cancelBoardInteractions();
+      if (_chessnutResetPending) {
+        _chessnutPosition = null;
+        _queuedChessnutPosition = null;
+      }
     }
     if (nextState != _chessnutState) {
       _chessnutLeds.invalidate();
@@ -1846,7 +1871,7 @@ class _GamePageState extends State<GamePage>
     if (nextState == ElectronicBoardConnectionState.ready) {
       if (_pendingPhysicalMaiaMove != null) {
         _startChessnutLedRefresh(immediate: true);
-      } else if (_chessnutTakebackRestoreActive) {
+      } else if (_chessnutTakebackRestoreActive || _chessnutResetPending) {
         _startChessnutLedRefresh(immediate: true);
       }
       final position = _chessnutPosition;
@@ -1914,6 +1939,39 @@ class _GamePageState extends State<GamePage>
     if (!_chessnutGameActive) return;
 
     final expected = ChessnutProtocol.pieceMapFromFen(_game.fen);
+    if (_chessnutResetPending) {
+      // Physical rearrangement is setup, never a sequence of chess moves.
+      // Keep the new session paused through disconnects and route/lifecycle changes.
+      if (_startingGame || _gameFinished || _storageFailed || _storageBlocked) {
+        return;
+      }
+      final matches = ChessnutProtocol.positionsMatch(observed, expected);
+      await _setChessnutLeds(
+        matches
+            ? const []
+            : ChessnutProtocol.mismatchSquares(observed, expected),
+      );
+      if (!isCurrent()) return;
+      setState(() => _status = _PlayMessage.restoreLitSquares);
+      if (!matches ||
+          !_gameCanRun ||
+          !ChessnutProtocol.positionsMatch(
+            _chessnutPosition ?? const {},
+            expected,
+          )) {
+        return;
+      }
+      _stopChessnutLedRefresh();
+      setState(() {
+        _chessnutResetPending = false;
+        _status = _isPlayerTurn
+            ? _PlayMessage.yourMoveChessnut
+            : _PlayMessage.maiaIsThinking;
+      });
+      _resumeStartedGameWhenVisible = true;
+      _resumeGame();
+      return;
+    }
     if (_chessnutTakebackRestoreActive) {
       final matches = ChessnutProtocol.positionsMatch(observed, expected);
       final mismatch = matches
@@ -2088,7 +2146,9 @@ class _GamePageState extends State<GamePage>
 
   void _startChessnutLedRefresh({bool immediate = false}) {
     _chessnutLedRefreshTimer?.cancel();
-    if (_pendingPhysicalMaiaMove == null && !_chessnutTakebackRestoreActive) {
+    if (_pendingPhysicalMaiaMove == null &&
+        !_chessnutTakebackRestoreActive &&
+        !_chessnutResetPending) {
       _chessnutLedRefreshGeneration++;
       return;
     }
@@ -2114,7 +2174,9 @@ class _GamePageState extends State<GamePage>
       final pending = _pendingPhysicalMaiaMove;
       if (!mounted ||
           !_chessnutGameActive ||
-          (pending == null && !_chessnutTakebackRestoreActive)) {
+          (pending == null &&
+              !_chessnutTakebackRestoreActive &&
+              !_chessnutResetPending)) {
         if (generation == _chessnutLedRefreshGeneration) {
           _stopChessnutLedRefresh();
         }
@@ -2132,6 +2194,16 @@ class _GamePageState extends State<GamePage>
             );
       if (squares.isNotEmpty && generation == _chessnutLedRefreshGeneration) {
         await _setChessnutLeds(squares, refresh: true);
+      }
+      // Popup routes do not notify the PageRoute observer on dismissal. Retry a
+      // matched pending setup using the existing LED timer, without requiring
+      // another physical move/notification after closing a menu or dialog.
+      if (_chessnutResetPending &&
+          observed != null &&
+          squares.isEmpty &&
+          _gameCanRun &&
+          generation == _chessnutLedRefreshGeneration) {
+        _queueChessnutPosition(observed);
       }
     } finally {
       if (_chessnutLedRefreshInFlightGeneration == generation) {
@@ -2462,9 +2534,12 @@ class _GamePageState extends State<GamePage>
     );
   }
 
-  Future<void> _startGame({bool archiveCurrent = true}) async {
+  Future<void> _startGame({
+    bool archiveCurrent = true,
+    bool resetChessnutBoard = false,
+  }) async {
     if (_storageBlocked || _startingGame || !mounted) return;
-    if (_useChessnutGo && !_chessnutStartPositionReady) {
+    if (_useChessnutGo && !resetChessnutBoard && !_chessnutStartPositionReady) {
       final message = !_chessnutReady
           ? _PlayMessage.connectChessnutFirst
           : _PlayMessage.chessnutStartingPosition;
@@ -2512,21 +2587,27 @@ class _GamePageState extends State<GamePage>
       _clockTimer?.cancel();
       _gameEndFeedbackTimer?.cancel();
       _stopChessnutLedRefresh();
-      final randomWhite = Random().nextBool();
-      _playerColor = switch (_sideChoice) {
-        PlayerSide.white => chess.Color.WHITE,
-        PlayerSide.black => chess.Color.BLACK,
-        PlayerSide.random =>
-          randomWhite ? chess.Color.WHITE : chess.Color.BLACK,
-      };
+      if (!resetChessnutBoard) {
+        final randomWhite = Random().nextBool();
+        _playerColor = switch (_sideChoice) {
+          PlayerSide.white => chess.Color.WHITE,
+          PlayerSide.black => chess.Color.BLACK,
+          PlayerSide.random =>
+            randomWhite ? chess.Color.WHITE : chess.Color.BLACK,
+        };
+      }
       setState(() {
-        _game = widget.startingFen == null
+        _game = resetChessnutBoard || widget.startingFen == null
             ? chess.Chess()
             : chess.Chess.fromFEN(widget.startingFen!);
-        _gameUseMoveHistory = widget.startingUseMoveHistory ?? _useMoveHistory;
+        if (!resetChessnutBoard) {
+          _gameUseMoveHistory =
+              widget.startingUseMoveHistory ?? _useMoveHistory;
+        }
         final startingHistory = widget.startingPositionHistory;
         _gameHistoryPrefix =
-            startingHistory != null &&
+            !resetChessnutBoard &&
+                startingHistory != null &&
                 startingHistory.isNotEmpty &&
                 PgnVariationExporter._samePosition(
                   startingHistory.last,
@@ -2553,7 +2634,7 @@ class _GamePageState extends State<GamePage>
         _engineThinking = false;
         _maiaFailed = false;
         _clockPaused = true;
-        _boardFlipped = false;
+        if (!resetChessnutBoard) _boardFlipped = false;
         _resultDialogShown = false;
         _drawOfferEvaluating = false;
         _lastDrawOfferFen = null;
@@ -2562,6 +2643,7 @@ class _GamePageState extends State<GamePage>
         _chessnutGameActive = _useChessnutGo;
         _pendingPhysicalMaiaMove = null;
         _chessnutTakebackRestoreActive = false;
+        _chessnutResetPending = resetChessnutBoard;
         _lastChessnutIllegalPosition = null;
         _started = true;
         final startingMillis = _baseMinutes * 60 * 1000;
@@ -2573,7 +2655,9 @@ class _GamePageState extends State<GamePage>
         _clockHistory
           ..clear()
           ..add(ClockSnapshot(_whiteMillis, _blackMillis));
-        _status = _chessnutGameActive
+        _status = resetChessnutBoard
+            ? _PlayMessage.restoreLitSquares
+            : _chessnutGameActive
             ? (_isPlayerTurn
                   ? _PlayMessage.yourMoveChessnut
                   : _PlayMessage.maiaIsThinking)
@@ -2601,7 +2685,8 @@ class _GamePageState extends State<GamePage>
           'Result',
           '*',
         ]);
-        if (widget.startingFen != null &&
+        if (!resetChessnutBoard &&
+            widget.startingFen != null &&
             widget.startingFen != chess.Chess.DEFAULT_POSITION) {
           _game.set_header(['SetUp', '1', 'FEN', widget.startingFen!]);
         }
@@ -2629,6 +2714,11 @@ class _GamePageState extends State<GamePage>
       if (mounted) setState(() => _startingGame = false);
     }
     if (mounted && !_storageFailed) {
+      if (_chessnutResetPending) {
+        _startChessnutLedRefresh(immediate: true);
+        final observed = _chessnutPosition;
+        if (observed != null) _queueChessnutPosition(observed);
+      }
       _resumeStartedGameWhenVisible = true;
       if (_gameCanRun) _resumeGame();
     }
@@ -2863,6 +2953,7 @@ class _GamePageState extends State<GamePage>
 
   Future<void> _playMaiaMove() async {
     if (_gameFinished ||
+        _chessnutResetPending ||
         _isPlayerTurn ||
         _clockPaused ||
         _reviewOpen ||
@@ -3171,6 +3262,7 @@ class _GamePageState extends State<GamePage>
     _stopChessnutLedRefresh();
     setState(() {
       _forcedResult = result;
+      _chessnutResetPending = false;
       _game.set_header(['Result', result, 'Termination', 'Player resigned']);
       _status = _PlayMessage.youResigned;
     });
@@ -3204,6 +3296,7 @@ class _GamePageState extends State<GamePage>
       _chessnutGameActive = false;
       _pendingPhysicalMaiaMove = null;
       _chessnutTakebackRestoreActive = false;
+      _chessnutResetPending = false;
       _lastChessnutIllegalPosition = null;
       _timePreset = _useChessnutGo
           ? TimePreset.unlimited
@@ -3267,7 +3360,8 @@ class _GamePageState extends State<GamePage>
         !_chessnutReady ||
         _storageBlocked ||
         _startingGame ||
-        _resetDialogAccepting) {
+        _resetDialogAccepting ||
+        _chessnutResetPending) {
       return;
     }
     final press = _boardReset.press(
@@ -3396,7 +3490,11 @@ class _GamePageState extends State<GamePage>
       // A game can finish while the confirmation is open. Never erase a result.
       if (_gameFinished) {
         await _saveGameState(allowDuringStart: true);
-        await ActiveSessionStore.startNew();
+        // The in-place Chessnut start below archives this completed checkpoint
+        // while creating the new identity. Avoid archiving/clearing it twice.
+        if (!_chessnutGameActive || _boardKind != BoardKind.chessnut) {
+          await ActiveSessionStore.startNew();
+        }
       } else {
         await ActiveSessionStore.discardActive();
       }
@@ -3411,6 +3509,13 @@ class _GamePageState extends State<GamePage>
       if (mounted) setState(() => _startingGame = false);
     }
     if (!mounted) return;
+    if (_chessnutGameActive && _boardKind == BoardKind.chessnut) {
+      _cancelBoardInteractions();
+      _physicalMoveInProgress = false;
+      _queuedChessnutPosition = null;
+      await _startGame(archiveCurrent: false, resetChessnutBoard: true);
+      return;
+    }
     if (_chessnutGameActive) {
       _boardSetupConfirmed = false;
       _cancelBoardInteractions();
@@ -3440,6 +3545,7 @@ class _GamePageState extends State<GamePage>
         _chessnutGameActive = false;
         _pendingPhysicalMaiaMove = null;
         _chessnutTakebackRestoreActive = false;
+        _chessnutResetPending = false;
         _lastChessnutIllegalPosition = null;
         _timePreset = _useChessnutGo
             ? TimePreset.unlimited
