@@ -57,7 +57,7 @@ actual 79M model. History is experimental and does not promise greater strength.
 - The release's verification bundle records APK packaging/signature checks, byte-identical signature reconstruction, beta.9 upgrade checks and native 79M qualification. The separate harness source is provided for reproduction; the harness is not in the app.
 - Stable 2.3.0 and Dev alpha.2 were not rebuilt or republished. Physical Chessnut acceptance remains outstanding with the owner/testers; this publication does not claim Grand Kingdom/DGT support.
 
-## Next Preview correction (source only; not yet published)
+## Preview 2.4.0-beta.2 candidate (not yet published)
 
 The Chessnut reset follow-up reduces fresh discovery from four to three seconds.
 After reset confirmation it stays in-game, preserves colors/settings, and waits
