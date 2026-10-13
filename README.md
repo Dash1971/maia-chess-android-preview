@@ -18,7 +18,11 @@ screenshots, see the
 
 [Build-channel status and testing scope](docs/BUILD_CHANNELS.md)
 
-## Preview 2.4.0-beta.2
+## Preview 2.4.0-beta.3
+
+Beta.3 keeps queued pieces at their projected destinations as multiple premoves
+are consumed, removing the brief jump back to the real position. Completed
+premove highlights disappear as the queue progresses.
 
 Beta.2 shortens fresh Chessnut discovery to three seconds and keeps confirmed
 NEW GAME resets on the play screen. Colors and settings stay the same; LEDs
