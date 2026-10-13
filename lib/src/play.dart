@@ -3019,7 +3019,12 @@ class _GamePageState extends State<GamePage>
       _emitAcceptedMoveFeedback(move);
       _positionHistory.add(_game.fen);
       _recordClockSnapshot();
-      _syncGameBoard();
+      // A multi-premove board already shows the queued destination. Resolve
+      // the next premove before publishing a position, or Chessground animates
+      // those pieces back to the real position and out to the plan again.
+      final deferBoardUpdate =
+          _multiplePremoves && !_chessnutGameActive && !_game.game_over;
+      if (!deferBoardUpdate) _syncGameBoard();
       if (_chessnutGameActive) {
         // Persist guidance with the committed move even if the app pauses
         // while the check alert is waiting for Bluetooth completion.
@@ -3048,6 +3053,9 @@ class _GamePageState extends State<GamePage>
       }
       final premovePlayed = await _playQueuedPremove();
       if (!mounted || generation != _gameGeneration) return;
+      // Successful premoves publish their resulting position themselves.
+      // Empty/invalid queues must instead reveal the real board immediately.
+      if (deferBoardUpdate && !premovePlayed) _syncGameBoard();
       setState(() {
         _engineThinking = false;
         _status =
