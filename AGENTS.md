@@ -31,3 +31,16 @@ and DGT adapters remain Dev-only: preserve both Dart and native flavor gates
 and the Preview restriction tests. Stable releases use the Stable repository's
 authoritative release procedure, including its Zapstore and F-Droid follow-up.
 Preview/Dev publication does not authorize a Stable or app-store release.
+
+## Release and workspace cleanup
+
+After a verified publication, delete merged PR branches and temporary release-build
+branches once their source is preserved by a release tag and they have no unique
+unmerged commits. Do not delete active work, release tags or releases. Keep
+automatic deletion of merged branches enabled.
+
+Remove only task-owned build containers/checkouts, downloaded or reconstructed
+APKs, test virtual environments and emulator test data after retaining compact
+verification evidence and checking the published download. Stop task-owned
+emulators. Preserve shared SDK/Gradle caches, signing keys and other people's
+work. Record cleanup in the release PR, including anything intentionally retained.
