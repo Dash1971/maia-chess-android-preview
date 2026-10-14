@@ -332,3 +332,12 @@ flutter test --flavor preview test/board_reset_widget_test.dart \
 Also run the exact Preview invocation in `.github/workflows/checks.yml` and the
 normal full suite. All six cases run in ordinary CI; no BLE hardware, APK build,
 new dependency or production test hook is required.
+
+## Restored analysis Home navigation
+
+`test/review_home_restore_test.dart` compares immediate Home, ordinary
+background/resume, and reconstruction from a saved completed-game review.
+It verifies one-tap Home, checkpoint clearing, unfinished-game Back to game,
+and standalone review without an underlying game. The restart test destroys
+the widget tree with host frames enabled: pumping a replacement tree while
+Flutter is paused does not actually simulate process death.
