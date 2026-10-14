@@ -18,7 +18,11 @@ screenshots, see the
 
 [Build-channel status and testing scope](docs/BUILD_CHANNELS.md)
 
-## Preview 2.4.0-beta.4
+## Preview 2.4.0-beta.5
+
+Restored post-game analysis now returns directly Home in one tap after Android
+restarts the app in the background. Unfinished-game analysis still returns to
+the game. This release also includes the beta.4 board messages described below.
 
 Beta.4 names the connected board (for example, “Chessnut Go connected”) and
 retains that name in disconnect guidance. Messages are localized in all ten

@@ -540,7 +540,7 @@ class _GamePageState extends State<GamePage>
                           flipped,
                           updated,
                         ),
-                    onHome: ActiveSessionStore.clear,
+                    onHome: _started ? _goHome : ActiveSessionStore.clear,
                     returnToGame: _started && !_gameFinished,
                   ),
                 ),
