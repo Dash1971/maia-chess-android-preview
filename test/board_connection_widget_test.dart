@@ -173,6 +173,243 @@ void main() {
     find.widgetWithText(FilledButton, 'Start game'),
   );
 
+  test(
+    'board labels use recognized products and conservative fallbacks',
+    () async {
+      final t = await AppLocalizations.delegate.load(const Locale('en'));
+      for (final example in [
+        ('Chessnut Go', 'Chessnut Go'),
+        (' CHESSNUT_AIR_1234 ', 'Chessnut Air'),
+        ('Chessnut Pro', 'Chessnut Pro'),
+        ('Chessnut', 'Chessnut'),
+        ('Smart Chess', 'Chessnut'),
+        ('Chessnut Airship', 'Chessnut'),
+        ('Chessnut GoPlus', 'Chessnut'),
+        ('DGT Pegasus', 'Chessnut'),
+        ('', 'Chessnut'),
+      ]) {
+        expect(
+          electronicBoardDisplayName(t, BoardKind.chessnut, example.$1),
+          example.$2,
+        );
+      }
+      expect(
+        electronicBoardDisplayName(t, BoardKind.chessnut, null),
+        'Chessnut',
+      );
+      expect(
+        electronicBoardDisplayName(t, BoardKind.pegasus, null),
+        'DGT Pegasus',
+      );
+      expect(
+        electronicBoardDisplayName(t, BoardKind.squareOff, null),
+        'Square Off Grand Kingdom',
+      );
+      expect(
+        electronicBoardDisplayName(t, null, 'unknown alias'),
+        'Chessboard',
+      );
+    },
+  );
+
+  testWidgets(
+    'named status waits for readiness and follows connection identity',
+    (tester) async {
+      await launch(tester);
+      await enable(tester);
+      void status(
+        ElectronicBoardConnectionState state, {
+        BoardKind kind = BoardKind.chessnut,
+        String id = 'go',
+        String? name,
+      }) => board.controller.add(
+        ElectronicBoardEvent(
+          type: 'status',
+          connectionState: state,
+          boardKind: kind,
+          boardId: id,
+          connectionSession: 'session-$id',
+          deviceName: name,
+        ),
+      );
+      final statusBox = find.byKey(const ValueKey('chessnut-setup-status'));
+      Finder message(String text) =>
+          find.descendant(of: statusBox, matching: find.text(text));
+      expect(message('Searching for boards…'), findsOneWidget);
+      status(ElectronicBoardConnectionState.connected, name: 'Chessnut Go');
+      await tester.pumpAndSettle();
+      expect(message('Connecting to board…'), findsOneWidget);
+      expect(message('Chessnut Go connected'), findsNothing);
+      status(ElectronicBoardConnectionState.ready);
+      await tester.pumpAndSettle();
+      expect(message('Chessnut Go connected'), findsOneWidget);
+      // Readiness must not imply that the physical position is correct.
+      board.controller.add(
+        const ElectronicBoardEvent(
+          type: 'position',
+          connectionSession: 'session-go',
+          position: {},
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        message('Set up the standard starting position on your board.'),
+        findsOneWidget,
+      );
+      status(ElectronicBoardConnectionState.disconnected);
+      await tester.pumpAndSettle();
+      expect(message('Chessnut Go disconnected'), findsOneWidget);
+      // A different unnamed Chessnut must not inherit the old model.
+      status(ElectronicBoardConnectionState.ready, id: 'unnamed');
+      await tester.pumpAndSettle();
+      expect(message('Chessnut connected'), findsOneWidget);
+      // Late events from the old session must not restore its name or status.
+      status(ElectronicBoardConnectionState.ready, name: 'Chessnut Go');
+      await tester.pumpAndSettle();
+      expect(message('Chessnut connected'), findsOneWidget);
+      for (final entry in [
+        (BoardKind.pegasus, 'pegasus', 'DGT Pegasus'),
+        (BoardKind.squareOff, 'square-off', 'Square Off Grand Kingdom'),
+      ]) {
+        status(
+          ElectronicBoardConnectionState.ready,
+          kind: entry.$1,
+          id: entry.$2,
+        );
+        await tester.pumpAndSettle();
+        expect(message('${entry.$3} connected'), findsOneWidget);
+        status(
+          ElectronicBoardConnectionState.disconnected,
+          kind: entry.$1,
+          id: entry.$2,
+        );
+        await tester.pumpAndSettle();
+        expect(message('${entry.$3} disconnected'), findsOneWidget);
+      }
+      await dispose(tester);
+    },
+  );
+
+  testWidgets(
+    'in-game disconnect identifies the board without changing recovery',
+    (tester) async {
+      await launch(tester);
+      await enable(tester);
+      board.controller.add(
+        const ElectronicBoardEvent(
+          type: 'status',
+          connectionState: ElectronicBoardConnectionState.ready,
+          boardKind: BoardKind.chessnut,
+          boardId: 'go',
+          connectionSession: 'session-go',
+          deviceName: 'Chessnut Go',
+        ),
+      );
+      board.controller.add(
+        ElectronicBoardEvent(
+          type: 'position',
+          connectionSession: 'session-go',
+          position: ChessnutProtocol.pieceMapFromFen(
+            'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(
+        find.widgetWithText(FilledButton, 'Start game'),
+      );
+      await tester.tap(find.widgetWithText(FilledButton, 'Start game'));
+      await tester.pumpAndSettle();
+      board.controller.add(
+        const ElectronicBoardEvent(
+          type: 'status',
+          connectionState: ElectronicBoardConnectionState.disconnected,
+          connectionSession: 'session-go',
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('chessnut-status-banner')),
+          matching: find.text('Chessnut Go disconnected'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('chessnut-inline-reconnect')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('chessnut-play-in-app')),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+      await dispose(tester);
+    },
+  );
+
+  for (final locale in AppLocalizations.supportedLocales) {
+    testWidgets(
+      'named board status fits compact large-text UI in ${locale.languageCode}',
+      (tester) async {
+        tester.view.physicalSize = const Size(320, 568);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final strings = await AppLocalizations.delegate.load(locale);
+        await tester.pumpWidget(
+          MaterialApp(
+            locale: locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: TextScaler.linear(2)),
+              child: child!,
+            ),
+            home: GamePage(electronicBoardTransport: board),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await enable(tester);
+        board.status(BoardKind.squareOff);
+        await tester.pumpAndSettle();
+        final status = find.byKey(const ValueKey('chessnut-setup-status'));
+        await tester.ensureVisible(status);
+        await tester.pumpAndSettle();
+        expect(
+          find.descendant(
+            of: status,
+            matching: find.text(
+              strings.namedBoardConnected('Square Off Grand Kingdom'),
+            ),
+          ),
+          findsOneWidget,
+        );
+        expect(tester.takeException(), isNull);
+        board.controller.add(
+          const ElectronicBoardEvent(
+            type: 'status',
+            connectionState: ElectronicBoardConnectionState.disconnected,
+            connectionSession: 'session-selected-board',
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          find.descendant(
+            of: status,
+            matching: find.text(
+              strings.namedBoardDisconnected('Square Off Grand Kingdom'),
+            ),
+          ),
+          findsOneWidget,
+        );
+        expect(tester.takeException(), isNull);
+        await dispose(tester);
+      },
+    );
+  }
+
   testWidgets(
     'multiple candidates use one chooser and only explicit selection connects',
     (tester) async {

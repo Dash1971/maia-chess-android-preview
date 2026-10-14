@@ -1154,4 +1154,17 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get maiaHistoryOff => '이전 포지션: 꺼짐';
+
+  @override
+  String get chessboardDeviceName => '체스보드';
+
+  @override
+  String namedBoardConnected(String boardName) {
+    return '$boardName 연결됨';
+  }
+
+  @override
+  String namedBoardDisconnected(String boardName) {
+    return '$boardName 연결 끊김';
+  }
 }

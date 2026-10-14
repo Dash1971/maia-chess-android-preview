@@ -1245,4 +1245,17 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get maiaHistoryOff => 'पिछली स्थितियाँ: बंद';
+
+  @override
+  String get chessboardDeviceName => 'शतरंज बोर्ड';
+
+  @override
+  String namedBoardConnected(String boardName) {
+    return '$boardName से कनेक्ट हो गया';
+  }
+
+  @override
+  String namedBoardDisconnected(String boardName) {
+    return '$boardName से कनेक्शन नहीं है';
+  }
 }

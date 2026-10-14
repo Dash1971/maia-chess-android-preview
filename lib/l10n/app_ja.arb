@@ -339,5 +339,8 @@
   "maiaHistoryHelp": "現在の局面に加え、最大7つ前までの局面をMaiaに渡します。79Mモデルでのテストでは人間の指し手の予測精度が上がりましたが、低レーティングの序盤では相手の手を繰り返し真似しやすくなる場合がありました。棋力の向上は確認されていません。当面はオフを推奨します。単独で読み込んだ局面では、それ以前の手は利用できません。 新しい対局と解析盤に適用されます。保存済みのセッションは元の設定を保持します。",
   "maiaHistoryResearch": "過去の局面に関する研究を読む",
   "maiaHistoryOn": "過去の局面：使用（実験的機能）",
-  "maiaHistoryOff": "過去の局面：不使用"
+  "maiaHistoryOff": "過去の局面：不使用",
+  "chessboardDeviceName": "チェスボード",
+  "namedBoardConnected": "{boardName}に接続しました",
+  "namedBoardDisconnected": "{boardName}未接続"
 }

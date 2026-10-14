@@ -2157,6 +2157,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Move history: off'**
   String get maiaHistoryOff;
+
+  /// Generic electronic chessboard name when no brand or model is known.
+  ///
+  /// In en, this message translates to:
+  /// **'Chessboard'**
+  String get chessboardDeviceName;
+
+  /// Electronic board status, only after transport is ready. Board name is a canonical product name or the localized generic chessboard name.
+  ///
+  /// In en, this message translates to:
+  /// **'{boardName} connected'**
+  String namedBoardConnected(String boardName);
+
+  /// Electronic board disconnected status. Keep the last known board name until another connection begins.
+  ///
+  /// In en, this message translates to:
+  /// **'{boardName} disconnected'**
+  String namedBoardDisconnected(String boardName);
 }
 
 class _AppLocalizationsDelegate

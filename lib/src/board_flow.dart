@@ -18,9 +18,22 @@ extension _ElectronicBoardFlow on _GamePageState {
       ? _chessnut
       : null;
 
+  String get _boardDisplayName => electronicBoardDisplayName(
+    l10n(context),
+    _boardNameKind ??
+        (_chessnutGameActive || !_genericBoards ? _boardKind : null),
+    _chessnutDeviceName,
+  );
+
   String _boardText(_PlayMessage message) {
-    if (!_genericBoards) return message.text(context);
     final t = l10n(context);
+    if (message == _PlayMessage.chessnutReady && _chessnutReady) {
+      return t.namedBoardConnected(_boardDisplayName);
+    }
+    if (message == _PlayMessage.chessnutIsDisconnected) {
+      return t.namedBoardDisconnected(_boardDisplayName);
+    }
+    if (!_genericBoards) return message.text(context);
     if (_chessnutState == ElectronicBoardConnectionState.error &&
         _boardProblem != null) {
       return switch (_boardProblem!) {
@@ -35,11 +48,9 @@ extension _ElectronicBoardFlow on _GamePageState {
     return switch (message) {
       _PlayMessage.searchingChessnut => t.boardSearching,
       _PlayMessage.connectingChessnut => t.boardConnecting,
-      _PlayMessage.chessnutIsDisconnected => t.boardDisconnected,
       _PlayMessage.chessnutConnectionError ||
       _PlayMessage.couldNotConnectChessnut => t.boardConnectionError,
       _PlayMessage.chessnutStartingPosition => t.boardStartingPosition,
-      _PlayMessage.chessnutReady => t.boardReady,
       _PlayMessage.reconnectChessnut ||
       _PlayMessage.connectChessnutFirst => t.boardReconnect,
       _PlayMessage.yourMoveChessnut ||
@@ -88,6 +99,8 @@ extension _ElectronicBoardFlow on _GamePageState {
     }
     _boardConnectionSession = null;
     _chessnutPosition = null;
+    _chessnutDeviceName = null;
+    _boardNameKind = null;
     _chessnutLeds.invalidate();
     _updateBoardUi(() {
       _chessnutBatteryPercent = null;

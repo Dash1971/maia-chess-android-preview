@@ -240,6 +240,7 @@ class _GamePageState extends State<GamePage>
   bool _boardSetupConfirmed = false;
   BoardProblem? _boardProblem;
   String? _chessnutDeviceName;
+  BoardKind? _boardNameKind;
   int? _chessnutBatteryPercent;
   bool _chessnutCharging = false;
   Map<String, String>? _chessnutPosition;
@@ -1616,6 +1617,8 @@ class _GamePageState extends State<GamePage>
     if (mounted) {
       setState(() {
         _chessnutPosition = null;
+        _chessnutDeviceName = null;
+        _boardNameKind = null;
         _chessnutState = ElectronicBoardConnectionState.scanning;
         _chessnutMessage = _PlayMessage.searchingChessnut;
       });
@@ -1820,6 +1823,15 @@ class _GamePageState extends State<GamePage>
     }
     final nextState = event.connectionState;
     if (nextState == null) return;
+    // Names belong to one connection, not the previously selected board.
+    if ((event.connectionSession != null &&
+            event.connectionSession != _boardConnectionSession) ||
+        (event.boardId != null && event.boardId != _selectedBoardId) ||
+        (event.boardKind != null && event.boardKind != _boardKind)) {
+      _chessnutDeviceName = null;
+      _boardNameKind = null;
+    }
+    _boardNameKind = event.boardKind ?? _boardNameKind;
     if (event.connectionSession != null &&
         event.connectionSession != _boardConnectionSession) {
       if (_boardConnectionSession != null) {
@@ -2312,9 +2324,7 @@ class _GamePageState extends State<GamePage>
         ? (_genericBoards
               ? l10n(context).boardUnavailable
               : l10n(context).chessnutUnavailable)
-        : (_genericBoards
-              ? l10n(context).boardDisconnected
-              : l10n(context).chessnutDisconnected);
+        : l10n(context).namedBoardDisconnected(_boardDisplayName);
     return Container(
       key: const ValueKey('chessnut-status-banner'),
       height: _chessnutBannerHeight,
