@@ -2175,6 +2175,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{boardName} disconnected'**
   String namedBoardDisconnected(String boardName);
+
+  /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Maia sampling data'**
+  String get saveMaiaSamplingData;
+
+  /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nUp to 64 MB is kept. The oldest captured games are deleted first; this does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.'**
+  String get samplingDataHelp;
+
+  /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
+  ///
+  /// In en, this message translates to:
+  /// **'Export sampling data'**
+  String get exportSamplingData;
+
+  /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear sampling data'**
+  String get clearSamplingData;
+
+  /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} decisions saved · {pruned} older captures removed'**
+  String samplingDataStatus(int count, int pruned);
+
+  /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not access sampling data. Playing is unaffected.'**
+  String get samplingDataError;
 }
 
 class _AppLocalizationsDelegate

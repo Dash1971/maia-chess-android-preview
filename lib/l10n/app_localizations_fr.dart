@@ -1263,4 +1263,26 @@ class AppLocalizationsFr extends AppLocalizations {
   String namedBoardDisconnected(String boardName) {
     return '$boardName : déconnecté';
   }
+
+  @override
+  String get saveMaiaSamplingData => 'Enregistrer les données de choix de Maia';
+
+  @override
+  String get samplingDataHelp =>
+      'Enregistrez sur cet appareil les probabilités des coups de Maia, ses réglages et les coups choisis pour comprendre sa façon de jouer. Cette option est désactivée par défaut. La désactiver conserve les données existantes.\n\nLes fichiers exportés contiennent les positions, l’historique des coups ainsi que les entrées et décisions du modèle. Rien n’est envoyé automatiquement.\n\nLa limite est de 64 Mo. Les données des parties les plus anciennes sont supprimées en premier, sans supprimer les parties récentes. Une partie très longue ou une interruption peut laisser un enregistrement incomplet. L’activation en cours de partie ne conserve que les décisions suivantes. Exportez régulièrement les données si vous souhaitez les garder.';
+
+  @override
+  String get exportSamplingData => 'Exporter les données de choix';
+
+  @override
+  String get clearSamplingData => 'Effacer les données de choix';
+
+  @override
+  String samplingDataStatus(int count, int pruned) {
+    return '$count décisions enregistrées · $pruned anciens enregistrements supprimés';
+  }
+
+  @override
+  String get samplingDataError =>
+      'Impossible d’accéder aux données de choix. Vous pouvez continuer à jouer.';
 }

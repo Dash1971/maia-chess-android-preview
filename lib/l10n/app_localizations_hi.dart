@@ -1258,4 +1258,26 @@ class AppLocalizationsHi extends AppLocalizations {
   String namedBoardDisconnected(String boardName) {
     return '$boardName से कनेक्शन नहीं है';
   }
+
+  @override
+  String get saveMaiaSamplingData => 'Maia के चाल चयन का डेटा सहेजें';
+
+  @override
+  String get samplingDataHelp =>
+      'Maia कैसे खेलता है, यह समझने के लिए उसकी चालों की संभावनाएँ, सेटिंग्स और चुनी गई चालें इस डिवाइस पर सहेजें। यह विकल्प पहले से बंद रहता है। इसे बंद करने पर पहले से सहेजा डेटा बना रहता है।\n\nनिर्यात की गई फ़ाइलों में बोर्ड की स्थितियाँ, चालों का इतिहास और मॉडल के इनपुट तथा निर्णय होते हैं। कुछ भी अपने आप अपलोड नहीं होता।\n\nअधिकतम 64 MB डेटा रखा जाता है। सबसे पुराने खेलों का दर्ज किया गया डेटा पहले हटाया जाता है; हाल के खेल नहीं हटते। बहुत लंबा खेल या बीच में रुकावट होने पर डेटा अधूरा रह सकता है। खेल के बीच में चालू करने पर केवल उसके बाद के निर्णय सहेजे जाते हैं। डेटा रखना हो तो नियमित रूप से निर्यात करें।';
+
+  @override
+  String get exportSamplingData => 'चाल चयन का डेटा निर्यात करें';
+
+  @override
+  String get clearSamplingData => 'चाल चयन का डेटा मिटाएँ';
+
+  @override
+  String samplingDataStatus(int count, int pruned) {
+    return 'सहेजे गए निर्णय: $count · हटाई गई पुरानी रिकॉर्डिंग: $pruned';
+  }
+
+  @override
+  String get samplingDataError =>
+      'चाल चयन के डेटा तक पहुँच नहीं हो सकी। खेल पर कोई असर नहीं पड़ता।';
 }

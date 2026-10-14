@@ -43,6 +43,7 @@ dependencies:
   multistockfish: ^0.6.1
   package_info_plus: ^10.2.1
   shared_preferences: ^2.5.3
+  crypto: ^3.0.7
 
 dev_dependencies:
   flutter_test:

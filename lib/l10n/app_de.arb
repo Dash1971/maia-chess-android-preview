@@ -342,5 +342,11 @@
   "maiaHistoryOff": "Stellungsverlauf: aus",
   "chessboardDeviceName": "Schachbrett",
   "namedBoardConnected": "{boardName} verbunden",
-  "namedBoardDisconnected": "{boardName} getrennt"
+  "namedBoardDisconnected": "{boardName} getrennt",
+  "saveMaiaSamplingData": "Maias Zugauswahldaten speichern",
+  "samplingDataHelp": "Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen. Es wird nichts automatisch hochgeladen.\n\nEs werden bis zu 64 MB gespeichert. Die Aufzeichnungen der ältesten Partien werden zuerst gelöscht; die zuletzt gespielten Partien bleiben erhalten. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.",
+  "exportSamplingData": "Zugauswahldaten exportieren",
+  "clearSamplingData": "Zugauswahldaten löschen",
+  "samplingDataStatus": "{count} Entscheidungen gespeichert · {pruned} ältere Aufzeichnungen gelöscht",
+  "samplingDataError": "Kein Zugriff auf die Zugauswahldaten. Das Spielen ist nicht betroffen."
 }

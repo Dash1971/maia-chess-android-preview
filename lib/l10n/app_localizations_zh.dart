@@ -1147,4 +1147,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String namedBoardDisconnected(String boardName) {
     return '$boardName已断开连接';
   }
+
+  @override
+  String get saveMaiaSamplingData => '保存 Maia 选招数据';
+
+  @override
+  String get samplingDataHelp =>
+      '将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。不会自动上传任何内容。\n\n最多保存 64 MB。最早对局的采集数据会优先删除，但不会删除“最近对局”中的棋谱。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。';
+
+  @override
+  String get exportSamplingData => '导出选招数据';
+
+  @override
+  String get clearSamplingData => '清除选招数据';
+
+  @override
+  String samplingDataStatus(int count, int pruned) {
+    return '已保存 $count 次决策 · 已移除 $pruned 份较早的对局数据';
+  }
+
+  @override
+  String get samplingDataError => '无法访问选招数据。不影响对局。';
 }

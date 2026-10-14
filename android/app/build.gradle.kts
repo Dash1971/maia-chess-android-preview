@@ -24,8 +24,10 @@ require(releaseSigningValues.all { it == null } || releaseSigningValues.all { it
         "MOBILE_MAIA_KEY_PASSWORD together."
 }
 
+val maiaRuntimeVersion = "1.24.3"
+
 dependencies {
-    implementation("com.microsoft.onnxruntime:onnxruntime-android:1.24.3")
+    implementation("com.microsoft.onnxruntime:onnxruntime-android:$maiaRuntimeVersion")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test:runner:1.6.2")
 }
@@ -45,6 +47,7 @@ android {
     }
 
     defaultConfig {
+        buildConfigField("String", "MAIA_RUNTIME_VERSION", "\"$maiaRuntimeVersion\"")
         applicationId = "com.dash1971.maia_chess.preview"
         if (developmentArm64Only) {
             ndk {
