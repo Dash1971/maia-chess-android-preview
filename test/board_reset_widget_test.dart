@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:chess/chess.dart' as chess;
+import 'package:chessground/chessground.dart' as cg;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/main.dart';
@@ -12,6 +13,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'fixtures/electronic_board.dart';
 
 class ResetBoard extends SimulatedElectronicBoard {
+  final ledEvents = <String>[];
+
+  @override
+  Future<void> setLeds(Iterable<String> squares) async {
+    final state = squares.join(',');
+    ledEvents.add('request:$state');
+    await super.setLeds(squares);
+    ledEvents.add('complete:$state');
+  }
+
   @override
   void status(ElectronicBoardConnectionState state) => controller.add(
     ElectronicBoardEvent(
@@ -28,6 +39,26 @@ class ResetBoard extends SimulatedElectronicBoard {
       boardId: 'reset-board',
     ),
   );
+}
+
+/// Hold completion after the real empty reset checkpoint has been persisted.
+/// This exposes the interval before _startGame requests physical setup guidance.
+class HeldResetRepository extends SessionRepository {
+  HeldResetRepository(super.directory);
+
+  final release = Completer<void>();
+  bool held = false;
+  Map<String, Object?>? lastSaved;
+
+  @override
+  Future<void> save(Map<String, Object?> data) async {
+    await super.save(data);
+    lastSaved = Map.of(data);
+    if (data['chessnutResetPending'] == true && !held) {
+      held = true;
+      await release.future;
+    }
+  }
 }
 
 void main() {
@@ -58,13 +89,32 @@ void main() {
     }
   }
 
-  Future<void> initialize(WidgetTester tester) async {
+  Future<void> waitFor(
+    WidgetTester tester,
+    bool Function() ready,
+    String description,
+  ) async {
+    final deadline = Stopwatch()..start();
+    while (!ready() && deadline.elapsed < const Duration(seconds: 10)) {
+      // Yield to real file I/O, then process widget futures in fake time.
+      // Success depends on the observed event, not on a fixed sleep budget.
+      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+      await tester.pump(const Duration(milliseconds: 10));
+    }
+    expect(ready(), isTrue, reason: description);
+  }
+
+  Future<void> initialize(
+    WidgetTester tester, {
+    SessionRepository Function(Directory)? repositoryFactory,
+  }) async {
     currentTester = tester;
     directory = (await tester.runAsync(
       () => Directory.systemTemp.createTemp('maia-reset-widget-'),
     ))!;
     final repository = (await tester.runAsync(
-      () async => SessionRepository(directory),
+      () async =>
+          repositoryFactory?.call(directory) ?? SessionRepository(directory),
     ))!;
     ActiveSessionStore.setTestRepository(repository);
   }
@@ -267,62 +317,169 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('reset rejects a delayed Maia completion and its LED guidance', (
-    tester,
-  ) async {
-    await initialize(tester);
-    final pending = Completer<Float32List>();
-    var requests = 0;
-    await tester.runAsync(
-      () => ActiveSessionStore.save({
-        'type': 'game',
-        'pgn': '1. e4 *',
-        'playerIsWhite': true,
-        'electronicBoard': 'chessnut-go',
-        'clockPaused': false,
-      }),
-    );
-    await tester.pumpWidget(
-      MaterialApp(
-        home: GamePage(
-          electronicBoardTransport: board,
-          maiaEvaluator: (_, _) {
-            requests++;
-            return pending.future;
-          },
-        ),
-      ),
-    );
-    await flush(tester);
-    await tester.pumpAndSettle();
-    board.status(ElectronicBoardConnectionState.ready);
-    final physical = chess.Chess()..move('e4');
-    board.position(physical.fen);
-    await tester.pump(const Duration(milliseconds: 200));
-    await tester.pump(const Duration(milliseconds: 200));
-    expect(requests, 1);
-    await tester.tap(find.byKey(const ValueKey('new-game-button')));
-    await flush(tester);
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(FilledButton, 'Reset'));
-    await flush(tester);
-    await tester.pumpAndSettle();
-    final guidance = List<String>.of(board.leds.last);
-    pending.complete(Float32List(4352));
-    await flush(tester);
-    await tester.pumpAndSettle();
-    expect(
-      await tester.runAsync<Map<String, dynamic>?>(
-        () => SessionRepository(directory).load(),
-      ),
-      containsPair('uciMoves', isEmpty),
-    );
-    expect(board.leds.last, guidance);
-    expect(requests, 1);
-    await tester.pumpWidget(const SizedBox.shrink());
-    await flush(tester);
-    await tester.pumpAndSettle();
-  });
+  for (final completion in ['during save', 'after save', 'after setup']) {
+    for (final delayLed in [false, true]) {
+      testWidgets(
+        'reset rejects a delayed Maia completion and its LED guidance '
+        '(Maia $completion; '
+        'LED ${delayLed ? 'reconnected' : 'immediate'})',
+        (tester) async {
+          late HeldResetRepository repository;
+          await initialize(
+            tester,
+            repositoryFactory: (directory) =>
+                repository = HeldResetRepository(directory),
+          );
+          final pending = Completer<Float32List>();
+          final ledCompletion = Completer<void>();
+          addTearDown(() {
+            if (!pending.isCompleted) pending.complete(Float32List(4352));
+            if (!repository.release.isCompleted) repository.release.complete();
+            if (!ledCompletion.isCompleted) ledCompletion.complete();
+          });
+          var requests = 0;
+          await tester.runAsync(
+            () => ActiveSessionStore.save({
+              'type': 'game',
+              'pgn': '1. e4 *',
+              'playerIsWhite': true,
+              'electronicBoard': 'chessnut-go',
+              'clockPaused': false,
+            }),
+          );
+          await tester.pumpWidget(
+            MaterialApp(
+              home: GamePage(
+                electronicBoardTransport: board,
+                maiaEvaluator: (_, _) {
+                  requests++;
+                  return pending.future;
+                },
+              ),
+            ),
+          );
+          await flush(tester);
+          await tester.pumpAndSettle();
+          board.status(ElectronicBoardConnectionState.ready);
+          final physical = chess.Chess()..move('e4');
+          board.position(physical.fen);
+          await waitFor(
+            tester,
+            () => requests == 1,
+            'old Maia request started',
+          );
+          await tester.tap(find.byKey(const ValueKey('new-game-button')));
+          await tester.pumpAndSettle();
+          await tester.tap(find.widgetWithText(FilledButton, 'Reset'));
+          await waitFor(
+            tester,
+            () => repository.held,
+            'reset checkpoint saved',
+          );
+
+          // The game is already empty on disk, but save completion (and thus
+          // reset LED setup) is still held. A snapshot here was the old race.
+          expect(
+            await tester.runAsync(() => SessionRepository(directory).load()),
+            containsPair('uciMoves', isEmpty),
+          );
+          expect(board.leds.last, isEmpty);
+          if (completion == 'during save') {
+            pending.complete(Float32List(4352));
+            await tester.pump();
+            expect(board.leds.last, isEmpty);
+          }
+          if (delayLed) board.writeGate = ledCompletion;
+          repository.release.complete();
+          await waitFor(
+            tester,
+            () => board.leds.last.join(',') == 'e2,e4',
+            'reset requests the actual pawn replacement guidance',
+          );
+          if (completion == 'after save') {
+            // Correct reset guidance arrives even with Maia still pending.
+            expect(pending.isCompleted, isFalse);
+            pending.complete(Float32List(4352));
+            await tester.pump();
+          }
+          expect(board.leds.last, ['e2', 'e4']);
+          expect(requests, 1);
+          expect(
+            await tester.runAsync(() => SessionRepository(directory).load()),
+            containsPair('uciMoves', isEmpty),
+          );
+
+          if (delayLed) {
+            // Reconnect while the previous connection's LED acknowledgement
+            // is outstanding. New guidance must complete first; the retired
+            // connection's completion must not restore its state/start Maia.
+            board.status(ElectronicBoardConnectionState.disconnected);
+            board.controller.add(
+              const ElectronicBoardEvent(
+                type: 'status',
+                connectionState: ElectronicBoardConnectionState.ready,
+                connectionSession: 'reset-board-reconnected',
+                boardId: 'reset-board',
+              ),
+            );
+            physical.move('d5');
+            board.position(physical.fen);
+            await tester.pump(const Duration(seconds: 2));
+            await waitFor(
+              tester,
+              () => board.ledEvents.contains('complete:d5,d7,e2,e4'),
+              'newer LED request completes before the old acknowledgement',
+            );
+            expect(board.ledEvents, isNot(contains('complete:e2,e4')));
+            ledCompletion.complete();
+            await tester.pump();
+            expect(board.ledEvents, contains('complete:e2,e4'));
+            expect(board.leds.last, ['d5', 'd7', 'e2', 'e4']);
+            expect(requests, 1);
+            expect(
+              await tester.runAsync(() => SessionRepository(directory).load()),
+              containsPair('uciMoves', isEmpty),
+            );
+          }
+          // Completing physical setup clears guidance without inventing a move.
+          board.position(chess.Chess.DEFAULT_POSITION);
+          await waitFor(
+            tester,
+            () => board.leds.last.isEmpty,
+            'setup LEDs clear',
+          );
+          await tester.pumpAndSettle();
+          await waitFor(
+            tester,
+            () =>
+                repository.lastSaved?['clockPaused'] == false &&
+                repository.lastSaved?['chessnutResetPending'] != true,
+            'physical setup finishes and the new game resumes',
+          );
+          if (completion == 'after setup') {
+            pending.complete(Float32List(4352));
+            await tester.pump();
+          }
+          expect(
+            tester
+                .widget<cg.Chessboard>(find.byKey(const ValueKey('game-board')))
+                .controller
+                .fen,
+            chess.Chess.DEFAULT_POSITION,
+          );
+          expect(board.leds.last, isEmpty);
+          expect(requests, 1);
+          expect(
+            await tester.runAsync(() => SessionRepository(directory).load()),
+            containsPair('uciMoves', isEmpty),
+          );
+          await tester.pumpWidget(const SizedBox.shrink());
+          await flush(tester);
+          await tester.pumpAndSettle();
+        },
+      );
+    }
+  }
   testWidgets(
     'completion while reset is open refreshes dialog and keeps result',
     (tester) async {

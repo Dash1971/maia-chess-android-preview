@@ -302,3 +302,33 @@ Ordinary CI runs `tool/board_capture_test.py` and
 The game-screen regression in `test/chessnut_continuation_test.dart` verifies that
 a corrupt frame followed by a valid native-ready position resumes play, commits
 one player move, requests one Maia reply, restores LEDs and records recovery.
+
+### Chessnut reset: storage, Maia and LED completion order
+
+`test/board_reset_widget_test.dart` covers issue #118 with real temporary session
+files and controlled futures. A held save distinguishes an empty persisted reset
+checkpoint from completion of reset setup. For a physical pawn still on e4,
+`[]` becoming `['e2', 'e4']` is correct setup guidance; it can happen before the
+old Maia evaluator completes. Do not snapshot the LEDs after a fixed delay and
+assume every later change comes from inference. `pumpAndSettle` alone does not
+wait for the real file I/O used by these tests.
+
+Six cases complete the obsolete Maia result during the save, after the save,
+and after physical setup, each with immediate LED completion or a reconnect
+whose newer LED write completes before the old acknowledgement. Assertions keep
+the displayed position and saved move list at the initial position, retain the
+correct setup LEDs, clear them after physical setup, and reject an extra engine
+request. The after-setup cases matter: while setup is pending, the paused-clock
+check provides a second defense that can mask missing inference-generation guards.
+
+Run the focused matrix with the pinned Flutter SDK:
+
+```sh
+flutter test --flavor preview test/board_reset_widget_test.dart \
+  --plain-name 'reset rejects a delayed Maia completion and its LED guidance' \
+  --reporter expanded
+```
+
+Also run the exact Preview invocation in `.github/workflows/checks.yml` and the
+normal full suite. All six cases run in ordinary CI; no BLE hardware, APK build,
+new dependency or production test hook is required.
