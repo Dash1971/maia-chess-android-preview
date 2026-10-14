@@ -34,15 +34,6 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
     }
   }
 
-  Future<void> _export() async {
-    final file = await capture.export();
-    try {
-      await maiaEngineChannel.invokeMethod<bool>('saveSamplingData');
-    } finally {
-      if (await file.exists()) await file.delete();
-    }
-  }
-
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: capture,
@@ -92,7 +83,7 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
               trailing: const Icon(Icons.save_alt),
               onTap: blocked || capture.records == 0
                   ? null
-                  : () => _run(_export),
+                  : () => _run(capture.saveDocument),
             ),
             ListTile(
               title: Text(strings.clearSamplingData),

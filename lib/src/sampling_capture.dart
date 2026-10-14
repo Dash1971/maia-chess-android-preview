@@ -14,7 +14,9 @@ class SamplingCapture extends ChangeNotifier {
   final int limitBytes;
   bool enabled = false;
   bool failed = false;
-  bool busy = false;
+  bool _busy = false;
+  bool _documentExport = false;
+  bool get busy => _busy || _documentExport;
   bool _clearing = false;
   int records = 0;
   int prunedGames = 0;
@@ -185,7 +187,7 @@ class SamplingCapture extends ChangeNotifier {
 
   Future<void> clear() async {
     if (busy) return;
-    busy = true;
+    _busy = true;
     _clearing = true;
     _epoch++; // In-flight requests cannot recreate explicitly cleared data.
     _inFlight.clear();
@@ -206,18 +208,41 @@ class SamplingCapture extends ChangeNotifier {
       failed = true;
     } finally {
       _clearing = false;
-      busy = false;
+      _busy = false;
       notifyListeners();
     }
   }
 
   /// Returns a stable file snapshot. The native document picker streams it;
   /// large exports never cross the platform channel as a giant string.
-  Future<File> export() async {
+  Future<void> saveDocument() async {
+    if (busy) throw StateError('Sampling export already open');
+    _documentExport = true;
+    notifyListeners();
+    File? file;
+    try {
+      file = await _export();
+      await maiaEngineChannel.invokeMethod<bool>('saveSamplingData');
+    } finally {
+      try {
+        if (file != null && await file.exists()) await file.delete();
+      } finally {
+        _documentExport = false;
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<File> export() {
+    if (_documentExport) throw StateError('Sampling document picker is open');
+    return _export();
+  }
+
+  Future<File> _export() async {
     await initialize();
     await _prepare();
-    if (_path == null || busy) throw StateError('Sampling export unavailable');
-    busy = true;
+    if (_path == null || _busy) throw StateError('Sampling export unavailable');
+    _busy = true;
     notifyListeners();
     try {
       await _writes;
@@ -236,7 +261,7 @@ class SamplingCapture extends ChangeNotifier {
       });
       return await completer.future;
     } finally {
-      busy = false;
+      _busy = false;
       notifyListeners();
     }
   }
