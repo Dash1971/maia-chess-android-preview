@@ -158,3 +158,13 @@ ambiguity. The help limits its research claim to the 79M tests, keeps the option
 experimental and off by default, and explains saved-session behavior. This is
 app-specific prose, not an upstream Lichess translation. Both Maia probability
 sheets and accessible engine-label tooltips identify the effective input mode.
+
+## Named electronic-board connection status
+
+Connection/disconnection confirmations name the recognized product (for example,
+Chessnut Go or DGT Pegasus), falling back to the brand or a localized chessboard
+label when identification is unavailable. These hardware connection messages have
+no direct equivalent in the pinned Lichess terminology baseline. Product names
+remain unchanged; all ten languages translate the surrounding status. Languages
+where product-name gender is ambiguous use a compact device-status label. Setup
+and recovery instructions still take priority over a connection confirmation.

@@ -1604,5 +1604,29 @@
   "maiaHistoryOff": "Move history: off",
   "@maiaHistoryOff": {
     "description": "Maia-specific experimental history setting/help: Move history: off"
+  },
+  "chessboardDeviceName": "Chessboard",
+  "@chessboardDeviceName": {
+    "description": "Generic electronic chessboard name when no brand or model is known."
+  },
+  "namedBoardConnected": "{boardName} connected",
+  "@namedBoardConnected": {
+    "description": "Electronic board status, only after transport is ready. Board name is a canonical product name or the localized generic chessboard name.",
+    "placeholders": {
+      "boardName": {
+        "type": "String",
+        "description": "Product name, e.g. Chessnut Go or DGT Pegasus; do not translate product names."
+      }
+    }
+  },
+  "namedBoardDisconnected": "{boardName} disconnected",
+  "@namedBoardDisconnected": {
+    "description": "Electronic board disconnected status. Keep the last known board name until another connection begins.",
+    "placeholders": {
+      "boardName": {
+        "type": "String",
+        "description": "Product name, e.g. Chessnut Go or DGT Pegasus; do not translate product names."
+      }
+    }
   }
 }

@@ -2,6 +2,31 @@ part of '../main.dart';
 
 enum BoardKind { chessnut, pegasus, squareOff }
 
+/// Canonical product names, never a Bluetooth address or an unrecognized alias.
+String electronicBoardDisplayName(
+  AppLocalizations translations,
+  BoardKind? kind,
+  String? deviceName,
+) {
+  if (kind == BoardKind.chessnut) {
+    final model = RegExp(
+      r'^chessnut[\s_-]*(go|air|pro)(?=$|[\s_-])',
+      caseSensitive: false,
+    ).firstMatch(deviceName?.trim() ?? '')?.group(1)?.toLowerCase();
+    return switch (model) {
+      'go' => 'Chessnut Go',
+      'air' => 'Chessnut Air',
+      'pro' => 'Chessnut Pro',
+      _ => 'Chessnut',
+    };
+  }
+  return switch (kind) {
+    BoardKind.pegasus => 'DGT Pegasus',
+    BoardKind.squareOff => 'Square Off Grand Kingdom',
+    _ => translations.chessboardDeviceName,
+  };
+}
+
 /// Channel restriction independent of discovered devices or persisted preferences.
 class BoardChannelPolicy {
   static bool supports(String? flavor, BoardKind kind) =>

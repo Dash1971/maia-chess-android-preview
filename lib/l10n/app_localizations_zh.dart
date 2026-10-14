@@ -1134,4 +1134,17 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get maiaHistoryOff => '历史局面：关闭';
+
+  @override
+  String get chessboardDeviceName => '棋盘';
+
+  @override
+  String namedBoardConnected(String boardName) {
+    return '已连接$boardName';
+  }
+
+  @override
+  String namedBoardDisconnected(String boardName) {
+    return '$boardName已断开连接';
+  }
 }

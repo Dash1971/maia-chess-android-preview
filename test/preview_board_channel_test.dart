@@ -61,12 +61,25 @@ void main() {
       );
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
+      board.controller.add(
+        const ElectronicBoardEvent(
+          type: 'status',
+          connectionState: ElectronicBoardConnectionState.ready,
+          boardKind: BoardKind.chessnut,
+          boardId: 'chessnut-go',
+          connectionSession: 'preview-chessnut',
+          deviceName: 'Chessnut Go',
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Chessnut Go connected'), findsOneWidget);
       for (final kind in [BoardKind.pegasus, BoardKind.squareOff]) {
         board.status(kind);
         await tester.pumpAndSettle();
         expect(find.text('Confirm board setup'), findsNothing);
         expect(board.starts, isEmpty);
         expect(board.motorMoves, isEmpty);
+        expect(find.text('Chessnut Go connected'), findsOneWidget);
       }
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pumpAndSettle();

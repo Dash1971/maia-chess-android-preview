@@ -1153,4 +1153,17 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get maiaHistoryOff => '過去の局面：不使用';
+
+  @override
+  String get chessboardDeviceName => 'チェスボード';
+
+  @override
+  String namedBoardConnected(String boardName) {
+    return '$boardNameに接続しました';
+  }
+
+  @override
+  String namedBoardDisconnected(String boardName) {
+    return '$boardName未接続';
+  }
 }

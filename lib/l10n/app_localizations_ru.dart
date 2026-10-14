@@ -1267,4 +1267,17 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get maiaHistoryOff => 'История позиций: выключена';
+
+  @override
+  String get chessboardDeviceName => 'Шахматная доска';
+
+  @override
+  String namedBoardConnected(String boardName) {
+    return '$boardName: подключено';
+  }
+
+  @override
+  String namedBoardDisconnected(String boardName) {
+    return '$boardName: отключено';
+  }
 }

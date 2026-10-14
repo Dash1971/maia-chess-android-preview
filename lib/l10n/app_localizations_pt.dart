@@ -1257,4 +1257,17 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get maiaHistoryOff => 'Histórico de posições: desativado';
+
+  @override
+  String get chessboardDeviceName => 'Tabuleiro';
+
+  @override
+  String namedBoardConnected(String boardName) {
+    return '$boardName: conectado';
+  }
+
+  @override
+  String namedBoardDisconnected(String boardName) {
+    return '$boardName: desconectado';
+  }
 }
