@@ -18,7 +18,11 @@ screenshots, see the
 
 [Build-channel status and testing scope](docs/BUILD_CHANNELS.md)
 
-## Preview 2.4.0-beta.3
+## Preview 2.4.0-beta.4
+
+Beta.4 names the connected board (for example, “Chessnut Go connected”) and
+retains that name in disconnect guidance. Messages are localized in all ten
+languages; connection readiness and setup guidance work as before.
 
 Beta.3 keeps queued pieces at their projected destinations as multiple premoves
 are consumed, removing the brief jump back to the real position. Completed
@@ -47,8 +51,7 @@ specific low-rated opening; it does not establish a strength gain. Preview uses
 the 79M model; Dev snapshots use the smaller 5M model.
 
 The source includes German, French, Russian, Hindi, Brazilian Portuguese, Japanese,
-Simplified Chinese, Korean and Spanish UI catalogs alongside English. German,
-French, Russian, Hindi and Brazilian Portuguese are new in beta.4.
+Simplified Chinese, Korean and Spanish UI catalogs alongside English.
 Choose a language in Settings or follow the device language. Native-speaker review is still pending; see the
 [localization guide](docs/L10N_REVIEW.md) for coverage, intentional technical-text
 exceptions, contributor instructions and the ARB reviewer guide.

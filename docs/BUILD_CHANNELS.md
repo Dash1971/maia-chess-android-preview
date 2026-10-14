@@ -1,13 +1,13 @@
 # Build channels and promotion status
 
-Updated 2026-10-13. Release pages are authoritative for published artifacts;
+Updated 2026-10-14. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published 2.3.0; unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.3), code 2405; updates beta.2 in place | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.4](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.4), code 2406; updates beta.3 in place | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -35,6 +35,23 @@ installations update in place using the established Preview certificate.
   5M measurements are not evidence of 79M performance.
 - Physical Chessnut acceptance remains with the owner/testers. Automated tests
   cannot confirm radio reliability, physical LEDs or button behavior on hardware.
+
+## Stable 2.4 promotion boundary
+
+A Stable 2.4 release can proceed with Chessnut support while Grand Kingdom and
+Pegasus remain unaccepted Dev prototypes. Keep both Dart and native flavor gates
+and their regression tests; verify the actual production flavor during promotion.
+Source presence is not a support claim, and these restrictions do not promise that
+experimental code is absent from the compiled APK. There is no user setting to
+enable the blocked adapters in Preview or Stable.
+
+Grand Kingdom needs physical motor, reset/reconnect and recovery acceptance.
+Pegasus additionally needs a documented FOSS-compatible initialization route for
+locked firmware; no manufacturer initialization key is bundled. Neither should
+be enabled or listed as supported simply because the shared source is promoted.
+Shared Chessnut discovery/lifecycle code remains active and must still be tested.
+If the prototypes remain unmaintained long-term, review their separation/removal
+as planned cleanup rather than enabling them to finish a release.
 
 ## Dev limitations
 
@@ -78,3 +95,14 @@ actual 79M model. History is experimental and does not promise greater strength.
 - The release verification bundle records the actual signed beta.2 upgrade, real Maia play with the player Black, and saved-game regressions for variations, unfinished games, checkmate, archive restoration and force-stop/restart. Additional fixture upgrades use temporary test signatures; the published-certificate upgrade is recorded separately.
 - Models, native engines and dependencies are unchanged. Beta.1's native tensor qualification is historical evidence, not a new beta.3 run. Phone visual/physical Chessnut acceptance remains with owner/testers.
 - Grand Kingdom/DGT remain Dev-only. Stable 2.3.0 and Dev alpha.2 were not rebuilt or republished; no app-store changes. The release PR records temporary artifact/container cleanup.
+
+## Preview 2.4.0-beta.4 publication record
+
+- Source: `abdb27697b73a436fe55930dfa23c327db2aefc2` ([change #114](https://github.com/Dash1971/maia-chess-android-preview/pull/114), [release #115](https://github.com/Dash1971/maia-chess-android-preview/pull/115)). Later documentation commits do not rebuild this APK.
+- Board connection/disconnection messages name recognized devices, with brand/generic fallbacks and translations in all ten languages. Readiness, stale-event protection, name retention, switching boards, Preview restrictions and narrow/large-text layouts have regression coverage.
+- [Release CI](https://github.com/Dash1971/maia-chess-android-preview/actions/runs/38494899378): 911 Flutter tests, 28 explicit Preview tests, 51 release-tool tests, native board policies, localization, static analysis and Android packaging passed.
+- GitHub Linux and independent Linux unsigned APK SHA-256: `acc275e020600047e82672d1f445e0dd1e8df8beed0a4e0bd7f951a7713ed420`.
+- Signed APK SHA-256: `8ef36f5f9cd7f8466b614d310c79f2875da73d2853dea8b09325ac3ff4c8fd53`. Preview certificate remains `cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e`. Signature reconstruction is byte-identical.
+- The release verification bundle records an actual signed beta.3 upgrade, real Maia play with the player Black, and saved-game regressions for variations, unfinished games, checkmate, archive restoration and force-stop/restart. Additional fixture upgrades use temporary test signatures.
+- Models, native engines and dependencies are unchanged. Beta.1's native tensor qualification is historical evidence, not a new beta.4 run. Physical board acceptance remains with owner/testers.
+- Grand Kingdom/DGT remain Dev-only. Stable 2.3.0 and Dev alpha.2 were not rebuilt or republished; no app-store changes. Release #115 records temporary artifact/container cleanup.
