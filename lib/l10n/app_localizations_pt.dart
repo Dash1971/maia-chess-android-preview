@@ -967,7 +967,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get samplingDefaultsQuestion => 'Escolha quanta variedade você quer';
 
   @override
-  String get samplingResearch => 'Ler a pesquisa sobre amostragem';
+  String get samplingResearch => 'Dados completos de pesquisa (JSONL)';
 
   @override
   String get close => 'Fechar';
@@ -1285,11 +1285,68 @@ class AppLocalizationsPt extends AppLocalizations {
   String get clearSamplingData => 'Apagar dados de seleção';
 
   @override
-  String samplingDataStatus(int count, int pruned) {
-    return '$count decisões salvas · $pruned registros antigos removidos';
+  String samplingDataStatus(int count) {
+    return 'Decisões salvas: $count';
   }
 
   @override
   String get samplingDataError =>
       'Não foi possível acessar os dados de seleção. Isso não afeta o jogo.';
+
+  @override
+  String get samplingView => 'Ver resumo';
+
+  @override
+  String get samplingSave => 'Salvar…';
+
+  @override
+  String get samplingShare => 'Compartilhar…';
+
+  @override
+  String get samplingSummary => 'As escolhas da Maia';
+
+  @override
+  String get samplingReadable => 'Relatório legível (HTML)';
+
+  @override
+  String get samplingReadableHint =>
+      'Lances, probabilidades e diagramas. Abre no navegador.';
+
+  @override
+  String get samplingResearchHint =>
+      'Entradas e saídas brutas do modelo para análise técnica.';
+
+  @override
+  String get samplingReportExplanation =>
+      'As porcentagens indicam os lances previstos pela Maia, não as chances de vitória nem a qualidade dos lances. São as probabilidades do modelo antes de aplicar Temperatura e Top-P.';
+
+  @override
+  String get samplingReportPartial =>
+      'Apenas as decisões registradas da Maia são mostradas, não uma partida completa. Voltar lances ou tentar novamente pode repetir um número de lance.';
+
+  @override
+  String get samplingReportMissing =>
+      'Alguns dados foram removidos ou não puderam ser salvos. O relatório pode conter lacunas.';
+
+  @override
+  String get samplingPlayed => 'Lance jogado';
+
+  @override
+  String get samplingNotPlayed => 'Não registrado como jogado';
+
+  @override
+  String get samplingAlternatives => 'Alternativas prováveis';
+
+  @override
+  String get samplingPositionBefore => 'Posição antes do lance';
+
+  @override
+  String samplingGame(String number) {
+    return 'Partida $number';
+  }
+
+  @override
+  String samplingRecords(String count) {
+    return 'Decisões registradas: $count';
+  }
 }

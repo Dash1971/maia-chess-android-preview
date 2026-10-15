@@ -213,25 +213,63 @@ class SamplingCapture extends ChangeNotifier {
     }
   }
 
-  /// Returns a stable file snapshot. The native document picker streams it;
-  /// large exports never cross the platform channel as a giant string.
-  Future<void> saveDocument() async {
+  /// Lease covers snapshot creation, report generation and native handoff.
+  /// Gameplay writes can continue after the snapshot cutoff.
+  Future<T> _withSnapshot<T>(Future<T> Function(File) action) async {
     if (busy) throw StateError('Sampling export already open');
     _documentExport = true;
     notifyListeners();
     File? file;
     try {
       file = await _export();
-      await maiaEngineChannel.invokeMethod<bool>('saveSamplingData');
+      return await action(file);
     } finally {
       try {
-        if (file != null && await file.exists()) await file.delete();
+        if (file != null) {
+          for (final path in [file.path, '${file.parent.path}/report.html']) {
+            final temporary = File(path);
+            if (await temporary.exists()) await temporary.delete();
+          }
+        }
       } finally {
         _documentExport = false;
         notifyListeners();
       }
     }
   }
+
+  Future<SamplingReport> report() => _withSnapshot((file) {
+    final path = file.path;
+    return Isolate.run(() => SamplingReport.read(File(path)));
+  });
+
+  Future<void> saveDocument({
+    bool share = false,
+    bool readable = false,
+    Map<String, String>? text,
+    String locale = 'en',
+    Map<String, String> pieceImages = const {},
+  }) => _withSnapshot((file) async {
+    if (readable) {
+      final path = file.path;
+      final labels = text!;
+      await Isolate.run(() async {
+        final report = await SamplingReport.read(File(path));
+        await writeSamplingReportHtml(
+          report,
+          File('${File(path).parent.path}/report.html'),
+          labels,
+          locale,
+          pieceImages,
+        );
+      });
+    }
+    await maiaEngineChannel.invokeMethod<bool>('saveSamplingData', {
+      'share': share,
+      'readable': readable,
+      'shareTitle': text?['title'] ?? '',
+    });
+  });
 
   Future<File> export() {
     if (_documentExport) throw StateError('Sampling document picker is open');

@@ -177,3 +177,16 @@ They have dedicated wording in all ten languages. The dialog retains the
 existing Lichess-aligned Close action. No shared chess terminology is redefined.
 As with other app-specific prose, these are editorial translations, not a claim
 of native-speaker certification.
+
+## Readable sampling reports (#128)
+
+Report explanations, partial-capture notices, model probabilities and research
+format descriptions are Maia-specific and translated in all ten catalogs.
+Save follows the pinned Lichess `save` label, adding an ellipsis because another
+choice follows. Share follows the meaning of `mobileShareGamePGN`, omitting PGN
+because these exports are HTML/JSONL; both adaptations are recorded in the
+terminology reference. White/Black, Temperature, Top-P, history input status,
+Cancel and chess notation reuse existing app concepts. Report SAN remains
+standard international algebraic notation, as in the existing move list.
+These translations require the normal native-speaker review; automated checks
+verify consistency, placeholders and layout, not linguistic certification.

@@ -1,39 +1,80 @@
 package com.dash1971.maia_chess
 
 import android.app.Activity
+import android.content.ClipData
 import android.content.Intent
+import androidx.core.content.FileProvider
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.Executors
+import java.util.UUID
 
-/** Explicit, streaming export. No network/storage permission or arbitrary source path. */
+/** Explicit, streaming export. Sources are fixed private paths, never caller-supplied. */
 class SamplingDocuments(private val activity: Activity) {
     private val io = Executors.newSingleThreadExecutor()
     private var pending: MethodChannel.Result? = null
-    private val snapshot = File(activity.cacheDir, "sampling-export.jsonl")
-    private var closed = false
+    private val snapshot = File(activity.cacheDir, "sampling-export-${UUID.randomUUID()}.tmp")
+    private val shares = File(activity.cacheDir, "sampling-share")
+    @Volatile private var closed = false
 
-    fun save(reply: MethodChannel.Result) {
+    init {
+        io.execute {
+            activity.cacheDir.listFiles()?.filter {
+                it.isFile && it.name.startsWith("sampling-export-") && it.name.endsWith(".tmp") &&
+                    System.currentTimeMillis() - it.lastModified() > SamplingShareFiles.RETAIN_MILLIS
+            }?.forEach { it.delete() }
+            SamplingShareFiles.pruneExpired(shares, System.currentTimeMillis())
+        }
+    }
+
+    fun save(reply: MethodChannel.Result, readable: Boolean = false, share: Boolean = false,
+             chooserTitle: String = "") {
         if (pending != null || closed) {
             reply.error("sampling_busy", "Sampling export unavailable", null)
             return
         }
         pending = reply
+        val suffix = if (readable) ".html" else ".jsonl"
+        val mime = if (readable) "text/html" else "application/x-ndjson"
         io.execute {
             try {
-                val source = File(activity.filesDir, "sampling-data/export.jsonl")
-                if (source.length() > 70L * 1024 * 1024) throw IOException("Export exceeds limit")
+                val source = File(activity.filesDir,
+                    if (readable) "sampling-data/report.html" else "sampling-data/export.jsonl")
+                if (!source.isFile || source.length() > SamplingShareFiles.MAX_FILE_BYTES) {
+                    throw IOException("Invalid export")
+                }
                 source.inputStream().use { input -> snapshot.outputStream().use { input.copyTo(it) } }
-                activity.runOnUiThread {
-                    if (closed) return@runOnUiThread
-                    try {
-                        activity.startActivityForResult(Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                            addCategory(Intent.CATEGORY_OPENABLE)
-                            type = "application/x-ndjson"
-                            putExtra(Intent.EXTRA_TITLE, "mobile-maia-sampling.jsonl")
-                        }, 2201)
-                    } catch (_: Exception) { finish(false) }
+                if (share) {
+                    val shared = SamplingShareFiles.retain(snapshot, shares, suffix, System.currentTimeMillis())
+                    activity.runOnUiThread {
+                        if (closed) return@runOnUiThread
+                        try {
+                            val uri = FileProvider.getUriForFile(activity, "${activity.packageName}.files", shared)
+                            val send = Intent(Intent.ACTION_SEND).apply {
+                                type = mime
+                                putExtra(Intent.EXTRA_STREAM, uri)
+                                clipData = ClipData.newRawUri("Mobile Maia", uri)
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            }
+                            activity.startActivity(Intent.createChooser(send, chooserTitle).apply {
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            })
+                            // Do not delete the shared file here: recipients read asynchronously.
+                            finish(true)
+                        } catch (_: Exception) { finish(false) }
+                    }
+                } else {
+                    activity.runOnUiThread {
+                        if (closed) return@runOnUiThread
+                        try {
+                            activity.startActivityForResult(Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                                addCategory(Intent.CATEGORY_OPENABLE)
+                                type = mime
+                                putExtra(Intent.EXTRA_TITLE, "mobile-maia-sampling$suffix")
+                            }, 2201)
+                        } catch (_: Exception) { finish(false) }
+                    }
                 }
             } catch (_: Exception) { activity.runOnUiThread { finish(false) } }
         }

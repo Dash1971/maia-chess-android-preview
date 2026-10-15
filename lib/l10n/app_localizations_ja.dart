@@ -877,7 +877,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get samplingDefaultsQuestion => '指し手の多様さを選ぶ';
 
   @override
-  String get samplingResearch => 'サンプリングの研究を読む';
+  String get samplingResearch => '研究用の全データ（JSONL）';
 
   @override
   String get close => '閉じる';
@@ -1181,10 +1181,65 @@ class AppLocalizationsJa extends AppLocalizations {
   String get clearSamplingData => '手の選択データを削除';
 
   @override
-  String samplingDataStatus(int count, int pruned) {
-    return '判断$count件を保存済み · 古い対局のデータ$pruned件を削除済み';
+  String samplingDataStatus(int count) {
+    return '$count件の判断を保存済み';
   }
 
   @override
   String get samplingDataError => '手の選択データにアクセスできませんでした。対局への影響はありません。';
+
+  @override
+  String get samplingView => '概要を見る';
+
+  @override
+  String get samplingSave => '保存…';
+
+  @override
+  String get samplingShare => '共有…';
+
+  @override
+  String get samplingSummary => 'Maiaの指し手';
+
+  @override
+  String get samplingReadable => '読みやすいレポート（HTML）';
+
+  @override
+  String get samplingReadableHint => '指し手、確率、盤面図をブラウザーで表示します。';
+
+  @override
+  String get samplingResearchHint => '技術的な分析に使うモデルの生の入出力です。';
+
+  @override
+  String get samplingReportExplanation =>
+      'パーセントはMaiaが予測する指し手の選ばれやすさで、勝率や手の良し悪しではありません。TemperatureとTop-Pを適用する前のモデルの確率です。';
+
+  @override
+  String get samplingReportPartial =>
+      '記録されたMaiaの判断のみを表示します。完全な棋譜ではありません。待ったや再試行により、同じ手数が複数回表示されることがあります。';
+
+  @override
+  String get samplingReportMissing =>
+      '一部のデータが削除されたか、保存できませんでした。記録が抜けている可能性があります。';
+
+  @override
+  String get samplingPlayed => '指した手';
+
+  @override
+  String get samplingNotPlayed => '実際に指した記録なし';
+
+  @override
+  String get samplingAlternatives => '選ばれやすい他の手';
+
+  @override
+  String get samplingPositionBefore => '指す前の局面';
+
+  @override
+  String samplingGame(String number) {
+    return '対局 $number';
+  }
+
+  @override
+  String samplingRecords(String count) {
+    return '記録された判断：$count';
+  }
 }

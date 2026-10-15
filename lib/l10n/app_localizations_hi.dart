@@ -955,7 +955,7 @@ class AppLocalizationsHi extends AppLocalizations {
       'तय करें कि चालों में कितनी विविधता चाहिए';
 
   @override
-  String get samplingResearch => 'चाल चुनने की विधि पर शोध पढ़ें';
+  String get samplingResearch => 'शोध का पूरा डेटा (JSONL)';
 
   @override
   String get close => 'बंद करें';
@@ -1273,11 +1273,68 @@ class AppLocalizationsHi extends AppLocalizations {
   String get clearSamplingData => 'चाल चयन का डेटा मिटाएँ';
 
   @override
-  String samplingDataStatus(int count, int pruned) {
-    return 'सहेजे गए निर्णय: $count · हटाई गई पुरानी रिकॉर्डिंग: $pruned';
+  String samplingDataStatus(int count) {
+    return 'सहेजे गए निर्णय: $count';
   }
 
   @override
   String get samplingDataError =>
       'चाल चयन के डेटा तक पहुँच नहीं हो सकी। खेल पर कोई असर नहीं पड़ता।';
+
+  @override
+  String get samplingView => 'सारांश देखें';
+
+  @override
+  String get samplingSave => 'सहेजें…';
+
+  @override
+  String get samplingShare => 'साझा करें…';
+
+  @override
+  String get samplingSummary => 'Maia की चालों का चयन';
+
+  @override
+  String get samplingReadable => 'पढ़ने योग्य रिपोर्ट (HTML)';
+
+  @override
+  String get samplingReadableHint =>
+      'चालें, संभावनाएँ और बिसात के चित्र। ब्राउज़र में खुलती है।';
+
+  @override
+  String get samplingResearchHint =>
+      'तकनीकी विश्लेषण के लिए मॉडल के मूल इनपुट और आउटपुट।';
+
+  @override
+  String get samplingReportExplanation =>
+      'प्रतिशत बताते हैं कि Maia के अनुमान के अनुसार कौन-सी चाल चुनी जा सकती है। ये जीतने की संभावना या चाल की गुणवत्ता नहीं बताते। ये Temperature और Top-P लागू करने से पहले मॉडल की संभावनाएँ हैं।';
+
+  @override
+  String get samplingReportPartial =>
+      'केवल Maia के दर्ज किए गए निर्णय दिखाए जाते हैं, पूरी बाज़ी नहीं। चाल वापस लेने या दोबारा कोशिश करने पर चाल संख्या दोहराई जा सकती है।';
+
+  @override
+  String get samplingReportMissing =>
+      'कुछ डेटा हटा दिया गया या सहेजा नहीं जा सका। रिपोर्ट में कुछ जानकारी छूटी हो सकती है।';
+
+  @override
+  String get samplingPlayed => 'खेली गई चाल';
+
+  @override
+  String get samplingNotPlayed => 'खेली गई चाल के रूप में दर्ज नहीं';
+
+  @override
+  String get samplingAlternatives => 'अन्य संभावित चालें';
+
+  @override
+  String get samplingPositionBefore => 'चाल से पहले की स्थिति';
+
+  @override
+  String samplingGame(String number) {
+    return 'बाज़ी $number';
+  }
+
+  @override
+  String samplingRecords(String count) {
+    return 'दर्ज निर्णय: $count';
+  }
 }

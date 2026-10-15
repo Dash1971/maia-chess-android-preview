@@ -1559,6 +1559,120 @@
           "reason": "Add sentence punctuation to the upstream turn announcement, matching in-game status messages."
         }
       }
+    },
+    "samplingSave": {
+      "upstream_key": "save",
+      "upstream": {
+        "en": "Save",
+        "ja": "保存",
+        "zh": "保存",
+        "ko": "저장하기",
+        "es": "Guardar",
+        "de": "Speichern",
+        "fr": "Enregistrer",
+        "ru": "Сохранить",
+        "hi": "सहेजें",
+        "pt": "Salvar"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Save…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "ja": {
+          "value": "保存…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "zh": {
+          "value": "保存…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "ko": {
+          "value": "저장하기…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "es": {
+          "value": "Guardar…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "de": {
+          "value": "Speichern…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "fr": {
+          "value": "Enregistrer…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "ru": {
+          "value": "Сохранить…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "hi": {
+          "value": "सहेजें…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "pt": {
+          "value": "Salvar…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        }
+      }
+    },
+    "samplingShare": {
+      "upstream_key": "mobileShareGamePGN",
+      "upstream": {
+        "en": "Share PGN",
+        "ja": "PGN を共有",
+        "zh": "分享 PGN",
+        "ko": "PGN 공유",
+        "es": "Compartir PGN",
+        "de": "PGN teilen",
+        "fr": "Partager le PGN",
+        "ru": "Поделиться PGN",
+        "hi": "पीजीएन शेयर करें",
+        "pt": "Compartilhar PGN"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Share…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "ja": {
+          "value": "共有…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "zh": {
+          "value": "分享…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "ko": {
+          "value": "공유…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "es": {
+          "value": "Compartir…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "de": {
+          "value": "Teilen…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "fr": {
+          "value": "Partager…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "ru": {
+          "value": "Поделиться…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "hi": {
+          "value": "साझा करें…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        },
+        "pt": {
+          "value": "Compartilhar…",
+          "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
+        }
+      }
     }
   }
 }

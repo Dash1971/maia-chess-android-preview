@@ -957,7 +957,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Choisissez la variété de jeu souhaitée';
 
   @override
-  String get samplingResearch => 'Lire l’étude sur l’échantillonnage';
+  String get samplingResearch => 'Données de recherche complètes (JSONL)';
 
   @override
   String get close => 'Fermer';
@@ -1278,11 +1278,68 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clearSamplingData => 'Effacer les données de choix';
 
   @override
-  String samplingDataStatus(int count, int pruned) {
-    return '$count décisions enregistrées · $pruned anciens enregistrements supprimés';
+  String samplingDataStatus(int count) {
+    return 'Décisions enregistrées : $count';
   }
 
   @override
   String get samplingDataError =>
       'Impossible d’accéder aux données de choix. Vous pouvez continuer à jouer.';
+
+  @override
+  String get samplingView => 'Voir le résumé';
+
+  @override
+  String get samplingSave => 'Enregistrer…';
+
+  @override
+  String get samplingShare => 'Partager…';
+
+  @override
+  String get samplingSummary => 'Les choix de Maia';
+
+  @override
+  String get samplingReadable => 'Rapport lisible (HTML)';
+
+  @override
+  String get samplingReadableHint =>
+      'Coups, probabilités et diagrammes. À ouvrir dans un navigateur.';
+
+  @override
+  String get samplingResearchHint =>
+      'Entrées et sorties brutes du modèle pour une analyse technique.';
+
+  @override
+  String get samplingReportExplanation =>
+      'Les pourcentages indiquent les choix de coups prédits par Maia, pas les chances de gagner ni la qualité des coups. Ce sont les probabilités du modèle avant application de la température et de Top-P.';
+
+  @override
+  String get samplingReportPartial =>
+      'Seules les décisions enregistrées de Maia sont affichées, pas une partie complète. Les reprises de coups et les nouvelles tentatives peuvent répéter un numéro de coup.';
+
+  @override
+  String get samplingReportMissing =>
+      'Certaines données ont été supprimées ou n’ont pas pu être enregistrées. Le rapport peut comporter des lacunes.';
+
+  @override
+  String get samplingPlayed => 'Coup joué';
+
+  @override
+  String get samplingNotPlayed => 'Non enregistré comme joué';
+
+  @override
+  String get samplingAlternatives => 'Autres coups probables';
+
+  @override
+  String get samplingPositionBefore => 'Position avant le coup';
+
+  @override
+  String samplingGame(String number) {
+    return 'Partie $number';
+  }
+
+  @override
+  String samplingRecords(String count) {
+    return 'Décisions enregistrées : $count';
+  }
 }

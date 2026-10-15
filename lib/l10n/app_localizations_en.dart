@@ -942,7 +942,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get samplingDefaultsQuestion => 'Choose how much variety you want';
 
   @override
-  String get samplingResearch => 'Read the sampling research';
+  String get samplingResearch => 'Full research data (JSONL)';
 
   @override
   String get close => 'Close';
@@ -1258,11 +1258,68 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clearSamplingData => 'Clear sampling data';
 
   @override
-  String samplingDataStatus(int count, int pruned) {
-    return '$count decisions saved · $pruned older captures removed';
+  String samplingDataStatus(int count) {
+    return '$count decisions saved';
   }
 
   @override
   String get samplingDataError =>
       'Could not access sampling data. Playing is unaffected.';
+
+  @override
+  String get samplingView => 'View summary';
+
+  @override
+  String get samplingSave => 'Save…';
+
+  @override
+  String get samplingShare => 'Share…';
+
+  @override
+  String get samplingSummary => 'Maia’s choices';
+
+  @override
+  String get samplingReadable => 'Readable report (HTML)';
+
+  @override
+  String get samplingReadableHint =>
+      'Moves, probabilities and board diagrams. Opens in a browser.';
+
+  @override
+  String get samplingResearchHint =>
+      'Raw model inputs and outputs for technical analysis.';
+
+  @override
+  String get samplingReportExplanation =>
+      'Percentages show Maia’s predicted move choices, not winning chances or move quality. These are model probabilities before Temperature and Top-P are applied.';
+
+  @override
+  String get samplingReportPartial =>
+      'Only recorded Maia decisions are shown, not a complete game. Takebacks and retries can repeat a move number.';
+
+  @override
+  String get samplingReportMissing =>
+      'Some capture data was removed or could not be saved. This report may have gaps.';
+
+  @override
+  String get samplingPlayed => 'Played';
+
+  @override
+  String get samplingNotPlayed => 'Not recorded as played';
+
+  @override
+  String get samplingAlternatives => 'Likely alternatives';
+
+  @override
+  String get samplingPositionBefore => 'Position before the move';
+
+  @override
+  String samplingGame(String number) {
+    return 'Game $number';
+  }
+
+  @override
+  String samplingRecords(String count) {
+    return 'Recorded decisions: $count';
+  }
 }

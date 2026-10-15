@@ -267,7 +267,10 @@ class MainActivity : FlutterActivity() {
                         "runtimeVersion" to BuildConfig.MAIA_RUNTIME_VERSION,
                         "provider" to "CPU"
                     ))
-                    "saveSamplingData" -> samplingDocuments.save(result)
+                    "saveSamplingData" -> samplingDocuments.save(result,
+                        call.argument<Boolean>("readable") == true,
+                        call.argument<Boolean>("share") == true,
+                        call.argument<String>("shareTitle") ?: "")
                     "dataDirectory" -> result.success(filesDir.absolutePath)
                     "systemDiagnostics" -> result.success(systemDiagnostics())
                     "getPendingPgn" -> documents.takePending(result)

@@ -6,6 +6,9 @@ import 'dart:typed_data';
 
 import 'package:chess/chess.dart' as chess;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
+import 'package:maia_chess/l10n/app_localizations.dart';
 import 'package:maia_chess/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -381,6 +384,53 @@ void main() {
       await save;
       expect(store.busy, false);
       expect(store.records, 2);
+      expect(File('${dir.path}/export.jsonl').existsSync(), false);
+    } finally {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(maiaEngineChannel, null);
+    }
+  });
+  test('readable sharing uses a verified report and releases its lease on platform failure', () async {
+    begin().finish('timeout');
+    await store.flush();
+    final strings = await AppLocalizations.delegate.load(const Locale('en'));
+    var called = false;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(maiaEngineChannel, (call) async {
+          if (call.method == 'saveSamplingData') {
+            called = true;
+            expect(store.busy, true);
+            expect(call.arguments['share'], true);
+            expect(call.arguments['readable'], true);
+            final report = File('${dir.path}/report.html');
+            expect(
+              await report.readAsString(),
+              contains('Not recorded as played'),
+            );
+            await store.clear();
+            expect(store.records, 1);
+            throw PlatformException(code: 'test_share_failed');
+          }
+          return null;
+        });
+    try {
+      await expectLater(
+        store.saveDocument(
+          share: true,
+          readable: true,
+          text: samplingReportText(strings),
+        ),
+        throwsA(isA<PlatformException>()),
+      );
+      expect(called, true);
+      expect(store.busy, false);
+      expect(store.records, 1);
+      expect(File('${dir.path}/export.jsonl').existsSync(), false);
+      expect(File('${dir.path}/report.html').existsSync(), false);
+      final summary = await store.report();
+      expect(summary.decisions, hasLength(1));
+      expect(summary.decisions.single.played, isNull);
+      expect(store.busy, false);
       expect(File('${dir.path}/export.jsonl').existsSync(), false);
     } finally {
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger

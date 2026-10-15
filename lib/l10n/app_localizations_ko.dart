@@ -878,7 +878,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get samplingDefaultsQuestion => '원하는 수의 다양성을 선택하세요';
 
   @override
-  String get samplingResearch => '샘플링 연구 읽기';
+  String get samplingResearch => '전체 연구 데이터 (JSONL)';
 
   @override
   String get close => '닫기';
@@ -1182,10 +1182,65 @@ class AppLocalizationsKo extends AppLocalizations {
   String get clearSamplingData => '수 선택 데이터 삭제';
 
   @override
-  String samplingDataStatus(int count, int pruned) {
-    return '판단 $count개 저장 · 오래된 대국 데이터 $pruned개 삭제';
+  String samplingDataStatus(int count) {
+    return '판단 $count개 저장됨';
   }
 
   @override
   String get samplingDataError => '수 선택 데이터에 접근할 수 없습니다. 대국에는 영향이 없습니다.';
+
+  @override
+  String get samplingView => '요약 보기';
+
+  @override
+  String get samplingSave => '저장하기…';
+
+  @override
+  String get samplingShare => '공유…';
+
+  @override
+  String get samplingSummary => 'Maia의 수 선택';
+
+  @override
+  String get samplingReadable => '읽기 쉬운 보고서 (HTML)';
+
+  @override
+  String get samplingReadableHint => '브라우저에서 수, 확률, 보드 그림을 볼 수 있습니다.';
+
+  @override
+  String get samplingResearchHint => '기술 분석을 위한 모델의 원시 입력과 출력입니다.';
+
+  @override
+  String get samplingReportExplanation =>
+      '백분율은 Maia가 예측한 수의 선택 확률이며, 승률이나 수의 좋고 나쁨을 뜻하지 않습니다. Temperature와 Top-P를 적용하기 전의 모델 확률입니다.';
+
+  @override
+  String get samplingReportPartial =>
+      '기록된 Maia의 판단만 표시하며, 전체 기보는 아닙니다. 무르기나 재시도로 같은 수 번호가 반복될 수 있습니다.';
+
+  @override
+  String get samplingReportMissing =>
+      '일부 기록이 삭제되었거나 저장되지 않았습니다. 보고서에 누락된 내용이 있을 수 있습니다.';
+
+  @override
+  String get samplingPlayed => '둔 수';
+
+  @override
+  String get samplingNotPlayed => '실제로 둔 기록 없음';
+
+  @override
+  String get samplingAlternatives => '선택 가능성이 높은 다른 수';
+
+  @override
+  String get samplingPositionBefore => '수를 두기 전 포지션';
+
+  @override
+  String samplingGame(String number) {
+    return '게임 $number';
+  }
+
+  @override
+  String samplingRecords(String count) {
+    return '기록된 판단: $count';
+  }
 }
