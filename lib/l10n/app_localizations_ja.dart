@@ -880,6 +880,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get samplingResearch => '研究用の全データ（JSONL）';
 
   @override
+  String get samplingResearchLink => '研究用の全データ（英文）';
+
+  @override
   String get close => '閉じる';
 
   @override
@@ -1143,7 +1146,7 @@ class AppLocalizationsJa extends AppLocalizations {
       '現在の局面に加え、最大7つ前までの局面をMaiaに渡します。79Mモデルでのテストでは人間の指し手の予測精度が上がりましたが、低レーティングの序盤では相手の手を繰り返し真似しやすくなる場合がありました。棋力の向上は確認されていません。当面はオフを推奨します。単独で読み込んだ局面では、それ以前の手は利用できません。 新しい対局と解析盤に適用されます。保存済みのセッションは元の設定を保持します。';
 
   @override
-  String get maiaHistoryResearch => '過去の局面に関する研究を読む';
+  String get maiaHistoryResearch => '過去の局面の研究を読む（英文）';
 
   @override
   String get maiaHistoryOn => '過去の局面：使用';
@@ -1169,7 +1172,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Maiaがどのように手を選ぶかを調べるため、各候補手の確率、設定、選んだ手をこの端末に保存します。初期設定ではオフです。オフにしても保存済みのデータは残ります。\n\n書き出すファイルには局面、指し手の履歴、モデルへの入力と判断結果が含まれます。自動送信は行いません。\n\n記録した直近10局を新しい順に表示します。保存容量の上限に達した場合は、古い対局がそれより早く削除されることがあります。「最近の対局」は削除されません。対局が非常に長い場合や処理が中断された場合は、データが一部欠けることがあります。対局の途中でオンにした場合は、それ以降の判断のみ保存します。データを残したい場合は定期的に書き出してください。';
+      'Maiaがどのように手を選ぶかを調べるため、各候補手の確率、設定、選んだ手をこの端末に保存します。初期設定ではオフです。オフにしても保存済みのデータは残ります。\n\n書き出すファイルには局面、指し手の履歴、モデルへの入力と判断結果が含まれます。\n\n記録した直近10局を新しい順に表示します。保存容量の上限に達した場合は、古い対局がそれより早く削除されることがあります。「最近の対局」は削除されません。対局が非常に長い場合や処理が中断された場合は、データが一部欠けることがあります。対局の途中でオンにした場合は、それ以降の判断のみ保存します。データを残したい場合は定期的に書き出してください。';
 
   @override
   String get clearSamplingData => '手の選択データを削除';

@@ -881,6 +881,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get samplingResearch => '전체 연구 데이터 (JSONL)';
 
   @override
+  String get samplingResearchLink => '전체 연구 데이터 (영어)';
+
+  @override
   String get close => '닫기';
 
   @override
@@ -1144,7 +1147,7 @@ class AppLocalizationsKo extends AppLocalizations {
       'Maia가 현재 포지션과 최대 7개의 이전 포지션을 함께 고려하게 합니다. 79M 모델 테스트에서는 사람의 수를 예측하는 정확도가 높아졌지만, 낮은 레이팅의 오프닝에서 상대의 수를 반복해서 따라 두는 경우도 있었습니다. 실력이 향상된다고 입증된 것은 아닙니다. 현재는 끄기를 권장합니다. 포지션 하나만 불러오면 그 이전 수는 사용할 수 없습니다. 새 대국과 분석 보드에 적용되며, 저장된 세션은 원래 선택을 유지합니다.';
 
   @override
-  String get maiaHistoryResearch => '이전 포지션 연구 읽기';
+  String get maiaHistoryResearch => '이전 포지션 연구 읽기 (영어)';
 
   @override
   String get maiaHistoryOn => '이전 포지션: 켜짐';
@@ -1170,7 +1173,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Maia가 어떻게 수를 고르는지 살펴볼 수 있도록 각 수의 확률, 설정, 선택한 수를 이 기기에 저장합니다. 기본적으로 꺼져 있으며, 꺼도 기존 데이터는 유지됩니다.\n\n내보낸 파일에는 보드 위치, 수순, 모델 입력과 판단 결과가 포함됩니다. 자동으로 업로드되는 데이터는 없습니다.\n\n최근 기록한 10개 대국을 최신순으로 표시합니다. 저장 용량 한도에 도달하면 이전 대국이 더 일찍 삭제될 수 있습니다. 최근 대국 목록의 대국은 삭제되지 않습니다. 대국이 매우 길거나 처리가 중단되면 일부 데이터가 누락될 수 있습니다. 대국 도중 켜면 이후의 판단만 저장합니다. 데이터를 보관하려면 정기적으로 내보내세요.';
+      'Maia가 어떻게 수를 고르는지 살펴볼 수 있도록 각 수의 확률, 설정, 선택한 수를 이 기기에 저장합니다. 기본적으로 꺼져 있으며, 꺼도 기존 데이터는 유지됩니다.\n\n내보낸 파일에는 보드 위치, 수순, 모델 입력과 판단 결과가 포함됩니다.\n\n최근 기록한 10개 대국을 최신순으로 표시합니다. 저장 용량 한도에 도달하면 이전 대국이 더 일찍 삭제될 수 있습니다. 최근 대국 목록의 대국은 삭제되지 않습니다. 대국이 매우 길거나 처리가 중단되면 일부 데이터가 누락될 수 있습니다. 대국 도중 켜면 이후의 판단만 저장합니다. 데이터를 보관하려면 정기적으로 내보내세요.';
 
   @override
   String get clearSamplingData => '수 선택 데이터 삭제';

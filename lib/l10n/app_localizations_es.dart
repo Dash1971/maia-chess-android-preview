@@ -961,6 +961,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get samplingResearch => 'Datos completos de investigación (JSONL)';
 
   @override
+  String get samplingResearchLink =>
+      'Datos completos de investigación (en inglés)';
+
+  @override
   String get close => 'Cerrar';
 
   @override
@@ -1238,7 +1242,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get maiaHistoryResearch =>
-      'Leer la investigación sobre el historial de jugadas';
+      'Leer la investigación sobre el historial de jugadas (en inglés)';
 
   @override
   String get maiaHistoryOn => 'Historial de jugadas: activado';
@@ -1264,7 +1268,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Guarda en este dispositivo las probabilidades de las jugadas de Maia, sus ajustes y las jugadas elegidas para explorar cómo juega. Está desactivado por defecto. Al desactivarlo, se conservan los datos guardados.\n\nLos archivos exportados contienen posiciones, historial de jugadas y las entradas y decisiones del modelo. No se sube nada automáticamente.\n\nSe muestran las últimas 10 partidas registradas, de la más reciente a la más antigua. Las partidas antiguas pueden eliminarse antes si se alcanza el límite de almacenamiento. Esto no elimina las partidas de Partidas recientes. Una partida muy larga o una interrupción pueden dejar datos incompletos. Si lo activas durante una partida, solo se guardan las decisiones posteriores. Exporta los datos periódicamente si quieres conservarlos.';
+      'Guarda en este dispositivo las probabilidades de las jugadas de Maia, sus ajustes y las jugadas elegidas para explorar cómo juega. Está desactivado por defecto. Al desactivarlo, se conservan los datos guardados.\n\nLos archivos exportados contienen posiciones, historial de jugadas y las entradas y decisiones del modelo.\n\nSe muestran las últimas 10 partidas registradas, de la más reciente a la más antigua. Las partidas antiguas pueden eliminarse antes si se alcanza el límite de almacenamiento. Esto no elimina las partidas de Partidas recientes. Una partida muy larga o una interrupción pueden dejar datos incompletos. Si lo activas durante una partida, solo se guardan las decisiones posteriores. Exporta los datos periódicamente si quieres conservarlos.';
 
   @override
   String get clearSamplingData => 'Borrar datos de selección';

@@ -960,6 +960,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get samplingResearch => 'Données de recherche complètes (JSONL)';
 
   @override
+  String get samplingResearchLink =>
+      'Données de recherche complètes (en anglais)';
+
+  @override
   String get close => 'Fermer';
 
   @override
@@ -1237,7 +1241,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get maiaHistoryResearch =>
-      'Lire l’étude sur l’historique des positions';
+      'Lire l’étude sur l’historique des positions (en anglais)';
 
   @override
   String get maiaHistoryOn => 'Historique des positions : activé';
@@ -1263,7 +1267,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Enregistrez sur cet appareil les probabilités des coups de Maia, ses réglages et les coups choisis pour comprendre sa façon de jouer. Cette option est désactivée par défaut. La désactiver conserve les données existantes.\n\nLes fichiers exportés contiennent les positions, l’historique des coups ainsi que les entrées et décisions du modèle. Rien n’est envoyé automatiquement.\n\nLes 10 dernières parties enregistrées sont affichées de la plus récente à la plus ancienne. Les parties anciennes peuvent être supprimées plus tôt si la limite de stockage est atteinte. Cela ne supprime pas les parties de Parties récentes. Une partie très longue ou une interruption peut laisser un enregistrement incomplet. L’activation en cours de partie ne conserve que les décisions suivantes. Exportez régulièrement les données si vous souhaitez les garder.';
+      'Enregistrez sur cet appareil les probabilités des coups de Maia, ses réglages et les coups choisis pour comprendre sa façon de jouer. Cette option est désactivée par défaut. La désactiver conserve les données existantes.\n\nLes fichiers exportés contiennent les positions, l’historique des coups ainsi que les entrées et décisions du modèle.\n\nLes 10 dernières parties enregistrées sont affichées de la plus récente à la plus ancienne. Les parties anciennes peuvent être supprimées plus tôt si la limite de stockage est atteinte. Cela ne supprime pas les parties de Parties récentes. Une partie très longue ou une interruption peut laisser un enregistrement incomplet. L’activation en cours de partie ne conserve que les décisions suivantes. Exportez régulièrement les données si vous souhaitez les garder.';
 
   @override
   String get clearSamplingData => 'Effacer les données de choix';

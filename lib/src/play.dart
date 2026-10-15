@@ -1308,7 +1308,7 @@ class _GamePageState extends State<GamePage>
                   'main/studies/maia3-sampling/REPORT.md',
             }),
             icon: const Icon(Icons.open_in_new),
-            label: Text(l10n(context).samplingResearch),
+            label: Text(l10n(context).samplingResearchLink),
           ),
           const SizedBox(height: 14),
           Text(l10n(context).samplingTemperatureHelp),
@@ -4915,6 +4915,38 @@ class _GamePageState extends State<GamePage>
                     },
                   ),
                   const SamplingCaptureSettings(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton(
+                      key: const ValueKey('reset-engine-defaults'),
+                      onPressed: () {
+                        setState(() {
+                          _humanTiming = false;
+                          _useMoveHistory = false;
+                          _premovesEnabled = true;
+                          _premovePenalty = false;
+                          _multiplePremoves = false;
+                          _temperature = 1.0;
+                          _topP = 1.0;
+                          _analysisElo = 1600;
+                          _secondMaiaEnabled = false;
+                          _secondMaiaElo = 2400;
+                          _gameAnalysisQuality = GameAnalysisQuality.fast;
+                        });
+                        unawaited(_saveEnginePreferences());
+                      },
+                      child: Text(l10n(context).resetEngineDefaults),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                    child: Text(
+                      l10n(context).resetEngineDefaultsScope,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
@@ -5033,38 +5065,6 @@ class _GamePageState extends State<GamePage>
                     ),
                   ),
                 ],
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                  key: const ValueKey('reset-engine-defaults'),
-                  onPressed: () {
-                    setState(() {
-                      _humanTiming = false;
-                      _useMoveHistory = false;
-                      _premovesEnabled = true;
-                      _premovePenalty = false;
-                      _multiplePremoves = false;
-                      _temperature = 1.0;
-                      _topP = 1.0;
-                      _analysisElo = 1600;
-                      _secondMaiaEnabled = false;
-                      _secondMaiaElo = 2400;
-                      _gameAnalysisQuality = GameAnalysisQuality.fast;
-                    });
-                    unawaited(_saveEnginePreferences());
-                  },
-                  child: Text(l10n(context).resetEngineDefaults),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  l10n(context).resetEngineDefaultsScope,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
               ),
               const SizedBox(height: 8),
               _settingsSection(

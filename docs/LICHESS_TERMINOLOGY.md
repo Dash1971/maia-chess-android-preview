@@ -225,3 +225,13 @@ in all ten languages. The move-history setting and on-status drop only their
 experimental suffix; the substantive help, off recommendation and saved-session
 behaviour remain unchanged. Experimental electronic-board wording is untouched.
 The now-unused inline history subtitle and export-row title were removed.
+
+## Research-link language and settings help
+
+Research report links have a dedicated label separate from the JSONL export
+format. Both report links identify English as the document language in all
+non-English catalogs (Japanese: 英文). These are Maia-specific research labels,
+not direct Lichess equivalents. Sampling help omits the automatic-upload sentence
+in every language; file-content and retention explanations remain unchanged.
+The reset action and its existing scope note sit at the foot of Engine settings;
+its behavior still includes premoves, timing and analysis preferences.

@@ -26,6 +26,10 @@ Widget settingsApp({Locale locale = const Locale('en'), double scale = 1}) =>
         ),
         scaffoldBackgroundColor: const Color(0xff171a18),
         useMaterial3: true,
+        fontFamilyFallback:
+            Platform.environment['MAIA_SETTINGS_JAPANESE_FONT'] != null
+            ? const ['ScreenshotJapanese']
+            : null,
       ),
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -130,6 +134,13 @@ void main() {
         expect(child.value, isTrue);
         expect(tester.getSize(key(id)).height, greaterThanOrEqualTo(48));
       }
+      expect(
+        find.descendant(
+          of: key('engine-settings-section'),
+          matching: key('reset-engine-defaults'),
+        ),
+        findsOneWidget,
+      );
       await tester.ensureVisible(key('reset-engine-defaults'));
       await tester.tap(key('reset-engine-defaults'));
       await tester.pumpAndSettle();
@@ -285,6 +296,21 @@ void main() {
             Future.value(ByteData.sublistView(File(font).readAsBytesSync())),
           );
         await tester.runAsync(loader.load);
+        final japaneseFont =
+            Platform.environment['MAIA_SETTINGS_JAPANESE_FONT'];
+        if (japaneseFont != null) {
+          final japanese = FontLoader('ScreenshotJapanese')
+            ..addFont(
+              Future.value(
+                ByteData.sublistView(File(japaneseFont).readAsBytesSync()),
+              ),
+            );
+          await tester.runAsync(japanese.load);
+        }
+        final locale = Locale(
+          Platform.environment['MAIA_SETTINGS_LOCALE'] ?? 'en',
+        );
+        final strings = await AppLocalizations.delegate.load(locale);
         for (final family in ['MaterialIcons', 'LichessIcons']) {
           final loader = FontLoader(family)
             ..addFont(
@@ -301,7 +327,10 @@ void main() {
         });
         final boundaryKey = GlobalKey();
         await tester.pumpWidget(
-          RepaintBoundary(key: boundaryKey, child: settingsApp()),
+          RepaintBoundary(
+            key: boundaryKey,
+            child: settingsApp(locale: locale),
+          ),
         );
         await openSettings(tester);
         Future<void> shot(String name) async {
@@ -328,10 +357,24 @@ void main() {
           );
           await shot(section);
         }
+        await tester.ensureVisible(key('sampling-help'));
+        await tester.tap(key('sampling-help'));
+        await shot('engine-help');
+        await tester.tap(find.text(strings.close));
+        await tester.pumpAndSettle();
         await tester.ensureVisible(key('maia-history-help'));
         await tester.tap(key('maia-history-help'));
         await shot('history-help');
-        await tester.tap(find.text('Close'));
+        await tester.tap(find.text(strings.close));
+        await tester.pumpAndSettle();
+        final samplingHelp = find.descendant(
+          of: key('sampling-data-toggle'),
+          matching: find.byType(IconButton),
+        );
+        await tester.ensureVisible(samplingHelp);
+        await tester.tap(samplingHelp);
+        await shot('sampling-help');
+        await tester.tap(find.text(strings.close));
         await tester.pumpAndSettle();
         await tester.ensureVisible(key('sampling-actions'));
         await tester.tap(key('sampling-actions'));

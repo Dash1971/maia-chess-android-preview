@@ -872,6 +872,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingResearch => '完整研究数据（JSONL）';
 
   @override
+  String get samplingResearchLink => '完整研究数据（英文）';
+
+  @override
   String get close => '关闭';
 
   @override
@@ -1124,7 +1127,7 @@ class AppLocalizationsZh extends AppLocalizations {
       '让Maia在当前局面之外，参考最多七个先前局面。在79M模型的测试中，这提高了对人类走法的预测准确率，但有时也让低等级分的开局更容易反复模仿对手。尚未证实它能提高棋力。目前建议关闭。单独载入的局面没有更早的走法可供使用。 此设置用于新对局和新分析棋盘；已保存的会话保留原来的选择。';
 
   @override
-  String get maiaHistoryResearch => '阅读历史局面研究';
+  String get maiaHistoryResearch => '阅读历史局面研究（英文）';
 
   @override
   String get maiaHistoryOn => '历史局面：开启';
@@ -1150,7 +1153,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      '将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。不会自动上传任何内容。\n\n按从新到旧的顺序显示最近记录的10局棋。达到存储上限时，较早的对局可能会提前删除。这不会删除“最近的对局”中的棋局。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。';
+      '将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。\n\n按从新到旧的顺序显示最近记录的10局棋。达到存储上限时，较早的对局可能会提前删除。这不会删除“最近的对局”中的棋局。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。';
 
   @override
   String get clearSamplingData => '清除选招数据';

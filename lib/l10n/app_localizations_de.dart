@@ -963,6 +963,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get samplingResearch => 'Vollständige Forschungsdaten (JSONL)';
 
   @override
+  String get samplingResearchLink => 'Vollständige Forschungsdaten (Englisch)';
+
+  @override
   String get close => 'Schließen';
 
   @override
@@ -1240,7 +1243,8 @@ class AppLocalizationsDe extends AppLocalizations {
       'Maia berücksichtigt neben der aktuellen Stellung bis zu sieben vorherige Stellungen. In unseren Tests mit dem 79M-Modell verbesserte das die Vorhersage menschlicher Züge, begünstigte aber manchmal wiederholtes Nachahmen in Eröffnungen bei niedrigen Wertungszahlen. Eine höhere Spielstärke ist nicht nachgewiesen. Vorerst empfehlen wir, dies ausgeschaltet zu lassen. Bei einer einzeln geladenen Stellung sind keine früheren Züge verfügbar. Gilt für neue Partien und Analysebretter; gespeicherte Sitzungen behalten ihre ursprüngliche Auswahl.';
 
   @override
-  String get maiaHistoryResearch => 'Studie zum Stellungsverlauf lesen';
+  String get maiaHistoryResearch =>
+      'Studie zum Stellungsverlauf lesen (Englisch)';
 
   @override
   String get maiaHistoryOn => 'Stellungsverlauf: an';
@@ -1266,7 +1270,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen. Es wird nichts automatisch hochgeladen.\n\nDie letzten 10 aufgezeichneten Partien werden mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist. Dadurch werden keine Partien aus Letzte Partien gelöscht. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.';
+      'Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen.\n\nDie letzten 10 aufgezeichneten Partien werden mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist. Dadurch werden keine Partien aus Letzte Partien gelöscht. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.';
 
   @override
   String get clearSamplingData => 'Zugauswahldaten löschen';
