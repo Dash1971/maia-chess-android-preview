@@ -1388,4 +1388,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingDraw => 'Tablas';
+
+  @override
+  String get samplingDeleteData => 'Borrar datos';
+
+  @override
+  String get samplingClearConfirmation =>
+      '¿Borrar todos los datos de selección de jugadas de Maia? No se podrán recuperar.';
 }

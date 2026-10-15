@@ -1268,4 +1268,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingDraw => '平局';
+
+  @override
+  String get samplingDeleteData => '删除数据';
+
+  @override
+  String get samplingClearConfirmation => '要删除所有 Maia 选招数据吗？删除后无法恢复。';
 }

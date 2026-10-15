@@ -2385,6 +2385,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Draw'**
   String get samplingDraw;
+
+  /// Sampling data: destructive confirmation button. Lichess Delete adapted with an explicit data object.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete data'**
+  String get samplingDeleteData;
+
+  /// Sampling data: confirm irreversible deletion of app-local captures only, excluding separately saved/shared exports.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all Maia sampling data? It cannot be recovered.'**
+  String get samplingClearConfirmation;
 }
 
 class _AppLocalizationsDelegate

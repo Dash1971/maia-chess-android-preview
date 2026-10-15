@@ -1721,6 +1721,63 @@
         "pt": "Empate"
       },
       "adaptations": {}
+    },
+    "samplingDeleteData": {
+      "upstream_key": "delete",
+      "upstream": {
+        "en": "Delete",
+        "ja": "削除",
+        "zh": "删除",
+        "ko": "삭제",
+        "es": "Borrar",
+        "de": "Löschen",
+        "fr": "Effacer",
+        "ru": "Удалить",
+        "hi": "हटाएँ",
+        "pt": "Excluir"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Delete data",
+          "reason": "Adds the data object to Lichess’s Delete action so the destructive confirmation is explicit."
+        },
+        "ja": {
+          "value": "データを削除",
+          "reason": "Adds the data object to Lichess’s Delete action so the destructive confirmation is explicit."
+        },
+        "zh": {
+          "value": "删除数据",
+          "reason": "Adds the data object to Lichess’s Delete action so the destructive confirmation is explicit."
+        },
+        "ko": {
+          "value": "데이터 삭제",
+          "reason": "Adds the data object to Lichess’s Delete action so the destructive confirmation is explicit."
+        },
+        "es": {
+          "value": "Borrar datos",
+          "reason": "Adds the data object to Lichess’s Delete action so the destructive confirmation is explicit."
+        },
+        "de": {
+          "value": "Daten löschen",
+          "reason": "Adds the data object to Lichess’s Delete action so the destructive confirmation is explicit."
+        },
+        "fr": {
+          "value": "Effacer les données",
+          "reason": "Adds the data object to Lichess’s Delete action so the destructive confirmation is explicit."
+        },
+        "ru": {
+          "value": "Удалить данные",
+          "reason": "Adds the data object to Lichess’s Delete action so the destructive confirmation is explicit."
+        },
+        "hi": {
+          "value": "डेटा हटाएँ",
+          "reason": "Adds the data object to Lichess’s Delete action so the destructive confirmation is explicit."
+        },
+        "pt": {
+          "value": "Excluir dados",
+          "reason": "Adds the data object to Lichess’s Delete action so the destructive confirmation is explicit."
+        }
+      }
     }
   }
 }

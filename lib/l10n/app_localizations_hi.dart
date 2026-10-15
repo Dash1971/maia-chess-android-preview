@@ -1383,4 +1383,11 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get samplingDraw => 'खेल बराबरी पे समाप्त';
+
+  @override
+  String get samplingDeleteData => 'डेटा हटाएँ';
+
+  @override
+  String get samplingClearConfirmation =>
+      'क्या Maia की चाल चयन का सारा डेटा हटाना है? इसे वापस नहीं पाया जा सकेगा।';
 }

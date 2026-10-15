@@ -377,5 +377,7 @@
   "samplingTimeUnknown": "Heure inconnue",
   "samplingWin": "Victoire",
   "samplingLoss": "Défaite",
-  "samplingDraw": "Partie nulle"
+  "samplingDraw": "Partie nulle",
+  "samplingDeleteData": "Effacer les données",
+  "samplingClearConfirmation": "Effacer toutes les données de choix de coups de Maia ? Elles ne pourront pas être récupérées."
 }

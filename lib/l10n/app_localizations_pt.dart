@@ -1395,4 +1395,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingDraw => 'Empate';
+
+  @override
+  String get samplingDeleteData => 'Excluir dados';
+
+  @override
+  String get samplingClearConfirmation =>
+      'Excluir todos os dados de seleção de jogadas do Maia? Não será possível recuperá-los.';
 }

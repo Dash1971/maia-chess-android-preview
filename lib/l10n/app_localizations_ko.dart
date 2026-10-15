@@ -1289,4 +1289,11 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingDraw => '무승부';
+
+  @override
+  String get samplingDeleteData => '데이터 삭제';
+
+  @override
+  String get samplingClearConfirmation =>
+      'Maia의 수 선택 데이터를 모두 삭제할까요? 복구할 수 없습니다.';
 }

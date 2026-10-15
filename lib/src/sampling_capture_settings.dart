@@ -10,6 +10,7 @@ class SamplingCaptureSettings extends StatefulWidget {
 class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
   final capture = SamplingCapture.instance;
   bool _working = false;
+  bool _choosing = false;
   final _menu = GlobalKey<PopupMenuButtonState<String>>();
 
   @override
@@ -36,24 +37,78 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
   }
 
   Future<void> _action(String action) async {
-    if (_working || capture.busy) return;
-    final share = action == 'share';
-    final readable = await chooseSamplingFormat(context, share: share);
-    if (!mounted || readable == null || capture.busy) return;
-    final s = l10n(context);
-    final text = samplingReportText(s);
-    await _run(() async {
-      final images = readable
-          ? await samplingPieceImages()
-          : <String, String>{};
-      await capture.saveDocument(
-        share: share,
-        readable: readable,
-        text: text,
-        locale: s.localeName,
-        pieceImages: images,
+    if (_working || _choosing || capture.busy) return;
+    setState(() => _choosing = true);
+    try {
+      final share = action == 'share';
+      final readable = await chooseSamplingFormat(context, share: share);
+      if (!mounted || readable == null || capture.busy) return;
+      final s = l10n(context);
+      final text = samplingReportText(s);
+      await _run(() async {
+        final images = readable
+            ? await samplingPieceImages()
+            : <String, String>{};
+        await capture.saveDocument(
+          share: share,
+          readable: readable,
+          text: text,
+          locale: s.localeName,
+          pieceImages: images,
+        );
+      });
+    } finally {
+      if (mounted) setState(() => _choosing = false);
+    }
+  }
+
+  Future<void> _confirmClear() async {
+    if (_working || _choosing || capture.busy) return;
+    setState(() => _choosing = true);
+    try {
+      final strings = l10n(context);
+      var answered = false;
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) {
+          void answer(bool value) {
+            if (answered || ModalRoute.of(dialogContext)?.isCurrent != true) {
+              return;
+            }
+            answered = true;
+            Navigator.of(dialogContext).pop(value);
+          }
+
+          return ListenableBuilder(
+            listenable: capture,
+            builder: (context, _) => AlertDialog(
+              title: Text(strings.clearSamplingData),
+              scrollable: true,
+              content: Text(strings.samplingClearConfirmation),
+              actions: [
+                TextButton(
+                  onPressed: () => answer(false),
+                  child: Text(strings.cancel),
+                ),
+                TextButton(
+                  key: const ValueKey('confirm-clear-sampling-data'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.error,
+                  ),
+                  onPressed: capture.busy ? null : () => answer(true),
+                  child: Text(strings.samplingDeleteData),
+                ),
+              ],
+            ),
+          );
+        },
       );
-    });
+      // Another storage operation or navigation may have happened while open.
+      if (!mounted || confirmed != true || capture.busy) return;
+      await _run(capture.clear);
+    } finally {
+      if (mounted) setState(() => _choosing = false);
+    }
   }
 
   @override
@@ -61,7 +116,7 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
     listenable: capture,
     builder: (context, _) {
       final strings = l10n(context);
-      final blocked = _working || capture.busy;
+      final blocked = _working || _choosing || capture.busy;
       return Column(
         children: [
           SwitchListTile(
@@ -76,9 +131,8 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
                     context: context,
                     builder: (context) => AlertDialog(
                       title: Text(strings.saveMaiaSamplingData),
-                      content: SingleChildScrollView(
-                        child: Text(strings.samplingDataHelp),
-                      ),
+                      scrollable: true,
+                      content: Text(strings.samplingDataHelp),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
@@ -114,7 +168,7 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
                 position: PopupMenuPosition.under,
                 tooltip: strings.shareAndExport,
                 onSelected: _action,
-                icon: blocked
+                icon: _working || capture.busy
                     ? const SizedBox(
                         width: 20,
                         height: 20,
@@ -134,11 +188,12 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
               ),
             ),
             ListTile(
+              key: const ValueKey('clear-sampling-data'),
               title: Text(strings.clearSamplingData),
               trailing: const Icon(Icons.delete_outline),
               onTap: blocked || (capture.records == 0 && !capture.failed)
                   ? null
-                  : () => _run(capture.clear),
+                  : _confirmClear,
             ),
           ],
         ],

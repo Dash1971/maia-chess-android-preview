@@ -377,5 +377,7 @@
   "samplingTimeUnknown": "時刻不明",
   "samplingWin": "勝ち",
   "samplingLoss": "負け",
-  "samplingDraw": "引き分け"
+  "samplingDraw": "引き分け",
+  "samplingDeleteData": "データを削除",
+  "samplingClearConfirmation": "Maiaの手の選択データをすべて削除しますか？ 復元はできません。"
 }

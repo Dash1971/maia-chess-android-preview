@@ -377,5 +377,7 @@
   "samplingTimeUnknown": "时间未知",
   "samplingWin": "胜局",
   "samplingLoss": "负局",
-  "samplingDraw": "平局"
+  "samplingDraw": "平局",
+  "samplingDeleteData": "删除数据",
+  "samplingClearConfirmation": "要删除所有 Maia 选招数据吗？删除后无法恢复。"
 }

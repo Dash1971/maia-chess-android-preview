@@ -1368,4 +1368,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingDraw => 'Draw';
+
+  @override
+  String get samplingDeleteData => 'Delete data';
+
+  @override
+  String get samplingClearConfirmation =>
+      'Delete all Maia sampling data? It cannot be recovered.';
 }

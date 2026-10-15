@@ -1288,4 +1288,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingDraw => '引き分け';
+
+  @override
+  String get samplingDeleteData => 'データを削除';
+
+  @override
+  String get samplingClearConfirmation => 'Maiaの手の選択データをすべて削除しますか？ 復元はできません。';
 }

@@ -1390,4 +1390,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingDraw => 'Remis';
+
+  @override
+  String get samplingDeleteData => 'Daten löschen';
+
+  @override
+  String get samplingClearConfirmation =>
+      'Alle Zugauswahldaten von Maia löschen? Sie lassen sich nicht wiederherstellen.';
 }

@@ -377,5 +377,7 @@
   "samplingTimeUnknown": "Hora desconocida",
   "samplingWin": "Victoria",
   "samplingLoss": "Derrota",
-  "samplingDraw": "Tablas"
+  "samplingDraw": "Tablas",
+  "samplingDeleteData": "Borrar datos",
+  "samplingClearConfirmation": "¿Borrar todos los datos de selección de jugadas de Maia? No se podrán recuperar."
 }

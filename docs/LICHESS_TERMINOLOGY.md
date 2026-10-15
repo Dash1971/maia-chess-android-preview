@@ -206,3 +206,12 @@ and `draw` translations, recorded as three additional reference entries. Missing
 results, openings and timestamps, incomplete captures, and report navigation are
 app-specific contextual descriptions translated in every catalog. They do not
 claim that incomplete captures are complete game records.
+
+## Sampling deletion confirmation
+
+The confirmation reuses the pinned Cancel translations. “Delete data” adapts
+Lichess’s Delete verb with an explicit object in each language; the reference
+records this context adaptation. The concise warning is app-specific prose
+explaining that deleting sampling data cannot be undone. Separately saved/shared
+files remain unaffected. All ten translations receive layout and terminology checks; this is not native-speaker
+certification.

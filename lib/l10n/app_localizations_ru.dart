@@ -1405,4 +1405,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get samplingDraw => 'Ничья';
+
+  @override
+  String get samplingDeleteData => 'Удалить данные';
+
+  @override
+  String get samplingClearConfirmation =>
+      'Удалить все данные о выборе ходов Maia? Восстановить их будет невозможно.';
 }
