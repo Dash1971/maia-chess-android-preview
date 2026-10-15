@@ -1,0 +1,299 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:chess/chess.dart' as chess;
+import 'package:dartchess/dartchess.dart' as dc;
+
+import 'fixtures/launch_game.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:maia_chess/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'support/sampling_replay.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  late Directory dir;
+  late SamplingCapture capture;
+  late Completer<Float32List> response;
+  var calls = 0;
+  setUp(() async {
+    MaiaInferenceQueue.resetForTesting();
+    SharedPreferences.setMockInitialValues({
+      'temperatureV2': 0.0,
+      'topPV2': 0.0,
+    });
+    dir = await Directory.systemTemp.createTemp('maia-capture-play-');
+    capture = SamplingCapture(directory: dir);
+    SamplingCapture.instance = capture;
+    await capture.setEnabled(true);
+    await ActiveSessionStore.clear();
+    response = Completer<Float32List>();
+    calls = 0;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(maiaEngineChannel, (call) async {
+          if (call.method == 'predict') {
+            calls++;
+            return response.future;
+          }
+          return null;
+        });
+  });
+  tearDown(() async {
+    if (!response.isCompleted) response.complete(Float32List(4352));
+    await Future<void>.delayed(const Duration(milliseconds: 30));
+    // Each case drains capture inside its own (possibly fake-clock) zone.
+    capture.dispose();
+    SamplingCapture.instance = SamplingCapture();
+    await dir.delete(recursive: true);
+    await ActiveSessionStore.clear();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(maiaEngineChannel, null);
+  });
+  Future<void> start(WidgetTester tester) async {
+    final game = chess.Chess()..move('e4');
+    await tester.pumpWidget(
+      MaterialApp(
+        home: GamePage(
+          startingFen: game.fen,
+          startingSide: PlayerSide.white,
+          startingUseMoveHistory: true,
+          startingPositionHistory: [chess.Chess.DEFAULT_POSITION, game.fen],
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    for (var i = 0; i < 50 && calls == 0; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 20)),
+      );
+      await tester.pump();
+    }
+    expectSync(calls, 1);
+  }
+
+  Future<void> drive(
+    WidgetTester tester,
+    Future<void> Function() operation,
+  ) async {
+    var done = false;
+    Object? error;
+    unawaited(
+      operation().then(
+        (_) => done = true,
+        onError: (Object e) {
+          error = e;
+          done = true;
+        },
+      ),
+    );
+    for (var i = 0; i < 200 && !done; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 10)),
+      );
+      await tester.pump();
+    }
+    expectSync(done, true, reason: 'filesystem operation completed');
+    if (error != null) throw error!;
+  }
+
+  Future<void> drain(WidgetTester tester) async {
+    var done = false;
+    unawaited(capture.flush().then((_) => done = true));
+    for (var i = 0; i < 100 && !done; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 10)),
+      );
+      await tester.pump();
+    }
+    expectSync(done, true);
+  }
+
+  testWidgets(
+    'normal play path records effective history, commit, and resume identity',
+    (tester) async {
+      await start(tester);
+      response.complete(Float32List(4352));
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 40)),
+      );
+      await tester.pumpAndSettle();
+      await drain(tester);
+      await drive(tester, () async {
+        final record = (await readExport(capture)).single;
+        expectSync(record['outcome'], 'committed');
+        expectSync(record['cache'], 'no-play-policy-cache');
+        expectSync(record['historyEnabled'], true);
+        expectSync(record['continuationPrefix'], [
+          chess.Chess.DEFAULT_POSITION,
+        ]);
+        expectSync(record['sampling']['mode'], 'argmax');
+        expectSync(record['queueOutcome'], 'inference-returned');
+        replay(record);
+        final saved = await ActiveSessionStore.load();
+        expectSync(saved!['samplingGameId'], record['gameId']);
+      });
+      final id = (await ActiveSessionStore.load())!['samplingGameId'];
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+      await tester.pumpWidget(const MaterialApp(home: GamePage()));
+      await tester.pumpAndSettle();
+      expectSync((await ActiveSessionStore.load())!['samplingGameId'], id);
+      expectSync(calls, 1);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+    },
+  );
+  testWidgets(
+    'disposing play during inference records stale output, never a committed move',
+    (tester) async {
+      await start(tester);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+      response.complete(Float32List(4352));
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 40)),
+      );
+      await tester.pumpAndSettle();
+      await drain(tester);
+      await drive(tester, () async {
+        final record = (await readExport(capture)).single;
+        expectSync(record['outcome'], 'cancelled-or-stale');
+        expectSync(record.containsKey('committedMove'), false);
+        expectSync(record['logits'], isNotNull);
+        expectSync(record.containsKey('sampling'), false);
+      });
+    },
+  );
+  for (final invalid in [Float32List(3), Float32List(4352)..[3] = double.nan]) {
+    testWidgets(
+      'malformed/non-finite policy does not sample or commit (${invalid.length})',
+      (tester) async {
+        await start(tester);
+        response.complete(invalid);
+        await tester.pumpAndSettle();
+        await drain(tester);
+        await drive(tester, () async {
+          final record = (await readExport(capture)).single;
+          expectSync(record['outcome'], 'invalid-output');
+          expectSync(record.containsKey('committedMove'), false);
+          expectSync(record.containsKey('sampling'), false);
+        });
+        await tester.pumpWidget(const SizedBox());
+        await tester.pumpAndSettle();
+      },
+    );
+  }
+  testWidgets(
+    'takeback and a different branch keep game identity but reject old inference',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: GamePage(
+            startingFen: chess.Chess.DEFAULT_POSITION,
+            startingSide: PlayerSide.white,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      for (var i = 0; i < 50; i++) {
+        if ((await ActiveSessionStore.load())?['clockPaused'] == false) break;
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)),
+        );
+        await tester.pump();
+      }
+      expectSync((await ActiveSessionStore.load())?['clockPaused'], false);
+      boardOf(tester).onMove!(dc.NormalMove.fromUci('e2e4'));
+      await tester.pumpAndSettle();
+      for (var i = 0; i < 50 && calls < 1; i++) {
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)),
+        );
+        await tester.pump();
+      }
+      expectSync((await ActiveSessionStore.load())!['uciMoves'], ['e2e4']);
+      expectSync(calls, 1);
+      await tester.tap(find.byKey(const ValueKey('game-actions-menu')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Takeback'));
+      await tester.pumpAndSettle();
+      response.complete(Float32List(4352));
+      await tester.pumpAndSettle();
+      await drain(tester);
+      response = Completer<Float32List>();
+      boardOf(tester).onMove!(dc.NormalMove.fromUci('d2d4'));
+      await tester.pumpAndSettle();
+      for (var i = 0; i < 50 && calls < 2; i++) {
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)),
+        );
+        await tester.pump();
+      }
+      expectSync(calls, 2);
+      response.complete(Float32List(4352));
+      await tester.pumpAndSettle();
+      await drain(tester);
+      await drive(tester, () async {
+        final records = await readExport(capture);
+        expectSync(records, hasLength(2));
+        expectSync(records[0]['outcome'], 'cancelled-or-stale');
+        expectSync(records[1]['outcome'], 'committed');
+        expectSync(records[0]['gameId'], records[1]['gameId']);
+        expectSync(records[0]['requestId'], isNot(records[1]['requestId']));
+        expectSync(records[0]['generation'], isNot(records[1]['generation']));
+        final afterD4 = chess.Chess()..move('d4');
+        expectSync(records[1]['positions'], [
+          chess.Chess.DEFAULT_POSITION,
+          afterD4.fen,
+        ]);
+        replay(records[1]);
+      });
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+    },
+  );
+
+  test('queue cancellation and timeout preserve request association', () async {
+    final scope = MaiaInferenceScope();
+    final fen = chess.Chess.DEFAULT_POSITION;
+    CapturedDecision ticket() => capture.begin(
+      gameId: SamplingCapture.newId(),
+      generation: 0,
+      ply: 0,
+      fen: fen,
+      positions: [fen],
+      prefix: [],
+      history: false,
+      elo: 1600,
+      tokens: Float32List(6208),
+      backend: 'test',
+    )!;
+    final a = ticket();
+    final b = ticket();
+    final first = MaiaInferenceQueue.predict(
+      {'tokens': Float32List(6208), 'selfElo': 1600, 'opponentElo': 1600},
+      replaceableScope: scope,
+      capture: a,
+    );
+    final second = MaiaInferenceQueue.predict(
+      {'tokens': Float32List(6208), 'selfElo': 1600, 'opponentElo': 1600},
+      replaceableScope: scope,
+      capture: b,
+      timeout: const Duration(milliseconds: 10),
+    );
+    expectSync(await first, isNull);
+    a.finish('cancelled-or-stale');
+    await expectLater(second, throwsA(isA<TimeoutException>()));
+    b.finish('timeout');
+    response.complete(Float32List(4352));
+    await capture.flush();
+    final records = await readExport(capture);
+    expectSync(records[0]['queueOutcome'], 'cancelled-before-inference');
+    expectSync(records[1]['outcome'], 'timeout');
+    expectSync(records.every((r) => !r.containsKey('committedMove')), true);
+  });
+}

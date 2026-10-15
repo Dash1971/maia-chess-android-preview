@@ -155,10 +155,11 @@ class MaiaEncoding {
     double temperature = 1.0,
     double topP = 1.0,
     Random? random,
+    void Function(Map<String, Object?>)? onSample,
   }) {
     final safeTopP = topP.clamp(0.0, 1.0);
     if (temperature <= 0) {
-      return legalMoves.reduce((best, move) {
+      final selected = legalMoves.reduce((best, move) {
         final bestIndex = moveIndex(uci(best), game.turn == chess.Color.BLACK);
         final moveIndexValue = moveIndex(
           uci(move),
@@ -166,6 +167,10 @@ class MaiaEncoding {
         );
         return logits[moveIndexValue] > logits[bestIndex] ? move : best;
       });
+      onSample?.call(
+        _samplingTrace(game, legalMoves, temperature, topP, selected, null),
+      );
+      return selected;
     }
     final safeTemperature = temperature.clamp(0.001, 1.0);
     final scored = legalMoves.map((move) {
@@ -204,13 +209,65 @@ class MaiaEncoding {
       0,
       (sum, item) => sum + item.weight,
     );
-    var target = (random ?? _random).nextDouble() * nucleusTotal;
+    final draw = (random ?? _random).nextDouble();
+    var target = draw * nucleusTotal;
+    var lower = 0.0;
+    void record(chess.Move selected) {
+      if (onSample == null) return;
+      onSample(
+        _samplingTrace(game, legalMoves, temperature, topP, selected, {
+          'draw': draw,
+          'target': draw * nucleusTotal,
+          'total': nucleusTotal,
+          'lower': lower,
+          'upper': lower + nucleus.firstWhere((v) => v.move == selected).weight,
+          'nucleusCount': nucleus.length,
+          'weightedOrder': weighted
+              .map((v) => {'uci': uci(v.move), 'weight': v.weight})
+              .toList(),
+        }),
+      );
+    }
+
     for (final item in nucleus) {
       target -= item.weight;
-      if (target <= 0) return item.move;
+      if (target <= 0) {
+        record(item.move);
+        return item.move;
+      }
+      lower += item.weight;
     }
+    lower -= nucleus.last.weight;
+    record(nucleus.last.move);
     return nucleus.last.move;
   }
+
+  static Map<String, Object?> _samplingTrace(
+    chess.Chess game,
+    List<chess.Move> moves,
+    double temperature,
+    double topP,
+    chess.Move selected,
+    Map<String, Object?>? random,
+  ) => {
+    'temperature': temperature,
+    'topP': topP,
+    'effectiveTemperature': temperature <= 0
+        ? 0.0
+        : temperature.clamp(0.001, 1.0),
+    'effectiveTopP': topP.clamp(0.0, 1.0),
+    'mode': random == null ? 'argmax' : 'random',
+    'selected': uci(selected),
+    'legalOrder': moves
+        .map(
+          (m) => {
+            'uci': uci(m),
+            'index': moveIndex(uci(m), game.turn == chess.Color.BLACK),
+          },
+        )
+        .toList(),
+    'random': random,
+  };
 
   static ({double probability, String topMove}) reviewMove(
     chess.Chess game,

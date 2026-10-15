@@ -342,5 +342,11 @@
   "maiaHistoryOff": "Historial de jugadas: desactivado",
   "chessboardDeviceName": "Tablero",
   "namedBoardConnected": "{boardName}: conectado",
-  "namedBoardDisconnected": "{boardName}: desconectado"
+  "namedBoardDisconnected": "{boardName}: desconectado",
+  "saveMaiaSamplingData": "Guardar datos de selección de Maia",
+  "samplingDataHelp": "Guarda en este dispositivo las probabilidades de las jugadas de Maia, sus ajustes y las jugadas elegidas para explorar cómo juega. Está desactivado por defecto. Al desactivarlo, se conservan los datos guardados.\n\nLos archivos exportados contienen posiciones, historial de jugadas y las entradas y decisiones del modelo. No se sube nada automáticamente.\n\nSe guardan hasta 64 MB. Primero se eliminan los datos de las partidas más antiguas, sin borrar las partidas recientes. Una partida muy larga o una interrupción pueden dejar datos incompletos. Si lo activas durante una partida, solo se guardan las decisiones posteriores. Exporta los datos periódicamente si quieres conservarlos.",
+  "exportSamplingData": "Exportar datos de selección",
+  "clearSamplingData": "Borrar datos de selección",
+  "samplingDataStatus": "{count} decisiones guardadas · {pruned} capturas antiguas eliminadas",
+  "samplingDataError": "No se ha podido acceder a los datos de selección. Puedes seguir jugando."
 }

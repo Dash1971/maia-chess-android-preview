@@ -1243,4 +1243,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String namedBoardDisconnected(String boardName) {
     return '$boardName disconnected';
   }
+
+  @override
+  String get saveMaiaSamplingData => 'Save Maia sampling data';
+
+  @override
+  String get samplingDataHelp =>
+      'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nUp to 64 MB is kept. The oldest captured games are deleted first; this does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.';
+
+  @override
+  String get exportSamplingData => 'Export sampling data';
+
+  @override
+  String get clearSamplingData => 'Clear sampling data';
+
+  @override
+  String samplingDataStatus(int count, int pruned) {
+    return '$count decisions saved · $pruned older captures removed';
+  }
+
+  @override
+  String get samplingDataError =>
+      'Could not access sampling data. Playing is unaffected.';
 }

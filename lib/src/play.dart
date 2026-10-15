@@ -635,6 +635,10 @@ class _GamePageState extends State<GamePage>
       _stopChessnutLedRefresh();
       setState(() {
         _game = restored;
+        final captureId = saved['samplingGameId'];
+        if (captureId is String && RegExp(r'^\d+-\d+$').hasMatch(captureId)) {
+          _samplingGameId = captureId;
+        }
         _gameUseMoveHistory = saved['maiaUseMoveHistory'] == true;
         _gameHistoryPrefix = restoreMaiaHistoryPrefix(
           saved['historyPrefix'],
@@ -858,6 +862,7 @@ class _GamePageState extends State<GamePage>
     'variations': _takebackVariations.map((item) => item.toJson()).toList(),
     'playerIsWhite': _playerIsWhite,
     'elo': _elo,
+    'samplingGameId': _samplingGameId,
     'maiaUseMoveHistory': _gameUseMoveHistory,
     'historyPrefix': _gameHistoryPrefix,
     'timePreset': _timePreset.name,
@@ -964,6 +969,7 @@ class _GamePageState extends State<GamePage>
 
   Future<void> _loadEnginePreferences() async {
     final preferences = await SharedPreferences.getInstance();
+    await SamplingCapture.instance.initialize();
     if (!mounted) return;
     final savedPlayElo = _readMaiaRatingPreference(
       preferences,
@@ -2591,6 +2597,7 @@ class _GamePageState extends State<GamePage>
       if (!mounted) return;
       setState(() => _storageFailed = false);
       // Preserve the archived opponent rating; only the new game uses current bounds.
+      _samplingGameId = SamplingCapture.newId();
       _elo = normalizeMaiaRating(_elo);
       _gameGeneration++;
       _gameInferenceScope.invalidate();
@@ -2961,6 +2968,8 @@ class _GamePageState extends State<GamePage>
     return true;
   }
 
+  String _samplingGameId = SamplingCapture.newId();
+
   Future<void> _playMaiaMove() async {
     if (_gameFinished ||
         _chessnutResetPending ||
@@ -2977,6 +2986,7 @@ class _GamePageState extends State<GamePage>
       return;
     }
     final generation = _gameGeneration;
+    CapturedDecision? capture;
     final thinkingTimer = (widget.clockFactory?.call() ?? Stopwatch())..start();
     setState(() {
       _engineThinking = true;
@@ -2991,15 +3001,33 @@ class _GamePageState extends State<GamePage>
         positions,
         useMoveHistory: _gameUseMoveHistory,
       );
+      capture = SamplingCapture.instance.begin(
+        gameId: _samplingGameId,
+        generation: generation,
+        ply: _uciMoves.length,
+        fen: _game.fen,
+        positions: positions,
+        prefix: _gameHistoryPrefix,
+        history: _gameUseMoveHistory,
+        elo: _elo,
+        tokens: tokens,
+        backend: widget.maiaEvaluator == null
+            ? 'onnx-android'
+            : 'injected-evaluator',
+      );
       final response = widget.maiaEvaluator != null
           ? await widget.maiaEvaluator!(positions, _elo)
-          : await MaiaInferenceQueue.predict({
-              'tokens': tokens,
-              'selfElo': _elo,
-              'opponentElo': _elo,
-            }, replaceableScope: _gameInferenceScope);
+          : await MaiaInferenceQueue.predict(
+              {'tokens': tokens, 'selfElo': _elo, 'opponentElo': _elo},
+              replaceableScope: _gameInferenceScope,
+              capture: capture,
+            );
+      if (widget.maiaEvaluator != null) capture?.output(response);
       if (!mounted || generation != _gameGeneration || _gameFinished) return;
-      if (response == null || response.length != 4352) {
+      if (response == null ||
+          response.length != 4352 ||
+          response.any((v) => !v.isFinite)) {
+        capture?.finish('invalid-output');
         throw StateError('Maia returned an invalid policy vector.');
       }
       final logits = response.toList(growable: false);
@@ -3010,6 +3038,7 @@ class _GamePageState extends State<GamePage>
         logits,
         temperature: _temperature,
         topP: _topP,
+        onSample: capture?.sampling,
       );
       if (_humanTiming) {
         final target = sampleHumanMoveTime(
@@ -3021,10 +3050,14 @@ class _GamePageState extends State<GamePage>
         if (remaining > Duration.zero) await Future<void>.delayed(remaining);
       }
       if (!mounted || generation != _gameGeneration || _gameFinished) return;
-      if (!_commitClock(_game.turn)) return;
+      if (!_commitClock(_game.turn)) {
+        capture?.finish('clock-expired');
+        return;
+      }
       final maiaUci = MaiaEncoding.uci(move);
       _uciMoves.add(maiaUci);
       _game.move(move);
+      capture?.finish('committed', committedFen: _game.fen, move: maiaUci);
       final naturalResult = _finishNaturalGame();
       _emitAcceptedMoveFeedback(move);
       _positionHistory.add(_game.fen);
@@ -3083,6 +3116,10 @@ class _GamePageState extends State<GamePage>
         unawaited(_playMaiaMove());
       }
     } catch (error, stackTrace) {
+      capture?.finish(
+        error is TimeoutException ? 'timeout' : 'error',
+        error: error.runtimeType.toString(),
+      );
       if (!mounted || generation != _gameGeneration) return;
       unawaited(AppDiagnostics.record('maia-game', error, stackTrace));
       setState(() {
@@ -3092,6 +3129,8 @@ class _GamePageState extends State<GamePage>
       });
       _pauseGame();
       unawaited(_saveGameState());
+    } finally {
+      capture?.finish('cancelled-or-stale');
     }
   }
 
@@ -4811,6 +4850,7 @@ class _GamePageState extends State<GamePage>
                       unawaited(_saveEnginePreferences());
                     },
                   ),
+                  const SamplingCaptureSettings(),
                   ListTile(
                     title: Text(
                       l10n(context).analysisRatingValue(

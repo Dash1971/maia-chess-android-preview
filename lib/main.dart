@@ -6,6 +6,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:crypto/crypto.dart' as crypto;
 import 'package:chess/chess.dart' as chess;
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart' as dc;
@@ -33,6 +34,8 @@ part 'src/session_history.dart';
 part 'src/pgn_files.dart';
 
 part 'src/maia_queue.dart';
+part 'src/sampling_capture.dart';
+part 'src/sampling_capture_settings.dart';
 part 'src/diagnostics.dart';
 part 'src/session_types.dart';
 part 'src/variation_tree.dart';

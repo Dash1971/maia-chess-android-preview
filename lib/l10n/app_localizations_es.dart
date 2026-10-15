@@ -1263,4 +1263,26 @@ class AppLocalizationsEs extends AppLocalizations {
   String namedBoardDisconnected(String boardName) {
     return '$boardName: desconectado';
   }
+
+  @override
+  String get saveMaiaSamplingData => 'Guardar datos de selección de Maia';
+
+  @override
+  String get samplingDataHelp =>
+      'Guarda en este dispositivo las probabilidades de las jugadas de Maia, sus ajustes y las jugadas elegidas para explorar cómo juega. Está desactivado por defecto. Al desactivarlo, se conservan los datos guardados.\n\nLos archivos exportados contienen posiciones, historial de jugadas y las entradas y decisiones del modelo. No se sube nada automáticamente.\n\nSe guardan hasta 64 MB. Primero se eliminan los datos de las partidas más antiguas, sin borrar las partidas recientes. Una partida muy larga o una interrupción pueden dejar datos incompletos. Si lo activas durante una partida, solo se guardan las decisiones posteriores. Exporta los datos periódicamente si quieres conservarlos.';
+
+  @override
+  String get exportSamplingData => 'Exportar datos de selección';
+
+  @override
+  String get clearSamplingData => 'Borrar datos de selección';
+
+  @override
+  String samplingDataStatus(int count, int pruned) {
+    return '$count decisiones guardadas · $pruned capturas antiguas eliminadas';
+  }
+
+  @override
+  String get samplingDataError =>
+      'No se ha podido acceder a los datos de selección. Puedes seguir jugando.';
 }

@@ -168,3 +168,12 @@ no direct equivalent in the pinned Lichess terminology baseline. Product names
 remain unchanged; all ten languages translate the surrounding status. Languages
 where product-name gender is ambiguous use a compact device-status label. Setup
 and recovery instructions still take priority over a connection confirmation.
+
+## Sampling data export (#122)
+
+The opt-in sampling capture label, help, counts and export/clear actions are
+Maia-specific features with no direct equivalent in the pinned Lichess catalog.
+They have dedicated wording in all ten languages. The dialog retains the
+existing Lichess-aligned Close action. No shared chess terminology is redefined.
+As with other app-specific prose, these are editorial translations, not a claim
+of native-speaker certification.

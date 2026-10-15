@@ -1280,4 +1280,26 @@ class AppLocalizationsRu extends AppLocalizations {
   String namedBoardDisconnected(String boardName) {
     return '$boardName: отключено';
   }
+
+  @override
+  String get saveMaiaSamplingData => 'Сохранять данные о выборе ходов Maia';
+
+  @override
+  String get samplingDataHelp =>
+      'Сохраняйте на этом устройстве вероятности ходов Maia, настройки и выбранные ходы, чтобы изучать её игру. По умолчанию выключено. При отключении сохранённые данные остаются.\n\nЭкспортируемые файлы содержат позиции, историю ходов, входные данные модели и её решения. Ничего не отправляется автоматически.\n\nХранится до 64 МБ. Сначала удаляются записи самых старых партий; сами недавние партии не удаляются. Очень длинная партия или прерывание работы могут привести к неполной записи. При включении во время партии сохраняются только последующие решения. Регулярно экспортируйте данные, если хотите их сохранить.';
+
+  @override
+  String get exportSamplingData => 'Экспортировать данные о выборе ходов';
+
+  @override
+  String get clearSamplingData => 'Удалить данные о выборе ходов';
+
+  @override
+  String samplingDataStatus(int count, int pruned) {
+    return 'Сохранено решений: $count · Удалено старых записей: $pruned';
+  }
+
+  @override
+  String get samplingDataError =>
+      'Не удалось получить доступ к данным о выборе ходов. Это не мешает игре.';
 }

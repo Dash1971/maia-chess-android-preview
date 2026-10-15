@@ -61,6 +61,24 @@ class HeldResetRepository extends SessionRepository {
   }
 }
 
+/// Expose the legitimate gap between discarding the old game and committing
+/// the replacement, independent of the host's disk speed.
+class DelayedResetRepository extends SessionRepository {
+  DelayedResetRepository(super.directory);
+
+  final release = Completer<void>();
+  bool waiting = false;
+
+  @override
+  Future<void> save(Map<String, Object?> data) async {
+    if (data['chessnutResetPending'] == true && !waiting) {
+      waiting = true;
+      await release.future;
+    }
+    await super.save(data);
+  }
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late Directory directory;
@@ -123,8 +141,9 @@ void main() {
     WidgetTester tester, {
     bool playerIsWhite = true,
     Future<Float32List> Function(List<String>, int)? evaluator,
+    SessionRepository Function(Directory)? repositoryFactory,
   }) async {
-    await initialize(tester);
+    await initialize(tester, repositoryFactory: repositoryFactory);
     await tester.runAsync(
       () => ActiveSessionStore.save({
         'type': 'game',
@@ -597,9 +616,12 @@ void main() {
           maiaPlaySidePreferenceKey: playerIsWhite ? 'black' : 'white',
         });
         var requests = 0;
+        late DelayedResetRepository repository;
         await launch(
           tester,
           playerIsWhite: playerIsWhite,
+          repositoryFactory: (directory) =>
+              repository = DelayedResetRepository(directory),
           evaluator: (_, _) async {
             requests++;
             return Float32List(4352);
@@ -611,9 +633,29 @@ void main() {
         board.newGame();
         await flush(tester);
         await tester.pumpAndSettle();
-        var saved = (await tester.runAsync<Map<String, dynamic>?>(
-          () => SessionRepository(directory).load(),
-        ))!;
+        await waitFor(tester, () => repository.waiting, 'reset save started');
+        expect(
+          await tester.runAsync<Map<String, dynamic>?>(
+            () => SessionRepository(directory).load(),
+          ),
+          isNull,
+          reason: 'The discarded game must not survive while reset is saving.',
+        );
+        expect(requests, 0, reason: 'Maia must wait for the reset checkpoint.');
+        repository.release.complete();
+        Map<String, dynamic>? checkpoint;
+        // File I/O is real asynchronous work: pumpAndSettle only waits for
+        // widget frames, so it cannot guarantee that the save has committed.
+        final deadline = Stopwatch()..start();
+        while (deadline.elapsed < const Duration(seconds: 10)) {
+          checkpoint = await tester.runAsync<Map<String, dynamic>?>(
+            () => SessionRepository(directory).load(),
+          );
+          await tester.pump();
+          if (checkpoint?['chessnutResetPending'] == true) break;
+        }
+        expect(checkpoint, containsPair('chessnutResetPending', true));
+        var saved = checkpoint!;
         expect(saved['playerIsWhite'], playerIsWhite);
         expect(saved['elo'], 1800);
         expect(saved['maiaUseMoveHistory'], true);

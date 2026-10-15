@@ -1264,4 +1264,26 @@ class AppLocalizationsDe extends AppLocalizations {
   String namedBoardDisconnected(String boardName) {
     return '$boardName getrennt';
   }
+
+  @override
+  String get saveMaiaSamplingData => 'Maias Zugauswahldaten speichern';
+
+  @override
+  String get samplingDataHelp =>
+      'Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen. Es wird nichts automatisch hochgeladen.\n\nEs werden bis zu 64 MB gespeichert. Die Aufzeichnungen der ältesten Partien werden zuerst gelöscht; die zuletzt gespielten Partien bleiben erhalten. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.';
+
+  @override
+  String get exportSamplingData => 'Zugauswahldaten exportieren';
+
+  @override
+  String get clearSamplingData => 'Zugauswahldaten löschen';
+
+  @override
+  String samplingDataStatus(int count, int pruned) {
+    return '$count Entscheidungen gespeichert · $pruned ältere Aufzeichnungen gelöscht';
+  }
+
+  @override
+  String get samplingDataError =>
+      'Kein Zugriff auf die Zugauswahldaten. Das Spielen ist nicht betroffen.';
 }
