@@ -420,11 +420,11 @@ abstract class AppLocalizations {
   /// **'Game analysis quality'**
   String get gameAnalysisQuality;
 
-  /// Settings: Reset engine defaults
+  /// Settings: Reset settings on this screen to their defaults
   ///
   /// In en, this message translates to:
-  /// **'Reset engine defaults'**
-  String get resetEngineDefaults;
+  /// **'Reset settings to default'**
+  String get resetSettingsDefaults;
 
   /// Settings: Board sounds
   ///
@@ -2185,7 +2185,7 @@ abstract class AppLocalizations {
   /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
   ///
   /// In en, this message translates to:
-  /// **'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions.\n\nThe latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.'**
+  /// **'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions.\n\nThe last 10 recorded games are saved and presented newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.'**
   String get samplingDataHelp;
 
   /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
@@ -2323,7 +2323,7 @@ abstract class AppLocalizations {
   /// Explains report game order, ten-game retention, and earlier removal under the storage limit.
   ///
   /// In en, this message translates to:
-  /// **'The latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached.'**
+  /// **'The last 10 recorded games are saved and presented newest first. Older games may be removed sooner if the storage limit is reached.'**
   String get samplingReportRetention;
 
   /// Accessible game chooser label for jumping to a game section.
@@ -2404,11 +2404,17 @@ abstract class AppLocalizations {
   /// **'Sampling data'**
   String get samplingData;
 
-  /// Exact scope of Reset engine defaults; does not include sounds, language, sampling capture or board preferences.
+  /// Reset all preferences shown on Settings, including language, sounds and recording; preserve stored games and captures.
   ///
   /// In en, this message translates to:
-  /// **'Resets premoves, human timing, move history, Temperature, Top-P and analysis settings.'**
-  String get resetEngineDefaultsScope;
+  /// **'Resets all settings on this screen. Saved games and sampling data are kept.'**
+  String get resetSettingsDefaultsScope;
+
+  /// Settings reset persistence failure; retry is safe and saved games are unaffected.
+  ///
+  /// In en, this message translates to:
+  /// **'Some settings could not be reset. Please try again.'**
+  String get settingsResetError;
 }
 
 class _AppLocalizationsDelegate

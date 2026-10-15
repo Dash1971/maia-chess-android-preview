@@ -51,7 +51,7 @@
   "compareAnotherMaiaRatingInAnalysisAndReview": "解析や棋譜レビューで、異なるレーティングのMaiaを比較します",
   "secondMaiaAnalysisRating": "2つ目のMaiaのレーティング",
   "gameAnalysisQuality": "対局解析の品質",
-  "resetEngineDefaults": "エンジン設定を初期化",
+  "resetSettingsDefaults": "設定を初期値に戻す",
   "boardSounds": "電子盤の通知音",
   "beepForCheckCheckmateAndCompletedIllegalMoves": "チェック、チェックメイト、反則手を指したときに音で知らせます。",
   "copyDiagnostics": "診断情報をコピー",
@@ -344,7 +344,7 @@
   "namedBoardConnected": "{boardName}に接続しました",
   "namedBoardDisconnected": "{boardName}未接続",
   "saveMaiaSamplingData": "Maiaの手の選択データを保存",
-  "samplingDataHelp": "Maiaがどのように手を選ぶかを調べるため、各候補手の確率、設定、選んだ手をこの端末に保存します。初期設定ではオフです。オフにしても保存済みのデータは残ります。\n\n書き出すファイルには局面、指し手の履歴、モデルへの入力と判断結果が含まれます。\n\n記録した直近10局を新しい順に表示します。保存容量の上限に達した場合は、古い対局がそれより早く削除されることがあります。「最近の対局」は削除されません。対局が非常に長い場合や処理が中断された場合は、データが一部欠けることがあります。対局の途中でオンにした場合は、それ以降の判断のみ保存します。データを残したい場合は定期的に書き出してください。",
+  "samplingDataHelp": "Maiaがどのように手を選ぶかを調べるため、各候補手の確率、設定、選んだ手をこの端末に保存します。初期設定ではオフです。オフにしても保存済みのデータは残ります。\n\n書き出すファイルには局面、指し手の履歴、モデルへの入力と判断結果が含まれます。\n\n記録した直近10局を保存し、新しい順に表示します。保存容量の上限に達した場合は、古い対局がそれより早く削除されることがあります。「最近の対局」は削除されません。対局が非常に長い場合や処理が中断された場合は、データが一部欠けることがあります。対局の途中でオンにした場合は、それ以降の判断のみ保存します。データを残したい場合は定期的に書き出してください。",
   "clearSamplingData": "手の選択データを削除",
   "samplingDataStatus": "{count}件の判断を保存済み",
   "samplingDataError": "手の選択データにアクセスできませんでした。対局への影響はありません。",
@@ -367,7 +367,7 @@
   "samplingChance": "{move}が選ばれる確率は約{odds}分の1でした。",
   "samplingCertain": "{move}が必ず選ばれる設定でした（100%）。",
   "samplingAlmostCertain": "{move}が選ばれる確率は、ほぼ100%でした。",
-  "samplingReportRetention": "記録した直近10局を新しい順に表示します。保存容量の上限に達した場合は、古い対局がそれより早く削除されることがあります。",
+  "samplingReportRetention": "記録した直近10局を保存し、新しい順に表示します。保存容量の上限に達した場合は、古い対局がそれより早く削除されることがあります。",
   "samplingJumpToGame": "対局へ移動",
   "samplingBackToGames": "対局一覧に戻る",
   "samplingIncomplete": "未完了",
@@ -381,5 +381,6 @@
   "samplingClearConfirmation": "Maiaの手の選択データをすべて削除しますか？ 復元はできません。",
   "analysisSettings": "解析に関する設定",
   "samplingData": "選択データ",
-  "resetEngineDefaultsScope": "プリムーブ、人間らしい思考時間、過去の局面の使用、温度、Top-P、解析設定をリセットします。"
+  "resetSettingsDefaultsScope": "この画面のすべての設定を初期値に戻します。保存済みの対局と手の選択データは残ります。",
+  "settingsResetError": "一部の設定を初期値に戻せませんでした。もう一度お試しください。"
 }

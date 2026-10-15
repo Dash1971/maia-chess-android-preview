@@ -170,7 +170,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameAnalysisQuality => 'Game analysis quality';
 
   @override
-  String get resetEngineDefaults => 'Reset engine defaults';
+  String get resetSettingsDefaults => 'Reset settings to default';
 
   @override
   String get boardSounds => 'Board sounds';
@@ -1248,7 +1248,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions.\n\nThe latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.';
+      'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions.\n\nThe last 10 recorded games are saved and presented newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.';
 
   @override
   String get clearSamplingData => 'Clear sampling data';
@@ -1336,7 +1336,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingReportRetention =>
-      'The latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached.';
+      'The last 10 recorded games are saved and presented newest first. Older games may be removed sooner if the storage limit is reached.';
 
   @override
   String get samplingJumpToGame => 'Jump to game';
@@ -1379,6 +1379,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get samplingData => 'Sampling data';
 
   @override
-  String get resetEngineDefaultsScope =>
-      'Resets premoves, human timing, move history, Temperature, Top-P and analysis settings.';
+  String get resetSettingsDefaultsScope =>
+      'Resets all settings on this screen. Saved games and sampling data are kept.';
+
+  @override
+  String get settingsResetError =>
+      'Some settings could not be reset. Please try again.';
 }

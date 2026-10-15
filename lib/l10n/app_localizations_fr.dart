@@ -172,8 +172,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get gameAnalysisQuality => 'Qualité de l’analyse de la partie';
 
   @override
-  String get resetEngineDefaults =>
-      'Rétablir les paramètres par défaut du moteur';
+  String get resetSettingsDefaults => 'Rétablir les réglages par défaut';
 
   @override
   String get boardSounds => 'Sons de l’échiquier';
@@ -1267,7 +1266,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Enregistrez sur cet appareil les probabilités des coups de Maia, ses réglages et les coups choisis pour comprendre sa façon de jouer. Cette option est désactivée par défaut. La désactiver conserve les données existantes.\n\nLes fichiers exportés contiennent les positions, l’historique des coups ainsi que les entrées et décisions du modèle.\n\nLes 10 dernières parties enregistrées sont affichées de la plus récente à la plus ancienne. Les parties anciennes peuvent être supprimées plus tôt si la limite de stockage est atteinte. Cela ne supprime pas les parties de Parties récentes. Une partie très longue ou une interruption peut laisser un enregistrement incomplet. L’activation en cours de partie ne conserve que les décisions suivantes. Exportez régulièrement les données si vous souhaitez les garder.';
+      'Enregistrez sur cet appareil les probabilités des coups de Maia, ses réglages et les coups choisis pour comprendre sa façon de jouer. Cette option est désactivée par défaut. La désactiver conserve les données existantes.\n\nLes fichiers exportés contiennent les positions, l’historique des coups ainsi que les entrées et décisions du modèle.\n\nLes 10 dernières parties enregistrées sont conservées et affichées de la plus récente à la plus ancienne. Les parties anciennes peuvent être supprimées plus tôt si la limite de stockage est atteinte. Cela ne supprime pas les parties de Parties récentes. Une partie très longue ou une interruption peut laisser un enregistrement incomplet. L’activation en cours de partie ne conserve que les décisions suivantes. Exportez régulièrement les données si vous souhaitez les garder.';
 
   @override
   String get clearSamplingData => 'Effacer les données de choix';
@@ -1356,7 +1355,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingReportRetention =>
-      'Les 10 dernières parties enregistrées sont affichées de la plus récente à la plus ancienne. Les parties anciennes peuvent être supprimées plus tôt si la limite de stockage est atteinte.';
+      'Les 10 dernières parties enregistrées sont conservées et affichées de la plus récente à la plus ancienne. Les parties anciennes peuvent être supprimées plus tôt si la limite de stockage est atteinte.';
 
   @override
   String get samplingJumpToGame => 'Aller à la partie';
@@ -1399,6 +1398,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get samplingData => 'Données de choix de coups';
 
   @override
-  String get resetEngineDefaultsScope =>
-      'Réinitialise les pré-coups, les pauses avant les coups de Maia, l’historique des positions, la température, Top-P et les paramètres d’analyse.';
+  String get resetSettingsDefaultsScope =>
+      'Rétablit tous les réglages de cet écran. Les parties et les données d’échantillonnage enregistrées sont conservées.';
+
+  @override
+  String get settingsResetError =>
+      'Certains réglages n’ont pas pu être réinitialisés. Veuillez réessayer.';
 }

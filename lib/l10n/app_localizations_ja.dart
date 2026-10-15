@@ -167,7 +167,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get gameAnalysisQuality => '対局解析の品質';
 
   @override
-  String get resetEngineDefaults => 'エンジン設定を初期化';
+  String get resetSettingsDefaults => '設定を初期値に戻す';
 
   @override
   String get boardSounds => '電子盤の通知音';
@@ -1172,7 +1172,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Maiaがどのように手を選ぶかを調べるため、各候補手の確率、設定、選んだ手をこの端末に保存します。初期設定ではオフです。オフにしても保存済みのデータは残ります。\n\n書き出すファイルには局面、指し手の履歴、モデルへの入力と判断結果が含まれます。\n\n記録した直近10局を新しい順に表示します。保存容量の上限に達した場合は、古い対局がそれより早く削除されることがあります。「最近の対局」は削除されません。対局が非常に長い場合や処理が中断された場合は、データが一部欠けることがあります。対局の途中でオンにした場合は、それ以降の判断のみ保存します。データを残したい場合は定期的に書き出してください。';
+      'Maiaがどのように手を選ぶかを調べるため、各候補手の確率、設定、選んだ手をこの端末に保存します。初期設定ではオフです。オフにしても保存済みのデータは残ります。\n\n書き出すファイルには局面、指し手の履歴、モデルへの入力と判断結果が含まれます。\n\n記録した直近10局を保存し、新しい順に表示します。保存容量の上限に達した場合は、古い対局がそれより早く削除されることがあります。「最近の対局」は削除されません。対局が非常に長い場合や処理が中断された場合は、データが一部欠けることがあります。対局の途中でオンにした場合は、それ以降の判断のみ保存します。データを残したい場合は定期的に書き出してください。';
 
   @override
   String get clearSamplingData => '手の選択データを削除';
@@ -1257,7 +1257,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingReportRetention =>
-      '記録した直近10局を新しい順に表示します。保存容量の上限に達した場合は、古い対局がそれより早く削除されることがあります。';
+      '記録した直近10局を保存し、新しい順に表示します。保存容量の上限に達した場合は、古い対局がそれより早く削除されることがあります。';
 
   @override
   String get samplingJumpToGame => '対局へ移動';
@@ -1299,6 +1299,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get samplingData => '選択データ';
 
   @override
-  String get resetEngineDefaultsScope =>
-      'プリムーブ、人間らしい思考時間、過去の局面の使用、温度、Top-P、解析設定をリセットします。';
+  String get resetSettingsDefaultsScope =>
+      'この画面のすべての設定を初期値に戻します。保存済みの対局と手の選択データは残ります。';
+
+  @override
+  String get settingsResetError => '一部の設定を初期値に戻せませんでした。もう一度お試しください。';
 }

@@ -171,7 +171,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gameAnalysisQuality => 'Calidad del análisis de partida';
 
   @override
-  String get resetEngineDefaults => 'Restablecer ajustes del motor';
+  String get resetSettingsDefaults => 'Restablecer los ajustes predeterminados';
 
   @override
   String get boardSounds => 'Avisos del tablero electrónico';
@@ -1268,7 +1268,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Guarda en este dispositivo las probabilidades de las jugadas de Maia, sus ajustes y las jugadas elegidas para explorar cómo juega. Está desactivado por defecto. Al desactivarlo, se conservan los datos guardados.\n\nLos archivos exportados contienen posiciones, historial de jugadas y las entradas y decisiones del modelo.\n\nSe muestran las últimas 10 partidas registradas, de la más reciente a la más antigua. Las partidas antiguas pueden eliminarse antes si se alcanza el límite de almacenamiento. Esto no elimina las partidas de Partidas recientes. Una partida muy larga o una interrupción pueden dejar datos incompletos. Si lo activas durante una partida, solo se guardan las decisiones posteriores. Exporta los datos periódicamente si quieres conservarlos.';
+      'Guarda en este dispositivo las probabilidades de las jugadas de Maia, sus ajustes y las jugadas elegidas para explorar cómo juega. Está desactivado por defecto. Al desactivarlo, se conservan los datos guardados.\n\nLos archivos exportados contienen posiciones, historial de jugadas y las entradas y decisiones del modelo.\n\nSe guardan las últimas 10 partidas registradas y se muestran de la más reciente a la más antigua. Las partidas antiguas pueden eliminarse antes si se alcanza el límite de almacenamiento. Esto no elimina las partidas de Partidas recientes. Una partida muy larga o una interrupción pueden dejar datos incompletos. Si lo activas durante una partida, solo se guardan las decisiones posteriores. Exporta los datos periódicamente si quieres conservarlos.';
 
   @override
   String get clearSamplingData => 'Borrar datos de selección';
@@ -1356,7 +1356,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingReportRetention =>
-      'Se muestran las últimas 10 partidas registradas, de la más reciente a la más antigua. Las partidas antiguas pueden eliminarse antes si se alcanza el límite de almacenamiento.';
+      'Se guardan las últimas 10 partidas registradas y se muestran de la más reciente a la más antigua. Las partidas antiguas pueden eliminarse antes si se alcanza el límite de almacenamiento.';
 
   @override
   String get samplingJumpToGame => 'Ir a la partida';
@@ -1399,6 +1399,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get samplingData => 'Datos de selección de jugadas';
 
   @override
-  String get resetEngineDefaultsScope =>
-      'Restablece los movimientos anticipados, las pausas naturales, el historial de jugadas, la temperatura, Top-P y las preferencias de análisis.';
+  String get resetSettingsDefaultsScope =>
+      'Restablece todos los ajustes de esta pantalla. Se conservan las partidas guardadas y los datos de muestreo.';
+
+  @override
+  String get settingsResetError =>
+      'No se han podido restablecer algunos ajustes. Inténtalo de nuevo.';
 }

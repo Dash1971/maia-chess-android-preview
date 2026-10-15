@@ -170,8 +170,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get gameAnalysisQuality => 'Qualität der Partieanalyse';
 
   @override
-  String get resetEngineDefaults =>
-      'Engine-Standardeinstellungen wiederherstellen';
+  String get resetSettingsDefaults => 'Einstellungen zurücksetzen';
 
   @override
   String get boardSounds => 'Bretttöne';
@@ -1270,7 +1269,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen.\n\nDie letzten 10 aufgezeichneten Partien werden mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist. Dadurch werden keine Partien aus Letzte Partien gelöscht. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.';
+      'Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen.\n\nDie letzten 10 aufgezeichneten Partien werden gespeichert und mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist. Dadurch werden keine Partien aus Letzte Partien gelöscht. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.';
 
   @override
   String get clearSamplingData => 'Zugauswahldaten löschen';
@@ -1359,7 +1358,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingReportRetention =>
-      'Die letzten 10 aufgezeichneten Partien werden mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist.';
+      'Die letzten 10 aufgezeichneten Partien werden gespeichert und mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist.';
 
   @override
   String get samplingJumpToGame => 'Zur Partie springen';
@@ -1402,6 +1401,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get samplingData => 'Zugauswahldaten';
 
   @override
-  String get resetEngineDefaultsScope =>
-      'Setzt Vorauszüge, natürliche Zugpausen, Stellungsverlauf, Temperatur, Top-P und Analyse-Einstellungen zurück.';
+  String get resetSettingsDefaultsScope =>
+      'Setzt alle Einstellungen auf dieser Seite zurück. Gespeicherte Partien und Sampling-Daten bleiben erhalten.';
+
+  @override
+  String get settingsResetError =>
+      'Einige Einstellungen konnten nicht zurückgesetzt werden. Bitte versuche es erneut.';
 }

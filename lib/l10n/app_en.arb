@@ -204,9 +204,9 @@
   "@gameAnalysisQuality": {
     "description": "Settings: Game analysis quality"
   },
-  "resetEngineDefaults": "Reset engine defaults",
-  "@resetEngineDefaults": {
-    "description": "Settings: Reset engine defaults"
+  "resetSettingsDefaults": "Reset settings to default",
+  "@resetSettingsDefaults": {
+    "description": "Settings: Reset settings on this screen to their defaults"
   },
   "boardSounds": "Board sounds",
   "@boardSounds": {
@@ -1630,7 +1630,7 @@
     }
   },
   "saveMaiaSamplingData": "Save Maia sampling data",
-  "samplingDataHelp": "Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions.\n\nThe latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.",
+  "samplingDataHelp": "Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions.\n\nThe last 10 recorded games are saved and presented newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.",
   "clearSamplingData": "Clear sampling data",
   "samplingDataStatus": "{count} decisions saved",
   "samplingDataError": "Could not access sampling data. Playing is unaffected.",
@@ -1762,7 +1762,7 @@
       }
     }
   },
-  "samplingReportRetention": "The latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached.",
+  "samplingReportRetention": "The last 10 recorded games are saved and presented newest first. Older games may be removed sooner if the storage limit is reached.",
   "samplingJumpToGame": "Jump to game",
   "samplingBackToGames": "Back to game list",
   "samplingIncomplete": "Incomplete",
@@ -1792,14 +1792,16 @@
   },
   "analysisSettings": "Analysis settings",
   "samplingData": "Sampling data",
-  "resetEngineDefaultsScope": "Resets premoves, human timing, move history, Temperature, Top-P and analysis settings.",
+  "resetSettingsDefaultsScope": "Resets all settings on this screen. Saved games and sampling data are kept.",
   "@analysisSettings": {
     "description": "Settings section for analysis ratings and full-game analysis quality. Uses Lichess preferencesAnalysisSettings."
   },
   "@samplingData": {
     "description": "Settings: stored Maia sampling captures, with saved count and export/delete actions."
   },
-  "@resetEngineDefaultsScope": {
-    "description": "Exact scope of Reset engine defaults; does not include sounds, language, sampling capture or board preferences."
-  }
+  "@resetSettingsDefaultsScope": {
+    "description": "Reset all preferences shown on Settings, including language, sounds and recording; preserve stored games and captures."
+  },
+  "settingsResetError": "Some settings could not be reset. Please try again.",
+  "@settingsResetError": {"description": "Settings reset persistence failure; retry is safe and saved games are unaffected."}
 }

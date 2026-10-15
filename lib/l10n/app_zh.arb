@@ -51,7 +51,7 @@
   "compareAnotherMaiaRatingInAnalysisAndReview": "在分析和复盘中比较另一等级分的 Maia",
   "secondMaiaAnalysisRating": "第二个 Maia 的分析等级分",
   "gameAnalysisQuality": "对局分析质量",
-  "resetEngineDefaults": "恢复引擎默认设置",
+  "resetSettingsDefaults": "恢复默认设置",
   "boardSounds": "电子棋盘提示音",
   "beepForCheckCheckmateAndCompletedIllegalMoves": "将军、将杀或走完不合规则的一步棋时发出提示音。",
   "copyDiagnostics": "复制诊断信息",
@@ -344,7 +344,7 @@
   "namedBoardConnected": "已连接{boardName}",
   "namedBoardDisconnected": "{boardName}已断开连接",
   "saveMaiaSamplingData": "保存 Maia 选招数据",
-  "samplingDataHelp": "将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。\n\n按从新到旧的顺序显示最近记录的10局棋。达到存储上限时，较早的对局可能会提前删除。这不会删除“最近的对局”中的棋局。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。",
+  "samplingDataHelp": "将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。\n\n保存最近记录的10局棋，并按从新到旧的顺序显示。达到存储上限时，较早的对局可能会提前删除。这不会删除“最近的对局”中的棋局。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。",
   "clearSamplingData": "清除选招数据",
   "samplingDataStatus": "已保存 {count} 条决策",
   "samplingDataError": "无法访问选招数据。不影响对局。",
@@ -367,7 +367,7 @@
   "samplingChance": "{move} 被选中的概率约为 {odds} 分之一。",
   "samplingCertain": "{move} 必定会被选中（100%）。",
   "samplingAlmostCertain": "{move} 几乎必定会被选中。",
-  "samplingReportRetention": "按从新到旧的顺序显示最近记录的10局棋。达到存储上限时，较早的对局可能会提前删除。",
+  "samplingReportRetention": "保存最近记录的10局棋，并按从新到旧的顺序显示。达到存储上限时，较早的对局可能会提前删除。",
   "samplingJumpToGame": "跳转到对局",
   "samplingBackToGames": "返回对局列表",
   "samplingIncomplete": "未完成",
@@ -381,5 +381,6 @@
   "samplingClearConfirmation": "要删除所有 Maia 选招数据吗？删除后无法恢复。",
   "analysisSettings": "分析设置",
   "samplingData": "选招数据",
-  "resetEngineDefaultsScope": "重置预走棋、走棋前随机停顿、历史局面的使用、温度、Top-P 和分析设置。"
+  "resetSettingsDefaultsScope": "将此页面上的所有设置恢复为默认值。已保存的对局和采样数据会保留。",
+  "settingsResetError": "部分设置未能重置，请重试。"
 }

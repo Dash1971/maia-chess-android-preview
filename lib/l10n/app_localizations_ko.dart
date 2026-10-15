@@ -168,7 +168,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get gameAnalysisQuality => '대국 분석 품질';
 
   @override
-  String get resetEngineDefaults => '엔진 기본값 복원';
+  String get resetSettingsDefaults => '설정을 기본값으로 초기화';
 
   @override
   String get boardSounds => '전자 보드 알림음';
@@ -1173,7 +1173,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Maia가 어떻게 수를 고르는지 살펴볼 수 있도록 각 수의 확률, 설정, 선택한 수를 이 기기에 저장합니다. 기본적으로 꺼져 있으며, 꺼도 기존 데이터는 유지됩니다.\n\n내보낸 파일에는 보드 위치, 수순, 모델 입력과 판단 결과가 포함됩니다.\n\n최근 기록한 10개 대국을 최신순으로 표시합니다. 저장 용량 한도에 도달하면 이전 대국이 더 일찍 삭제될 수 있습니다. 최근 대국 목록의 대국은 삭제되지 않습니다. 대국이 매우 길거나 처리가 중단되면 일부 데이터가 누락될 수 있습니다. 대국 도중 켜면 이후의 판단만 저장합니다. 데이터를 보관하려면 정기적으로 내보내세요.';
+      'Maia가 어떻게 수를 고르는지 살펴볼 수 있도록 각 수의 확률, 설정, 선택한 수를 이 기기에 저장합니다. 기본적으로 꺼져 있으며, 꺼도 기존 데이터는 유지됩니다.\n\n내보낸 파일에는 보드 위치, 수순, 모델 입력과 판단 결과가 포함됩니다.\n\n최근 기록한 10개 대국을 저장하고 최신순으로 표시합니다. 저장 용량 한도에 도달하면 이전 대국이 더 일찍 삭제될 수 있습니다. 최근 대국 목록의 대국은 삭제되지 않습니다. 대국이 매우 길거나 처리가 중단되면 일부 데이터가 누락될 수 있습니다. 대국 도중 켜면 이후의 판단만 저장합니다. 데이터를 보관하려면 정기적으로 내보내세요.';
 
   @override
   String get clearSamplingData => '수 선택 데이터 삭제';
@@ -1258,7 +1258,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingReportRetention =>
-      '최근 기록한 10개 대국을 최신순으로 표시합니다. 저장 용량 한도에 도달하면 이전 대국이 더 일찍 삭제될 수 있습니다.';
+      '최근 기록한 10개 대국을 저장하고 최신순으로 표시합니다. 저장 용량 한도에 도달하면 이전 대국이 더 일찍 삭제될 수 있습니다.';
 
   @override
   String get samplingJumpToGame => '대국으로 이동';
@@ -1301,6 +1301,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get samplingData => '수 선택 데이터';
 
   @override
-  String get resetEngineDefaultsScope =>
-      '미리두기, 자연스러운 착수 간격, 이전 포지션 사용, 온도, Top-P 및 분석 설정을 초기화합니다.';
+  String get resetSettingsDefaultsScope =>
+      '이 화면의 모든 설정을 기본값으로 되돌립니다. 저장된 대국과 샘플링 데이터는 유지됩니다.';
+
+  @override
+  String get settingsResetError => '일부 설정을 초기화하지 못했습니다. 다시 시도해 주세요.';
 }

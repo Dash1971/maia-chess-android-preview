@@ -233,5 +233,9 @@ format. Both report links identify English as the document language in all
 non-English catalogs (Japanese: 英文). These are Maia-specific research labels,
 not direct Lichess equivalents. Sampling help omits the automatic-upload sentence
 in every language; file-content and retention explanations remain unchanged.
-The reset action and its existing scope note sit at the foot of Engine settings;
-its behavior still includes premoves, timing and analysis preferences.
+Reset settings to default sits above Diagnostics and restores every preference
+shown on Settings, including language (system default), sounds/haptics, board
+sounds and sampling recording (off). Its scope note and failure message are
+app-specific, translated in all ten languages. Stored games, sampling captures
+and home game-setup selections are preserved. Sampling retention wording now
+explicitly says the last ten recorded games are saved and shown newest first.

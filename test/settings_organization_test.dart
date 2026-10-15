@@ -10,37 +10,58 @@ import 'package:maia_chess/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _SettingsCapture extends SamplingCapture {
+  bool blockReset = false;
+  bool failReset = false;
+  @override
+  bool get busy => blockReset || super.busy;
+  @override
+  Future<void> setEnabled(bool value) async {
+    if (failReset) throw StateError('Test preference failure');
+    await super.setEnabled(value);
+  }
+
   @override
   Future<void> initialize() async {}
   @override
   Future<void> loadStoredData() async {}
 }
 
-Widget settingsApp({Locale locale = const Locale('en'), double scale = 1}) =>
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xff5d735f),
-          brightness: Brightness.dark,
+Widget settingsApp({
+  Locale locale = const Locale('en'),
+  double scale = 1,
+  AppLanguageController? language,
+}) => MaterialApp(
+  debugShowCheckedModeBanner: false,
+  theme: ThemeData(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: const Color(0xff5d735f),
+      brightness: Brightness.dark,
+    ),
+    scaffoldBackgroundColor: const Color(0xff171a18),
+    useMaterial3: true,
+    fontFamilyFallback:
+        Platform.environment['MAIA_SETTINGS_JAPANESE_FONT'] != null
+        ? const ['ScreenshotJapanese']
+        : null,
+  ),
+  locale: locale,
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  builder: (context, child) => MediaQuery(
+    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(scale)),
+    child: child!,
+  ),
+  home: language == null
+      ? const GamePage()
+      : ListenableBuilder(
+          listenable: language,
+          builder: (context, _) => AppLanguageSettings(
+            selectedCode: language.selectedCode,
+            onChanged: language.select,
+            child: const GamePage(),
+          ),
         ),
-        scaffoldBackgroundColor: const Color(0xff171a18),
-        useMaterial3: true,
-        fontFamilyFallback:
-            Platform.environment['MAIA_SETTINGS_JAPANESE_FONT'] != null
-            ? const ['ScreenshotJapanese']
-            : null,
-      ),
-      locale: locale,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(context)
-            .copyWith(textScaler: TextScaler.linear(scale)),
-        child: child!,
-      ),
-      home: const GamePage(),
-    );
+);
 
 Finder key(String value) => find.byKey(ValueKey(value));
 Future<void> openSettings(WidgetTester tester) async {
@@ -65,7 +86,7 @@ void main() {
   });
 
   testWidgets(
-    'grouping preserves preferences and reset retains its exact scope',
+    'reset restores every Settings preference and preserves stored game data',
     (tester) async {
       final before = <String, Object>{
         'premovesEnabled': false,
@@ -83,9 +104,16 @@ void main() {
         gameHapticsPreferenceKey: false,
         'chessnutBoardSounds': false,
         samplingCapturePreference: true,
+        appLanguagePreferenceKey: 'ja',
+        'savedGame': 'saved-session-sentinel',
+        'recentGames': 'saved-games-sentinel',
+        maiaPlayEloPreferenceKey: 1800,
       };
       SharedPreferences.setMockInitialValues(before);
-      await tester.pumpWidget(settingsApp());
+      final language = AppLanguageController();
+      addTearDown(language.dispose);
+      await language.initialize();
+      await tester.pumpWidget(settingsApp(language: language));
       await openSettings(tester);
       final prefs = await SharedPreferences.getInstance();
       for (final entry in before.entries) {
@@ -137,12 +165,12 @@ void main() {
       expect(
         find.descendant(
           of: key('engine-settings-section'),
-          matching: key('reset-engine-defaults'),
+          matching: key('reset-settings-defaults'),
         ),
-        findsOneWidget,
+        findsNothing,
       );
-      await tester.ensureVisible(key('reset-engine-defaults'));
-      await tester.tap(key('reset-engine-defaults'));
+      await tester.ensureVisible(key('reset-settings-defaults'));
+      await tester.tap(key('reset-settings-defaults'));
       await tester.pumpAndSettle();
       final defaults = <String, Object>{
         'premovesEnabled': true,
@@ -156,21 +184,82 @@ void main() {
         secondMaiaEnabledPreferenceKey: false,
         secondMaiaEloPreferenceKey: 2400,
         gameAnalysisQualityPreferenceKey: 'fast',
+        gameSoundsPreferenceKey: false,
+        gameHapticsPreferenceKey: true,
+        'chessnutBoardSounds': true,
+        samplingCapturePreference: false,
       };
       for (final entry in defaults.entries) {
         expect(prefs.get(entry.key), entry.value);
       }
-      for (final id in [
-        gameSoundsPreferenceKey,
-        gameHapticsPreferenceKey,
-        'chessnutBoardSounds',
-        samplingCapturePreference,
-      ]) {
+      for (final id in ['savedGame', 'recentGames', maiaPlayEloPreferenceKey]) {
         expect(prefs.get(id), before[id]);
       }
       expect(capture.records, 24);
-      expect(capture.enabled, isTrue);
+      expect(capture.enabled, isFalse);
+      expect(language.selectedCode, isNull);
+      expect(prefs.containsKey(appLanguagePreferenceKey), isFalse);
+      expect(
+        tester.getTopLeft(key('reset-settings-defaults')).dy,
+        lessThan(tester.getTopLeft(key('copy-diagnostics')).dy),
+      );
       expect(key('second-maia-rating-setting'), findsNothing);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+      await tester.pumpWidget(settingsApp(language: language));
+      await openSettings(tester);
+      expect(
+        tester.widget<SwitchListTile>(key('game-sounds-setting')).value,
+        isFalse,
+      );
+      expect(
+        tester.widget<SwitchListTile>(key('game-haptics-setting')).value,
+        isTrue,
+      );
+      expect(
+        tester.widget<SwitchListTile>(key('chessnut-sounds-toggle')).value,
+        isTrue,
+      );
+      expect(key('game-analysis-quality-fast'), findsOneWidget);
+      for (final entry in defaults.entries) {
+        expect(prefs.get(entry.key), entry.value);
+      }
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+    },
+  );
+
+  testWidgets(
+    'reset respects capture operations and recovers from a failed write',
+    (tester) async {
+      await tester.pumpWidget(settingsApp());
+      await openSettings(tester);
+      capture.blockReset = true;
+      capture.notifyListeners();
+      await tester.pump();
+      await tester.ensureVisible(key('reset-settings-defaults'));
+      expect(
+        tester.widget<TextButton>(key('reset-settings-defaults')).onPressed,
+        isNull,
+      );
+      capture.blockReset = false;
+      capture.failReset = true;
+      capture.notifyListeners();
+      await tester.pumpAndSettle();
+      await tester.tap(key('reset-settings-defaults'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Some settings could not be reset. Please try again.'),
+        findsOneWidget,
+      );
+      expect(capture.records, 24);
+      expect(capture.enabled, isTrue);
+      capture.failReset = false;
+      await tester.tap(key('reset-settings-defaults'));
+      await tester.pumpAndSettle();
+      expect(capture.enabled, isFalse);
+      expect(capture.records, 24);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
       await tester.pumpAndSettle();
@@ -202,7 +291,7 @@ void main() {
             'second-maia-engine-setting',
             'second-maia-rating-setting',
             'game-analysis-quality-fast',
-            'reset-engine-defaults',
+            'reset-settings-defaults',
           ]) {
             final switches = find.descendant(
               of: key(id),
@@ -357,6 +446,8 @@ void main() {
           );
           await shot(section);
         }
+        await tester.ensureVisible(key('copy-diagnostics'));
+        await shot('reset-settings');
         await tester.ensureVisible(key('sampling-help'));
         await tester.tap(key('sampling-help'));
         await shot('engine-help');

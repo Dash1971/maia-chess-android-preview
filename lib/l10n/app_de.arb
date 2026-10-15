@@ -51,7 +51,7 @@
   "compareAnotherMaiaRatingInAnalysisAndReview": "Ein weiteres Maia-Rating in Analyse und Partierückblick vergleichen",
   "secondMaiaAnalysisRating": "Zweites Maia-Rating (Analyse)",
   "gameAnalysisQuality": "Qualität der Partieanalyse",
-  "resetEngineDefaults": "Engine-Standardeinstellungen wiederherstellen",
+  "resetSettingsDefaults": "Einstellungen zurücksetzen",
   "boardSounds": "Bretttöne",
   "beepForCheckCheckmateAndCompletedIllegalMoves": "Signalton bei Schach, Schachmatt und nach Ausführung eines regelwidrigen Zugs.",
   "copyDiagnostics": "Diagnosedaten kopieren",
@@ -344,7 +344,7 @@
   "namedBoardConnected": "{boardName} verbunden",
   "namedBoardDisconnected": "{boardName} getrennt",
   "saveMaiaSamplingData": "Maias Zugauswahldaten speichern",
-  "samplingDataHelp": "Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen.\n\nDie letzten 10 aufgezeichneten Partien werden mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist. Dadurch werden keine Partien aus Letzte Partien gelöscht. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.",
+  "samplingDataHelp": "Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen.\n\nDie letzten 10 aufgezeichneten Partien werden gespeichert und mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist. Dadurch werden keine Partien aus Letzte Partien gelöscht. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.",
   "clearSamplingData": "Zugauswahldaten löschen",
   "samplingDataStatus": "Gespeicherte Entscheidungen: {count}",
   "samplingDataError": "Kein Zugriff auf die Zugauswahldaten. Das Spielen ist nicht betroffen.",
@@ -367,7 +367,7 @@
   "samplingChance": "{move} hatte eine Auswahlwahrscheinlichkeit von ungefähr 1 zu {odds}.",
   "samplingCertain": "{move} wurde mit Sicherheit ausgewählt (100 %).",
   "samplingAlmostCertain": "{move} wurde mit nahezu vollständiger Sicherheit ausgewählt.",
-  "samplingReportRetention": "Die letzten 10 aufgezeichneten Partien werden mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist.",
+  "samplingReportRetention": "Die letzten 10 aufgezeichneten Partien werden gespeichert und mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist.",
   "samplingJumpToGame": "Zur Partie springen",
   "samplingBackToGames": "Zurück zur Partienliste",
   "samplingIncomplete": "Nicht beendet",
@@ -381,5 +381,6 @@
   "samplingClearConfirmation": "Alle Zugauswahldaten von Maia löschen? Sie lassen sich nicht wiederherstellen.",
   "analysisSettings": "Analyse-Einstellungen",
   "samplingData": "Zugauswahldaten",
-  "resetEngineDefaultsScope": "Setzt Vorauszüge, natürliche Zugpausen, Stellungsverlauf, Temperatur, Top-P und Analyse-Einstellungen zurück."
+  "resetSettingsDefaultsScope": "Setzt alle Einstellungen auf dieser Seite zurück. Gespeicherte Partien und Sampling-Daten bleiben erhalten.",
+  "settingsResetError": "Einige Einstellungen konnten nicht zurückgesetzt werden. Bitte versuche es erneut."
 }

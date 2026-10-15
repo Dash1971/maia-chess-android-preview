@@ -165,7 +165,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get gameAnalysisQuality => '对局分析质量';
 
   @override
-  String get resetEngineDefaults => '恢复引擎默认设置';
+  String get resetSettingsDefaults => '恢复默认设置';
 
   @override
   String get boardSounds => '电子棋盘提示音';
@@ -1153,7 +1153,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      '将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。\n\n按从新到旧的顺序显示最近记录的10局棋。达到存储上限时，较早的对局可能会提前删除。这不会删除“最近的对局”中的棋局。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。';
+      '将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。\n\n保存最近记录的10局棋，并按从新到旧的顺序显示。达到存储上限时，较早的对局可能会提前删除。这不会删除“最近的对局”中的棋局。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。';
 
   @override
   String get clearSamplingData => '清除选招数据';
@@ -1237,7 +1237,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingReportRetention =>
-      '按从新到旧的顺序显示最近记录的10局棋。达到存储上限时，较早的对局可能会提前删除。';
+      '保存最近记录的10局棋，并按从新到旧的顺序显示。达到存储上限时，较早的对局可能会提前删除。';
 
   @override
   String get samplingJumpToGame => '跳转到对局';
@@ -1279,6 +1279,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingData => '选招数据';
 
   @override
-  String get resetEngineDefaultsScope =>
-      '重置预走棋、走棋前随机停顿、历史局面的使用、温度、Top-P 和分析设置。';
+  String get resetSettingsDefaultsScope => '将此页面上的所有设置恢复为默认值。已保存的对局和采样数据会保留。';
+
+  @override
+  String get settingsResetError => '部分设置未能重置，请重试。';
 }
