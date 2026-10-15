@@ -118,7 +118,7 @@ void main() {
         expect(find.byType(AlertDialog), findsNothing);
         expect(capture.clearCalls, 0);
         expect(storedBytes(), before);
-        expect(tester.widget<ListTile>(clear).onTap, isNotNull);
+        expect(tester.widget<IconButton>(clear).onPressed, isNotNull);
       }
       await tester.pumpWidget(const SizedBox());
     },
@@ -138,7 +138,7 @@ void main() {
       capture.clearGate = Completer<void>();
       await tester.pumpWidget(captureApp());
       await tester.pumpAndSettle();
-      final open = tester.widget<ListTile>(clear).onTap!;
+      final open = tester.widget<IconButton>(clear).onPressed!;
       open();
       open();
       await tester.pumpAndSettle();
@@ -150,12 +150,14 @@ void main() {
       await tester.pump();
       expect(capture.clearCalls, 1);
       expect(capture.records, 1);
-      expect(tester.widget<ListTile>(clear).onTap, isNull);
+      expect(tester.widget<IconButton>(clear).onPressed, isNull);
       expect(
         tester
-            .widget<ListTile>(find.byKey(const ValueKey('sampling-actions')))
-            .onTap,
-        isNull,
+            .widget<PopupMenuButton<String>>(
+              find.byKey(const ValueKey('sampling-actions')),
+            )
+            .enabled,
+        isFalse,
       );
       open();
       expect(capture.clearCalls, 1);
@@ -168,7 +170,7 @@ void main() {
       expect(saved.readAsBytesSync(), savedBytes);
       expect(find.byType(SamplingCaptureSettings), findsOneWidget);
       expect(find.byType(AlertDialog), findsNothing);
-      expect(find.text('Export sampling data'), findsNothing);
+      expect(find.text('Sampling data'), findsNothing);
       await tester.pumpWidget(const SizedBox());
     },
   );
@@ -195,7 +197,7 @@ void main() {
       ),
       findsOneWidget,
     );
-    expect(tester.widget<ListTile>(clear).onTap, isNotNull);
+    expect(tester.widget<IconButton>(clear).onPressed, isNotNull);
     capture.failClear = false;
     await tester.tap(clear);
     await tester.pumpAndSettle();
@@ -213,7 +215,7 @@ void main() {
   ) async {
     await tester.pumpWidget(captureApp());
     await tester.pumpAndSettle();
-    final open = tester.widget<ListTile>(clear).onTap!;
+    final open = tester.widget<IconButton>(clear).onPressed!;
     await tester.tap(find.byKey(const ValueKey('sampling-actions')));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Save…'));
@@ -225,7 +227,7 @@ void main() {
     expect(capture.clearCalls, 0);
     await tester.tap(find.text('Cancel'));
     await tester.pumpAndSettle();
-    expect(tester.widget<ListTile>(clear).onTap, isNotNull);
+    expect(tester.widget<IconButton>(clear).onPressed, isNotNull);
     await tester.pumpWidget(const SizedBox());
   });
 
@@ -294,9 +296,9 @@ void main() {
         );
         await tester.pumpAndSettle();
         final toggle = find.byKey(const ValueKey('sampling-data-toggle'));
-        expect(tester.widget<SwitchListTile>(toggle).value, false);
-        expect(find.text(strings.exportSamplingData), findsOneWidget);
-        expect(find.text(strings.clearSamplingData), findsOneWidget);
+        expect(tester.widget<SettingsInfoSwitch>(toggle).value, false);
+        expect(find.text(strings.samplingData), findsOneWidget);
+        expect(find.byTooltip(strings.clearSamplingData), findsOneWidget);
         await tester.ensureVisible(clear);
         await tester.tap(clear);
         await tester.pumpAndSettle();

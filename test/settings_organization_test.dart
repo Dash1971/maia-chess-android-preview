@@ -1,0 +1,348 @@
+import 'dart:io';
+import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:maia_chess/l10n/app_localizations.dart';
+import 'package:maia_chess/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class _SettingsCapture extends SamplingCapture {
+  @override
+  Future<void> initialize() async {}
+  @override
+  Future<void> loadStoredData() async {}
+}
+
+Widget settingsApp({Locale locale = const Locale('en'), double scale = 1}) =>
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xff5d735f),
+          brightness: Brightness.dark,
+        ),
+        scaffoldBackgroundColor: const Color(0xff171a18),
+        useMaterial3: true,
+      ),
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context)
+            .copyWith(textScaler: TextScaler.linear(scale)),
+        child: child!,
+      ),
+      home: const GamePage(),
+    );
+
+Finder key(String value) => find.byKey(ValueKey(value));
+Future<void> openSettings(WidgetTester tester) async {
+  await tester.pumpAndSettle();
+  await tester.tap(key('home-settings-button'));
+  await tester.pumpAndSettle();
+}
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  late _SettingsCapture capture;
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    capture = _SettingsCapture()
+      ..enabled = true
+      ..records = 24;
+    SamplingCapture.instance = capture;
+  });
+  tearDown(() {
+    capture.dispose();
+    SamplingCapture.instance = SamplingCapture();
+  });
+
+  testWidgets(
+    'grouping preserves preferences and reset retains its exact scope',
+    (tester) async {
+      final before = <String, Object>{
+        'premovesEnabled': false,
+        'premovePenalty': true,
+        'multiplePremoves': true,
+        'humanTiming': true,
+        'maiaUseMoveHistoryV1': true,
+        'temperatureV2': 0.5,
+        'topPV2': 0.9,
+        'analysisElo': 1800,
+        secondMaiaEnabledPreferenceKey: true,
+        secondMaiaEloPreferenceKey: 2200,
+        gameAnalysisQualityPreferenceKey: 'thorough',
+        gameSoundsPreferenceKey: true,
+        gameHapticsPreferenceKey: false,
+        'chessnutBoardSounds': false,
+        samplingCapturePreference: true,
+      };
+      SharedPreferences.setMockInitialValues(before);
+      await tester.pumpWidget(settingsApp());
+      await openSettings(tester);
+      final prefs = await SharedPreferences.getInstance();
+      for (final entry in before.entries) {
+        expect(prefs.get(entry.key), entry.value);
+      }
+      for (final id in [
+        'analysis-rating-setting',
+        'second-maia-engine-setting',
+        'second-maia-rating-setting',
+        'game-analysis-quality-thorough',
+      ]) {
+        expect(
+          find.descendant(
+            of: key('analysis-settings-section'),
+            matching: key(id),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(
+            of: key('engine-settings-section'),
+            matching: key(id),
+          ),
+          findsNothing,
+        );
+      }
+      expect(
+        find.textContaining('See information button for details.'),
+        findsNothing,
+      );
+      for (final id in [
+        'premove-penalty-setting',
+        'multiple-premoves-setting',
+      ]) {
+        expect(tester.widget<SwitchListTile>(key(id)).onChanged, isNull);
+      }
+      await tester.ensureVisible(key('premoves-setting'));
+      await tester.tap(key('premoves-setting'));
+      await tester.pumpAndSettle();
+      for (final id in [
+        'premove-penalty-setting',
+        'multiple-premoves-setting',
+      ]) {
+        final child = tester.widget<SwitchListTile>(key(id));
+        expect(child.onChanged, isNotNull);
+        expect(child.value, isTrue);
+        expect(tester.getSize(key(id)).height, greaterThanOrEqualTo(48));
+      }
+      await tester.ensureVisible(key('reset-engine-defaults'));
+      await tester.tap(key('reset-engine-defaults'));
+      await tester.pumpAndSettle();
+      final defaults = <String, Object>{
+        'premovesEnabled': true,
+        'premovePenalty': false,
+        'multiplePremoves': false,
+        'humanTiming': false,
+        'maiaUseMoveHistoryV1': false,
+        'temperatureV2': 1.0,
+        'topPV2': 1.0,
+        'analysisElo': 1600,
+        secondMaiaEnabledPreferenceKey: false,
+        secondMaiaEloPreferenceKey: 2400,
+        gameAnalysisQualityPreferenceKey: 'fast',
+      };
+      for (final entry in defaults.entries) {
+        expect(prefs.get(entry.key), entry.value);
+      }
+      for (final id in [
+        gameSoundsPreferenceKey,
+        gameHapticsPreferenceKey,
+        'chessnutBoardSounds',
+        samplingCapturePreference,
+      ]) {
+        expect(prefs.get(id), before[id]);
+      }
+      expect(capture.records, 24);
+      expect(capture.enabled, isTrue);
+      expect(key('second-maia-rating-setting'), findsNothing);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+    },
+  );
+
+  testWidgets(
+    'all settings actions remain accessible at 320px and 200% in every language',
+    (tester) async {
+      tester.view.physicalSize = const Size(320, 568);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final semantics = tester.ensureSemantics();
+      try {
+        for (final locale in AppLocalizations.supportedLocales) {
+          SharedPreferences.setMockInitialValues({
+            secondMaiaEnabledPreferenceKey: true,
+          });
+          final strings = await AppLocalizations.delegate.load(locale);
+          await tester.pumpWidget(settingsApp(locale: locale, scale: 2));
+          await openSettings(tester);
+          for (final id in [
+            'premove-penalty-setting',
+            'multiple-premoves-setting',
+            'maia-history-help',
+            'sampling-actions',
+            'clear-sampling-data',
+            'second-maia-engine-setting',
+            'second-maia-rating-setting',
+            'game-analysis-quality-fast',
+            'reset-engine-defaults',
+          ]) {
+            final switches = find.descendant(
+              of: key(id),
+              matching: find.byType(Switch),
+            );
+            final target = switches.evaluate().isNotEmpty ? switches : key(id);
+            await tester.ensureVisible(target);
+            await tester.pumpAndSettle();
+            expect(
+              target.hitTestable(),
+              findsOneWidget,
+              reason: '${locale.languageCode}: $id',
+            );
+            expect(
+              tester.takeException(),
+              isNull,
+              reason: '${locale.languageCode}: $id',
+            );
+          }
+          await tester.ensureVisible(key('maia-history-help'));
+          await tester.pumpAndSettle();
+          final helpNode = tester.getSemantics(key('maia-history-help'));
+          expect(
+            helpNode.getSemanticsData().tooltip,
+            strings.maiaHistorySetting,
+          );
+          final switchNode = tester.getSemantics(
+            find.descendant(
+              of: key('maia-history-setting'),
+              matching: find.byType(Switch),
+            ),
+          );
+          expect(helpNode.id, isNot(switchNode.id));
+          expect(switchNode.label, strings.maiaHistorySetting);
+          await tester.ensureVisible(key('sampling-actions'));
+          await tester.pumpAndSettle();
+          expect(
+            tester.getSize(key('clear-sampling-data')).shortestSide,
+            greaterThanOrEqualTo(48),
+          );
+          expect(
+            tester.getSize(key('sampling-actions')).shortestSide,
+            greaterThanOrEqualTo(48),
+          );
+          expect(
+            tester.getCenter(key('sampling-actions')).dy,
+            tester.getCenter(key('clear-sampling-data')).dy,
+          );
+          expect(
+            tester
+                .getSemantics(key('clear-sampling-data'))
+                .getSemanticsData()
+                .tooltip,
+            strings.clearSamplingData,
+          );
+          expect(
+            tester
+                .getSemantics(
+                  find.descendant(
+                    of: key('sampling-actions'),
+                    matching: find.byType(IconButton),
+                  ),
+                )
+                .getSemanticsData()
+                .tooltip,
+            contains(strings.shareAndExport),
+          );
+          await tester.pumpWidget(const SizedBox());
+          await tester.pumpAndSettle();
+        }
+      } finally {
+        semantics.dispose();
+      }
+    },
+  );
+
+  // Actual Settings screen, opt-in only. No emulator/APK build or CI goldens.
+  final output = Platform.environment['MAIA_SETTINGS_SCREENSHOT_DIR'];
+  if (output != null) {
+    testWidgets('render Settings proposal', (tester) async {
+      tester.view.physicalSize = const Size(412, 892);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final previousShadows = debugDisableShadows;
+      debugDisableShadows = false;
+      try {
+        final font = Platform.environment['MAIA_REPORT_FONT']!;
+        final loader = FontLoader('Roboto')
+          ..addFont(
+            Future.value(ByteData.sublistView(File(font).readAsBytesSync())),
+          );
+        await tester.runAsync(loader.load);
+        for (final family in ['MaterialIcons', 'LichessIcons']) {
+          final loader = FontLoader(family)
+            ..addFont(
+              rootBundle.load(
+                family == 'MaterialIcons'
+                    ? 'fonts/MaterialIcons-Regular.otf'
+                    : 'assets/fonts/LichessIcons.ttf',
+              ),
+            );
+          await tester.runAsync(loader.load);
+        }
+        SharedPreferences.setMockInitialValues({
+          secondMaiaEnabledPreferenceKey: true,
+        });
+        final boundaryKey = GlobalKey();
+        await tester.pumpWidget(
+          RepaintBoundary(key: boundaryKey, child: settingsApp()),
+        );
+        await openSettings(tester);
+        Future<void> shot(String name) async {
+          await tester.pumpAndSettle();
+          final boundary =
+              boundaryKey.currentContext!.findRenderObject()!
+                  as RenderRepaintBoundary;
+          await tester.runAsync(() async {
+            final image = await boundary.toImage(pixelRatio: 2);
+            final bytes = await image.toByteData(
+              format: ui.ImageByteFormat.png,
+            );
+            await Directory(output).create(recursive: true);
+            await File('$output/$name.png')
+                .writeAsBytes(bytes!.buffer.asUint8List());
+            image.dispose();
+          });
+        }
+
+        for (final section in ['game', 'engine', 'analysis']) {
+          await Scrollable.ensureVisible(
+            tester.element(key('$section-settings-section')),
+            alignment: 0,
+          );
+          await shot(section);
+        }
+        await tester.ensureVisible(key('maia-history-help'));
+        await tester.tap(key('maia-history-help'));
+        await shot('history-help');
+        await tester.tap(find.text('Close'));
+        await tester.pumpAndSettle();
+        await tester.ensureVisible(key('sampling-actions'));
+        await tester.tap(key('sampling-actions'));
+        await shot('sampling-menu');
+        await tester.binding.handlePopRoute();
+        await tester.pumpAndSettle();
+        await tester.pumpWidget(const SizedBox());
+        await tester.pumpAndSettle();
+      } finally {
+        debugDisableShadows = previousShadows;
+      }
+    });
+  }
+}

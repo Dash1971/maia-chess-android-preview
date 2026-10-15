@@ -1,4 +1,4 @@
-# Experimental Maia move-history input (Preview and Dev)
+# Maia move-history input (Preview and Dev)
 
 This opt-in setting changes the positions supplied to Maia. It does not change
 model weights, Temperature/Top-P, rating preferences, clocks or Stockfish review.
@@ -7,6 +7,10 @@ strength improvement. The [79M study](https://github.com/Dash1971/mobile-maia-re
 found better human-move prediction and increased repeated copying in a specific
 low-rated opening. That result is not a general strength claim or certification
 of the smaller Dev model.
+
+The Settings label is **Use move history**, with its own scrollable information
+popup and research link. UI status labels no longer append “experimental”; the
+recommendation to leave it off and the research caveats remain unchanged.
 
 ## Behavior contract
 

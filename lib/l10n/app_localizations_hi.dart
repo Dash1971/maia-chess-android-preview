@@ -1226,12 +1226,7 @@ class AppLocalizationsHi extends AppLocalizations {
       '1 / 1 — पूरी विविधता (डिफ़ॉल्ट)। सभी वैध चालों को अवसर मिलता है, लेकिन अधिक संभावित चालें फिर भी ज़्यादा खेली जाती हैं।';
 
   @override
-  String get maiaHistorySetting =>
-      'पिछली स्थितियों का उपयोग करें (प्रयोगात्मक)';
-
-  @override
-  String get maiaHistoryScope =>
-      'इसे बंद रखने की सलाह दी जाती है। अधिक जानकारी के लिए जानकारी बटन देखें।';
+  String get maiaHistorySetting => 'पिछली स्थितियों का उपयोग करें';
 
   @override
   String get maiaHistoryHelp =>
@@ -1241,7 +1236,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get maiaHistoryResearch => 'पिछली स्थितियों पर शोध पढ़ें';
 
   @override
-  String get maiaHistoryOn => 'पिछली स्थितियाँ: चालू (प्रयोगात्मक)';
+  String get maiaHistoryOn => 'पिछली स्थितियाँ: चालू';
 
   @override
   String get maiaHistoryOff => 'पिछली स्थितियाँ: बंद';
@@ -1265,9 +1260,6 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get samplingDataHelp =>
       'Maia कैसे खेलता है, यह समझने के लिए उसकी चालों की संभावनाएँ, सेटिंग्स और चुनी गई चालें इस डिवाइस पर सहेजें। यह विकल्प पहले से बंद रहता है। इसे बंद करने पर पहले से सहेजा डेटा बना रहता है।\n\nनिर्यात की गई फ़ाइलों में बोर्ड की स्थितियाँ, चालों का इतिहास और मॉडल के इनपुट तथा निर्णय होते हैं। कुछ भी अपने आप अपलोड नहीं होता।\n\nदर्ज की गई पिछली 10 बाज़ियाँ सबसे नई बाज़ी से शुरू करके दिखाई जाती हैं। स्टोरेज की सीमा पूरी होने पर पुरानी बाज़ियाँ इससे पहले भी हटाई जा सकती हैं। इससे हाल की बाज़ियों की सूची से बाज़ियाँ नहीं हटतीं। बहुत लंबी बाज़ी या बीच में रुकावट होने पर डेटा अधूरा रह सकता है। बाज़ी के बीच में चालू करने पर केवल उसके बाद के निर्णय सहेजे जाते हैं। डेटा रखना हो तो नियमित रूप से निर्यात करें।';
-
-  @override
-  String get exportSamplingData => 'चाल चयन का डेटा निर्यात करें';
 
   @override
   String get clearSamplingData => 'चाल चयन का डेटा मिटाएँ';
@@ -1390,4 +1382,14 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get samplingClearConfirmation =>
       'क्या Maia की चाल चयन का सारा डेटा हटाना है? इसे वापस नहीं पाया जा सकेगा।';
+
+  @override
+  String get analysisSettings => 'विश्लेषण की सेटिंग';
+
+  @override
+  String get samplingData => 'चाल चयन का डेटा';
+
+  @override
+  String get resetEngineDefaultsScope =>
+      'पहले से चुनी गयी चालें, इंसानों जैसे समय अंतराल, पिछली स्थितियों का उपयोग, टेम्परेचर, Top-P और विश्लेषण की सेटिंग रीसेट करता है।';
 }

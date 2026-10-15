@@ -1117,10 +1117,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingExampleFull => '1 / 1 — 完整变化（默认）。所有合法走法都有机会，但高概率走法仍然更常出现。';
 
   @override
-  String get maiaHistorySetting => '使用历史局面（实验性）';
-
-  @override
-  String get maiaHistoryScope => '建议关闭。详情请查看信息按钮。';
+  String get maiaHistorySetting => '使用历史局面';
 
   @override
   String get maiaHistoryHelp =>
@@ -1130,7 +1127,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get maiaHistoryResearch => '阅读历史局面研究';
 
   @override
-  String get maiaHistoryOn => '历史局面：开启（实验性）';
+  String get maiaHistoryOn => '历史局面：开启';
 
   @override
   String get maiaHistoryOff => '历史局面：关闭';
@@ -1154,9 +1151,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get samplingDataHelp =>
       '将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。不会自动上传任何内容。\n\n按从新到旧的顺序显示最近记录的10局棋。达到存储上限时，较早的对局可能会提前删除。这不会删除“最近的对局”中的棋局。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。';
-
-  @override
-  String get exportSamplingData => '导出选招数据';
 
   @override
   String get clearSamplingData => '清除选招数据';
@@ -1274,4 +1268,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingClearConfirmation => '要删除所有 Maia 选招数据吗？删除后无法恢复。';
+
+  @override
+  String get analysisSettings => '分析设置';
+
+  @override
+  String get samplingData => '选招数据';
+
+  @override
+  String get resetEngineDefaultsScope =>
+      '重置预走棋、走棋前随机停顿、历史局面的使用、温度、Top-P 和分析设置。';
 }

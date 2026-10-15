@@ -18,14 +18,20 @@ screenshots, see the
 
 [Build-channel status and testing scope](docs/BUILD_CHANNELS.md)
 
-## Preview 2.4.0-beta.9
+## Preview 2.4.0-beta.10
 
-Clearing Maia sampling data now asks for confirmation. Cancel or dismiss the
-warning to keep your data; **Delete data** removes the captures stored in the app.
-Saved games and separately exported reports are unaffected. The confirmation is
-available in all ten languages and supports large text.
+Settings is easier to scan: premove options are grouped beneath Premoves,
+analysis ratings and quality have their own section, and Sampling data has
+adjacent Save/Share and delete actions. Use move history has a dedicated info
+button and research link; its recommendation remains unchanged. Reset explains
+which settings it affects. All ten languages support the revised layout,
+including large text and independently accessible help buttons.
 
 ### Earlier Preview changes
+
+Beta.9: clearing Maia sampling data asks for confirmation. Cancel or dismiss the
+warning to keep your data; **Delete data** removes the captures stored in the app.
+Saved games and separately exported reports are unaffected.
 
 Beta.8: opt-in Maia move reports now show the latest ten recorded games, newest first,
 including unfinished games. Jump links and compact headings show who played each
@@ -62,7 +68,7 @@ Research links point to the dedicated
 [research repository](https://github.com/Dash1971/mobile-maia-research).
 Existing Stable research URLs remain available for older app versions.
 
-Preview 2.4 also adds **Use move history (experimental)**, off by default.
+Preview 2.4 also adds **Use move history**, off by default.
 It lets Maia consider up to seven earlier positions without changing the sampling
 settings. New sessions use the preference; saved sessions retain their original
 choice. See the [behavior and test contract](docs/MAIA_MOVE_HISTORY.md) and the

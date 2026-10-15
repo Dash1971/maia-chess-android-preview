@@ -1233,11 +1233,7 @@ class AppLocalizationsDe extends AppLocalizations {
       '1 / 1 — Volle Vielfalt (Standard). Alle legalen Züge bleiben möglich, wahrscheinliche Züge werden aber weiterhin häufiger gespielt.';
 
   @override
-  String get maiaHistorySetting => 'Stellungsverlauf verwenden (experimentell)';
-
-  @override
-  String get maiaHistoryScope =>
-      'Wir empfehlen, diese Option ausgeschaltet zu lassen. Einzelheiten findest du über die Info-Schaltfläche.';
+  String get maiaHistorySetting => 'Stellungsverlauf verwenden';
 
   @override
   String get maiaHistoryHelp =>
@@ -1247,7 +1243,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get maiaHistoryResearch => 'Studie zum Stellungsverlauf lesen';
 
   @override
-  String get maiaHistoryOn => 'Stellungsverlauf: an (experimentell)';
+  String get maiaHistoryOn => 'Stellungsverlauf: an';
 
   @override
   String get maiaHistoryOff => 'Stellungsverlauf: aus';
@@ -1271,9 +1267,6 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get samplingDataHelp =>
       'Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen. Es wird nichts automatisch hochgeladen.\n\nDie letzten 10 aufgezeichneten Partien werden mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist. Dadurch werden keine Partien aus Letzte Partien gelöscht. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.';
-
-  @override
-  String get exportSamplingData => 'Zugauswahldaten exportieren';
 
   @override
   String get clearSamplingData => 'Zugauswahldaten löschen';
@@ -1397,4 +1390,14 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get samplingClearConfirmation =>
       'Alle Zugauswahldaten von Maia löschen? Sie lassen sich nicht wiederherstellen.';
+
+  @override
+  String get analysisSettings => 'Analyse-Einstellungen';
+
+  @override
+  String get samplingData => 'Zugauswahldaten';
+
+  @override
+  String get resetEngineDefaultsScope =>
+      'Setzt Vorauszüge, natürliche Zugpausen, Stellungsverlauf, Temperatur, Top-P und Analyse-Einstellungen zurück.';
 }

@@ -1212,11 +1212,7 @@ class AppLocalizationsEn extends AppLocalizations {
       '1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.';
 
   @override
-  String get maiaHistorySetting => 'Use move history (experimental)';
-
-  @override
-  String get maiaHistoryScope =>
-      'Off is recommended. See information button for details.';
+  String get maiaHistorySetting => 'Use move history';
 
   @override
   String get maiaHistoryHelp =>
@@ -1226,7 +1222,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get maiaHistoryResearch => 'Read the move-history research';
 
   @override
-  String get maiaHistoryOn => 'Move history: on (experimental)';
+  String get maiaHistoryOn => 'Move history: on';
 
   @override
   String get maiaHistoryOff => 'Move history: off';
@@ -1250,9 +1246,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get samplingDataHelp =>
       'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nThe latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.';
-
-  @override
-  String get exportSamplingData => 'Export sampling data';
 
   @override
   String get clearSamplingData => 'Clear sampling data';
@@ -1375,4 +1368,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get samplingClearConfirmation =>
       'Delete all Maia sampling data? It cannot be recovered.';
+
+  @override
+  String get analysisSettings => 'Analysis settings';
+
+  @override
+  String get samplingData => 'Sampling data';
+
+  @override
+  String get resetEngineDefaultsScope =>
+      'Resets premoves, human timing, move history, Temperature, Top-P and analysis settings.';
 }

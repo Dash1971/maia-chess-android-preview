@@ -215,3 +215,13 @@ records this context adaptation. The concise warning is app-specific prose
 explaining that deleting sampling data cannot be undone. Separately saved/shared
 files remain unaffected. All ten translations receive layout and terminology checks; this is not native-speaker
 certification.
+
+## Settings organisation (#137)
+
+Analysis settings uses pinned Lichess `preferencesAnalysisSettings` in nine
+languages; Hindi has no upstream value and uses a documented native fallback.
+Sampling data and the reset-scope explanation are Maia-specific prose translated
+in all ten languages. The move-history setting and on-status drop only their
+experimental suffix; the substantive help, off recommendation and saved-session
+behaviour remain unchanged. Experimental electronic-board wording is untouched.
+The now-unused inline history subtitle and export-row title were removed.

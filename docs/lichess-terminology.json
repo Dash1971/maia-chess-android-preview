@@ -1778,6 +1778,27 @@
           "reason": "Adds the data object to Lichess’s Delete action so the destructive confirmation is explicit."
         }
       }
+    },
+    "analysisSettings": {
+      "upstream_key": "preferencesAnalysisSettings",
+      "upstream": {
+        "en": "Analysis settings",
+        "ja": "解析に関する設定",
+        "zh": "分析设置",
+        "ko": "분석 설정",
+        "es": "Preferencias de análisis",
+        "de": "Analyse-Einstellungen",
+        "fr": "Paramètres d'analyse",
+        "ru": "Настройки анализа",
+        "hi": null,
+        "pt": "Configurações de análise"
+      },
+      "adaptations": {
+        "hi": {
+          "value": "विश्लेषण की सेटिंग",
+          "reason": "No translation for this key in the pinned upstream catalog; use native Hindi wording."
+        }
+      }
     }
   }
 }

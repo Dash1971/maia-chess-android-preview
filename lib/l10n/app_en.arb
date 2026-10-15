@@ -1581,13 +1581,9 @@
   "@samplingExampleFull": {
     "description": "Maia-specific sampling help: 1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often."
   },
-  "maiaHistorySetting": "Use move history (experimental)",
+  "maiaHistorySetting": "Use move history",
   "@maiaHistorySetting": {
-    "description": "Maia-specific experimental history setting/help: Use move history (experimental)"
-  },
-  "maiaHistoryScope": "Off is recommended. See information button for details.",
-  "@maiaHistoryScope": {
-    "description": "Short recommendation beneath the experimental move-history switch; detailed scope is in the information dialog."
+    "description": "Maia-specific history setting/help: Use move history"
   },
   "maiaHistoryHelp": "Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use. New games and analysis boards use this setting; saved sessions keep their original choice.",
   "@maiaHistoryHelp": {
@@ -1595,15 +1591,15 @@
   },
   "maiaHistoryResearch": "Read the move-history research",
   "@maiaHistoryResearch": {
-    "description": "Maia-specific experimental history setting/help: Read the move-history research"
+    "description": "Maia-specific history setting/help: Read the move-history research"
   },
-  "maiaHistoryOn": "Move history: on (experimental)",
+  "maiaHistoryOn": "Move history: on",
   "@maiaHistoryOn": {
-    "description": "Maia-specific experimental history setting/help: Move history: on (experimental)"
+    "description": "Maia-specific history setting/help: Move history: on"
   },
   "maiaHistoryOff": "Move history: off",
   "@maiaHistoryOff": {
-    "description": "Maia-specific experimental history setting/help: Move history: off"
+    "description": "Maia-specific history setting/help: Move history: off"
   },
   "chessboardDeviceName": "Chessboard",
   "@chessboardDeviceName": {
@@ -1631,7 +1627,6 @@
   },
   "saveMaiaSamplingData": "Save Maia sampling data",
   "samplingDataHelp": "Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nThe latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.",
-  "exportSamplingData": "Export sampling data",
   "clearSamplingData": "Clear sampling data",
   "samplingDataStatus": "{count} decisions saved",
   "samplingDataError": "Could not access sampling data. Playing is unaffected.",
@@ -1639,9 +1634,6 @@
     "description": "App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games."
   },
   "@samplingDataHelp": {
-    "description": "App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games."
-  },
-  "@exportSamplingData": {
     "description": "App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games."
   },
   "@clearSamplingData": {
@@ -1793,5 +1785,17 @@
   },
   "@samplingClearConfirmation": {
     "description": "Sampling data: confirm irreversible deletion of app-local captures only, excluding separately saved/shared exports."
+  },
+  "analysisSettings": "Analysis settings",
+  "samplingData": "Sampling data",
+  "resetEngineDefaultsScope": "Resets premoves, human timing, move history, Temperature, Top-P and analysis settings.",
+  "@analysisSettings": {
+    "description": "Settings section for analysis ratings and full-game analysis quality. Uses Lichess preferencesAnalysisSettings."
+  },
+  "@samplingData": {
+    "description": "Settings: stored Maia sampling captures, with saved count and export/delete actions."
+  },
+  "@resetEngineDefaultsScope": {
+    "description": "Exact scope of Reset engine defaults; does not include sounds, language, sampling capture or board preferences."
   }
 }

@@ -1137,10 +1137,7 @@ class AppLocalizationsKo extends AppLocalizations {
       '1 / 1 — 전체 다양성 (기본값). 모든 합법적인 수를 고려하되, 가능성이 높은 수를 더 자주 둡니다.';
 
   @override
-  String get maiaHistorySetting => '이전 포지션 사용 (실험적)';
-
-  @override
-  String get maiaHistoryScope => '끄기를 권장합니다. 자세한 내용은 정보 버튼을 누르세요.';
+  String get maiaHistorySetting => '이전 포지션 사용';
 
   @override
   String get maiaHistoryHelp =>
@@ -1150,7 +1147,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get maiaHistoryResearch => '이전 포지션 연구 읽기';
 
   @override
-  String get maiaHistoryOn => '이전 포지션: 켜짐 (실험적)';
+  String get maiaHistoryOn => '이전 포지션: 켜짐';
 
   @override
   String get maiaHistoryOff => '이전 포지션: 꺼짐';
@@ -1174,9 +1171,6 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get samplingDataHelp =>
       'Maia가 어떻게 수를 고르는지 살펴볼 수 있도록 각 수의 확률, 설정, 선택한 수를 이 기기에 저장합니다. 기본적으로 꺼져 있으며, 꺼도 기존 데이터는 유지됩니다.\n\n내보낸 파일에는 보드 위치, 수순, 모델 입력과 판단 결과가 포함됩니다. 자동으로 업로드되는 데이터는 없습니다.\n\n최근 기록한 10개 대국을 최신순으로 표시합니다. 저장 용량 한도에 도달하면 이전 대국이 더 일찍 삭제될 수 있습니다. 최근 대국 목록의 대국은 삭제되지 않습니다. 대국이 매우 길거나 처리가 중단되면 일부 데이터가 누락될 수 있습니다. 대국 도중 켜면 이후의 판단만 저장합니다. 데이터를 보관하려면 정기적으로 내보내세요.';
-
-  @override
-  String get exportSamplingData => '수 선택 데이터 내보내기';
 
   @override
   String get clearSamplingData => '수 선택 데이터 삭제';
@@ -1296,4 +1290,14 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get samplingClearConfirmation =>
       'Maia의 수 선택 데이터를 모두 삭제할까요? 복구할 수 없습니다.';
+
+  @override
+  String get analysisSettings => '분석 설정';
+
+  @override
+  String get samplingData => '수 선택 데이터';
+
+  @override
+  String get resetEngineDefaultsScope =>
+      '미리두기, 자연스러운 착수 간격, 이전 포지션 사용, 온도, Top-P 및 분석 설정을 초기화합니다.';
 }

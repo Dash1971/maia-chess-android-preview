@@ -268,3 +268,12 @@ Results describe the player's perspective. Dates display the exporting device's
 time zone explicitly. All ten languages have localized labels. The report remains
 self-contained and script-free; metadata is escaped. Raw decisions and sampling
 probabilities are unchanged. No extra inference or network access is performed.
+
+### Settings actions
+
+The Sampling data row shows the saved-decision count (or storage error). Its
+three-dot menu offers Save/Share and the existing HTML/JSONL picker; the adjacent
+delete icon opens the confirmation from #134. Both buttons retain 48-pixel touch
+targets, localized accessible tooltips and the existing busy-state guards.
+The recording switch and its help remain separate. These layout changes do not
+change capture files, limits, preference keys or the sampler.
