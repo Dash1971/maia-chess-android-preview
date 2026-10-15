@@ -8,20 +8,20 @@ import io.flutter.plugin.common.MethodChannel
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.Executors
-import java.util.UUID
 
 /** Explicit, streaming export. Sources are fixed private paths, never caller-supplied. */
-class SamplingDocuments(private val activity: Activity) {
+class SamplingDocuments(private val activity: Activity, restoredName: String? = null) {
     private val io = Executors.newSingleThreadExecutor()
     private var pending: MethodChannel.Result? = null
-    private val snapshot = File(activity.cacheDir, "sampling-export-${UUID.randomUUID()}.tmp")
+    private val snapshotState = SamplingDocumentSnapshot(activity.cacheDir, restoredName)
+    private val snapshot get() = snapshotState.file
     private val shares = File(activity.cacheDir, "sampling-share")
     @Volatile private var closed = false
 
     init {
         io.execute {
             activity.cacheDir.listFiles()?.filter {
-                it.isFile && it.name.startsWith("sampling-export-") && it.name.endsWith(".tmp") &&
+                it != snapshot && it.isFile && it.name.startsWith("sampling-export-") && it.name.endsWith(".tmp") &&
                     System.currentTimeMillis() - it.lastModified() > SamplingShareFiles.RETAIN_MILLIS
             }?.forEach { it.delete() }
             SamplingShareFiles.pruneExpired(shares, System.currentTimeMillis())
@@ -30,7 +30,7 @@ class SamplingDocuments(private val activity: Activity) {
 
     fun save(reply: MethodChannel.Result, readable: Boolean = false, share: Boolean = false,
              chooserTitle: String = "") {
-        if (pending != null || closed) {
+        if (pending != null || snapshotState.awaitingResult || closed) {
             reply.error("sampling_busy", "Sampling export unavailable", null)
             return
         }
@@ -68,6 +68,7 @@ class SamplingDocuments(private val activity: Activity) {
                     activity.runOnUiThread {
                         if (closed) return@runOnUiThread
                         try {
+                            snapshotState.awaitResult()
                             activity.startActivityForResult(Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                                 addCategory(Intent.CATEGORY_OPENABLE)
                                 type = mime
@@ -82,7 +83,7 @@ class SamplingDocuments(private val activity: Activity) {
 
     fun onResult(request: Int, code: Int, intent: Intent?): Boolean {
         if (request != 2201) return false
-        if (pending == null) return true
+        if (!snapshotState.awaitingResult) return true
         val uri = intent?.data
         if (code != Activity.RESULT_OK || uri == null) { finish(null); return true }
         io.execute {
@@ -102,16 +103,18 @@ class SamplingDocuments(private val activity: Activity) {
     private fun finish(success: Boolean?) {
         val reply = pending
         pending = null
-        snapshot.delete()
+        snapshotState.finish()
         if (success == false) reply?.error("sampling_export_failed", "Could not export sampling data", null)
         else reply?.success(success)
     }
+
+    fun saveState(): String? = snapshotState.saveState()
 
     fun close() {
         closed = true
         pending?.error("sampling_closed", "Activity closed during export", null)
         pending = null
-        io.execute { snapshot.delete() }
+        io.execute { snapshotState.close(activity.isFinishing) }
         io.shutdown()
     }
 }

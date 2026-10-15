@@ -31,5 +31,7 @@ unzip -q "$task_dir/compiler.zip" -d "$task_dir/compiler"
   "$repo_root/android/native_test/ElectronicBoardProtocolTest.kt" \
   "$repo_root/android/app/src/main/kotlin/com/dash1971/maia_chess/SamplingShareFiles.kt" \
   "$repo_root/android/native_test/SamplingShareFilesTest.kt" \
+  "$repo_root/android/app/src/main/kotlin/com/dash1971/maia_chess/SamplingDocumentSnapshot.kt" \
+  "$repo_root/android/native_test/SamplingDocumentSnapshotTest.kt" \
   -include-runtime -d "$task_dir/native-checks.jar"
 java -jar "$task_dir/native-checks.jar"

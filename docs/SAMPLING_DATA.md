@@ -233,3 +233,12 @@ run by `tool/test_board_native.sh`. Optional widget screenshots use
 use `MAIA_REPORT_EXPORT_SOURCE` and `MAIA_REPORT_EXPORT_OUTPUT`. These are review artifacts,
 not APK/device evidence. Before release, still qualify Save/Share/cancellation,
 receiver access after returning to the app, and activity recreation on Android.
+
+### Android Save recovery
+
+The system Save picker uses a private snapshot. Its filename is included in Android
+Activity state so completing or cancelling the picker after Activity recreation or
+process death can finish the same export. The original captures are never moved.
+Unreferenced interrupted snapshots expire after 24 hours; recent shared reports
+retain their separate bounded cache policy. Native regression checks exercise
+recreation, process death, cancellation and invalid restored filenames.

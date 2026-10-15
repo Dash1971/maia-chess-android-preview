@@ -4,6 +4,7 @@ import java.io.File
 import java.nio.file.Files
 
 fun samplingShareFilesChecks() {
+    samplingDocumentSnapshotChecks()
     val root = Files.createTempDirectory("maia-share-test").toFile()
     try {
         val folder = File(root, "shares")
