@@ -1,6 +1,6 @@
 # Build channels and promotion status
 
-Updated 2026-10-15. Release pages are authoritative for published artifacts;
+Updated 2026-10-16. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
@@ -17,10 +17,10 @@ installations update in place using the established Preview certificate.
 
 ## Preview acceptance
 
-- Use move history remains off by default. Its short description is
-  “Off is recommended. See information button for details.” in English, with
-  equivalent text in all ten languages. The information dialog retains the
-  explanation that saved sessions keep their original mode.
+- Use move history remains off by default. The beta.10 candidate has its own
+  information button and drops the experimental suffix from UI labels. The
+  scrollable help retains the off recommendation, research caveats and explanation
+  that saved sessions keep their original mode. All ten languages are covered.
 - Chessnut: bounded diagnostics and decoder recovery, single/multiple-board
   discovery, remembered selection, session/lifecycle protection, and NEW GAME
   confirmation by a second deliberate press within 2.5 seconds.
@@ -159,3 +159,11 @@ actual 79M model. History is experimental and does not promise greater strength.
 - Signed APK SHA-256: `30f8f8604b6c39c738e182ff5a8f8908dbd1e56fd18520de563363077438c1c8`. Existing Preview certificate: `cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e`. Signature reconstruction is byte-identical.
 - Actual signed beta.8 → beta.9 upgrade preserved UID, saved games and captures. Android confirmation Cancel/Back/outside dismissal preserved capture bytes. Delete cleared only captures, kept saved games/exported HTML/recording preference, survived restart, and allowed recording real Maia moves again. Widget regressions additionally cover repeated taps, export exclusion and failure/retry.
 - Models, engines and dependencies are unchanged. Physical phone/board acceptance remains with owner/testers. Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 are unchanged. PR #135 records public-download verification and task-owned cleanup.
+
+## Preview 2.4.0-beta.10 candidate
+
+PR #138 reorganizes Settings without changing defaults, preference keys,
+sampling storage or gameplay. Version code 2412 is reserved for this candidate.
+The published release remains beta.9 until Android qualification and publication
+complete. The release PR will record the exact source, CI, independent build
+comparison, signing identity, upgrade checks and cleanup.
