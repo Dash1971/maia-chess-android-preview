@@ -21,6 +21,7 @@ import 'package:flutter/foundation.dart'
         setEquals,
         visibleForTesting;
 import 'package:flutter/services.dart';
+import 'package:flutter/semantics.dart' show OrdinalSortKey;
 import 'package:intl/intl.dart' show NumberFormat;
 import 'package:multistockfish/multistockfish.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -36,6 +37,7 @@ part 'src/pgn_files.dart';
 part 'src/maia_queue.dart';
 part 'src/sampling_capture.dart';
 part 'src/sampling_capture_settings.dart';
+part 'src/settings_widgets.dart';
 part 'src/sampling_report.dart';
 part 'src/sampling_report_format.dart';
 part 'src/diagnostics.dart';

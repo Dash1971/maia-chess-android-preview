@@ -1314,12 +1314,26 @@ class _GamePageState extends State<GamePage>
           Text(l10n(context).samplingTemperatureHelp),
           const SizedBox(height: 14),
           Text(l10n(context).samplingTopPHelp),
-          const SizedBox(height: 14),
-          Text(
-            l10n(context).maiaHistorySetting,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          const SizedBox(height: 8),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n(context).close),
+        ),
+      ],
+    ),
+  );
+
+  Future<void> _showMoveHistoryHelp() => showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      scrollable: true,
+      title: Text(l10n(context).maiaHistorySetting),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Text(l10n(context).maiaHistoryHelp),
           TextButton.icon(
             key: const ValueKey('history-research-link'),
@@ -4650,20 +4664,25 @@ class _GamePageState extends State<GamePage>
   }
 
   Widget _settingsSection({
+    Key? key,
     required String title,
     required IconData icon,
     required List<Widget> children,
     Widget? trailing,
   }) {
     return Card(
+      key: key,
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           ListTile(
             leading: Icon(icon),
-            title: Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.w700),
+            title: Semantics(
+              header: true,
+              child: Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
             trailing: trailing,
           ),
@@ -4734,6 +4753,7 @@ class _GamePageState extends State<GamePage>
                 const SizedBox(height: 8),
               ],
               _settingsSection(
+                key: const ValueKey('game-settings-section'),
                 title: l10n(context).gameSettings,
                 icon: Icons.sports_esports_outlined,
                 children: [
@@ -4767,7 +4787,14 @@ class _GamePageState extends State<GamePage>
                   ),
                   SwitchListTile(
                     key: const ValueKey('premove-penalty-setting'),
-                    title: Text(l10n(context).oneHundredMsPremovePenalty),
+                    contentPadding: const EdgeInsetsDirectional.only(
+                      start: 32,
+                      end: 24,
+                    ),
+                    title: Text(
+                      l10n(context).oneHundredMsPremovePenalty,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     subtitle: Text(
                       l10n(context).use01SecondsPerPremoveInTimedGames,
                     ),
@@ -4781,7 +4808,14 @@ class _GamePageState extends State<GamePage>
                   ),
                   SwitchListTile(
                     key: const ValueKey('multiple-premoves-setting'),
-                    title: Text(l10n(context).allowMultiplePremoves),
+                    contentPadding: const EdgeInsetsDirectional.only(
+                      start: 32,
+                      end: 24,
+                    ),
+                    title: Text(
+                      l10n(context).allowMultiplePremoves,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     subtitle: Text(
                       l10n(context).queueASequenceAnIllegalMoveCancelsTheRest,
                     ),
@@ -4809,6 +4843,7 @@ class _GamePageState extends State<GamePage>
               ),
               const SizedBox(height: 8),
               _settingsSection(
+                key: const ValueKey('engine-settings-section'),
                 title: l10n(context).engineSettings,
                 icon: Icons.memory_outlined,
                 trailing: IconButton(
@@ -4868,18 +4903,28 @@ class _GamePageState extends State<GamePage>
                         ),
                       ),
                     ),
-                  SwitchListTile(
+                  SettingsInfoSwitch(
                     key: const ValueKey('maia-history-setting'),
                     value: _useMoveHistory,
-                    title: Text(l10n(context).maiaHistorySetting),
-                    subtitle: Text(l10n(context).maiaHistoryScope),
+                    title: l10n(context).maiaHistorySetting,
+                    helpKey: const ValueKey('maia-history-help'),
+                    onHelp: _showMoveHistoryHelp,
                     onChanged: (value) {
                       setState(() => _useMoveHistory = value);
                       unawaited(_saveEnginePreferences());
                     },
                   ),
                   const SamplingCaptureSettings(),
+                ],
+              ),
+              const SizedBox(height: 8),
+              _settingsSection(
+                key: const ValueKey('analysis-settings-section'),
+                title: l10n(context).analysisSettings,
+                icon: Icons.analytics_outlined,
+                children: [
                   ListTile(
+                    key: const ValueKey('analysis-rating-setting'),
                     title: Text(
                       l10n(context).analysisRatingValue(
                         displayNumber(context, _analysisElo),
@@ -4929,61 +4974,97 @@ class _GamePageState extends State<GamePage>
                     ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-                    child: DropdownButtonFormField<GameAnalysisQuality>(
-                      key: ValueKey(
-                        'game-analysis-quality-${_gameAnalysisQuality.name}',
-                      ),
-                      isExpanded: true,
-                      initialValue: _gameAnalysisQuality,
-                      decoration: InputDecoration(
-                        labelText: l10n(context).gameAnalysisQuality,
-                        helperText: localizedAnalysisQualityDescription(
-                          context,
-                          _gameAnalysisQuality,
-                        ),
-                        helperMaxLines: 2,
-                        border: const OutlineInputBorder(),
-                      ),
-                      items: GameAnalysisQuality.values
-                          .map(
-                            (quality) => DropdownMenuItem(
-                              value: quality,
-                              child: Text(
-                                localizedAnalysisQuality(context, quality),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(l10n(context).gameAnalysisQuality),
+                        const SizedBox(height: 8),
+                        Semantics(
+                          label: l10n(context).gameAnalysisQuality,
+                          child: DropdownButtonFormField<GameAnalysisQuality>(
+                            key: ValueKey(
+                              'game-analysis-quality-${_gameAnalysisQuality.name}',
+                            ),
+                            isExpanded: true,
+                            itemHeight: null,
+                            isDense: false,
+                            initialValue: _gameAnalysisQuality,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
                               ),
                             ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        if (value == null) return;
-                        setState(() => _gameAnalysisQuality = value);
-                        unawaited(_saveEnginePreferences());
-                      },
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _humanTiming = false;
-                          _useMoveHistory = false;
-                          _premovesEnabled = true;
-                          _premovePenalty = false;
-                          _multiplePremoves = false;
-                          _temperature = 1.0;
-                          _topP = 1.0;
-                          _analysisElo = 1600;
-                          _secondMaiaEnabled = false;
-                          _secondMaiaElo = 2400;
-                          _gameAnalysisQuality = GameAnalysisQuality.fast;
-                        });
-                        unawaited(_saveEnginePreferences());
-                      },
-                      child: Text(l10n(context).resetEngineDefaults),
+                            items: GameAnalysisQuality.values
+                                .map(
+                                  (quality) => DropdownMenuItem(
+                                    value: quality,
+                                    child: Text(
+                                      localizedAnalysisQuality(
+                                        context,
+                                        quality,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (value) {
+                              if (value == null) return;
+                              setState(() => _gameAnalysisQuality = value);
+                              unawaited(_saveEnginePreferences());
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          localizedAnalysisQualityDescription(
+                            context,
+                            _gameAnalysisQuality,
+                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  key: const ValueKey('reset-engine-defaults'),
+                  onPressed: () {
+                    setState(() {
+                      _humanTiming = false;
+                      _useMoveHistory = false;
+                      _premovesEnabled = true;
+                      _premovePenalty = false;
+                      _multiplePremoves = false;
+                      _temperature = 1.0;
+                      _topP = 1.0;
+                      _analysisElo = 1600;
+                      _secondMaiaEnabled = false;
+                      _secondMaiaElo = 2400;
+                      _gameAnalysisQuality = GameAnalysisQuality.fast;
+                    });
+                    unawaited(_saveEnginePreferences());
+                  },
+                  child: Text(l10n(context).resetEngineDefaults),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  l10n(context).resetEngineDefaultsScope,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
               ),
               const SizedBox(height: 8),
               _settingsSection(

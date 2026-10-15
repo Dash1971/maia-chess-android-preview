@@ -1136,10 +1136,7 @@ class AppLocalizationsJa extends AppLocalizations {
       '1 / 1 — 最大の多様さ（初期設定）。すべての合法手が候補になりますが、指されやすい手ほど多く選ばれます。';
 
   @override
-  String get maiaHistorySetting => '過去の局面を使う（実験的機能）';
-
-  @override
-  String get maiaHistoryScope => 'オフを推奨します。詳しくは情報ボタンをご覧ください。';
+  String get maiaHistorySetting => '過去の局面を使う';
 
   @override
   String get maiaHistoryHelp =>
@@ -1149,7 +1146,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get maiaHistoryResearch => '過去の局面に関する研究を読む';
 
   @override
-  String get maiaHistoryOn => '過去の局面：使用（実験的機能）';
+  String get maiaHistoryOn => '過去の局面：使用';
 
   @override
   String get maiaHistoryOff => '過去の局面：不使用';
@@ -1173,9 +1170,6 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get samplingDataHelp =>
       'Maiaがどのように手を選ぶかを調べるため、各候補手の確率、設定、選んだ手をこの端末に保存します。初期設定ではオフです。オフにしても保存済みのデータは残ります。\n\n書き出すファイルには局面、指し手の履歴、モデルへの入力と判断結果が含まれます。自動送信は行いません。\n\n記録した直近10局を新しい順に表示します。保存容量の上限に達した場合は、古い対局がそれより早く削除されることがあります。「最近の対局」は削除されません。対局が非常に長い場合や処理が中断された場合は、データが一部欠けることがあります。対局の途中でオンにした場合は、それ以降の判断のみ保存します。データを残したい場合は定期的に書き出してください。';
-
-  @override
-  String get exportSamplingData => '手の選択データを書き出す';
 
   @override
   String get clearSamplingData => '手の選択データを削除';
@@ -1294,4 +1288,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingClearConfirmation => 'Maiaの手の選択データをすべて削除しますか？ 復元はできません。';
+
+  @override
+  String get analysisSettings => '解析に関する設定';
+
+  @override
+  String get samplingData => '選択データ';
+
+  @override
+  String get resetEngineDefaultsScope =>
+      'プリムーブ、人間らしい思考時間、過去の局面の使用、温度、Top-P、解析設定をリセットします。';
 }

@@ -250,7 +250,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       tester
-          .widget<SwitchListTile>(
+          .widget<SettingsInfoSwitch>(
             find.byKey(const ValueKey('maia-history-setting')),
           )
           .value,
@@ -261,7 +261,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       tester
-          .widget<SwitchListTile>(
+          .widget<SettingsInfoSwitch>(
             find.byKey(const ValueKey('maia-history-setting')),
           )
           .value,
@@ -285,7 +285,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         tester
-            .widget<SwitchListTile>(
+            .widget<SettingsInfoSwitch>(
               find.byKey(const ValueKey('maia-history-setting')),
             )
             .value,

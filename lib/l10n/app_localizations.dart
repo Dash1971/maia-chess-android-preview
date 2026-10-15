@@ -2122,17 +2122,11 @@ abstract class AppLocalizations {
   /// **'1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.'**
   String get samplingExampleFull;
 
-  /// Maia-specific experimental history setting/help: Use move history (experimental)
+  /// Maia-specific history setting/help: Use move history
   ///
   /// In en, this message translates to:
-  /// **'Use move history (experimental)'**
+  /// **'Use move history'**
   String get maiaHistorySetting;
-
-  /// Short recommendation beneath the experimental move-history switch; detailed scope is in the information dialog.
-  ///
-  /// In en, this message translates to:
-  /// **'Off is recommended. See information button for details.'**
-  String get maiaHistoryScope;
 
   /// Maia-specific move-history explanation, research limitations, and new versus saved session behavior.
   ///
@@ -2140,19 +2134,19 @@ abstract class AppLocalizations {
   /// **'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use. New games and analysis boards use this setting; saved sessions keep their original choice.'**
   String get maiaHistoryHelp;
 
-  /// Maia-specific experimental history setting/help: Read the move-history research
+  /// Maia-specific history setting/help: Read the move-history research
   ///
   /// In en, this message translates to:
   /// **'Read the move-history research'**
   String get maiaHistoryResearch;
 
-  /// Maia-specific experimental history setting/help: Move history: on (experimental)
+  /// Maia-specific history setting/help: Move history: on
   ///
   /// In en, this message translates to:
-  /// **'Move history: on (experimental)'**
+  /// **'Move history: on'**
   String get maiaHistoryOn;
 
-  /// Maia-specific experimental history setting/help: Move history: off
+  /// Maia-specific history setting/help: Move history: off
   ///
   /// In en, this message translates to:
   /// **'Move history: off'**
@@ -2187,12 +2181,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nThe latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.'**
   String get samplingDataHelp;
-
-  /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
-  ///
-  /// In en, this message translates to:
-  /// **'Export sampling data'**
-  String get exportSamplingData;
 
   /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
   ///
@@ -2397,6 +2385,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete all Maia sampling data? It cannot be recovered.'**
   String get samplingClearConfirmation;
+
+  /// Settings section for analysis ratings and full-game analysis quality. Uses Lichess preferencesAnalysisSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis settings'**
+  String get analysisSettings;
+
+  /// Settings: stored Maia sampling captures, with saved count and export/delete actions.
+  ///
+  /// In en, this message translates to:
+  /// **'Sampling data'**
+  String get samplingData;
+
+  /// Exact scope of Reset engine defaults; does not include sounds, language, sampling capture or board preferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Resets premoves, human timing, move history, Temperature, Top-P and analysis settings.'**
+  String get resetEngineDefaultsScope;
 }
 
 class _AppLocalizationsDelegate

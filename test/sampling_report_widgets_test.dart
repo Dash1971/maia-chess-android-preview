@@ -167,10 +167,7 @@ void main() {
                       SwitchListTile(
                         value: false,
                         onChanged: (_) {},
-                        title: const Text('Use move history (experimental)'),
-                        subtitle: const Text(
-                          'Off is recommended. See information button for details.',
-                        ),
+                        title: const Text('Use move history'),
                       ),
                       const SamplingCaptureSettings(),
                       const ListTile(title: Text('Maia analysis rating: 1600')),

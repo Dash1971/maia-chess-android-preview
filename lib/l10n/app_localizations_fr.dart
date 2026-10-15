@@ -1229,12 +1229,7 @@ class AppLocalizationsFr extends AppLocalizations {
       '1 / 1 — Toute la variété (par défaut). Tous les coups légaux restent possibles, mais les plus probables sont toujours joués plus souvent.';
 
   @override
-  String get maiaHistorySetting =>
-      'Utiliser l’historique des positions (expérimental)';
-
-  @override
-  String get maiaHistoryScope =>
-      'Nous recommandons de laisser cette option désactivée. Consultez le bouton d’information pour en savoir plus.';
+  String get maiaHistorySetting => 'Utiliser l’historique des positions';
 
   @override
   String get maiaHistoryHelp =>
@@ -1245,8 +1240,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Lire l’étude sur l’historique des positions';
 
   @override
-  String get maiaHistoryOn =>
-      'Historique des positions : activé (expérimental)';
+  String get maiaHistoryOn => 'Historique des positions : activé';
 
   @override
   String get maiaHistoryOff => 'Historique des positions : désactivé';
@@ -1270,9 +1264,6 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get samplingDataHelp =>
       'Enregistrez sur cet appareil les probabilités des coups de Maia, ses réglages et les coups choisis pour comprendre sa façon de jouer. Cette option est désactivée par défaut. La désactiver conserve les données existantes.\n\nLes fichiers exportés contiennent les positions, l’historique des coups ainsi que les entrées et décisions du modèle. Rien n’est envoyé automatiquement.\n\nLes 10 dernières parties enregistrées sont affichées de la plus récente à la plus ancienne. Les parties anciennes peuvent être supprimées plus tôt si la limite de stockage est atteinte. Cela ne supprime pas les parties de Parties récentes. Une partie très longue ou une interruption peut laisser un enregistrement incomplet. L’activation en cours de partie ne conserve que les décisions suivantes. Exportez régulièrement les données si vous souhaitez les garder.';
-
-  @override
-  String get exportSamplingData => 'Exporter les données de choix';
 
   @override
   String get clearSamplingData => 'Effacer les données de choix';
@@ -1396,4 +1387,14 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get samplingClearConfirmation =>
       'Effacer toutes les données de choix de coups de Maia ? Elles ne pourront pas être récupérées.';
+
+  @override
+  String get analysisSettings => 'Paramètres d\'analyse';
+
+  @override
+  String get samplingData => 'Données de choix de coups';
+
+  @override
+  String get resetEngineDefaultsScope =>
+      'Réinitialise les pré-coups, les pauses avant les coups de Maia, l’historique des positions, la température, Top-P et les paramètres d’analyse.';
 }

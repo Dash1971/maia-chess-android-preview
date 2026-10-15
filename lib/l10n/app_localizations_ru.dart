@@ -1248,12 +1248,7 @@ class AppLocalizationsRu extends AppLocalizations {
       '1 / 1 — Полное разнообразие (по умолчанию). Возможны все допустимые ходы, но более вероятные по-прежнему встречаются чаще.';
 
   @override
-  String get maiaHistorySetting =>
-      'Учитывать историю позиций (экспериментально)';
-
-  @override
-  String get maiaHistoryScope =>
-      'Рекомендуется отключить. Подробнее — по кнопке информации.';
+  String get maiaHistorySetting => 'Учитывать историю позиций';
 
   @override
   String get maiaHistoryHelp =>
@@ -1263,7 +1258,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get maiaHistoryResearch => 'Читать исследование истории позиций';
 
   @override
-  String get maiaHistoryOn => 'История позиций: включена (экспериментально)';
+  String get maiaHistoryOn => 'История позиций: включена';
 
   @override
   String get maiaHistoryOff => 'История позиций: выключена';
@@ -1287,9 +1282,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get samplingDataHelp =>
       'Сохраняйте на этом устройстве вероятности ходов Maia, настройки и выбранные ходы, чтобы изучать её игру. По умолчанию выключено. При отключении сохранённые данные остаются.\n\nЭкспортируемые файлы содержат позиции, историю ходов, входные данные модели и её решения. Ничего не отправляется автоматически.\n\nПоследние 10 записанных партий показаны от новых к старым. Старые партии могут быть удалены раньше, если достигнут лимит хранилища. При этом партии из раздела «Недавние партии» не удаляются. Очень длинная партия или прерывание работы могут привести к неполной записи. При включении во время партии сохраняются только последующие решения. Регулярно экспортируйте данные, если хотите их сохранить.';
-
-  @override
-  String get exportSamplingData => 'Экспортировать данные о выборе ходов';
 
   @override
   String get clearSamplingData => 'Удалить данные о выборе ходов';
@@ -1412,4 +1404,14 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get samplingClearConfirmation =>
       'Удалить все данные о выборе ходов Maia? Восстановить их будет невозможно.';
+
+  @override
+  String get analysisSettings => 'Настройки анализа';
+
+  @override
+  String get samplingData => 'Данные о выборе ходов';
+
+  @override
+  String get resetEngineDefaultsScope =>
+      'Сбрасывает настройки предварительных ходов, пауз как у человека, истории позиций, температуры, Top-P и анализа.';
 }

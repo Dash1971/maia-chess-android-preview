@@ -1238,11 +1238,7 @@ class AppLocalizationsPt extends AppLocalizations {
       '1 / 1 — Variedade completa (padrão). Todos os lances legais continuam possíveis, mas os mais prováveis ainda são jogados com mais frequência.';
 
   @override
-  String get maiaHistorySetting => 'Usar histórico de posições (experimental)';
-
-  @override
-  String get maiaHistoryScope =>
-      'Recomendamos deixar desativado. Toque no botão de informações para saber mais.';
+  String get maiaHistorySetting => 'Usar histórico de posições';
 
   @override
   String get maiaHistoryHelp =>
@@ -1253,7 +1249,7 @@ class AppLocalizationsPt extends AppLocalizations {
       'Ler a pesquisa sobre o histórico de posições';
 
   @override
-  String get maiaHistoryOn => 'Histórico de posições: ativado (experimental)';
+  String get maiaHistoryOn => 'Histórico de posições: ativado';
 
   @override
   String get maiaHistoryOff => 'Histórico de posições: desativado';
@@ -1277,9 +1273,6 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get samplingDataHelp =>
       'Salve neste dispositivo as probabilidades dos lances do Maia, as configurações e os lances escolhidos para explorar como ele joga. Desativado por padrão. Ao desativar, os dados existentes são mantidos.\n\nOs arquivos exportados contêm posições, histórico de lances e as entradas e decisões do modelo. Nada é enviado automaticamente.\n\nAs últimas 10 partidas registradas são mostradas da mais recente para a mais antiga. As partidas antigas podem ser removidas antes se o limite de armazenamento for atingido. Isso não exclui as partidas de Partidas recentes. Uma partida muito longa ou uma interrupção pode deixar dados incompletos. Ao ativar durante uma partida, apenas as decisões seguintes são salvas. Exporte os dados regularmente se quiser mantê-los.';
-
-  @override
-  String get exportSamplingData => 'Exportar dados de seleção';
 
   @override
   String get clearSamplingData => 'Apagar dados de seleção';
@@ -1402,4 +1395,14 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get samplingClearConfirmation =>
       'Excluir todos os dados de seleção de jogadas do Maia? Não será possível recuperá-los.';
+
+  @override
+  String get analysisSettings => 'Configurações de análise';
+
+  @override
+  String get samplingData => 'Dados de seleção de jogadas';
+
+  @override
+  String get resetEngineDefaultsScope =>
+      'Redefine os pré-movimentos, as pausas como as de um jogador humano, o histórico de posições, a temperatura, Top-P e as configurações de análise.';
 }

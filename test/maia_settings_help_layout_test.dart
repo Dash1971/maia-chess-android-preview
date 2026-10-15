@@ -64,7 +64,7 @@ void main() {
       await tester.pumpAndSettle();
       final toggle = find.byKey(const ValueKey('maia-history-setting'));
       await tester.ensureVisible(toggle);
-      expect(tester.widget<SwitchListTile>(toggle).value, isFalse);
+      expect(tester.widget<SettingsInfoSwitch>(toggle).value, isFalse);
       expect(tester.takeException(), isNull);
       final help = find.byKey(const ValueKey('sampling-help'));
       await tester.ensureVisible(help);
@@ -73,11 +73,23 @@ void main() {
       expect(find.text(strings.samplingExampleLikely), findsOneWidget);
       expect(find.text(strings.samplingExampleReduced), findsOneWidget);
       expect(find.text(strings.samplingExampleFull), findsOneWidget);
-      expect(find.text(strings.maiaHistoryHelp), findsOneWidget);
+      expect(find.text(strings.maiaHistoryHelp), findsNothing);
+      expect(find.byKey(const ValueKey('history-research-link')), findsNothing);
       for (final (key, path) in [
         ('sampling-research-link', 'studies/maia3-sampling/REPORT.md'),
         ('history-research-link', 'studies/move-history-2026-10-09/REPORT.md'),
       ]) {
+        if (key == 'history-research-link') {
+          await tester.tap(find.text(strings.close));
+          await tester.pumpAndSettle();
+          final historyHelp = find.byKey(const ValueKey('maia-history-help'));
+          await tester.ensureVisible(historyHelp);
+          await tester.tap(historyHelp);
+          await tester.pumpAndSettle();
+          expect(find.text(strings.maiaHistoryHelp), findsOneWidget);
+          expect(find.text(strings.samplingExampleFull), findsNothing);
+          expect(tester.widget<SettingsInfoSwitch>(toggle).value, isFalse);
+        }
         final link = find.byKey(ValueKey(key));
         await Scrollable.ensureVisible(tester.element(link), alignment: 0.5);
         await tester.pumpAndSettle();

@@ -11,7 +11,6 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
   final capture = SamplingCapture.instance;
   bool _working = false;
   bool _choosing = false;
-  final _menu = GlobalKey<PopupMenuButtonState<String>>();
 
   @override
   void initState() {
@@ -119,30 +118,22 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
       final blocked = _working || _choosing || capture.busy;
       return Column(
         children: [
-          SwitchListTile(
+          SettingsInfoSwitch(
             key: const ValueKey('sampling-data-toggle'),
-            title: Row(
-              children: [
-                Flexible(child: Text(strings.saveMaiaSamplingData)),
-                IconButton(
-                  tooltip: strings.saveMaiaSamplingData,
-                  icon: const Icon(Icons.info_outline),
-                  onPressed: () => showDialog<void>(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(strings.saveMaiaSamplingData),
-                      scrollable: true,
-                      content: Text(strings.samplingDataHelp),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text(strings.close),
-                        ),
-                      ],
-                    ),
+            title: strings.saveMaiaSamplingData,
+            onHelp: () => showDialog<void>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text(strings.saveMaiaSamplingData),
+                scrollable: true,
+                content: Text(strings.samplingDataHelp),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(strings.close),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             value: capture.enabled,
             onChanged: blocked
@@ -150,50 +141,68 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
                 : (value) => _run(() => capture.setEnabled(value)),
           ),
           if (capture.enabled || capture.records > 0 || capture.failed) ...[
-            ListTile(
-              key: const ValueKey('sampling-actions'),
-              enabled: !blocked && capture.records > 0,
-              title: Text(strings.exportSamplingData),
-              subtitle: Text(
-                capture.failed
-                    ? strings.samplingDataError
-                    : strings.samplingDataStatus(capture.records),
-              ),
-              onTap: blocked || capture.records == 0
-                  ? null
-                  : () => _menu.currentState?.showButtonMenu(),
-              trailing: PopupMenuButton<String>(
-                key: _menu,
-                enabled: !blocked && capture.records > 0,
-                position: PopupMenuPosition.under,
-                tooltip: strings.shareAndExport,
-                onSelected: _action,
-                icon: _working || capture.busy
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.more_vert),
-                itemBuilder: (_) => [
-                  PopupMenuItem(
-                    value: 'save',
-                    child: Text(strings.samplingSave),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          strings.samplingData,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        Text(
+                          capture.failed
+                              ? strings.samplingDataError
+                              : strings.samplingDataStatus(capture.records),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
-                  PopupMenuItem(
-                    value: 'share',
-                    child: Text(strings.samplingShare),
+                  const SizedBox(width: 8),
+                  PopupMenuButton<String>(
+                    key: const ValueKey('sampling-actions'),
+                    enabled: !blocked && capture.records > 0,
+                    position: PopupMenuPosition.under,
+                    tooltip: strings.shareAndExport,
+                    onSelected: _action,
+                    icon: _working || capture.busy
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(Icons.more_vert),
+                    itemBuilder: (_) => [
+                      PopupMenuItem(
+                        value: 'save',
+                        child: Text(strings.samplingSave),
+                      ),
+                      PopupMenuItem(
+                        value: 'share',
+                        child: Text(strings.samplingShare),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    key: const ValueKey('clear-sampling-data'),
+                    tooltip: strings.clearSamplingData,
+                    icon: const Icon(Icons.delete_outline),
+                    onPressed:
+                        blocked || (capture.records == 0 && !capture.failed)
+                        ? null
+                        : _confirmClear,
                   ),
                 ],
               ),
-            ),
-            ListTile(
-              key: const ValueKey('clear-sampling-data'),
-              title: Text(strings.clearSamplingData),
-              trailing: const Icon(Icons.delete_outline),
-              onTap: blocked || (capture.records == 0 && !capture.failed)
-                  ? null
-                  : _confirmClear,
             ),
           ],
         ],
