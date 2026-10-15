@@ -1,4 +1,4 @@
-# Opt-in Maia sampling data (draft)
+# Opt-in Maia sampling data
 
 This feature implements Preview issue #122. It is off by default, entirely
 local, and separate from Copy diagnostics. It observes actual Maia **play**
@@ -120,14 +120,14 @@ regression code, not a research data collection tool. Research reports, datasets
 and standalone analysis tools belong in
 [mobile-maia-research](https://github.com/Dash1971/mobile-maia-research).
 
-## Qualification before leaving draft
+## Release qualification
 
 Automated coverage is in `test/sampling_capture*_test.dart`. The small Qf5
 fixture is explicitly a **reconstructed desktop** output, not a recovered phone
 trace. Neither unit tests nor widget tests with a mocked native channel prove
 real ONNX inference, Android document-provider behavior, or phone performance.
 
-Before merge/release, verify an actual Android build through normal play and
+For changes to this feature, verify an actual Android build through normal play and
 export/replay (including the Qf5 position), document-provider save/cancel,
 process restart, and capture-on/off overhead in 1+0. Exercise takeback/branch,
 resume and Continue from here, settings changes and interrupted inference.
@@ -145,3 +145,15 @@ sample, 18 µs with the trace callback, and 0.13–0.18 ms of synchronous captur
 work per decision. Two asynchronous checkpoint writes averaged about 5 ms
 including worker startup and disk I/O in a small store. These are observations,
 not timing guarantees or phone/bullet/full-store qualification.
+
+### Preview 2.4.0-beta.6 Android qualification
+
+The publication record in [BUILD_CHANNELS.md](BUILD_CHANNELS.md) and release
+`verification.zip` provide source/artifact hashes and exact test scope. Actual
+79M Android play at the opening and Qf5 position, document-provider export and
+independent replay, save cancellation, interruption/restart and near-capacity
+64 MiB retention passed on the ARM64 emulator. Clear preserved existing archived
+game hashes. The actual Preview-signed beta.5 upgrade preserved game data.
+Small interleaved 1+0 measurements showed no observable recording slowdown in
+that emulator; this is not a guarantee for physical phones. The maintainer
+reviewed the setting and help screenshots before authorizing publication.
