@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published 2.3.0; unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.6](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.6), code 2408; updates beta.5 in place | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.7](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.7), code 2409; updates beta.6 in place | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -128,11 +128,13 @@ actual 79M model. History is experimental and does not promise greater strength.
 - The small interleaved 1+0 emulator sample observed no slowdown from recording (median launch-to-move about 1.76 s off, 1.63 s on; near-capacity about 1.81 s). These include launch/inference and do not establish a speedup or physical-phone guarantees.
 - Models/native engines are unchanged. `crypto` 3.0.7 is the sole new Dart dependency for local checksums. Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 are unchanged. Physical device/board acceptance remains with owner/testers. The release verification bundle and PR #125 record qualification and cleanup.
 
-## Preview 2.4.0-beta.7 candidate
+## Preview 2.4.0-beta.7 publication record
 
-PR #129 prepares 2.4.0-beta.7, code 2409: readable offline sampling reports,
-actual post-Temperature/Top-P probabilities, plain-language odds, and Save/Share.
-The board uses charcoal/gray arrows with outside coordinates. There is no in-app
-summary screen. Both formats and settings copy are localized in all ten languages.
-Publication is pending exact-source Linux builds, Android qualification and signing.
-The published Preview remains beta.6 until the release record is appended.
+- Source: `695fd38992ab1f24e6dea85377e0767621b6cef2` ([PR #129](https://github.com/Dash1971/maia-chess-android-preview/pull/129), issues #127 and #128). The tag points to the exact built commit; later documentation does not rebuild the APK.
+- Readable offline HTML reports show actual post-Temperature/Top-P probabilities, plain-language odds and charcoal/gray board diagrams. Save/Share also offers original JSONL. All ten languages are supported; there is no in-app summary screen.
+- [Release CI](https://github.com/Dash1971/maia-chess-android-preview/actions/runs/38683441570): 950 Flutter tests (one expected flavor skip), 33 Preview checks, 51 release-tool tests, native board/share/document lifecycle checks, localization, static analysis and Android packaging passed.
+- Independent Linux and GitHub unsigned APK SHA-256: `189b94417aa4d4e196d7c140af6fe4f89f57940ac50c1d6756e630c361994a84`.
+- Signed APK SHA-256: `4efff6745427c4cdf386a11e0024e8f2d2489d2ddc1e06914f93a6aafdd5f3c4`. Existing Preview certificate: `cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e`. Signature reconstruction is byte-identical.
+- Actual signed beta.6 → beta.7 upgrade preserved app UID, saved games and captures. Real 79M play with Temperature 0.5/Top-P 0.9 and effective report probabilities passed. Native Android Save/Share, read-only receiver grants, cancellation, failed document storage, retry and reading a shared file after capture Clear passed. Additional variation, incomplete-game and checkmate upgrades use temporary test signatures.
+- Android qualification found and fixed a pending Save being lost when the process died in the system picker. Forced process-death save/cancel and Activity recreation now pass on the corrected APK, with snapshot cleanup and another successful export. Fixed preparation files left by abrupt process death are bounded and removed on the next export/Clear.
+- Models, engines and dependencies are unchanged. Physical phone/board acceptance remains with owner/testers. Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 are unchanged. Release verification and task-owned cleanup are recorded in PR #129.

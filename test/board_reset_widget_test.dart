@@ -122,6 +122,23 @@ void main() {
     expect(ready(), isTrue, reason: description);
   }
 
+  Future<Map<String, dynamic>> waitForSaved(
+    WidgetTester tester,
+    bool Function(Map<String, dynamic>) ready,
+    String description,
+  ) async {
+    final deadline = Stopwatch()..start();
+    Map<String, dynamic>? saved;
+    while (deadline.elapsed < const Duration(seconds: 10)) {
+      saved = await tester.runAsync<Map<String, dynamic>?>(
+        () => SessionRepository(directory).load(),
+      );
+      await tester.pump(const Duration(milliseconds: 10));
+      if (saved != null && ready(saved)) return saved;
+    }
+    fail('Timed out waiting for $description; last checkpoint: $saved');
+  }
+
   Future<void> initialize(
     WidgetTester tester, {
     SessionRepository Function(Directory)? repositoryFactory,
@@ -586,6 +603,11 @@ void main() {
         find.byKey(const ValueKey('chessnut-status-banner')),
         findsOneWidget,
       );
+      await waitFor(tester, () {
+        final squares = board.leds.last.toSet();
+        return squares.length == 4 &&
+            squares.containsAll({'e2', 'e4', 'e7', 'e5'});
+      }, 'reset guidance LEDs');
       expect(board.leds.last.toSet(), {'e2', 'e4', 'e7', 'e5'});
       expect(
         await tester.runAsync<Map<String, dynamic>?>(
@@ -674,9 +696,14 @@ void main() {
         board.position(chess.Chess.DEFAULT_POSITION);
         await flush(tester);
         await tester.pumpAndSettle();
-        saved = (await tester.runAsync<Map<String, dynamic>?>(
-          () => SessionRepository(directory).load(),
-        ))!;
+        saved = await waitForSaved(
+          tester,
+          (data) =>
+              data['chessnutResetPending'] == null &&
+              data['clockPaused'] == false &&
+              (data['uciMoves'] as List?)?.length == (playerIsWhite ? 0 : 1),
+          'completed board setup checkpoint',
+        );
         expect(saved['chessnutResetPending'], isNull);
         expect(saved['clockPaused'], false);
         expect(requests, playerIsWhite ? 0 : 1);
@@ -724,9 +751,13 @@ void main() {
       await flush(tester);
       await tester.pumpAndSettle();
       expect(requests, 1);
-      final saved = (await tester.runAsync<Map<String, dynamic>?>(
-        () => SessionRepository(directory).load(),
-      ))!;
+      final saved = await waitForSaved(
+        tester,
+        (data) =>
+            data['electronicBoard'] == null &&
+            data['chessnutResetPending'] == null,
+        'phone fallback checkpoint',
+      );
       expect(saved['electronicBoard'], isNull);
       expect(saved['chessnutResetPending'], isNull);
       expect(saved['playerIsWhite'], false);
