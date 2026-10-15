@@ -1288,4 +1288,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingDraw => '引き分け';
+
+  @override
+  String get samplingDeleteData => 'データを削除';
+
+  @override
+  String get samplingClearConfirmation =>
+      'この端末のアプリ内に保存されたMaiaの手の選択データをすべて削除しますか？ アプリからは復元できません。別途保存・共有したファイルは削除されません。';
 }

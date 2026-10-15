@@ -377,5 +377,7 @@
   "samplingTimeUnknown": "समय अज्ञात",
   "samplingWin": "जीत!",
   "samplingLoss": "हार",
-  "samplingDraw": "खेल बराबरी पे समाप्त"
+  "samplingDraw": "खेल बराबरी पे समाप्त",
+  "samplingDeleteData": "डेटा हटाएँ",
+  "samplingClearConfirmation": "क्या इस डिवाइस पर ऐप में सहेजा गया Maia की चाल चयन का सारा डेटा हटाना है? इसे ऐप से वापस नहीं पाया जा सकेगा। अलग से सहेजी या साझा की गई फ़ाइलें नहीं हटेंगी।"
 }

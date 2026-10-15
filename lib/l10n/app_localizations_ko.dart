@@ -1289,4 +1289,11 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingDraw => '무승부';
+
+  @override
+  String get samplingDeleteData => '데이터 삭제';
+
+  @override
+  String get samplingClearConfirmation =>
+      '이 기기의 앱에 저장된 Maia의 수 선택 데이터를 모두 삭제할까요? 앱에서 복구할 수 없습니다. 별도로 저장하거나 공유한 파일은 삭제되지 않습니다.';
 }

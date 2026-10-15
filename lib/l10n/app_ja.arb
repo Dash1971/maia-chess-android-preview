@@ -377,5 +377,7 @@
   "samplingTimeUnknown": "時刻不明",
   "samplingWin": "勝ち",
   "samplingLoss": "負け",
-  "samplingDraw": "引き分け"
+  "samplingDraw": "引き分け",
+  "samplingDeleteData": "データを削除",
+  "samplingClearConfirmation": "この端末のアプリ内に保存されたMaiaの手の選択データをすべて削除しますか？ アプリからは復元できません。別途保存・共有したファイルは削除されません。"
 }

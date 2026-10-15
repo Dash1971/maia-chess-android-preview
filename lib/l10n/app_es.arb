@@ -377,5 +377,7 @@
   "samplingTimeUnknown": "Hora desconocida",
   "samplingWin": "Victoria",
   "samplingLoss": "Derrota",
-  "samplingDraw": "Tablas"
+  "samplingDraw": "Tablas",
+  "samplingDeleteData": "Borrar datos",
+  "samplingClearConfirmation": "¿Borrar todos los datos de selección de jugadas de Maia guardados en esta aplicación en este dispositivo? No se podrán recuperar desde la aplicación. Los archivos guardados o compartidos por separado no se borrarán."
 }

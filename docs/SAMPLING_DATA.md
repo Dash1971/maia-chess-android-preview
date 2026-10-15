@@ -11,7 +11,9 @@ started while enabled may finish recording their outcome.
 Engine settings offers Save Maia sampling data, its information button, Export
 sampling data and Clear sampling data. The preference survives restart. Export
 uses Android's document picker and streams JSON Lines to the location the user
-chooses. No Internet/storage permissions or automatic uploads are added.
+chooses. Clear asks for explicit confirmation before deleting app-local captures;
+Cancel, Back and dismissal leave them intact. Separately saved/shared exports
+and the recording preference are unchanged. No Internet/storage permissions or automatic uploads are added.
 
 Capture files live under the app's private `sampling-data/` directory, never in
 Recent Games. **The latest ten recorded games are retained, including unfinished
