@@ -1423,4 +1423,15 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get settingsResetError =>
       'Не удалось сбросить некоторые настройки. Попробуйте ещё раз.';
+
+  @override
+  String get resetSettingsConfirmation =>
+      'Восстановить все настройки по умолчанию?';
+
+  @override
+  String get resetSettingsKeepData =>
+      'Ваши сохранённые партии и данные выборки сохранятся.';
+
+  @override
+  String get resetSettingsAction => 'Сбросить настройки';
 }

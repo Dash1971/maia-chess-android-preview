@@ -1803,5 +1803,11 @@
     "description": "Reset all preferences shown on Settings, including language, sounds and recording; preserve stored games and captures."
   },
   "settingsResetError": "Some settings could not be reset. Please try again.",
-  "@settingsResetError": {"description": "Settings reset persistence failure; retry is safe and saved games are unaffected."}
+  "@settingsResetError": {"description": "Settings reset persistence failure; retry is safe and saved games are unaffected."},
+  "resetSettingsConfirmation": "Reset all settings to default?",
+  "@resetSettingsConfirmation": {"description": "Settings reset confirmation: question."},
+  "resetSettingsKeepData": "Your saved games and sampling data will be kept.",
+  "@resetSettingsKeepData": {"description": "Settings reset confirmation: preservation notice."},
+  "resetSettingsAction": "Reset settings",
+  "@resetSettingsAction": {"description": "Settings reset confirmation: explicit confirmation action."}
 }

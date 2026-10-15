@@ -382,5 +382,8 @@
   "analysisSettings": "分析设置",
   "samplingData": "选招数据",
   "resetSettingsDefaultsScope": "将此页面上的所有设置恢复为默认值。已保存的对局和采样数据会保留。",
-  "settingsResetError": "部分设置未能重置，请重试。"
+  "settingsResetError": "部分设置未能重置，请重试。",
+  "resetSettingsConfirmation": "将所有设置恢复为默认值？",
+  "resetSettingsKeepData": "已保存的对局和采样数据会保留。",
+  "resetSettingsAction": "重置设置"
 }

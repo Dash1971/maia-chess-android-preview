@@ -1283,4 +1283,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsResetError => '部分设置未能重置，请重试。';
+
+  @override
+  String get resetSettingsConfirmation => '将所有设置恢复为默认值？';
+
+  @override
+  String get resetSettingsKeepData => '已保存的对局和采样数据会保留。';
+
+  @override
+  String get resetSettingsAction => '重置设置';
 }

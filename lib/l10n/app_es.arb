@@ -382,5 +382,8 @@
   "analysisSettings": "Preferencias de análisis",
   "samplingData": "Datos de selección de jugadas",
   "resetSettingsDefaultsScope": "Restablece todos los ajustes de esta pantalla. Se conservan las partidas guardadas y los datos de muestreo.",
-  "settingsResetError": "No se han podido restablecer algunos ajustes. Inténtalo de nuevo."
+  "settingsResetError": "No se han podido restablecer algunos ajustes. Inténtalo de nuevo.",
+  "resetSettingsConfirmation": "¿Restablecer todos los ajustes predeterminados?",
+  "resetSettingsKeepData": "Se conservarán tus partidas guardadas y los datos de muestreo.",
+  "resetSettingsAction": "Restablecer ajustes"
 }

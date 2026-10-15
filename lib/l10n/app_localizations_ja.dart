@@ -1304,4 +1304,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsResetError => '一部の設定を初期値に戻せませんでした。もう一度お試しください。';
+
+  @override
+  String get resetSettingsConfirmation => 'すべての設定を初期値に戻しますか？';
+
+  @override
+  String get resetSettingsKeepData => '保存済みの対局と手の選択データは残ります。';
+
+  @override
+  String get resetSettingsAction => '設定を初期値に戻す';
 }

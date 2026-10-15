@@ -1405,4 +1405,15 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get settingsResetError =>
       'No se han podido restablecer algunos ajustes. Inténtalo de nuevo.';
+
+  @override
+  String get resetSettingsConfirmation =>
+      '¿Restablecer todos los ajustes predeterminados?';
+
+  @override
+  String get resetSettingsKeepData =>
+      'Se conservarán tus partidas guardadas y los datos de muestreo.';
+
+  @override
+  String get resetSettingsAction => 'Restablecer ajustes';
 }

@@ -382,5 +382,8 @@
   "analysisSettings": "解析に関する設定",
   "samplingData": "選択データ",
   "resetSettingsDefaultsScope": "この画面のすべての設定を初期値に戻します。保存済みの対局と手の選択データは残ります。",
-  "settingsResetError": "一部の設定を初期値に戻せませんでした。もう一度お試しください。"
+  "settingsResetError": "一部の設定を初期値に戻せませんでした。もう一度お試しください。",
+  "resetSettingsConfirmation": "すべての設定を初期値に戻しますか？",
+  "resetSettingsKeepData": "保存済みの対局と手の選択データは残ります。",
+  "resetSettingsAction": "設定を初期値に戻す"
 }

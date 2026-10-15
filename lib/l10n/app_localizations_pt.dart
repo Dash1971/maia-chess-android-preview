@@ -1412,4 +1412,15 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get settingsResetError =>
       'Não foi possível restaurar algumas configurações. Tente novamente.';
+
+  @override
+  String get resetSettingsConfirmation =>
+      'Restaurar todas as configurações padrão?';
+
+  @override
+  String get resetSettingsKeepData =>
+      'Suas partidas salvas e os dados de amostragem serão mantidos.';
+
+  @override
+  String get resetSettingsAction => 'Restaurar configurações';
 }

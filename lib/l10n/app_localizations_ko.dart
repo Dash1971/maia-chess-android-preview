@@ -1306,4 +1306,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsResetError => '일부 설정을 초기화하지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get resetSettingsConfirmation => '모든 설정을 기본값으로 되돌릴까요?';
+
+  @override
+  String get resetSettingsKeepData => '저장된 대국과 샘플링 데이터는 유지됩니다.';
+
+  @override
+  String get resetSettingsAction => '설정 초기화';
 }

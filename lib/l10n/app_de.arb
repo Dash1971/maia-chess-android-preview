@@ -382,5 +382,8 @@
   "analysisSettings": "Analyse-Einstellungen",
   "samplingData": "Zugauswahldaten",
   "resetSettingsDefaultsScope": "Setzt alle Einstellungen auf dieser Seite zurück. Gespeicherte Partien und Sampling-Daten bleiben erhalten.",
-  "settingsResetError": "Einige Einstellungen konnten nicht zurückgesetzt werden. Bitte versuche es erneut."
+  "settingsResetError": "Einige Einstellungen konnten nicht zurückgesetzt werden. Bitte versuche es erneut.",
+  "resetSettingsConfirmation": "Alle Einstellungen zurücksetzen?",
+  "resetSettingsKeepData": "Deine gespeicherten Partien und Sampling-Daten bleiben erhalten.",
+  "resetSettingsAction": "Einstellungen zurücksetzen"
 }

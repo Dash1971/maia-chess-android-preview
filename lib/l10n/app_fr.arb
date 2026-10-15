@@ -382,5 +382,8 @@
   "analysisSettings": "Paramètres d'analyse",
   "samplingData": "Données de choix de coups",
   "resetSettingsDefaultsScope": "Rétablit tous les réglages de cet écran. Les parties et les données d’échantillonnage enregistrées sont conservées.",
-  "settingsResetError": "Certains réglages n’ont pas pu être réinitialisés. Veuillez réessayer."
+  "settingsResetError": "Certains réglages n’ont pas pu être réinitialisés. Veuillez réessayer.",
+  "resetSettingsConfirmation": "Rétablir tous les réglages par défaut ?",
+  "resetSettingsKeepData": "Vos parties et données d’échantillonnage enregistrées seront conservées.",
+  "resetSettingsAction": "Rétablir les réglages"
 }

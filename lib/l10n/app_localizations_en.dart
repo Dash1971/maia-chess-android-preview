@@ -1385,4 +1385,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settingsResetError =>
       'Some settings could not be reset. Please try again.';
+
+  @override
+  String get resetSettingsConfirmation => 'Reset all settings to default?';
+
+  @override
+  String get resetSettingsKeepData =>
+      'Your saved games and sampling data will be kept.';
+
+  @override
+  String get resetSettingsAction => 'Reset settings';
 }

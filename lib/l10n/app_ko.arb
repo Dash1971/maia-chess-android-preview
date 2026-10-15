@@ -382,5 +382,8 @@
   "analysisSettings": "분석 설정",
   "samplingData": "수 선택 데이터",
   "resetSettingsDefaultsScope": "이 화면의 모든 설정을 기본값으로 되돌립니다. 저장된 대국과 샘플링 데이터는 유지됩니다.",
-  "settingsResetError": "일부 설정을 초기화하지 못했습니다. 다시 시도해 주세요."
+  "settingsResetError": "일부 설정을 초기화하지 못했습니다. 다시 시도해 주세요.",
+  "resetSettingsConfirmation": "모든 설정을 기본값으로 되돌릴까요?",
+  "resetSettingsKeepData": "저장된 대국과 샘플링 데이터는 유지됩니다.",
+  "resetSettingsAction": "설정 초기화"
 }

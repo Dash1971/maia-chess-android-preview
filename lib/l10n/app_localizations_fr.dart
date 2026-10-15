@@ -1404,4 +1404,15 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get settingsResetError =>
       'Certains réglages n’ont pas pu être réinitialisés. Veuillez réessayer.';
+
+  @override
+  String get resetSettingsConfirmation =>
+      'Rétablir tous les réglages par défaut ?';
+
+  @override
+  String get resetSettingsKeepData =>
+      'Vos parties et données d’échantillonnage enregistrées seront conservées.';
+
+  @override
+  String get resetSettingsAction => 'Rétablir les réglages';
 }

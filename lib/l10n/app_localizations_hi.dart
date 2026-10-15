@@ -1400,4 +1400,15 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get settingsResetError =>
       'कुछ सेटिंग्स रीसेट नहीं हो सकीं। कृपया फिर कोशिश करें।';
+
+  @override
+  String get resetSettingsConfirmation =>
+      'सभी सेटिंग्स को डिफ़ॉल्ट पर रीसेट करें?';
+
+  @override
+  String get resetSettingsKeepData =>
+      'आपकी सहेजी गई बाज़ियाँ और सैंपलिंग डेटा बने रहेंगे।';
+
+  @override
+  String get resetSettingsAction => 'सेटिंग्स रीसेट करें';
 }

@@ -382,5 +382,8 @@
   "analysisSettings": "Configurações de análise",
   "samplingData": "Dados de seleção de jogadas",
   "resetSettingsDefaultsScope": "Restaura todas as configurações desta tela. As partidas salvas e os dados de amostragem são mantidos.",
-  "settingsResetError": "Não foi possível restaurar algumas configurações. Tente novamente."
+  "settingsResetError": "Não foi possível restaurar algumas configurações. Tente novamente.",
+  "resetSettingsConfirmation": "Restaurar todas as configurações padrão?",
+  "resetSettingsKeepData": "Suas partidas salvas e os dados de amostragem serão mantidos.",
+  "resetSettingsAction": "Restaurar configurações"
 }

@@ -1200,6 +1200,58 @@ class _GamePageState extends State<GamePage>
     ]);
   }
 
+  bool _confirmingSettingsReset = false;
+
+  Future<void> _confirmResetSettings() async {
+    if (_confirmingSettingsReset ||
+        _resettingSettings ||
+        SamplingCapture.instance.busy) {
+      return;
+    }
+    _confirmingSettingsReset = true;
+    try {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) {
+          var answered = false;
+          void answer(bool value) {
+            if (answered || ModalRoute.of(dialogContext)?.isCurrent != true) {
+              return;
+            }
+            answered = true;
+            Navigator.pop(dialogContext, value);
+          }
+
+          return ListenableBuilder(
+            listenable: SamplingCapture.instance,
+            builder: (context, _) => AlertDialog(
+              title: Text(l10n(context).resetSettingsConfirmation),
+              scrollable: true,
+              content: Text(l10n(context).resetSettingsKeepData),
+              actions: [
+                TextButton(
+                  onPressed: () => answer(false),
+                  child: Text(l10n(context).cancel),
+                ),
+                TextButton(
+                  key: const ValueKey('confirm-reset-settings'),
+                  onPressed: SamplingCapture.instance.busy
+                      ? null
+                      : () => answer(true),
+                  child: Text(l10n(context).resetSettingsAction),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+      if (!mounted || confirmed != true || !_settingsOpen || _started) return;
+      await _resetSettingsDefaults();
+    } finally {
+      _confirmingSettingsReset = false;
+    }
+  }
+
   bool _resettingSettings = false;
 
   Future<void> _resetSettingsDefaults() async {
@@ -5117,7 +5169,7 @@ class _GamePageState extends State<GamePage>
                     onPressed:
                         _resettingSettings || SamplingCapture.instance.busy
                         ? null
-                        : _resetSettingsDefaults,
+                        : _confirmResetSettings,
                     child: Text(l10n(context).resetSettingsDefaults),
                   ),
                 ),

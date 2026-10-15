@@ -172,6 +172,8 @@ void main() {
       await tester.ensureVisible(key('reset-settings-defaults'));
       await tester.tap(key('reset-settings-defaults'));
       await tester.pumpAndSettle();
+      await tester.tap(key('confirm-reset-settings'));
+      await tester.pumpAndSettle();
       final defaults = <String, Object>{
         'premovesEnabled': true,
         'premovePenalty': false,
@@ -249,6 +251,8 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(key('reset-settings-defaults'));
       await tester.pumpAndSettle();
+      await tester.tap(key('confirm-reset-settings'));
+      await tester.pumpAndSettle();
       expect(
         find.text('Some settings could not be reset. Please try again.'),
         findsOneWidget,
@@ -258,6 +262,8 @@ void main() {
       capture.failReset = false;
       await tester.tap(key('reset-settings-defaults'));
       await tester.pumpAndSettle();
+      await tester.tap(key('confirm-reset-settings'));
+      await tester.pumpAndSettle();
       expect(capture.enabled, isFalse);
       expect(capture.records, 24);
       expect(tester.takeException(), isNull);
@@ -265,6 +271,80 @@ void main() {
       await tester.pumpAndSettle();
     },
   );
+
+  for (final locale in AppLocalizations.supportedLocales) {
+    testWidgets(
+      'reset confirmation preserves settings on dismissal in ${locale.languageCode}',
+      (tester) async {
+        tester.view.physicalSize = const Size(320, 568);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final before = <String, Object>{
+          'temperatureV2': 0.5,
+          'humanTiming': true,
+          samplingCapturePreference: true,
+          appLanguagePreferenceKey: locale.languageCode,
+        };
+        SharedPreferences.setMockInitialValues(before);
+        await tester.pumpWidget(settingsApp(locale: locale, scale: 2));
+        await openSettings(tester);
+        final strings = await AppLocalizations.delegate.load(locale);
+        final prefs = await SharedPreferences.getInstance();
+        for (final dismiss in ['cancel', 'back', 'outside']) {
+          await tester.ensureVisible(key('reset-settings-defaults'));
+          await tester.tap(key('reset-settings-defaults'));
+          await tester.pumpAndSettle();
+          expect(find.text(strings.resetSettingsConfirmation), findsOneWidget);
+          expect(find.text(strings.resetSettingsKeepData), findsOneWidget);
+          expect(key('confirm-reset-settings').hitTestable(), findsOneWidget);
+          if (dismiss == 'cancel') {
+            await tester.tap(find.text(strings.cancel));
+          } else if (dismiss == 'back') {
+            await tester.binding.handlePopRoute();
+          } else {
+            await tester.tapAt(const Offset(1, 1));
+          }
+          await tester.pumpAndSettle();
+          expect(find.byType(AlertDialog), findsNothing);
+          for (final entry in before.entries) {
+            expect(prefs.get(entry.key), entry.value);
+          }
+          expect(capture.enabled, isTrue);
+          expect(capture.records, 24);
+          expect(tester.takeException(), isNull);
+        }
+        await tester.pumpWidget(const SizedBox());
+        await tester.pumpAndSettle();
+      },
+    );
+  }
+
+  testWidgets('reset confirmation cannot proceed while capture becomes busy', (
+    tester,
+  ) async {
+    await tester.pumpWidget(settingsApp());
+    await openSettings(tester);
+    await tester.ensureVisible(key('reset-settings-defaults'));
+    await tester.tap(key('reset-settings-defaults'));
+    await tester.pumpAndSettle();
+    capture.blockReset = true;
+    capture.notifyListeners();
+    await tester.pump();
+    expect(
+      tester.widget<TextButton>(key('confirm-reset-settings')).onPressed,
+      isNull,
+    );
+    await tester.tap(find.text('Cancel'));
+    await tester.pump();
+    capture.blockReset = false;
+    capture.notifyListeners();
+    await tester.pumpAndSettle();
+    expect(capture.enabled, isTrue);
+    expect(capture.records, 24);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pumpAndSettle();
+  });
 
   testWidgets(
     'all settings actions remain accessible at 320px and 200% in every language',
@@ -448,6 +528,10 @@ void main() {
         }
         await tester.ensureVisible(key('copy-diagnostics'));
         await shot('reset-settings');
+        await tester.tap(key('reset-settings-defaults'));
+        await shot('reset-confirmation');
+        await tester.tap(find.text(strings.cancel));
+        await tester.pumpAndSettle();
         await tester.ensureVisible(key('sampling-help'));
         await tester.tap(key('sampling-help'));
         await shot('engine-help');

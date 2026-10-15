@@ -239,3 +239,7 @@ sounds and sampling recording (off). Its scope note and failure message are
 app-specific, translated in all ten languages. Stored games, sampling captures
 and home game-setup selections are preserved. Sampling retention wording now
 explicitly says the last ten recorded games are saved and shown newest first.
+
+The settings reset requires explicit confirmation. The dialog keeps the pinned
+Lichess Cancel label and uses app-specific reset/preserved-data wording in all
+ten languages. Cancel, Back and outside dismissal do not change preferences.

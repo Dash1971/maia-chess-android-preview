@@ -1407,4 +1407,14 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get settingsResetError =>
       'Einige Einstellungen konnten nicht zurückgesetzt werden. Bitte versuche es erneut.';
+
+  @override
+  String get resetSettingsConfirmation => 'Alle Einstellungen zurücksetzen?';
+
+  @override
+  String get resetSettingsKeepData =>
+      'Deine gespeicherten Partien und Sampling-Daten bleiben erhalten.';
+
+  @override
+  String get resetSettingsAction => 'Einstellungen zurücksetzen';
 }

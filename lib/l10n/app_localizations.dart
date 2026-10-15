@@ -2415,6 +2415,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Some settings could not be reset. Please try again.'**
   String get settingsResetError;
+
+  /// Settings reset confirmation: question.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset all settings to default?'**
+  String get resetSettingsConfirmation;
+
+  /// Settings reset confirmation: preservation notice.
+  ///
+  /// In en, this message translates to:
+  /// **'Your saved games and sampling data will be kept.'**
+  String get resetSettingsKeepData;
+
+  /// Settings reset confirmation: explicit confirmation action.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset settings'**
+  String get resetSettingsAction;
 }
 
 class _AppLocalizationsDelegate
