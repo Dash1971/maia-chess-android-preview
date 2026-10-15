@@ -18,9 +18,16 @@ screenshots, see the
 
 [Build-channel status and testing scope](docs/BUILD_CHANNELS.md)
 
-## Preview 2.4.0-beta.8
+## Preview 2.4.0-beta.9
 
-Opt-in Maia move reports now show the latest ten recorded games, newest first,
+Clearing Maia sampling data now asks for confirmation. Cancel or dismiss the
+warning to keep your data; **Delete data** removes the captures stored in the app.
+Saved games and separately exported reports are unaffected. The confirmation is
+available in all ten languages and supports large text.
+
+### Earlier Preview changes
+
+Beta.8: opt-in Maia move reports now show the latest ten recorded games, newest first,
 including unfinished games. Jump links and compact headings show who played each
 color, the result, opening, time control and original game date when known.
 Result colors match Recent Games. The readable HTML and detailed JSONL contain
@@ -29,9 +36,6 @@ the same games; a 64 MiB safety ceiling keeps capture storage bounded.
 Beta.7 introduced readable reports with boards, the actual in-game selection
 probabilities and “1 in X” explanations, plus Save/Share and reliable recovery
 when Android recreates a pending Save dialog. Recording stays off by default.
-
-### Earlier Preview changes
-
 
 Restored post-game analysis now returns directly Home in one tap after Android
 restarts the app in the background. Unfinished-game analysis still returns to
