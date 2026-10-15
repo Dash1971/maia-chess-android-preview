@@ -163,108 +163,116 @@ void main() {
   final output = Platform.environment['MAIA_REPORT_MOCKUP_DIR'];
   if (output != null) {
     testWidgets('render report proposal for maintainer', (tester) async {
-      tester.view.physicalSize = const Size(412, 892);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      final font = Platform.environment['MAIA_REPORT_FONT'];
-      if (font != null) {
-        final loader = FontLoader('Roboto')
-          ..addFont(
-            Future.value(ByteData.sublistView(File(font).readAsBytesSync())),
-          );
-        await tester.runAsync(loader.load);
-        final icons = FontLoader('MaterialIcons')
-          ..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'));
-        await tester.runAsync(icons.load);
-      }
-      final boundaryKey = GlobalKey();
-      Future<void> shot(String name) async {
-        await tester.pumpAndSettle();
-        final boundary =
-            boundaryKey.currentContext!.findRenderObject()!
-                as RenderRepaintBoundary;
-        await tester.runAsync(() async {
-          final image = await boundary.toImage(pixelRatio: 2);
-          final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
-          await Directory(output).create(recursive: true);
-          await File('$output/$name.png')
-              .writeAsBytes(bytes!.buffer.asUint8List());
-          image.dispose();
-        });
-      }
+      final previousShadows = debugDisableShadows;
+      debugDisableShadows = false;
+      try {
+        tester.view.physicalSize = const Size(412, 892);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final font = Platform.environment['MAIA_REPORT_FONT'];
+        if (font != null) {
+          final loader = FontLoader('Roboto')
+            ..addFont(
+              Future.value(ByteData.sublistView(File(font).readAsBytesSync())),
+            );
+          await tester.runAsync(loader.load);
+          final icons = FontLoader('MaterialIcons')
+            ..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'));
+          await tester.runAsync(icons.load);
+        }
+        final boundaryKey = GlobalKey();
+        Future<void> shot(String name) async {
+          await tester.pumpAndSettle();
+          final boundary =
+              boundaryKey.currentContext!.findRenderObject()!
+                  as RenderRepaintBoundary;
+          await tester.runAsync(() async {
+            final image = await boundary.toImage(pixelRatio: 2);
+            final bytes = await image.toByteData(
+              format: ui.ImageByteFormat.png,
+            );
+            await Directory(output).create(recursive: true);
+            await File('$output/$name.png')
+                .writeAsBytes(bytes!.buffer.asUint8List());
+            image.dispose();
+          });
+        }
 
-      SharedPreferences.setMockInitialValues({});
-      final directory = Directory.systemTemp.createTempSync(
-        'maia-report-shots',
-      );
-      final capture = SamplingCapture(directory: directory);
-      SamplingCapture.instance = capture;
-      await tester.runAsync(() => capture.setEnabled(true));
-      capture.records = 24;
-      await tester.pumpWidget(
-        RepaintBoundary(
-          key: boundaryKey,
-          child: app(
-            Scaffold(
-              appBar: AppBar(
-                leading: const BackButton(),
-                title: const Text('Settings'),
-              ),
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const ListTile(title: Text('Temperature: 1.00')),
-                    Slider(value: 1, onChanged: (_) {}),
-                    const ListTile(title: Text('Top-P: 1.00')),
-                    Slider(value: 1, onChanged: (_) {}),
-                    SwitchListTile(
-                      value: false,
-                      onChanged: (_) {},
-                      title: const Text('Use move history (experimental)'),
-                      subtitle: const Text(
-                        'Off is recommended. See information button for details.',
+        SharedPreferences.setMockInitialValues({});
+        final directory = Directory.systemTemp.createTempSync(
+          'maia-report-shots',
+        );
+        final capture = SamplingCapture(directory: directory);
+        SamplingCapture.instance = capture;
+        await tester.runAsync(() => capture.setEnabled(true));
+        capture.records = 24;
+        await tester.pumpWidget(
+          RepaintBoundary(
+            key: boundaryKey,
+            child: app(
+              Scaffold(
+                appBar: AppBar(
+                  leading: const BackButton(),
+                  title: const Text('Settings'),
+                ),
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const ListTile(title: Text('Temperature: 1.00')),
+                      Slider(value: 1, onChanged: (_) {}),
+                      const ListTile(title: Text('Top-P: 1.00')),
+                      Slider(value: 1, onChanged: (_) {}),
+                      SwitchListTile(
+                        value: false,
+                        onChanged: (_) {},
+                        title: const Text('Use move history (experimental)'),
+                        subtitle: const Text(
+                          'Off is recommended. See information button for details.',
+                        ),
                       ),
-                    ),
-                    const SamplingCaptureSettings(),
-                    const ListTile(title: Text('Maia analysis rating: 1600')),
-                    Slider(value: 0.5, onChanged: (_) {}),
-                  ],
+                      const SamplingCaptureSettings(),
+                      const ListTile(title: Text('Maia analysis rating: 1600')),
+                      Slider(value: 0.5, onChanged: (_) {}),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      capture.records = 24; // Illustrative count, not a user's capture.
-      await tester.runAsync(() => capture.setEnabled(true));
-      await tester.pumpAndSettle();
-      await shot('01-settings');
-      await tester.tap(find.byKey(const ValueKey('sampling-actions')));
-      await tester.pumpAndSettle();
-      await shot('02-actions');
-      await tester.tap(find.text('Save…'));
-      await tester.pumpAndSettle();
-      await shot('03-format');
-      await tester.tap(find.text('Cancel'));
-      await tester.pumpAndSettle();
-      await tester.pumpWidget(
-        RepaintBoundary(
-          key: boundaryKey,
-          child: app(SamplingReportScreen(report: sampleReport())),
-        ),
-      );
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Position before the move'));
-      await tester.pumpAndSettle();
-      await shot('04-summary');
-      await tester.pumpWidget(const SizedBox());
-      await tester.pumpAndSettle();
-      await tester.runAsync(capture.flush);
-      capture.dispose();
-      SamplingCapture.instance = SamplingCapture();
-      directory.deleteSync(recursive: true);
+        );
+        await tester.pumpAndSettle();
+        capture.records = 24; // Illustrative count, not a user's capture.
+        await tester.runAsync(() => capture.setEnabled(true));
+        await tester.pumpAndSettle();
+        await shot('01-settings');
+        await tester.tap(find.byKey(const ValueKey('sampling-actions')));
+        await tester.pumpAndSettle();
+        await shot('02-actions');
+        await tester.tap(find.text('Save…'));
+        await tester.pumpAndSettle();
+        await shot('03-format');
+        await tester.tap(find.text('Cancel'));
+        await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          RepaintBoundary(
+            key: boundaryKey,
+            child: app(SamplingReportScreen(report: sampleReport())),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Position before the move'));
+        await tester.pumpAndSettle();
+        await shot('04-summary');
+        await tester.pumpWidget(const SizedBox());
+        await tester.pumpAndSettle();
+        await tester.runAsync(capture.flush);
+        capture.dispose();
+        SamplingCapture.instance = SamplingCapture();
+        directory.deleteSync(recursive: true);
+      } finally {
+        debugDisableShadows = previousShadows;
+      }
     });
   }
 }

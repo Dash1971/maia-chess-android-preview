@@ -10,6 +10,7 @@ class SamplingCaptureSettings extends StatefulWidget {
 class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
   final capture = SamplingCapture.instance;
   bool _working = false;
+  final _menu = GlobalKey<PopupMenuButtonState<String>>();
 
   @override
   void initState() {
@@ -109,34 +110,45 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
                 : (value) => _run(() => capture.setEnabled(value)),
           ),
           if (capture.enabled || capture.records > 0 || capture.failed) ...[
-            PopupMenuButton<String>(
+            ListTile(
               key: const ValueKey('sampling-actions'),
               enabled: !blocked && capture.records > 0,
-              tooltip: strings.shareAndExport,
-              onSelected: _action,
-              itemBuilder: (_) => [
-                PopupMenuItem(value: 'view', child: Text(strings.samplingView)),
-                PopupMenuItem(value: 'save', child: Text(strings.samplingSave)),
-                PopupMenuItem(
-                  value: 'share',
-                  child: Text(strings.samplingShare),
-                ),
-              ],
-              child: ListTile(
+              title: Text(strings.exportSamplingData),
+              subtitle: Text(
+                capture.failed
+                    ? strings.samplingDataError
+                    : strings.samplingDataStatus(capture.records),
+              ),
+              onTap: blocked || capture.records == 0
+                  ? null
+                  : () => _menu.currentState?.showButtonMenu(),
+              trailing: PopupMenuButton<String>(
+                key: _menu,
                 enabled: !blocked && capture.records > 0,
-                title: Text(strings.exportSamplingData),
-                subtitle: Text(
-                  capture.failed
-                      ? strings.samplingDataError
-                      : strings.samplingDataStatus(capture.records),
-                ),
-                trailing: blocked
+                position: PopupMenuPosition.under,
+                tooltip: strings.shareAndExport,
+                onSelected: _action,
+                icon: blocked
                     ? const SizedBox(
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.more_vert),
+                itemBuilder: (_) => [
+                  PopupMenuItem(
+                    value: 'view',
+                    child: Text(strings.samplingView),
+                  ),
+                  PopupMenuItem(
+                    value: 'save',
+                    child: Text(strings.samplingSave),
+                  ),
+                  PopupMenuItem(
+                    value: 'share',
+                    child: Text(strings.samplingShare),
+                  ),
+                ],
               ),
             ),
             ListTile(
