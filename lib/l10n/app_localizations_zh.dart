@@ -1170,9 +1170,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingDataError => '无法访问选招数据。不影响对局。';
 
   @override
-  String get samplingView => '查看摘要';
-
-  @override
   String get samplingSave => '保存…';
 
   @override
@@ -1192,7 +1189,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingReportExplanation =>
-      '百分比表示 Maia 预测的走法选择概率，并非获胜概率或走法质量。这些是应用 Temperature 和 Top-P 之前的模型概率。';
+      '百分比表示应用当时的 Temperature 和 Top-P 设置后，每步棋被选中的概率，并非获胜概率或走法质量评分。';
 
   @override
   String get samplingReportPartial =>
@@ -1211,9 +1208,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingAlternatives => '其他可能走法';
 
   @override
-  String get samplingPositionBefore => '走棋前的局面';
-
-  @override
   String samplingGame(String number) {
     return '对局 $number';
   }
@@ -1221,5 +1215,26 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String samplingRecords(String count) {
     return '已记录决策：$count';
+  }
+
+  @override
+  String get samplingMostProbable => '最可能的走法';
+
+  @override
+  String get samplingPlayedMostProbable => '下出了最可能的走法';
+
+  @override
+  String samplingChance(String move, String odds) {
+    return '$move 被选中的概率约为 $odds 分之一。';
+  }
+
+  @override
+  String samplingCertain(String move) {
+    return '$move 必定会被选中（100%）。';
+  }
+
+  @override
+  String samplingAlmostCertain(String move) {
+    return '$move 几乎必定会被选中。';
   }
 }

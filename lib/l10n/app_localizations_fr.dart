@@ -1287,9 +1287,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'Impossible d’accéder aux données de choix. Vous pouvez continuer à jouer.';
 
   @override
-  String get samplingView => 'Voir le résumé';
-
-  @override
   String get samplingSave => 'Enregistrer…';
 
   @override
@@ -1311,7 +1308,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingReportExplanation =>
-      'Les pourcentages indiquent les choix de coups prédits par Maia, pas les chances de gagner ni la qualité des coups. Ce sont les probabilités du modèle avant application de la température et de Top-P.';
+      'Les pourcentages indiquent la probabilité de sélection de chaque coup après application de vos réglages de température et de Top-P. Ils ne représentent ni les chances de gagner ni la qualité des coups.';
 
   @override
   String get samplingReportPartial =>
@@ -1331,9 +1328,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get samplingAlternatives => 'Autres coups probables';
 
   @override
-  String get samplingPositionBefore => 'Position avant le coup';
-
-  @override
   String samplingGame(String number) {
     return 'Partie $number';
   }
@@ -1341,5 +1335,27 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String samplingRecords(String count) {
     return 'Décisions enregistrées : $count';
+  }
+
+  @override
+  String get samplingMostProbable => 'Le plus probable';
+
+  @override
+  String get samplingPlayedMostProbable =>
+      'Le coup le plus probable a été joué';
+
+  @override
+  String samplingChance(String move, String odds) {
+    return '$move avait environ 1 chance sur $odds d’être joué.';
+  }
+
+  @override
+  String samplingCertain(String move) {
+    return '$move serait sélectionné à coup sûr (100 %).';
+  }
+
+  @override
+  String samplingAlmostCertain(String move) {
+    return '$move avait une probabilité presque certaine d’être sélectionné.';
   }
 }

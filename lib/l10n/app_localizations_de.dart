@@ -1288,9 +1288,6 @@ class AppLocalizationsDe extends AppLocalizations {
       'Kein Zugriff auf die Zugauswahldaten. Das Spielen ist nicht betroffen.';
 
   @override
-  String get samplingView => 'Zusammenfassung ansehen';
-
-  @override
   String get samplingSave => 'Speichern…';
 
   @override
@@ -1312,7 +1309,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingReportExplanation =>
-      'Die Prozentwerte zeigen Maias vorhergesagte Zugwahl, keine Gewinnchancen oder Zugqualität. Es sind Modellwahrscheinlichkeiten vor Anwendung von Temperatur und Top-P.';
+      'Die Prozentwerte zeigen, mit welcher Wahrscheinlichkeit jeder Zug nach Anwendung deiner Einstellungen für Temperatur und Top-P ausgewählt wurde. Sie sind keine Gewinnchancen oder Bewertungen der Zugqualität.';
 
   @override
   String get samplingReportPartial =>
@@ -1332,9 +1329,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get samplingAlternatives => 'Wahrscheinliche Alternativen';
 
   @override
-  String get samplingPositionBefore => 'Stellung vor dem Zug';
-
-  @override
   String samplingGame(String number) {
     return 'Partie $number';
   }
@@ -1342,5 +1336,27 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String samplingRecords(String count) {
     return 'Aufgezeichnete Entscheidungen: $count';
+  }
+
+  @override
+  String get samplingMostProbable => 'Am wahrscheinlichsten';
+
+  @override
+  String get samplingPlayedMostProbable =>
+      'Der wahrscheinlichste Zug wurde gespielt';
+
+  @override
+  String samplingChance(String move, String odds) {
+    return '$move hatte eine Auswahlwahrscheinlichkeit von ungefähr 1 zu $odds.';
+  }
+
+  @override
+  String samplingCertain(String move) {
+    return '$move wurde mit Sicherheit ausgewählt (100 %).';
+  }
+
+  @override
+  String samplingAlmostCertain(String move) {
+    return '$move wurde mit nahezu vollständiger Sicherheit ausgewählt.';
   }
 }

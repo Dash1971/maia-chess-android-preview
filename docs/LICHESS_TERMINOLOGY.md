@@ -180,7 +180,7 @@ of native-speaker certification.
 
 ## Readable sampling reports (#128)
 
-Report explanations, partial-capture notices, model probabilities and research
+Report explanations, partial-capture notices, effective selection probabilities and research
 format descriptions are Maia-specific and translated in all ten catalogs.
 Save follows the pinned Lichess `save` label, adding an ellipsis because another
 choice follows. Share follows the meaning of `mobileShareGamePGN`, omitting PGN
@@ -190,3 +190,8 @@ Cancel and chess notation reuse existing app concepts. Report SAN remains
 standard international algebraic notation, as in the existing move list.
 These translations require the normal native-speaker review; automated checks
 verify consistency, placeholders and layout, not linguistic certification.
+
+The report uses probabilities after the recorded Temperature/Top-P settings.
+The localized reciprocal (“about a 1 in X chance”), certainty wording and
+most-probable labels are Maia-specific explanatory prose. “View summary” and
+its screen were removed; Save/Share remain the only export actions.

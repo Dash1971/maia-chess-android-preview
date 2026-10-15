@@ -123,6 +123,14 @@ class SamplingReportDecision {
   final SamplingReportMove? played;
   final List<SamplingReportMove> alternatives;
   final DateTime startedAt;
+  SamplingReportMove? get mostProbable {
+    final other = alternatives.firstOrNull;
+    if (played == null) return other;
+    return other == null || played!.probability >= other.probability
+        ? played
+        : other;
+  }
+
   String get moveNumber => '$number${white ? '.' : '…'}';
 
   factory SamplingReportDecision.fromJson(Map<String, dynamic> r) {
@@ -138,36 +146,6 @@ class SamplingReportDecision {
       for (final m in game.moves({'asObjects': true}).cast<chess.Move>())
         MaiaEncoding.uci(m): m,
     };
-    final policy = <String, double>{};
-    for (final candidate in (r['rawLegalPolicy'] as List? ?? const [])) {
-      final uci = candidate['uci'] as String;
-      final p = (candidate['probability'] as num).toDouble();
-      if (!moves.containsKey(uci) ||
-          !p.isFinite ||
-          p < 0 ||
-          p > 1 ||
-          policy.containsKey(uci)) {
-        throw const FormatException('Invalid move probability');
-      }
-      policy[uci] = p;
-    }
-    if (policy.isNotEmpty &&
-        ((policy.values.fold(0.0, (a, b) => a + b) - 1).abs() > 0.0001 ||
-            policy.length != moves.length)) {
-      throw const FormatException('Incomplete move probability distribution');
-    }
-    SamplingReportMove describe(String uci) =>
-        SamplingReportMove(uci, game.move_to_san(moves[uci]!), policy[uci]!);
-    final committed = r['outcome'] == 'committed';
-    final chosen = r['committedMove'] as String?;
-    if (committed && (chosen == null || !policy.containsKey(chosen))) {
-      throw const FormatException('Played move missing from policy');
-    }
-    final ranked = policy.keys.toList()
-      ..sort((a, b) {
-        final order = policy[b]!.compareTo(policy[a]!);
-        return order == 0 ? a.compareTo(b) : order;
-      });
     final trace = r['sampling'] as Map?;
     double? setting(String name) {
       final v = (trace?[name] as num?)?.toDouble();
@@ -177,6 +155,101 @@ class SamplingReportDecision {
       return v;
     }
 
+    final temperature = setting('effectiveTemperature');
+    final topP = setting('effectiveTopP');
+    final policy = <String, double>{};
+    // Read the actual sampler trace. Never substitute raw model probabilities
+    // or rerun inference: settings, tie order and the retained set are recorded.
+    if (trace != null) {
+      final selected = trace['selected'];
+      if (!moves.containsKey(selected) || temperature == null || topP == null) {
+        throw const FormatException('Incomplete sampling trace');
+      }
+      if (trace['mode'] == 'argmax') {
+        if (temperature != 0 || trace['random'] != null) {
+          throw const FormatException('Invalid deterministic trace');
+        }
+        policy[selected as String] = 1;
+      } else if (trace['mode'] == 'random') {
+        if (temperature <= 0) {
+          throw const FormatException('Invalid random temperature');
+        }
+        final random = trace['random'] as Map;
+        final ordered = random['weightedOrder'] as List;
+        final count = random['nucleusCount'] as int;
+        if (count < 1 ||
+            count > ordered.length ||
+            ordered.length != moves.length) {
+          throw const FormatException('Invalid retained moves');
+        }
+        final weights = <String, double>{};
+        var last = double.infinity;
+        for (final item in ordered) {
+          final uci = item['uci'] as String;
+          final weight = (item['weight'] as num).toDouble();
+          if (!moves.containsKey(uci) ||
+              weights.containsKey(uci) ||
+              !weight.isFinite ||
+              weight < 0 ||
+              weight > last) {
+            throw const FormatException('Invalid sampler weights');
+          }
+          weights[uci] = weight;
+          last = weight;
+        }
+        final total = weights.values.fold(0.0, (a, b) => a + b);
+        if (!total.isFinite || total <= 0) {
+          throw const FormatException('Empty sampler distribution');
+        }
+        var mass = 0.0;
+        var expectedCount = 0;
+        for (final weight in weights.values) {
+          mass += weight / total;
+          expectedCount++;
+          if (topP < 1 && mass >= topP) break;
+        }
+        final retained = weights.entries.take(count).toList();
+        final retainedTotal = retained.fold(0.0, (v, m) => v + m.value);
+        final recordedTotal = (random['total'] as num).toDouble();
+        if (count != expectedCount ||
+            !recordedTotal.isFinite ||
+            retainedTotal <= 0 ||
+            (retainedTotal - recordedTotal).abs() > retainedTotal * 1e-12) {
+          throw const FormatException('Inconsistent sampling nucleus');
+        }
+        for (final item in retained) {
+          // Zero weights and Top-P-excluded moves are not possible alternatives.
+          if (item.value > 0) policy[item.key] = item.value / retainedTotal;
+        }
+        if (!policy.containsKey(selected)) {
+          throw const FormatException(
+            'Selected move outside sampling distribution',
+          );
+        }
+      } else {
+        throw const FormatException('Unsupported sampler mode');
+      }
+    }
+    SamplingReportMove describe(String uci) =>
+        SamplingReportMove(uci, game.move_to_san(moves[uci]!), policy[uci]!);
+    final committed = r['outcome'] == 'committed';
+    final chosen = r['committedMove'] as String?;
+    if (committed &&
+        (chosen == null ||
+            !policy.containsKey(chosen) ||
+            chosen != trace?['selected'])) {
+      throw const FormatException('Played move missing from sampling trace');
+    }
+    // The sampler's recorded ordering breaks ties; a played tied maximum can
+    // also be described as most probable, without inventing another preference.
+    final order = policy.keys.toList();
+    final ranked = [...order]
+      ..sort((a, b) {
+        final result = policy[b]!.compareTo(policy[a]!);
+        return result == 0
+            ? order.indexOf(a).compareTo(order.indexOf(b))
+            : result;
+      });
     final fields = fen.split(' ');
     return SamplingReportDecision(
       gameId: r['gameId'] as String,
@@ -186,8 +259,8 @@ class SamplingReportDecision {
       white: fields[1] == 'w',
       elo: r['selfElo'] as int,
       history: r['historyEnabled'] as bool,
-      temperature: setting('effectiveTemperature'),
-      topP: setting('effectiveTopP'),
+      temperature: temperature,
+      topP: topP,
       startedAt: DateTime.parse(r['startedAt'] as String).toUtc(),
       played: committed ? describe(chosen!) : null,
       alternatives: ranked
@@ -208,7 +281,11 @@ Map<String, String> samplingReportText(AppLocalizations s) => {
   'played': s.samplingPlayed,
   'notPlayed': s.samplingNotPlayed,
   'alternatives': s.samplingAlternatives,
-  'before': s.samplingPositionBefore,
+  'mostProbable': s.samplingMostProbable,
+  'matched': s.samplingPlayedMostProbable,
+  'chance': s.samplingChance('{move}', '{odds}'),
+  'certain': s.samplingCertain('{move}'),
+  'almostCertain': s.samplingAlmostCertain('{move}'),
   'white': s.white,
   'black': s.black,
   'temperature': s.temperature,
@@ -250,8 +327,97 @@ Future<Map<String, String>> samplingPieceImages() async {
   return images;
 }
 
-/// Self-contained HTML. The only images are the app's bundled chess pieces.
-/// No scripts, external URLs, fonts, engine calls or raw numerical arrays.
+/// Human-readable reciprocal of the effective selection probability.
+String samplingChance(
+  String move,
+  double probability,
+  Map<String, String> text,
+  String locale,
+) {
+  if (!probability.isFinite || probability <= 0 || probability > 1) {
+    throw const FormatException('Invalid selection probability');
+  }
+  if (probability == 1) return text['certain']!.replaceAll('{move}', move);
+  // Do not round a non-certain event into “1 in 1”.
+  if (probability > 1 / 1.05) {
+    return text['almostCertain']!.replaceAll('{move}', move);
+  }
+  final inverse = 1 / probability;
+  final String odds;
+  if (inverse <= 1000000) {
+    odds = NumberFormat('#,##0.#', locale).format(inverse);
+  } else {
+    // Computing the reciprocal directly can overflow for subnormal weights.
+    final logInverse = -log(probability) / ln10;
+    var exponent = logInverse.floor();
+    var mantissa = pow(10, logInverse - exponent).toDouble();
+    if (mantissa >= 9.95) {
+      mantissa = 1;
+      exponent++;
+    }
+    odds = '${NumberFormat('0.#', locale).format(mantissa)} × 10^$exponent';
+  }
+  return text['chance']!.replaceAll('{odds}', odds).replaceAll('{move}', move);
+}
+
+/// Black is the committed move; gray is a hypothetical most probable move.
+/// A tied played maximum needs only one solid arrow. Coordinates are outside.
+String samplingReportBoard(SamplingReportDecision d) {
+  const escape = HtmlEscape();
+  final out = StringBuffer(
+    '<div class="diagram"><div class="ranks" aria-hidden="true">',
+  );
+  for (var rank = 8; rank >= 1; rank--) {
+    out.write('<span>$rank</span>');
+  }
+  out.write(
+    '</div><div class="board" role="img" aria-label="${escape.convert(d.fen)}">',
+  );
+  final squares = <String>[];
+  for (final ch in d.fen.split(' ').first.replaceAll('/', '').split('')) {
+    final count = int.tryParse(ch);
+    if (count != null) {
+      squares.addAll(List.filled(count, ''));
+    } else {
+      squares.add(ch);
+    }
+  }
+  for (var i = 0; i < squares.length; i++) {
+    final piece = squares[i];
+    out.write(
+      '<span class="square ${(i ~/ 8 + i % 8).isOdd ? 'dark' : ''} ${piece.isEmpty ? '' : 'p${piece.codeUnitAt(0)}'}"></span>',
+    );
+  }
+  String arrow(SamplingReportMove move, bool solid) {
+    (double, double) point(String s) =>
+        ((s.codeUnitAt(0) - 97 + 0.5) * 40, (8 - int.parse(s[1]) + 0.5) * 40);
+    final (x, y) = point(move.uci.substring(0, 2));
+    final (tx, ty) = point(move.uci.substring(2, 4));
+    final length = sqrt(pow(tx - x, 2) + pow(ty - y, 2));
+    final ux = (tx - x) / length, uy = (ty - y) / length;
+    final sx = x + ux * 12, sy = y + uy * 12;
+    final bx = tx - ux * 16, by = ty - uy * 16;
+    String q(double x, double y, double n) =>
+        '${(x - uy * n).toStringAsFixed(3)},${(y + ux * n).toStringAsFixed(3)}';
+    if (solid) {
+      return '<path class="played-arrow" d="M ${q(sx, sy, 4)} L ${q(bx, by, 4)} L ${q(bx, by, 9)} L $tx,$ty L ${q(bx, by, -9)} L ${q(bx, by, -4)} L ${q(sx, sy, -4)} Z" fill="#171717"/>';
+    }
+    return '<path class="probable-arrow" d="M $sx,$sy L $tx,$ty M ${q(bx, by, 9)} L $tx,$ty L ${q(bx, by, -9)}" fill="none" stroke="#737373" stroke-width="3" stroke-linejoin="round"/>';
+  }
+
+  out.write('<svg viewBox="0 0 320 320" aria-hidden="true">');
+  final top = d.mostProbable;
+  if (top != null && top.uci != d.played?.uci) out.write(arrow(top, false));
+  if (d.played != null) out.write(arrow(d.played!, true));
+  out.write('</svg></div><div class="files" aria-hidden="true">');
+  for (final file in 'abcdefgh'.split('')) {
+    out.write('<span>$file</span>');
+  }
+  out.write('</div></div>');
+  return out.toString();
+}
+
+/// Self-contained HTML: bundled pieces, inline vector arrows, no network or JS.
 Future<void> writeSamplingReportHtml(
   SamplingReport report,
   File target,
@@ -268,10 +434,9 @@ Future<void> writeSamplingReportHtml(
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
 <title>${t('title')}</title><style>
-:root{color-scheme:light dark}body{font:16px/1.5 system-ui,sans-serif;max-width:860px;margin:auto;padding:20px;background:#171e16;color:#e0e8df}h1{font-size:28px}h2{font-size:22px;margin-top:36px}small,.muted{color:#bbc9b8}article{padding:16px;margin:12px 0;background:#253026;border-radius:12px}.headline{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.headline strong{font-size:21px}.probability{color:#a7dca4}details{margin-top:12px}summary{cursor:pointer}.board{display:grid;grid-template-columns:repeat(8,1fr);width:min(100%,288px);aspect-ratio:1;margin:12px 0}.square{background:#f0d9b5;background-size:contain;position:relative}.dark{background-color:#b58863}.square b{position:absolute;font:10px system-ui;left:2px;bottom:0;color:#222}.note{border-left:3px solid #a7dca4;padding-left:12px}.settings{white-space:pre-line}.alternatives{margin:8px 0}.option{display:inline-block;margin-right:18px}footer{font-size:12px;margin-top:24px}
+:root{color-scheme:dark}body{font:16px/1.5 system-ui,sans-serif;max-width:1080px;margin:auto;padding:24px;background:#171e16;color:#e0e8df}h1{font-size:28px}h2{font-size:22px;margin-top:36px}h3{font-size:21px;margin:0 0 12px}small,.muted{color:#bbc9b8}article{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:28px;align-items:center;padding:24px;margin:12px 0;background:#253026;border-radius:12px}.copy{min-width:0;overflow-wrap:anywhere}.settings{white-space:pre-line;font-size:14px}.alternatives{margin:16px 0;font-size:14px}.option{display:inline-block;margin-right:16px}.legend{margin:16px 0 8px}.legend p{margin:4px 0}.key{display:inline-block;width:18px;height:3px;margin:0 8px 3px 0}.played-key{background:#171717;outline:1px solid #9aa498}.probable-key{background:#737373}.chance{margin:12px 0}.diagram{width:340px;max-width:100%;display:grid;grid-template-columns:20px minmax(0,1fr);grid-template-rows:1fr 20px}.board{position:relative;display:grid;grid-template-columns:repeat(8,1fr);aspect-ratio:1}.square{background:#f0d9b5;background-size:contain}.dark{background-color:#b58863}.board svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.ranks{display:grid;grid-template-rows:repeat(8,1fr);font-size:11px;text-align:center;color:#bbc9b8}.ranks span{align-self:center}.files{grid-column:2;display:grid;grid-template-columns:repeat(8,1fr);font-size:11px;text-align:center;color:#bbc9b8;padding-top:3px}.note{border-left:3px solid #a7dca4;padding-left:12px;font-size:14px}footer{font-size:12px;margin-top:24px}a{color:#a7dca4}@media(max-width:680px){body{padding:16px}article{grid-template-columns:1fr;padding:16px;gap:18px}.diagram{justify-self:center;width:min(100%,340px)}h1{font-size:26px}}@media print{body{background:white;color:black}.muted,.ranks,.files{color:#444}article{background:#eee;break-inside:avoid}a{color:inherit}}
 ''');
     for (final entry in pieceImages.entries) {
-      // Only known piece codes and validated base64 supplied by bundled assets.
       if (!RegExp(r'^[prnbqkPRNBQK]$').hasMatch(entry.key) ||
           !RegExp(r'^[A-Za-z0-9+/=]+$').hasMatch(entry.value)) {
         throw const FormatException('Invalid embedded piece');
@@ -292,49 +457,44 @@ Future<void> writeSamplingReportHtml(
         '<h2>${e(text['game']!.replaceAll('{number}', '$gameIndex'))}</h2><p class="muted">${e(text['records']!.replaceAll('{count}', '${game.length}'))}</p>',
       );
       for (final d in game) {
-        final move = d.played;
+        final move = d.played, top = d.mostProbable;
+        final matched = move != null && move.uci == top?.uci;
         out.write(
-          '<article><div class="headline"><strong>${e(d.moveNumber)} ${move == null ? t('notPlayed') : '${t('played')}: ${e(move.san)}'}</strong>',
+          '<article><div class="copy"><h3>${e(d.moveNumber)} ${move == null ? t('notPlayed') : '${t('played')}: ${e(move.san)}'}</h3><p class="settings muted">${e(samplingSettings(d, text, locale))}</p><div class="legend">',
         );
+        String description(SamplingReportMove m) =>
+            '${e(m.san)} · ${e(samplingPercent(m.probability, locale))}';
+        if (matched) {
+          out.write(
+            '<p>${t('matched')}</p><p><i class="key played-key" aria-hidden="true"></i>${description(move)}</p>',
+          );
+        } else {
+          if (move != null) {
+            out.write(
+              '<p><i class="key played-key" aria-hidden="true"></i>${t('played')} ${description(move)}</p>',
+            );
+          }
+          if (top != null) {
+            out.write(
+              '<p><i class="key probable-key" aria-hidden="true"></i>${t('mostProbable')} ${description(top)}</p>',
+            );
+          }
+        }
+        out.write('</div>');
         if (move != null) {
           out.write(
-            '<span class="probability">${e(samplingPercent(move.probability, locale))}</span>',
+            '<p class="chance">${e(samplingChance(move.san, move.probability, text, locale))}</p>',
           );
         }
-        out.write(
-          '</div><p class="settings muted">${e(samplingSettings(d, text, locale))}</p>',
-        );
         if (d.alternatives.isNotEmpty) {
           out.write('<div class="alternatives">${t('alternatives')}:<br>');
           for (final m in d.alternatives) {
-            out.write(
-              '<span class="option">${e(m.san)} <span class="probability">${e(samplingPercent(m.probability, locale))}</span></span>',
-            );
+            out.write('<span class="option">${description(m)}</span>');
           }
           out.write('</div>');
         }
         out.write(
-          '<details><summary>${t('before')}</summary><div class="board" role="img" aria-label="${e(d.fen)}">',
-        );
-        final squares = <String>[];
-        for (final ch in d.fen.split(' ').first.replaceAll('/', '').split('')) {
-          final count = int.tryParse(ch);
-          if (count != null) {
-            squares.addAll(List.filled(count, ''));
-          } else {
-            squares.add(ch);
-          }
-        }
-        for (var i = 0; i < squares.length; i++) {
-          final piece = squares[i];
-          final rank = 8 - i ~/ 8, file = String.fromCharCode(97 + i % 8);
-          final label = i >= 56 ? file : (i % 8 == 0 ? '$rank' : '');
-          out.write(
-            '<span class="square ${(i ~/ 8 + i % 8).isOdd ? 'dark' : ''} ${piece.isEmpty ? '' : 'p${piece.codeUnitAt(0)}'}"><b>$label</b></span>',
-          );
-        }
-        out.write(
-          '</div><small>${e(d.startedAt.toIso8601String())}</small></details></article>',
+          '<small>${e('${d.startedAt.toIso8601String().substring(0, 16).replaceFirst('T', ' ')} UTC')}</small></div>${samplingReportBoard(d)}</article>',
         );
         if (++recordIndex % 32 == 0) await out.flush();
       }

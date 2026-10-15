@@ -37,20 +37,6 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
 
   Future<void> _action(String action) async {
     if (_working || capture.busy) return;
-    if (action == 'view') {
-      SamplingReport? report;
-      await _run(() async {
-        report = await capture.report();
-      });
-      if (mounted && report != null) {
-        await Navigator.of(context).push<void>(
-          MaterialPageRoute(
-            builder: (_) => SamplingReportScreen(report: report!),
-          ),
-        );
-      }
-      return;
-    }
     final share = action == 'share';
     final readable = await chooseSamplingFormat(context, share: share);
     if (!mounted || readable == null || capture.busy) return;
@@ -136,10 +122,6 @@ class _SamplingCaptureSettingsState extends State<SamplingCaptureSettings> {
                       )
                     : const Icon(Icons.more_vert),
                 itemBuilder: (_) => [
-                  PopupMenuItem(
-                    value: 'view',
-                    child: Text(strings.samplingView),
-                  ),
                   PopupMenuItem(
                     value: 'save',
                     child: Text(strings.samplingSave),

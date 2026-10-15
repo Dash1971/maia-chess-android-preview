@@ -238,11 +238,6 @@ class SamplingCapture extends ChangeNotifier {
     }
   }
 
-  Future<SamplingReport> report() => _withSnapshot((file) {
-    final path = file.path;
-    return Isolate.run(() => SamplingReport.read(File(path)));
-  });
-
   Future<void> saveDocument({
     bool share = false,
     bool readable = false,

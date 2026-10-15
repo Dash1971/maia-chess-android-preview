@@ -9,30 +9,6 @@ import 'package:maia_chess/main.dart';
 import 'package:maia_chess/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'sampling_report_test.dart' show reportRecord;
-
-SamplingReport sampleReport() {
-  final record = reportRecord(
-    fen: 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1',
-    move: 'd7d5',
-  );
-  for (final p in record['rawLegalPolicy'] as List) {
-    p['probability'] = switch (p['uci']) {
-      'd7d5' => 0.47,
-      'g8f6' => 0.16,
-      'e7e6' => 0.10,
-      'e7e5' => 0.08,
-      _ => 0.19 / 16,
-    };
-  }
-  return SamplingReport([
-    SamplingReportDecision.fromJson(record),
-    SamplingReportDecision.fromJson(
-      reportRecord(id: 'second')..['gameId'] = 'second-game',
-    ),
-  ], incomplete: false);
-}
-
 Widget app(
   Widget home, {
   Locale locale = const Locale('en'),
@@ -59,7 +35,7 @@ Widget app(
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  testWidgets('report and both format choices fit every locale at large text', (
+  testWidgets('both format choices fit every locale at large text', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(320, 640);
@@ -68,25 +44,6 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     for (final locale in AppLocalizations.supportedLocales) {
       final s = await AppLocalizations.delegate.load(locale);
-      await tester.pumpWidget(
-        app(
-          SamplingReportScreen(key: ValueKey(locale), report: sampleReport()),
-          locale: locale,
-          scale: 2,
-        ),
-      );
-      await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
-      await tester.scrollUntilVisible(find.text('1… d5'), 200);
-      await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
-      await tester.scrollUntilVisible(find.text(s.samplingPositionBefore), 150);
-      await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text(s.samplingPositionBefore));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(s.samplingPositionBefore));
-      await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
       for (final share in [false, true]) {
         await tester.pumpWidget(
           app(
@@ -114,50 +71,34 @@ void main() {
     await tester.pumpWidget(const SizedBox());
     await tester.pumpAndSettle();
   });
-  testWidgets(
-    'game selector replaces visible decisions and format defaults to HTML',
-    (tester) async {
-      await tester.pumpWidget(
-        app(SamplingReportScreen(report: sampleReport())),
-      );
-      await tester.pumpAndSettle();
-      expect(find.text('1… d5'), findsOneWidget);
-      await tester.tap(find.byKey(const ValueKey('sampling-report-game')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Game 2').last);
-      await tester.pumpAndSettle();
-      expect(find.text('1. e4'), findsOneWidget);
-      expect(find.text('1… d5'), findsNothing);
-      bool? result;
-      await tester.pumpWidget(
-        app(
-          Scaffold(
-            body: Builder(
-              builder: (context) => TextButton(
-                onPressed: () async {
-                  result = await chooseSamplingFormat(context, share: false);
-                },
-                child: const Text('open'),
-              ),
+  testWidgets('format defaults to HTML and allows JSONL', (tester) async {
+    bool? result;
+    await tester.pumpWidget(
+      app(
+        Scaffold(
+          body: Builder(
+            builder: (context) => TextButton(
+              onPressed: () async {
+                result = await chooseSamplingFormat(context, share: false);
+              },
+              child: const Text('open'),
             ),
           ),
         ),
-      );
-      await tester.tap(find.text('open'));
-      await tester.pumpAndSettle();
-      expect(
-        tester
-            .widget<RadioGroup<bool>>(find.byType(RadioGroup<bool>))
-            .groupValue,
-        true,
-      );
-      await tester.tap(find.text('Full research data (JSONL)'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(FilledButton, 'Save…'));
-      await tester.pumpAndSettle();
-      expect(result, false);
-    },
-  );
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<RadioGroup<bool>>(find.byType(RadioGroup<bool>)).groupValue,
+      true,
+    );
+    await tester.tap(find.text('Full research data (JSONL)'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Save…'));
+    await tester.pumpAndSettle();
+    expect(result, false);
+  });
 
   // Opt-in screenshots of the actual widgets; CI never writes golden artifacts.
   final output = Platform.environment['MAIA_REPORT_MOCKUP_DIR'];
@@ -254,16 +195,13 @@ void main() {
         await shot('03-format');
         await tester.tap(find.text('Cancel'));
         await tester.pumpAndSettle();
-        await tester.pumpWidget(
-          RepaintBoundary(
-            key: boundaryKey,
-            child: app(SamplingReportScreen(report: sampleReport())),
-          ),
-        );
+        await tester.tap(find.byKey(const ValueKey('sampling-actions')));
         await tester.pumpAndSettle();
-        await tester.tap(find.text('Position before the move'));
+        await tester.tap(find.text('Share…'));
         await tester.pumpAndSettle();
-        await shot('04-summary');
+        await shot('04-share-format');
+        await tester.tap(find.text('Cancel'));
+        await tester.pumpAndSettle();
         await tester.pumpWidget(const SizedBox());
         await tester.pumpAndSettle();
         await tester.runAsync(capture.flush);

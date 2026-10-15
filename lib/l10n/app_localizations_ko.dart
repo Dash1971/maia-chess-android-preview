@@ -1190,9 +1190,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get samplingDataError => '수 선택 데이터에 접근할 수 없습니다. 대국에는 영향이 없습니다.';
 
   @override
-  String get samplingView => '요약 보기';
-
-  @override
   String get samplingSave => '저장하기…';
 
   @override
@@ -1212,7 +1209,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingReportExplanation =>
-      '백분율은 Maia가 예측한 수의 선택 확률이며, 승률이나 수의 좋고 나쁨을 뜻하지 않습니다. Temperature와 Top-P를 적용하기 전의 모델 확률입니다.';
+      '백분율은 당시 Temperature와 Top-P 설정을 적용한 뒤 각 수가 선택될 확률입니다. 승률이나 수의 좋고 나쁨을 나타내는 점수가 아닙니다.';
 
   @override
   String get samplingReportPartial =>
@@ -1232,9 +1229,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get samplingAlternatives => '선택 가능성이 높은 다른 수';
 
   @override
-  String get samplingPositionBefore => '수를 두기 전 포지션';
-
-  @override
   String samplingGame(String number) {
     return '게임 $number';
   }
@@ -1242,5 +1236,26 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String samplingRecords(String count) {
     return '기록된 판단: $count';
+  }
+
+  @override
+  String get samplingMostProbable => '선택 확률이 가장 높은 수';
+
+  @override
+  String get samplingPlayedMostProbable => '선택 확률이 가장 높은 수를 두었습니다';
+
+  @override
+  String samplingChance(String move, String odds) {
+    return '$move 선택 확률은 약 $odds분의 1이었습니다.';
+  }
+
+  @override
+  String samplingCertain(String move) {
+    return '$move 선택 확률은 100%였습니다.';
+  }
+
+  @override
+  String samplingAlmostCertain(String move) {
+    return '$move 선택 확률은 거의 100%였습니다.';
   }
 }

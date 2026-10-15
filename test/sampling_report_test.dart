@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:chess/chess.dart' as chess;
 import 'package:crypto/crypto.dart';
@@ -27,7 +28,19 @@ Map<String, dynamic> reportRecord({
     'startedAt': '2026-10-15T00:00:00Z',
     'outcome': outcome,
     if (outcome == 'committed') 'committedMove': move,
-    'sampling': {'effectiveTemperature': 0.5, 'effectiveTopP': 0.9},
+    'sampling': {
+      'mode': 'random',
+      'selected': move,
+      'effectiveTemperature': 1.0,
+      'effectiveTopP': 1.0,
+      'random': {
+        'nucleusCount': moves.length,
+        'total': moves.length.toDouble(),
+        'weightedOrder': [
+          for (final m in moves) {'uci': MaiaEncoding.uci(m), 'weight': 1.0},
+        ],
+      },
+    },
     'rawLegalPolicy': [
       for (final m in moves)
         {'uci': MaiaEncoding.uci(m), 'probability': 1 / moves.length},
@@ -109,6 +122,9 @@ void main() {
           reportRecord(id: state, outcome: state),
       ];
       records[1]['sampling'] = {
+        'mode': 'argmax',
+        'selected': 'e2e4',
+        'random': null,
         'effectiveTemperature': 0.0,
         'effectiveTopP': 0.0,
       };
@@ -153,7 +169,8 @@ void main() {
         throwsFormatException,
       );
       final duplicate = reportRecord();
-      (duplicate['rawLegalPolicy'] as List).add(duplicate['rawLegalPolicy'][0]);
+      duplicate['sampling']['random']['weightedOrder'][1] =
+          duplicate['sampling']['random']['weightedOrder'][0];
       expect(
         () => SamplingReportDecision.fromJson(duplicate),
         throwsFormatException,
@@ -184,12 +201,157 @@ void main() {
       expect(html, contains('data:image/webp;base64,'));
       expect(html, contains('Not recorded as played'));
       expect(html, contains('e4'));
-      expect(html, contains('Position before the move'));
+      expect(html, isNot(contains('<details>')));
+      expect(html, contains('class="ranks"'));
+      expect(html, contains('class="files"'));
+      expect(html, contains('class="played-arrow"'));
+      expect(html, contains('fill="#171717"'));
+      expect(html, contains('1 in 20'));
+      for (final svg in RegExp(r'<svg.*?</svg>').allMatches(html)) {
+        expect(svg.group(0), isNot(contains('%')));
+        expect(svg.group(0), isNot(contains('<text')));
+      }
       expect(html, contains('CC BY-SA 3.0'));
       expect(html.length, lessThan(150000));
       expect(samplingPercent(0.0061, 'de'), '0,61%');
     },
   );
+  test('effective probability uses the actual temperature weights and Top-P crossing move', () {
+    final board = chess.Chess();
+    final moves = board.moves({'asObjects': true}).cast<chess.Move>();
+    final logits = List<double>.filled(4352, -1000);
+    for (final pair in [('e2e4', 0.6), ('d2d4', 0.3), ('g1f3', 0.1)]) {
+      logits[MaiaEncoding.moveIndex(pair.$1, false)] = log(pair.$2);
+    }
+    for (final temp in [0.0, 0.5, 1.0]) {
+      for (final topP in [0.0, 0.8, 1.0]) {
+        Map<String, Object?>? trace;
+        final selected = MaiaEncoding.sampleLegalMove(
+          board,
+          moves,
+          logits,
+          temperature: temp,
+          topP: topP,
+          random: Random(42),
+          onSample: (v) => trace = v,
+        );
+        final record = reportRecord(move: MaiaEncoding.uci(selected))
+          ..['sampling'] = trace;
+        // Raw policy is deliberately unrelated: the report must not use it.
+        final d = SamplingReportDecision.fromJson(record);
+        final distribution = {
+          d.played!.uci: d.played!.probability,
+          for (final m in d.alternatives) m.uci: m.probability,
+        };
+        if (temp == 0 || topP == 0) {
+          expect(distribution, {'e2e4': 1.0});
+          expect(d.alternatives, isEmpty);
+        } else if (topP == 0.8) {
+          expect(distribution.length, 2);
+          expect(distribution['e2e4'], closeTo(temp == 1 ? 2 / 3 : 0.8, 1e-12));
+          expect(distribution['d2d4'], closeTo(temp == 1 ? 1 / 3 : 0.2, 1e-12));
+          expect(distribution.containsKey('g1f3'), false);
+        } else {
+          expect(
+            distribution['e2e4'],
+            closeTo(temp == 1 ? 0.6 : 36 / 46, 1e-12),
+          );
+          expect(
+            distribution['g1f3'],
+            closeTo(temp == 1 ? 0.1 : 1 / 46, 1e-12),
+          );
+        }
+        expect(distribution.values.reduce((a, b) => a + b), closeTo(1, 1e-12));
+      }
+    }
+  });
+  test('trace errors never silently fall back to raw policy', () {
+    for (final mutate in <void Function(Map<String, dynamic>)>[
+      (r) => r.remove('sampling'),
+      (r) => r['sampling']['selected'] = 'd2d4',
+      (r) => r['sampling']['mode'] = 'unknown',
+      (r) => r['sampling']['random']['total'] = 0,
+      (r) => r['sampling']['random']['nucleusCount'] = 1,
+      (r) => r['sampling']['random']['weightedOrder'][0]['weight'] = double.nan,
+      (r) => r['sampling']['random']['weightedOrder'][0]['weight'] = -1,
+      (r) => r['sampling']['random']['weightedOrder'][1]['weight'] = 2,
+    ]) {
+      final r = reportRecord();
+      mutate(r);
+      expect(() => SamplingReportDecision.fromJson(r), throwsFormatException);
+    }
+    final incomplete = SamplingReportDecision.fromJson(
+      reportRecord(outcome: 'pending')..remove('sampling'),
+    );
+    expect(incomplete.played, isNull);
+    expect(incomplete.mostProbable, isNull);
+    expect(incomplete.alternatives, isEmpty);
+  });
+  test('one-in-X handles localization, certainty and extremely small probabilities', () async {
+    for (final locale in AppLocalizations.supportedLocales) {
+      final s = await AppLocalizations.delegate.load(locale);
+      final t = samplingReportText(s);
+      final chance = samplingChance('e4', 0.1804, t, s.localeName);
+      expect(
+        chance,
+        contains(
+          locale.languageCode == 'en' ||
+                  ['ja', 'zh', 'ko', 'hi'].contains(locale.languageCode)
+              ? '5.5'
+              : '5,5',
+        ),
+      );
+      expect(samplingChance('e4', 1, t, s.localeName), s.samplingCertain('e4'));
+      expect(
+        samplingChance('e4', 0.99999, t, s.localeName),
+        s.samplingAlmostCertain('e4'),
+      );
+      expect(
+        samplingChance('e4', 5e-324, t, s.localeName),
+        isNot(contains('Infinity')),
+      );
+      expect(samplingChance('e4', 5e-324, t, s.localeName), contains('10^323'));
+    }
+    final t = samplingReportText(
+      await AppLocalizations.delegate.load(const Locale('en')),
+    );
+    expect(samplingChance('e4', 0.5, t, 'en'), contains('1 in 2 '));
+    expect(() => samplingChance('e4', 0, t, 'en'), throwsFormatException);
+  });
+  test('arrows distinguish played and most probable, with ties combined', () {
+    final d = SamplingReportDecision.fromJson(reportRecord());
+    final board = samplingReportBoard(d);
+    expect(RegExp('class="played-arrow"').allMatches(board).length, 1);
+    expect(board, isNot(contains('class="probable-arrow"')));
+    final r = reportRecord();
+    r['sampling']['random']['weightedOrder'][0]['weight'] = 2.0;
+    r['sampling']['random']['total'] = 21.0;
+    final different = samplingReportBoard(SamplingReportDecision.fromJson(r));
+    expect(different, contains('class="probable-arrow"'));
+    expect(different, contains('stroke="#737373"'));
+    expect(different, isNot(contains('%')));
+  });
+  // Optional local evidence; no user captures are checked into the repository.
+  final source = Platform.environment['MAIA_REPORT_EXPORT_SOURCE'];
+  final destination = Platform.environment['MAIA_REPORT_EXPORT_OUTPUT'];
+  if (source != null && destination != null) {
+    test('render a local capture with the production HTML writer', () async {
+      final report = await SamplingReport.read(File(source));
+      final images = await samplingPieceImages();
+      for (final locale in AppLocalizations.supportedLocales) {
+        final strings = await AppLocalizations.delegate.load(locale);
+        final target = File('$destination/report-${locale.languageCode}.html');
+        await target.parent.create(recursive: true);
+        await writeSamplingReportHtml(
+          report,
+          target,
+          samplingReportText(strings),
+          strings.localeName,
+          images,
+        );
+      }
+    });
+  }
   test('large raw payloads are discarded from the compact report', () async {
     final f = File('${dir.path}/large.jsonl');
     final record = reportRecord()

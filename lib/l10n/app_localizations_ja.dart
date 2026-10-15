@@ -1189,9 +1189,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get samplingDataError => '手の選択データにアクセスできませんでした。対局への影響はありません。';
 
   @override
-  String get samplingView => '概要を見る';
-
-  @override
   String get samplingSave => '保存…';
 
   @override
@@ -1211,7 +1208,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingReportExplanation =>
-      'パーセントはMaiaが予測する指し手の選ばれやすさで、勝率や手の良し悪しではありません。TemperatureとTop-Pを適用する前のモデルの確率です。';
+      'パーセントは、その時点のTemperatureとTop-P設定を適用した後に各指し手が選ばれる確率です。勝率や手の良し悪しを表すものではありません。';
 
   @override
   String get samplingReportPartial =>
@@ -1231,9 +1228,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get samplingAlternatives => '選ばれやすい他の手';
 
   @override
-  String get samplingPositionBefore => '指す前の局面';
-
-  @override
   String samplingGame(String number) {
     return '対局 $number';
   }
@@ -1241,5 +1235,26 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String samplingRecords(String count) {
     return '記録された判断：$count';
+  }
+
+  @override
+  String get samplingMostProbable => '最も選ばれやすい手';
+
+  @override
+  String get samplingPlayedMostProbable => '最も選ばれやすい手を指しました';
+
+  @override
+  String samplingChance(String move, String odds) {
+    return '$moveが選ばれる確率は約$odds分の1でした。';
+  }
+
+  @override
+  String samplingCertain(String move) {
+    return '$moveが必ず選ばれる設定でした（100%）。';
+  }
+
+  @override
+  String samplingAlmostCertain(String move) {
+    return '$moveが選ばれる確率は、ほぼ100%でした。';
   }
 }

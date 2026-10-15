@@ -37,7 +37,7 @@ part 'src/maia_queue.dart';
 part 'src/sampling_capture.dart';
 part 'src/sampling_capture_settings.dart';
 part 'src/sampling_report.dart';
-part 'src/sampling_report_screen.dart';
+part 'src/sampling_report_format.dart';
 part 'src/diagnostics.dart';
 part 'src/session_types.dart';
 part 'src/variation_tree.dart';

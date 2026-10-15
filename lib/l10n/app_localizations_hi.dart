@@ -1282,9 +1282,6 @@ class AppLocalizationsHi extends AppLocalizations {
       'चाल चयन के डेटा तक पहुँच नहीं हो सकी। खेल पर कोई असर नहीं पड़ता।';
 
   @override
-  String get samplingView => 'सारांश देखें';
-
-  @override
   String get samplingSave => 'सहेजें…';
 
   @override
@@ -1306,7 +1303,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get samplingReportExplanation =>
-      'प्रतिशत बताते हैं कि Maia के अनुमान के अनुसार कौन-सी चाल चुनी जा सकती है। ये जीतने की संभावना या चाल की गुणवत्ता नहीं बताते। ये Temperature और Top-P लागू करने से पहले मॉडल की संभावनाएँ हैं।';
+      'प्रतिशत बताते हैं कि आपकी Temperature और Top-P सेटिंग लागू होने के बाद हर चाल के चुने जाने की संभावना कितनी थी। ये जीतने की संभावना या चाल की गुणवत्ता के अंक नहीं हैं।';
 
   @override
   String get samplingReportPartial =>
@@ -1326,9 +1323,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get samplingAlternatives => 'अन्य संभावित चालें';
 
   @override
-  String get samplingPositionBefore => 'चाल से पहले की स्थिति';
-
-  @override
   String samplingGame(String number) {
     return 'बाज़ी $number';
   }
@@ -1336,5 +1330,26 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String samplingRecords(String count) {
     return 'दर्ज निर्णय: $count';
+  }
+
+  @override
+  String get samplingMostProbable => 'सबसे संभावित चाल';
+
+  @override
+  String get samplingPlayedMostProbable => 'सबसे संभावित चाल खेली गई';
+
+  @override
+  String samplingChance(String move, String odds) {
+    return '$move के चुने जाने की संभावना लगभग $odds में 1 थी।';
+  }
+
+  @override
+  String samplingCertain(String move) {
+    return '$move का चुना जाना निश्चित था (100%)।';
+  }
+
+  @override
+  String samplingAlmostCertain(String move) {
+    return '$move का चुना जाना लगभग निश्चित था।';
   }
 }

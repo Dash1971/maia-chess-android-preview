@@ -2215,12 +2215,6 @@ abstract class AppLocalizations {
   /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
   ///
   /// In en, this message translates to:
-  /// **'View summary'**
-  String get samplingView;
-
-  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
-  ///
-  /// In en, this message translates to:
   /// **'Save…'**
   String get samplingSave;
 
@@ -2254,10 +2248,10 @@ abstract class AppLocalizations {
   /// **'Raw model inputs and outputs for technical analysis.'**
   String get samplingResearchHint;
 
-  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
   ///
   /// In en, this message translates to:
-  /// **'Percentages show Maia’s predicted move choices, not winning chances or move quality. These are model probabilities before Temperature and Top-P are applied.'**
+  /// **'Percentages show the chance of each move being selected after your Temperature and Top-P settings were applied. They are not winning chances or move-quality scores.'**
   String get samplingReportExplanation;
 
   /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
@@ -2293,12 +2287,6 @@ abstract class AppLocalizations {
   /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
   ///
   /// In en, this message translates to:
-  /// **'Position before the move'**
-  String get samplingPositionBefore;
-
-  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
-  ///
-  /// In en, this message translates to:
   /// **'Game {number}'**
   String samplingGame(String number);
 
@@ -2307,6 +2295,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recorded decisions: {count}'**
   String samplingRecords(String count);
+
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  ///
+  /// In en, this message translates to:
+  /// **'Most probable'**
+  String get samplingMostProbable;
+
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  ///
+  /// In en, this message translates to:
+  /// **'Played the most probable move'**
+  String get samplingPlayedMostProbable;
+
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  ///
+  /// In en, this message translates to:
+  /// **'{move} had about a 1 in {odds} chance of being played.'**
+  String samplingChance(String move, String odds);
+
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  ///
+  /// In en, this message translates to:
+  /// **'{move} was certain to be selected (100%).'**
+  String samplingCertain(String move);
+
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  ///
+  /// In en, this message translates to:
+  /// **'{move} was almost certain to be selected.'**
+  String samplingAlmostCertain(String move);
 }
 
 class _AppLocalizationsDelegate

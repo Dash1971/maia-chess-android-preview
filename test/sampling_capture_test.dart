@@ -427,11 +427,6 @@ void main() {
       expect(store.records, 1);
       expect(File('${dir.path}/export.jsonl').existsSync(), false);
       expect(File('${dir.path}/report.html').existsSync(), false);
-      final summary = await store.report();
-      expect(summary.decisions, hasLength(1));
-      expect(summary.decisions.single.played, isNull);
-      expect(store.busy, false);
-      expect(File('${dir.path}/export.jsonl').existsSync(), false);
     } finally {
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(maiaEngineChannel, null);

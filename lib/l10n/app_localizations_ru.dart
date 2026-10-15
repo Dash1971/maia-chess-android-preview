@@ -1304,9 +1304,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Не удалось получить доступ к данным о выборе ходов. Это не мешает игре.';
 
   @override
-  String get samplingView => 'Посмотреть сводку';
-
-  @override
   String get samplingSave => 'Сохранить…';
 
   @override
@@ -1328,7 +1325,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get samplingReportExplanation =>
-      'Проценты показывают предсказанную Maia вероятность выбора хода, а не шансы на победу или качество хода. Это вероятности модели до применения температуры и Top-P.';
+      'Проценты показывают вероятность выбора каждого хода после применения ваших настроек температуры и Top-P. Это не шансы на победу и не оценка качества хода.';
 
   @override
   String get samplingReportPartial =>
@@ -1348,9 +1345,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get samplingAlternatives => 'Вероятные альтернативы';
 
   @override
-  String get samplingPositionBefore => 'Позиция перед ходом';
-
-  @override
   String samplingGame(String number) {
     return 'Партия $number';
   }
@@ -1358,5 +1352,26 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String samplingRecords(String count) {
     return 'Записано решений: $count';
+  }
+
+  @override
+  String get samplingMostProbable => 'Наиболее вероятный';
+
+  @override
+  String get samplingPlayedMostProbable => 'Сыгран наиболее вероятный ход';
+
+  @override
+  String samplingChance(String move, String odds) {
+    return 'Вероятность выбора хода $move составляла примерно 1 из $odds.';
+  }
+
+  @override
+  String samplingCertain(String move) {
+    return 'Ход $move выбирался гарантированно (100%).';
+  }
+
+  @override
+  String samplingAlmostCertain(String move) {
+    return 'Ход $move выбирался почти наверняка.';
   }
 }
