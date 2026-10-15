@@ -205,7 +205,7 @@ void main() {
       expect(html, contains('class="ranks"'));
       expect(html, contains('class="files"'));
       expect(html, contains('class="played-arrow"'));
-      expect(html, contains('fill="#171717"'));
+      expect(html, contains('fill="#505050"'));
       expect(html, contains('1 in 20'));
       for (final svg in RegExp(r'<svg.*?</svg>').allMatches(html)) {
         expect(svg.group(0), isNot(contains('%')));

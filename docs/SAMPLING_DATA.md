@@ -191,9 +191,9 @@ not raw model probabilities, winning chances or move-quality scores:
 
 The board is always visible: right of the text on wide screens, stacked below
 on phones. It shows the position before the move, White at the bottom, with
-coordinates outside. A solid black arrow marks the committed move; a thin open
+coordinates outside. A solid charcoal arrow marks the committed move; a thin open
 gray arrow marks the most probable choice. If the played move is a tied maximum,
-show one black arrow and label it as the most probable move. Percentages remain
+show one charcoal arrow and label it as the most probable move. Percentages remain
 in the text, never over the board. The original raw model policy remains in JSONL.
 
 A report is explicitly a partial capture, not a complete game/PGN; capture loss
