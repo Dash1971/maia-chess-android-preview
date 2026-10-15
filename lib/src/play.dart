@@ -636,9 +636,14 @@ class _GamePageState extends State<GamePage>
       setState(() {
         _game = restored;
         final captureId = saved['samplingGameId'];
-        if (captureId is String && RegExp(r'^\d+-\d+$').hasMatch(captureId)) {
-          _samplingGameId = captureId;
-        }
+        _samplingGameId =
+            captureId is String && RegExp(r'^\d+-\d+$').hasMatch(captureId)
+            ? captureId
+            : SamplingCapture.newId();
+        final startedAt = saved['samplingStartedAt'];
+        _samplingStartedAt = startedAt is String
+            ? DateTime.tryParse(startedAt)?.toUtc()
+            : null;
         _gameUseMoveHistory = saved['maiaUseMoveHistory'] == true;
         _gameHistoryPrefix = restoreMaiaHistoryPrefix(
           saved['historyPrefix'],
@@ -844,6 +849,7 @@ class _GamePageState extends State<GamePage>
     if (!_started || _reviewOpen || (_startingGame && !allowDuringStart)) {
       return;
     }
+    _updateSamplingGame();
     await ActiveSessionStore.save(_gameSnapshot());
   }
 
@@ -863,6 +869,7 @@ class _GamePageState extends State<GamePage>
     'playerIsWhite': _playerIsWhite,
     'elo': _elo,
     'samplingGameId': _samplingGameId,
+    'samplingStartedAt': _samplingStartedAt?.toUtc().toIso8601String(),
     'maiaUseMoveHistory': _gameUseMoveHistory,
     'historyPrefix': _gameHistoryPrefix,
     'timePreset': _timePreset.name,
@@ -2598,6 +2605,7 @@ class _GamePageState extends State<GamePage>
       setState(() => _storageFailed = false);
       // Preserve the archived opponent rating; only the new game uses current bounds.
       _samplingGameId = SamplingCapture.newId();
+      _samplingStartedAt = gameStartedAt.toUtc();
       _elo = normalizeMaiaRating(_elo);
       _gameGeneration++;
       _gameInferenceScope.invalidate();
@@ -2969,6 +2977,23 @@ class _GamePageState extends State<GamePage>
   }
 
   String _samplingGameId = SamplingCapture.newId();
+  DateTime? _samplingStartedAt;
+
+  Map<String, Object?> _samplingGameSummary() => {
+    'playerIsWhite': _playerIsWhite,
+    'elo': _elo,
+    'result': naturalGameResult(_game) ?? _forcedResult ?? '*',
+    'opening': OpeningNames.identifyPositions(_positionHistory),
+    'timeControl': _clockEnabled ? '$_baseMinutes+$_incrementSeconds' : '-',
+    'startedAt': _samplingStartedAt?.toUtc().toIso8601String(),
+  };
+
+  void _updateSamplingGame() {
+    final capture = SamplingCapture.instance;
+    if (capture.enabled || capture.hasStorage) {
+      capture.updateGame(_samplingGameId, _samplingGameSummary());
+    }
+  }
 
   Future<void> _playMaiaMove() async {
     if (_gameFinished ||
@@ -3003,6 +3028,7 @@ class _GamePageState extends State<GamePage>
       );
       capture = SamplingCapture.instance.begin(
         gameId: _samplingGameId,
+        game: SamplingCapture.instance.enabled ? _samplingGameSummary() : null,
         generation: generation,
         ply: _uciMoves.length,
         fen: _game.fen,
@@ -3335,6 +3361,7 @@ class _GamePageState extends State<GamePage>
     _boardSetupConfirmed = false;
     _pauseGame();
     _savedAsIncomplete = !_gameFinished;
+    _updateSamplingGame();
     final snapshot = _gameSnapshot();
     await ActiveSessionStore.save(snapshot);
     await ActiveSessionStore.clear();
@@ -3900,6 +3927,7 @@ class _GamePageState extends State<GamePage>
   Future<void> _analyzeGame() async {
     if (_startingGame || _storageBlocked) return;
     _pauseGame();
+    _updateSamplingGame();
     _reviewOpen = true;
     final moves = _game
         .getHistory({'verbose': true})

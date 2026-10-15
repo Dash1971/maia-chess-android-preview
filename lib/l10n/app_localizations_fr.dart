@@ -1269,7 +1269,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Enregistrez sur cet appareil les probabilités des coups de Maia, ses réglages et les coups choisis pour comprendre sa façon de jouer. Cette option est désactivée par défaut. La désactiver conserve les données existantes.\n\nLes fichiers exportés contiennent les positions, l’historique des coups ainsi que les entrées et décisions du modèle. Rien n’est envoyé automatiquement.\n\nLa limite est de 64 Mo. Les données des parties les plus anciennes sont supprimées en premier, sans supprimer les parties récentes. Une partie très longue ou une interruption peut laisser un enregistrement incomplet. L’activation en cours de partie ne conserve que les décisions suivantes. Exportez régulièrement les données si vous souhaitez les garder.';
+      'Enregistrez sur cet appareil les probabilités des coups de Maia, ses réglages et les coups choisis pour comprendre sa façon de jouer. Cette option est désactivée par défaut. La désactiver conserve les données existantes.\n\nLes fichiers exportés contiennent les positions, l’historique des coups ainsi que les entrées et décisions du modèle. Rien n’est envoyé automatiquement.\n\nLes 10 dernières parties enregistrées sont affichées de la plus récente à la plus ancienne. Les parties anciennes peuvent être supprimées plus tôt si la limite de stockage est atteinte. Cela ne supprime pas les parties de Parties récentes. Une partie très longue ou une interruption peut laisser un enregistrement incomplet. L’activation en cours de partie ne conserve que les décisions suivantes. Exportez régulièrement les données si vous souhaitez les garder.';
 
   @override
   String get exportSamplingData => 'Exporter les données de choix';
@@ -1358,4 +1358,35 @@ class AppLocalizationsFr extends AppLocalizations {
   String samplingAlmostCertain(String move) {
     return '$move avait une probabilité presque certaine d’être sélectionné.';
   }
+
+  @override
+  String get samplingReportRetention =>
+      'Les 10 dernières parties enregistrées sont affichées de la plus récente à la plus ancienne. Les parties anciennes peuvent être supprimées plus tôt si la limite de stockage est atteinte.';
+
+  @override
+  String get samplingJumpToGame => 'Aller à la partie';
+
+  @override
+  String get samplingBackToGames => 'Retour à la liste des parties';
+
+  @override
+  String get samplingIncomplete => 'Inachevée';
+
+  @override
+  String get samplingUnknownResult => 'Résultat inconnu';
+
+  @override
+  String get samplingOpeningUnknown => 'Ouverture inconnue';
+
+  @override
+  String get samplingTimeUnknown => 'Heure inconnue';
+
+  @override
+  String get samplingWin => 'Victoire';
+
+  @override
+  String get samplingLoss => 'Défaite';
+
+  @override
+  String get samplingDraw => 'Partie nulle';
 }

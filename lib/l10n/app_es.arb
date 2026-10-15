@@ -344,7 +344,7 @@
   "namedBoardConnected": "{boardName}: conectado",
   "namedBoardDisconnected": "{boardName}: desconectado",
   "saveMaiaSamplingData": "Guardar datos de selección de Maia",
-  "samplingDataHelp": "Guarda en este dispositivo las probabilidades de las jugadas de Maia, sus ajustes y las jugadas elegidas para explorar cómo juega. Está desactivado por defecto. Al desactivarlo, se conservan los datos guardados.\n\nLos archivos exportados contienen posiciones, historial de jugadas y las entradas y decisiones del modelo. No se sube nada automáticamente.\n\nSe guardan hasta 64 MB. Primero se eliminan los datos de las partidas más antiguas, sin borrar las partidas recientes. Una partida muy larga o una interrupción pueden dejar datos incompletos. Si lo activas durante una partida, solo se guardan las decisiones posteriores. Exporta los datos periódicamente si quieres conservarlos.",
+  "samplingDataHelp": "Guarda en este dispositivo las probabilidades de las jugadas de Maia, sus ajustes y las jugadas elegidas para explorar cómo juega. Está desactivado por defecto. Al desactivarlo, se conservan los datos guardados.\n\nLos archivos exportados contienen posiciones, historial de jugadas y las entradas y decisiones del modelo. No se sube nada automáticamente.\n\nSe muestran las últimas 10 partidas registradas, de la más reciente a la más antigua. Las partidas antiguas pueden eliminarse antes si se alcanza el límite de almacenamiento. Esto no elimina las partidas de Partidas recientes. Una partida muy larga o una interrupción pueden dejar datos incompletos. Si lo activas durante una partida, solo se guardan las decisiones posteriores. Exporta los datos periódicamente si quieres conservarlos.",
   "exportSamplingData": "Exportar datos de selección",
   "clearSamplingData": "Borrar datos de selección",
   "samplingDataStatus": "Decisiones guardadas: {count}",
@@ -367,5 +367,15 @@
   "samplingPlayedMostProbable": "Se jugó la opción más probable",
   "samplingChance": "{move} tenía aproximadamente 1 posibilidad entre {odds} de ser elegida.",
   "samplingCertain": "{move} se elegiría con certeza (100 %).",
-  "samplingAlmostCertain": "Era casi seguro que se elegiría {move}."
+  "samplingAlmostCertain": "Era casi seguro que se elegiría {move}.",
+  "samplingReportRetention": "Se muestran las últimas 10 partidas registradas, de la más reciente a la más antigua. Las partidas antiguas pueden eliminarse antes si se alcanza el límite de almacenamiento.",
+  "samplingJumpToGame": "Ir a la partida",
+  "samplingBackToGames": "Volver a la lista de partidas",
+  "samplingIncomplete": "Sin terminar",
+  "samplingUnknownResult": "Resultado desconocido",
+  "samplingOpeningUnknown": "Apertura desconocida",
+  "samplingTimeUnknown": "Hora desconocida",
+  "samplingWin": "Victoria",
+  "samplingLoss": "Derrota",
+  "samplingDraw": "Tablas"
 }

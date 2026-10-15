@@ -14,8 +14,8 @@ uses Android's document picker and streams JSON Lines to the location the user
 chooses. No Internet/storage permissions or automatic uploads are added.
 
 Capture files live under the app's private `sampling-data/` directory, never in
-Recent Games. **At 64 MiB, the oldest captured games are deleted first, as whole
-groups.** Saved games/PGNs are unaffected. The active game and requests still in
+Recent Games. **The latest ten recorded games are retained, including unfinished
+games, with a 64 MiB safety ceiling. Older captures are deleted as whole groups.** Saved games/PGNs are unaffected. The active game and requests still in
 flight are protected. If an exceptionally long active game fills the entire
 allowance, further records are dropped and the export reports the loss; the
 limit is not exceeded. Individual records are limited to 512 KiB. Export early
@@ -242,3 +242,27 @@ process death can finish the same export. The original captures are never moved.
 Unreferenced interrupted snapshots expire after 24 hours; recent shared reports
 retain their separate bounded cache policy. Native regression checks exercise
 recreation, process death, cancellation and invalid restored filenames.
+
+## Game navigation and metadata (Preview beta.8)
+
+Both exports group games newest first, using their immutable capture game IDs;
+requests within each game remain chronological, including retries/takebacks.
+Reopening a retained game does not reorder it. Resuming an evicted game does not
+recreate a misleading tail-only capture or evict newer games. Clear resets the
+retention watermark. The count cap is also enforced when opening an older store.
+
+The manifest includes `gameOrder: newest-first` and a `games` map keyed by game
+ID. Each small summary contains `startedAt` (UTC, original start),
+`playerIsWhite`, `elo`, PGN `result`, `timeControl` (minutes+increment, `-` for
+unlimited), and the known Lichess opening name. Summaries are stored separately
+from decisions, updated on gameplay saves including final human moves and forced
+results, and survive deletion from Recent Games. A stale inference completion
+cannot overwrite a newer game result. Unknown fields remain unknown; no data
+migration or replay-based result guessing is performed.
+
+HTML adds a linked game index and compact headings. Only result text receives
+the same win/loss/draw/unfinished color as Recent Games, from the same palette.
+Results describe the player's perspective. Dates display the exporting device's
+time zone explicitly. All ten languages have localized labels. The report remains
+self-contained and script-free; metadata is escaped. Raw decisions and sampling
+probabilities are unchanged. No extra inference or network access is performed.

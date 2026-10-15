@@ -344,7 +344,7 @@
   "namedBoardConnected": "{boardName} verbunden",
   "namedBoardDisconnected": "{boardName} getrennt",
   "saveMaiaSamplingData": "Maias Zugauswahldaten speichern",
-  "samplingDataHelp": "Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen. Es wird nichts automatisch hochgeladen.\n\nEs werden bis zu 64 MB gespeichert. Die Aufzeichnungen der ältesten Partien werden zuerst gelöscht; die zuletzt gespielten Partien bleiben erhalten. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.",
+  "samplingDataHelp": "Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen. Es wird nichts automatisch hochgeladen.\n\nDie letzten 10 aufgezeichneten Partien werden mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist. Dadurch werden keine Partien aus Letzte Partien gelöscht. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.",
   "exportSamplingData": "Zugauswahldaten exportieren",
   "clearSamplingData": "Zugauswahldaten löschen",
   "samplingDataStatus": "Gespeicherte Entscheidungen: {count}",
@@ -367,5 +367,15 @@
   "samplingPlayedMostProbable": "Der wahrscheinlichste Zug wurde gespielt",
   "samplingChance": "{move} hatte eine Auswahlwahrscheinlichkeit von ungefähr 1 zu {odds}.",
   "samplingCertain": "{move} wurde mit Sicherheit ausgewählt (100 %).",
-  "samplingAlmostCertain": "{move} wurde mit nahezu vollständiger Sicherheit ausgewählt."
+  "samplingAlmostCertain": "{move} wurde mit nahezu vollständiger Sicherheit ausgewählt.",
+  "samplingReportRetention": "Die letzten 10 aufgezeichneten Partien werden mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist.",
+  "samplingJumpToGame": "Zur Partie springen",
+  "samplingBackToGames": "Zurück zur Partienliste",
+  "samplingIncomplete": "Nicht beendet",
+  "samplingUnknownResult": "Ergebnis unbekannt",
+  "samplingOpeningUnknown": "Eröffnung unbekannt",
+  "samplingTimeUnknown": "Zeit unbekannt",
+  "samplingWin": "Sieg",
+  "samplingLoss": "Niederlage",
+  "samplingDraw": "Remis"
 }

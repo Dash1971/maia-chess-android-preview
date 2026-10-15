@@ -1630,7 +1630,7 @@
     }
   },
   "saveMaiaSamplingData": "Save Maia sampling data",
-  "samplingDataHelp": "Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nUp to 64 MB is kept. The oldest captured games are deleted first; this does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.",
+  "samplingDataHelp": "Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nThe latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.",
   "exportSamplingData": "Export sampling data",
   "clearSamplingData": "Clear sampling data",
   "samplingDataStatus": "{count} decisions saved",
@@ -1765,5 +1765,25 @@
         "example": "e6"
       }
     }
-  }
+  },
+  "samplingReportRetention": "The latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached.",
+  "samplingJumpToGame": "Jump to game",
+  "samplingBackToGames": "Back to game list",
+  "samplingIncomplete": "Incomplete",
+  "samplingUnknownResult": "Unknown result",
+  "samplingOpeningUnknown": "Unknown opening",
+  "samplingTimeUnknown": "Unknown time",
+  "samplingWin": "Victory",
+  "samplingLoss": "Defeat",
+  "samplingDraw": "Draw",
+  "@samplingReportRetention": {"description": "Explains report game order, ten-game retention, and earlier removal under the storage limit."},
+  "@samplingJumpToGame": {"description": "Accessible game chooser label for jumping to a game section."},
+  "@samplingBackToGames": {"description": "Navigation link back to the report game list."},
+  "@samplingIncomplete": {"description": "Recorded game has no final result yet."},
+  "@samplingUnknownResult": {"description": "No known result is available in this historical record."},
+  "@samplingOpeningUnknown": {"description": "No opening name is available for this game."},
+  "@samplingTimeUnknown": {"description": "No valid timestamp is available for this game."},
+  "@samplingWin": {"description": "Recorded game result: the human player won."},
+  "@samplingLoss": {"description": "Recorded game result: the human player lost."},
+  "@samplingDraw": {"description": "Recorded game result: the game was drawn."}
 }

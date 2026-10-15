@@ -1249,7 +1249,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nUp to 64 MB is kept. The oldest captured games are deleted first; this does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.';
+      'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nThe latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.';
 
   @override
   String get exportSamplingData => 'Export sampling data';
@@ -1337,4 +1337,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String samplingAlmostCertain(String move) {
     return '$move was almost certain to be selected.';
   }
+
+  @override
+  String get samplingReportRetention =>
+      'The latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached.';
+
+  @override
+  String get samplingJumpToGame => 'Jump to game';
+
+  @override
+  String get samplingBackToGames => 'Back to game list';
+
+  @override
+  String get samplingIncomplete => 'Incomplete';
+
+  @override
+  String get samplingUnknownResult => 'Unknown result';
+
+  @override
+  String get samplingOpeningUnknown => 'Unknown opening';
+
+  @override
+  String get samplingTimeUnknown => 'Unknown time';
+
+  @override
+  String get samplingWin => 'Victory';
+
+  @override
+  String get samplingLoss => 'Defeat';
+
+  @override
+  String get samplingDraw => 'Draw';
 }

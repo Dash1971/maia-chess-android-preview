@@ -1269,7 +1269,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Guarda en este dispositivo las probabilidades de las jugadas de Maia, sus ajustes y las jugadas elegidas para explorar cómo juega. Está desactivado por defecto. Al desactivarlo, se conservan los datos guardados.\n\nLos archivos exportados contienen posiciones, historial de jugadas y las entradas y decisiones del modelo. No se sube nada automáticamente.\n\nSe guardan hasta 64 MB. Primero se eliminan los datos de las partidas más antiguas, sin borrar las partidas recientes. Una partida muy larga o una interrupción pueden dejar datos incompletos. Si lo activas durante una partida, solo se guardan las decisiones posteriores. Exporta los datos periódicamente si quieres conservarlos.';
+      'Guarda en este dispositivo las probabilidades de las jugadas de Maia, sus ajustes y las jugadas elegidas para explorar cómo juega. Está desactivado por defecto. Al desactivarlo, se conservan los datos guardados.\n\nLos archivos exportados contienen posiciones, historial de jugadas y las entradas y decisiones del modelo. No se sube nada automáticamente.\n\nSe muestran las últimas 10 partidas registradas, de la más reciente a la más antigua. Las partidas antiguas pueden eliminarse antes si se alcanza el límite de almacenamiento. Esto no elimina las partidas de Partidas recientes. Una partida muy larga o una interrupción pueden dejar datos incompletos. Si lo activas durante una partida, solo se guardan las decisiones posteriores. Exporta los datos periódicamente si quieres conservarlos.';
 
   @override
   String get exportSamplingData => 'Exportar datos de selección';
@@ -1357,4 +1357,35 @@ class AppLocalizationsEs extends AppLocalizations {
   String samplingAlmostCertain(String move) {
     return 'Era casi seguro que se elegiría $move.';
   }
+
+  @override
+  String get samplingReportRetention =>
+      'Se muestran las últimas 10 partidas registradas, de la más reciente a la más antigua. Las partidas antiguas pueden eliminarse antes si se alcanza el límite de almacenamiento.';
+
+  @override
+  String get samplingJumpToGame => 'Ir a la partida';
+
+  @override
+  String get samplingBackToGames => 'Volver a la lista de partidas';
+
+  @override
+  String get samplingIncomplete => 'Sin terminar';
+
+  @override
+  String get samplingUnknownResult => 'Resultado desconocido';
+
+  @override
+  String get samplingOpeningUnknown => 'Apertura desconocida';
+
+  @override
+  String get samplingTimeUnknown => 'Hora desconocida';
+
+  @override
+  String get samplingWin => 'Victoria';
+
+  @override
+  String get samplingLoss => 'Derrota';
+
+  @override
+  String get samplingDraw => 'Tablas';
 }

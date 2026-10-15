@@ -195,3 +195,14 @@ The report uses probabilities after the recorded Temperature/Top-P settings.
 The localized reciprocal (“about a 1 in X chance”), certainty wording and
 most-probable labels are Maia-specific explanatory prose. “View summary” and
 its screen were removed; Save/Share remain the only export actions.
+
+## Sampling report game metadata
+
+The report keeps the latest ten captured games and lists them newest first;
+its retention notice explains that storage limits can remove older games sooner.
+The setting help gives the same policy in every language. Existing White, Black
+and You labels are reused. Game results use the pinned Lichess `victory`, `defeat`
+and `draw` translations, recorded as three additional reference entries. Missing
+results, openings and timestamps, incomplete captures, and report navigation are
+app-specific contextual descriptions translated in every catalog. They do not
+claim that incomplete captures are complete game records.
