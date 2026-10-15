@@ -1673,6 +1673,54 @@
           "reason": "Opens a format choice before saving or sharing sampling reports; ellipsis marks the extra step. Omit PGN because the formats here are HTML and JSONL."
         }
       }
+    },
+    "samplingWin": {
+      "upstream_key": "victory",
+      "upstream": {
+        "en": "Victory",
+        "ja": "勝ち",
+        "zh": "胜局",
+        "ko": "승리",
+        "es": "Victoria",
+        "de": "Sieg",
+        "fr": "Victoire",
+        "ru": "Победа",
+        "hi": "जीत!",
+        "pt": "Vitória"
+      },
+      "adaptations": {}
+    },
+    "samplingLoss": {
+      "upstream_key": "defeat",
+      "upstream": {
+        "en": "Defeat",
+        "ja": "負け",
+        "zh": "负局",
+        "ko": "패배",
+        "es": "Derrota",
+        "de": "Niederlage",
+        "fr": "Défaite",
+        "ru": "Поражение",
+        "hi": "हार",
+        "pt": "Derrota"
+      },
+      "adaptations": {}
+    },
+    "samplingDraw": {
+      "upstream_key": "draw",
+      "upstream": {
+        "en": "Draw",
+        "ja": "引き分け",
+        "zh": "平局",
+        "ko": "무승부",
+        "es": "Tablas",
+        "de": "Remis",
+        "fr": "Partie nulle",
+        "ru": "Ничья",
+        "hi": "खेल बराबरी पे समाप्त",
+        "pt": "Empate"
+      },
+      "adaptations": {}
     }
   }
 }

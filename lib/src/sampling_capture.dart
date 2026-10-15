@@ -4,7 +4,11 @@ const samplingCapturePreference = 'saveMaiaSamplingDataV1';
 
 /// Separate from diagnostics. No inference, network access, or random draws.
 class SamplingCapture extends ChangeNotifier {
-  SamplingCapture({this.directory, this.limitBytes = 64 * 1024 * 1024});
+  SamplingCapture({
+    this.directory,
+    this.limitBytes = 64 * 1024 * 1024,
+    this.limitGames = 10,
+  });
   static SamplingCapture instance = SamplingCapture();
   static int _sequence = 0;
   static final _process = DateTime.now().microsecondsSinceEpoch.toString();
@@ -12,6 +16,8 @@ class SamplingCapture extends ChangeNotifier {
       '$_process-${(++_sequence).toString().padLeft(8, '0')}';
   final Directory? directory;
   final int limitBytes;
+  final int limitGames;
+  bool get hasStorage => _path != null;
   bool enabled = false;
   bool failed = false;
   bool _busy = false;
@@ -61,7 +67,7 @@ class SamplingCapture extends ChangeNotifier {
                   ) ??
                   {},
             );
-      final stats = await _samplingStatsAsync(root);
+      final stats = await _samplingStatsAsync(root, limitGames);
       _path = root;
       _metadata = Map.unmodifiable(metadata);
       records = stats.$1;
@@ -100,6 +106,7 @@ class SamplingCapture extends ChangeNotifier {
     required int elo,
     required Float32List tokens,
     required String backend,
+    Map<String, Object?>? game,
   }) {
     if (!enabled || failed || _clearing || _path == null) return null;
     _currentGame = gameId;
@@ -120,6 +127,7 @@ class SamplingCapture extends ChangeNotifier {
       'fullMove': int.parse(fen.split(' ')[5]),
       'startedAt': DateTime.now().toUtc().toIso8601String(),
       'context': _metadata,
+      if (game != null) 'game': Map<String, Object?>.from(game),
       'sourceRevision': const String.fromEnvironment('MAIA_SOURCE_REVISION'),
       'inferenceBackend': backend,
       'cache': 'no-play-policy-cache',
@@ -147,12 +155,15 @@ class SamplingCapture extends ChangeNotifier {
     if (ticket.epoch != _epoch) return;
     final path = _path!;
     final data = Map<String, Object?>.from(ticket.data);
+    // A late inference completion must not overwrite a newer game result.
+    if (finalRecord) data.remove('game');
     final epoch = _epoch;
     final protected = {
       _currentGame,
       ..._inFlight.map((t) => t.data['gameId']),
     }.whereType<String>().toSet();
     final limit = limitBytes;
+    final games = limitGames;
     _queued++;
     _writes = _writes
         .then((_) async {
@@ -164,6 +175,7 @@ class SamplingCapture extends ChangeNotifier {
             protected,
             limit,
             losses,
+            games,
           );
           if (epoch == _epoch) {
             records = stats.$1;
@@ -177,6 +189,29 @@ class SamplingCapture extends ChangeNotifier {
         .whenComplete(() {
           _queued--;
           if (finalRecord) _inFlight.remove(ticket);
+          notifyListeners();
+        });
+  }
+
+  /// Small metadata updates share the write queue; never recreate pruned games.
+  /// Also updates an existing capture after recording has been switched off.
+  void updateGame(String gameId, Map<String, Object?> summary) {
+    if (_path == null || _clearing || failed || _queued >= 16) return;
+    final root = _path!;
+    final epoch = _epoch;
+    final data = Map<String, Object?>.from(summary);
+    final limit = limitBytes;
+    _queued++;
+    _writes = _writes
+        .then((_) async {
+          if (epoch != _epoch) return;
+          await _samplingUpdateGameAsync(root, gameId, data, limit);
+        })
+        .catchError((Object _) {
+          failed = true;
+        })
+        .whenComplete(() {
+          _queued--;
           notifyListeners();
         });
   }
@@ -366,6 +401,43 @@ List<File> _samplingFiles(Directory directory) =>
   );
 }
 
+int _samplingGameBytes(Directory game) => game
+    .listSync(followLinks: false)
+    .whereType<File>()
+    .fold(0, (n, f) => n + f.lengthSync());
+
+void _updateSamplingGame(
+  String root,
+  String id,
+  Map<String, Object?> data,
+  int limit,
+) {
+  if (!RegExp(r'^\d+-\d+$').hasMatch(id)) {
+    throw const FormatException('Invalid capture identifier');
+  }
+  final directory = Directory('$root/games/$id');
+  if (!directory.existsSync()) return;
+  final file = File('${directory.path}/summary.meta');
+  // Dates identify the original game, never the last visit or export.
+  if (file.existsSync()) {
+    final previous = jsonDecode(file.readAsStringSync()) as Map;
+    if (previous['startedAt'] != null) {
+      data['startedAt'] = previous['startedAt'];
+    }
+  }
+  final encoded = jsonEncode(data);
+  final bytes = utf8.encode(encoded).length;
+  if (bytes > 8192) throw const FormatException('Game summary too large');
+  final total = _samplingGames(root)
+      .fold<int>(0, (n, d) => n + _samplingGameBytes(d));
+  if (total - (file.existsSync() ? file.lengthSync() : 0) + bytes > limit) {
+    // Never keep a stale result if the new summary cannot fit.
+    if (file.existsSync()) file.deleteSync();
+    return;
+  }
+  _samplingAtomic(file, encoded);
+}
+
 Float32List _copySamplingFloats(Float32List values) => Float32List.view(
   Uint8List.fromList(
     values.buffer.asUint8List(values.offsetInBytes, values.lengthInBytes),
@@ -400,6 +472,7 @@ Map<String, Object> _samplingFloats(Float32List values) {
   Set<String> protected,
   int limit,
   int losses,
+  int maxGames,
 ) {
   final meta = _samplingMeta(root);
   meta['dropped'] = max(meta['dropped'] as int, losses);
@@ -438,6 +511,7 @@ Map<String, Object> _samplingFloats(Float32List values) {
         .convert(utf8.encode(fen))
         .toString();
   }
+  final summary = data.remove('game') as Map<String, Object?>?;
   final payload = jsonEncode(data);
   final envelope = jsonEncode({
     'sha256': crypto.sha256.convert(utf8.encode(payload)).toString(),
@@ -446,26 +520,45 @@ Map<String, Object> _samplingFloats(Float32List values) {
   final bytes = utf8.encode(envelope).length;
   final destination = File('$root/games/$game/$id.json');
   final games = _samplingGames(root);
-  var size = games.fold<int>(
-    0,
-    (n, d) => n + _samplingFiles(d).fold<int>(0, (n, f) => n + f.lengthSync()),
-  );
+  var size = games.fold<int>(0, (n, d) => n + _samplingGameBytes(d));
+  var count = games.length + (destination.parent.existsSync() ? 0 : 1);
+  final cutoff = meta['evictedThrough'] as String?;
+  if (!destination.parent.existsSync() &&
+      cutoff != null &&
+      game.compareTo(cutoff) <= 0) {
+    // Resuming an evicted old game must not push out newer games or return a
+    // misleading tail-only capture. Clear resets this bounded watermark.
+    return _samplingStats(root);
+  }
   final replacedBytes = destination.existsSync() ? destination.lengthSync() : 0;
   for (final old
       in bytes > 512 * 1024 || bytes > limit ? <Directory>[] : games) {
-    if (size - replacedBytes + bytes <= limit) break;
+    if (size - replacedBytes + bytes <= limit && count <= maxGames) break;
     final oldId = old.uri.pathSegments.where((s) => s.isNotEmpty).last;
     if (protected.contains(oldId) || oldId == game) continue;
-    size -= _samplingFiles(old).fold<int>(0, (n, f) => n + f.lengthSync());
+    if (count > maxGames &&
+        oldId.compareTo(game) > 0 &&
+        !destination.parent.existsSync()) {
+      return _samplingStats(root);
+    }
+    size -= _samplingGameBytes(old);
+    count--;
+    final previous = meta['evictedThrough'] as String?;
+    if (previous == null || oldId.compareTo(previous) > 0) {
+      meta['evictedThrough'] = oldId;
+    }
     old.deleteSync(recursive: true);
     meta['prunedGames'] = (meta['prunedGames'] as int) + 1;
   }
-  if (bytes > 512 * 1024 || size - replacedBytes + bytes > limit) {
+  if (bytes > 512 * 1024 ||
+      size - replacedBytes + bytes > limit ||
+      count > maxGames) {
     // A single exceptionally long game may fill the store; keep prior records
     // and mark incomplete capture rather than exceed the cap or lose this game.
     meta['dropped'] = (meta['dropped'] as int) + 1;
   } else {
     _samplingAtomic(destination, envelope);
+    if (summary != null) _updateSamplingGame(root, game, summary, limit);
   }
   _samplingAtomic(File('$root/retention.json'), jsonEncode(meta));
   return _samplingStats(root);
@@ -483,11 +576,20 @@ String _exportSampling(String root, int losses, bool storageFailed) {
   var count = 0;
   var complete = false;
   try {
+    final games = _samplingGames(root).reversed.toList(growable: false);
+    final summaries = <String, Object?>{};
+    for (final game in games) {
+      final summary = File('${game.path}/summary.meta');
+      if (summary.existsSync() && summary.lengthSync() <= 8192) {
+        summaries[game.uri.pathSegments.where((s) => s.isNotEmpty).last] =
+            jsonDecode(summary.readAsStringSync());
+      }
+    }
     final manifest =
-        '${jsonEncode({'type': 'manifest', 'schema': 1, 'algorithm': 'mobile-maia-sampler-v1', 'coverage': 'captured-decisions-only', 'prunedGames': meta['prunedGames'], 'storageErrorObserved': storageFailed, 'droppedRecords': max(meta['dropped'] as int, losses), 'pendingMeans': 'no terminal outcome durably observed; possibly interrupted', 'createdAt': DateTime.now().toUtc().toIso8601String()})}\n';
+        '${jsonEncode({'type': 'manifest', 'schema': 1, 'algorithm': 'mobile-maia-sampler-v1', 'coverage': 'captured-decisions-only', 'prunedGames': meta['prunedGames'], 'storageErrorObserved': storageFailed, 'droppedRecords': max(meta['dropped'] as int, losses), 'pendingMeans': 'no terminal outcome durably observed; possibly interrupted', 'createdAt': DateTime.now().toUtc().toIso8601String(), 'games': summaries, 'gameOrder': 'newest-first'})}\n';
     out.writeStringSync(manifest);
     digestSink.add(utf8.encode(manifest));
-    for (final game in _samplingGames(root)) {
+    for (final game in games) {
       for (final record in _samplingFiles(game)) {
         final bytes = record.readAsBytesSync();
         final envelope = jsonDecode(utf8.decode(bytes)) as Map;
@@ -528,19 +630,43 @@ class _SamplingDigestSink implements Sink<crypto.Digest> {
 
 // Top-level boundaries prevent Dart closures from capturing the controller's
 // unsendable Future/Completer state when spawning the worker isolate.
-Future<(int, int, int)> _samplingStatsAsync(String root) =>
-    Isolate.run(() => _samplingStats(root));
+Future<(int, int, int)> _samplingStatsAsync(String root, int maxGames) =>
+    Isolate.run(() {
+      final games = _samplingGames(root);
+      if (games.length > maxGames) {
+        final meta = _samplingMeta(root);
+        for (final old in games.take(games.length - maxGames)) {
+          final id = old.uri.pathSegments.where((s) => s.isNotEmpty).last;
+          final previous = meta['evictedThrough'] as String?;
+          if (previous == null || id.compareTo(previous) > 0) {
+            meta['evictedThrough'] = id;
+          }
+          old.deleteSync(recursive: true);
+          meta['prunedGames'] = (meta['prunedGames'] as int) + 1;
+        }
+        _samplingAtomic(File('$root/retention.json'), jsonEncode(meta));
+      }
+      return _samplingStats(root);
+    });
 Future<(int, int, int)> _samplingWriteAsync(
   String root,
   Map<String, Object?> data,
   Set<String> protected,
   int limit,
   int losses,
+  int maxGames,
 ) => Isolate.run(
-  () => _writeSamplingRecord(root, data, protected, limit, losses),
+  () => _writeSamplingRecord(root, data, protected, limit, losses, maxGames),
 );
 Future<String> _samplingExportAsync(
   String root,
   int losses,
   bool storageFailed,
 ) => Isolate.run(() => _exportSampling(root, losses, storageFailed));
+
+Future<void> _samplingUpdateGameAsync(
+  String root,
+  String gameId,
+  Map<String, Object?> data,
+  int limit,
+) => Isolate.run(() => _updateSamplingGame(root, gameId, data, limit));

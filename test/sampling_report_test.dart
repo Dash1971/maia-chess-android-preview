@@ -82,6 +82,58 @@ void main() {
     return SamplingReport.read(f);
   }
 
+  test(
+    'game result perspective, unknown metadata and safe HTML navigation',
+    () async {
+      final labels = samplingReportText(
+        await AppLocalizations.delegate.load(const Locale('en')),
+      );
+      for (final white in [true, false]) {
+        for (final result in ['1-0', '0-1', '1/2-1/2', '*', 'unknown']) {
+          final g = SamplingReportGame({
+            'playerIsWhite': white,
+            'elo': 1600,
+            'result': result,
+          }, labels);
+          expect(g.white, white ? 'You' : 'Maia 1600');
+          expect(g.black, white ? 'Maia 1600' : 'You');
+          expect(g.outcome, switch (result) {
+            '1-0' => white ? RecentGameOutcome.win : RecentGameOutcome.loss,
+            '0-1' => white ? RecentGameOutcome.loss : RecentGameOutcome.win,
+            '1/2-1/2' => RecentGameOutcome.draw,
+            '*' => RecentGameOutcome.incomplete,
+            _ => RecentGameOutcome.unknown,
+          });
+        }
+      }
+      final unknown = SamplingReportGame({}, labels);
+      expect(unknown.date, '—');
+      expect(unknown.outcome, RecentGameOutcome.unknown);
+      final report = SamplingReport(
+        [SamplingReportDecision.fromJson(reportRecord())],
+        incomplete: false,
+        summaries: {
+          'game': {
+            'playerIsWhite': false,
+            'result': '0-1',
+            'opening': '<script>alert(1)</script>',
+            'elo': 1600,
+          },
+        },
+      );
+      final file = File('${dir.path}/report.html');
+      await writeSamplingReportHtml(report, file, labels, 'en', {});
+      final html = await file.readAsString();
+      expect(html, contains('href="#game-1"'));
+      expect(html, contains('id="game-1"'));
+      expect(html, contains('href="#game-list"'));
+      expect(html, contains('result-win'));
+      expect(html, contains('&lt;script&gt;'));
+      expect(html, isNot(contains('<script>')));
+      expect(html, contains('0–1'));
+    },
+  );
+
   test('notation for both colors, castling, en passant, promotion, check and disambiguation', () {
     for (final example in [
       (chess.Chess.DEFAULT_POSITION, 'g1f3', 'Nf3'),

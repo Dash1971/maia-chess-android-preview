@@ -52,8 +52,111 @@ void main() {
   }
 
   test(
+    'latest ten games, resume order, eviction watermark and clear',
+    () async {
+      final ids = <String>[];
+      for (var n = 0; n < 12; n++) {
+        final id = SamplingCapture.newId();
+        ids.add(id);
+        begin(id: id).finish('cancelled-or-stale');
+        await store.flush();
+      }
+      final expected = ids.skip(2).toList().reversed.toList();
+      expect(
+        (await readExport(store)).map((r) => r['gameId']).toList(),
+        expected,
+      );
+      expect(store.prunedGames, 2);
+      // A retained resumed game stays in its original place and retains both attempts.
+      begin(id: ids[3]).finish('cancelled-or-stale');
+      await store.flush();
+      final resumed = await readExport(store);
+      expect(resumed.map((r) => r['gameId']).toSet().toList(), expected);
+      expect(resumed.where((r) => r['gameId'] == ids[3]), hasLength(2));
+      // Neither resuming nor metadata can recreate a game removed by retention.
+      begin(id: ids.first).finish('cancelled-or-stale');
+      store.updateGame(ids.first, {'result': '1-0'});
+      await store.flush();
+      expect(
+        (await readExport(store)).map((r) => r['gameId']).toSet().toList(),
+        expected,
+      );
+      expect(store.failed, isFalse);
+      await store.clear();
+      begin(id: ids.first).finish('cancelled-or-stale');
+      await store.flush();
+      expect((await readExport(store)).single['gameId'], ids.first);
+    },
+  );
+
+  test(
+    'load immediately enforces ten games on a previously larger store',
+    () async {
+      store.dispose();
+      store = SamplingCapture(directory: dir, limitGames: 12);
+      await store.setEnabled(true);
+      for (var i = 0; i < 12; i++) {
+        begin().finish('cancelled-or-stale');
+        await store.flush();
+      }
+      store.dispose();
+      store = SamplingCapture(directory: dir);
+      await store.loadStoredData();
+      expect(await readExport(store), hasLength(10));
+      expect(store.prunedGames, 2);
+    },
+  );
+
+  test(
+    'metadata survives restart and a stale final ticket cannot erase result',
+    () async {
+      final id = SamplingCapture.newId();
+      final ticket = store.begin(
+        gameId: id,
+        generation: 0,
+        ply: 0,
+        fen: chess.Chess.DEFAULT_POSITION,
+        positions: [chess.Chess.DEFAULT_POSITION],
+        prefix: [],
+        history: false,
+        elo: 1600,
+        tokens: Float32List(6208),
+        backend: 'test',
+        game: {
+          'startedAt': '2026-10-14T01:00:00Z',
+          'result': '*',
+          'playerIsWhite': false,
+          'elo': 1600,
+        },
+      );
+      store.updateGame(id, {
+        'startedAt': '2026-10-15T01:00:00Z',
+        'result': '0-1',
+        'playerIsWhite': false,
+        'elo': 1600,
+      });
+      ticket!.finish('cancelled-or-stale');
+      await store.flush();
+      store.dispose();
+      store = SamplingCapture(directory: dir);
+      await store.loadStoredData();
+      final manifest =
+          jsonDecode((await (await store.export()).readAsLines()).first) as Map;
+      expect(manifest['games'][id]['result'], '0-1');
+      expect(manifest['games'][id]['startedAt'], '2026-10-14T01:00:00Z');
+      expect(manifest['gameOrder'], 'newest-first');
+      final report = await SamplingReport.read(await store.export());
+      expect(report.summaries[id]!['result'], '0-1');
+      expect(store.failed, isFalse);
+    },
+  );
+
+  test(
     'export replay and capture parity: colors, promotions, history, settings',
     () async {
+      store.dispose();
+      store = SamplingCapture(directory: dir, limitGames: 100);
+      await store.setEnabled(true);
       final black = chess.Chess()..move('e4');
       final histories = [
         [chess.Chess.DEFAULT_POSITION],

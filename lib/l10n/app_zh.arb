@@ -344,7 +344,7 @@
   "namedBoardConnected": "已连接{boardName}",
   "namedBoardDisconnected": "{boardName}已断开连接",
   "saveMaiaSamplingData": "保存 Maia 选招数据",
-  "samplingDataHelp": "将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。不会自动上传任何内容。\n\n最多保存 64 MB。最早对局的采集数据会优先删除，但不会删除“最近对局”中的棋谱。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。",
+  "samplingDataHelp": "将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。不会自动上传任何内容。\n\n按从新到旧的顺序显示最近记录的10局棋。达到存储上限时，较早的对局可能会提前删除。这不会删除“最近的对局”中的棋局。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。",
   "exportSamplingData": "导出选招数据",
   "clearSamplingData": "清除选招数据",
   "samplingDataStatus": "已保存 {count} 条决策",
@@ -367,5 +367,15 @@
   "samplingPlayedMostProbable": "下出了最可能的走法",
   "samplingChance": "{move} 被选中的概率约为 {odds} 分之一。",
   "samplingCertain": "{move} 必定会被选中（100%）。",
-  "samplingAlmostCertain": "{move} 几乎必定会被选中。"
+  "samplingAlmostCertain": "{move} 几乎必定会被选中。",
+  "samplingReportRetention": "按从新到旧的顺序显示最近记录的10局棋。达到存储上限时，较早的对局可能会提前删除。",
+  "samplingJumpToGame": "跳转到对局",
+  "samplingBackToGames": "返回对局列表",
+  "samplingIncomplete": "未完成",
+  "samplingUnknownResult": "结果未知",
+  "samplingOpeningUnknown": "开局未知",
+  "samplingTimeUnknown": "时间未知",
+  "samplingWin": "胜局",
+  "samplingLoss": "负局",
+  "samplingDraw": "平局"
 }

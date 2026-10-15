@@ -1153,7 +1153,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      '将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。不会自动上传任何内容。\n\n最多保存 64 MB。最早对局的采集数据会优先删除，但不会删除“最近对局”中的棋谱。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。';
+      '将 Maia 的着法概率、设置和所选着法保存在此设备上，以了解它如何下棋。默认关闭。关闭后会保留已保存的数据。\n\n导出的文件包含棋盘局面、走子历史以及模型的输入和决策。不会自动上传任何内容。\n\n按从新到旧的顺序显示最近记录的10局棋。达到存储上限时，较早的对局可能会提前删除。这不会删除“最近的对局”中的棋局。对局过长或发生中断时，数据可能不完整。中途开启只会记录之后的决策。如需保留数据，请定期导出。';
 
   @override
   String get exportSamplingData => '导出选招数据';
@@ -1237,4 +1237,35 @@ class AppLocalizationsZh extends AppLocalizations {
   String samplingAlmostCertain(String move) {
     return '$move 几乎必定会被选中。';
   }
+
+  @override
+  String get samplingReportRetention =>
+      '按从新到旧的顺序显示最近记录的10局棋。达到存储上限时，较早的对局可能会提前删除。';
+
+  @override
+  String get samplingJumpToGame => '跳转到对局';
+
+  @override
+  String get samplingBackToGames => '返回对局列表';
+
+  @override
+  String get samplingIncomplete => '未完成';
+
+  @override
+  String get samplingUnknownResult => '结果未知';
+
+  @override
+  String get samplingOpeningUnknown => '开局未知';
+
+  @override
+  String get samplingTimeUnknown => '时间未知';
+
+  @override
+  String get samplingWin => '胜局';
+
+  @override
+  String get samplingLoss => '负局';
+
+  @override
+  String get samplingDraw => '平局';
 }

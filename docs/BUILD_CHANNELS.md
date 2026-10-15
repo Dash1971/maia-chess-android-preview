@@ -138,3 +138,10 @@ actual 79M model. History is experimental and does not promise greater strength.
 - Actual signed beta.6 → beta.7 upgrade preserved app UID, saved games and captures. Real 79M play with Temperature 0.5/Top-P 0.9 and effective report probabilities passed. Native Android Save/Share, read-only receiver grants, cancellation, failed document storage, retry and reading a shared file after capture Clear passed. Additional variation, incomplete-game and checkmate upgrades use temporary test signatures.
 - Android qualification found and fixed a pending Save being lost when the process died in the system picker. Forced process-death save/cancel and Activity recreation now pass on the corrected APK, with snapshot cleanup and another successful export. Fixed preparation files left by abrupt process death are bounded and removed on the next export/Clear.
 - Models, engines and dependencies are unchanged. Physical phone/board acceptance remains with owner/testers. Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 are unchanged. Release verification and task-owned cleanup are recorded in PR #129.
+
+## Preview 2.4.0-beta.8 preparation
+
+Source adds latest-ten sampling retention, newest-first exports and localized
+compact game metadata/navigation. Release qualification is in progress; beta.7
+remains the published build until the beta.8 release record is complete.
+No Stable, Dev, board-support or engine changes are included.

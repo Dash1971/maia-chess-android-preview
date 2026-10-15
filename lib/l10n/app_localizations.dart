@@ -2185,7 +2185,7 @@ abstract class AppLocalizations {
   /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
   ///
   /// In en, this message translates to:
-  /// **'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nUp to 64 MB is kept. The oldest captured games are deleted first; this does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.'**
+  /// **'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nThe latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.'**
   String get samplingDataHelp;
 
   /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
@@ -2325,6 +2325,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{move} was almost certain to be selected.'**
   String samplingAlmostCertain(String move);
+
+  /// Explains report game order, ten-game retention, and earlier removal under the storage limit.
+  ///
+  /// In en, this message translates to:
+  /// **'The latest 10 recorded games are shown newest first. Older games may be removed sooner if the storage limit is reached.'**
+  String get samplingReportRetention;
+
+  /// Accessible game chooser label for jumping to a game section.
+  ///
+  /// In en, this message translates to:
+  /// **'Jump to game'**
+  String get samplingJumpToGame;
+
+  /// Navigation link back to the report game list.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to game list'**
+  String get samplingBackToGames;
+
+  /// Recorded game has no final result yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete'**
+  String get samplingIncomplete;
+
+  /// No known result is available in this historical record.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown result'**
+  String get samplingUnknownResult;
+
+  /// No opening name is available for this game.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown opening'**
+  String get samplingOpeningUnknown;
+
+  /// No valid timestamp is available for this game.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown time'**
+  String get samplingTimeUnknown;
+
+  /// Recorded game result: the human player won.
+  ///
+  /// In en, this message translates to:
+  /// **'Victory'**
+  String get samplingWin;
+
+  /// Recorded game result: the human player lost.
+  ///
+  /// In en, this message translates to:
+  /// **'Defeat'**
+  String get samplingLoss;
+
+  /// Recorded game result: the game was drawn.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw'**
+  String get samplingDraw;
 }
 
 class _AppLocalizationsDelegate

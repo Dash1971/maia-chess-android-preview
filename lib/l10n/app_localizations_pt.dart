@@ -1276,7 +1276,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Salve neste dispositivo as probabilidades dos lances do Maia, as configurações e os lances escolhidos para explorar como ele joga. Desativado por padrão. Ao desativar, os dados existentes são mantidos.\n\nOs arquivos exportados contêm posições, histórico de lances e as entradas e decisões do modelo. Nada é enviado automaticamente.\n\nSão armazenados até 64 MB. Os dados das partidas mais antigas são excluídos primeiro, sem excluir as partidas recentes. Uma partida muito longa ou uma interrupção pode deixar dados incompletos. Ao ativar durante uma partida, apenas as decisões seguintes são salvas. Exporte os dados regularmente se quiser mantê-los.';
+      'Salve neste dispositivo as probabilidades dos lances do Maia, as configurações e os lances escolhidos para explorar como ele joga. Desativado por padrão. Ao desativar, os dados existentes são mantidos.\n\nOs arquivos exportados contêm posições, histórico de lances e as entradas e decisões do modelo. Nada é enviado automaticamente.\n\nAs últimas 10 partidas registradas são mostradas da mais recente para a mais antiga. As partidas antigas podem ser removidas antes se o limite de armazenamento for atingido. Isso não exclui as partidas de Partidas recentes. Uma partida muito longa ou uma interrupção pode deixar dados incompletos. Ao ativar durante uma partida, apenas as decisões seguintes são salvas. Exporte os dados regularmente se quiser mantê-los.';
 
   @override
   String get exportSamplingData => 'Exportar dados de seleção';
@@ -1364,4 +1364,35 @@ class AppLocalizationsPt extends AppLocalizations {
   String samplingAlmostCertain(String move) {
     return 'Era quase certo que $move seria escolhido.';
   }
+
+  @override
+  String get samplingReportRetention =>
+      'As últimas 10 partidas registradas são mostradas da mais recente para a mais antiga. As partidas antigas podem ser removidas antes se o limite de armazenamento for atingido.';
+
+  @override
+  String get samplingJumpToGame => 'Ir para a partida';
+
+  @override
+  String get samplingBackToGames => 'Voltar à lista de partidas';
+
+  @override
+  String get samplingIncomplete => 'Não concluída';
+
+  @override
+  String get samplingUnknownResult => 'Resultado desconhecido';
+
+  @override
+  String get samplingOpeningUnknown => 'Abertura desconhecida';
+
+  @override
+  String get samplingTimeUnknown => 'Horário desconhecido';
+
+  @override
+  String get samplingWin => 'Vitória';
+
+  @override
+  String get samplingLoss => 'Derrota';
+
+  @override
+  String get samplingDraw => 'Empate';
 }

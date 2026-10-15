@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -136,17 +137,88 @@ void main() {
         final saved = await ActiveSessionStore.load();
         expectSync(saved!['samplingGameId'], record['gameId']);
       });
-      final id = (await ActiveSessionStore.load())!['samplingGameId'];
+      final initial = (await ActiveSessionStore.load())!;
+      final id = initial['samplingGameId'];
+      final startedAt = initial['samplingStartedAt'];
+      expectSync(DateTime.parse(startedAt as String).isUtc, true);
       await tester.pumpWidget(const SizedBox());
       await tester.pumpAndSettle();
       await tester.pumpWidget(const MaterialApp(home: GamePage()));
       await tester.pumpAndSettle();
-      expectSync((await ActiveSessionStore.load())!['samplingGameId'], id);
+      final resumed = (await ActiveSessionStore.load())!;
+      expectSync(resumed['samplingGameId'], id);
+      expectSync(resumed['samplingStartedAt'], startedAt);
       expectSync(calls, 1);
       await tester.pumpWidget(const SizedBox());
       await tester.pumpAndSettle();
     },
   );
+  for (final resign in [false, true]) {
+    testWidgets(
+      'game summary records ${resign ? 'resignation' : 'final human checkmate'}',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: GamePage(
+              startingFen: '7k/p7/5KQ1/8/8/8/8/8 b - - 0 1',
+              startingSide: PlayerSide.white,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        for (var i = 0; i < 50 && calls == 0; i++) {
+          await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 20)),
+          );
+          await tester.pump();
+        }
+        expectSync(calls, 1);
+        response.complete(
+          Float32List(4352)..[MaiaEncoding.moveIndex('a7a6', true)] = 100,
+        );
+        await tester.pumpAndSettle();
+        await drain(tester);
+        // An already captured game's result remains accurate after opting out.
+        await drive(tester, () => capture.setEnabled(false));
+        if (resign) {
+          await tester.tap(find.byKey(const ValueKey('quick-resign-button')));
+          await tester.pumpAndSettle();
+          await tester.tap(find.widgetWithText(FilledButton, 'Resign'));
+        } else {
+          boardOf(tester).onMove!(dc.NormalMove.fromUci('g6g7'));
+        }
+        await tester.pumpAndSettle();
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 100)),
+        );
+        await tester.pumpAndSettle();
+        await drain(tester);
+        await drive(tester, () async {
+          final savedResult = (await ActiveSessionStore.load())!;
+          expectSync(savedResult['recentState'], 'completed');
+          expectSync(capture.failed, false);
+          expectSync(
+            savedResult['samplingGameId'],
+            (await readExport(capture)).single['gameId'],
+          );
+          final record = (await readExport(capture)).single;
+          final exported = await capture.export();
+          final manifest =
+              jsonDecode((await exported.readAsLines()).first) as Map;
+          final summary = manifest['games'][record['gameId']] as Map;
+          expectSync(summary['result'], resign ? '0-1' : '1-0');
+          expectSync(summary['playerIsWhite'], true);
+          final saved = (await ActiveSessionStore.load())!;
+          expectSync(summary['elo'], saved['elo']);
+          expectSync(summary['startedAt'], saved['samplingStartedAt']);
+          expectSync(summary['timeControl'], '-');
+        });
+        expectSync(calls, 1);
+        await tester.pumpWidget(const SizedBox());
+        await tester.pumpAndSettle();
+      },
+    );
+  }
   testWidgets(
     'disposing play during inference records stale output, never a committed move',
     (tester) async {
@@ -274,6 +346,15 @@ void main() {
     )!;
     final a = ticket();
     final b = ticket();
+    // Keep inference occupied so both replaceable requests are pending.
+    final blockerResponse = response;
+    final blocker = MaiaInferenceQueue.predict({
+      'tokens': Float32List(6208),
+      'selfElo': 1600,
+      'opponentElo': 1600,
+    });
+    await Future<void>.delayed(Duration.zero);
+    response = Completer<Float32List>();
     final first = MaiaInferenceQueue.predict(
       {'tokens': Float32List(6208), 'selfElo': 1600, 'opponentElo': 1600},
       replaceableScope: scope,
@@ -285,6 +366,8 @@ void main() {
       capture: b,
       timeout: const Duration(milliseconds: 10),
     );
+    blockerResponse.complete(Float32List(4352));
+    await blocker;
     expectSync(await first, isNull);
     a.finish('cancelled-or-stale');
     await expectLater(second, throwsA(isA<TimeoutException>()));
@@ -292,8 +375,14 @@ void main() {
     response.complete(Float32List(4352));
     await capture.flush();
     final records = await readExport(capture);
-    expectSync(records[0]['queueOutcome'], 'cancelled-before-inference');
-    expectSync(records[1]['outcome'], 'timeout');
+    final cancelled = records.singleWhere(
+      (r) => r['requestId'] == a.data['requestId'],
+    );
+    final timedOut = records.singleWhere(
+      (r) => r['requestId'] == b.data['requestId'],
+    );
+    expectSync(cancelled['queueOutcome'], 'cancelled-before-inference');
+    expectSync(timedOut['outcome'], 'timeout');
     expectSync(records.every((r) => !r.containsKey('committedMove')), true);
   });
 }

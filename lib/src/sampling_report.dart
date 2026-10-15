@@ -2,7 +2,12 @@ part of '../main.dart';
 
 /// A compact projection of capture data: no tensors/logits reach the UI.
 class SamplingReport {
-  SamplingReport(this.decisions, {required this.incomplete});
+  SamplingReport(
+    this.decisions, {
+    required this.incomplete,
+    this.summaries = const {},
+  });
+  final Map<String, Map<String, dynamic>> summaries;
   final List<SamplingReportDecision> decisions;
   final bool incomplete;
 
@@ -16,6 +21,7 @@ class SamplingReport {
       _SamplingDigestSink(hashes),
     );
     final decisions = <SamplingReportDecision>[];
+    final summaries = <String, Map<String, dynamic>>{};
     var header = false;
     var footer = false;
     var incomplete = false;
@@ -33,6 +39,19 @@ class SamplingReport {
             envelope['storageErrorObserved'] == true ||
             (envelope['droppedRecords'] as num) > 0 ||
             (envelope['prunedGames'] as num) > 0;
+        if (envelope['games'] case final Map games) {
+          if (games.length > 10) {
+            throw const FormatException('Too many game summaries');
+          }
+          for (final entry in games.entries) {
+            if (entry.key is! String || entry.value is! Map) {
+              throw const FormatException('Invalid game summary');
+            }
+            summaries[entry.key as String] = Map<String, dynamic>.from(
+              entry.value as Map,
+            );
+          }
+        }
         header = true;
       } else if (envelope['type'] == 'footer') {
         sink.close();
@@ -60,7 +79,11 @@ class SamplingReport {
       sink.add(bytes);
     }
     if (!footer) throw const FormatException('Incomplete sampling export');
-    return SamplingReport(List.unmodifiable(decisions), incomplete: incomplete);
+    return SamplingReport(
+      List.unmodifiable(decisions),
+      incomplete: incomplete,
+      summaries: Map.unmodifiable(summaries),
+    );
   }
 
   Map<String, List<SamplingReportDecision>> get games {
@@ -274,6 +297,18 @@ class SamplingReportDecision {
 
 /// Plain strings only: safe to send to the report-generation isolate.
 Map<String, String> samplingReportText(AppLocalizations s) => {
+  'retention': s.samplingReportRetention,
+  'jump': s.samplingJumpToGame,
+  'back': s.samplingBackToGames,
+  'win': s.samplingWin,
+  'loss': s.samplingLoss,
+  'draw': s.samplingDraw,
+  'incomplete': s.samplingIncomplete,
+  'unknownResult': s.samplingUnknownResult,
+  'openingUnknown': s.samplingOpeningUnknown,
+  'timeUnknown': s.samplingTimeUnknown,
+  'player': s.you,
+  'unlimited': s.unlimited,
   'title': s.samplingSummary,
   'explanation': s.samplingReportExplanation,
   'partial': s.samplingReportPartial,
@@ -417,6 +452,74 @@ String samplingReportBoard(SamplingReportDecision d) {
   return out.toString();
 }
 
+/// Metadata is a snapshot, separate from immutable individual decisions.
+/// Missing fields stay unknown rather than deriving a result from the last FEN.
+class SamplingReportGame {
+  SamplingReportGame(this.summary, this.text);
+  final Map<String, dynamic> summary;
+  final Map<String, String> text;
+  String get white => _player(true);
+  String get black => _player(false);
+  String _player(bool white) {
+    if (summary['playerIsWhite'] is! bool) return '—';
+    if (summary['playerIsWhite'] == white) return text['player']!;
+    return summary['elo'] is int ? 'Maia ${summary['elo']}' : 'Maia';
+  }
+
+  String get opening =>
+      summary['opening'] is String && (summary['opening'] as String).isNotEmpty
+      ? summary['opening'] as String
+      : text['openingUnknown']!;
+  String get timeControl => summary['timeControl'] == '-'
+      ? text['unlimited']!
+      : summary['timeControl'] is String
+      ? summary['timeControl'] as String
+      : text['timeUnknown']!;
+  RecentGameOutcome get outcome => switch (summary['result']) {
+    '*' => RecentGameOutcome.incomplete,
+    '1/2-1/2' => RecentGameOutcome.draw,
+    '1-0' => switch (summary['playerIsWhite']) {
+      true => RecentGameOutcome.win,
+      false => RecentGameOutcome.loss,
+      _ => RecentGameOutcome.unknown,
+    },
+    '0-1' => switch (summary['playerIsWhite']) {
+      false => RecentGameOutcome.win,
+      true => RecentGameOutcome.loss,
+      _ => RecentGameOutcome.unknown,
+    },
+    _ => RecentGameOutcome.unknown,
+  };
+  String get result {
+    final label = switch (outcome) {
+      RecentGameOutcome.win => text['win']!,
+      RecentGameOutcome.loss => text['loss']!,
+      RecentGameOutcome.draw => text['draw']!,
+      RecentGameOutcome.incomplete => text['incomplete']!,
+      RecentGameOutcome.unknown => text['unknownResult']!,
+    };
+    final score = switch (summary['result']) {
+      '1-0' => '1–0',
+      '0-1' => '0–1',
+      '1/2-1/2' => '½–½',
+      _ => null,
+    };
+    return score == null ? label : '$score · $label';
+  }
+
+  String get date {
+    final raw = summary['startedAt'];
+    final date = raw is String ? DateTime.tryParse(raw)?.toLocal() : null;
+    if (date == null) return '—';
+    final offset = date.timeZoneOffset.inMinutes;
+    String two(int n) => n.toString().padLeft(2, '0');
+    final zone = offset == 0
+        ? 'UTC'
+        : 'UTC${offset < 0 ? '-' : '+'}${two(offset.abs() ~/ 60)}:${two(offset.abs() % 60)}';
+    return '${date.year}-${two(date.month)}-${two(date.day)} · ${two(date.hour)}:${two(date.minute)} $zone';
+  }
+}
+
 /// Self-contained HTML: bundled pieces, inline vector arrows, no network or JS.
 Future<void> writeSamplingReportHtml(
   SamplingReport report,
@@ -446,15 +549,46 @@ Future<void> writeSamplingReportHtml(
       );
     }
     out.write(
-      '</style><h1>${t('title')}</h1><p>${t('explanation')}</p><p class="note">${t('partial')}</p>',
+      '</style><header id="game-list"><h1>${t('title')}</h1><p>${t('explanation')}</p><p class="muted retention">${t('retention')}</p><p class="note">${t('partial')}</p></header>',
     );
     if (report.incomplete) out.write('<p class="note">${t('missing')}</p>');
+    out.write(
+      '<style>nav{margin:24px 0 32px;border-top:1px solid #3c483b;border-bottom:1px solid #3c483b;padding:14px 0}.jump-row{display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:8px 0;font-size:14px}.game-heading{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between}.game-heading h2{margin:0}.game-heading time{font-size:14px;color:#bbc9b8}.game-section{scroll-margin-top:16px;margin-top:36px}.players,.game-meta{display:flex;flex-wrap:wrap;gap:4px 20px;margin:8px 0}.opening,.retention,.back{font-size:14px}.jump-title{font-size:14px;color:#bbc9b8}.jump-row>*{overflow-wrap:anywhere;min-width:0}@media(max-width:680px){.jump-row{grid-template-columns:80px minmax(0,1fr);gap:0 10px}.index-result{grid-column:2}article{grid-template-columns:minmax(0,1fr)}}',
+    );
+    for (final outcome in RecentGameOutcome.values) {
+      final color = outcome.colorFor(Brightness.dark);
+      if (color != null) {
+        out.write(
+          '.result-${outcome.name}{color:#${color.toARGB32().toRadixString(16).substring(2)}}',
+        );
+      }
+    }
+    out.write('</style>');
+    final games = report.games;
+    String resultMarkup(SamplingReportGame g) =>
+        '<span class="result-${g.outcome.name}">${e(g.result)}</span>';
+    if (games.isNotEmpty) {
+      out.write(
+        '<nav aria-label="${t('jump')}"><p class="jump-title">${t('jump')}</p>',
+      );
+      var i = 0;
+      for (final entry in games.entries) {
+        final g = SamplingReportGame(report.summaries[entry.key] ?? {}, text);
+        i++;
+        out.write(
+          '<div class="jump-row"><a href="#game-$i">${e(text['game']!.replaceAll('{number}', '$i'))}</a><span>${e(g.date)} · ${e(g.opening)}</span><span class="index-result">${resultMarkup(g)}</span></div>',
+        );
+      }
+      out.write('</nav>');
+    }
     var gameIndex = 0;
     var recordIndex = 0;
-    for (final game in report.games.values) {
+    for (final entry in games.entries) {
+      final game = entry.value;
+      final g = SamplingReportGame(report.summaries[entry.key] ?? {}, text);
       gameIndex++;
       out.write(
-        '<h2>${e(text['game']!.replaceAll('{number}', '$gameIndex'))}</h2><p class="muted">${e(text['records']!.replaceAll('{count}', '${game.length}'))}</p>',
+        '<section class="game-section" id="game-$gameIndex"><div class="game-heading"><h2>${e(text['game']!.replaceAll('{number}', '$gameIndex'))}</h2><time>${e(g.date)}</time></div><div class="players"><span><span class="muted">${t('white')}:</span> ${e(g.white)}</span><span><span class="muted">${t('black')}:</span> ${e(g.black)}</span></div><div class="game-meta">${resultMarkup(g)}<span>${e(g.timeControl)}</span><span class="muted">${e(text['records']!.replaceAll('{count}', '${game.length}'))}</span></div><p class="muted opening">${e(g.opening)}</p>',
       );
       for (final d in game) {
         final move = d.played, top = d.mostProbable;
@@ -498,6 +632,9 @@ Future<void> writeSamplingReportHtml(
         );
         if (++recordIndex % 32 == 0) await out.flush();
       }
+      out.write(
+        '<a class="back" href="#game-list">${t('back')} ↑</a></section>',
+      );
     }
     out.write(
       '<footer>Mobile Maia · Chess pieces: Colin M. L. Burnett, via Lichess / chessground (WebP conversion). <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> · <a href="https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces">Original artwork</a>.</footer></html>',

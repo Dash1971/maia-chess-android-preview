@@ -1270,7 +1270,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen. Es wird nichts automatisch hochgeladen.\n\nEs werden bis zu 64 MB gespeichert. Die Aufzeichnungen der ältesten Partien werden zuerst gelöscht; die zuletzt gespielten Partien bleiben erhalten. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.';
+      'Speichere Maias Zugwahrscheinlichkeiten, Einstellungen und gewählte Züge auf diesem Gerät, um seine Spielweise zu untersuchen. Standardmäßig deaktiviert. Beim Ausschalten bleiben vorhandene Daten erhalten.\n\nExportierte Dateien enthalten Stellungen, den Zugverlauf sowie Modelleingaben und Entscheidungen. Es wird nichts automatisch hochgeladen.\n\nDie letzten 10 aufgezeichneten Partien werden mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist. Dadurch werden keine Partien aus Letzte Partien gelöscht. Sehr lange Partien oder Unterbrechungen können zu unvollständigen Aufzeichnungen führen. Bei Aktivierung während einer Partie werden nur spätere Entscheidungen erfasst. Exportiere die Daten regelmäßig, wenn du sie behalten möchtest.';
 
   @override
   String get exportSamplingData => 'Zugauswahldaten exportieren';
@@ -1359,4 +1359,35 @@ class AppLocalizationsDe extends AppLocalizations {
   String samplingAlmostCertain(String move) {
     return '$move wurde mit nahezu vollständiger Sicherheit ausgewählt.';
   }
+
+  @override
+  String get samplingReportRetention =>
+      'Die letzten 10 aufgezeichneten Partien werden mit der neuesten zuerst angezeigt. Ältere Partien können früher entfernt werden, wenn das Speicherlimit erreicht ist.';
+
+  @override
+  String get samplingJumpToGame => 'Zur Partie springen';
+
+  @override
+  String get samplingBackToGames => 'Zurück zur Partienliste';
+
+  @override
+  String get samplingIncomplete => 'Nicht beendet';
+
+  @override
+  String get samplingUnknownResult => 'Ergebnis unbekannt';
+
+  @override
+  String get samplingOpeningUnknown => 'Eröffnung unbekannt';
+
+  @override
+  String get samplingTimeUnknown => 'Zeit unbekannt';
+
+  @override
+  String get samplingWin => 'Sieg';
+
+  @override
+  String get samplingLoss => 'Niederlage';
+
+  @override
+  String get samplingDraw => 'Remis';
 }
