@@ -1389,5 +1389,5 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get samplingClearConfirmation =>
-      'क्या इस डिवाइस पर ऐप में सहेजा गया Maia की चाल चयन का सारा डेटा हटाना है? इसे ऐप से वापस नहीं पाया जा सकेगा। अलग से सहेजी या साझा की गई फ़ाइलें नहीं हटेंगी।';
+      'क्या Maia की चाल चयन का सारा डेटा हटाना है? इसे वापस नहीं पाया जा सकेगा।';
 }

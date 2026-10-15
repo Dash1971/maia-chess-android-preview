@@ -1374,5 +1374,5 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingClearConfirmation =>
-      'Delete all Maia sampling data saved in this app on this device? It cannot be recovered from the app. Files saved or shared separately are not deleted.';
+      'Delete all Maia sampling data? It cannot be recovered.';
 }

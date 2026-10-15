@@ -1787,7 +1787,7 @@
   "@samplingLoss": {"description": "Recorded game result: the human player lost."},
   "@samplingDraw": {"description": "Recorded game result: the game was drawn."},
   "samplingDeleteData": "Delete data",
-  "samplingClearConfirmation": "Delete all Maia sampling data saved in this app on this device? It cannot be recovered from the app. Files saved or shared separately are not deleted.",
+  "samplingClearConfirmation": "Delete all Maia sampling data? It cannot be recovered.",
   "@samplingDeleteData": {
     "description": "Sampling data: destructive confirmation button. Lichess Delete adapted with an explicit data object."
   },

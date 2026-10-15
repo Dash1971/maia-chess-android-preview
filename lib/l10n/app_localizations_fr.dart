@@ -1395,5 +1395,5 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingClearConfirmation =>
-      'Effacer toutes les données de choix de coups de Maia enregistrées dans cette application sur cet appareil ? Elles ne pourront pas être récupérées dans l’application. Les fichiers enregistrés ou partagés séparément ne seront pas effacés.';
+      'Effacer toutes les données de choix de coups de Maia ? Elles ne pourront pas être récupérées.';
 }

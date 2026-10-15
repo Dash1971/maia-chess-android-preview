@@ -1394,5 +1394,5 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingClearConfirmation =>
-      '¿Borrar todos los datos de selección de jugadas de Maia guardados en esta aplicación en este dispositivo? No se podrán recuperar desde la aplicación. Los archivos guardados o compartidos por separado no se borrarán.';
+      '¿Borrar todos los datos de selección de jugadas de Maia? No se podrán recuperar.';
 }

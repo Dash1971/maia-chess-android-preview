@@ -1396,5 +1396,5 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingClearConfirmation =>
-      'Alle in dieser App auf diesem Gerät gespeicherten Zugauswahldaten von Maia löschen? Sie lassen sich in der App nicht wiederherstellen. Separat gespeicherte oder geteilte Dateien werden nicht gelöscht.';
+      'Alle Zugauswahldaten von Maia löschen? Sie lassen sich nicht wiederherstellen.';
 }

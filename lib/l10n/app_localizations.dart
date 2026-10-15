@@ -2395,7 +2395,7 @@ abstract class AppLocalizations {
   /// Sampling data: confirm irreversible deletion of app-local captures only, excluding separately saved/shared exports.
   ///
   /// In en, this message translates to:
-  /// **'Delete all Maia sampling data saved in this app on this device? It cannot be recovered from the app. Files saved or shared separately are not deleted.'**
+  /// **'Delete all Maia sampling data? It cannot be recovered.'**
   String get samplingClearConfirmation;
 }
 

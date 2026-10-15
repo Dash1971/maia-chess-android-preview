@@ -1273,6 +1273,5 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingDeleteData => '删除数据';
 
   @override
-  String get samplingClearConfirmation =>
-      '要删除本设备上保存在此应用中的所有 Maia 选招数据吗？删除后无法在应用中恢复。另行保存或分享的文件不会被删除。';
+  String get samplingClearConfirmation => '要删除所有 Maia 选招数据吗？删除后无法恢复。';
 }
