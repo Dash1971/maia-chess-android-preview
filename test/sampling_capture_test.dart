@@ -107,6 +107,48 @@ void main() {
     },
   );
 
+  test('loading data and enabling recording share storage preparation', () async {
+    await store.setEnabled(false);
+    final pending = SamplingCapture();
+    final reachedMetadata = Completer<void>();
+    final metadata = Completer<Map<String, Object?>>();
+    var metadataCalls = 0;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(maiaEngineChannel, (call) async {
+          if (call.method == 'dataDirectory') return dir.path;
+          if (call.method == 'samplingMetadata') {
+            metadataCalls++;
+            if (!reachedMetadata.isCompleted) reachedMetadata.complete();
+            return metadata.future;
+          }
+          return null;
+        });
+    try {
+      await pending.initialize();
+      final load = pending.loadStoredData();
+      await reachedMetadata.future;
+      final enable = pending.setEnabled(true);
+      // Drain the preference write while metadata deliberately remains blocked.
+      await Future<void>.delayed(Duration.zero);
+      await Future<void>.delayed(Duration.zero);
+      expect(pending.enabled, isTrue);
+      expect(metadataCalls, 1);
+      metadata.complete({'backend': 'test'});
+      await Future.wait([load, enable]);
+      expect(pending.failed, isFalse);
+      expect(pending.hasStorage, isTrue);
+      expect(pending.records, 0);
+      await pending.loadStoredData();
+      expect(metadataCalls, 1);
+    } finally {
+      if (!metadata.isCompleted) metadata.complete({'backend': 'test'});
+      await pending.flush();
+      pending.dispose();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(maiaEngineChannel, null);
+    }
+  });
+
   test(
     'metadata survives restart and a stale final ticket cannot erase result',
     () async {

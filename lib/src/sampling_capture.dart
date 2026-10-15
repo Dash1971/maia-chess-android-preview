@@ -31,6 +31,7 @@ class SamplingCapture extends ChangeNotifier {
   int _queued = 0;
   String? _path;
   Future<void>? _initializing;
+  Future<void>? _preparing;
   bool _initialized = false;
   Future<void> _writes = Future.value();
   Map<String, Object?> _metadata = const {};
@@ -52,6 +53,17 @@ class SamplingCapture extends ChangeNotifier {
 
   Future<void> _prepare() async {
     if (_path != null) return;
+    // Settings may load existing data while the user enables recording.
+    // Share preparation so pruning and the initial counters run only once.
+    final pending = _preparing ??= _prepareStorage();
+    try {
+      await pending;
+    } finally {
+      if (identical(_preparing, pending)) _preparing = null;
+    }
+  }
+
+  Future<void> _prepareStorage() async {
     try {
       final root =
           directory?.path ??
