@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published 2.3.0; unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.7](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.7), code 2409; updates beta.6 in place | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.8](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.8), code 2410; updates beta.7 in place | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -139,9 +139,13 @@ actual 79M model. History is experimental and does not promise greater strength.
 - Android qualification found and fixed a pending Save being lost when the process died in the system picker. Forced process-death save/cancel and Activity recreation now pass on the corrected APK, with snapshot cleanup and another successful export. Fixed preparation files left by abrupt process death are bounded and removed on the next export/Clear.
 - Models, engines and dependencies are unchanged. Physical phone/board acceptance remains with owner/testers. Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 are unchanged. Release verification and task-owned cleanup are recorded in PR #129.
 
-## Preview 2.4.0-beta.8 preparation
+## Preview 2.4.0-beta.8 publication record
 
-Source adds latest-ten sampling retention, newest-first exports and localized
-compact game metadata/navigation. Release qualification is in progress; beta.7
-remains the published build until the beta.8 release record is complete.
-No Stable, Dev, board-support or engine changes are included.
+- Source: `23d88b585fcc16b572b6591ff3d0d10b806b9146` ([PR #131](https://github.com/Dash1971/maia-chess-android-preview/pull/131)). The release tag points to the exact built commit; later documentation does not rebuild the APK.
+- HTML and JSONL keep the latest ten recorded games, including unfinished games, newest first. Compact game headings show known players/results/openings/time controls and the original start date; HTML adds jump links. Only results use the shared Recent Games colors. The 64 MiB safeguard remains and never deletes Recent Games/PGNs.
+- [Release CI](https://github.com/Dash1971/maia-chess-android-preview/actions/runs/38697125351): 957 Flutter tests (one expected flavor skip), 33 Preview checks, 51 release-tool tests, native policy/lifecycle checks, localization, static analysis and Android packaging passed. Browser checks covered ten languages at three widths.
+- Independent Linux and GitHub unsigned APK SHA-256: `81dc4d969a5639f354522e2986c3737e72d261172a7474b8fe693a9b17cec5d6`.
+- Signed APK SHA-256: `385b869d01c3dc453bf85f204568fdbb6ec7281db217562c8ae3baff4c28c762`. Existing Preview certificate: `cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e`.
+- Actual signed beta.7 → beta.8 upgrade preserved UID, saved games and capture files. Real 79M play with history off/on, game metadata, twelve-to-ten retention, result perspective, matching HTML/JSONL exports, Save/Share, cancellation, failed document storage and retry passed. Additional variation, unfinished-game and checkmate upgrades use temporary test signatures.
+- Regression tests cover resumed/evicted games, terminal human/forced results, stale inference metadata, and concurrent Settings storage loading/enabling. Unknown metadata remains unknown. Models, native engines and dependencies are unchanged.
+- Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 are unchanged. Physical phone/board acceptance remains with owner/testers. PR #131 records public-download verification and task-owned cleanup.
