@@ -977,7 +977,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Выберите, насколько разнообразной будет игра';
 
   @override
-  String get samplingResearch => 'Прочитать исследование выбора ходов';
+  String get samplingResearch => 'Полные данные для исследования (JSONL)';
 
   @override
   String get close => 'Закрыть';
@@ -1295,11 +1295,83 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clearSamplingData => 'Удалить данные о выборе ходов';
 
   @override
-  String samplingDataStatus(int count, int pruned) {
-    return 'Сохранено решений: $count · Удалено старых записей: $pruned';
+  String samplingDataStatus(int count) {
+    return 'Сохранено решений: $count';
   }
 
   @override
   String get samplingDataError =>
       'Не удалось получить доступ к данным о выборе ходов. Это не мешает игре.';
+
+  @override
+  String get samplingSave => 'Сохранить…';
+
+  @override
+  String get samplingShare => 'Поделиться…';
+
+  @override
+  String get samplingSummary => 'Выбор ходов Maia';
+
+  @override
+  String get samplingReadable => 'Читаемый отчёт (HTML)';
+
+  @override
+  String get samplingReadableHint =>
+      'Ходы, вероятности и диаграммы. Открывается в браузере.';
+
+  @override
+  String get samplingResearchHint =>
+      'Исходные входные и выходные данные модели для технического анализа.';
+
+  @override
+  String get samplingReportExplanation =>
+      'Проценты показывают вероятность выбора каждого хода после применения ваших настроек температуры и Top-P. Это не шансы на победу и не оценка качества хода.';
+
+  @override
+  String get samplingReportPartial =>
+      'Показаны только записанные решения Maia, а не полная партия. Из-за отмены ходов и повторных попыток номера ходов могут повторяться.';
+
+  @override
+  String get samplingReportMissing =>
+      'Часть данных удалена или не была сохранена. В отчёте могут быть пропуски.';
+
+  @override
+  String get samplingPlayed => 'Сыграно';
+
+  @override
+  String get samplingNotPlayed => 'Не записан как сыгранный';
+
+  @override
+  String get samplingAlternatives => 'Вероятные альтернативы';
+
+  @override
+  String samplingGame(String number) {
+    return 'Партия $number';
+  }
+
+  @override
+  String samplingRecords(String count) {
+    return 'Записано решений: $count';
+  }
+
+  @override
+  String get samplingMostProbable => 'Наиболее вероятный';
+
+  @override
+  String get samplingPlayedMostProbable => 'Сыгран наиболее вероятный ход';
+
+  @override
+  String samplingChance(String move, String odds) {
+    return 'Вероятность выбора хода $move составляла примерно 1 из $odds.';
+  }
+
+  @override
+  String samplingCertain(String move) {
+    return 'Ход $move выбирался гарантированно (100%).';
+  }
+
+  @override
+  String samplingAlmostCertain(String move) {
+    return 'Ход $move выбирался почти наверняка.';
+  }
 }

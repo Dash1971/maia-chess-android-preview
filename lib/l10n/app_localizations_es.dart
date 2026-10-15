@@ -958,7 +958,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get samplingDefaultsQuestion => 'Elige cuánta variedad quieres';
 
   @override
-  String get samplingResearch => 'Leer la investigación sobre muestreo';
+  String get samplingResearch => 'Datos completos de investigación (JSONL)';
 
   @override
   String get close => 'Cerrar';
@@ -1278,11 +1278,83 @@ class AppLocalizationsEs extends AppLocalizations {
   String get clearSamplingData => 'Borrar datos de selección';
 
   @override
-  String samplingDataStatus(int count, int pruned) {
-    return '$count decisiones guardadas · $pruned capturas antiguas eliminadas';
+  String samplingDataStatus(int count) {
+    return 'Decisiones guardadas: $count';
   }
 
   @override
   String get samplingDataError =>
       'No se ha podido acceder a los datos de selección. Puedes seguir jugando.';
+
+  @override
+  String get samplingSave => 'Guardar…';
+
+  @override
+  String get samplingShare => 'Compartir…';
+
+  @override
+  String get samplingSummary => 'Las decisiones de Maia';
+
+  @override
+  String get samplingReadable => 'Informe legible (HTML)';
+
+  @override
+  String get samplingReadableHint =>
+      'Jugadas, probabilidades y diagramas. Se abre en el navegador.';
+
+  @override
+  String get samplingResearchHint =>
+      'Entradas y salidas originales del modelo para análisis técnico.';
+
+  @override
+  String get samplingReportExplanation =>
+      'Los porcentajes indican la probabilidad de que se eligiera cada jugada tras aplicar tus ajustes de Temperatura y Top-P. No son probabilidades de ganar ni valoraciones de la calidad de las jugadas.';
+
+  @override
+  String get samplingReportPartial =>
+      'Solo se muestran las decisiones de Maia registradas, no una partida completa. Al deshacer jugadas o reintentar, un número de jugada puede aparecer más de una vez.';
+
+  @override
+  String get samplingReportMissing =>
+      'Algunos datos se eliminaron o no se pudieron guardar. Puede haber lagunas en el informe.';
+
+  @override
+  String get samplingPlayed => 'Jugada realizada';
+
+  @override
+  String get samplingNotPlayed => 'No consta como realizada';
+
+  @override
+  String get samplingAlternatives => 'Alternativas probables';
+
+  @override
+  String samplingGame(String number) {
+    return 'Partida $number';
+  }
+
+  @override
+  String samplingRecords(String count) {
+    return 'Decisiones registradas: $count';
+  }
+
+  @override
+  String get samplingMostProbable => 'Más probable';
+
+  @override
+  String get samplingPlayedMostProbable => 'Se jugó la opción más probable';
+
+  @override
+  String samplingChance(String move, String odds) {
+    return '$move tenía aproximadamente 1 posibilidad entre $odds de ser elegida.';
+  }
+
+  @override
+  String samplingCertain(String move) {
+    return '$move se elegiría con certeza (100 %).';
+  }
+
+  @override
+  String samplingAlmostCertain(String move) {
+    return 'Era casi seguro que se elegiría $move.';
+  }
 }

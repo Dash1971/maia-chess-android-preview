@@ -24,7 +24,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Test native electronic board transport policies
+      - name: Test native board transport and sampling share policies
         timeout-minutes: 5
         run: tool/test_board_native.sh
       - name: Install pinned Flutter

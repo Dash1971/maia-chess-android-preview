@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.app.ActivityManager
+import android.os.Bundle
 import android.os.Build
 import android.view.WindowManager
 import android.system.Os
@@ -128,7 +129,8 @@ class MainActivity : FlutterActivity() {
     private var methodChannel: MethodChannel? = null
     private var chessnutBridge: ChessnutBridge? = null
     private var soundEffectBridge: SoundEffectBridge? = null
-    private val samplingDocuments by lazy { SamplingDocuments(this) }
+    private var restoredSamplingDocument: String? = null
+    private val samplingDocuments by lazy { SamplingDocuments(this, restoredSamplingDocument) }
     private val documents by lazy { PgnDocuments(this) { methodChannel?.invokeMethod("pgnReceived", null) } }
 
     @Volatile
@@ -267,7 +269,10 @@ class MainActivity : FlutterActivity() {
                         "runtimeVersion" to BuildConfig.MAIA_RUNTIME_VERSION,
                         "provider" to "CPU"
                     ))
-                    "saveSamplingData" -> samplingDocuments.save(result)
+                    "saveSamplingData" -> samplingDocuments.save(result,
+                        call.argument<Boolean>("readable") == true,
+                        call.argument<Boolean>("share") == true,
+                        call.argument<String>("shareTitle") ?: "")
                     "dataDirectory" -> result.success(filesDir.absolutePath)
                     "systemDiagnostics" -> result.success(systemDiagnostics())
                     "getPendingPgn" -> documents.takePending(result)
@@ -319,6 +324,16 @@ class MainActivity : FlutterActivity() {
         chessnutBridge = ChessnutBridge(this, flutterEngine.dartExecutor.binaryMessenger)
         soundEffectBridge = SoundEffectBridge(applicationContext, flutterEngine.dartExecutor.binaryMessenger)
         setProcessPhase("app-ready")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        restoredSamplingDocument = savedInstanceState?.getString("samplingDocumentSnapshot")
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        samplingDocuments.saveState()?.let { outState.putString("samplingDocumentSnapshot", it) }
+        super.onSaveInstanceState(outState)
     }
 
     override fun onNewIntent(intent: Intent) {

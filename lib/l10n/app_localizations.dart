@@ -1698,10 +1698,10 @@ abstract class AppLocalizations {
   /// **'Choose how much variety you want'**
   String get samplingDefaultsQuestion;
 
-  /// Play screen: Read the sampling research
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
   ///
   /// In en, this message translates to:
-  /// **'Read the sampling research'**
+  /// **'Full research data (JSONL)'**
   String get samplingResearch;
 
   /// Play screen: Close
@@ -2203,14 +2203,128 @@ abstract class AppLocalizations {
   /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
   ///
   /// In en, this message translates to:
-  /// **'{count} decisions saved · {pruned} older captures removed'**
-  String samplingDataStatus(int count, int pruned);
+  /// **'{count} decisions saved'**
+  String samplingDataStatus(int count);
 
   /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
   ///
   /// In en, this message translates to:
   /// **'Could not access sampling data. Playing is unaffected.'**
   String get samplingDataError;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Save…'**
+  String get samplingSave;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Share…'**
+  String get samplingShare;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Maia’s choices'**
+  String get samplingSummary;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Readable report (HTML)'**
+  String get samplingReadable;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Moves, probabilities and board diagrams. Opens in a browser.'**
+  String get samplingReadableHint;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Raw model inputs and outputs for technical analysis.'**
+  String get samplingResearchHint;
+
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  ///
+  /// In en, this message translates to:
+  /// **'Percentages show the chance of each move being selected after your Temperature and Top-P settings were applied. They are not winning chances or move-quality scores.'**
+  String get samplingReportExplanation;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Only recorded Maia decisions are shown, not a complete game. Takebacks and retries can repeat a move number.'**
+  String get samplingReportPartial;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Some capture data was removed or could not be saved. This report may have gaps.'**
+  String get samplingReportMissing;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Played'**
+  String get samplingPlayed;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Not recorded as played'**
+  String get samplingNotPlayed;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Likely alternatives'**
+  String get samplingAlternatives;
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Game {number}'**
+  String samplingGame(String number);
+
+  /// Maia-specific offline sampling report; use Lichess vocabulary where the action matches.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded decisions: {count}'**
+  String samplingRecords(String count);
+
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  ///
+  /// In en, this message translates to:
+  /// **'Most probable'**
+  String get samplingMostProbable;
+
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  ///
+  /// In en, this message translates to:
+  /// **'Played the most probable move'**
+  String get samplingPlayedMostProbable;
+
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  ///
+  /// In en, this message translates to:
+  /// **'{move} had about a 1 in {odds} chance of being played.'**
+  String samplingChance(String move, String odds);
+
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  ///
+  /// In en, this message translates to:
+  /// **'{move} was certain to be selected (100%).'**
+  String samplingCertain(String move);
+
+  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  ///
+  /// In en, this message translates to:
+  /// **'{move} was almost certain to be selected.'**
+  String samplingAlmostCertain(String move);
 }
 
 class _AppLocalizationsDelegate

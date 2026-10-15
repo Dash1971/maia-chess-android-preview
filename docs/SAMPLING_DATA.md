@@ -157,3 +157,88 @@ game hashes. The actual Preview-signed beta.5 upgrade preserved game data.
 Small interleaved 1+0 measurements showed no observable recording slowdown in
 that emulator; this is not a guarantee for physical phones. The maintainer
 reviewed the setting and help screenshots before authorizing publication.
+
+## Readable reports (proposed in #128)
+
+The settings export row opens **Save…** or **Share…**. Both initially select a
+self-contained **Readable report (HTML)**. **Full research data (JSONL)** keeps
+the existing schema and replay data. No in-app summary or clipboard export is offered.
+
+HTML groups recorded attempts by game ID, preserves their order and repeated
+move numbers, and uses standard algebraic notation. Only committed records are
+described as played; other outcomes say they were not recorded as played.
+Each decision includes its own rating, color, effective Temperature and Top-P,
+history mode, selection probabilities and up to three possible *other* moves.
+These are the **actual selection probabilities after the recorded settings**,
+not raw model probabilities, winning chances or move-quality scores:
+
+- Random mode: divide each retained weight from `sampling.random.weightedOrder`
+  (first `nucleusCount` entries) by their sum. Temperature is already applied
+  to these weights. Validate their legal coverage/order, the Top-P crossing count,
+  the recorded total and the selected/committed move before displaying anything.
+- Moves outside that retained set or with zero weight have zero probability and
+  are omitted from possible alternatives. Never substitute `rawLegalPolicy`.
+- Deterministic `argmax` mode: the recorded selected move has probability 100%.
+  Ties follow the sampler's recorded choice; do not sort raw probabilities to
+  invent a new deterministic winner.
+- A request that stopped before sampling has no selection percentages or arrows.
+  A malformed committed trace is rejected, not silently shown with raw values.
+- Positive probabilities below 0.01% display as `<0.01%`. “About a 1 in X chance”
+  uses the reciprocal of the unrounded probability, with one decimal and locale
+  formatting. Near-certainty has its own wording, so rounding never implies
+  certainty; only exactly 100% is described as certain. Very large reciprocals
+  use scientific notation without floating-point overflow.
+
+The board is always visible: right of the text on wide screens, stacked below
+on phones. It shows the position before the move, White at the bottom, with
+coordinates outside. A solid charcoal arrow marks the committed move; a thin open
+gray arrow marks the most probable choice. If the played move is a tied maximum,
+show one charcoal arrow and label it as the most probable move. Percentages remain
+in the text, never over the board. The original raw model policy remains in JSONL.
+
+A report is explicitly a partial capture, not a complete game/PGN; capture loss
+or pruning adds a coverage notice. Changes to rating/history/settings midgame
+are never replaced with a single inferred game-wide value. Game numbering is
+local to that snapshot, not an ID stored in Recent Games. The report does not
+attempt to infer a result or time control not recorded in the source schema.
+
+Report generation holds the existing snapshot lease and runs on a worker
+isolate. It verifies exact-byte record/footer checksums, schema and legal move
+sampling weights, and reads one bounded line at a time. Tensors/logits are
+discarded from the compact report. HTML is written incrementally. Limits: 70 MiB input, 1 MiB per encoded line,
+8,192 compact decisions. These bounds accommodate the existing 64 MiB store.
+No new dependencies or persistent-data schema are introduced.
+
+Save uses the native document picker. Share sends a read-only content URI through
+Android's chooser; opening a menu does not share anything.
+The native provider exposes only the dedicated `sampling-share/` cache folder.
+Each handoff gets an immutable file (identical content can reuse a file), so
+another export or Clear does not invalidate a recipient's in-progress read.
+Shared copies are eligible for removal after 24 hours, on a later activity start
+or share; Android may also reclaim cache. The cache is capped at 140 MiB and 32
+files. It refuses further distinct shares when full instead of deleting recent
+files; Save to file is still available. Closing the chooser cannot prove when a
+receiving app has finished reading, so it must not immediately delete that copy.
+Temporary generation/picker snapshots are removed on completion/cancellation;
+activity-specific filenames avoid collisions across activity recreation.
+
+This adds at most the bounded 140 MiB share cache to the existing capture and
+transient export storage. Files explicitly saved to a user-selected destination
+or received by another app are outside Clear sampling data's scope.
+
+Checks: `test/sampling_report*_test.dart`, capture/export lease tests,
+`test/sampling_capture_settings_test.dart`, and the native share-retention checks
+run by `tool/test_board_native.sh`. Optional widget screenshots use
+`MAIA_REPORT_MOCKUP_DIR` and `MAIA_REPORT_FONT`; optional production HTML samples
+use `MAIA_REPORT_EXPORT_SOURCE` and `MAIA_REPORT_EXPORT_OUTPUT`. These are review artifacts,
+not APK/device evidence. Before release, still qualify Save/Share/cancellation,
+receiver access after returning to the app, and activity recreation on Android.
+
+### Android Save recovery
+
+The system Save picker uses a private snapshot. Its filename is included in Android
+Activity state so completing or cancelling the picker after Activity recreation or
+process death can finish the same export. The original captures are never moved.
+Unreferenced interrupted snapshots expire after 24 hours; recent shared reports
+retain their separate bounded cache policy. Native regression checks exercise
+recreation, process death, cancellation and invalid restored filenames.

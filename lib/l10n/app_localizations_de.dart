@@ -960,7 +960,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Wähle, wie abwechslungsreich Maia spielen soll';
 
   @override
-  String get samplingResearch => 'Forschung zur Zugauswahl lesen';
+  String get samplingResearch => 'Vollständige Forschungsdaten (JSONL)';
 
   @override
   String get close => 'Schließen';
@@ -1279,11 +1279,84 @@ class AppLocalizationsDe extends AppLocalizations {
   String get clearSamplingData => 'Zugauswahldaten löschen';
 
   @override
-  String samplingDataStatus(int count, int pruned) {
-    return '$count Entscheidungen gespeichert · $pruned ältere Aufzeichnungen gelöscht';
+  String samplingDataStatus(int count) {
+    return 'Gespeicherte Entscheidungen: $count';
   }
 
   @override
   String get samplingDataError =>
       'Kein Zugriff auf die Zugauswahldaten. Das Spielen ist nicht betroffen.';
+
+  @override
+  String get samplingSave => 'Speichern…';
+
+  @override
+  String get samplingShare => 'Teilen…';
+
+  @override
+  String get samplingSummary => 'Maias Zugwahl';
+
+  @override
+  String get samplingReadable => 'Lesbarer Bericht (HTML)';
+
+  @override
+  String get samplingReadableHint =>
+      'Züge, Wahrscheinlichkeiten und Stellungsbilder. Öffnet sich im Browser.';
+
+  @override
+  String get samplingResearchHint =>
+      'Rohe Modelleingaben und -ausgaben für technische Analysen.';
+
+  @override
+  String get samplingReportExplanation =>
+      'Die Prozentwerte zeigen, mit welcher Wahrscheinlichkeit jeder Zug nach Anwendung deiner Einstellungen für Temperatur und Top-P ausgewählt wurde. Sie sind keine Gewinnchancen oder Bewertungen der Zugqualität.';
+
+  @override
+  String get samplingReportPartial =>
+      'Nur aufgezeichnete Maia-Entscheidungen werden angezeigt, keine vollständige Partie. Durch Zugrücknahmen oder erneute Versuche können Zugnummern mehrfach vorkommen.';
+
+  @override
+  String get samplingReportMissing =>
+      'Einige Daten wurden entfernt oder konnten nicht gespeichert werden. Der Bericht kann Lücken enthalten.';
+
+  @override
+  String get samplingPlayed => 'Gespielt';
+
+  @override
+  String get samplingNotPlayed => 'Nicht als gespielt erfasst';
+
+  @override
+  String get samplingAlternatives => 'Wahrscheinliche Alternativen';
+
+  @override
+  String samplingGame(String number) {
+    return 'Partie $number';
+  }
+
+  @override
+  String samplingRecords(String count) {
+    return 'Aufgezeichnete Entscheidungen: $count';
+  }
+
+  @override
+  String get samplingMostProbable => 'Am wahrscheinlichsten';
+
+  @override
+  String get samplingPlayedMostProbable =>
+      'Der wahrscheinlichste Zug wurde gespielt';
+
+  @override
+  String samplingChance(String move, String odds) {
+    return '$move hatte eine Auswahlwahrscheinlichkeit von ungefähr 1 zu $odds.';
+  }
+
+  @override
+  String samplingCertain(String move) {
+    return '$move wurde mit Sicherheit ausgewählt (100 %).';
+  }
+
+  @override
+  String samplingAlmostCertain(String move) {
+    return '$move wurde mit nahezu vollständiger Sicherheit ausgewählt.';
+  }
 }

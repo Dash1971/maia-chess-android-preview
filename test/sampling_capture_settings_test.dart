@@ -77,6 +77,19 @@ void main() {
         await tester.tap(find.text(strings.close));
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
+        await tester.ensureVisible(
+          find.byKey(const ValueKey('sampling-actions')),
+        );
+        await tester.tap(find.byKey(const ValueKey('sampling-actions')));
+        await tester.pumpAndSettle();
+        expect(find.byType(PopupMenuItem<String>), findsNWidgets(2));
+        expect(find.text(strings.samplingSave), findsOneWidget);
+        expect(find.text(strings.samplingShare), findsOneWidget);
+        await tester.tap(find.text(strings.samplingSave));
+        await tester.pumpAndSettle();
+        expect(find.text(strings.samplingReadable), findsOneWidget);
+        await tester.tap(find.text(strings.cancel));
+        await tester.pumpAndSettle();
       }
       await tester.pumpWidget(const SizedBox());
       await tester.pumpAndSettle();

@@ -869,7 +869,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingDefaultsQuestion => '选择你想要的变化程度';
 
   @override
-  String get samplingResearch => '阅读采样研究';
+  String get samplingResearch => '完整研究数据（JSONL）';
 
   @override
   String get close => '关闭';
@@ -1162,10 +1162,79 @@ class AppLocalizationsZh extends AppLocalizations {
   String get clearSamplingData => '清除选招数据';
 
   @override
-  String samplingDataStatus(int count, int pruned) {
-    return '已保存 $count 次决策 · 已移除 $pruned 份较早的对局数据';
+  String samplingDataStatus(int count) {
+    return '已保存 $count 条决策';
   }
 
   @override
   String get samplingDataError => '无法访问选招数据。不影响对局。';
+
+  @override
+  String get samplingSave => '保存…';
+
+  @override
+  String get samplingShare => '分享…';
+
+  @override
+  String get samplingSummary => 'Maia 的选择';
+
+  @override
+  String get samplingReadable => '易读报告（HTML）';
+
+  @override
+  String get samplingReadableHint => '在浏览器中查看走法、概率和棋盘图。';
+
+  @override
+  String get samplingResearchHint => '供技术分析使用的模型原始输入和输出。';
+
+  @override
+  String get samplingReportExplanation =>
+      '百分比表示应用当时的 Temperature 和 Top-P 设置后，每步棋被选中的概率，并非获胜概率或走法质量评分。';
+
+  @override
+  String get samplingReportPartial =>
+      '仅显示已记录的 Maia 决策，并非完整棋谱。悔棋或重试可能导致同一回合出现多条记录。';
+
+  @override
+  String get samplingReportMissing => '部分记录已被删除或未能保存。此报告可能存在缺失。';
+
+  @override
+  String get samplingPlayed => '实际走法';
+
+  @override
+  String get samplingNotPlayed => '未记录为已走';
+
+  @override
+  String get samplingAlternatives => '其他可能走法';
+
+  @override
+  String samplingGame(String number) {
+    return '对局 $number';
+  }
+
+  @override
+  String samplingRecords(String count) {
+    return '已记录决策：$count';
+  }
+
+  @override
+  String get samplingMostProbable => '最可能的走法';
+
+  @override
+  String get samplingPlayedMostProbable => '下出了最可能的走法';
+
+  @override
+  String samplingChance(String move, String odds) {
+    return '$move 被选中的概率约为 $odds 分之一。';
+  }
+
+  @override
+  String samplingCertain(String move) {
+    return '$move 必定会被选中（100%）。';
+  }
+
+  @override
+  String samplingAlmostCertain(String move) {
+    return '$move 几乎必定会被选中。';
+  }
 }

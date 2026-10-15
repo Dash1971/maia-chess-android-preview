@@ -1223,9 +1223,9 @@
   "@samplingDefaultsQuestion": {
     "description": "Maia-specific sampling help: Choose how much variety you want"
   },
-  "samplingResearch": "Read the sampling research",
+  "samplingResearch": "Full research data (JSONL)",
   "@samplingResearch": {
-    "description": "Play screen: Read the sampling research"
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
   },
   "close": "Close",
   "@close": {
@@ -1633,7 +1633,7 @@
   "samplingDataHelp": "Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions. Nothing is uploaded automatically.\n\nUp to 64 MB is kept. The oldest captured games are deleted first; this does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.",
   "exportSamplingData": "Export sampling data",
   "clearSamplingData": "Clear sampling data",
-  "samplingDataStatus": "{count} decisions saved · {pruned} older captures removed",
+  "samplingDataStatus": "{count} decisions saved",
   "samplingDataError": "Could not access sampling data. Playing is unaffected.",
   "@saveMaiaSamplingData": {
     "description": "App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games."
@@ -1652,13 +1652,118 @@
     "placeholders": {
       "count": {
         "type": "int"
-      },
-      "pruned": {
-        "type": "int"
       }
     }
   },
   "@samplingDataError": {
     "description": "App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games."
+  },
+  "samplingSave": "Save…",
+  "@samplingSave": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
+  },
+  "samplingShare": "Share…",
+  "@samplingShare": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
+  },
+  "samplingSummary": "Maia’s choices",
+  "@samplingSummary": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
+  },
+  "samplingReadable": "Readable report (HTML)",
+  "@samplingReadable": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
+  },
+  "samplingReadableHint": "Moves, probabilities and board diagrams. Opens in a browser.",
+  "@samplingReadableHint": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
+  },
+  "samplingResearchHint": "Raw model inputs and outputs for technical analysis.",
+  "@samplingResearchHint": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
+  },
+  "samplingReportExplanation": "Percentages show the chance of each move being selected after your Temperature and Top-P settings were applied. They are not winning chances or move-quality scores.",
+  "@samplingReportExplanation": {
+    "description": "Offline report of recorded Maia selection probabilities after Temperature and Top-P."
+  },
+  "samplingReportPartial": "Only recorded Maia decisions are shown, not a complete game. Takebacks and retries can repeat a move number.",
+  "@samplingReportPartial": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
+  },
+  "samplingReportMissing": "Some capture data was removed or could not be saved. This report may have gaps.",
+  "@samplingReportMissing": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
+  },
+  "samplingPlayed": "Played",
+  "@samplingPlayed": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
+  },
+  "samplingNotPlayed": "Not recorded as played",
+  "@samplingNotPlayed": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
+  },
+  "samplingAlternatives": "Likely alternatives",
+  "@samplingAlternatives": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches."
+  },
+  "samplingGame": "Game {number}",
+  "@samplingGame": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "samplingRecords": "Recorded decisions: {count}",
+  "@samplingRecords": {
+    "description": "Maia-specific offline sampling report; use Lichess vocabulary where the action matches.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "samplingMostProbable": "Most probable",
+  "@samplingMostProbable": {
+    "description": "Offline report of recorded Maia selection probabilities after Temperature and Top-P."
+  },
+  "samplingPlayedMostProbable": "Played the most probable move",
+  "@samplingPlayedMostProbable": {
+    "description": "Offline report of recorded Maia selection probabilities after Temperature and Top-P."
+  },
+  "samplingChance": "{move} had about a 1 in {odds} chance of being played.",
+  "@samplingChance": {
+    "description": "Offline report of recorded Maia selection probabilities after Temperature and Top-P.",
+    "placeholders": {
+      "move": {
+        "type": "String",
+        "example": "e6"
+      },
+      "odds": {
+        "type": "String",
+        "example": "5.5"
+      }
+    }
+  },
+  "samplingCertain": "{move} was certain to be selected (100%).",
+  "@samplingCertain": {
+    "description": "Offline report of recorded Maia selection probabilities after Temperature and Top-P.",
+    "placeholders": {
+      "move": {
+        "type": "String",
+        "example": "e6"
+      }
+    }
+  },
+  "samplingAlmostCertain": "{move} was almost certain to be selected.",
+  "@samplingAlmostCertain": {
+    "description": "Offline report of recorded Maia selection probabilities after Temperature and Top-P.",
+    "placeholders": {
+      "move": {
+        "type": "String",
+        "example": "e6"
+      }
+    }
   }
 }

@@ -127,3 +127,12 @@ actual 79M model. History is experimental and does not promise greater strength.
 - Actual Android 79M play and independent replay of document-provider exports passed for the opening and Qf5 position. Save/cancel, persisted off preference, near-capacity FIFO retention, Clear with preserved archive hashes, and interruption/restart outcomes passed. Initial feature qualification used the exact APK payload with a disposable emulator signature; official-signed play and the beta.5 → beta.6 upgrade also passed. Additional variation, incomplete-game and checkmate upgrades use temporary test signatures.
 - The small interleaved 1+0 emulator sample observed no slowdown from recording (median launch-to-move about 1.76 s off, 1.63 s on; near-capacity about 1.81 s). These include launch/inference and do not establish a speedup or physical-phone guarantees.
 - Models/native engines are unchanged. `crypto` 3.0.7 is the sole new Dart dependency for local checksums. Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 are unchanged. Physical device/board acceptance remains with owner/testers. The release verification bundle and PR #125 record qualification and cleanup.
+
+## Preview 2.4.0-beta.7 candidate
+
+PR #129 prepares 2.4.0-beta.7, code 2409: readable offline sampling reports,
+actual post-Temperature/Top-P probabilities, plain-language odds, and Save/Share.
+The board uses charcoal/gray arrows with outside coordinates. There is no in-app
+summary screen. Both formats and settings copy are localized in all ten languages.
+Publication is pending exact-source Linux builds, Android qualification and signing.
+The published Preview remains beta.6 until the release record is appended.

@@ -4,6 +4,7 @@ private fun bytes(vararg values: Int) = values.map { it.toByte() }.toByteArray()
 private fun rejects(block: () -> Unit) { check(runCatching(block).isFailure) }
 
 fun main() {
+    samplingShareFilesChecks()
     for (flavor in listOf("preview", "", "stable")) {
         check(BoardChannelPolicy.supports(flavor, "chessnut"))
         check(!BoardChannelPolicy.supports(flavor, "pegasus"))
