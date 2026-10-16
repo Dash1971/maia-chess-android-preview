@@ -256,8 +256,10 @@ void main() {
           .value,
       true,
     );
-    await tester.ensureVisible(find.text('Reset engine defaults'));
-    await tester.tap(find.text('Reset engine defaults'));
+    await tester.ensureVisible(find.text('Reset settings to default'));
+    await tester.tap(find.text('Reset settings to default'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('confirm-reset-settings')));
     await tester.pumpAndSettle();
     expect(
       tester
