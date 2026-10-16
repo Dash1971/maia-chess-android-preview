@@ -176,15 +176,13 @@ void main() {
     // Center this tall paragraph within the dialog's scroll viewport.
     await Scrollable.ensureVisible(
       tester.element(
-        find.textContaining('Top-P: lower values keep a smaller group'),
+        find.textContaining('For balanced play, you may consider'),
       ),
       alignment: 0.5,
     );
     await tester.pumpAndSettle();
     expect(
-      find
-          .textContaining('Top-P: lower values keep a smaller group')
-          .hitTestable(),
+      find.textContaining('For balanced play, you may consider').hitTestable(),
       findsOneWidget,
     );
     final researchLink = find.byKey(const ValueKey('sampling-research-link'));
