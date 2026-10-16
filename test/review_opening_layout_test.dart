@@ -153,25 +153,40 @@ void main() {
                   matching: find.byType(RichText),
                 );
                 final paragraph = tester.renderObject<RenderParagraph>(rich);
-                expect(paragraph.didExceedMaxLines, isFalse);
-                // The trailing variation must actually be laid out, not just present
-                // in Text.data/semantics behind an ellipsis.
-                final last = paragraph.getBoxesForSelection(
-                  TextSelection(
-                    baseOffset: fixture.label.length - 1,
-                    extentOffset: fixture.label.length,
-                  ),
-                );
-                expect(last, isNotEmpty);
-                expect(
-                  last.last.bottom,
-                  lessThanOrEqualTo(paragraph.size.height + 0.01),
+                final details = find.byKey(
+                  const ValueKey('review-opening-details'),
                 );
                 expect(
-                  last.last.right,
-                  lessThanOrEqualTo(paragraph.size.width + 0.01),
+                  details,
+                  paragraph.didExceedMaxLines ? findsOneWidget : findsNothing,
                 );
                 expect(tester.getSemantics(openingFinder).label, fixture.label);
+                if (paragraph.didExceedMaxLines) {
+                  await tester.tap(openingFinder);
+                  await tester.pumpAndSettle();
+                  final full = find.byKey(
+                    const ValueKey('review-opening-full-name'),
+                  );
+                  expect(full, findsOneWidget);
+                  final fullParagraph = tester.renderObject<RenderParagraph>(
+                    find.descendant(of: full, matching: find.byType(RichText)),
+                  );
+                  expect(fullParagraph.didExceedMaxLines, isFalse);
+                  final last = fullParagraph.getBoxesForSelection(
+                    TextSelection(
+                      baseOffset: fixture.label.length - 1,
+                      extentOffset: fixture.label.length,
+                    ),
+                  );
+                  expect(last, isNotEmpty);
+                  expect(
+                    last.last.bottom,
+                    lessThanOrEqualTo(fullParagraph.size.height + 0.01),
+                  );
+                  await tester.tap(find.text('Close'));
+                  await tester.pumpAndSettle();
+                  expect(find.byType(AlertDialog), findsNothing);
+                }
                 expect(
                   find.byTooltip('Previous move').hitTestable(),
                   findsOneWidget,
@@ -288,7 +303,7 @@ void main() {
           final lines = paragraph.getBoxesForSelection(
             TextSelection(baseOffset: 0, extentOffset: fixture.label.length),
           );
-          // Report actual rendered line count and height with the real font.
+          // Report the compact label with the real font.
           debugPrint(
             '${fixture.name} ${entry.key}: ${lines.length} lines, ${paragraph.size.height}px text',
           );
@@ -303,6 +318,27 @@ void main() {
                 .writeAsBytes(data!.buffer.asUint8List());
             image.dispose();
           });
+          if (find
+              .byKey(const ValueKey('review-opening-details'))
+              .evaluate()
+              .isNotEmpty) {
+            await tester.tap(openingFinder);
+            await tester.pumpAndSettle();
+            await tester.runAsync(() async {
+              final boundary =
+                  key.currentContext!.findRenderObject()!
+                      as RenderRepaintBoundary;
+              final image = await boundary.toImage(pixelRatio: 2);
+              final data = await image.toByteData(
+                format: ui.ImageByteFormat.png,
+              );
+              await File('$output/${fixture.name}-${entry.key}-dialog.png')
+                  .writeAsBytes(data!.buffer.asUint8List());
+              image.dispose();
+            });
+            await tester.tap(find.text('Close'));
+            await tester.pumpAndSettle();
+          }
           expect(tester.takeException(), isNull);
           await tester.pumpWidget(const SizedBox.shrink());
           await tester.pumpAndSettle();
