@@ -979,22 +979,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileMaiaSource => 'Mobile Maia का स्रोत कोड';
 
   @override
-  String get samplingFullRange =>
-      'Maia अनुमान लगाता है कि आपकी चुनी हुई रेटिंग के लोग कौन-सी चालें चलेंगे। टेम्परेचर और Top-P तय करते हैं कि इन चालों में से कैसे चुना जाए।';
-
-  @override
-  String get samplingStrength =>
-      'कम मानों पर Maia को हराना कठिन हो सकता है, लेकिन खेल में दोहराव भी बढ़ सकता है। 1600 रेटिंग पर हमारे परीक्षणों में 1 / 1 की शुरुआती चालें मानव खेलों से अधिक मिलती थीं, जबकि कम मानों वाली सेटिंग अधिक बार जीती। इससे न तो सर्वश्रेष्ठ चाल की गारंटी मिलती है, न किसी निश्चित खेल-क्षमता की।';
-
-  @override
-  String get samplingTemperatureHelp =>
-      'टेम्परेचर: 0 पर Maia हमेशा अपनी सबसे संभावित चाल चुनता है। कम मान अधिक संभावित चालों को प्राथमिकता देते हैं; अधिक मान कम संभावित चालों को भी ज़्यादा अवसर देते हैं।';
-
-  @override
-  String get samplingTopPHelp =>
-      'Top-P: कम मानों पर अधिक संभावित चालों का छोटा समूह रखा जाता है; 1 पर सभी वैध चालें बनी रहती हैं। टेम्परेचर 0 होने पर इसका कोई प्रभाव नहीं पड़ता।';
-
-  @override
   String get aboutPoweredBy =>
       'Maia-3 पर आधारित, इंसानों की तरह खेलने वाला शतरंज इंजन जिसे University of Toronto Computational Social Science Lab ने विकसित किया है।';
 
@@ -1214,21 +1198,6 @@ class AppLocalizationsHi extends AppLocalizations {
       'जाँचें कि हर मोहरा स्क्रीन पर दिखाई गई स्थिति से मेल खाता है।';
 
   @override
-  String get samplingExamplesTitle => 'उदाहरण (टेम्परेचर / Top-P)';
-
-  @override
-  String get samplingExampleLikely =>
-      '0 / 0 — सबसे अधिक अनुमान योग्य। Maia हमेशा अपनी सबसे संभावित चाल चुनता है।';
-
-  @override
-  String get samplingExampleReduced =>
-      '0.5 / 0.9 — कुछ विविधता। आम चालों को प्राथमिकता मिलती है और Maia को हराना कठिन हो सकता है।';
-
-  @override
-  String get samplingExampleFull =>
-      '1 / 1 — पूरी विविधता (डिफ़ॉल्ट)। सभी वैध चालों को अवसर मिलता है, लेकिन अधिक संभावित चालें फिर भी ज़्यादा खेली जाती हैं।';
-
-  @override
   String get maiaHistorySetting => 'पिछली स्थितियों का उपयोग करें';
 
   @override
@@ -1411,4 +1380,32 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get resetSettingsAction => 'सेटिंग्स रीसेट करें';
+
+  @override
+  String get samplingHelpIntro =>
+      'टेम्परेचर और Top-P तय करते हैं कि Maia अलग-अलग चालों में से कैसे चुनती है।';
+
+  @override
+  String get samplingHelpVariety =>
+      'टेम्परेचर और Top-P बढ़ाने पर Maia के खेल में उतार-चढ़ाव बढ़ जाते हैं, क्योंकि वह कम संभावना वाली चालें ज़्यादा चुनने लगती है। ये भयंकर गलतियाँ भी हो सकती हैं और अद्भुत चालें भी!';
+
+  @override
+  String get samplingHelpDefaults =>
+      'अगर आप खेल में अधिकतम विविधता चाहते हैं और चाहते हैं कि Maia इंसानों की तरह कई तरह की ओपनिंग खेले, जिनमें कम प्रचलित विकल्प भी शामिल हों, तो 1.0 और 1.0 के डिफ़ॉल्ट मान बनाए रखें।';
+
+  @override
+  String get samplingHelpStrength =>
+      'अगर आप ऐसा मज़बूत प्रतिद्वंद्वी चाहते हैं जो कम भयंकर गलतियाँ करे, तो टेम्परेचर और Top-P के मान घटाकर देखें।';
+
+  @override
+  String get samplingHelpArgmax =>
+      'टेम्परेचर को 0 करने पर Maia argmax का इस्तेमाल करती है। इस तकनीकी शब्द का मतलब है कि Maia किसी भी स्थिति में हमेशा वह चाल खेलेगी जिसे वह किसी इंसान की सबसे संभावित चाल मानती है। ध्यान दें! 1600 रेटिंग सेटिंग पर हमारे शोध में, argmax वाली Maia ने 1.0 / 1.0 वाली Maia के खिलाफ सीधे मुकाबलों में लगभग 300 Elo अंकों के बराबर बढ़त दिखाई।';
+
+  @override
+  String get samplingHelpTopP =>
+      'संतुलित खेल के लिए आप टेम्परेचर को 1.0 पर रखकर Top-P को 0.9 या 0.95 कर सकते हैं। इससे विविधता बनी रहती है और कम संभावना वाली चालें हट जाती हैं। ऐसी चालें अक्सर भयंकर गलतियाँ हो सकती हैं, लेकिन अच्छी चालें भी हो सकती हैं। आसान शब्दों में, Top-P कम संभावना वाली चालों को विकल्पों से हटा देता है। इसे 0.95 पर रखने से, टेम्परेचर लागू होने के बाद कुल संभावना के कम-से-कम 95% हिस्से वाली चालें रखी जाती हैं। बाकी चालें Maia नहीं चुन सकती।';
+
+  @override
+  String get samplingHelpResearchIntro =>
+      'हमने 1600 Elo पर इन सेटिंग्स के साथ प्रयोग किए और पूरे नतीजे यहाँ प्रकाशित किए हैं:';
 }

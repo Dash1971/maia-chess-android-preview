@@ -1746,30 +1746,6 @@ abstract class AppLocalizations {
   /// **'Mobile Maia source code'**
   String get mobileMaiaSource;
 
-  /// Maia-specific sampling help: Maia predicts which moves people at your chosen rating would play. Temperature and Top-P control how it chooses between those moves.
-  ///
-  /// In en, this message translates to:
-  /// **'Maia predicts which moves people at your chosen rating would play. Temperature and Top-P control how it chooses between those moves.'**
-  String get samplingFullRange;
-
-  /// Maia-specific sampling help: Lower settings can make Maia tougher to beat, but also more repetitive. In our tests at the 1600 setting, 1 / 1 gave an opening mix closer to human games, while lower settings won more often. This does not guarantee the best move or an exact playing strength.
-  ///
-  /// In en, this message translates to:
-  /// **'Lower settings can make Maia tougher to beat, but also more repetitive. In our tests at the 1600 setting, 1 / 1 gave an opening mix closer to human games, while lower settings won more often. This does not guarantee the best move or an exact playing strength.'**
-  String get samplingStrength;
-
-  /// Maia-specific sampling help: Temperature: at 0, Maia always chooses its most likely move. Low values favor likely moves; higher values give less likely moves more chance.
-  ///
-  /// In en, this message translates to:
-  /// **'Temperature: at 0, Maia always chooses its most likely move. Low values favor likely moves; higher values give less likely moves more chance.'**
-  String get samplingTemperatureHelp;
-
-  /// Maia-specific sampling help: Top-P: lower values keep a smaller group of likely moves; 1 keeps every legal move. It has no effect when Temperature is 0.
-  ///
-  /// In en, this message translates to:
-  /// **'Top-P: lower values keep a smaller group of likely moves; 1 keeps every legal move. It has no effect when Temperature is 0.'**
-  String get samplingTopPHelp;
-
   /// Play help, about or error message: Powered by Maia-3, the human-like chess engine developed by the University of Toronto Computational Social Science Lab.
   ///
   /// In en, this message translates to:
@@ -2104,30 +2080,6 @@ abstract class AppLocalizations {
   /// **'Check that every piece matches the position on screen.'**
   String get boardConfirmPositionHelp;
 
-  /// Maia-specific sampling help: Examples (Temperature / Top-P)
-  ///
-  /// In en, this message translates to:
-  /// **'Examples (Temperature / Top-P)'**
-  String get samplingExamplesTitle;
-
-  /// Maia-specific sampling help: 0 / 0 — Most predictable. Always choose Maia’s most likely move.
-  ///
-  /// In en, this message translates to:
-  /// **'0 / 0 — Most predictable. Always choose Maia’s most likely move.'**
-  String get samplingExampleLikely;
-
-  /// Maia-specific sampling help: 0.5 / 0.9 — Some variety. Favor common choices for a potentially tougher opponent.
-  ///
-  /// In en, this message translates to:
-  /// **'0.5 / 0.9 — Some variety. Favor common choices for a potentially tougher opponent.'**
-  String get samplingExampleReduced;
-
-  /// Maia-specific sampling help: 1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.
-  ///
-  /// In en, this message translates to:
-  /// **'1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.'**
-  String get samplingExampleFull;
-
   /// Maia-specific history setting/help: Use move history
   ///
   /// In en, this message translates to:
@@ -2433,6 +2385,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reset settings'**
   String get resetSettingsAction;
+
+  /// User-approved Maia-specific sampling help, paragraph 1. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Temperature and Top-P control how Maia chooses between moves.'**
+  String get samplingHelpIntro;
+
+  /// User-approved Maia-specific sampling help, paragraph 2. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Increasing Temperature and Top-P is like making Maia a more volatile player, as Maia becomes more likely to play low-probability moves. These may be blunders, but they may also be brilliant moves!'**
+  String get samplingHelpVariety;
+
+  /// User-approved Maia-specific sampling help, paragraph 3. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'If you value maximum variety, and you also want Maia to play a broad range of human openings, including sidelines, then keep the default values of 1.0 and 1.0.'**
+  String get samplingHelpDefaults;
+
+  /// User-approved Maia-specific sampling help, paragraph 4. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'If you prefer a stronger opponent playing fewer blunders, experiment with moving Temperature and Top-P values down.'**
+  String get samplingHelpStrength;
+
+  /// User-approved Maia-specific sampling help, paragraph 5. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Setting Temperature to 0 will cause Maia to use argmax, which is a technical way of saying that Maia will always play what it predicts is the most probable human move in a given position. Careful! In our research at the 1600 setting, argmax Maia outperformed Maia at 1.0 / 1.0 by the equivalent of about 300 Elo points in direct matches.'**
+  String get samplingHelpArgmax;
+
+  /// User-approved Maia-specific sampling help, paragraph 6. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.9 or 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.'**
+  String get samplingHelpTopP;
+
+  /// User-approved Maia-specific sampling help, paragraph 7. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'We experimented with these settings at 1600 Elo and published our full findings here:'**
+  String get samplingHelpResearchIntro;
 }
 
 class _AppLocalizationsDelegate

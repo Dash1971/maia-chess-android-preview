@@ -991,22 +991,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileMaiaSource => 'Código-fonte do Mobile Maia';
 
   @override
-  String get samplingFullRange =>
-      'Maia prevê quais lances pessoas da força escolhida fariam. A temperatura e o Top-P controlam como ele escolhe entre esses lances.';
-
-  @override
-  String get samplingStrength =>
-      'Valores mais baixos podem tornar Maia mais difícil de vencer, mas também mais repetitivo. Nos nossos testes com a configuração 1600, 1 / 1 produziu aberturas mais próximas de partidas humanas, enquanto valores mais baixos venceram com mais frequência. Isso não garante o melhor lance nem uma força de jogo exata.';
-
-  @override
-  String get samplingTemperatureHelp =>
-      'Temperatura: com 0, Maia sempre escolhe seu lance mais provável. Valores baixos favorecem os lances mais prováveis; valores altos dão mais chances aos menos prováveis.';
-
-  @override
-  String get samplingTopPHelp =>
-      'Top-P: valores mais baixos mantêm um grupo menor de lances prováveis; 1 mantém todos os lances legais. Não tem efeito quando a temperatura é 0.';
-
-  @override
   String get aboutPoweredBy =>
       'Utiliza o Maia-3, o motor de xadrez que joga como humanos, desenvolvido pelo Laboratório de Ciências Sociais Computacionais da University of Toronto.';
 
@@ -1226,21 +1210,6 @@ class AppLocalizationsPt extends AppLocalizations {
       'Confira se todas as peças correspondem à posição na tela.';
 
   @override
-  String get samplingExamplesTitle => 'Exemplos (Temperatura / Top-P)';
-
-  @override
-  String get samplingExampleLikely =>
-      '0 / 0 — Mais previsível. Maia sempre escolhe seu lance mais provável.';
-
-  @override
-  String get samplingExampleReduced =>
-      '0,5 / 0,9 — Alguma variedade. Favorece escolhas comuns e pode tornar Maia mais difícil de vencer.';
-
-  @override
-  String get samplingExampleFull =>
-      '1 / 1 — Variedade completa (padrão). Todos os lances legais continuam possíveis, mas os mais prováveis ainda são jogados com mais frequência.';
-
-  @override
   String get maiaHistorySetting => 'Usar histórico de posições';
 
   @override
@@ -1423,4 +1392,32 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get resetSettingsAction => 'Restaurar configurações';
+
+  @override
+  String get samplingHelpIntro =>
+      'A Temperatura e o Top-P controlam como a Maia escolhe entre os lances.';
+
+  @override
+  String get samplingHelpVariety =>
+      'Aumentar a Temperatura e o Top-P é como tornar a Maia uma jogadora mais imprevisível, pois ela passa a ter mais chances de escolher lances pouco prováveis. Eles podem ser erros graves, mas também jogadas excelentes!';
+
+  @override
+  String get samplingHelpDefaults =>
+      'Se você quer o máximo de variedade e também quer que a Maia jogue uma ampla gama de aberturas humanas, incluindo variantes secundárias, mantenha os valores padrão de 1,0 e 1,0.';
+
+  @override
+  String get samplingHelpStrength =>
+      'Se você prefere uma adversária mais forte que cometa menos erros graves, experimente diminuir os valores de Temperatura e Top-P.';
+
+  @override
+  String get samplingHelpArgmax =>
+      'Definir a Temperatura como 0 faz a Maia usar argmax, que é uma forma técnica de dizer que ela sempre jogará o lance que prevê ser o mais provável para um humano em determinada posição. Atenção! Em nossa pesquisa com o nível definido como 1600, a Maia com argmax superou a Maia com 1,0 / 1,0 pelo equivalente a cerca de 300 pontos Elo em confrontos diretos.';
+
+  @override
+  String get samplingHelpTopP =>
+      'Para equilibrar força e variedade, você pode manter a Temperatura em 1,0 e definir o Top-P como 0,9 ou 0,95. Isso mantém a variedade e elimina lances pouco prováveis, que muitas vezes podem ser erros graves, mas também podem ser bons lances. Basicamente, o Top-P exclui os lances menos prováveis. Ao defini-lo como 0,95, ele mantém lances que somam pelo menos 95% da probabilidade após a aplicação da Temperatura. A Maia não poderá escolher os lances restantes.';
+
+  @override
+  String get samplingHelpResearchIntro =>
+      'Experimentamos essas configurações em 1600 Elo e publicamos todos os resultados aqui:';
 }

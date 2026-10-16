@@ -901,22 +901,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileMaiaSource => 'Mobile Maiaのソースコード';
 
   @override
-  String get samplingFullRange =>
-      'Maiaは、選んだレーティングの人がどの手を指すかを予測します。温度とTop-Pは、その候補から手を選ぶ方法を調整します。';
-
-  @override
-  String get samplingStrength =>
-      '値を下げるとMaiaが手ごわくなる場合がありますが、同じ展開も増えます。レーティング1600でのテストでは、1 / 1の序盤の選択が人間の対局に近く、低い値の設定はより多く勝ちました。最善手や一定の棋力を保証するものではありません。';
-
-  @override
-  String get samplingTemperatureHelp =>
-      '温度：0では、Maiaが最も指されやすいと予測した手を必ず選びます。低い値はよく指される手を優先し、高い値は珍しい手も選びやすくします。';
-
-  @override
-  String get samplingTopPHelp =>
-      'Top-P：値を下げると、よく指される手に候補を絞ります。1ではすべての合法手が候補に入ります。温度が0のときは影響しません。';
-
-  @override
   String get aboutPoweredBy =>
       'トロント大学の計算社会科学研究室が開発した、人間らしく指すチェスエンジンMaia-3を使用しています。';
 
@@ -1124,21 +1108,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get boardConfirmPositionHelp => 'すべての駒が画面の局面と一致していることを確認してください。';
 
   @override
-  String get samplingExamplesTitle => '設定例（温度 / Top-P）';
-
-  @override
-  String get samplingExampleLikely =>
-      '0 / 0 — 最も予測しやすい設定。Maiaが最も指されやすいと予測した手を必ず選びます。';
-
-  @override
-  String get samplingExampleReduced =>
-      '0.5 / 0.9 — 適度な多様さ。よく指される手を優先し、より手ごわい相手になる可能性があります。';
-
-  @override
-  String get samplingExampleFull =>
-      '1 / 1 — 最大の多様さ（初期設定）。すべての合法手が候補になりますが、指されやすい手ほど多く選ばれます。';
-
-  @override
   String get maiaHistorySetting => '過去の局面を使う';
 
   @override
@@ -1313,4 +1282,31 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get resetSettingsAction => '設定を初期値に戻す';
+
+  @override
+  String get samplingHelpIntro => '温度とTop-Pは、Maiaがどの指し手を選ぶかを調整する設定です。';
+
+  @override
+  String get samplingHelpVariety =>
+      '温度とTop-Pを上げると、Maiaは確率の低い手も選びやすくなり、より予測しにくいプレイヤーのようになります。その手は大悪手かもしれませんが、妙手かもしれません！';
+
+  @override
+  String get samplingHelpDefaults =>
+      '指し手の多様さを最大限に楽しみたい方や、あまり指されない変化も含め、人間が指す幅広いオープニングをMaiaに指してほしい方は、初期値の1.0と1.0のままにしてください。';
+
+  @override
+  String get samplingHelpStrength =>
+      '大悪手が少なく、より強い相手と対局したい方は、温度やTop-Pの値を下げて試してみてください。';
+
+  @override
+  String get samplingHelpArgmax =>
+      '温度を0にすると、Maiaはargmaxという方法で手を選びます。これは、ある局面で人間が最も指しそうだとMaiaが予測した手を、常に選ぶという意味です。ご注意ください！レーティング設定1600で行った私たちの研究では、argmaxのMaiaは、1.0 / 1.0のMaiaとの直接対局で、約300 Eloポイントの差に相当する好成績を収めました。';
+
+  @override
+  String get samplingHelpTopP =>
+      '強さと多様さのバランスを取りたい方は、温度を1.0のまま、Top-Pを0.9か0.95にしてみてください。多様さを保ちながら、確率の低い手を選択肢から除きます。そうした手は大悪手であることも多いですが、良い手の場合もあります。Top-Pは、簡単に言えば、確率の低い手を候補から外す設定です。0.95にすると、温度を適用した後の確率の合計が少なくとも95％になるまで候補の手を残します。それ以外の手をMaiaが選ぶことはありません。';
+
+  @override
+  String get samplingHelpResearchIntro =>
+      'これらの設定を1600 Eloで実験しました。詳しい結果はこちらで公開しています：';
 }

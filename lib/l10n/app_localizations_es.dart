@@ -984,22 +984,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileMaiaSource => 'Código fuente de Mobile Maia';
 
   @override
-  String get samplingFullRange =>
-      'Maia predice qué jugadas harían personas del nivel que has elegido. La temperatura y Top-P controlan cómo elige entre esas jugadas.';
-
-  @override
-  String get samplingStrength =>
-      'Los valores bajos pueden hacer que Maia sea más difícil de vencer, pero también más repetitiva. En nuestras pruebas con el ajuste 1600, 1 / 1 produjo aperturas más parecidas a las de partidas humanas, mientras que los valores bajos ganaron más a menudo. Esto no garantiza la mejor jugada ni una fuerza de juego exacta.';
-
-  @override
-  String get samplingTemperatureHelp =>
-      'Temperatura: con 0, Maia siempre elige su jugada más probable. Los valores bajos favorecen las jugadas más probables; los valores altos dan más posibilidades a las menos probables.';
-
-  @override
-  String get samplingTopPHelp =>
-      'Top-P: los valores bajos conservan un grupo más pequeño de jugadas probables; 1 conserva todas las jugadas legales. No tiene efecto cuando la temperatura es 0.';
-
-  @override
   String get aboutPoweredBy =>
       'Utiliza Maia-3, el motor de ajedrez de estilo humano desarrollado por el Laboratorio de Ciencias Sociales Computacionales de la Universidad de Toronto.';
 
@@ -1219,21 +1203,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Comprueba que todas las piezas coincidan con la posición en pantalla.';
 
   @override
-  String get samplingExamplesTitle => 'Ejemplos (Temperatura / Top-P)';
-
-  @override
-  String get samplingExampleLikely =>
-      '0 / 0 — Máxima previsibilidad. Maia siempre elige su jugada más probable.';
-
-  @override
-  String get samplingExampleReduced =>
-      '0,5 / 0,9 — Algo de variedad. Favorece las opciones habituales y puede resultar más difícil de vencer.';
-
-  @override
-  String get samplingExampleFull =>
-      '1 / 1 — Toda la variedad (predeterminado). Incluye todas las jugadas legales, aunque las más probables siguen apareciendo más a menudo.';
-
-  @override
   String get maiaHistorySetting => 'Usar el historial de jugadas';
 
   @override
@@ -1416,4 +1385,32 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get resetSettingsAction => 'Restablecer ajustes';
+
+  @override
+  String get samplingHelpIntro =>
+      'La Temperatura y Top-P controlan cómo elige Maia entre las distintas jugadas.';
+
+  @override
+  String get samplingHelpVariety =>
+      'Subir la Temperatura y Top-P es como hacer que Maia sea un jugador más impredecible, ya que aumenta la posibilidad de que elija jugadas poco probables. ¡Pueden ser errores graves, pero también jugadas brillantes!';
+
+  @override
+  String get samplingHelpDefaults =>
+      'Si buscas la máxima variedad y quieres que Maia juegue un amplio repertorio de aperturas humanas, incluidas líneas secundarias, mantén los valores predeterminados de 1,0 y 1,0.';
+
+  @override
+  String get samplingHelpStrength =>
+      'Si prefieres un rival más fuerte que cometa menos errores graves, prueba a bajar los valores de Temperatura y Top-P.';
+
+  @override
+  String get samplingHelpArgmax =>
+      'Al poner la Temperatura a 0, Maia utiliza argmax, una forma técnica de decir que siempre elegirá la jugada que predice como más probable para un humano en una posición dada. ¡Ojo! En nuestra investigación con el nivel ajustado a 1600, Maia con argmax superó a Maia con 1,0 / 1,0 por el equivalente a unos 300 puntos Elo en enfrentamientos directos.';
+
+  @override
+  String get samplingHelpTopP =>
+      'Para equilibrar fuerza y variedad, puedes mantener la Temperatura en 1,0 y poner Top-P en 0,9 o 0,95. Esto conserva la variedad y elimina jugadas poco probables, que a menudo pueden ser errores graves, aunque también pueden ser buenas jugadas. Básicamente, Top-P descarta las jugadas menos probables. Al ponerlo en 0,95, conserva jugadas que suman al menos el 95 % de la probabilidad después de aplicar la Temperatura. Maia no podrá elegir las jugadas restantes.';
+
+  @override
+  String get samplingHelpResearchIntro =>
+      'Experimentamos con estos ajustes a 1600 Elo y publicamos todos los resultados aquí:';
 }
