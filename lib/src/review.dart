@@ -3124,15 +3124,19 @@ class _ReviewPageState extends State<ReviewPage>
             Widget details() => LayoutBuilder(
               builder: (context, available) {
                 final header = <Widget>[
-                  SizedBox(
-                    height: 28,
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 28),
                     child: openingName == null
                         ? const SizedBox.shrink()
-                        : Center(
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 4,
+                            ),
                             child: Text(
                               openingName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                              key: const ValueKey('review-opening-name'),
+                              textAlign: TextAlign.center,
                               style: const TextStyle(fontSize: 13),
                             ),
                           ),
