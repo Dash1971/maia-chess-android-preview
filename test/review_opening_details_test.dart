@@ -30,7 +30,13 @@ Widget app({
         textDirection: rtl ? TextDirection.rtl : TextDirection.ltr,
         child: SizedBox(
           width: width,
-          child: ReviewOpeningName(name: name),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ReviewOpeningName(name: name),
+              const SizedBox(key: ValueKey('below-opening'), height: 10),
+            ],
+          ),
         ),
       ),
     ),
@@ -38,6 +44,51 @@ Widget app({
 );
 
 void main() {
+  for (final scale in [1.0, 1.5, 2.0, 3.0]) {
+    for (final bold in [false, true]) {
+      testWidgets(
+        'truncation keeps row and content fixed at $scale, bold $bold',
+        (tester) async {
+          const short = 'C60 · Ruy Lopez';
+          final row = find.byType(ReviewOpeningName);
+          final below = find.byKey(const ValueKey('below-opening'));
+          await tester.pumpWidget(
+            app(width: 700, scale: scale, bold: bold, name: short),
+          );
+          await tester.pumpAndSettle();
+          expect(action, findsNothing);
+          final rowRect = tester.getRect(row);
+          final belowRect = tester.getRect(below);
+          if (scale == 1) expect(rowRect.height, 28);
+
+          await tester.pumpWidget(app(width: 700, scale: scale, bold: bold));
+          await tester.pumpAndSettle();
+          expect(action, findsOneWidget);
+          expect(tester.getRect(row), rowRect);
+          expect(tester.getRect(below), belowRect);
+          // The compact action remains tappable on both the text and the icon.
+          for (final target in [label, find.byIcon(Icons.info_outline)]) {
+            await tester.tap(target);
+            await tester.pumpAndSettle();
+            expect(find.byType(AlertDialog), findsOneWidget);
+            await tester.tap(find.text('Close'));
+            await tester.pumpAndSettle();
+            expect(tester.getRect(row), rowRect);
+            expect(tester.getRect(below), belowRect);
+          }
+
+          await tester.pumpWidget(
+            app(width: 700, scale: scale, bold: bold, name: short),
+          );
+          await tester.pumpAndSettle();
+          expect(action, findsNothing);
+          expect(tester.getRect(row), rowRect);
+          expect(tester.getRect(below), belowRect);
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+  }
   testWidgets(
     'info uses full available width and follows resize, text size and name',
     (tester) async {

@@ -36,6 +36,9 @@ class ReviewOpeningName extends StatelessWidget {
           final truncated = painter.didExceedMaxLines;
           final labelHeight = painter.height;
           painter.dispose();
+          // Truncation must not move the engine panel or move list. Keep the
+          // whole compact row tappable, with the same text-scaled height.
+          final rowHeight = max(28.0, labelHeight + 8);
           final label = Text(
             name,
             key: const ValueKey('review-opening-name'),
@@ -47,7 +50,7 @@ class ReviewOpeningName extends StatelessWidget {
           if (!truncated) {
             return SizedBox(
               width: double.infinity,
-              height: max(28, labelHeight + 8),
+              height: rowHeight,
               child: Center(child: label),
             );
           }
@@ -74,10 +77,8 @@ class ReviewOpeningName extends StatelessWidget {
                     ],
                   ),
                 ),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: max(48, labelHeight + 8),
-                  ),
+                child: SizedBox(
+                  height: rowHeight,
                   child: Row(
                     children: [
                       Expanded(child: label),
