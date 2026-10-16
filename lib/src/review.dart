@@ -3173,11 +3173,12 @@ class _ReviewPageState extends State<ReviewPage>
                 return Column(
                   children: [
                     // Wrapped probabilities can exceed the minimum estimate.
-                    // Keep them scrollable while reserving room for moves and
-                    // the navigation controls on taller layouts too.
+                    // Reserve a usable move row even when large text makes
+                    // the controls wrap to two rows (108px + 56px for moves).
+                    // The header scrolls instead of squeezing the move list.
                     ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxHeight: available.maxHeight - 112,
+                        maxHeight: available.maxHeight - 164,
                       ),
                       child: SingleChildScrollView(
                         child: Column(children: header),

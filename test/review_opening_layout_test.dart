@@ -14,10 +14,47 @@ const opening =
 const pgn =
     '1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 Nc6 5. Nf3 d6 '
     '6. Bc4 a6 7. O-O Nf6 *';
+const longestEnglish = (
+  name: 'longest-english',
+  label: "A29 · English Opening: King's English Variation, Four Knights Variation, Fianchetto Line, with .. d6, Be7",
+  pgn: '1. c4 e5 2. Nc3 Nf6 3. g3 Nc6 4. Bg2 d6 5. d3 Be7 6. Nf3 O-O *',
+  best: 'c1d2',
+  alternative: 'd1d2',
+  reply: 'a7a6',
+);
+const longestLondon = (
+  name: 'longest-london',
+  label: "D00 · Queen's Pawn Game: Accelerated London System, Steinitz Countergambit, Morris Countergambit Accepted",
+  pgn: '1. d4 d5 2. Bf4 c5 3. e4 dxe4 *',
+  best: 'd4d5',
+  alternative: 'b1c3',
+  reply: 'g8f6',
+);
+const smithMorra = (
+  name: 'smith-morra',
+  label: opening,
+  pgn: pgn,
+  best: 'd1e2',
+  alternative: 'c1g5',
+  reply: 'c8g4',
+);
 final openingFinder = find.byKey(const ValueKey('review-opening-name'));
 
-Widget review({double scale = 1, bool twoEngines = false}) {
-  final session = AnalysisSession.fromPgn(pgn);
+Widget review({
+  double scale = 1,
+  bool twoEngines = false,
+  ({
+        String name,
+        String label,
+        String pgn,
+        String best,
+        String alternative,
+        String reply,
+      })
+      fixture =
+      smithMorra,
+}) {
+  final session = AnalysisSession.fromPgn(fixture.pgn);
   return MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
@@ -40,22 +77,25 @@ Widget review({double scale = 1, bool twoEngines = false}) {
       uciMoves: session.uciMoves,
       initialCurrentFen: session.positions.last,
       playerIsWhite: true,
-      pgn: pgn,
+      pgn: fixture.pgn,
       secondMaiaElo: twoEngines ? 2400 : null,
       onHome: () {},
       // Deterministic display fixtures; this test does not run chess engines.
-      evaluator: (_) async => const StockfishReview(
+      evaluator: (_) async => StockfishReview(
         -30,
-        'd1e2',
+        fixture.best,
         lines: [
-          StockfishLine(evaluation: -30, moves: ['d1e2', 'c8g4']),
-          StockfishLine(evaluation: -40, moves: ['c1g5', 'e7e6']),
+          StockfishLine(evaluation: -30, moves: [fixture.best, fixture.reply]),
+          StockfishLine(
+            evaluation: -40,
+            moves: [fixture.alternative, fixture.reply],
+          ),
         ],
       ),
       maiaPolicyEvaluator: (_, _) async {
         final policy = List<double>.filled(4352, -20);
-        policy[MaiaEncoding.moveIndex('d1e2', false)] = 3;
-        policy[MaiaEncoding.moveIndex('c1g5', false)] = 2;
+        policy[MaiaEncoding.moveIndex(fixture.best, false)] = 3;
+        policy[MaiaEncoding.moveIndex(fixture.alternative, false)] = 2;
         return policy;
       },
     ),
@@ -65,74 +105,106 @@ Widget review({double scale = 1, bool twoEngines = false}) {
 void main() {
   setUpAll(OpeningNames.load);
 
-  for (final size in [
-    const Size(320, 568),
-    const Size(390, 844),
-    const Size(844, 390),
-  ]) {
-    for (final scale in [1.0, 2.0]) {
-      for (final twoEngines in [false, true]) {
-        testWidgets(
-          'full opening at $size, scale $scale, two engines $twoEngines',
-          (tester) async {
-            tester.view.physicalSize = size;
-            tester.view.devicePixelRatio = 1;
-            addTearDown(tester.view.resetPhysicalSize);
-            addTearDown(tester.view.resetDevicePixelRatio);
-            final semantics = tester.ensureSemantics();
-            try {
-              await tester.pumpWidget(
-                review(scale: scale, twoEngines: twoEngines),
-              );
-              await tester.pumpAndSettle();
-              expect(find.text(opening), findsOneWidget);
-              final rich = find.descendant(
-                of: openingFinder,
-                matching: find.byType(RichText),
-              );
-              final paragraph = tester.renderObject<RenderParagraph>(rich);
-              expect(paragraph.didExceedMaxLines, isFalse);
-              // The trailing variation must actually be laid out, not just present
-              // in Text.data/semantics behind an ellipsis.
-              final last = paragraph.getBoxesForSelection(
-                const TextSelection(
-                  baseOffset: opening.length - 1,
-                  extentOffset: opening.length,
-                ),
-              );
-              expect(last, isNotEmpty);
-              expect(
-                last.last.bottom,
-                lessThanOrEqualTo(paragraph.size.height + 0.01),
-              );
-              expect(
-                last.last.right,
-                lessThanOrEqualTo(paragraph.size.width + 0.01),
-              );
-              expect(tester.getSemantics(openingFinder).label, opening);
-              expect(
-                find.byTooltip('Previous move').hitTestable(),
-                findsOneWidget,
-              );
-              expect(find.byTooltip('Next move').hitTestable(), findsOneWidget);
-              await tester.ensureVisible(
-                find.byKey(const ValueKey('analysis-engine-lines')),
-              );
-              await tester.ensureVisible(
-                find.byKey(const ValueKey('analysis-tab-panel')),
-              );
-              expect(
-                find.byTooltip('Previous move').hitTestable(),
-                findsOneWidget,
-              );
-              expect(tester.takeException(), isNull);
-              await tester.pumpWidget(const SizedBox.shrink());
-              await tester.pumpAndSettle();
-            } finally {
-              semantics.dispose();
-            }
-          },
-        );
+  test('fixtures cover both longest names in the bundled database', () async {
+    final rows = (await rootBundle.loadString(
+      'assets/openings/lichess_openings.tsv',
+    )).trim().split('\n').skip(1).map((line) => line.split('\t')).toList();
+    final length = rows
+        .map((row) => row[1].length)
+        .reduce((a, b) => a > b ? a : b);
+    expect(length, 99);
+    expect(
+      rows
+          .where((row) => row[1].length == length)
+          .map((row) => '${row[0]} · ${row[1]}')
+          .toSet(),
+      {longestEnglish.label, longestLondon.label},
+    );
+  });
+
+  for (final fixture in [smithMorra, longestEnglish, longestLondon]) {
+    for (final size in [
+      const Size(320, 568),
+      const Size(390, 844),
+      const Size(844, 390),
+    ]) {
+      for (final scale in [1.0, 2.0]) {
+        for (final twoEngines in [false, true]) {
+          testWidgets(
+            '${fixture.name} full opening at $size, scale $scale, two engines $twoEngines',
+            (tester) async {
+              tester.view.physicalSize = size;
+              tester.view.devicePixelRatio = 1;
+              addTearDown(tester.view.resetPhysicalSize);
+              addTearDown(tester.view.resetDevicePixelRatio);
+              final semantics = tester.ensureSemantics();
+              try {
+                await tester.pumpWidget(
+                  review(
+                    scale: scale,
+                    twoEngines: twoEngines,
+                    fixture: fixture,
+                  ),
+                );
+                await tester.pumpAndSettle();
+                expect(find.text(fixture.label), findsOneWidget);
+                final rich = find.descendant(
+                  of: openingFinder,
+                  matching: find.byType(RichText),
+                );
+                final paragraph = tester.renderObject<RenderParagraph>(rich);
+                expect(paragraph.didExceedMaxLines, isFalse);
+                // The trailing variation must actually be laid out, not just present
+                // in Text.data/semantics behind an ellipsis.
+                final last = paragraph.getBoxesForSelection(
+                  TextSelection(
+                    baseOffset: fixture.label.length - 1,
+                    extentOffset: fixture.label.length,
+                  ),
+                );
+                expect(last, isNotEmpty);
+                expect(
+                  last.last.bottom,
+                  lessThanOrEqualTo(paragraph.size.height + 0.01),
+                );
+                expect(
+                  last.last.right,
+                  lessThanOrEqualTo(paragraph.size.width + 0.01),
+                );
+                expect(tester.getSemantics(openingFinder).label, fixture.label);
+                expect(
+                  find.byTooltip('Previous move').hitTestable(),
+                  findsOneWidget,
+                );
+                expect(
+                  find.byTooltip('Next move').hitTestable(),
+                  findsOneWidget,
+                );
+                await tester.ensureVisible(
+                  find.byKey(const ValueKey('analysis-engine-lines')),
+                );
+                await tester.ensureVisible(
+                  find.byKey(const ValueKey('analysis-tab-panel')),
+                );
+                expect(
+                  tester
+                      .getSize(find.byKey(const ValueKey('analysis-tab-panel')))
+                      .height,
+                  greaterThanOrEqualTo(56),
+                );
+                expect(
+                  find.byTooltip('Previous move').hitTestable(),
+                  findsOneWidget,
+                );
+                expect(tester.takeException(), isNull);
+                await tester.pumpWidget(const SizedBox.shrink());
+                await tester.pumpAndSettle();
+              } finally {
+                semantics.dispose();
+              }
+            },
+          );
+        }
       }
     }
   }
@@ -190,33 +262,51 @@ void main() {
         final loader = FontLoader(entry.key)..addFont(entry.value);
         await tester.runAsync(loader.load);
       }
-      for (final entry in {
-        'portrait': (const Size(390, 844), 1.0),
-        'large-text': (const Size(320, 568), 2.0),
-        'landscape': (const Size(844, 390), 1.0),
-      }.entries) {
-        tester.view.physicalSize = entry.value.$1;
-        final key = GlobalKey();
-        await tester.pumpWidget(
-          RepaintBoundary(
-            key: key,
-            child: review(scale: entry.value.$2, twoEngines: true),
-          ),
-        );
-        await tester.pumpAndSettle();
-        await tester.runAsync(() async {
-          final boundary =
-              key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-          final image = await boundary.toImage(pixelRatio: 2);
-          final data = await image.toByteData(format: ui.ImageByteFormat.png);
-          await Directory(output).create(recursive: true);
-          await File('$output/${entry.key}.png')
-              .writeAsBytes(data!.buffer.asUint8List());
-          image.dispose();
-        });
-        expect(tester.takeException(), isNull);
-        await tester.pumpWidget(const SizedBox.shrink());
-        await tester.pumpAndSettle();
+      for (final fixture in [smithMorra, longestEnglish, longestLondon]) {
+        for (final entry in {
+          'portrait': (const Size(390, 844), 1.0),
+          'narrow': (const Size(320, 568), 1.0),
+          'large-text': (const Size(320, 568), 2.0),
+          'landscape': (const Size(844, 390), 1.0),
+        }.entries) {
+          tester.view.physicalSize = entry.value.$1;
+          final key = GlobalKey();
+          await tester.pumpWidget(
+            RepaintBoundary(
+              key: key,
+              child: review(
+                scale: entry.value.$2,
+                twoEngines: true,
+                fixture: fixture,
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          final paragraph = tester.renderObject<RenderParagraph>(
+            find.descendant(of: openingFinder, matching: find.byType(RichText)),
+          );
+          final lines = paragraph.getBoxesForSelection(
+            TextSelection(baseOffset: 0, extentOffset: fixture.label.length),
+          );
+          // Report actual rendered line count and height with the real font.
+          debugPrint(
+            '${fixture.name} ${entry.key}: ${lines.length} lines, ${paragraph.size.height}px text',
+          );
+          await tester.runAsync(() async {
+            final boundary =
+                key.currentContext!.findRenderObject()!
+                    as RenderRepaintBoundary;
+            final image = await boundary.toImage(pixelRatio: 2);
+            final data = await image.toByteData(format: ui.ImageByteFormat.png);
+            await Directory(output).create(recursive: true);
+            await File('$output/${fixture.name}-${entry.key}.png')
+                .writeAsBytes(data!.buffer.asUint8List());
+            image.dispose();
+          });
+          expect(tester.takeException(), isNull);
+          await tester.pumpWidget(const SizedBox.shrink());
+          await tester.pumpAndSettle();
+        }
       }
     });
   }
