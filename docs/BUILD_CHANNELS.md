@@ -1,13 +1,13 @@
 # Build channels and promotion status
 
-Updated 2026-10-16. Release pages are authoritative for published artifacts;
+Updated 2026-10-17. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published 2.3.0; unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.11), code 2413; updates beta.10 in place | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.12](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.12), code 2414; updates beta.11 in place | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -181,3 +181,13 @@ actual 79M model. History is experimental and does not promise greater strength.
 - Signed APK SHA-256: `ccf8603c0c2c600bc9145a066cadc3cbe6598ffba159983df945529239f71dac`. Existing Preview certificate: `cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e`. Signature reconstruction is byte-identical.
 - Actual signed beta.10 to beta.11 upgrade on ARM64 Android emulator: UID, game, captures and preferences preserved. Research/export labels, confirmation Cancel/Back/outside dismissal, reset to all Settings defaults, language to system, restart persistence and byte-preserved saved games/captures passed. Real 79M inference with history off/on passed on both versions. Host tests cover all ten languages at large text and failure/retry.
 - Models, engines and dependencies are unchanged. Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 are unchanged. Physical phone/board acceptance remains with owner/testers. PR #140 records public-download verification and task-owned build/APK/emulator cleanup.
+
+## Preview 2.4.0-beta.12 publication record
+
+- Source: `2267d2eafc9b3ab2d1748528160939b0ffc41811` ([PR #143](https://github.com/Dash1971/maia-chess-android-preview/pull/143), issue #142). The tag points to the exact tested build source, preserved in the merge. Later documentation does not rebuild the APK.
+- Opening names stay on one line. Only truncated names show an information icon and open a localized, scrollable full-name dialog. Close, Back and outside dismissal preserve the board/selected position. Names that fit have no icon/action. Large-text layouts reserve usable move-list space.
+- [Release CI](https://github.com/Dash1971/maia-chess-android-preview/actions/runs/38973973243) passed host regressions, explicit Preview checks, release-tool tests, native policies/lifecycle, localization, static analysis and Android packaging.
+- Independent Linux and GitHub unsigned APK SHA-256: `a7f44d5c2530e86a71a6218afe3697206e65a316b2ec441ab5f57801432bcccb`.
+- Signed APK SHA-256: `62e79bcb4bb403c7e6995f4b9d752eeea6fe874a94178b3eafdcb72ba01be761`. Existing Preview certificate: `cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e`. Signature reconstruction is byte-identical.
+- Actual signed beta.11 to beta.12 upgrade on ARM64 Android emulator: UID, saved game, captures and preferences preserved. Opening details checked at normal, narrow, large-text and landscape layouts, with short names and both longest names; complete accessibility labels, conditional details action, dialog dismissal, navigation, background and process restart. Real 79M inference with history off/on passed. Host tests cover all ten dialog languages, precise truncation boundary, navigation, semantics, and large-text layouts.
+- Models, engines and dependencies are unchanged. Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 are unchanged. Physical phone/board acceptance remains with owner/testers. PR #143 records public-download verification and task-owned build/APK/emulator cleanup.
