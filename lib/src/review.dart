@@ -5,6 +5,98 @@ enum _ReviewAnalysisStatus { failed, stopped }
 const primaryMaiaAnalysisColor = Color(0xffe89b3c);
 const secondaryMaiaAnalysisColor = Color(0xffe85d68);
 
+/// Keeps the opening compact; only truncated names need a details action.
+class ReviewOpeningName extends StatelessWidget {
+  const ReviewOpeningName({required this.name, super.key});
+
+  final String? name;
+
+  @override
+  Widget build(BuildContext context) {
+    final name = this.name;
+    if (name == null) return const SizedBox(height: 28);
+    const labelStyle = TextStyle(fontSize: 13);
+    var measuredStyle = DefaultTextStyle.of(context).style.merge(labelStyle);
+    if (MediaQuery.boldTextOf(context)) {
+      measuredStyle = measuredStyle.copyWith(fontWeight: FontWeight.bold);
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Measure against the full text width BEFORE reserving icon space.
+          // Otherwise the icon can cause its own unnecessary truncation.
+          final painter = TextPainter(
+            text: TextSpan(text: name, style: measuredStyle),
+            maxLines: 1,
+            textDirection: Directionality.of(context),
+            textScaler: MediaQuery.textScalerOf(context),
+            locale: Localizations.maybeLocaleOf(context),
+          )..layout(maxWidth: constraints.maxWidth);
+          final truncated = painter.didExceedMaxLines;
+          final labelHeight = painter.height;
+          painter.dispose();
+          final label = Text(
+            name,
+            key: const ValueKey('review-opening-name'),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: labelStyle,
+          );
+          if (!truncated) {
+            return SizedBox(
+              width: double.infinity,
+              height: max(28, labelHeight + 8),
+              child: Center(child: label),
+            );
+          }
+          return Semantics(
+            button: true,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                key: const ValueKey('review-opening-details'),
+                onTap: () => showDialog<void>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    scrollable: true,
+                    title: Text(l10n(context).phaseOpening),
+                    content: Text(
+                      name,
+                      key: const ValueKey('review-opening-full-name'),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(l10n(context).close),
+                      ),
+                    ],
+                  ),
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: max(48, labelHeight + 8),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(child: label),
+                      const SizedBox(width: 8),
+                      const ExcludeSemantics(
+                        child: Icon(Icons.info_outline, size: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
 class ReviewPage extends StatefulWidget {
   const ReviewPage({
     required this.positions,
@@ -3124,19 +3216,7 @@ class _ReviewPageState extends State<ReviewPage>
             Widget details() => LayoutBuilder(
               builder: (context, available) {
                 final header = <Widget>[
-                  SizedBox(
-                    height: 28,
-                    child: openingName == null
-                        ? const SizedBox.shrink()
-                        : Center(
-                            child: Text(
-                              openingName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 13),
-                            ),
-                          ),
-                  ),
+                  ReviewOpeningName(name: openingName),
                   if (_engineEnabled)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(12, 2, 12, 4),
@@ -3169,11 +3249,12 @@ class _ReviewPageState extends State<ReviewPage>
                 return Column(
                   children: [
                     // Wrapped probabilities can exceed the minimum estimate.
-                    // Keep them scrollable while reserving room for moves and
-                    // the navigation controls on taller layouts too.
+                    // Reserve a usable move row even when large text makes
+                    // the controls wrap to two rows (108px + 56px for moves).
+                    // The header scrolls instead of squeezing the move list.
                     ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxHeight: available.maxHeight - 112,
+                        maxHeight: available.maxHeight - 164,
                       ),
                       child: SingleChildScrollView(
                         child: Column(children: header),
