@@ -73,6 +73,10 @@ void main() {
       expect(find.text(strings.samplingExampleLikely), findsOneWidget);
       expect(find.text(strings.samplingExampleReduced), findsOneWidget);
       expect(find.text(strings.samplingExampleFull), findsOneWidget);
+      expect(find.text(strings.samplingResearchLink), findsOneWidget);
+      expect(find.text(strings.samplingResearch), findsNothing);
+      expect(strings.samplingResearchLink, isNot(contains('JSONL')));
+      expect(strings.samplingResearch, contains('JSONL'));
       expect(find.text(strings.maiaHistoryHelp), findsNothing);
       expect(find.byKey(const ValueKey('history-research-link')), findsNothing);
       for (final (key, path) in [

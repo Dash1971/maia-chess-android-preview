@@ -225,3 +225,21 @@ in all ten languages. The move-history setting and on-status drop only their
 experimental suffix; the substantive help, off recommendation and saved-session
 behaviour remain unchanged. Experimental electronic-board wording is untouched.
 The now-unused inline history subtitle and export-row title were removed.
+
+## Research-link language and settings help
+
+Research report links have a dedicated label separate from the JSONL export
+format. Both report links identify English as the document language in all
+non-English catalogs (Japanese: 英文). These are Maia-specific research labels,
+not direct Lichess equivalents. Sampling help omits the automatic-upload sentence
+in every language; file-content and retention explanations remain unchanged.
+Reset settings to default sits above Diagnostics and restores every preference
+shown on Settings, including language (system default), sounds/haptics, board
+sounds and sampling recording (off). Its scope note and failure message are
+app-specific, translated in all ten languages. Stored games, sampling captures
+and home game-setup selections are preserved. Sampling retention wording now
+explicitly says the last ten recorded games are saved and shown newest first.
+
+The settings reset requires explicit confirmation. The dialog keeps the pinned
+Lichess Cancel label and uses app-specific reset/preserved-data wording in all
+ten languages. Cancel, Back and outside dismissal do not change preferences.

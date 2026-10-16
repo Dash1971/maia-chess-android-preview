@@ -1200,6 +1200,108 @@ class _GamePageState extends State<GamePage>
     ]);
   }
 
+  bool _confirmingSettingsReset = false;
+
+  Future<void> _confirmResetSettings() async {
+    if (_confirmingSettingsReset ||
+        _resettingSettings ||
+        SamplingCapture.instance.busy) {
+      return;
+    }
+    _confirmingSettingsReset = true;
+    try {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) {
+          var answered = false;
+          void answer(bool value) {
+            if (answered || ModalRoute.of(dialogContext)?.isCurrent != true) {
+              return;
+            }
+            answered = true;
+            Navigator.pop(dialogContext, value);
+          }
+
+          return ListenableBuilder(
+            listenable: SamplingCapture.instance,
+            builder: (context, _) => AlertDialog(
+              title: Text(l10n(context).resetSettingsConfirmation),
+              scrollable: true,
+              content: Text(l10n(context).resetSettingsKeepData),
+              actions: [
+                TextButton(
+                  onPressed: () => answer(false),
+                  child: Text(l10n(context).cancel),
+                ),
+                TextButton(
+                  key: const ValueKey('confirm-reset-settings'),
+                  onPressed: SamplingCapture.instance.busy
+                      ? null
+                      : () => answer(true),
+                  child: Text(l10n(context).resetSettingsAction),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+      if (!mounted || confirmed != true || !_settingsOpen || _started) return;
+      await _resetSettingsDefaults();
+    } finally {
+      _confirmingSettingsReset = false;
+    }
+  }
+
+  bool _resettingSettings = false;
+
+  Future<void> _resetSettingsDefaults() async {
+    if (_resettingSettings || SamplingCapture.instance.busy) return;
+    final language = AppLanguageSettings.maybeOf(context);
+    _cancelGameFeedback();
+    setState(() {
+      _resettingSettings = true;
+      _humanTiming = false;
+      _useMoveHistory = false;
+      _premovesEnabled = true;
+      _premovePenalty = false;
+      _multiplePremoves = false;
+      _temperature = 1.0;
+      _topP = 1.0;
+      _analysisElo = 1600;
+      _secondMaiaEnabled = false;
+      _secondMaiaElo = 2400;
+      _gameAnalysisQuality = GameAnalysisQuality.fast;
+      _gameSoundsEnabled = false;
+      _gameHapticsEnabled = true;
+      _chessnutSoundsEnabled = true;
+    });
+    try {
+      // Reset explicit preferences only: never clear games, captures or sessions.
+      await _saveEnginePreferences();
+      final preferences = await SharedPreferences.getInstance();
+      if (!await preferences.setBool('chessnutBoardSounds', true)) {
+        throw StateError('Board sound preference write failed');
+      }
+      await SamplingCapture.instance.setEnabled(false);
+      if (!mounted) return;
+      if (language != null) {
+        // The language controller serializes writes and reports failures itself.
+        language.onChanged(null);
+      } else if (!await preferences.remove(appLanguagePreferenceKey)) {
+        throw StateError('Language preference reset failed');
+      }
+    } catch (error, stack) {
+      unawaited(AppDiagnostics.record('settings-reset', error, stack));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n(context).settingsResetError)),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _resettingSettings = false);
+    }
+  }
+
   Future<void> _setGameSoundsEnabled(bool enabled) async {
     _cancelGameFeedback();
     setState(() => _gameSoundsEnabled = enabled);
@@ -1308,7 +1410,7 @@ class _GamePageState extends State<GamePage>
                   'main/studies/maia3-sampling/REPORT.md',
             }),
             icon: const Icon(Icons.open_in_new),
-            label: Text(l10n(context).samplingResearch),
+            label: Text(l10n(context).samplingResearchLink),
           ),
           const SizedBox(height: 14),
           Text(l10n(context).samplingTemperatureHelp),
@@ -4140,7 +4242,12 @@ class _GamePageState extends State<GamePage>
         child: LayoutBuilder(
           builder: (context, constraints) {
             if (!_started) {
-              if (_settingsOpen) return _settingsView();
+              if (_settingsOpen) {
+                return AbsorbPointer(
+                  absorbing: _resettingSettings,
+                  child: _settingsView(),
+                );
+              }
               return SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(12, 6, 12, 12),
                 child: Center(
@@ -5034,38 +5141,6 @@ class _GamePageState extends State<GamePage>
                   ),
                 ],
               ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                  key: const ValueKey('reset-engine-defaults'),
-                  onPressed: () {
-                    setState(() {
-                      _humanTiming = false;
-                      _useMoveHistory = false;
-                      _premovesEnabled = true;
-                      _premovePenalty = false;
-                      _multiplePremoves = false;
-                      _temperature = 1.0;
-                      _topP = 1.0;
-                      _analysisElo = 1600;
-                      _secondMaiaEnabled = false;
-                      _secondMaiaElo = 2400;
-                      _gameAnalysisQuality = GameAnalysisQuality.fast;
-                    });
-                    unawaited(_saveEnginePreferences());
-                  },
-                  child: Text(l10n(context).resetEngineDefaults),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  l10n(context).resetEngineDefaultsScope,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
               const SizedBox(height: 8),
               _settingsSection(
                 title: 'Chessnut',
@@ -5085,7 +5160,31 @@ class _GamePageState extends State<GamePage>
                 ],
               ),
               const SizedBox(height: 16),
+              ListenableBuilder(
+                listenable: SamplingCapture.instance,
+                builder: (context, _) => Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    key: const ValueKey('reset-settings-defaults'),
+                    onPressed:
+                        _resettingSettings || SamplingCapture.instance.busy
+                        ? null
+                        : _confirmResetSettings,
+                    child: Text(l10n(context).resetSettingsDefaults),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: Text(
+                  l10n(context).resetSettingsDefaultsScope,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
               OutlinedButton.icon(
+                key: const ValueKey('copy-diagnostics'),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(52),
                 ),

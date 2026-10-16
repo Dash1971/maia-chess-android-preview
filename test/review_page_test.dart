@@ -696,9 +696,11 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Temperature: 0.50'), findsOneWidget);
     expect(find.text('Top-P: 0.90'), findsOneWidget);
-    final reset = find.text('Reset engine defaults');
+    final reset = find.text('Reset settings to default');
     await tester.ensureVisible(reset);
     await tester.tap(reset);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('confirm-reset-settings')));
     await tester.pumpAndSettle();
 
     expect(find.text('Temperature: 1.00'), findsOneWidget);
