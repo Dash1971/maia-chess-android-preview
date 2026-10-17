@@ -1207,7 +1207,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get maiaHistoryHelp =>
-      'Permite que Maia tenga en cuenta hasta siete posiciones anteriores, además de la actual. Esto mejoró la predicción de jugadas humanas en nuestras pruebas con el modelo 79M, pero a veces favoreció la copia repetida de jugadas en aperturas de nivel bajo. No se ha demostrado que aumente la fuerza de juego. Por ahora, se recomienda desactivarlo. Una posición cargada por sí sola no tiene jugadas anteriores disponibles. Se aplica a nuevas partidas y tableros de análisis; las sesiones guardadas conservan su elección original.';
+      'Permite que Maia tenga en cuenta hasta siete posiciones anteriores, además de la posición actual. Esto mejoró la precisión al predecir jugadas humanas en unos 2 puntos porcentuales en nuestras pruebas con el modelo 79M, pero a veces favoreció la imitación repetida de jugadas en aperturas de bajo nivel. No pudimos confirmar una mejora en la fuerza de juego. Por ahora, recomendamos dejarlo desactivado.';
 
   @override
   String get maiaHistoryResearch =>
@@ -1237,7 +1237,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Guarda en este dispositivo las probabilidades de las jugadas de Maia, sus ajustes y las jugadas elegidas para explorar cómo juega. Está desactivado por defecto. Al desactivarlo, se conservan los datos guardados.\n\nLos archivos exportados contienen posiciones, historial de jugadas y las entradas y decisiones del modelo.\n\nSe guardan las últimas 10 partidas registradas y se muestran de la más reciente a la más antigua. Las partidas antiguas pueden eliminarse antes si se alcanza el límite de almacenamiento. Esto no elimina las partidas de Partidas recientes. Una partida muy larga o una interrupción pueden dejar datos incompletos. Si lo activas durante una partida, solo se guardan las decisiones posteriores. Exporta los datos periódicamente si quieres conservarlos.';
+      'Guarda las probabilidades de las jugadas de Maia, los ajustes y las jugadas elegidas en este dispositivo para explorar cómo juega.\n\nLos archivos exportados contienen posiciones del tablero, el historial de jugadas y los datos de entrada y las decisiones del modelo.\n\nSe guardan las últimas 10 partidas con datos registrados y se presentan de la más reciente a la más antigua. Las partidas anteriores pueden eliminarse antes si se alcanza el límite de almacenamiento. Estos datos son independientes de las partidas recientes.\n\nUtiliza esta función si te interesa estudiar los detalles técnicos del funcionamiento de Maia. Los datos no se pueden consultar en la aplicación. Se exportan a un archivo HTML fácil de consultar que contiene parte de los datos, o a un archivo JSONL con todos los datos registrados.\n\nEstá desactivada por defecto y recomendamos mantenerla así, salvo que te interese investigar cómo funciona Maia.';
 
   @override
   String get clearSamplingData => 'Borrar datos de selección';

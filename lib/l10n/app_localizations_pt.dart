@@ -1214,7 +1214,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get maiaHistoryHelp =>
-      'Permite que Maia considere até sete posições anteriores além da atual. Isso melhorou a previsão de lances humanos nos nossos testes com o modelo 79M, mas às vezes incentivou a cópia repetida de lances em aberturas de jogadores com rating baixo. Não foi comprovado um aumento de força de jogo. Por enquanto, recomendamos deixar desativado. Uma posição carregada sozinha não tem lances anteriores disponíveis. Vale para novas partidas e tabuleiros de análise; sessões salvas mantêm a escolha original.';
+      'Permita que a Maia considere até sete posições anteriores, além da posição atual. Isso melhorou a precisão das previsões de lances humanos em cerca de 2 pontos percentuais nos nossos testes com o modelo 79M, mas às vezes incentivou a imitação repetida de lances em aberturas de rating baixo. Não conseguimos confirmar um aumento na força de jogo. Por enquanto, recomendamos deixar esta opção desativada.';
 
   @override
   String get maiaHistoryResearch =>
@@ -1244,7 +1244,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Salve neste dispositivo as probabilidades dos lances do Maia, as configurações e os lances escolhidos para explorar como ele joga. Desativado por padrão. Ao desativar, os dados existentes são mantidos.\n\nOs arquivos exportados contêm posições, histórico de lances e as entradas e decisões do modelo.\n\nAs últimas 10 partidas registradas são salvas e mostradas da mais recente para a mais antiga. As partidas antigas podem ser removidas antes se o limite de armazenamento for atingido. Isso não exclui as partidas de Partidas recentes. Uma partida muito longa ou uma interrupção pode deixar dados incompletos. Ao ativar durante uma partida, apenas as decisões seguintes são salvas. Exporte os dados regularmente se quiser mantê-los.';
+      'Salve as probabilidades dos lances da Maia, as configurações e os lances escolhidos neste dispositivo para explorar como ela joga.\n\nOs arquivos exportados contêm posições do tabuleiro, o histórico de lances e as entradas e decisões do modelo.\n\nAs últimas 10 partidas com dados registrados são salvas e apresentadas da mais recente para a mais antiga. Partidas anteriores podem ser removidas antes se o limite de armazenamento for atingido. Esses dados são separados das partidas recentes.\n\nUse este recurso se você tiver interesse em estudar os detalhes técnicos de como a Maia funciona. Os dados não podem ser visualizados no aplicativo. Eles são exportados para um arquivo HTML fácil de visualizar com parte dos dados, ou para um arquivo JSONL com todos os dados registrados.\n\nO recurso fica desativado por padrão, e recomendamos mantê-lo assim, a menos que você tenha interesse em pesquisar como a Maia funciona.';
 
   @override
   String get clearSamplingData => 'Apagar dados de seleção';
