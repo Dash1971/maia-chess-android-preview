@@ -9,6 +9,8 @@ dart_bin=${DART_BIN:-$(dirname -- "$flutter_path")/dart}
 
 cd "$repo_root"
 
+python3 tool/verify_gradle_wrapper.py
+
 python3 tool/verify_model.py assets/models/maia3-79m.onnx
 
 # A fixed source timestamp and locked dependencies keep independent release
