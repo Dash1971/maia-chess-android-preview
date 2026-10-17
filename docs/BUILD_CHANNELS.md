@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published 2.3.0; unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.13](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.13), code 2415; updates beta.12 in place | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.14](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.14), code 2416; final candidate for Stable 2.4 testing | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -17,10 +17,10 @@ installations update in place using the established Preview certificate.
 
 ## Preview acceptance
 
-- Use move history remains off by default. The beta.10 UI has its own
-  information button and drops the experimental suffix from UI labels. The
-  scrollable help retains the off recommendation, research caveats and explanation
-  that saved sessions keep their original mode. All ten languages are covered.
+- Use move history remains off by default, with its own information button.
+  The updated help explains the measured prediction improvement, unestablished
+  strength gain and off recommendation, with a research link. Saved sessions
+  continue to retain their recorded mode. All ten languages are covered.
 - Chessnut: bounded diagnostics and decoder recovery, single/multiple-board
   discovery, remembered selection, session/lifecycle protection, and NEW GAME
   confirmation by a second deliberate press within 2.5 seconds.
@@ -238,3 +238,15 @@ actual 79M model. History is experimental and does not promise greater strength.
 - Signed APK SHA-256: `6c7f1bba47e7b3cb1d96b9059c7aaea65e3463bf0f01946cd250002ca9a75be6`. Existing Preview certificate: `cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e`. Signature reconstruction is byte-identical.
 - Actual signed beta.12 to beta.13 upgrade on ARM64 Android emulator preserved UID, saved game, captures and preferences. Short/long/short opening checks at portrait, narrow, 200% text and landscape verified an unchanged engine-panel position. Text/icon taps, dialog dismissal, navigation, background/resume and process restart passed. Real 79M inference with history off/on passed. Eight new widget regressions verify stable row/following-content geometry (six reproduced the old jump before the fix) at four text sizes with normal/bold text. Approved sampling help is translated in all ten languages. Expanded help passed 320px/200% widget checks in all ten locales and English/Japanese actual-APK scrolling, research-label, dismissal and unchanged-settings checks.
 - Models, engines and dependencies are unchanged. Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 are unchanged. Physical phone/board acceptance remains with owner/testers. PR #145 records public-download verification and task-owned build/APK/emulator cleanup.
+
+
+## Preview 2.4.0-beta.14 publication record
+
+- Source: `49058a541132bb61312b7d8071c07f1b84c3a01a` ([release #150](https://github.com/Dash1971/maia-chess-android-preview/pull/150), changes #147, #148 and #149). The tag points to the exact built commit, preserved unchanged in the merge. Later documentation does not rebuild the APK.
+- Approved Temperature/Top-P, history and sampling-data help in all ten languages; the balanced-play example is Temperature 1.0 / Top-P 0.95. Shared Chessnut behavior is ready for Stable promotion, including legacy reconnect without a saved board identity. Models, engines, settings defaults and sampling behavior are unchanged.
+- [Exact-source CI](https://github.com/Dash1971/maia-chess-android-preview/actions/runs/38989883544): 1,036 Flutter tests (three expected flavor-specific skips), 35 Preview checks, eight Stable/empty-flavor checks, 57 release-tool tests, native policies, localization, static analysis and Android packaging passed.
+- Independent Linux and GitHub unsigned APK SHA-256: `8b1be3db1a6170c9adee3db9a5503f535a2a742a73008db5e123924d2d6ed127`.
+- Signed APK SHA-256: `02df25aafd7b94bac1ef24dbcb61df4ef8f41a95ee53e24675233a6fbea7f818`. Established Preview certificate: `cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e`. Signature reconstruction is byte-identical.
+- Actual signed beta.13 upgrade preserved UID, settings, saved games and captures. Opening rows retained engine-panel position across short/long/short names in four layouts, including 200% text; navigation, resume and restart passed. All three updated help dialogs passed English/Japanese actual-APK text, scrolling, dismissal and unchanged-settings checks. Real 79M inference with history off/on passed.
+- Gradle 9.8.1 replaces the vulnerable 9.3.1 pin, with an official checksum and offline CI/build guard. The [Stable companion's canonical F-Droid build/scans](https://github.com/Dash1971/maia-chess-android/pull/53#issuecomment-6228113567) also reproduced its CI APK exactly. That compatibility test does not replace final Stable 2.4 release qualification.
+- Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 were not rebuilt or published. Owner phone/Chessnut testing remains the final acceptance step before Stable promotion. The release verification bundle and PR #150 record public-download verification and task-owned cleanup.
