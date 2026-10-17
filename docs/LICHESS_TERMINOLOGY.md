@@ -243,3 +243,20 @@ explicitly says the last ten recorded games are saved and shown newest first.
 The settings reset requires explicit confirmation. The dialog keeps the pinned
 Lichess Cancel label and uses app-specific reset/preserved-data wording in all
 ten languages. Cancel, Back and outside dismissal do not change preferences.
+
+## Expanded sampling explanation — Preview beta.13
+
+The Temperature/Top-P dialog follows the maintainer-approved seven-paragraph
+English copy, translated into all nine other languages. These explanations are
+Maia-specific, with no direct Lichess equivalent; shared chess terms retain the
+existing Lichess baseline. The new paragraph IDs replace the former example-list
+messages rather than keeping unused translations. Research links still identify
+English in non-English locales.
+
+Translations preserve the distinction between low probability and poor move
+quality, the roughly 300 Elo equivalent result in direct matches at the 1600
+setting, and a Top-P cutoff covering at least 95% of probability after Temperature.
+Decimal commas follow the established European-language conventions. These are
+editorially reviewed translations, not native-speaker certification. Existing
+all-language tests check the expanded dialog at 320px and 200% text, its paragraph
+order, accessible research link and dismissal, with unchanged engine settings.

@@ -569,20 +569,28 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Temperature and Top-P'), findsOneWidget);
-    expect(find.textContaining('at 0, Maia always chooses'), findsOneWidget);
+    expect(find.text('Choose how much variety you want'), findsOneWidget);
+    expect(find.textContaining('Setting Temperature to 0'), findsOneWidget);
+    expect(find.textContaining('research at the 1600 setting'), findsOneWidget);
+    expect(
+      find.textContaining('about 300 Elo points in direct matches'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('brilliant moves!'), findsOneWidget);
+    expect(
+      find.textContaining('default values of 1.0 and 1.0'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Top-P to 0.9 or 0.95'), findsOneWidget);
+    expect(
+      find.textContaining('at least 95% of the probability'),
+      findsOneWidget,
+    );
     expect(
       find.textContaining('It has no effect when Temperature is 0'),
-      findsOneWidget,
+      findsNothing,
     );
-    expect(find.text('Choose how much variety you want'), findsOneWidget);
-    expect(find.textContaining('tests at the 1600 setting'), findsOneWidget);
-    expect(
-      find.textContaining('does not guarantee the best move'),
-      findsOneWidget,
-    );
-    expect(find.textContaining('0 / 0 — Most predictable'), findsOneWidget);
-    expect(find.textContaining('0.5 / 0.9 — Some variety'), findsOneWidget);
-    expect(find.textContaining('1 / 1 — Full variety'), findsOneWidget);
+    expect(find.textContaining('0.5 / 0.9 — Some variety'), findsNothing);
 
     final link = find.byKey(const ValueKey('sampling-research-link'));
     await tester.ensureVisible(link);

@@ -981,22 +981,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileMaiaSource => 'Code source de Mobile Maia';
 
   @override
-  String get samplingFullRange =>
-      'Maia prédit les coups que joueraient des personnes du niveau choisi. La température et Top-P déterminent comment elle choisit parmi ces coups.';
-
-  @override
-  String get samplingStrength =>
-      'Des valeurs plus basses peuvent rendre Maia plus difficile à battre, mais aussi plus répétitive. Dans nos tests au réglage 1600, 1 / 1 donnait des ouvertures plus proches des parties humaines, tandis que les valeurs plus basses gagnaient plus souvent. Cela ne garantit ni le meilleur coup ni une force de jeu précise.';
-
-  @override
-  String get samplingTemperatureHelp =>
-      'Température : à 0, Maia choisit toujours son coup le plus probable. Les valeurs basses favorisent les coups probables ; les valeurs hautes donnent plus de chances aux coups moins probables.';
-
-  @override
-  String get samplingTopPHelp =>
-      'Top-P : les valeurs basses limitent le choix à un plus petit groupe de coups probables ; 1 conserve tous les coups légaux. Ce réglage est sans effet lorsque la température vaut 0.';
-
-  @override
   String get aboutPoweredBy =>
       'Propulsé par Maia-3, un moteur d’échecs développé par le Computational Social Science Lab de l’Université de Toronto pour imiter le jeu humain.';
 
@@ -1217,21 +1201,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'Vérifiez que chaque pièce correspond à la position affichée à l’écran.';
 
   @override
-  String get samplingExamplesTitle => 'Exemples (Température / Top-P)';
-
-  @override
-  String get samplingExampleLikely =>
-      '0 / 0 — Le plus prévisible. Maia choisit toujours son coup le plus probable.';
-
-  @override
-  String get samplingExampleReduced =>
-      '0,5 / 0,9 — Un peu de variété. Favorise les choix courants et peut rendre Maia plus difficile à battre.';
-
-  @override
-  String get samplingExampleFull =>
-      '1 / 1 — Toute la variété (par défaut). Tous les coups légaux restent possibles, mais les plus probables sont toujours joués plus souvent.';
-
-  @override
   String get maiaHistorySetting => 'Utiliser l’historique des positions';
 
   @override
@@ -1415,4 +1384,32 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get resetSettingsAction => 'Rétablir les réglages';
+
+  @override
+  String get samplingHelpIntro =>
+      'La Température et Top-P déterminent comment Maia choisit parmi les coups possibles.';
+
+  @override
+  String get samplingHelpVariety =>
+      'Augmenter la Température et Top-P rend Maia plus imprévisible, car elle a davantage de chances de jouer des coups peu probables. Il peut s’agir de gaffes, mais aussi d’excellents coups !';
+
+  @override
+  String get samplingHelpDefaults =>
+      'Si vous souhaitez un maximum de variété et voulez que Maia joue un large éventail d’ouvertures humaines, y compris des variantes secondaires, conservez les valeurs par défaut de 1,0 et 1,0.';
+
+  @override
+  String get samplingHelpStrength =>
+      'Si vous préférez un adversaire plus fort qui commet moins de gaffes, essayez de réduire les valeurs de Température et de Top-P.';
+
+  @override
+  String get samplingHelpArgmax =>
+      'Lorsque la Température est réglée sur 0, Maia utilise argmax. C’est une façon technique de dire que Maia jouera toujours le coup qu’elle prédit comme le plus probable pour un humain dans une position donnée. Attention ! Dans notre étude avec le niveau réglé sur 1600, Maia avec argmax a surpassé Maia avec 1,0 / 1,0 d’un écart équivalent à environ 300 points Elo lors de confrontations directes.';
+
+  @override
+  String get samplingHelpTopP =>
+      'Pour un jeu équilibré, vous pouvez conserver la Température à 1,0 et régler Top-P sur 0,9 ou 0,95. Cela préserve la variété tout en éliminant des coups peu probables, qui peuvent souvent être des gaffes, mais aussi de bons coups. Top-P écarte essentiellement les coups les moins probables. À 0,95, il conserve des coups dont les probabilités totalisent au moins 95 % après application de la Température. Maia ne pourra pas choisir les coups restants.';
+
+  @override
+  String get samplingHelpResearchIntro =>
+      'Nous avons expérimenté ces réglages à 1600 Elo et publié l’ensemble de nos résultats ici :';
 }

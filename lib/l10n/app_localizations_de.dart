@@ -984,22 +984,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileMaiaSource => 'Quellcode von Mobile Maia';
 
   @override
-  String get samplingFullRange =>
-      'Maia sagt voraus, welche Züge Menschen mit der gewählten Wertungszahl spielen würden. Temperatur und Top-P steuern, wie Maia zwischen diesen Zügen auswählt.';
-
-  @override
-  String get samplingStrength =>
-      'Niedrigere Werte können Maia schwerer zu schlagen machen, führen aber auch zu mehr Wiederholungen. In unseren Tests bei der Einstellung 1600 ähnelten die Eröffnungen mit 1 / 1 stärker menschlichen Partien, während niedrigere Werte häufiger gewannen. Das garantiert weder den besten Zug noch eine genaue Spielstärke.';
-
-  @override
-  String get samplingTemperatureHelp =>
-      'Temperatur: Bei 0 wählt Maia immer den wahrscheinlichsten Zug. Niedrige Werte bevorzugen wahrscheinliche Züge; höhere Werte geben selteneren Zügen mehr Chancen.';
-
-  @override
-  String get samplingTopPHelp =>
-      'Top-P: Niedrigere Werte beschränken die Auswahl auf eine kleinere Gruppe wahrscheinlicher Züge; 1 behält alle legalen Züge bei. Bei Temperatur 0 hat Top-P keine Wirkung.';
-
-  @override
   String get aboutPoweredBy =>
       'Basiert auf Maia-3, der menschenähnlichen Schachengine des Computational Social Science Lab der University of Toronto.';
 
@@ -1220,21 +1204,6 @@ class AppLocalizationsDe extends AppLocalizations {
       'Prüfe, ob jede Figur mit der Stellung auf dem Bildschirm übereinstimmt.';
 
   @override
-  String get samplingExamplesTitle => 'Beispiele (Temperatur / Top-P)';
-
-  @override
-  String get samplingExampleLikely =>
-      '0 / 0 — Am vorhersehbarsten. Maia wählt immer den wahrscheinlichsten Zug.';
-
-  @override
-  String get samplingExampleReduced =>
-      '0,5 / 0,9 — Etwas Abwechslung. Bevorzugt häufige Züge und kann Maia zu einem stärkeren Gegner machen.';
-
-  @override
-  String get samplingExampleFull =>
-      '1 / 1 — Volle Vielfalt (Standard). Alle legalen Züge bleiben möglich, wahrscheinliche Züge werden aber weiterhin häufiger gespielt.';
-
-  @override
   String get maiaHistorySetting => 'Stellungsverlauf verwenden';
 
   @override
@@ -1417,4 +1386,32 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get resetSettingsAction => 'Einstellungen zurücksetzen';
+
+  @override
+  String get samplingHelpIntro =>
+      'Temperatur und Top-P steuern, wie Maia zwischen den möglichen Zügen auswählt.';
+
+  @override
+  String get samplingHelpVariety =>
+      'Wenn du Temperatur und Top-P erhöhst, spielt Maia unberechenbarer, weil sie häufiger Züge mit geringer Wahrscheinlichkeit auswählt. Das können grobe Patzer sein, aber auch brillante Züge!';
+
+  @override
+  String get samplingHelpDefaults =>
+      'Wenn du möglichst viel Abwechslung möchtest und Maia ein breites Spektrum menschlicher Eröffnungen einschließlich Nebenvarianten spielen soll, behalte die Standardwerte 1,0 und 1,0 bei.';
+
+  @override
+  String get samplingHelpStrength =>
+      'Wenn du einen stärkeren Gegner bevorzugst, der weniger grobe Patzer macht, probiere niedrigere Werte für Temperatur und Top-P aus.';
+
+  @override
+  String get samplingHelpArgmax =>
+      'Bei Temperatur 0 verwendet Maia argmax. Das ist der Fachbegriff dafür, dass Maia in einer Stellung immer den Zug spielt, den sie für einen Menschen als am wahrscheinlichsten vorhersagt. Achtung! In unserer Untersuchung mit der Rating-Einstellung 1600 erzielte argmax-Maia in direkten Partien gegen Maia mit 1,0 / 1,0 einen Vorsprung, der etwa 300 Elo-Punkten entspricht.';
+
+  @override
+  String get samplingHelpTopP =>
+      'Für ein ausgewogenes Spiel kannst du die Temperatur bei 1,0 belassen und Top-P auf 0,9 oder 0,95 setzen. So bleibt Abwechslung erhalten, während Züge mit geringer Wahrscheinlichkeit ausgeschlossen werden. Diese können oft grobe Patzer sein, aber auch gute Züge. Top-P schneidet im Grunde die unwahrscheinlichsten Züge ab. Bei 0,95 bleiben so viele Züge übrig, dass sie nach Anwendung der Temperatur zusammen mindestens 95 % der Wahrscheinlichkeit abdecken. Die übrigen Züge kann Maia nicht auswählen.';
+
+  @override
+  String get samplingHelpResearchIntro =>
+      'Wir haben diese Einstellungen bei 1600 Elo getestet und unsere vollständigen Ergebnisse hier veröffentlicht:';
 }

@@ -270,11 +270,11 @@ void main() {
       await tester.ensureVisible(help);
       await tester.tap(help);
       await tester.pumpAndSettle();
-      expect(find.text(strings.samplingFullRange), findsOneWidget);
-      expect(find.text(strings.samplingTopPHelp), findsOneWidget);
-      expect(find.text(strings.samplingExampleLikely), findsOneWidget);
-      expect(find.text(strings.samplingExampleReduced), findsOneWidget);
-      expect(find.text(strings.samplingExampleFull), findsOneWidget);
+      expect(find.text(strings.samplingHelpIntro), findsOneWidget);
+      expect(find.text(strings.samplingHelpTopP), findsOneWidget);
+      expect(find.text(strings.samplingHelpArgmax), findsOneWidget);
+      expect(find.text(strings.samplingHelpStrength), findsOneWidget);
+      expect(find.text(strings.samplingHelpDefaults), findsOneWidget);
       expect(find.text('Temperature and Top-P'), findsNothing);
       await tester.tap(find.text(strings.close));
       await tester.pumpAndSettle();

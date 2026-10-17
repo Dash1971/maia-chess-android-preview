@@ -902,22 +902,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileMaiaSource => 'Mobile Maia 소스 코드';
 
   @override
-  String get samplingFullRange =>
-      'Maia는 선택한 레이팅의 사람이 어떤 수를 둘지 예측합니다. 온도와 Top-P는 그중에서 수를 고르는 방식을 조절합니다.';
-
-  @override
-  String get samplingStrength =>
-      '설정값을 낮추면 Maia가 더 상대하기 어려워질 수 있지만, 같은 진행도 늘어납니다. 레이팅 1600 테스트에서는 1 / 1의 오프닝 선택이 사람의 대국에 더 가까웠고, 낮은 설정값은 더 많이 이겼습니다. 최선의 수나 정확한 실력을 보장하는 것은 아닙니다.';
-
-  @override
-  String get samplingTemperatureHelp =>
-      '온도: 0이면 Maia가 가장 가능성이 높다고 예측한 수를 항상 선택합니다. 낮은 값은 흔한 수를 선호하고, 높은 값은 드문 수에도 더 많은 기회를 줍니다.';
-
-  @override
-  String get samplingTopPHelp =>
-      'Top-P: 값을 낮추면 가능성이 높은 소수의 수로 선택지를 좁힙니다. 1이면 모든 합법적인 수를 유지합니다. 온도가 0이면 영향을 주지 않습니다.';
-
-  @override
   String get aboutPoweredBy =>
       '토론토 대학교 계산사회과학 연구실이 개발한 사람처럼 두는 체스 엔진 Maia-3를 사용합니다.';
 
@@ -1125,21 +1109,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get boardConfirmPositionHelp => '모든 기물이 화면에 표시된 포지션과 일치하는지 확인하세요.';
 
   @override
-  String get samplingExamplesTitle => '설정 예시 (온도 / Top-P)';
-
-  @override
-  String get samplingExampleLikely =>
-      '0 / 0 — 가장 예측하기 쉬움. Maia가 가장 가능성이 높다고 예측한 수를 항상 선택합니다.';
-
-  @override
-  String get samplingExampleReduced =>
-      '0.5 / 0.9 — 어느 정도의 다양성. 흔한 선택을 선호하며 더 상대하기 어려워질 수 있습니다.';
-
-  @override
-  String get samplingExampleFull =>
-      '1 / 1 — 전체 다양성 (기본값). 모든 합법적인 수를 고려하되, 가능성이 높은 수를 더 자주 둡니다.';
-
-  @override
   String get maiaHistorySetting => '이전 포지션 사용';
 
   @override
@@ -1315,4 +1284,31 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get resetSettingsAction => '설정 초기화';
+
+  @override
+  String get samplingHelpIntro => '온도와 Top-P는 Maia가 여러 수 중에서 어떤 수를 선택할지 조절합니다.';
+
+  @override
+  String get samplingHelpVariety =>
+      '온도와 Top-P를 높이면 Maia가 낮은 확률의 수를 둘 가능성이 커져, 기복이 더 큰 선수처럼 플레이합니다. 이런 수는 블런더일 수도 있지만, 매우 좋은 수일 수도 있습니다!';
+
+  @override
+  String get samplingHelpDefaults =>
+      '최대한 다양한 대국을 즐기고 싶고, 비주류 변화까지 포함해 사람들이 두는 폭넓은 오프닝을 Maia가 구사하길 원한다면 기본값인 1.0과 1.0을 유지하세요.';
+
+  @override
+  String get samplingHelpStrength =>
+      '블런더를 덜 하는 더 강한 상대를 원한다면 온도와 Top-P 값을 낮춰 보세요.';
+
+  @override
+  String get samplingHelpArgmax =>
+      '온도를 0으로 설정하면 Maia는 argmax라는 방식을 사용합니다. 쉽게 말해, 주어진 포지션에서 사람이 둘 가능성이 가장 높다고 Maia가 예측한 수를 항상 선택한다는 뜻입니다. 주의하세요! 레이팅을 1600으로 설정한 저희 연구에서 argmax Maia는 1.0 / 1.0 Maia와의 직접 대결에서 약 300 Elo 차이에 해당하는 우위를 보였습니다.';
+
+  @override
+  String get samplingHelpTopP =>
+      '강함과 다양성의 균형을 원한다면 온도를 1.0으로 유지하고 Top-P를 0.9 또는 0.95로 설정해 보세요. 다양성을 유지하면서 낮은 확률의 수를 제외할 수 있습니다. 이런 수는 블런더인 경우가 많지만 좋은 수일 수도 있습니다. Top-P는 간단히 말해 낮은 확률의 수를 후보에서 제외하는 설정입니다. 0.95로 설정하면 온도가 적용된 뒤의 확률을 합해 최소 95%가 되는 수들을 남깁니다. 나머지 수는 Maia가 선택할 수 없습니다.';
+
+  @override
+  String get samplingHelpResearchIntro =>
+      '저희는 1600 Elo 설정에서 이 값들을 실험했으며, 전체 연구 결과를 여기에 공개했습니다:';
 }

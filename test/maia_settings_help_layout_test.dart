@@ -70,9 +70,24 @@ void main() {
       await tester.ensureVisible(help);
       await tester.tap(help);
       await tester.pumpAndSettle();
-      expect(find.text(strings.samplingExampleLikely), findsOneWidget);
-      expect(find.text(strings.samplingExampleReduced), findsOneWidget);
-      expect(find.text(strings.samplingExampleFull), findsOneWidget);
+      // The approved prose must remain in reading order and scroll to its link.
+      final paragraphs = [
+        strings.samplingHelpIntro,
+        strings.samplingHelpVariety,
+        strings.samplingHelpDefaults,
+        strings.samplingHelpStrength,
+        strings.samplingHelpArgmax,
+        strings.samplingHelpTopP,
+        strings.samplingHelpResearchIntro,
+      ];
+      double? previousTop;
+      for (final paragraph in paragraphs) {
+        final text = find.text(paragraph);
+        expect(text, findsOneWidget);
+        final top = tester.getTopLeft(text).dy;
+        if (previousTop != null) expect(top, greaterThan(previousTop));
+        previousTop = top;
+      }
       expect(find.text(strings.samplingResearchLink), findsOneWidget);
       expect(find.text(strings.samplingResearch), findsNothing);
       expect(strings.samplingResearchLink, isNot(contains('JSONL')));
@@ -91,7 +106,7 @@ void main() {
           await tester.tap(historyHelp);
           await tester.pumpAndSettle();
           expect(find.text(strings.maiaHistoryHelp), findsOneWidget);
-          expect(find.text(strings.samplingExampleFull), findsNothing);
+          expect(find.text(strings.samplingHelpDefaults), findsNothing);
           expect(tester.widget<SettingsInfoSwitch>(toggle).value, isFalse);
         }
         final link = find.byKey(ValueKey(key));
@@ -109,6 +124,9 @@ void main() {
       await tester.tap(find.text(strings.close));
       await tester.pumpAndSettle();
       expect(find.byType(AlertDialog), findsNothing);
+      final preferences = await SharedPreferences.getInstance();
+      expect(preferences.getDouble('temperatureV2'), 0.5);
+      expect(preferences.getDouble('topPV2'), 0.9);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pumpAndSettle();

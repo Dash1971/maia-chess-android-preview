@@ -1255,22 +1255,6 @@
   "@mobileMaiaSource": {
     "description": "Play screen: Mobile Maia source code"
   },
-  "samplingFullRange": "Maia predicts which moves people at your chosen rating would play. Temperature and Top-P control how it chooses between those moves.",
-  "@samplingFullRange": {
-    "description": "Maia-specific sampling help: Maia predicts which moves people at your chosen rating would play. Temperature and Top-P control how it chooses between those moves."
-  },
-  "samplingStrength": "Lower settings can make Maia tougher to beat, but also more repetitive. In our tests at the 1600 setting, 1 / 1 gave an opening mix closer to human games, while lower settings won more often. This does not guarantee the best move or an exact playing strength.",
-  "@samplingStrength": {
-    "description": "Maia-specific sampling help: Lower settings can make Maia tougher to beat, but also more repetitive. In our tests at the 1600 setting, 1 / 1 gave an opening mix closer to human games, while lower settings won more often. This does not guarantee the best move or an exact playing strength."
-  },
-  "samplingTemperatureHelp": "Temperature: at 0, Maia always chooses its most likely move. Low values favor likely moves; higher values give less likely moves more chance.",
-  "@samplingTemperatureHelp": {
-    "description": "Maia-specific sampling help: Temperature: at 0, Maia always chooses its most likely move. Low values favor likely moves; higher values give less likely moves more chance."
-  },
-  "samplingTopPHelp": "Top-P: lower values keep a smaller group of likely moves; 1 keeps every legal move. It has no effect when Temperature is 0.",
-  "@samplingTopPHelp": {
-    "description": "Maia-specific sampling help: Top-P: lower values keep a smaller group of likely moves; 1 keeps every legal move. It has no effect when Temperature is 0."
-  },
   "aboutPoweredBy": "Powered by Maia-3, the human-like chess engine developed by the University of Toronto Computational Social Science Lab.",
   "@aboutPoweredBy": {
     "description": "Play help, about or error message: Powered by Maia-3, the human-like chess engine developed by the University of Toronto Computational Social Science Lab."
@@ -1569,22 +1553,6 @@
   "@boardConfirmPositionHelp": {
     "description": "Electronic board Dev support: Help for explicit physical-position confirmation, including piece identities."
   },
-  "samplingExamplesTitle": "Examples (Temperature / Top-P)",
-  "@samplingExamplesTitle": {
-    "description": "Maia-specific sampling help: Examples (Temperature / Top-P)"
-  },
-  "samplingExampleLikely": "0 / 0 — Most predictable. Always choose Maia’s most likely move.",
-  "@samplingExampleLikely": {
-    "description": "Maia-specific sampling help: 0 / 0 — Most predictable. Always choose Maia’s most likely move."
-  },
-  "samplingExampleReduced": "0.5 / 0.9 — Some variety. Favor common choices for a potentially tougher opponent.",
-  "@samplingExampleReduced": {
-    "description": "Maia-specific sampling help: 0.5 / 0.9 — Some variety. Favor common choices for a potentially tougher opponent."
-  },
-  "samplingExampleFull": "1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often.",
-  "@samplingExampleFull": {
-    "description": "Maia-specific sampling help: 1 / 1 — Full variety (default). Keep all legal moves in the mix, with likely moves still played more often."
-  },
   "maiaHistorySetting": "Use move history",
   "@maiaHistorySetting": {
     "description": "Maia-specific history setting/help: Use move history"
@@ -1772,16 +1740,36 @@
   "samplingWin": "Victory",
   "samplingLoss": "Defeat",
   "samplingDraw": "Draw",
-  "@samplingReportRetention": {"description": "Explains report game order, ten-game retention, and earlier removal under the storage limit."},
-  "@samplingJumpToGame": {"description": "Accessible game chooser label for jumping to a game section."},
-  "@samplingBackToGames": {"description": "Navigation link back to the report game list."},
-  "@samplingIncomplete": {"description": "Recorded game has no final result yet."},
-  "@samplingUnknownResult": {"description": "No known result is available in this historical record."},
-  "@samplingOpeningUnknown": {"description": "No opening name is available for this game."},
-  "@samplingTimeUnknown": {"description": "No valid timestamp is available for this game."},
-  "@samplingWin": {"description": "Recorded game result: the human player won."},
-  "@samplingLoss": {"description": "Recorded game result: the human player lost."},
-  "@samplingDraw": {"description": "Recorded game result: the game was drawn."},
+  "@samplingReportRetention": {
+    "description": "Explains report game order, ten-game retention, and earlier removal under the storage limit."
+  },
+  "@samplingJumpToGame": {
+    "description": "Accessible game chooser label for jumping to a game section."
+  },
+  "@samplingBackToGames": {
+    "description": "Navigation link back to the report game list."
+  },
+  "@samplingIncomplete": {
+    "description": "Recorded game has no final result yet."
+  },
+  "@samplingUnknownResult": {
+    "description": "No known result is available in this historical record."
+  },
+  "@samplingOpeningUnknown": {
+    "description": "No opening name is available for this game."
+  },
+  "@samplingTimeUnknown": {
+    "description": "No valid timestamp is available for this game."
+  },
+  "@samplingWin": {
+    "description": "Recorded game result: the human player won."
+  },
+  "@samplingLoss": {
+    "description": "Recorded game result: the human player lost."
+  },
+  "@samplingDraw": {
+    "description": "Recorded game result: the game was drawn."
+  },
   "samplingDeleteData": "Delete data",
   "samplingClearConfirmation": "Delete all Maia sampling data? It cannot be recovered.",
   "@samplingDeleteData": {
@@ -1803,11 +1791,47 @@
     "description": "Reset all preferences shown on Settings, including language, sounds and recording; preserve stored games and captures."
   },
   "settingsResetError": "Some settings could not be reset. Please try again.",
-  "@settingsResetError": {"description": "Settings reset persistence failure; retry is safe and saved games are unaffected."},
+  "@settingsResetError": {
+    "description": "Settings reset persistence failure; retry is safe and saved games are unaffected."
+  },
   "resetSettingsConfirmation": "Reset all settings to default?",
-  "@resetSettingsConfirmation": {"description": "Settings reset confirmation: question."},
+  "@resetSettingsConfirmation": {
+    "description": "Settings reset confirmation: question."
+  },
   "resetSettingsKeepData": "Your saved games and sampling data will be kept.",
-  "@resetSettingsKeepData": {"description": "Settings reset confirmation: preservation notice."},
+  "@resetSettingsKeepData": {
+    "description": "Settings reset confirmation: preservation notice."
+  },
   "resetSettingsAction": "Reset settings",
-  "@resetSettingsAction": {"description": "Settings reset confirmation: explicit confirmation action."}
+  "@resetSettingsAction": {
+    "description": "Settings reset confirmation: explicit confirmation action."
+  },
+  "samplingHelpIntro": "Temperature and Top-P control how Maia chooses between moves.",
+  "@samplingHelpIntro": {
+    "description": "User-approved Maia-specific sampling help, paragraph 1. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology."
+  },
+  "samplingHelpVariety": "Increasing Temperature and Top-P is like making Maia a more volatile player, as Maia becomes more likely to play low-probability moves. These may be blunders, but they may also be brilliant moves!",
+  "@samplingHelpVariety": {
+    "description": "User-approved Maia-specific sampling help, paragraph 2. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology."
+  },
+  "samplingHelpDefaults": "If you value maximum variety, and you also want Maia to play a broad range of human openings, including sidelines, then keep the default values of 1.0 and 1.0.",
+  "@samplingHelpDefaults": {
+    "description": "User-approved Maia-specific sampling help, paragraph 3. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology."
+  },
+  "samplingHelpStrength": "If you prefer a stronger opponent playing fewer blunders, experiment with moving Temperature and Top-P values down.",
+  "@samplingHelpStrength": {
+    "description": "User-approved Maia-specific sampling help, paragraph 4. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology."
+  },
+  "samplingHelpArgmax": "Setting Temperature to 0 will cause Maia to use argmax, which is a technical way of saying that Maia will always play what it predicts is the most probable human move in a given position. Careful! In our research at the 1600 setting, argmax Maia outperformed Maia at 1.0 / 1.0 by the equivalent of about 300 Elo points in direct matches.",
+  "@samplingHelpArgmax": {
+    "description": "User-approved Maia-specific sampling help, paragraph 5. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology."
+  },
+  "samplingHelpTopP": "For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.9 or 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.",
+  "@samplingHelpTopP": {
+    "description": "User-approved Maia-specific sampling help, paragraph 6. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology."
+  },
+  "samplingHelpResearchIntro": "We experimented with these settings at 1600 Elo and published our full findings here:",
+  "@samplingHelpResearchIntro": {
+    "description": "User-approved Maia-specific sampling help, paragraph 7. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology."
+  }
 }
