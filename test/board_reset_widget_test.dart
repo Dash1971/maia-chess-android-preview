@@ -123,6 +123,36 @@ void main() {
     expect(ready(), isTrue, reason: description);
   }
 
+  Future<T> driveCapture<T>(
+    WidgetTester tester,
+    Future<T> Function() operation,
+  ) async {
+    var done = false;
+    T? result;
+    Object? error;
+    unawaited(
+      operation().then(
+        (value) {
+          result = value;
+          done = true;
+        },
+        onError: (Object failure) {
+          error = failure;
+          done = true;
+        },
+      ),
+    );
+    for (var i = 0; i < 200 && !done; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 10)),
+      );
+      await tester.pump();
+    }
+    expect(done, isTrue, reason: 'capture filesystem operation completed');
+    if (error != null) throw error!;
+    return result as T;
+  }
+
   Future<Map<String, dynamic>> waitForSaved(
     WidgetTester tester,
     bool Function(Map<String, dynamic>) ready,
@@ -742,7 +772,7 @@ void main() {
         ))!;
         final capture = SamplingCapture(directory: captureDirectory);
         SamplingCapture.instance = capture;
-        await tester.runAsync(() => capture.setEnabled(true));
+        await driveCapture(tester, () => capture.setEnabled(true));
         addTearDown(() async {
           capture.dispose();
           SamplingCapture.instance = SamplingCapture();
@@ -781,7 +811,7 @@ void main() {
         expect(played['maiaSampling'], profile.toJson());
         expect(requests, 1);
         await flush(tester);
-        final records = (await tester.runAsync(() => readExport(capture)))!;
+        final records = await driveCapture(tester, () => readExport(capture));
         final sampling = records.single['sampling'] as Map;
         expect(sampling['configuredTemperature'], 0.0);
         expect(sampling['configuredTopP'], 0.0);
