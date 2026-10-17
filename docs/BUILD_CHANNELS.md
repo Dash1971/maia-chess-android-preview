@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published 2.3.0; unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.14](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.14), code 2416; beta.15 opening-variety candidate is in preparation | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.15](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.15), code 2417 | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -38,14 +38,13 @@ installations update in place using the established Preview certificate.
 
 ## Opening-variety candidate for Stable 2.4
 
-Beta.15 (2417) is being qualified for #152, superseding beta.14 as the intended
+Beta.15 (2417) is published for #152, superseding beta.14 as the intended
 final candidate. It adds optional full sampling through move 5, then the user's
 configured Temperature/Top-P from move 6. New games freeze their sampling
 configuration; older saves never silently opt in. JSONL records effective and
 configured values, while HTML uses the existing effective probability display.
-No new inference, model, engine or board-support changes. Preview publication
-requires exact-source CI, independent Linux build comparison and signed Android
-qualification; Stable stays unpublished pending owner acceptance.
+No new inference, model, engine or board-support changes. Exact-source CI,
+independent Linux build comparison and signed Android qualification passed. Stable 2.4 stays unpublished pending owner acceptance.
 
 ## Beta.14 baseline for Stable 2.4
 
@@ -261,3 +260,15 @@ actual 79M model. History is experimental and does not promise greater strength.
 - Actual signed beta.13 upgrade preserved UID, settings, saved games and captures. Opening rows retained engine-panel position across short/long/short names in four layouts, including 200% text; navigation, resume and restart passed. All three updated help dialogs passed English/Japanese actual-APK text, scrolling, dismissal and unchanged-settings checks. Real 79M inference with history off/on passed.
 - Gradle 9.8.1 replaces the vulnerable 9.3.1 pin, with an official checksum and offline CI/build guard. The [Stable companion's canonical F-Droid build/scans](https://github.com/Dash1971/maia-chess-android/pull/53#issuecomment-6228113567) also reproduced its CI APK exactly. That compatibility test does not replace final Stable 2.4 release qualification.
 - Grand Kingdom/DGT remain Dev-only; Stable 2.3.0 and Dev alpha.2 were not rebuilt or published. Owner phone/Chessnut testing remains the final acceptance step before Stable promotion. The release verification bundle and PR #150 record public-download verification and task-owned cleanup.
+
+
+## Preview 2.4.0-beta.15 publication record
+
+- Source: `48a4d0a57f501923d43cc14248ef291a05e915f0` ([PR #153](https://github.com/Dash1971/maia-chess-android-preview/pull/153), issue #152 split from #97). The tag points to the exact tested build source; the merge preserves an identical tree. Later documentation does not rebuild the APK.
+- Optional **Max variety in opening** uses Temperature/Top-P 1.0/1.0 through move 5 for both colors, then the configured settings from move 6. It is off by default and disabled/off at default 1.0/1.0. New games retain their sampling profile; old saves never silently opt in. Ten-language help, effective/configured capture metadata, takeback/Continue from here and Chessnut reset coverage are included. Analysis probabilities and model/engine defaults are unchanged; no extra inference is introduced.
+- [Exact-source CI](https://github.com/Dash1971/maia-chess-android-preview/actions/runs/39024551581): 1,072 Flutter tests (three expected flavor skips), 37 Preview checks, eight Stable/empty-flavor checks, 57 release-tool tests, native policies, localization, static analysis and Android packaging passed.
+- Independent Linux and GitHub unsigned APK SHA-256: `f84f9e16d5c3583c42b17cfd6934a15bf2d2fac23149be97abf30eae56be45f3`.
+- Signed APK SHA-256: `c6934e3c1a0d0ecd798b7a5806122c80b8c1a22bc226a67a21df716a185887c6`. Established Preview certificate: `cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e`. Signature reconstruction is byte-identical.
+- Actual signed beta.14 upgrade preserved UID, settings, saved games and captures. Real 79M sampling verified both colors at moves 5/6, frozen restored settings despite changed global preferences, legacy no-opt-in, new Home-game settings and restart persistence. Actual APK English/Japanese UI checks verified disabled defaults, independent help, enabling via slider, persistence and localized help dismissal. All ten languages passed narrow/large-text host regression checks.
+- Public APK and verification downloads were checked against local hashes and GitHub asset digests. The release contains compact evidence and the standalone emulator harness; test fixtures/harness are not bundled in the APK. Physical phone/Chessnut acceptance remains with owner/testers. Functional qualification does not establish increased strength or an optimal opening cutoff.
+- Grand Kingdom/DGT remain Dev-only. Stable 2.3.0 and Dev alpha.2 are unchanged; no Stable/store publication. PR #153 records task-owned build, APK and emulator cleanup. Shared toolchains/caches and signing keys are retained.
