@@ -1285,7 +1285,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      '如果想兼顾强度和多样性，可以将温度保持在 1.0，并把 Top-P 设为 0.9 或 0.95。这样既能保留多样性，又能排除一些低概率走法。这些走法往往可能是败着，但也可能是好棋。简单来说，Top-P 会筛掉低概率的走法。设为 0.95 时，它会保留应用温度设置后累计概率至少达到 95% 的走法。其余走法不会被 Maia 选中。';
+      '如果想兼顾强度和多样性，可以将温度保持在 1.0，并把 Top-P 设为 0.95。这样既能保留多样性，又能排除一些低概率走法。这些走法往往可能是败着，但也可能是好棋。简单来说，Top-P 会筛掉低概率的走法。设为 0.95 时，它会保留应用温度设置后累计概率至少达到 95% 的走法。其余走法不会被 Maia 选中。';
 
   @override
   String get samplingHelpResearchIntro =>

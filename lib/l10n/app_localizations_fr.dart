@@ -1407,7 +1407,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      'Pour un jeu équilibré, vous pouvez conserver la Température à 1,0 et régler Top-P sur 0,9 ou 0,95. Cela préserve la variété tout en éliminant des coups peu probables, qui peuvent souvent être des gaffes, mais aussi de bons coups. Top-P écarte essentiellement les coups les moins probables. À 0,95, il conserve des coups dont les probabilités totalisent au moins 95 % après application de la Température. Maia ne pourra pas choisir les coups restants.';
+      'Pour un jeu équilibré, vous pouvez conserver la Température à 1,0 et régler Top-P sur 0,95. Cela préserve la variété tout en éliminant des coups peu probables, qui peuvent souvent être des gaffes, mais aussi de bons coups. Top-P écarte essentiellement les coups les moins probables. À 0,95, il conserve des coups dont les probabilités totalisent au moins 95 % après application de la Température. Maia ne pourra pas choisir les coups restants.';
 
   @override
   String get samplingHelpResearchIntro =>

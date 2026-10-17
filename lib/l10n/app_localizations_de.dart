@@ -1409,7 +1409,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      'Für ein ausgewogenes Spiel kannst du die Temperatur bei 1,0 belassen und Top-P auf 0,9 oder 0,95 setzen. So bleibt Abwechslung erhalten, während Züge mit geringer Wahrscheinlichkeit ausgeschlossen werden. Diese können oft grobe Patzer sein, aber auch gute Züge. Top-P schneidet im Grunde die unwahrscheinlichsten Züge ab. Bei 0,95 bleiben so viele Züge übrig, dass sie nach Anwendung der Temperatur zusammen mindestens 95 % der Wahrscheinlichkeit abdecken. Die übrigen Züge kann Maia nicht auswählen.';
+      'Für ein ausgewogenes Spiel kannst du die Temperatur bei 1,0 belassen und Top-P auf 0,95 setzen. So bleibt Abwechslung erhalten, während Züge mit geringer Wahrscheinlichkeit ausgeschlossen werden. Diese können oft grobe Patzer sein, aber auch gute Züge. Top-P schneidet im Grunde die unwahrscheinlichsten Züge ab. Bei 0,95 bleiben so viele Züge übrig, dass sie nach Anwendung der Temperatur zusammen mindestens 95 % der Wahrscheinlichkeit abdecken. Die übrigen Züge kann Maia nicht auswählen.';
 
   @override
   String get samplingHelpResearchIntro =>

@@ -1408,7 +1408,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      'Para equilibrar fuerza y variedad, puedes mantener la Temperatura en 1,0 y poner Top-P en 0,9 o 0,95. Esto conserva la variedad y elimina jugadas poco probables, que a menudo pueden ser errores graves, aunque también pueden ser buenas jugadas. Básicamente, Top-P descarta las jugadas menos probables. Al ponerlo en 0,95, conserva jugadas que suman al menos el 95 % de la probabilidad después de aplicar la Temperatura. Maia no podrá elegir las jugadas restantes.';
+      'Para equilibrar fuerza y variedad, puedes mantener la Temperatura en 1,0 y poner Top-P en 0,95. Esto conserva la variedad y elimina jugadas poco probables, que a menudo pueden ser errores graves, aunque también pueden ser buenas jugadas. Básicamente, Top-P descarta las jugadas menos probables. Al ponerlo en 0,95, conserva jugadas que suman al menos el 95 % de la probabilidad después de aplicar la Temperatura. Maia no podrá elegir las jugadas restantes.';
 
   @override
   String get samplingHelpResearchIntro =>

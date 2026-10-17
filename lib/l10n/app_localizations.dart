@@ -2419,7 +2419,7 @@ abstract class AppLocalizations {
   /// User-approved Maia-specific sampling help, paragraph 6. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
   ///
   /// In en, this message translates to:
-  /// **'For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.9 or 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.'**
+  /// **'For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.'**
   String get samplingHelpTopP;
 
   /// User-approved Maia-specific sampling help, paragraph 7. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.

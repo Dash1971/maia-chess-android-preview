@@ -1387,7 +1387,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      'For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.9 or 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.';
+      'For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.';
 
   @override
   String get samplingHelpResearchIntro =>

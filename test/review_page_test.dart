@@ -581,7 +581,7 @@ void main() {
       find.textContaining('default values of 1.0 and 1.0'),
       findsOneWidget,
     );
-    expect(find.textContaining('Top-P to 0.9 or 0.95'), findsOneWidget);
+    expect(find.textContaining('Top-P to 0.95'), findsOneWidget);
     expect(
       find.textContaining('at least 95% of the probability'),
       findsOneWidget,

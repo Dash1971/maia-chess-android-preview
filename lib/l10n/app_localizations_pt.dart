@@ -1415,7 +1415,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      'Para equilibrar força e variedade, você pode manter a Temperatura em 1,0 e definir o Top-P como 0,9 ou 0,95. Isso mantém a variedade e elimina lances pouco prováveis, que muitas vezes podem ser erros graves, mas também podem ser bons lances. Basicamente, o Top-P exclui os lances menos prováveis. Ao defini-lo como 0,95, ele mantém lances que somam pelo menos 95% da probabilidade após a aplicação da Temperatura. A Maia não poderá escolher os lances restantes.';
+      'Para equilibrar força e variedade, você pode manter a Temperatura em 1,0 e definir o Top-P como 0,95. Isso mantém a variedade e elimina lances pouco prováveis, que muitas vezes podem ser erros graves, mas também podem ser bons lances. Basicamente, o Top-P exclui os lances menos prováveis. Ao defini-lo como 0,95, ele mantém lances que somam pelo menos 95% da probabilidade após a aplicação da Temperatura. A Maia não poderá escolher os lances restantes.';
 
   @override
   String get samplingHelpResearchIntro =>
