@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published 2.3.0; unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.14](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.14), code 2416; final candidate for Stable 2.4 testing | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.14](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.14), code 2416; beta.15 opening-variety candidate is in preparation | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -36,7 +36,18 @@ installations update in place using the established Preview certificate.
 - Physical Chessnut acceptance remains with the owner/testers. Automated tests
   cannot confirm radio reliability, physical LEDs or button behavior on hardware.
 
-## Final Preview candidate for Stable 2.4
+## Opening-variety candidate for Stable 2.4
+
+Beta.15 (2417) is being qualified for #152, superseding beta.14 as the intended
+final candidate. It adds optional full sampling through move 5, then the user's
+configured Temperature/Top-P from move 6. New games freeze their sampling
+configuration; older saves never silently opt in. JSONL records effective and
+configured values, while HTML uses the existing effective probability display.
+No new inference, model, engine or board-support changes. Preview publication
+requires exact-source CI, independent Linux build comparison and signed Android
+qualification; Stable stays unpublished pending owner acceptance.
+
+## Beta.14 baseline for Stable 2.4
 
 Preview 2.4.0-beta.14 (2416) combines the approved engine help in all ten
 languages, shared Chessnut behavior across Preview/Stable, and the verified

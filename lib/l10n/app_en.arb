@@ -184,6 +184,14 @@
   "@topP": {
     "description": "Settings: Top-P"
   },
+  "maxOpeningVariety": "Max variety in opening",
+  "@maxOpeningVariety": {
+    "description": "Settings: maximize opening variety for the first five moves by each side"
+  },
+  "maxOpeningVarietyHelp": "Not needed when Temperature and Top-P are at their default values of 1.0 / 1.0. Uses 1.0 / 1.0 for the first five moves by each side, then returns to your configured settings from move 6.\n\nThe goal is to give Maia maximum opening variety while allowing potentially stronger play later in the game by reducing the chance of low-probability moves through lower Temperature and/or Top-P.",
+  "@maxOpeningVarietyHelp": {
+    "description": "Settings help: opening sampling override and its purpose"
+  },
   "maiaAnalysisRating": "Maia analysis rating",
   "@maiaAnalysisRating": {
     "description": "Settings: Maia analysis rating"

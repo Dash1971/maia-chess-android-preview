@@ -155,6 +155,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get topP => 'Top-P';
 
   @override
+  String get maxOpeningVariety => 'Máxima variedad en la apertura';
+
+  @override
+  String get maxOpeningVarietyHelp =>
+      'No es necesario si Temperatura y Top-P tienen sus valores predeterminados de 1,0 / 1,0. Utiliza 1,0 / 1,0 durante los cinco primeros movimientos de cada bando y vuelve a los valores configurados a partir del movimiento 6.\n\nEl objetivo es ofrecer a Maia la máxima variedad en la apertura y, más adelante en la partida, permitir un juego potencialmente más fuerte al reducir la posibilidad de elegir movimientos de baja probabilidad mediante valores más bajos de Temperatura y/o Top-P.';
+
+  @override
   String get maiaAnalysisRating => 'Elo de Maia para analizar';
 
   @override

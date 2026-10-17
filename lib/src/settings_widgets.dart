@@ -42,7 +42,12 @@ class SettingsInfoSwitch extends StatelessWidget {
                           widthFactor: 1,
                           child: Text(
                             title,
-                            style: Theme.of(context).textTheme.bodyLarge,
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(
+                                  color: onChanged == null
+                                      ? Theme.of(context).disabledColor
+                                      : null,
+                                ),
                           ),
                         ),
                       ),

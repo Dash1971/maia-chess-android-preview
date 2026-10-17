@@ -11,6 +11,7 @@ import 'package:maia_chess/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'fixtures/electronic_board.dart';
+import 'support/sampling_replay.dart' show readExport;
 
 class ResetBoard extends SimulatedElectronicBoard {
   final ledEvents = <String>[];
@@ -122,6 +123,36 @@ void main() {
     expect(ready(), isTrue, reason: description);
   }
 
+  Future<T> driveCapture<T>(
+    WidgetTester tester,
+    Future<T> Function() operation,
+  ) async {
+    var done = false;
+    T? result;
+    Object? error;
+    unawaited(
+      operation().then(
+        (value) {
+          result = value;
+          done = true;
+        },
+        onError: (Object failure) {
+          error = failure;
+          done = true;
+        },
+      ),
+    );
+    for (var i = 0; i < 200 && !done; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 10)),
+      );
+      await tester.pump();
+    }
+    expect(done, isTrue, reason: 'capture filesystem operation completed');
+    if (error != null) throw error!;
+    return result as T;
+  }
+
   Future<Map<String, dynamic>> waitForSaved(
     WidgetTester tester,
     bool Function(Map<String, dynamic>) ready,
@@ -158,6 +189,7 @@ void main() {
     WidgetTester tester, {
     bool playerIsWhite = true,
     Future<Float32List> Function(List<String>, int)? evaluator,
+    MaiaPlaySettings? sampling,
     SessionRepository Function(Directory)? repositoryFactory,
   }) async {
     await initialize(tester, repositoryFactory: repositoryFactory);
@@ -176,6 +208,7 @@ void main() {
         'playerIsWhite': playerIsWhite,
         'elo': 1800,
         'maiaUseMoveHistory': true,
+        if (sampling != null) 'maiaSampling': sampling.toJson(),
         'flipped': true,
         'electronicBoard': 'chessnut-go',
         'clockPaused': true,
@@ -712,6 +745,82 @@ void main() {
         board.position(chess.Chess.DEFAULT_POSITION);
         await flush(tester);
         expect(requests, playerIsWhite ? 0 : 1);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await flush(tester);
+      },
+    );
+  }
+
+  for (final variety in [false, true]) {
+    testWidgets(
+      'Chessnut reset preserves saved sampling with variety $variety despite contrary preferences',
+      (tester) async {
+        final profile = MaiaPlaySettings(
+          temperature: 0,
+          topP: 0,
+          maxOpeningVariety: variety,
+        );
+        SharedPreferences.setMockInitialValues({
+          'temperatureV2': 0.5,
+          'topPV2': 0.95,
+          'maxOpeningVarietyV1': !variety,
+        });
+        // Capture the first actual decision after setup as well as the saved
+        // profile; serialization alone would miss a reset using preferences.
+        final captureDirectory = (await tester.runAsync(
+          () => Directory.systemTemp.createTemp('maia-reset-sampling-'),
+        ))!;
+        final capture = SamplingCapture(directory: captureDirectory);
+        SamplingCapture.instance = capture;
+        await driveCapture(tester, () => capture.setEnabled(true));
+        addTearDown(() async {
+          capture.dispose();
+          SamplingCapture.instance = SamplingCapture();
+          await tester.runAsync(() => captureDirectory.delete(recursive: true));
+        });
+        var requests = 0;
+        await launch(
+          tester,
+          playerIsWhite: false,
+          sampling: profile,
+          evaluator: (_, _) async {
+            requests++;
+            return Float32List(4352);
+          },
+        );
+        await tester.tap(find.byKey(const ValueKey('new-game-button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.widgetWithText(FilledButton, 'Reset'));
+        final checkpoint = await waitForSaved(
+          tester,
+          (data) => data['chessnutResetPending'] == true,
+          'sampling-preserving reset checkpoint',
+        );
+        expect(checkpoint['maiaSampling'], profile.toJson());
+        expect(checkpoint['uciMoves'], isEmpty);
+        expect(requests, 0);
+
+        board.position(chess.Chess.DEFAULT_POSITION);
+        final played = await waitForSaved(
+          tester,
+          (data) =>
+              data['chessnutResetPending'] == null &&
+              (data['uciMoves'] as List?)?.length == 1,
+          'first Maia move after physical reset setup',
+        );
+        expect(played['maiaSampling'], profile.toJson());
+        expect(requests, 1);
+        await flush(tester);
+        final records = await driveCapture(tester, () => readExport(capture));
+        final sampling = records.single['sampling'] as Map;
+        expect(sampling['configuredTemperature'], 0.0);
+        expect(sampling['configuredTopP'], 0.0);
+        expect(sampling['maxOpeningVariety'], variety);
+        expect(sampling['openingVarietyApplied'], variety);
+        expect(sampling['fullMoveNumber'], 1);
+        expect(sampling['effectiveTemperature'], variety ? 1.0 : 0.0);
+        expect(sampling['effectiveTopP'], variety ? 1.0 : 0.0);
+        expect(sampling['mode'], variety ? 'random' : 'argmax');
         await tester.pumpWidget(const SizedBox.shrink());
         await flush(tester);
       },

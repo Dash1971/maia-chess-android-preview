@@ -46,6 +46,8 @@
   "aboutTemperatureAndTopP": "关于温度和 Top-P",
   "temperature": "温度",
   "topP": "Top-P",
+  "maxOpeningVariety": "开局多样性最大化",
+  "maxOpeningVarietyHelp": "当温度和Top-P均为默认值1.0 / 1.0时，无需启用。双方各自的前五步使用1.0 / 1.0，从第6步起恢复您设置的值。\n\n此设置旨在让Maia的开局尽可能多样，同时在之后的对局中通过降低温度和/或Top-P，减少选择低概率走法的机会，从而有望提升棋力。",
   "maiaAnalysisRating": "Maia 分析等级分",
   "addSecondMaiaEngine": "添加第二个 Maia 引擎",
   "compareAnotherMaiaRatingInAnalysisAndReview": "在分析和复盘中比较另一等级分的 Maia",

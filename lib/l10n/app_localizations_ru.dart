@@ -155,6 +155,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get topP => 'Top-P';
 
   @override
+  String get maxOpeningVariety => 'Максимальное разнообразие в дебюте';
+
+  @override
+  String get maxOpeningVarietyHelp =>
+      'Не требуется, если Температура и Top-P имеют значения по умолчанию 1,0 / 1,0. Для первых пяти ходов каждой стороны используются значения 1,0 / 1,0, а с 6-го хода снова применяются ваши настройки.\n\nЦель — обеспечить Maia максимальное разнообразие в дебюте и возможность более сильной игры в дальнейшем: снижение Температуры и/или Top-P уменьшает шанс выбора маловероятных ходов.';
+
+  @override
   String get maiaAnalysisRating => 'Рейтинг Maia для анализа';
 
   @override

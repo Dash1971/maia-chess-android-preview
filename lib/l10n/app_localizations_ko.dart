@@ -152,6 +152,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get topP => 'Top-P';
 
   @override
+  String get maxOpeningVariety => '오프닝 다양성 최대화';
+
+  @override
+  String get maxOpeningVarietyHelp =>
+      '온도와 Top-P가 기본값인 1.0 / 1.0이면 필요하지 않습니다. 양측이 각각 처음 다섯 수를 둘 때는 1.0 / 1.0을 사용하고, 여섯 번째 수부터는 설정한 값으로 돌아갑니다.\n\nMaia의 오프닝을 최대한 다양하게 하면서, 이후에는 온도나 Top-P를 낮춰 확률이 낮은 수를 선택할 가능성을 줄임으로써 더 강한 플레이를 할 수 있도록 하는 것이 목적입니다.';
+
+  @override
   String get maiaAnalysisRating => 'Maia 분석 레이팅';
 
   @override

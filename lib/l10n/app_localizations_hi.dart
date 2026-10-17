@@ -155,6 +155,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get topP => 'Top-P';
 
   @override
+  String get maxOpeningVariety => 'ओपनिंग में अधिकतम विविधता';
+
+  @override
+  String get maxOpeningVarietyHelp =>
+      'यदि टेम्परेचर और Top-P अपने डिफ़ॉल्ट मानों 1.0 / 1.0 पर हैं, तो इसकी आवश्यकता नहीं है। हर पक्ष की पहली पाँच चालों के लिए 1.0 / 1.0 का उपयोग होता है और छठी चाल से आपके चुने हुए मान फिर से लागू हो जाते हैं।\n\nइसका उद्देश्य Maia को ओपनिंग में अधिकतम विविधता देना है। बाद में टेम्परेचर और/या Top-P को कम रखकर कम प्रायिकता वाली चालों के चुने जाने की संभावना घटती है, जिससे खेल के आगे के हिस्से में अधिक मज़बूत खेल संभव हो सकता है।';
+
+  @override
   String get maiaAnalysisRating => 'Maia की विश्लेषण रेटिंग';
 
   @override

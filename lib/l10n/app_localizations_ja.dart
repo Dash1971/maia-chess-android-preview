@@ -151,6 +151,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get topP => 'Top-P';
 
   @override
+  String get maxOpeningVariety => '序盤の多様性を最大にする';
+
+  @override
+  String get maxOpeningVarietyHelp =>
+      '温度とTop-Pが初期値の1.0 / 1.0の場合は不要です。双方の最初の5手には1.0 / 1.0を使用し、6手目から設定した値に戻ります。\n\nMaiaの序盤の指し手を最大限に多様にしつつ、その後は温度やTop-Pを下げて低確率の手が選ばれる可能性を減らすことで、より強いプレイを目指す設定です。';
+
+  @override
   String get maiaAnalysisRating => '解析用Maiaのレーティング';
 
   @override

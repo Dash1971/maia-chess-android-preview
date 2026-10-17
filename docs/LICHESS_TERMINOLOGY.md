@@ -279,3 +279,16 @@ in JSONL; neither promises an uninterrupted recording of every move. It retains
 the ten-game/storage-limit explanation and separation from Recent Games, and
 recommends keeping capture off unless researching Maia. Only help text changes;
 capture, retention, saved-session choices and engine defaults are unchanged.
+
+## Maximum opening variety
+
+The maximum-opening-variety setting and its help are Maia-specific sampling
+controls with no direct equivalent in the pinned Lichess catalog. All ten
+languages explain that each side's first five moves use Temperature/Top-P
+1.0 / 1.0, with the configured values restored from move 6. The help identifies
+the default values as making this option unnecessary and describes potentially
+stronger later play without promising a strength increase. It preserves the
+distinction between low move probability and poor move quality. Existing chess
+vocabulary and localized Temperature labels are retained; European-language
+translations follow the established decimal-comma convention. These are
+editorial translations, subject to the usual native-speaker review.
