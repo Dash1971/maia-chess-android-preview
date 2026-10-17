@@ -2,7 +2,7 @@ package com.dash1971.maia_chess
 
 import java.util.UUID
 
-/** Preview permits Chessnut only; prototype adapters must stay in the Dev APK. */
+/** All channels permit Chessnut; only Dev may discover or command prototype boards. */
 internal object BoardChannelPolicy {
     fun supports(flavor: String, kind: String): Boolean =
         kind == "chessnut" || (flavor == "dev" && kind in setOf("pegasus", "squareOff"))
@@ -12,6 +12,14 @@ internal object BoardChannelPolicy {
         supports(flavor, "squareOff") && name.equals("Square Off", true) -> "squareOff"
         else -> null
     }
+}
+
+/** Old Chessnut saves lack an identity; never silently reuse another board. */
+internal object BoardReconnectPolicy {
+    fun needsLegacyDiscovery(mode: String, requestedId: String?): Boolean =
+        mode == "reconnect" && requestedId == null
+    fun needsFreshConnection(mode: String, requestedId: String?, currentId: String?): Boolean =
+        mode == "reconnect" && (requestedId == null || requestedId != currentId)
 }
 
 /** Pure transport policy: no platform dependencies and no public device addresses. */
