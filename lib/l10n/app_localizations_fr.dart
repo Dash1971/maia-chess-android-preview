@@ -1205,7 +1205,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get maiaHistoryHelp =>
-      'Permet à Maia de prendre en compte jusqu’à sept positions précédentes en plus de la position actuelle. Cela a amélioré la prédiction des coups humains dans nos tests avec le modèle 79M, mais a parfois favorisé l’imitation répétée des coups adverses dans les ouvertures à faible classement. Aucun gain de force de jeu n’est établi. Nous conseillons de laisser cette option désactivée pour le moment. Une position chargée seule n’a pas de coups antérieurs disponibles. Elle s’applique aux nouvelles parties et aux nouveaux échiquiers d’analyse ; les sessions enregistrées conservent leur choix initial.';
+      'Permet à Maia de prendre en compte jusqu’à sept positions précédentes en plus de la position actuelle. Cela a amélioré la précision des prédictions des coups humains d’environ 2 points de pourcentage dans nos tests avec le modèle 79M, mais a parfois favorisé l’imitation répétée des coups dans les ouvertures à faible classement. Nous n’avons pas pu établir de gain de force de jeu. Pour l’instant, nous recommandons de laisser cette option désactivée.';
 
   @override
   String get maiaHistoryResearch =>
@@ -1235,7 +1235,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Enregistrez sur cet appareil les probabilités des coups de Maia, ses réglages et les coups choisis pour comprendre sa façon de jouer. Cette option est désactivée par défaut. La désactiver conserve les données existantes.\n\nLes fichiers exportés contiennent les positions, l’historique des coups ainsi que les entrées et décisions du modèle.\n\nLes 10 dernières parties enregistrées sont conservées et affichées de la plus récente à la plus ancienne. Les parties anciennes peuvent être supprimées plus tôt si la limite de stockage est atteinte. Cela ne supprime pas les parties de Parties récentes. Une partie très longue ou une interruption peut laisser un enregistrement incomplet. L’activation en cours de partie ne conserve que les décisions suivantes. Exportez régulièrement les données si vous souhaitez les garder.';
+      'Enregistrez les probabilités des coups de Maia, les réglages et les coups choisis sur cet appareil pour explorer sa façon de jouer.\n\nLes fichiers exportés contiennent les positions, l’historique des coups ainsi que les données d’entrée et les décisions du modèle.\n\nLes 10 dernières parties avec des données enregistrées sont conservées et présentées de la plus récente à la plus ancienne. Les parties plus anciennes peuvent être supprimées plus tôt si la limite de stockage est atteinte. Ces données sont distinctes des parties récentes.\n\nUtilisez cette fonction si vous souhaitez étudier les détails techniques du fonctionnement de Maia. Les données ne peuvent pas être consultées dans l’application. Elles sont exportées dans un fichier HTML facile à consulter contenant une partie des données, ou dans un fichier JSONL contenant toutes les données enregistrées.\n\nCette fonction est désactivée par défaut. Nous vous recommandons de la laisser désactivée, sauf si vous souhaitez étudier le fonctionnement de Maia.';
 
   @override
   String get clearSamplingData => 'Effacer les données de choix';
@@ -1407,7 +1407,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      'Pour un jeu équilibré, vous pouvez conserver la Température à 1,0 et régler Top-P sur 0,9 ou 0,95. Cela préserve la variété tout en éliminant des coups peu probables, qui peuvent souvent être des gaffes, mais aussi de bons coups. Top-P écarte essentiellement les coups les moins probables. À 0,95, il conserve des coups dont les probabilités totalisent au moins 95 % après application de la Température. Maia ne pourra pas choisir les coups restants.';
+      'Pour un jeu équilibré, vous pouvez conserver la Température à 1,0 et régler Top-P sur 0,95. Cela préserve la variété tout en éliminant des coups peu probables, qui peuvent souvent être des gaffes, mais aussi de bons coups. Top-P écarte essentiellement les coups les moins probables. À 0,95, il conserve des coups dont les probabilités totalisent au moins 95 % après application de la Température. Maia ne pourra pas choisir les coups restants.';
 
   @override
   String get samplingHelpResearchIntro =>

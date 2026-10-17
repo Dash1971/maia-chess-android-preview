@@ -2086,10 +2086,10 @@ abstract class AppLocalizations {
   /// **'Use move history'**
   String get maiaHistorySetting;
 
-  /// Maia-specific move-history explanation, research limitations, and new versus saved session behavior.
+  /// Maia-specific move-history help. The prediction gain is about 2 percentage points (57.00% to 59.36%), not a relative 2%. A playing-strength increase was not established; do not imply a full-game strength trial.
   ///
   /// In en, this message translates to:
-  /// **'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use. New games and analysis boards use this setting; saved sessions keep their original choice.'**
+  /// **'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves by about 2 percentage points in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. We were not able to establish a strength increase. Off is recommended for now.'**
   String get maiaHistoryHelp;
 
   /// Maia-specific history setting/help: Read the move-history research
@@ -2134,10 +2134,10 @@ abstract class AppLocalizations {
   /// **'Save Maia sampling data'**
   String get saveMaiaSamplingData;
 
-  /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
+  /// Maia-specific research capture help: last ten recorded games, separate from Recent Games; readable HTML subset versus all recorded data in JSONL, viewed outside the app. Off by default and recommended off unless researching. All recorded data does not promise a complete game capture.
   ///
   /// In en, this message translates to:
-  /// **'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions.\n\nThe last 10 recorded games are saved and presented newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.'**
+  /// **'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays.\n\nExported files contain board positions, move history and model inputs and decisions.\n\nThe last 10 recorded games are saved and presented newest first. Older games may be removed sooner if the storage limit is reached. This is separate from Recent Games.\n\nUse this feature if you are interested in studying the technical details of how Maia works. Data cannot be viewed in the app. It is exported to an easy-to-view HTML file containing a subset of the data, or a JSONL file containing all the recorded data.\n\nThis is off by default, and we recommend keeping it off unless you are interested in researching how Maia works.'**
   String get samplingDataHelp;
 
   /// App-specific opt-in local Maia decision capture; separate from diagnostics and Recent Games.
@@ -2419,7 +2419,7 @@ abstract class AppLocalizations {
   /// User-approved Maia-specific sampling help, paragraph 6. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
   ///
   /// In en, this message translates to:
-  /// **'For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.9 or 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.'**
+  /// **'For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.'**
   String get samplingHelpTopP;
 
   /// User-approved Maia-specific sampling help, paragraph 7. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.

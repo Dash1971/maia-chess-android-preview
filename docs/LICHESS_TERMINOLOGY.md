@@ -260,3 +260,22 @@ Decimal commas follow the established European-language conventions. These are
 editorially reviewed translations, not native-speaker certification. Existing
 all-language tests check the expanded dialog at 320px and 200% text, its paragraph
 order, accessible research link and dismissal, with unchanged engine settings.
+
+## Move-history and capture help refresh
+
+The two information dialogs follow the maintainer's shorter move-history copy
+and research-oriented capture explanation in all ten languages. These are
+Maia-specific explanations; existing Lichess terminology, setting titles and
+research-link labels are retained.
+
+The [move-history study](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/move-history-2026-10-09/REPORT.md)
+measured top-move prediction accuracy of 57.00% without history and 59.36% with
+history. The help rounds this to about two **percentage points**, not a relative
+two percent. It says a strength increase was not established, rather than
+implying that a complete-game strength trial found no improvement.
+
+Capture help distinguishes the readable HTML subset from all **recorded** data
+in JSONL; neither promises an uninterrupted recording of every move. It retains
+the ten-game/storage-limit explanation and separation from Recent Games, and
+recommends keeping capture off unless researching Maia. Only help text changes;
+capture, retention, saved-session choices and engine defaults are unchanged.

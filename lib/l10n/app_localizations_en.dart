@@ -1188,7 +1188,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get maiaHistoryHelp =>
-      'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. It is not a proven strength increase. Off is recommended for now. A position loaded on its own has no earlier moves to use. New games and analysis boards use this setting; saved sessions keep their original choice.';
+      'Let Maia consider up to seven previous positions as well as the current position. This improved prediction of human moves by about 2 percentage points in our tests with the 79M model, but sometimes encouraged repeated copying in low-rated openings. We were not able to establish a strength increase. Off is recommended for now.';
 
   @override
   String get maiaHistoryResearch => 'Read the move-history research';
@@ -1217,7 +1217,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingDataHelp =>
-      'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays. Off by default. Turning this off keeps existing data.\n\nExported files contain board positions, move history and model inputs and decisions.\n\nThe last 10 recorded games are saved and presented newest first. Older games may be removed sooner if the storage limit is reached. This does not delete Recent Games. An unusually large active game or an interruption can leave a partial capture. Enabling this during a game captures only later decisions. Export regularly if you want to keep the data.';
+      'Save Maia’s move probabilities, settings and selected moves on this device to explore how it plays.\n\nExported files contain board positions, move history and model inputs and decisions.\n\nThe last 10 recorded games are saved and presented newest first. Older games may be removed sooner if the storage limit is reached. This is separate from Recent Games.\n\nUse this feature if you are interested in studying the technical details of how Maia works. Data cannot be viewed in the app. It is exported to an easy-to-view HTML file containing a subset of the data, or a JSONL file containing all the recorded data.\n\nThis is off by default, and we recommend keeping it off unless you are interested in researching how Maia works.';
 
   @override
   String get clearSamplingData => 'Clear sampling data';
@@ -1387,7 +1387,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      'For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.9 or 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.';
+      'For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.';
 
   @override
   String get samplingHelpResearchIntro =>
