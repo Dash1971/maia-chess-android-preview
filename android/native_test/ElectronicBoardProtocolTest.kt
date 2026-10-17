@@ -5,7 +5,7 @@ private fun rejects(block: () -> Unit) { check(runCatching(block).isFailure) }
 
 fun main() {
     samplingShareFilesChecks()
-    for (flavor in listOf("preview", "", "stable")) {
+    for (flavor in listOf("preview", "", "stable", "production")) {
         check(BoardChannelPolicy.supports(flavor, "chessnut"))
         check(!BoardChannelPolicy.supports(flavor, "pegasus"))
         check(!BoardChannelPolicy.supports(flavor, "squareOff"))
@@ -17,6 +17,20 @@ fun main() {
     check(BoardChannelPolicy.discover("dev", "DGT Pegasus") == "pegasus")
     check(BoardChannelPolicy.discover("dev", "Square Off") == "squareOff")
     check(!BoardChannelPolicy.supports("dev", "unknown"))
+
+    // Legacy saves must scan even if another board is already ready or connecting.
+    for (current in listOf(null, "old-chessnut", "prototype-board")) {
+        check(BoardReconnectPolicy.needsFreshConnection("reconnect", null, current))
+        check(BoardReconnectPolicy.needsLegacyDiscovery("reconnect", null))
+    }
+    check(!BoardReconnectPolicy.needsFreshConnection("reconnect", "saved", "saved"))
+    check(BoardReconnectPolicy.needsFreshConnection("reconnect", "saved", "other"))
+    check(BoardReconnectPolicy.needsFreshConnection("reconnect", "saved", null))
+    check(!BoardReconnectPolicy.needsLegacyDiscovery("reconnect", "saved"))
+    for (mode in listOf("remembered", "discover")) {
+        check(!BoardReconnectPolicy.needsFreshConnection(mode, null, "ready"))
+        check(!BoardReconnectPolicy.needsLegacyDiscovery(mode, null))
+    }
 
     val discovery = BoardDiscoveryWindow<String>(2)
     discovery.add("private-address-1", "first")

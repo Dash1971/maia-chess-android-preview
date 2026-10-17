@@ -43,6 +43,10 @@ jobs:
       - run: flutter test --reporter expanded
       - name: Verify Preview board restrictions and settings
         run: flutter test --flavor preview test/preview_board_channel_test.dart test/board_reset_widget_test.dart test/home_settings_layout_test.dart test/maia_settings_help_layout_test.dart --reporter expanded
+      - name: Verify Stable board promotion restrictions
+        run: |
+          flutter test --flavor stable test/preview_board_channel_test.dart --reporter expanded
+          flutter test --flavor '' test/preview_board_channel_test.dart --reporter expanded
       - name: Test release verification tools
         run: |
           python3 -m venv "$RUNNER_TEMP/release-checks-venv"

@@ -55,7 +55,8 @@ class ChessnutBridge(
     private val adapter: BluetoothAdapter?
         get() = bluetoothManager?.adapter
 
-    private val experimentalBoards = BuildConfig.FLAVOR in setOf("dev", "preview")
+    // Connection safety and Chessnut behavior are shared by all channels.
+    // BoardChannelPolicy alone decides which board families are permitted.
     private val preferences = activity.getSharedPreferences("verified_electronic_boards", Context.MODE_PRIVATE)
     private data class Candidate(val device: BluetoothDevice, val name: String, val kind: String)
     private val discovery = BoardDiscoveryWindow<Candidate>()
@@ -110,7 +111,7 @@ class ChessnutBridge(
                 if (pendingPermissionResult != null) {
                     result.error("permission_pending", "A Bluetooth permission request is already open.", null); return
                 }
-                connectMode = if (experimentalBoards) call.argument<String>("mode") ?: "remembered" else "discover"
+                connectMode = call.argument<String>("mode") ?: "remembered"
                 requestedBoardId = call.argument<String>("boardId")
                 connect(result)
             }
@@ -118,14 +119,12 @@ class ChessnutBridge(
                 if (pendingPermissionResult != null) {
                     result.error("permission_pending", "A Bluetooth permission request is already open.", null); return
                 }
-                if (!experimentalBoards) { result.notImplemented(); return }
                 disconnect("Board disconnected.")
                 connectMode = "discover"
                 requestedBoardId = null
                 connect(result)
             }
             "selectBoard" -> {
-                if (!experimentalBoards) { result.notImplemented(); return }
                 val candidate = discovery.select(call.argument<String>("candidateId"))
                 if (candidate == null || !BoardChannelPolicy.supports(BuildConfig.FLAVOR, candidate.kind)) result.error("stale_candidate", "Choose a board from a fresh search.", null)
                 else {
@@ -193,18 +192,16 @@ class ChessnutBridge(
     }
 
     private fun connect(result: MethodChannel.Result) {
-        if (experimentalBoards && connectMode == "reconnect" && requestedBoardId == null) {
-            result.error("missing_board_identity", "The saved game has no selected board identity. Continue on the phone or explicitly choose another board.", null)
-            return
-        }
-        if (experimentalBoards && connectMode == "reconnect" && requestedBoardId != null && requestedBoardId != boardId) {
+        // Legacy saves have no identity: start a fresh Chessnut-only search,
+        // never reuse an unrelated ready/in-flight connection.
+        if (BoardReconnectPolicy.needsFreshConnection(connectMode, requestedBoardId, boardId)) {
             stopScan()
             disconnectGatt()
             state = "disconnected"
         }
         if (ready) {
             emitStatus("ready", "Chessnut is ready.", deviceName)
-            if (experimentalBoards && boardKind == "pegasus") {
+            if (boardKind == "pegasus") {
                 // Dart resets occupancy history when reconnecting after a parser error.
                 // Field updates cannot recover that history without a fresh complete dump.
                 enqueueWrite(byteArrayOf(0x5a))
@@ -257,13 +254,13 @@ class ChessnutBridge(
         }
 
     private fun startConnection() {
-        if (experimentalBoards && connectMode == "reconnect" && requestedBoardId == null) {
+        if (BoardReconnectPolicy.needsLegacyDiscovery(connectMode, requestedBoardId)) {
             // Pre-promotion Chessnut saves have no board identity. Discover only
             // Chessnut, then establish an identity after physical-position sync.
             startScan()
             return
         }
-        if (experimentalBoards && connectMode != "discover") {
+        if (connectMode != "discover") {
             val targetId = requestedBoardId ?: boardId ?: preferences.getString("last_id", null)
             val address = targetId?.let { preferences.getString("address_$it", null) }
             if (address != null) {
@@ -280,7 +277,7 @@ class ChessnutBridge(
     }
 
     private fun startScan() {
-        if (experimentalBoards) connectionSession = UUID.randomUUID().toString()
+        connectionSession = UUID.randomUUID().toString()
         disconnectGatt()
         discovery.clear()
         boardId = null
@@ -298,16 +295,9 @@ class ChessnutBridge(
                 mainHandler.post {
                     if (scanCallback !== this) return@post
                     val kind = BoardChannelPolicy.discover(BuildConfig.FLAVOR, name) ?: return@post
-                    if (connectMode == "reconnect" && requestedBoardId == null && kind != "chessnut") return@post
+                    if (BoardReconnectPolicy.needsLegacyDiscovery(connectMode, requestedBoardId) && kind != "chessnut") return@post
                     val address = result.device.address
-                    if (!experimentalBoards) {
-                        stopScan()
-                        boardKind = kind
-                        selectedAddress = address
-                        connectGatt(result.device, name.ifBlank { "Chessnut" })
-                    } else {
-                        discovery.add(address, Candidate(result.device, name, kind))
-                    }
+                    discovery.add(address, Candidate(result.device, name, kind))
                 }
             }
 
@@ -383,7 +373,7 @@ class ChessnutBridge(
             if (gatt == null) failConnection("Could not open the Chessnut connection.")
             val source = gatt
             mainHandler.postDelayed({
-                if (experimentalBoards && gatt === source && !ready) failConnection("Board connection timed out. Try reconnecting.")
+                if (gatt === source && !ready) failConnection("Board connection timed out. Try reconnecting.")
             }, 15_000L)
         } catch (error: SecurityException) {
             failConnection(error.message ?: "Bluetooth permission was revoked.")
@@ -476,7 +466,7 @@ class ChessnutBridge(
                     failConnection("Could not enable Chessnut notifications (status $status).")
                     return@post
                 }
-                if (experimentalBoards && descriptor.characteristic.uuid != configuringDescriptor) return@post
+                if (descriptor.characteristic.uuid != configuringDescriptor) return@post
                 when (configuringDescriptor) {
                     DATA_UUID -> enableNotifications(confirmationCharacteristic)
                     CONFIRM_UUID, uartNotify -> finishConfiguration()
@@ -492,7 +482,7 @@ class ChessnutBridge(
         ) {
             mainHandler.post {
                 if (this@ChessnutBridge.gatt !== gatt) return@post
-                if (experimentalBoards && (!writeInProgress || activeWrite == null || characteristic.uuid != writeCharacteristic?.uuid)) return@post
+                if (!writeInProgress || activeWrite == null || characteristic.uuid != writeCharacteristic?.uuid) return@post
                 writeInProgress = false
                 val completedWrite = activeWrite
                 activeWrite = null
@@ -596,7 +586,7 @@ class ChessnutBridge(
         }
         ready = true
         emitStatus("ready", "Chessnut is ready.", deviceName)
-        if (experimentalBoards && selectedAddress != null) {
+        if (selectedAddress != null) {
             val address = selectedAddress!!
             val existing = preferences.getString("id_$address", null)
             boardId = existing ?: UUID.randomUUID().toString()
@@ -619,57 +609,25 @@ class ChessnutBridge(
         val snapshot = value.copyOf()
         mainHandler.post {
             if (gatt !== source) return@post
-            if (experimentalBoards && boardKind != "chessnut") {
+            if (boardKind != "chessnut") {
                 if (snapshot.size <= 1024) emit(mapOf("type" to "boardData", "boardKind" to boardKind,
                     "data" to snapshot.map { it.toInt() and 255 }, "connectionSession" to connectionSession), source)
                 return@post
             }
-            if (experimentalBoards) {
-                val frames = when (uuid) {
-                    DATA_UUID -> positionFrames.feed(snapshot, SystemClock.elapsedRealtime())
-                    CONFIRM_UUID -> confirmationFrames.feed(snapshot, SystemClock.elapsedRealtime())
-                    else -> emptyList()
-                }
-                for (frame in frames) {
-                    if (uuid == DATA_UUID) emit(mapOf("type" to "position", "data" to frame.map { it.toInt() and 255 },
-                        "nativeReady" to ready, "gattPresent" to true), source)
-                    else if (frame.contentEquals(byteArrayOf(0x0f, 0x01, 0x02))) {
-                        emit(mapOf("type" to "newGame", "connectionSession" to connectionSession), source)
-                    } else if (frame.size == 4 && frame[0] == 0x2a.toByte()) {
-                        val raw = frame[2].toInt() and 255
-                        if ((raw and 127) <= 100) emit(mapOf("type" to "battery", "percent" to (raw and 127),
-                            "charging" to ((raw and 128) != 0)), source)
-                    }
-                }
-                return@post
+            val frames = when (uuid) {
+                DATA_UUID -> positionFrames.feed(snapshot, SystemClock.elapsedRealtime())
+                CONFIRM_UUID -> confirmationFrames.feed(snapshot, SystemClock.elapsedRealtime())
+                else -> emptyList()
             }
-            val value = snapshot
-            val looksLikePosition = value.size >= 32 ||
-                (value.size >= 2 && value[0] == 0x01.toByte() && value[1] == 0x24.toByte())
-            if (uuid == DATA_UUID && looksLikePosition) {
-                emit(
-                    mapOf(
-                        "type" to "position",
-                        "data" to value.map { it.toInt() and 0xff },
-                        "nativeReady" to ready,
-                        "gattPresent" to (gatt != null),
-                    ),
-                    expectedGatt = source,
-                )
-            } else if (uuid == CONFIRM_UUID &&
-                value.size >= 4 && value[0] == 0x2a.toByte() && value[1] == 0x02.toByte()
-            ) {
-                val raw = value[2].toInt() and 0xff
-                val percent = raw and 0x7f
-                if (percent <= 100) {
-                    emit(
-                        mapOf(
-                            "type" to "battery",
-                            "percent" to percent,
-                            "charging" to ((raw and 0x80) != 0),
-                        ),
-                        expectedGatt = source,
-                    )
+            for (frame in frames) {
+                if (uuid == DATA_UUID) emit(mapOf("type" to "position", "data" to frame.map { it.toInt() and 255 },
+                    "nativeReady" to ready, "gattPresent" to true), source)
+                else if (frame.contentEquals(byteArrayOf(0x0f, 0x01, 0x02))) {
+                    emit(mapOf("type" to "newGame", "connectionSession" to connectionSession), source)
+                } else if (frame.size == 4 && frame[0] == 0x2a.toByte()) {
+                    val raw = frame[2].toInt() and 255
+                    if ((raw and 127) <= 100) emit(mapOf("type" to "battery", "percent" to (raw and 127),
+                        "charging" to ((raw and 128) != 0)), source)
                 }
             }
         }
@@ -680,7 +638,7 @@ class ChessnutBridge(
             result.error("not_connected", "Chessnut is not ready.", null)
             return
         }
-        if (experimentalBoards && boardKind == "pegasus") {
+        if (boardKind == "pegasus") {
             val squares = call.argument<List<Number>>("squares")?.map { it.toInt() }
             if (squares == null || squares.size > 64 || squares.any { it !in 0..63 }) {
                 result.error("bad_arguments", "Expected DGT square indices.", null); return
@@ -818,7 +776,7 @@ class ChessnutBridge(
             }
             if (started) {
                 mainHandler.postDelayed({
-                    if (experimentalBoards && gatt === currentGatt && activeWrite === pendingWrite) failConnection("Board command acknowledgement timed out. Reconnect before continuing.")
+                    if (gatt === currentGatt && activeWrite === pendingWrite) failConnection("Board command acknowledgement timed out. Reconnect before continuing.")
                 }, 5_000L)
                 return
             }
@@ -861,7 +819,7 @@ class ChessnutBridge(
         command.size == 10 && command[0] == 0x0a.toByte() && command[1] == 0x08.toByte()
 
     private fun disconnect(message: String) {
-        if (experimentalBoards) connectionSession = UUID.randomUUID().toString()
+        connectionSession = UUID.randomUUID().toString()
         pendingPermissionResult?.error("cancelled", "Board connection was cancelled.", null)
         pendingPermissionResult = null
         stopScan()
@@ -936,22 +894,20 @@ class ChessnutBridge(
         emit(
             buildMap<String, Any> {
                 put("type", "status")
-                if (experimentalBoards) {
-                    put("boardKind", boardKind)
-                    boardId?.let { put("boardId", it) }
-                    put("connectionSession", connectionSession)
-                    put("capabilities", mapOf("pieceIdentity" to (boardKind == "chessnut"),
-                        "occupancy" to (boardKind == "pegasus"), "leds" to (boardKind != "squareOff"),
-                        "sound" to (boardKind == "chessnut"), "battery" to (boardKind == "chessnut"),
-                        "physicalButtons" to (boardKind == "chessnut"), "motors" to (boardKind == "squareOff")))
-                }
+                put("boardKind", boardKind)
+                boardId?.let { put("boardId", it) }
+                put("connectionSession", connectionSession)
+                put("capabilities", mapOf("pieceIdentity" to (boardKind == "chessnut"),
+                    "occupancy" to (boardKind == "pegasus"), "leds" to (boardKind != "squareOff"),
+                    "sound" to (boardKind == "chessnut"), "battery" to (boardKind == "chessnut"),
+                    "physicalButtons" to (boardKind == "chessnut"), "motors" to (boardKind == "squareOff")))
                 put("state", newState)
                 put("message", message)
                 if (name != null) put("deviceName", name)
                 val details = listOfNotNull(errorDiagnostic, diagnostic).joinToString(" ")
                 if (details.isNotEmpty()) put("diagnostic", details)
             },
-            expectedGatt = if (experimentalBoards && (newState == "ready" || newState == "connected")) gatt else null,
+            expectedGatt = if (newState == "ready" || newState == "connected") gatt else null,
         )
     }
 
@@ -964,14 +920,14 @@ class ChessnutBridge(
 
     private fun emit(event: Map<String, Any>, expectedGatt: BluetoothGatt? = null) {
         val sessionSnapshot = connectionSession
-        val decorated = if (experimentalBoards) buildMap<String, Any> {
+        val decorated = buildMap<String, Any> {
             putAll(event)
             put("connectionSession", sessionSnapshot)
             put("boardKind", boardKind)
             boardId?.let { put("boardId", it) }
-        } else event
+        }
         mainHandler.post {
-            if (experimentalBoards && connectionSession != sessionSnapshot) return@post
+            if (connectionSession != sessionSnapshot) return@post
             if (expectedGatt != null && gatt !== expectedGatt) return@post
             eventSink?.success(decorated)
         }
@@ -1006,7 +962,7 @@ class ChessnutBridge(
     }
 
     fun close() {
-        if (experimentalBoards) connectionSession = UUID.randomUUID().toString()
+        connectionSession = UUID.randomUUID().toString()
         eventSink = null
         pendingPermissionResult?.error("cancelled", "Chessnut connection was cancelled.", null)
         pendingPermissionResult = null

@@ -3,11 +3,9 @@ part of '../main.dart';
 enum BoardProblem { locked, motor, generic }
 
 extension _ElectronicBoardFlow on _GamePageState {
-  bool get _genericBoards =>
-      (_chessnut is ChessnutPlatformTransport &&
-          (appFlavor == 'dev' || appFlavor == 'preview')) ||
-      (_chessnut is DiscoverableBoardTransport &&
-          _chessnut is! ChessnutPlatformTransport);
+  // The tested connection flow is shared by every channel. BoardChannelPolicy
+  // independently restricts prototype adapters to Dev.
+  bool get _genericBoards => _chessnut is DiscoverableBoardTransport;
   bool get _legacyChessnutSelection =>
       _chessnutGameActive &&
       _boardKind == BoardKind.chessnut &&

@@ -41,6 +41,24 @@ installations update in place using the established Preview certificate.
 A Stable 2.4 release can proceed with Chessnut support while Grand Kingdom and
 Pegasus remain unaccepted Dev prototypes. Keep both Dart and native flavor gates
 and their regression tests; verify the actual production flavor during promotion.
+The shared connection flow must not depend on the Dev/Preview flavor name:
+Stable receives the same Chessnut discovery, remembered selection, notification
+reassembly, physical NEW GAME handling and stale-session protection. Only
+`BoardChannelPolicy` and the Dev-only motor-command guard restrict experimental
+board families. Extra bounded packet-error detail can remain Preview/Dev-only;
+that diagnostic verbosity switch must not change connection behavior.
+
+The CI Stable board regression uses the actual Dart platform transport (with
+mocked native messages), including multiple Chessnut candidates and rejection of
+Pegasus/Grand Kingdom, plus an older saved Chessnut game without a board identity.
+Native reconnect policy starts a fresh Chessnut-only search for that older save
+instead of rejecting it or reusing an unrelated connection. Preserve these tests
+when promoting the workflow. The
+current Stable app is unflavored: Android packaging, real upgrade/restore and
+hardware qualification still need to use the final Stable build, not just the
+Preview test flavor. Preserve Stable's release/security/store workflows and
+package identity; do not overwrite them with Preview's build scaffolding.
+
 Source presence is not a support claim, and these restrictions do not promise that
 experimental code is absent from the compiled APK. There is no user setting to
 enable the blocked adapters in Preview or Stable.
@@ -52,6 +70,10 @@ be enabled or listed as supported simply because the shared source is promoted.
 Shared Chessnut discovery/lifecycle code remains active and must still be tested.
 If the prototypes remain unmaintained long-term, review their separation/removal
 as planned cleanup rather than enabling them to finish a release.
+
+Before Stable publication, resolve the Gradle security findings in the
+[2026-10-17 upstream review](dependency-audit-2026-10-17.md). The passing
+automated advisory query does not override those upstream advisories.
 
 ## Dev limitations
 
