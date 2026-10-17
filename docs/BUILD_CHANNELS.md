@@ -36,6 +36,20 @@ installations update in place using the established Preview certificate.
 - Physical Chessnut acceptance remains with the owner/testers. Automated tests
   cannot confirm radio reliability, physical LEDs or button behavior on hardware.
 
+## Final Preview candidate for Stable 2.4
+
+Preview 2.4.0-beta.14 (2416) combines the approved engine help in all ten
+languages, shared Chessnut behavior across Preview/Stable, and the verified
+Gradle 9.8.1 security update. Grand Kingdom and DGT remain Dev-only. The balanced
+play example now recommends Temperature 1.0 and Top-P 0.95. Settings defaults,
+models and sampling behavior are unchanged.
+
+The release PR records exact-source CI, independent Linux reproduction, signed
+upgrade and Android checks before publication. After owner acceptance, Stable
+2.4 should promote this app behavior and qualified toolchain; a newly discovered
+app fix requires another tested Preview candidate. Stable packaging, metadata,
+signing and F-Droid/Zapstore release checks remain separate obligations.
+
 ## Stable 2.4 promotion boundary
 
 A Stable 2.4 release can proceed with Chessnut support while Grand Kingdom and
