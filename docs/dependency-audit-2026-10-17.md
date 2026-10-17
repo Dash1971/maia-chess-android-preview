@@ -1,10 +1,26 @@
 # Upstream and dependency review — 2026-10-17
 
-**Stable release decision: not cleared yet.** The current Gradle 9.3.1 build
-pin is affected by three upstream security advisories. Resolve and qualify the
-build-tool update before Stable publication. This draft changes board promotion
-behavior and records upgrade decisions; it does not upgrade dependencies,
-change engines/models, build an APK, or authorize publication.
+## Follow-up: Gradle blocker resolved in Preview beta.14
+
+[PR #149](https://github.com/Dash1971/maia-chess-android-preview/pull/149)
+updates Gradle to 9.8.1, pins the official checksum and adds an offline CI/build
+guard. Published [Preview 2.4.0-beta.14](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.14)
+includes that fix; exact-source CI and independent Linux APK reproduction passed.
+The [Stable companion's inherited F-Droid recipe](https://github.com/Dash1971/maia-chess-android/pull/53#issuecomment-6228113567)
+also passed source/binary scans and reproduced its CI APK exactly, without a
+Gradle-specific recipe change. Stable publication still requires owner acceptance
+and qualification of its final source. See [the channel record](BUILD_CHANNELS.md).
+
+The original review and JSON below remain a dated snapshot of the older source,
+not a claim that the current Preview still uses Gradle 9.3.1.
+
+## Original review decision
+
+**Stable release was not cleared at the reviewed source.** Its Gradle 9.3.1
+pin was affected by three upstream security advisories and required a qualified
+build-tool update. The original board-promotion draft recorded upgrade decisions;
+it did not itself upgrade dependencies, change engines/models or authorize
+publication.
 
 Reviewed Preview source: `156a908bacde7f3bcb8615eb4be7a2821fd01b94`.
 [Machine-readable evidence](dependency-audit-2026-10-17.json) records package
