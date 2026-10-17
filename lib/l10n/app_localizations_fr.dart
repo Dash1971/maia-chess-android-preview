@@ -155,6 +155,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get topP => 'Top-P';
 
   @override
+  String get maxOpeningVariety => 'Variété maximale dans l’ouverture';
+
+  @override
+  String get maxOpeningVarietyHelp =>
+      'Inutile si Température et Top-P sont à leurs valeurs par défaut de 1,0 / 1,0. Utilise 1,0 / 1,0 pour les cinq premiers coups de chaque camp, puis rétablit vos réglages à partir du 6e coup.\n\nL’objectif est d’offrir à Maia un maximum de variété dans l’ouverture, tout en permettant un jeu potentiellement plus fort par la suite en réduisant les chances de choisir des coups de faible probabilité grâce à des valeurs plus basses de Température et/ou de Top-P.';
+
+  @override
   String get maiaAnalysisRating => 'Classement de Maia pour l’analyse';
 
   @override

@@ -63,6 +63,7 @@ part 'src/review.dart';
 part 'src/review_widgets.dart';
 part 'src/stockfish.dart';
 part 'src/maia.dart';
+part 'src/maia_play_settings.dart';
 part 'src/app_language.dart';
 
 Future<void> main() async {

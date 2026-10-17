@@ -390,6 +390,18 @@ abstract class AppLocalizations {
   /// **'Top-P'**
   String get topP;
 
+  /// Settings: maximize opening variety for the first five moves by each side
+  ///
+  /// In en, this message translates to:
+  /// **'Max variety in opening'**
+  String get maxOpeningVariety;
+
+  /// Settings help: opening sampling override and its purpose
+  ///
+  /// In en, this message translates to:
+  /// **'Not needed when Temperature and Top-P are at their default values of 1.0 / 1.0. Uses 1.0 / 1.0 for the first five moves by each side, then returns to your configured settings from move 6.\n\nThe goal is to give Maia maximum opening variety while allowing potentially stronger play later in the game by reducing the chance of low-probability moves through lower Temperature and/or Top-P.'**
+  String get maxOpeningVarietyHelp;
+
   /// Settings: Maia analysis rating
   ///
   /// In en, this message translates to:

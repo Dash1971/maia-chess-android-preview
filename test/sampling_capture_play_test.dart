@@ -153,6 +153,151 @@ void main() {
       await tester.pumpAndSettle();
     },
   );
+  for (final side in ['w', 'b']) {
+    for (final number in [5, 6, 20]) {
+      testWidgets(
+        'opening variety capture uses actual settings: $side move $number',
+        (tester) async {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('maxOpeningVarietyV1', true);
+          final fen =
+              'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR $side KQkq - 0 $number';
+          await tester.pumpWidget(
+            MaterialApp(
+              home: GamePage(
+                startingFen: fen,
+                startingSide: side == 'w' ? PlayerSide.black : PlayerSide.white,
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          for (var i = 0; i < 50 && calls == 0; i++) {
+            await tester.runAsync(
+              () => Future<void>.delayed(const Duration(milliseconds: 20)),
+            );
+            await tester.pump();
+          }
+          expect(calls, 1);
+          response.complete(Float32List(4352));
+          await tester.pumpAndSettle();
+          await drain(tester);
+          await drive(tester, () async {
+            final record = (await readExport(capture)).single;
+            final sampling = record['sampling'] as Map;
+            expectSync(record['outcome'], 'committed');
+            expectSync(
+              sampling['effectiveTemperature'],
+              number <= 5 ? 1.0 : 0.0,
+            );
+            expectSync(sampling['effectiveTopP'], number <= 5 ? 1.0 : 0.0);
+            expectSync(sampling['configuredTemperature'], 0.0);
+            expectSync(sampling['configuredTopP'], 0.0);
+            expectSync(sampling['openingVarietyApplied'], number <= 5);
+            expectSync(sampling['fullMoveNumber'], number);
+            final report = SamplingReportDecision.fromJson(
+              Map<String, dynamic>.from(record),
+            );
+            expectSync(report.temperature, number <= 5 ? 1.0 : 0.0);
+            expectSync(report.topP, number <= 5 ? 1.0 : 0.0);
+            expectSync(report.played, isNotNull);
+            if (number > 5) expectSync(report.played!.probability, 1.0);
+            expectSync(sampling['mode'], number <= 5 ? 'random' : 'argmax');
+            replay(record);
+          });
+          final saved = (await ActiveSessionStore.load())!;
+          expect(
+            saved['maiaSampling'],
+            const MaiaPlaySettings(
+              temperature: 0,
+              topP: 0,
+              maxOpeningVariety: true,
+            ).toJson(),
+          );
+          await tester.pumpWidget(const SizedBox());
+          await tester.pumpAndSettle();
+          await prefs.setDouble('temperatureV2', 0.5);
+          await prefs.setDouble('topPV2', 0.95);
+          await prefs.setBool('maxOpeningVarietyV1', false);
+          await tester.pumpWidget(const MaterialApp(home: GamePage()));
+          await tester.pumpAndSettle();
+          expect(
+            (await ActiveSessionStore.load())!['maiaSampling'],
+            saved['maiaSampling'],
+          );
+          expect(calls, 1);
+          await tester.pumpWidget(const SizedBox());
+          await tester.pumpAndSettle();
+          await drain(tester);
+        },
+      );
+    }
+  }
+
+  for (final savedProfile in [false, true]) {
+    for (final number in [5, 6]) {
+      testWidgets(
+        'resumed inference honors ${savedProfile ? "saved" : "legacy"} profile at move $number',
+        (tester) async {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('maxOpeningVarietyV1', true);
+          final fen =
+              'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 $number';
+          await ActiveSessionStore.save({
+            ...gameRecord(
+              pgn: AnalysisSession.fromFen(fen).pgn,
+              preset: 'unlimited',
+            ),
+            'clockPaused': false,
+            if (savedProfile)
+              'maiaSampling': const MaiaPlaySettings(
+                temperature: 0.5,
+                topP: 0.95,
+                maxOpeningVariety: true,
+              ).toJson(),
+          });
+          await tester.pumpWidget(const MaterialApp(home: GamePage()));
+          await tester.pumpAndSettle();
+          for (var i = 0; i < 50 && calls == 0; i++) {
+            await tester.runAsync(
+              () => Future<void>.delayed(const Duration(milliseconds: 20)),
+            );
+            await tester.pump();
+          }
+          expect(calls, 1);
+          response.complete(Float32List(4352));
+          await tester.pumpAndSettle();
+          await drain(tester);
+          await drive(tester, () async {
+            final record = (await readExport(capture)).single;
+            final sampling = record['sampling'] as Map;
+            expectSync(record['outcome'], 'committed');
+            expectSync(
+              sampling['effectiveTemperature'],
+              !savedProfile
+                  ? 0.0
+                  : number <= 5
+                  ? 1.0
+                  : 0.5,
+            );
+            expectSync(
+              sampling['effectiveTopP'],
+              !savedProfile
+                  ? 0.0
+                  : number <= 5
+                  ? 1.0
+                  : 0.95,
+            );
+            expectSync(sampling['maxOpeningVariety'], savedProfile);
+            replay(record);
+          });
+          await tester.pumpWidget(const SizedBox());
+          await tester.pumpAndSettle();
+          await drain(tester);
+        },
+      );
+    }
+  }
+
   for (final resign in [false, true]) {
     testWidgets(
       'game summary records ${resign ? 'resignation' : 'final human checkmate'}',

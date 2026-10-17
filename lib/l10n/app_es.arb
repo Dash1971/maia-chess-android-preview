@@ -46,6 +46,8 @@
   "aboutTemperatureAndTopP": "Acerca de Temperatura y Top-P",
   "temperature": "Temperatura",
   "topP": "Top-P",
+  "maxOpeningVariety": "Máxima variedad en la apertura",
+  "maxOpeningVarietyHelp": "No es necesario si Temperatura y Top-P tienen sus valores predeterminados de 1,0 / 1,0. Utiliza 1,0 / 1,0 durante los cinco primeros movimientos de cada bando y vuelve a los valores configurados a partir del movimiento 6.\n\nEl objetivo es ofrecer a Maia la máxima variedad en la apertura y, más adelante en la partida, permitir un juego potencialmente más fuerte al reducir la posibilidad de elegir movimientos de baja probabilidad mediante valores más bajos de Temperatura y/o Top-P.",
   "maiaAnalysisRating": "Elo de Maia para analizar",
   "addSecondMaiaEngine": "Añadir un segundo motor Maia",
   "compareAnotherMaiaRatingInAnalysisAndReview": "Compara dos niveles de Maia al analizar posiciones y revisar partidas",

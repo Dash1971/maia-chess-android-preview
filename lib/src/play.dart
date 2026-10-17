@@ -176,6 +176,8 @@ class _GamePageState extends State<GamePage>
       _isViewingLivePosition &&
       !_isPlayerTurn;
 
+  bool _maxOpeningVariety = false;
+  MaiaPlaySettings _gameSampling = const MaiaPlaySettings();
   double _temperature = 1.0;
   double _topP = 1.0;
   TimePreset _timePreset = TimePreset.unlimited;
@@ -645,6 +647,11 @@ class _GamePageState extends State<GamePage>
             ? DateTime.tryParse(startedAt)?.toUtc()
             : null;
         _gameUseMoveHistory = saved['maiaUseMoveHistory'] == true;
+        _gameSampling = MaiaPlaySettings.restore(
+          saved['maiaSampling'],
+          fallbackTemperature: _temperature,
+          fallbackTopP: _topP,
+        );
         _gameHistoryPrefix = restoreMaiaHistoryPrefix(
           saved['historyPrefix'],
           restoredSession.positions.first,
@@ -871,6 +878,7 @@ class _GamePageState extends State<GamePage>
     'samplingGameId': _samplingGameId,
     'samplingStartedAt': _samplingStartedAt?.toUtc().toIso8601String(),
     'maiaUseMoveHistory': _gameUseMoveHistory,
+    'maiaSampling': _gameSampling.toJson(),
     'historyPrefix': _gameHistoryPrefix,
     'timePreset': _timePreset.name,
     'customMinutes': _customMinutes,
@@ -1021,6 +1029,12 @@ class _GamePageState extends State<GamePage>
       fallback: false,
       decode: (value) => value is bool ? value : null,
     );
+    final maxOpeningVariety = _readValidatedPreference<bool>(
+      preferences,
+      'maxOpeningVarietyV1',
+      fallback: false,
+      decode: (value) => value is bool ? value : null,
+    );
     final humanTiming = _readValidatedPreference<bool>(
       preferences,
       'humanTiming',
@@ -1131,6 +1145,8 @@ class _GamePageState extends State<GamePage>
       _multiplePremoves = multiplePremoves;
       _temperature = temperature;
       _topP = topP;
+      _maxOpeningVariety =
+          maxOpeningVariety && (temperature != 1.0 || topP != 1.0);
       _analysisElo = analysisElo;
       _secondMaiaEnabled = secondMaiaEnabled;
       _secondMaiaElo = secondMaiaElo;
@@ -1188,6 +1204,7 @@ class _GamePageState extends State<GamePage>
       preferences.setBool('maiaUseMoveHistoryV1', _useMoveHistory),
       preferences.setDouble('temperatureV2', _temperature),
       preferences.setDouble('topPV2', _topP),
+      preferences.setBool('maxOpeningVarietyV1', _maxOpeningVariety),
       preferences.setInt('analysisElo', _analysisElo),
       preferences.setBool(secondMaiaEnabledPreferenceKey, _secondMaiaEnabled),
       preferences.setInt(secondMaiaEloPreferenceKey, _secondMaiaElo),
@@ -1267,6 +1284,7 @@ class _GamePageState extends State<GamePage>
       _multiplePremoves = false;
       _temperature = 1.0;
       _topP = 1.0;
+      _maxOpeningVariety = false;
       _analysisElo = 1600;
       _secondMaiaEnabled = false;
       _secondMaiaElo = 2400;
@@ -1409,6 +1427,21 @@ class _GamePageState extends State<GamePage>
           ),
         ],
       ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n(context).close),
+        ),
+      ],
+    ),
+  );
+
+  Future<void> _showOpeningVarietyHelp() => showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      scrollable: true,
+      title: Text(l10n(context).maxOpeningVariety),
+      content: Text(l10n(context).maxOpeningVarietyHelp),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
@@ -2733,6 +2766,11 @@ class _GamePageState extends State<GamePage>
             ? chess.Chess()
             : chess.Chess.fromFEN(widget.startingFen!);
         if (!resetChessnutBoard) {
+          _gameSampling = MaiaPlaySettings(
+            temperature: _temperature,
+            topP: _topP,
+            maxOpeningVariety: _maxOpeningVariety,
+          );
           _gameUseMoveHistory =
               widget.startingUseMoveHistory ?? _useMoveHistory;
         }
@@ -3165,13 +3203,23 @@ class _GamePageState extends State<GamePage>
       }
       final logits = response.toList(growable: false);
       final legalMoves = _game.moves({'asObjects': true}).cast<chess.Move>();
+      final sampling = _gameSampling.forFen(_game.fen);
       final move = MaiaEncoding.sampleLegalMove(
         _game,
         legalMoves,
         logits,
-        temperature: _temperature,
-        topP: _topP,
-        onSample: capture?.sampling,
+        temperature: sampling.temperature,
+        topP: sampling.topP,
+        onSample: capture == null
+            ? null
+            : (trace) => capture!.sampling({
+                ...trace,
+                'configuredTemperature': _gameSampling.temperature,
+                'configuredTopP': _gameSampling.topP,
+                'maxOpeningVariety': _gameSampling.maxOpeningVariety,
+                'openingVarietyApplied': sampling.opening,
+                'fullMoveNumber': sampling.moveNumber,
+              }),
       );
       if (_humanTiming) {
         final target = sampleHumanMoveTime(
@@ -4968,8 +5016,12 @@ class _GamePageState extends State<GamePage>
                         _temperature,
                         decimalDigits: 2,
                       ),
-                      onChanged: (value) =>
-                          setState(() => _temperature = value),
+                      onChanged: (value) => setState(() {
+                        _temperature = value;
+                        if (_temperature == 1.0 && _topP == 1.0) {
+                          _maxOpeningVariety = false;
+                        }
+                      }),
                       onChangeEnd: (_) => unawaited(_saveEnginePreferences()),
                     ),
                   ),
@@ -4986,7 +5038,12 @@ class _GamePageState extends State<GamePage>
                       divisions: 20,
                       value: _topP,
                       label: displayNumber(context, _topP, decimalDigits: 2),
-                      onChanged: (value) => setState(() => _topP = value),
+                      onChanged: (value) => setState(() {
+                        _topP = value;
+                        if (_temperature == 1.0 && _topP == 1.0) {
+                          _maxOpeningVariety = false;
+                        }
+                      }),
                       onChangeEnd: (_) => unawaited(_saveEnginePreferences()),
                     ),
                   ),
@@ -5001,6 +5058,19 @@ class _GamePageState extends State<GamePage>
                         ),
                       ),
                     ),
+                  SettingsInfoSwitch(
+                    key: const ValueKey('opening-variety-setting'),
+                    value: _maxOpeningVariety,
+                    title: l10n(context).maxOpeningVariety,
+                    helpKey: const ValueKey('opening-variety-help'),
+                    onHelp: _showOpeningVarietyHelp,
+                    onChanged: _temperature == 1.0 && _topP == 1.0
+                        ? null
+                        : (value) {
+                            setState(() => _maxOpeningVariety = value);
+                            unawaited(_saveEnginePreferences());
+                          },
+                  ),
                   SettingsInfoSwitch(
                     key: const ValueKey('maia-history-setting'),
                     value: _useMoveHistory,

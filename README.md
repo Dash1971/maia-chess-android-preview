@@ -18,7 +18,25 @@ screenshots, see the
 
 [Build-channel status and testing scope](docs/BUILD_CHANNELS.md)
 
-## Preview 2.4.0-beta.10
+## Preview 2.4.0-beta.15
+
+**Max variety in opening** is an optional Engine settings switch. When enabled,
+Maia uses Temperature 1.0 and Top-P 1.0 for the first five moves by each side,
+then your configured values from move 6. It also works with Temperature 0:
+varied opening moves followed by the most likely human move.
+
+The option is off by default and disabled when both sliders are already 1.0.
+Returning both sliders to their defaults clears it. Each new game retains its
+sampling settings when resumed; older saved games do not automatically enable
+the opening override. Takebacks and Continue from here use the position's move
+number. Sampling reports show the probabilities actually used for each move;
+analysis probabilities are unchanged. This adds no extra model inference.
+
+Beta.14's approved help, Stable-ready Chessnut flow and Gradle 9.8.1 update are
+retained. Grand Kingdom and DGT remain Dev-only. This Preview requires fresh
+acceptance before Stable 2.4 promotion.
+
+### Beta.10 settings improvements
 
 Settings is easier to scan: premove options are grouped beneath Premoves,
 analysis ratings and quality have their own section, and Sampling data has
