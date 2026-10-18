@@ -34,11 +34,11 @@ Mobile Maia currently supports **English, Japanese, Simplified Chinese, Korean, 
 
 We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) speakers**. We would love to add these languages, but right-to-left layouts—especially alongside chess notation, clocks, and evaluations—need careful testing. See the [right-to-left language issue](https://github.com/Dash1971/maia-chess-android-preview/issues/84).
 
-**Further Temperature and Top-P research**
+**Temperature and Top-P research: defaults decision**
 
-We want to repeat and extend our sampling research using **Max variety in opening**. In particular, we want to compare the current **Temperature 1.0 / Top-P 1.0** defaults with **Temperature 1.0 / Top-P 0.95 and maximum opening variety enabled**.
+[The 79M sampling study](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/opening-variety-2026-10-18/REPORT.md) is complete: 3,000 full games, 5,400 opening rollouts and 180 quality positions. Temperature 1.0 / Top-P 0.95 with **Max variety in opening** scored 60.7% against 1.0 / 1.0 at the 1600 rating input (95% interval: 56.8–64.6%) and preserved the measured broad opening mix. Finer opening variation and human-move fidelity remain uncertain.
 
-That option keeps sampling at 1.0 / 1.0 for the first five moves by each side, then applies the configured settings from move 6. We want to understand whether this preserves opening variety while improving later play before deciding whether to change the defaults. See the [research issue](https://github.com/Dash1971/maia-chess-android-preview/issues/155) for the comparison plan. Results will be published in the [research repository](https://github.com/Dash1971/mobile-maia-research).
+The current **1.0 / 1.0 defaults remain unchanged** while we decide whether to adopt this candidate. The [research issue](https://github.com/Dash1971/maia-chess-android-preview/issues/155) remains open for that decision.
 
 **Colors and appearance**
 
