@@ -18,6 +18,40 @@ screenshots, see the
 
 [Build-channel status and testing scope](docs/BUILD_CHANNELS.md)
 
+## Roadmap
+
+These are the areas we would like to work on next.
+
+**Expand electronic-board support**
+
+Experimental work on **Square Off Grand Kingdom** and **DGT Pegasus** is available in Dev builds, but neither board is enabled in Preview or Stable yet. Grand Kingdom needs physical testing of piece movement, resets, reconnection, and recovery. Pegasus also needs a FOSS-compatible way to initialize boards with locked firmware before we can offer support.
+
+We’re looking for owners of these boards who are willing to help test and report their results. See the [board testing guide](https://github.com/Dash1971/maia-chess-android-preview/blob/main/docs/ELECTRONIC_BOARD_DEV.md) and [Grand Kingdom issue](https://github.com/Dash1971/maia-chess-android-preview/issues/27).
+
+**Languages and native-speaker review**
+
+Mobile Maia currently supports **English, Japanese, Simplified Chinese, Korean, Spanish, German, French, Russian, Hindi, and Brazilian Portuguese**. We have no general expansion beyond these ten languages planned, but we will consider requests when native speakers are willing to help us validate the translations in the app.
+
+We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) speakers**. We would love to add these languages, but right-to-left layouts—especially alongside chess notation, clocks, and evaluations—need careful testing. See the [right-to-left language issue](https://github.com/Dash1971/maia-chess-android-preview/issues/84).
+
+**Further Temperature and Top-P research**
+
+We want to repeat and extend our sampling research using **Max variety in opening**. In particular, we want to compare the current **Temperature 1.0 / Top-P 1.0** defaults with **Temperature 1.0 / Top-P 0.95 and maximum opening variety enabled**.
+
+That option keeps sampling at 1.0 / 1.0 for the first five moves by each side, then applies the configured settings from move 6. We want to understand whether this preserves opening variety while improving later play before deciding whether to change the defaults. Results will be published in the [research repository](https://github.com/Dash1971/mobile-maia-research).
+
+**Colors and appearance**
+
+We’re considering Android Material You colors and an optional true-black OLED theme, with attention to readable boards, clocks, and analysis displays. See the [theme issue](https://github.com/Dash1971/maia-chess-android-preview/issues/124).
+
+**Landscape and tablet layouts**
+
+We want to make better use of wider screens, keeping the board comfortable to use alongside the game and analysis controls. We’re considering buying an Android tablet to help test this properly. Feedback from tablet users is welcome in the [landscape layout issue](https://github.com/Dash1971/maia-chess-android-preview/issues/29).
+
+**Suggestions from users**
+
+Suggestions are always welcome. Please open an issue in the [Preview repository](https://github.com/Dash1971/maia-chess-android-preview/issues) or the [Stable repository](https://github.com/Dash1971/maia-chess-android/issues) so we can discuss and consider it.
+
 ## Preview 2.4.0-beta.15
 
 **Max variety in opening** is an optional Engine settings switch. When enabled,
