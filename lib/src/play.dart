@@ -1274,6 +1274,7 @@ class _GamePageState extends State<GamePage>
   Future<void> _resetSettingsDefaults() async {
     if (_resettingSettings || SamplingCapture.instance.busy) return;
     final language = AppLanguageSettings.maybeOf(context);
+    final appearance = AppAppearanceSettings.maybeOf(context);
     _cancelGameFeedback();
     setState(() {
       _resettingSettings = true;
@@ -1301,6 +1302,16 @@ class _GamePageState extends State<GamePage>
         throw StateError('Board sound preference write failed');
       }
       await SamplingCapture.instance.setEnabled(false);
+      if (appearance != null) {
+        await appearance.select(const AppAppearance());
+        if (appearance.persistenceFailed) {
+          throw StateError('Appearance preference reset failed');
+        }
+      } else {
+        await AppAppearanceController._writePreference(
+          const AppAppearance().encode(),
+        );
+      }
       if (!mounted) return;
       if (language != null) {
         // The language controller serializes writes and reports failures itself.
@@ -4896,6 +4907,10 @@ class _GamePageState extends State<GamePage>
                       ),
                   ],
                 ),
+                const SizedBox(height: 8),
+              ],
+              if (AppAppearanceSettings.maybeOf(context) != null) ...[
+                const AppearanceSettingsSection(),
                 const SizedBox(height: 8),
               ],
               _settingsSection(

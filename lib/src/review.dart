@@ -2235,7 +2235,7 @@ class _ReviewPageState extends State<ReviewPage>
               label: index < stockfishLines.length
                   ? _formatLineEvaluation(stockfishLines[index])
                   : 'SF${index + 1}',
-              color: const Color(0xff72b7ee),
+              color: chessTextColor(context, const Color(0xff72b7ee)),
               text:
                   (error == null ? null : l10n(context).analysisFailed) ??
                   (index < stockfishLines.length
@@ -2249,7 +2249,7 @@ class _ReviewPageState extends State<ReviewPage>
             move: maiaMove,
             loading: maiaLoading,
             elo: widget.maiaElo,
-            color: primaryMaiaAnalysisColor,
+            color: chessTextColor(context, primaryMaiaAnalysisColor),
             lineKey: const ValueKey('maia-engine-line'),
             otherKey: const ValueKey('maia-other'),
           ),
@@ -2259,7 +2259,7 @@ class _ReviewPageState extends State<ReviewPage>
               move: secondMaiaMove,
               loading: secondMaiaLoading,
               elo: elo,
-              color: secondaryMaiaAnalysisColor,
+              color: chessTextColor(context, secondaryMaiaAnalysisColor),
               lineKey: const ValueKey('second-maia-engine-line'),
               otherKey: const ValueKey('second-maia-other'),
             ),
@@ -2309,7 +2309,9 @@ class _ReviewPageState extends State<ReviewPage>
                   fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
                   color: selected
                       ? colors.onPrimaryContainer
-                      : classification?.color,
+                      : classification == null
+                      ? null
+                      : chessTextColor(context, classification.color),
                 ),
               ),
             ),

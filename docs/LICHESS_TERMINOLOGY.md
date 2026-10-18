@@ -292,3 +292,14 @@ distinction between low move probability and poor move quality. Existing chess
 vocabulary and localized Temperature labels are retained; European-language
 translations follow the established decimal-comma convention. These are
 editorial translations, subject to the usual native-speaker review.
+
+## Appearance settings (#124)
+
+Theme, Light and Dark follow the pinned Lichess mobile catalogs in all ten
+languages. The system-colors label adapts the pinned `mobileSystemColors` to an
+explicit independent switch; Chinese explicitly says colors so it cannot be
+confused with following system brightness. These references are recorded in the
+terminology baseline. Appearance, OLED explanation, platform availability and
+storage-error prose are contextual app settings, translated in all ten catalogs.
+System default reuses the existing app translation. As elsewhere, automated
+layout/consistency checks are not native-speaker certification.

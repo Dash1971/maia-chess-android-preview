@@ -386,5 +386,15 @@
   "samplingHelpStrength": "Si prefieres un rival más fuerte que cometa menos errores graves, prueba a bajar los valores de Temperatura y Top-P.",
   "samplingHelpArgmax": "Al poner la Temperatura a 0, Maia utiliza argmax, una forma técnica de decir que siempre elegirá la jugada que predice como más probable para un humano en una posición dada. ¡Ojo! En nuestra investigación con el nivel ajustado a 1600, Maia con argmax superó a Maia con 1,0 / 1,0 por el equivalente a unos 300 puntos Elo en enfrentamientos directos.",
   "samplingHelpTopP": "Para equilibrar fuerza y variedad, puedes mantener la Temperatura en 1,0 y poner Top-P en 0,95. Esto conserva la variedad y elimina jugadas poco probables, que a menudo pueden ser errores graves, aunque también pueden ser buenas jugadas. Básicamente, Top-P descarta las jugadas menos probables. Al ponerlo en 0,95, conserva jugadas que suman al menos el 95 % de la probabilidad después de aplicar la Temperatura. Maia no podrá elegir las jugadas restantes.",
-  "samplingHelpResearchIntro": "Experimentamos con estos ajustes a 1600 Elo y publicamos todos los resultados aquí:"
+  "samplingHelpResearchIntro": "Experimentamos con estos ajustes a 1600 Elo y publicamos todos los resultados aquí:",
+  "appearance": "Apariencia",
+  "appearanceSystemColors": "Usar colores del sistema",
+  "appearanceSystemColorsHelp": "Usar la paleta de colores de Android",
+  "appearanceSystemColorsUnavailable": "No disponible en este dispositivo. Requiere Android 12 o posterior.",
+  "appearancePureBlack": "Fondo negro puro",
+  "appearancePureBlackHelp": "Usar fondos negros en el modo oscuro",
+  "appearancePreferenceError": "La apariencia ha cambiado, pero no se ha podido guardar. Inténtalo de nuevo.",
+  "appearanceTheme": "Tema",
+  "appearanceLight": "Claro",
+  "appearanceDark": "Oscuro"
 }

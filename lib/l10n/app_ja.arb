@@ -386,5 +386,15 @@
   "samplingHelpStrength": "大悪手が少なく、より強い相手と対局したい方は、温度やTop-Pの値を下げて試してみてください。",
   "samplingHelpArgmax": "温度を0にすると、Maiaはargmaxという方法で手を選びます。これは、ある局面で人間が最も指しそうだとMaiaが予測した手を、常に選ぶという意味です。ご注意ください！レーティング設定1600で行った私たちの研究では、argmaxのMaiaは、1.0 / 1.0のMaiaとの直接対局で、約300 Eloポイントの差に相当する好成績を収めました。",
   "samplingHelpTopP": "強さと多様さのバランスを取りたい方は、温度を1.0のまま、Top-Pを0.95にしてみてください。多様さを保ちながら、確率の低い手を選択肢から除きます。そうした手は大悪手であることも多いですが、良い手の場合もあります。Top-Pは、簡単に言えば、確率の低い手を候補から外す設定です。0.95にすると、温度を適用した後の確率の合計が少なくとも95％になるまで候補の手を残します。それ以外の手をMaiaが選ぶことはありません。",
-  "samplingHelpResearchIntro": "これらの設定を1600 Eloで実験しました。詳しい結果はこちらで公開しています："
+  "samplingHelpResearchIntro": "これらの設定を1600 Eloで実験しました。詳しい結果はこちらで公開しています：",
+  "appearance": "外観",
+  "appearanceSystemColors": "OS と同じ色設定を使う",
+  "appearanceSystemColorsHelp": "Android のカラーパレットに合わせる",
+  "appearanceSystemColorsUnavailable": "この端末では利用できません。Android 12 以降が必要です。",
+  "appearancePureBlack": "完全な黒の背景",
+  "appearancePureBlackHelp": "ダークモードで背景を真っ黒にする",
+  "appearancePreferenceError": "外観を変更しましたが、保存できませんでした。もう一度お試しください。",
+  "appearanceTheme": "テーマ",
+  "appearanceLight": "明るい",
+  "appearanceDark": "暗い"
 }

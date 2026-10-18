@@ -187,3 +187,11 @@ The original artwork by Colin M. L. Burnett is also offered under CC BY-SA 3.0
 piece set). The report carries artist attribution, the conversion notice, and
 links to the artwork and <https://creativecommons.org/licenses/by-sa/3.0/>.
 No external image requests are made when opening a report.
+
+## Material dynamic color
+
+- Project: <https://github.com/material-foundation/flutter-packages/tree/main/packages/dynamic_color>
+- Package: `dynamic_color` 1.9.0
+- Copyright: The Material Flutter authors
+- Licence: Apache License 2.0 (included in Flutter's generated package licences)
+- Reads Android's system palette locally for the optional appearance setting.

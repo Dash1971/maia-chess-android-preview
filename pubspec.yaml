@@ -44,6 +44,8 @@ dependencies:
   package_info_plus: ^10.2.1
   shared_preferences: ^2.5.3
   crypto: ^3.0.7
+  # Last upstream line using Flutter Material; 2.x requires material_ui migration.
+  dynamic_color: 1.9.0
 
 dev_dependencies:
   flutter_test:

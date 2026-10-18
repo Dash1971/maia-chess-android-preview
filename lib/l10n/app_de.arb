@@ -386,5 +386,15 @@
   "samplingHelpStrength": "Wenn du einen stärkeren Gegner bevorzugst, der weniger grobe Patzer macht, probiere niedrigere Werte für Temperatur und Top-P aus.",
   "samplingHelpArgmax": "Bei Temperatur 0 verwendet Maia argmax. Das ist der Fachbegriff dafür, dass Maia in einer Stellung immer den Zug spielt, den sie für einen Menschen als am wahrscheinlichsten vorhersagt. Achtung! In unserer Untersuchung mit der Rating-Einstellung 1600 erzielte argmax-Maia in direkten Partien gegen Maia mit 1,0 / 1,0 einen Vorsprung, der etwa 300 Elo-Punkten entspricht.",
   "samplingHelpTopP": "Für ein ausgewogenes Spiel kannst du die Temperatur bei 1,0 belassen und Top-P auf 0,95 setzen. So bleibt Abwechslung erhalten, während Züge mit geringer Wahrscheinlichkeit ausgeschlossen werden. Diese können oft grobe Patzer sein, aber auch gute Züge. Top-P schneidet im Grunde die unwahrscheinlichsten Züge ab. Bei 0,95 bleiben so viele Züge übrig, dass sie nach Anwendung der Temperatur zusammen mindestens 95 % der Wahrscheinlichkeit abdecken. Die übrigen Züge kann Maia nicht auswählen.",
-  "samplingHelpResearchIntro": "Wir haben diese Einstellungen bei 1600 Elo getestet und unsere vollständigen Ergebnisse hier veröffentlicht:"
+  "samplingHelpResearchIntro": "Wir haben diese Einstellungen bei 1600 Elo getestet und unsere vollständigen Ergebnisse hier veröffentlicht:",
+  "appearance": "Erscheinungsbild",
+  "appearanceSystemColors": "Systemfarben verwenden",
+  "appearanceSystemColorsHelp": "Die Android-Farbpalette verwenden",
+  "appearanceSystemColorsUnavailable": "Auf diesem Gerät nicht verfügbar. Erfordert Android 12 oder neuer.",
+  "appearancePureBlack": "Tiefschwarzer Hintergrund",
+  "appearancePureBlackHelp": "Im dunklen Modus schwarze Hintergründe verwenden",
+  "appearancePreferenceError": "Das Erscheinungsbild wurde geändert, konnte aber nicht gespeichert werden. Bitte erneut versuchen.",
+  "appearanceTheme": "Erscheinungsbild",
+  "appearanceLight": "Hell",
+  "appearanceDark": "Dunkel"
 }

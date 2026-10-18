@@ -386,5 +386,15 @@
   "samplingHelpStrength": "블런더를 덜 하는 더 강한 상대를 원한다면 온도와 Top-P 값을 낮춰 보세요.",
   "samplingHelpArgmax": "온도를 0으로 설정하면 Maia는 argmax라는 방식을 사용합니다. 쉽게 말해, 주어진 포지션에서 사람이 둘 가능성이 가장 높다고 Maia가 예측한 수를 항상 선택한다는 뜻입니다. 주의하세요! 레이팅을 1600으로 설정한 저희 연구에서 argmax Maia는 1.0 / 1.0 Maia와의 직접 대결에서 약 300 Elo 차이에 해당하는 우위를 보였습니다.",
   "samplingHelpTopP": "강함과 다양성의 균형을 원한다면 온도를 1.0으로 유지하고 Top-P를 0.95로 설정해 보세요. 다양성을 유지하면서 낮은 확률의 수를 제외할 수 있습니다. 이런 수는 블런더인 경우가 많지만 좋은 수일 수도 있습니다. Top-P는 간단히 말해 낮은 확률의 수를 후보에서 제외하는 설정입니다. 0.95로 설정하면 온도가 적용된 뒤의 확률을 합해 최소 95%가 되는 수들을 남깁니다. 나머지 수는 Maia가 선택할 수 없습니다.",
-  "samplingHelpResearchIntro": "저희는 1600 Elo 설정에서 이 값들을 실험했으며, 전체 연구 결과를 여기에 공개했습니다:"
+  "samplingHelpResearchIntro": "저희는 1600 Elo 설정에서 이 값들을 실험했으며, 전체 연구 결과를 여기에 공개했습니다:",
+  "appearance": "화면 모양",
+  "appearanceSystemColors": "시스템 색상 사용",
+  "appearanceSystemColorsHelp": "Android 색상 팔레트에 맞추기",
+  "appearanceSystemColorsUnavailable": "이 기기에서는 사용할 수 없습니다. Android 12 이상이 필요합니다.",
+  "appearancePureBlack": "완전한 검정 배경",
+  "appearancePureBlackHelp": "다크 모드에서 배경을 완전한 검정으로 표시",
+  "appearancePreferenceError": "화면 모양을 변경했지만 저장하지 못했습니다. 다시 시도해 주세요.",
+  "appearanceTheme": "테마",
+  "appearanceLight": "밝게",
+  "appearanceDark": "어둡게"
 }

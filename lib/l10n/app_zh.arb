@@ -386,5 +386,15 @@
   "samplingHelpStrength": "如果你希望对手更强、败着更少，可以尝试降低温度和 Top-P 的值。",
   "samplingHelpArgmax": "将温度设为 0 会让 Maia 使用 argmax。这个技术术语的意思是：在给定局面中，Maia 总会选择它预测人类最有可能下的一步。注意！在我们以 1600 为等级分设置的研究中，使用 argmax 的 Maia 在与 1.0 / 1.0 的 Maia 直接对局时，取得了相当于约 300 Elo 分优势的成绩。",
   "samplingHelpTopP": "如果想兼顾强度和多样性，可以将温度保持在 1.0，并把 Top-P 设为 0.95。这样既能保留多样性，又能排除一些低概率走法。这些走法往往可能是败着，但也可能是好棋。简单来说，Top-P 会筛掉低概率的走法。设为 0.95 时，它会保留应用温度设置后累计概率至少达到 95% 的走法。其余走法不会被 Maia 选中。",
-  "samplingHelpResearchIntro": "我们在 1600 Elo 设置下试验了这些参数，完整研究结果已发布在这里："
+  "samplingHelpResearchIntro": "我们在 1600 Elo 设置下试验了这些参数，完整研究结果已发布在这里：",
+  "appearance": "外观",
+  "appearanceSystemColors": "使用系统颜色",
+  "appearanceSystemColorsHelp": "使用 Android 的配色",
+  "appearanceSystemColorsUnavailable": "此设备不支持。需要 Android 12 或更高版本。",
+  "appearancePureBlack": "纯黑背景",
+  "appearancePureBlackHelp": "在深色模式下使用纯黑背景",
+  "appearancePreferenceError": "外观已更改，但无法保存。请重试。",
+  "appearanceTheme": "主题",
+  "appearanceLight": "浅色",
+  "appearanceDark": "深色"
 }

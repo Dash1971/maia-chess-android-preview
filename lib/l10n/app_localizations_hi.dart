@@ -1415,4 +1415,37 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get samplingHelpResearchIntro =>
       'हमने 1600 Elo पर इन सेटिंग्स के साथ प्रयोग किए और पूरे नतीजे यहाँ प्रकाशित किए हैं:';
+
+  @override
+  String get appearance => 'दिखावट';
+
+  @override
+  String get appearanceSystemColors => 'सिस्टम कलर्स का उपयोग करें';
+
+  @override
+  String get appearanceSystemColorsHelp => 'Android की रंग योजना का उपयोग करें';
+
+  @override
+  String get appearanceSystemColorsUnavailable =>
+      'इस डिवाइस पर उपलब्ध नहीं है। Android 12 या नया संस्करण चाहिए।';
+
+  @override
+  String get appearancePureBlack => 'पूरी तरह काली पृष्ठभूमि';
+
+  @override
+  String get appearancePureBlackHelp =>
+      'डार्क मोड में काली पृष्ठभूमि का उपयोग करें';
+
+  @override
+  String get appearancePreferenceError =>
+      'दिखावट बदल गई है, लेकिन सहेजी नहीं जा सकी। कृपया फिर से कोशिश करें।';
+
+  @override
+  String get appearanceTheme => 'थीम';
+
+  @override
+  String get appearanceLight => 'हल्का';
+
+  @override
+  String get appearanceDark => 'काला';
 }

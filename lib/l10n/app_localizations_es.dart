@@ -1420,4 +1420,37 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get samplingHelpResearchIntro =>
       'Experimentamos con estos ajustes a 1600 Elo y publicamos todos los resultados aquí:';
+
+  @override
+  String get appearance => 'Apariencia';
+
+  @override
+  String get appearanceSystemColors => 'Usar colores del sistema';
+
+  @override
+  String get appearanceSystemColorsHelp =>
+      'Usar la paleta de colores de Android';
+
+  @override
+  String get appearanceSystemColorsUnavailable =>
+      'No disponible en este dispositivo. Requiere Android 12 o posterior.';
+
+  @override
+  String get appearancePureBlack => 'Fondo negro puro';
+
+  @override
+  String get appearancePureBlackHelp => 'Usar fondos negros en el modo oscuro';
+
+  @override
+  String get appearancePreferenceError =>
+      'La apariencia ha cambiado, pero no se ha podido guardar. Inténtalo de nuevo.';
+
+  @override
+  String get appearanceTheme => 'Tema';
+
+  @override
+  String get appearanceLight => 'Claro';
+
+  @override
+  String get appearanceDark => 'Oscuro';
 }

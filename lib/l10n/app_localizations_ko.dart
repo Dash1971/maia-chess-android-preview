@@ -1318,4 +1318,36 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get samplingHelpResearchIntro =>
       '저희는 1600 Elo 설정에서 이 값들을 실험했으며, 전체 연구 결과를 여기에 공개했습니다:';
+
+  @override
+  String get appearance => '화면 모양';
+
+  @override
+  String get appearanceSystemColors => '시스템 색상 사용';
+
+  @override
+  String get appearanceSystemColorsHelp => 'Android 색상 팔레트에 맞추기';
+
+  @override
+  String get appearanceSystemColorsUnavailable =>
+      '이 기기에서는 사용할 수 없습니다. Android 12 이상이 필요합니다.';
+
+  @override
+  String get appearancePureBlack => '완전한 검정 배경';
+
+  @override
+  String get appearancePureBlackHelp => '다크 모드에서 배경을 완전한 검정으로 표시';
+
+  @override
+  String get appearancePreferenceError =>
+      '화면 모양을 변경했지만 저장하지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get appearanceTheme => '테마';
+
+  @override
+  String get appearanceLight => '밝게';
+
+  @override
+  String get appearanceDark => '어둡게';
 }

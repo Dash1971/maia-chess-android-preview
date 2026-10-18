@@ -1841,5 +1841,45 @@
   "samplingHelpResearchIntro": "We experimented with these settings at 1600 Elo and published our full findings here:",
   "@samplingHelpResearchIntro": {
     "description": "User-approved Maia-specific sampling help, paragraph 7. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology."
+  },
+  "appearance": "Appearance",
+  "@appearance": {
+    "description": "Appearance setting: Appearance"
+  },
+  "appearanceSystemColors": "Use system colors",
+  "@appearanceSystemColors": {
+    "description": "Appearance setting: Use system colors"
+  },
+  "appearanceSystemColorsHelp": "Match your Android color palette",
+  "@appearanceSystemColorsHelp": {
+    "description": "Appearance setting: Match your Android color palette"
+  },
+  "appearanceSystemColorsUnavailable": "Unavailable on this device. Requires Android 12 or later.",
+  "@appearanceSystemColorsUnavailable": {
+    "description": "Appearance setting: Unavailable on this device. Requires Android 12 or later."
+  },
+  "appearancePureBlack": "Pure black background",
+  "@appearancePureBlack": {
+    "description": "Appearance setting: Pure black background"
+  },
+  "appearancePureBlackHelp": "Use black backgrounds in dark mode",
+  "@appearancePureBlackHelp": {
+    "description": "Appearance setting: Use black backgrounds in dark mode"
+  },
+  "appearancePreferenceError": "Appearance changed, but could not be saved. Please try again.",
+  "@appearancePreferenceError": {
+    "description": "Appearance setting: Appearance changed, but could not be saved. Please try again."
+  },
+  "appearanceTheme": "Theme",
+  "@appearanceTheme": {
+    "description": "Appearance mode label, following Lichess."
+  },
+  "appearanceLight": "Light",
+  "@appearanceLight": {
+    "description": "Appearance mode label, following Lichess."
+  },
+  "appearanceDark": "Dark",
+  "@appearanceDark": {
+    "description": "Appearance mode label, following Lichess."
   }
 }
