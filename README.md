@@ -38,7 +38,7 @@ We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) sp
 
 We want to repeat and extend our sampling research using **Max variety in opening**. In particular, we want to compare the current **Temperature 1.0 / Top-P 1.0** defaults with **Temperature 1.0 / Top-P 0.95 and maximum opening variety enabled**.
 
-That option keeps sampling at 1.0 / 1.0 for the first five moves by each side, then applies the configured settings from move 6. We want to understand whether this preserves opening variety while improving later play before deciding whether to change the defaults. Results will be published in the [research repository](https://github.com/Dash1971/mobile-maia-research).
+That option keeps sampling at 1.0 / 1.0 for the first five moves by each side, then applies the configured settings from move 6. We want to understand whether this preserves opening variety while improving later play before deciding whether to change the defaults. See the [research issue](https://github.com/Dash1971/maia-chess-android-preview/issues/155) for the comparison plan. Results will be published in the [research repository](https://github.com/Dash1971/mobile-maia-research).
 
 **Colors and appearance**
 
