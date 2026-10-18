@@ -2609,6 +2609,9 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          // The shipped default remains dark. Light-mode semantic text has
+          // separate contrast coverage in app_appearance_test.dart.
+          theme: appTheme(const AppAppearance(), Brightness.dark),
           home: ReviewPage(
             positions: const [chess.Chess.DEFAULT_POSITION],
             uciMoves: const [],
