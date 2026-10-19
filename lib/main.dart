@@ -71,8 +71,7 @@ part 'src/app_appearance.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Android 16 enforces edge-to-edge at the OS level, but Flutter must also
-  // opt in so its bottom overlay region controls navigation-button brightness.
+  // Keep Flutter's overlay regions consistent with Android's edge-to-edge layout.
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   LicenseRegistry.addLicense(() async* {
     yield LicenseEntryWithLineBreaks([
@@ -269,9 +268,9 @@ class _MaiaChessAppState extends State<MaiaChessApp>
               systemNavigationBarColor: Theme.of(context)
                   .scaffoldBackgroundColor,
               // Android 16 ignores navigationBarColor in edge-to-edge mode.
-              // Its automatic scrim can follow the OS's light theme even when
-              // this app is dark, leaving white buttons on a pale background.
-              // Our Scaffold paints the safe-area background in both modes.
+              // Our Scaffold paints the safe-area background in both modes;
+              // native NormalTheme explicitly declares navigationBarColor so
+              // Android cannot override our icon brightness from its OS theme.
               systemNavigationBarContrastEnforced: false,
               systemNavigationBarIconBrightness: dark
                   ? Brightness.light

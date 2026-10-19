@@ -1,5 +1,6 @@
 from pathlib import Path
 import unittest
+import xml.etree.ElementTree as ET
 
 from generate_maia3_reference import CASES
 
@@ -23,6 +24,18 @@ class PreviewBuildContractTest(unittest.TestCase):
             workflow,
         )
         self.assertNotRegex(workflow, r'uses: actions/[^@]+@v\d')
+
+    def test_native_themes_allow_flutter_navigation_icon_brightness(self):
+        # Android 16 DecorView otherwise forces icon brightness from the native
+        # window background, which can disagree with the user's app theme.
+        for variant in ('values', 'values-night'):
+            with self.subTest(variant=variant):
+                root = ET.parse(REPO / 'android/app/src/main/res' / variant / 'styles.xml')
+                normal = root.find("style[@name='NormalTheme']")
+                self.assertIsNotNone(normal)
+                color = normal.find("item[@name='android:navigationBarColor']")
+                self.assertIsNotNone(color)
+                self.assertEqual(color.text, '@android:color/transparent')
 
     def test_release_is_universal_r8_minified_and_jni_safe(self):
         gradle = (REPO / 'android/app/build.gradle.kts').read_text()
