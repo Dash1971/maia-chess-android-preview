@@ -1,7 +1,7 @@
 # Optional appearance themes — Preview #124
 
-Draft implementation for Preview. No APK has been built or published for this
-change. Android acceptance below remains required before merge/release.
+Published in Preview 2.5.0-beta.1 after combined-source qualification. See the
+[release evidence](../../releases/preview-2.5.0-beta.1.md) for checks and limits.
 
 ## Choices
 
@@ -51,7 +51,7 @@ Flutter's generated package licenses. The plugin reads Android system resources;
 no network access, new runtime permissions, analytics or wallpaper images.
 
 The upstream Android plugin uses the Flutter compile SDK and supports minSdk 24;
-its AGP/Kotlin integration must be checked in the requested later Android build.
+its AGP/Kotlin integration passed the qualified Linux Android release build.
 The app's pinned toolchain and release recipe have not been upgraded here.
 
 ## Review images
@@ -61,7 +61,7 @@ These are design mockups using illustrative palettes, not device certification:
 ![Theme comparison](theme-concepts.png)
 ![Appearance below Language](settings-concepts.png)
 
-## Before enabling a release
+## Acceptance checklist for future releases
 
 - Run the Flutter analysis, widget/localization and regression checks.
 - Build the Android candidate on the documented Linux toolchain.
@@ -73,3 +73,19 @@ These are design mockups using illustrative palettes, not device certification:
 - Change appearance during an active game/analysis route and confirm navigation,
   position, clocks and analysis state survive. Validate contrast with more than
   one real system palette; mock palettes cannot certify every Android vendor.
+
+## Native lifecycle qualification
+
+Android 16 wallpaper changes can recreate the Activity. This is distinct from
+ordinary theme changes or background/resume: active game and Analysis Board
+checkpoints restored successfully, while an open Settings page may reopen Home
+with appearance choices retained. Do not promise that every Android system
+configuration change preserves the exact screen.
+
+The final APK explicitly opts into edge-to-edge layout and supplies the selected
+app theme to the navigation-strip background without Android's extra contrast
+scrim. The emulator was configured with software navigation buttons; a prior
+physical-key configuration made even Android Settings show misleading invisible
+buttons and was discarded as an app-defect diagnosis. Actual final-app checks
+covered button contrast in fixed/dynamic light, dark and pure-black themes.
+Physical vendor-specific navigation behavior remains Preview acceptance work.
