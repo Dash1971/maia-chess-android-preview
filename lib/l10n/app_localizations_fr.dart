@@ -1470,4 +1470,38 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get samplingLowerNotice =>
       'Maia peut jouer plus fort avec une température ou un Top-P plus bas.';
+
+  @override
+  String get appearance => 'Apparence';
+
+  @override
+  String get appearanceSystemColors => 'Utiliser les couleurs du système';
+
+  @override
+  String get appearanceSystemColorsHelp =>
+      'Utiliser la palette de couleurs Android';
+
+  @override
+  String get appearanceSystemColorsUnavailable =>
+      'Indisponible sur cet appareil. Nécessite Android 12 ou une version ultérieure.';
+
+  @override
+  String get appearancePureBlack => 'Fond noir pur';
+
+  @override
+  String get appearancePureBlackHelp =>
+      'Utiliser des fonds noirs en mode sombre';
+
+  @override
+  String get appearancePreferenceError =>
+      'L’apparence a changé, mais n’a pas pu être enregistrée. Veuillez réessayer.';
+
+  @override
+  String get appearanceTheme => 'Thème';
+
+  @override
+  String get appearanceLight => 'Lumineux';
+
+  @override
+  String get appearanceDark => 'Sombre';
 }

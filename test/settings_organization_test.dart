@@ -105,6 +105,11 @@ void main() {
         'chessnutBoardSounds': false,
         samplingCapturePreference: true,
         appLanguagePreferenceKey: 'ja',
+        appAppearancePreferenceKey: const AppAppearance(
+          mode: ThemeMode.light,
+          systemColors: true,
+          pureBlack: true,
+        ).encode(),
         'savedGame': 'saved-session-sentinel',
         'recentGames': 'saved-games-sentinel',
         maiaPlayEloPreferenceKey: 1800,
@@ -191,6 +196,7 @@ void main() {
         gameHapticsPreferenceKey: true,
         'chessnutBoardSounds': true,
         samplingCapturePreference: false,
+        appAppearancePreferenceKey: const AppAppearance().encode(),
       };
       for (final entry in defaults.entries) {
         expect(prefs.get(entry.key), entry.value);

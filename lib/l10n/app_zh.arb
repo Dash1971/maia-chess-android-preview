@@ -400,5 +400,15 @@
   "topPNotUsedTitle": "为什么不使用Top-P",
   "topPNotUsedHelp": "温度为0时，Maia总是选择一个概率最高的走法，因此Top-P不起作用。您的Top-P值会保留，提高温度后可再次使用。如果开启开局多样性，双方的前五步仍使用1.0 / 1.0。",
   "samplingLowerAfterOpeningNotice": "降低温度或Top-P后，Maia可能会从第6步起下得更强。",
-  "samplingLowerNotice": "降低温度或Top-P后，Maia可能会下得更强。"
+  "samplingLowerNotice": "降低温度或Top-P后，Maia可能会下得更强。",
+  "appearance": "外观",
+  "appearanceSystemColors": "使用系统颜色",
+  "appearanceSystemColorsHelp": "使用 Android 的配色",
+  "appearanceSystemColorsUnavailable": "此设备不支持。需要 Android 12 或更高版本。",
+  "appearancePureBlack": "纯黑背景",
+  "appearancePureBlackHelp": "在深色模式下使用纯黑背景",
+  "appearancePreferenceError": "外观已更改，但无法保存。请重试。",
+  "appearanceTheme": "主题",
+  "appearanceLight": "浅色",
+  "appearanceDark": "深色"
 }

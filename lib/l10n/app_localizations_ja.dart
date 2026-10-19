@@ -1367,4 +1367,35 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingLowerNotice => '温度またはTop-Pを低くすると、Maiaがより強くなる可能性があります。';
+
+  @override
+  String get appearance => '外観';
+
+  @override
+  String get appearanceSystemColors => 'OS と同じ色設定を使う';
+
+  @override
+  String get appearanceSystemColorsHelp => 'Android のカラーパレットに合わせる';
+
+  @override
+  String get appearanceSystemColorsUnavailable =>
+      'この端末では利用できません。Android 12 以降が必要です。';
+
+  @override
+  String get appearancePureBlack => '完全な黒の背景';
+
+  @override
+  String get appearancePureBlackHelp => 'ダークモードで背景を真っ黒にする';
+
+  @override
+  String get appearancePreferenceError => '外観を変更しましたが、保存できませんでした。もう一度お試しください。';
+
+  @override
+  String get appearanceTheme => 'テーマ';
+
+  @override
+  String get appearanceLight => '明るい';
+
+  @override
+  String get appearanceDark => '暗い';
 }

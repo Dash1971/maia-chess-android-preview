@@ -1490,4 +1490,38 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get samplingLowerNotice =>
       'Maia может играть сильнее при более низкой температуре или Top-P.';
+
+  @override
+  String get appearance => 'Оформление';
+
+  @override
+  String get appearanceSystemColors => 'Использовать системные цвета';
+
+  @override
+  String get appearanceSystemColorsHelp =>
+      'Использовать цветовую палитру Android';
+
+  @override
+  String get appearanceSystemColorsUnavailable =>
+      'Недоступно на этом устройстве. Требуется Android 12 или новее.';
+
+  @override
+  String get appearancePureBlack => 'Полностью чёрный фон';
+
+  @override
+  String get appearancePureBlackHelp =>
+      'Использовать чёрный фон в тёмном режиме';
+
+  @override
+  String get appearancePreferenceError =>
+      'Оформление изменено, но сохранить его не удалось. Попробуйте ещё раз.';
+
+  @override
+  String get appearanceTheme => 'Оформление';
+
+  @override
+  String get appearanceLight => 'Светлая';
+
+  @override
+  String get appearanceDark => 'Тёмная';
 }

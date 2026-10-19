@@ -400,5 +400,15 @@
   "topPNotUsedTitle": "Top-P를 사용하지 않는 이유",
   "topPNotUsedHelp": "온도가 0이면 Maia는 항상 가장 확률 높은 수를 골라 Top-P가 영향을 주지 않습니다. Top-P 값은 저장되며 온도를 높이면 다시 사용할 수 있습니다. 오프닝 다양성을 켠 경우 양쪽의 처음 다섯 수에는 여전히 1.0 / 1.0을 사용합니다.",
   "samplingLowerAfterOpeningNotice": "온도나 Top-P를 낮추면 6수째부터 Maia가 더 강하게 둘 수 있습니다.",
-  "samplingLowerNotice": "온도나 Top-P를 낮추면 Maia가 더 강하게 둘 수 있습니다."
+  "samplingLowerNotice": "온도나 Top-P를 낮추면 Maia가 더 강하게 둘 수 있습니다.",
+  "appearance": "화면 모양",
+  "appearanceSystemColors": "시스템 색상 사용",
+  "appearanceSystemColorsHelp": "Android 색상 팔레트에 맞추기",
+  "appearanceSystemColorsUnavailable": "이 기기에서는 사용할 수 없습니다. Android 12 이상이 필요합니다.",
+  "appearancePureBlack": "완전한 검정 배경",
+  "appearancePureBlackHelp": "다크 모드에서 배경을 완전한 검정으로 표시",
+  "appearancePreferenceError": "화면 모양을 변경했지만 저장하지 못했습니다. 다시 시도해 주세요.",
+  "appearanceTheme": "테마",
+  "appearanceLight": "밝게",
+  "appearanceDark": "어둡게"
 }

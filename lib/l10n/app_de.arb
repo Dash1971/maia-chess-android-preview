@@ -400,5 +400,15 @@
   "topPNotUsedTitle": "Warum Top-P nicht verwendet wird",
   "topPNotUsedHelp": "Bei Temperatur 0 wählt Maia immer einen wahrscheinlichsten Zug. Top-P hat dann keinen Einfluss. Dein Top-P-Wert bleibt gespeichert und wird wieder nutzbar, wenn du die Temperatur erhöhst. Mit Eröffnungsvielfalt gilt für die ersten fünf Züge beider Seiten weiterhin 1.0 / 1.0.",
   "samplingLowerAfterOpeningNotice": "Ab dem 6. Zug kann Maia mit niedrigerer Temperatur oder niedrigerem Top-P stärker spielen.",
-  "samplingLowerNotice": "Maia kann mit niedrigerer Temperatur oder niedrigerem Top-P stärker spielen."
+  "samplingLowerNotice": "Maia kann mit niedrigerer Temperatur oder niedrigerem Top-P stärker spielen.",
+  "appearance": "Erscheinungsbild",
+  "appearanceSystemColors": "Systemfarben verwenden",
+  "appearanceSystemColorsHelp": "Die Android-Farbpalette verwenden",
+  "appearanceSystemColorsUnavailable": "Auf diesem Gerät nicht verfügbar. Erfordert Android 12 oder neuer.",
+  "appearancePureBlack": "Tiefschwarzer Hintergrund",
+  "appearancePureBlackHelp": "Im dunklen Modus schwarze Hintergründe verwenden",
+  "appearancePreferenceError": "Das Erscheinungsbild wurde geändert, konnte aber nicht gespeichert werden. Bitte erneut versuchen.",
+  "appearanceTheme": "Erscheinungsbild",
+  "appearanceLight": "Hell",
+  "appearanceDark": "Dunkel"
 }

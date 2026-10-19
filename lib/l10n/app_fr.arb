@@ -400,5 +400,15 @@
   "topPNotUsedTitle": "Pourquoi Top-P est inutilisé",
   "topPNotUsedHelp": "À température 0, Maia choisit toujours un coup de probabilité maximale : Top-P est donc sans effet. Sa valeur est conservée et redevient disponible quand vous augmentez la température. Si la variété en ouverture est activée, les cinq premiers coups de chaque camp utilisent toujours 1.0 / 1.0.",
   "samplingLowerAfterOpeningNotice": "À partir du 6e coup, Maia peut jouer plus fort avec une température ou un Top-P plus bas.",
-  "samplingLowerNotice": "Maia peut jouer plus fort avec une température ou un Top-P plus bas."
+  "samplingLowerNotice": "Maia peut jouer plus fort avec une température ou un Top-P plus bas.",
+  "appearance": "Apparence",
+  "appearanceSystemColors": "Utiliser les couleurs du système",
+  "appearanceSystemColorsHelp": "Utiliser la palette de couleurs Android",
+  "appearanceSystemColorsUnavailable": "Indisponible sur cet appareil. Nécessite Android 12 ou une version ultérieure.",
+  "appearancePureBlack": "Fond noir pur",
+  "appearancePureBlackHelp": "Utiliser des fonds noirs en mode sombre",
+  "appearancePreferenceError": "L’apparence a changé, mais n’a pas pu être enregistrée. Veuillez réessayer.",
+  "appearanceTheme": "Thème",
+  "appearanceLight": "Lumineux",
+  "appearanceDark": "Sombre"
 }

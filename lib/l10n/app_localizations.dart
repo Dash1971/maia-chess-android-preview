@@ -2523,6 +2523,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Maia may play stronger with lower Temperature or Top-P.'**
   String get samplingLowerNotice;
+
+  /// Appearance setting: Appearance
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// Appearance setting: Use system colors
+  ///
+  /// In en, this message translates to:
+  /// **'Use system colors'**
+  String get appearanceSystemColors;
+
+  /// Appearance setting: Match your Android color palette
+  ///
+  /// In en, this message translates to:
+  /// **'Match your Android color palette'**
+  String get appearanceSystemColorsHelp;
+
+  /// Appearance setting: Unavailable on this device. Requires Android 12 or later.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable on this device. Requires Android 12 or later.'**
+  String get appearanceSystemColorsUnavailable;
+
+  /// Appearance setting: Pure black background
+  ///
+  /// In en, this message translates to:
+  /// **'Pure black background'**
+  String get appearancePureBlack;
+
+  /// Appearance setting: Use black backgrounds in dark mode
+  ///
+  /// In en, this message translates to:
+  /// **'Use black backgrounds in dark mode'**
+  String get appearancePureBlackHelp;
+
+  /// Appearance setting: Appearance changed, but could not be saved. Please try again.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance changed, but could not be saved. Please try again.'**
+  String get appearancePreferenceError;
+
+  /// Appearance mode label, following Lichess.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get appearanceTheme;
+
+  /// Appearance mode label, following Lichess.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get appearanceLight;
+
+  /// Appearance mode label, following Lichess.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get appearanceDark;
 }
 
 class _AppLocalizationsDelegate

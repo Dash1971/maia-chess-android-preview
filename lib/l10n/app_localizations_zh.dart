@@ -1344,4 +1344,34 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingLowerNotice => '降低温度或Top-P后，Maia可能会下得更强。';
+
+  @override
+  String get appearance => '外观';
+
+  @override
+  String get appearanceSystemColors => '使用系统颜色';
+
+  @override
+  String get appearanceSystemColorsHelp => '使用 Android 的配色';
+
+  @override
+  String get appearanceSystemColorsUnavailable => '此设备不支持。需要 Android 12 或更高版本。';
+
+  @override
+  String get appearancePureBlack => '纯黑背景';
+
+  @override
+  String get appearancePureBlackHelp => '在深色模式下使用纯黑背景';
+
+  @override
+  String get appearancePreferenceError => '外观已更改，但无法保存。请重试。';
+
+  @override
+  String get appearanceTheme => '主题';
+
+  @override
+  String get appearanceLight => '浅色';
+
+  @override
+  String get appearanceDark => '深色';
 }

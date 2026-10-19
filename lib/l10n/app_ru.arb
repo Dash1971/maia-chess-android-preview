@@ -400,5 +400,15 @@
   "topPNotUsedTitle": "Почему Top-P не используется",
   "topPNotUsedHelp": "При температуре 0 Maia всегда выбирает один из наиболее вероятных ходов, поэтому Top-P не влияет на выбор. Его значение сохраняется и снова станет доступно при повышении температуры. Если разнообразие в дебюте включено, первые пять ходов каждой стороны по-прежнему используют 1.0 / 1.0.",
   "samplingLowerAfterOpeningNotice": "С 6-го хода Maia может играть сильнее при более низкой температуре или Top-P.",
-  "samplingLowerNotice": "Maia может играть сильнее при более низкой температуре или Top-P."
+  "samplingLowerNotice": "Maia может играть сильнее при более низкой температуре или Top-P.",
+  "appearance": "Оформление",
+  "appearanceSystemColors": "Использовать системные цвета",
+  "appearanceSystemColorsHelp": "Использовать цветовую палитру Android",
+  "appearanceSystemColorsUnavailable": "Недоступно на этом устройстве. Требуется Android 12 или новее.",
+  "appearancePureBlack": "Полностью чёрный фон",
+  "appearancePureBlackHelp": "Использовать чёрный фон в тёмном режиме",
+  "appearancePreferenceError": "Оформление изменено, но сохранить его не удалось. Попробуйте ещё раз.",
+  "appearanceTheme": "Оформление",
+  "appearanceLight": "Светлая",
+  "appearanceDark": "Тёмная"
 }
