@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.4.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.4.0); unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.15](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.15), code 2417 | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.1](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.1), code 2501 | `com.dash1971.maia_chess.preview`, 79M | Optional appearance themes, revised Maia defaults and Simple/Technical help. Grand Kingdom and DGT are disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -36,7 +36,21 @@ installations update in place using the established Preview certificate.
 - Physical Chessnut acceptance remains with the owner/testers. Automated tests
   cannot confirm radio reliability, physical LEDs or button behavior on hardware.
 
-## Opening-variety candidate for Stable 2.4
+## Preview 2.5.0-beta.1 qualification
+
+Published from `ffe8032c7082170b310013a66af59b74a7f7a0ad` after combining #156 and
+#157 through #158. Appearance remains green/dark by default; Light/System,
+Android system colors and OLED black are optional. Fresh sampling defaults are
+1.0/0.95 with opening variety on; explicit saved preferences and frozen game
+profiles are preserved. Primary analysis defaults to 1500; optional secondary
+Maia defaults to 2600 and remains disabled until selected.
+
+[Release verification](releases/preview-2.5.0-beta.1.md) records exact-source CI,
+independent Linux reproduction, signed upgrade, Android 11/16 appearance and
+actual 79M sampling/lifecycle checks. No Stable/F-Droid/Zapstore or Dev promotion
+is implied by this Preview release.
+
+## Opening-variety candidate for Stable 2.4 (historical)
 
 Beta.15 (2417) is published for #152, superseding beta.14 as the intended
 final candidate. It adds optional full sampling through move 5, then the user's
@@ -44,7 +58,7 @@ configured Temperature/Top-P from move 6. New games freeze their sampling
 configuration; older saves never silently opt in. JSONL records effective and
 configured values, while HTML uses the existing effective probability display.
 No new inference, model, engine or board-support changes. Exact-source CI,
-independent Linux build comparison and signed Android qualification passed. Stable 2.4 stays unpublished pending owner acceptance.
+independent Linux build comparison and signed Android qualification passed. This candidate was subsequently promoted to the published Stable 2.4.0 release.
 
 ## Beta.14 baseline for Stable 2.4
 
@@ -95,9 +109,10 @@ Shared Chessnut discovery/lifecycle code remains active and must still be tested
 If the prototypes remain unmaintained long-term, review their separation/removal
 as planned cleanup rather than enabling them to finish a release.
 
-Before Stable publication, resolve the Gradle security findings in the
-[2026-10-17 upstream review](dependency-audit-2026-10-17.md). The passing
-automated advisory query does not override those upstream advisories.
+Stable 2.4.0 and this Preview use the reviewed Gradle 9.8.1 pin that addressed
+the findings in the [2026-10-17 upstream review](dependency-audit-2026-10-17.md).
+Preserve the security pin; a passing automated advisory query alone does not
+override upstream advisories when considering later upgrades.
 
 ## Dev limitations
 
@@ -273,7 +288,7 @@ actual 79M model. History is experimental and does not promise greater strength.
 - Public APK and verification downloads were checked against local hashes and GitHub asset digests. The release contains compact evidence and the standalone emulator harness; test fixtures/harness are not bundled in the APK. Physical phone/Chessnut acceptance remains with owner/testers. Functional qualification does not establish increased strength or an optimal opening cutoff.
 - Grand Kingdom/DGT remain Dev-only. Stable 2.3.0 and Dev alpha.2 are unchanged; no Stable/store publication. PR #153 records task-owned build, APK and emulator cleanup. Shared toolchains/caches and signing keys are retained.
 
-## Preview 2.5.0-beta.1 candidate
+## Preview 2.5.0-beta.1 publication
 
 Combines Appearance #156 and sampling defaults/help #157. Existing installs keep
 their saved settings and the original dark green theme. New/reset engine defaults
@@ -281,8 +296,8 @@ are Temperature 1.0, Top-P 0.95 and opening variety on; primary analysis is 1500
 and the optional second engine is 2600. Play already defaults to 1500. Appearance
 is below Language and adds Light/Dark/System, system colors and pure black.
 
-This is candidate source, not a published APK. Exact-source Linux CI, independent
-reproduction, signed upgrade and Android appearance/settings checks are required
-before publication. The release PR records the final evidence. Preview package,
+Published after exact-source Linux CI, independent reproduction, signed upgrade
+and Android appearance/settings qualification. The release PR and linked
+verification record contain the final evidence. Preview package,
 79M model, signing identity and experimental-board restrictions remain unchanged.
 Stable 2.4 and Dev alpha.2 are not part of this publication.
