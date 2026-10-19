@@ -2407,13 +2407,13 @@ abstract class AppLocalizations {
   /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'You can think of higher Temperature as how creative Maia is in thinking of candidate moves. A Temperature of 0 is like a conservative OTB player, thinking hard to try to narrow down to the most likely (and quite often best) moves. A Temperature of 1 is like a creative blitz player, where no sac is too crazy, and every move, no matter how unlikely, is to be considered.'**
+  /// **'You can think of higher Temperature as how creative Maia is in thinking of candidate moves. A Temperature of 0 is like an experienced OTB player, choosing the most likely (and often best) move. A Temperature of 1 is like a creative blitz player, where no sac is too crazy, and every move, no matter how unlikely, is to be considered.'**
   String get samplingHelpVariety;
 
   /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'You can think of Top-P as the devil or angel on Maia’s shoulder. At 0, Maia has an angel on its shoulder telling it to ignore the wild, low-probability moves. At 1.0, Maia has a devil, encouraging Maia to shoot from the hip and possibly select the wildest, most unlikely move.'**
+  /// **'You can think of Top-P as an angel on Maia’s shoulder. At 0, the angel is telling Maia to ignore the wild, low-probability moves. At 1.0, the angel has gone, and Maia could select even the craziest, most improbable move.'**
   String get samplingHelpDefaults;
 
   /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.

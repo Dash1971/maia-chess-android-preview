@@ -1401,11 +1401,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingHelpVariety =>
-      'Eine höhere Temperatur kannst du dir als mehr Kreativität bei der Suche nach Kandidatenzügen vorstellen. Temperatur 0 ist wie ein konservativer Spieler am echten Brett, der gründlich nachdenkt, um die Auswahl auf die wahrscheinlichsten (und recht oft besten) Züge einzugrenzen. Temperatur 1 ist wie ein kreativer Blitzspieler, dem kein Opfer zu verrückt ist und der jeden Zug in Betracht zieht, so unwahrscheinlich er auch sein mag.';
+      'Eine höhere Temperatur kannst du dir als mehr Kreativität bei der Suche nach Kandidatenzügen vorstellen. Temperatur 0 ist wie ein erfahrener Spieler am echten Brett, der den wahrscheinlichsten (und oft besten) Zug wählt. Temperatur 1 ist wie ein kreativer Blitzspieler, dem kein Opfer zu verrückt ist und der jeden Zug in Betracht zieht, so unwahrscheinlich er auch sein mag.';
 
   @override
   String get samplingHelpDefaults =>
-      'Top-P kannst du dir als Teufel oder Engel auf Maias Schulter vorstellen. Bei 0 sitzt dort ein Engel, der Maia sagt, sie solle wilde, unwahrscheinliche Züge ignorieren. Bei 1.0 sitzt dort ein Teufel, der Maia zu einem Schuss aus der Hüfte ermutigt – vielleicht sogar zum wildesten, unwahrscheinlichsten Zug.';
+      'Top-P kannst du dir als Engel auf Maias Schulter vorstellen. Bei 0 sagt der Engel Maia, sie solle wilde, unwahrscheinliche Züge ignorieren. Bei 1.0 ist der Engel verschwunden, und Maia könnte sogar den verrücktesten, unwahrscheinlichsten Zug wählen.';
 
   @override
   String get samplingHelpStrength =>
