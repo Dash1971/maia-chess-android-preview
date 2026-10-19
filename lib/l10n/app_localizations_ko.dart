@@ -1297,11 +1297,11 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingHelpVariety =>
-      '온도가 높을수록 Maia가 후보 수를 생각할 때 더 창의적이라고 이해하면 됩니다. 온도 0은 가장 나올 법한 수(그리고 꽤 자주 최선의 수)로 선택지를 좁히려고 깊이 생각하는, 보수적인 대면 체스 플레이어와 같습니다. 온도 1은 아무리 대담한 희생도 마다하지 않고, 나올 가능성이 아무리 낮아도 모든 수를 고려하는 창의적인 블리츠 플레이어와 같습니다.';
+      '온도가 높을수록 Maia가 후보 수를 생각할 때 더 창의적이라고 이해하면 됩니다. 온도 0은 가장 나올 법한 수(그리고 흔히 최선의 수)를 선택하는, 경험 많은 대면 체스 플레이어와 같습니다. 온도 1은 아무리 대담한 희생도 마다하지 않고, 나올 가능성이 아무리 낮아도 모든 수를 고려하는 창의적인 블리츠 플레이어와 같습니다.';
 
   @override
   String get samplingHelpDefaults =>
-      'Top-P는 Maia의 어깨 위에 앉은 악마 또는 천사라고 생각하면 됩니다. 0에서는 천사가 엉뚱하고 확률이 낮은 수를 무시하라고 말합니다. 1.0에서는 악마가 과감하게 질러 보라고 부추겨, 가장 엉뚱하고 나올 가능성이 낮은 수를 고를 수도 있습니다.';
+      'Top-P는 Maia의 어깨 위에 앉은 천사라고 생각하면 됩니다. 0에서는 천사가 Maia에게 엉뚱하고 확률이 낮은 수를 무시하라고 말합니다. 1.0에서는 천사가 떠나고, Maia는 가장 엉뚱하고 나올 가능성이 낮은 수까지 고를 수 있습니다.';
 
   @override
   String get samplingHelpStrength =>
@@ -1350,10 +1350,6 @@ class AppLocalizationsKo extends AppLocalizations {
       '온도 또는 Top-P가 0이면 Maia가 더 강해질 수 있습니다. 행운을 빕니다!';
 
   @override
-  String get samplingArgmaxAfterOpeningNotice =>
-      '온도 또는 Top-P가 0이면 여섯 번째 수부터 Maia가 더 강해질 수 있습니다. 행운을 빕니다!';
-
-  @override
   String get topPNotUsed => 'Top-P: 사용 안 함';
 
   @override
@@ -1362,10 +1358,6 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       '온도가 0이면 Maia는 항상 가장 확률 높은 수를 골라 Top-P가 영향을 주지 않습니다. Top-P 값은 저장되며 온도를 높이면 다시 사용할 수 있습니다. 오프닝 다양성을 켠 경우 양쪽의 처음 다섯 수에는 여전히 1.0 / 1.0을 사용합니다.';
-
-  @override
-  String get samplingLowerAfterOpeningNotice =>
-      '온도나 Top-P를 낮추면 6수째부터 Maia가 더 강하게 둘 수 있습니다.';
 
   @override
   String get samplingLowerNotice => '온도나 Top-P를 낮추면 Maia가 더 강하게 둘 수 있습니다.';

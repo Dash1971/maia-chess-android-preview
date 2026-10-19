@@ -14,27 +14,25 @@ void main() {
       final full = s.samplingFullVarietyNotice;
       final limited = s.samplingRecommendationWarning;
       final deterministic = s.samplingArgmaxNotice;
-      final afterOpening = s.samplingArgmaxAfterOpeningNotice;
-      final lowerAfterOpening = s.samplingLowerAfterOpeningNotice;
       final lower = s.samplingLowerNotice;
       final cases = <(double, double, bool, List<String>)>[
         (1, 0.95, true, []),
         (1, 0.95, false, [limited]),
         (1, 0.99, false, [limited]),
         (1, 0.99, true, []),
-        (1, 0.94, true, [lowerAfterOpening]),
+        (1, 0.94, true, [lower]),
         (1, 0.94, false, [lower, limited]),
         (0.95, 0.95, false, [lower, limited]),
         (1, 0.90, false, [lower, limited]),
-        (1, 0.90, true, [lowerAfterOpening]),
-        (0.5, 1, true, [lowerAfterOpening]),
-        (0.5, 0.95, true, [lowerAfterOpening]),
+        (1, 0.90, true, [lower]),
+        (0.5, 1, true, [lower]),
+        (0.5, 0.95, true, [lower]),
         (1, 1, false, [full]),
         (1, 1, true, [full]),
         (0, 0.95, false, [deterministic, limited]),
-        (0, 0.95, true, [afterOpening]),
+        (0, 0.95, true, [deterministic]),
         (0, 0, false, [deterministic, limited]),
-        (0.5, 0, true, [afterOpening]),
+        (0.5, 0, true, [deterministic]),
         (1, 0, false, [deterministic, limited]),
         (0.5, 1, false, [lower, limited]),
       ];
@@ -82,6 +80,29 @@ void main() {
   });
 
   for (final locale in AppLocalizations.supportedLocales) {
+    test(
+      'strength notices do not depend on opening variety in ${locale.languageCode}',
+      () async {
+        final s = await AppLocalizations.delegate.load(locale);
+        for (final settings in [
+          (0.5, 0.95, s.samplingLowerNotice),
+          (0.0, 0.95, s.samplingArgmaxNotice),
+          (1.0, 0.0, s.samplingArgmaxNotice),
+        ]) {
+          for (final opening in [true, false]) {
+            expect(
+              samplingSettingsNotices(
+                s,
+                temperature: settings.$1,
+                topP: settings.$2,
+                openingVariety: opening,
+              ),
+              [settings.$3, if (!opening) s.samplingRecommendationWarning],
+            );
+          }
+        }
+      },
+    );
     testWidgets(
       'lower settings without opening variety show both notices in ${locale.languageCode}',
       (tester) async {

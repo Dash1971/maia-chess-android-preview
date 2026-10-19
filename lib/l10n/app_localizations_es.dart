@@ -1398,11 +1398,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingHelpVariety =>
-      'Puedes pensar en una temperatura más alta como una mayor creatividad de Maia al considerar jugadas candidatas. Una temperatura de 0 es como un jugador conservador de ajedrez presencial, que piensa detenidamente para reducir sus opciones a las jugadas más probables (y, con bastante frecuencia, las mejores). Una temperatura de 1 es como un jugador creativo de blitz, para quien ningún sacrificio es demasiado loco y toda jugada, por improbable que sea, merece considerarse.';
+      'Puedes pensar en una temperatura más alta como una mayor creatividad de Maia al considerar jugadas candidatas. Una temperatura de 0 es como un jugador experimentado de ajedrez presencial, que elige la jugada más probable (y a menudo la mejor). Una temperatura de 1 es como un jugador creativo de blitz, para quien ningún sacrificio es demasiado loco y toda jugada, por improbable que sea, merece considerarse.';
 
   @override
   String get samplingHelpDefaults =>
-      'Puedes imaginar Top-P como el diablo o el ángel en el hombro de Maia. Con 0, Maia tiene un ángel que le dice que ignore las jugadas disparatadas y poco probables. Con 1.0, tiene un diablo que la anima a improvisar y quizá elegir la jugada más disparatada e improbable.';
+      'Puedes imaginar Top-P como un ángel en el hombro de Maia. Con 0, el ángel le dice a Maia que ignore las jugadas disparatadas y poco probables. Con 1.0, el ángel se ha ido y Maia podría elegir incluso la jugada más disparatada e improbable.';
 
   @override
   String get samplingHelpStrength =>
@@ -1451,10 +1451,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Maia puede jugar más fuerte con temperatura o Top-P en 0. ¡Buena suerte!';
 
   @override
-  String get samplingArgmaxAfterOpeningNotice =>
-      'Desde la sexta jugada, Maia puede jugar más fuerte con temperatura o Top-P en 0. ¡Buena suerte!';
-
-  @override
   String get topPNotUsed => 'Top-P: No se usa';
 
   @override
@@ -1463,10 +1459,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       'Con temperatura 0, Maia siempre elige una de las jugadas más probables, así que Top-P no tiene efecto. Su valor se conserva y vuelve a estar disponible al subir la temperatura. Si la máxima variedad en la apertura está activada, las primeras cinco jugadas de cada bando siguen usando 1.0 / 1.0.';
-
-  @override
-  String get samplingLowerAfterOpeningNotice =>
-      'A partir de la sexta jugada, Maia puede jugar más fuerte con una temperatura o un Top-P más bajos.';
 
   @override
   String get samplingLowerNotice =>

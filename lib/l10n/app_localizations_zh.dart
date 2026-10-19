@@ -1276,11 +1276,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingHelpVariety =>
-      '你可以把更高的温度理解为Maia思考候选走法时更有创造力。温度为0时，就像一位稳健的线下棋手，认真思考，努力把选择缩小到最可能出现（而且往往也是最好）的走法。温度为1时，就像一位富有创造力的快棋棋手，再疯狂的弃子也敢尝试，每一步棋，无论多么不常见，都可以纳入考虑。';
+      '你可以把更高的温度理解为Maia思考候选走法时更有创造力。温度为0时，就像一位经验丰富的线下棋手，选择最可能出现（而且往往也是最好）的走法。温度为1时，就像一位富有创造力的快棋棋手，再疯狂的弃子也敢尝试，每一步棋，无论多么不常见，都可以纳入考虑。';
 
   @override
   String get samplingHelpDefaults =>
-      '你可以把Top-P想象成Maia肩上的恶魔或天使。设为0时，天使会告诉Maia忽略那些疯狂、低概率的走法。设为1.0时，恶魔会鼓动Maia大胆出手，甚至可能选择最疯狂、最不可能出现的走法。';
+      '你可以把Top-P想象成Maia肩上的天使。设为0时，天使会告诉Maia忽略那些疯狂、低概率的走法。设为1.0时，天使离开了，Maia甚至可能选择最疯狂、最不可能出现的走法。';
 
   @override
   String get samplingHelpStrength =>
@@ -1326,10 +1326,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingArgmaxNotice => '温度或Top-P为0时，Maia可能更强。祝您好运！';
 
   @override
-  String get samplingArgmaxAfterOpeningNotice =>
-      '温度或Top-P为0时，Maia可能从第六步起更强。祝您好运！';
-
-  @override
   String get topPNotUsed => 'Top-P：不使用';
 
   @override
@@ -1338,9 +1334,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       '温度为0时，Maia总是选择一个概率最高的走法，因此Top-P不起作用。您的Top-P值会保留，提高温度后可再次使用。如果开启开局多样性，双方的前五步仍使用1.0 / 1.0。';
-
-  @override
-  String get samplingLowerAfterOpeningNotice => '降低温度或Top-P后，Maia可能会从第6步起下得更强。';
 
   @override
   String get samplingLowerNotice => '降低温度或Top-P后，Maia可能会下得更强。';
