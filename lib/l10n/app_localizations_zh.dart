@@ -1326,10 +1326,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingArgmaxNotice => '温度或Top-P为0时，Maia可能更强。祝您好运！';
 
   @override
-  String get samplingArgmaxAfterOpeningNotice =>
-      '温度或Top-P为0时，Maia可能从第六步起更强。祝您好运！';
-
-  @override
   String get topPNotUsed => 'Top-P：不使用';
 
   @override
@@ -1338,9 +1334,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       '温度为0时，Maia总是选择一个概率最高的走法，因此Top-P不起作用。您的Top-P值会保留，提高温度后可再次使用。如果开启开局多样性，双方的前五步仍使用1.0 / 1.0。';
-
-  @override
-  String get samplingLowerAfterOpeningNotice => '降低温度或Top-P后，Maia可能会从第6步起下得更强。';
 
   @override
   String get samplingLowerNotice => '降低温度或Top-P后，Maia可能会下得更强。';

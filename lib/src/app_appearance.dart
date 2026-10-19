@@ -180,10 +180,10 @@ ThemeData appTheme(
       surface: Colors.black,
       surfaceDim: Colors.black,
       surfaceContainerLowest: Colors.black,
-      surfaceContainerLow: const Color(0xff101014),
-      surfaceContainer: const Color(0xff16161b),
-      surfaceContainerHigh: const Color(0xff202026),
-      surfaceContainerHighest: const Color(0xff2b2b31),
+      surfaceContainerLow: const Color(0xff080808),
+      surfaceContainer: const Color(0xff101010),
+      surfaceContainerHigh: const Color(0xff171717),
+      surfaceContainerHighest: const Color(0xff202020),
     );
   }
   return ThemeData(

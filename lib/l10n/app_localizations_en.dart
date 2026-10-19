@@ -1431,10 +1431,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Maia may play stronger with Temperature or Top-P at 0. Good luck!';
 
   @override
-  String get samplingArgmaxAfterOpeningNotice =>
-      'From move 6, Maia may play stronger with Temperature or Top-P at 0. Good luck!';
-
-  @override
   String get topPNotUsed => 'Top-P: Not used';
 
   @override
@@ -1443,10 +1439,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       'At Temperature 0, Maia always chooses a most likely move, so Top-P has no effect. Your Top-P value is kept and becomes available again when you raise Temperature. If Max variety in opening is on, the first five moves by each side still use 1.0 / 1.0.';
-
-  @override
-  String get samplingLowerAfterOpeningNotice =>
-      'From move 6, Maia may play stronger with lower Temperature or Top-P.';
 
   @override
   String get samplingLowerNotice =>

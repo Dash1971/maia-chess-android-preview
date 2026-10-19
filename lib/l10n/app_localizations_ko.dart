@@ -1350,10 +1350,6 @@ class AppLocalizationsKo extends AppLocalizations {
       '온도 또는 Top-P가 0이면 Maia가 더 강해질 수 있습니다. 행운을 빕니다!';
 
   @override
-  String get samplingArgmaxAfterOpeningNotice =>
-      '온도 또는 Top-P가 0이면 여섯 번째 수부터 Maia가 더 강해질 수 있습니다. 행운을 빕니다!';
-
-  @override
   String get topPNotUsed => 'Top-P: 사용 안 함';
 
   @override
@@ -1362,10 +1358,6 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       '온도가 0이면 Maia는 항상 가장 확률 높은 수를 골라 Top-P가 영향을 주지 않습니다. Top-P 값은 저장되며 온도를 높이면 다시 사용할 수 있습니다. 오프닝 다양성을 켠 경우 양쪽의 처음 다섯 수에는 여전히 1.0 / 1.0을 사용합니다.';
-
-  @override
-  String get samplingLowerAfterOpeningNotice =>
-      '온도나 Top-P를 낮추면 6수째부터 Maia가 더 강하게 둘 수 있습니다.';
 
   @override
   String get samplingLowerNotice => '온도나 Top-P를 낮추면 Maia가 더 강하게 둘 수 있습니다.';

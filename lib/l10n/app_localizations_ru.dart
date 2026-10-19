@@ -1470,10 +1470,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'При температуре или Top-P 0 Maia может играть сильнее. Удачи!';
 
   @override
-  String get samplingArgmaxAfterOpeningNotice =>
-      'С шестого хода при температуре или Top-P 0 Maia может играть сильнее. Удачи!';
-
-  @override
   String get topPNotUsed => 'Top-P: не используется';
 
   @override
@@ -1482,10 +1478,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       'При температуре 0 Maia всегда выбирает один из наиболее вероятных ходов, поэтому Top-P не влияет на выбор. Его значение сохраняется и снова станет доступно при повышении температуры. Если разнообразие в дебюте включено, первые пять ходов каждой стороны по-прежнему используют 1.0 / 1.0.';
-
-  @override
-  String get samplingLowerAfterOpeningNotice =>
-      'С 6-го хода Maia может играть сильнее при более низкой температуре или Top-P.';
 
   @override
   String get samplingLowerNotice =>

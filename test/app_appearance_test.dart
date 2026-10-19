@@ -75,6 +75,38 @@ void main() {
     }
   });
 
+  test('darker panels are confined to pure-black dark mode', () {
+    final dynamic = palette(Colors.purple);
+    for (final system in [false, true]) {
+      final normal = AppAppearance(systemColors: system);
+      final black = normal.copyWith(pureBlack: true);
+      final light = appTheme(normal, Brightness.light, dynamicColors: dynamic);
+      expect(appTheme(black, Brightness.light, dynamicColors: dynamic), light);
+      final dark = appTheme(normal, Brightness.dark, dynamicColors: dynamic);
+      final oled = appTheme(black, Brightness.dark, dynamicColors: dynamic);
+      expect(oled.scaffoldBackgroundColor, Colors.black);
+      expect(oled.colorScheme.surfaceContainerLow, const Color(0xff080808));
+      expect(oled.colorScheme.surfaceContainer, const Color(0xff101010));
+      expect(oled.colorScheme.surfaceContainerHigh, const Color(0xff171717));
+      expect(oled.colorScheme.surfaceContainerHighest, const Color(0xff202020));
+      // Only surface colors change: preserve readable foregrounds, accent
+      // colors and the meaning of selected/disabled controls.
+      expect(
+        oled.colorScheme.copyWith(
+          surface: dark.colorScheme.surface,
+          surfaceDim: dark.colorScheme.surfaceDim,
+          surfaceContainerLowest: dark.colorScheme.surfaceContainerLowest,
+          surfaceContainerLow: dark.colorScheme.surfaceContainerLow,
+          surfaceContainer: dark.colorScheme.surfaceContainer,
+          surfaceContainerHigh: dark.colorScheme.surfaceContainerHigh,
+          surfaceContainerHighest: dark.colorScheme.surfaceContainerHighest,
+        ),
+        dark.colorScheme,
+      );
+      expect(appTheme(normal, Brightness.dark, dynamicColors: dynamic), dark);
+    }
+  });
+
   test(
     'all combinations persist independently and OLED only changes dark mode',
     () async {

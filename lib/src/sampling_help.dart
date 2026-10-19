@@ -9,13 +9,9 @@ List<String> samplingSettingsNotices(
 }) => [
   if (temperature == 1.0 && topP == 1.0) strings.samplingFullVarietyNotice,
   if (temperature == 0.0 || topP == 0.0)
-    openingVariety
-        ? strings.samplingArgmaxAfterOpeningNotice
-        : strings.samplingArgmaxNotice
+    strings.samplingArgmaxNotice
   else if (temperature < defaultMaiaTemperature || topP < defaultMaiaTopP)
-    openingVariety
-        ? strings.samplingLowerAfterOpeningNotice
-        : strings.samplingLowerNotice,
+    strings.samplingLowerNotice,
   if (!openingVariety && (temperature < 1.0 || topP < 1.0))
     strings.samplingRecommendationWarning,
 ];

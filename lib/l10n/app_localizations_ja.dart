@@ -1348,10 +1348,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get samplingArgmaxNotice => '温度またはTop-Pが0の場合、Maiaがより強くなる可能性があります。幸運を！';
 
   @override
-  String get samplingArgmaxAfterOpeningNotice =>
-      '温度またはTop-Pが0の場合、6手目からMaiaがより強くなる可能性があります。幸運を！';
-
-  @override
   String get topPNotUsed => 'Top-P：使用しません';
 
   @override
@@ -1360,10 +1356,6 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       '温度が0の場合、Maiaは最も確率の高い手を必ず選ぶため、Top-Pは影響しません。Top-Pの値は保存され、温度を上げると再び使えます。序盤の多様性がオンなら、双方の最初の5手には引き続き1.0 / 1.0を使います。';
-
-  @override
-  String get samplingLowerAfterOpeningNotice =>
-      '温度またはTop-Pを低くすると、6手目からMaiaがより強くなる可能性があります。';
 
   @override
   String get samplingLowerNotice => '温度またはTop-Pを低くすると、Maiaがより強くなる可能性があります。';
