@@ -35,6 +35,36 @@ class SamplingHelpDialog extends StatefulWidget {
 class _SamplingHelpDialogState extends State<SamplingHelpDialog> {
   bool _technical = false;
 
+  // Buttons can grow with wrapped labels. ChoiceChip assumes a single-line
+  // label and can silently fade long translations or enlarged text.
+  Widget _explanationChoice(
+    BuildContext context, {
+    required Key key,
+    required String label,
+    required bool selected,
+    required VoidCallback onPressed,
+  }) {
+    final colors = Theme.of(context).colorScheme;
+    return Semantics(
+      selected: selected,
+      child: OutlinedButton.icon(
+        key: key,
+        onPressed: onPressed,
+        icon: selected ? const Icon(Icons.check, size: 18) : null,
+        label: Text(label, softWrap: true),
+        style: OutlinedButton.styleFrom(
+          backgroundColor: selected ? colors.secondaryContainer : null,
+          foregroundColor: selected
+              ? colors.onSecondaryContainer
+              : colors.onSurfaceVariant,
+          side: selected ? BorderSide.none : BorderSide(color: colors.outline),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final strings = l10n(context);
@@ -66,17 +96,19 @@ class _SamplingHelpDialogState extends State<SamplingHelpDialog> {
               spacing: 8,
               runSpacing: 8,
               children: [
-                ChoiceChip(
+                _explanationChoice(
+                  context,
                   key: const ValueKey('sampling-help-simple'),
-                  label: Text(strings.samplingSimpleExplanation),
+                  label: strings.samplingSimpleExplanation,
                   selected: !_technical,
-                  onSelected: (_) => setState(() => _technical = false),
+                  onPressed: () => setState(() => _technical = false),
                 ),
-                ChoiceChip(
+                _explanationChoice(
+                  context,
                   key: const ValueKey('sampling-help-technical'),
-                  label: Text(strings.samplingTechnicalExplanation),
+                  label: strings.samplingTechnicalExplanation,
                   selected: _technical,
-                  onSelected: (_) => setState(() => _technical = true),
+                  onPressed: () => setState(() => _technical = true),
                 ),
               ],
             ),

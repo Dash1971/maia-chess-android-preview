@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/l10n/app_localizations.dart';
@@ -93,6 +94,21 @@ void main() {
       await tester.tap(technical);
       await tester.pumpAndSettle();
       expect(find.text(strings.samplingTechnicalTopP), findsOneWidget);
+      for (final label in [
+        strings.samplingSimpleExplanation,
+        strings.samplingTechnicalExplanation,
+      ]) {
+        final paragraph = tester.renderObject<RenderParagraph>(
+          find.text(label),
+        );
+        expect(
+          paragraph.didExceedMaxLines,
+          isFalse,
+          reason:
+              '$code: $label / ${paragraph.constraints} / ${paragraph.maxLines} / ${paragraph.softWrap}',
+        );
+      }
+
       expect(find.text(strings.samplingHelpVariety), findsNothing);
       expect(tester.takeException(), isNull);
       expect(find.text(strings.samplingResearchLink), findsOneWidget);
