@@ -71,6 +71,9 @@ part 'src/app_appearance.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Android 16 enforces edge-to-edge at the OS level, but Flutter must also
+  // opt in so its bottom overlay region controls navigation-button brightness.
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   LicenseRegistry.addLicense(() async* {
     yield LicenseEntryWithLineBreaks([
       'Mobile Maia / Maia-3',
