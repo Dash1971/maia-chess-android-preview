@@ -256,6 +256,7 @@ class _MaiaChessAppState extends State<MaiaChessApp>
         builder: (context, child) {
           final dark = Theme.of(context).brightness == Brightness.dark;
           return AnnotatedRegion<SystemUiOverlayStyle>(
+            key: const ValueKey('app-system-ui-style'),
             value: SystemUiOverlayStyle(
               statusBarColor: Colors.transparent,
               statusBarIconBrightness: dark
@@ -264,6 +265,11 @@ class _MaiaChessAppState extends State<MaiaChessApp>
               statusBarBrightness: dark ? Brightness.dark : Brightness.light,
               systemNavigationBarColor: Theme.of(context)
                   .scaffoldBackgroundColor,
+              // Android 16 ignores navigationBarColor in edge-to-edge mode.
+              // Its automatic scrim can follow the OS's light theme even when
+              // this app is dark, leaving white buttons on a pale background.
+              // Our Scaffold paints the safe-area background in both modes.
+              systemNavigationBarContrastEnforced: false,
               systemNavigationBarIconBrightness: dark
                   ? Brightness.light
                   : Brightness.dark,

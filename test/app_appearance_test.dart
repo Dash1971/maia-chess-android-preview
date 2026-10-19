@@ -17,6 +17,39 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
+  testWidgets('system buttons contrast with the app rather than the OS theme', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaiaChessApp());
+    await tester.pumpAndSettle();
+    final context = tester.element(find.byType(GamePage));
+    final controller = AppAppearanceSettings.maybeOf(context)!;
+    for (final appearance in [
+      const AppAppearance(),
+      const AppAppearance(mode: ThemeMode.light),
+      const AppAppearance(pureBlack: true),
+    ]) {
+      await controller.select(appearance);
+      await tester.pumpAndSettle();
+      final style = tester
+          .widget<AnnotatedRegion<SystemUiOverlayStyle>>(
+            find.byKey(const ValueKey('app-system-ui-style')),
+          )
+          .value;
+      final theme = Theme.of(context);
+      expect(style.systemNavigationBarContrastEnforced, isFalse);
+      expect(style.systemNavigationBarColor, theme.scaffoldBackgroundColor);
+      expect(
+        style.systemNavigationBarIconBrightness,
+        theme.brightness == Brightness.dark
+            ? Brightness.light
+            : Brightness.dark,
+      );
+    }
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
+  });
+
   test('fresh installs and malformed preferences keep the exact old theme', () {
     final previous = ThemeData(
       colorScheme: ColorScheme.fromSeed(
