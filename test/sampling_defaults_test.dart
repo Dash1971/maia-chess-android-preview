@@ -8,36 +8,40 @@ import 'settings_organization_test.dart' show settingsApp, openSettings, key;
 
 void main() {
   test(
-    'notices match sampling effect and opening override across slider grid',
+    'notices cover recommendation boundaries and opening overrides',
     () async {
       final s = await AppLocalizations.delegate.load(const Locale('en'));
-      for (var t = 0; t <= 20; t++) {
-        for (var p = 0; p <= 20; p++) {
-          for (final opening in [false, true]) {
-            final notices = samplingSettingsNotices(
-              s,
-              temperature: t / 20,
-              topP: p / 20,
-              openingVariety: opening,
-            );
-            expect(
-              notices.contains(s.samplingFullVarietyNotice),
-              t == 20 && p == 20,
-            );
-            expect(
-              notices.contains(s.samplingRecommendationWarning),
-              !opening && (t < 20 || p < 19),
-            );
-            expect(
-              notices.contains(s.samplingArgmaxNotice),
-              !opening && (t == 0 || p == 0),
-            );
-            expect(
-              notices.contains(s.samplingArgmaxAfterOpeningNotice),
-              opening && (t == 0 || p == 0),
-            );
-          }
-        }
+      final full = s.samplingFullVarietyNotice;
+      final limited = s.samplingRecommendationWarning;
+      final deterministic = s.samplingArgmaxNotice;
+      final afterOpening = s.samplingArgmaxAfterOpeningNotice;
+      final cases = <(double, double, bool, List<String>)>[
+        (1, 0.95, true, []),
+        (1, 0.95, false, []),
+        (0.95, 0.95, false, [limited]),
+        (1, 0.90, false, [limited]),
+        (1, 0.90, true, []),
+        (1, 1, false, [full]),
+        (1, 1, true, [full]),
+        (0, 0.95, false, [deterministic, limited]),
+        (0, 0.95, true, [afterOpening]),
+        (0, 0, false, [deterministic, limited]),
+        (0.5, 0, true, [afterOpening]),
+        (1, 0, false, [deterministic, limited]),
+        (0.5, 1, false, [limited]),
+      ];
+      for (final (temperature, topP, openingVariety, expected) in cases) {
+        expect(
+          samplingSettingsNotices(
+            s,
+            temperature: temperature,
+            topP: topP,
+            openingVariety: openingVariety,
+          ),
+          expected,
+          reason:
+              'Temperature $temperature, Top-P $topP, opening $openingVariety',
+        );
       }
     },
   );

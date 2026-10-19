@@ -86,9 +86,11 @@ At Temperature 0, Maia always chooses a most likely move, so Top-P has no effect
 its public main-branch URL before merging/releasing this app change. Existing
 research links and archived study evidence are retained.
 
-PR #156 changes some of the same settings/localization files. Integrate both
-branches and rerun localization, host regressions and Android qualification on
-the actual combined source before publishing Preview. This PR does not merge
+A merge dry run with PR #156 found conflicts in localization catalogs, generated
+localizations and terminology/review documentation, but no Dart application-code
+conflicts. Reconcile both sets of source strings, regenerate localizations, and
+rerun localization, host regressions and Android qualification on the actual
+combined source before publishing Preview. This PR does not merge
 that appearance dependency or qualify it for Android/F-Droid.
 
 ## Verification
@@ -96,8 +98,13 @@ that appearance dependency or qualify it for Android/F-Droid.
 Host regression coverage includes new/reset defaults, explicit preference
 preservation, malformed preference fallback, first-five-move boundaries for both
 colors, restored profiles, capture probabilities, takebacks, board reset and
-continued games. The notice table is checked across all 21×21 slider positions
-with both opening states. All ten languages exercise Simple/Technical selection,
+continued games. Thirteen explicit notice scenarios cover the recommendation
+boundaries, deterministic settings and both opening states. All ten languages exercise Simple/Technical selection,
 research navigation, dismissal and Top-P inactive help at 320px and 200% text.
 Screenshots come from Flutter widget rendering, not an installed Android APK.
 Android/device checks remain a later publication gate.
+
+Local full-suite result: **1,084 passed, 3 skipped**. After refining the notice
+regression into explicit boundary examples, all 12 tests in
+`sampling_defaults_test.dart` passed again. Static analysis and localization
+contract/reference checks also passed.
