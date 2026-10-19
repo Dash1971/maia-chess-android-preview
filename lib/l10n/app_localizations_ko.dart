@@ -1182,7 +1182,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingReportExplanation =>
-      '백분율은 당시 Temperature와 Top-P 설정을 적용한 뒤 각 수가 선택될 확률입니다. 승률이나 수의 좋고 나쁨을 나타내는 점수가 아닙니다.';
+      '백분율은 당시 온도와 Top-P 설정을 적용한 뒤 각 수가 선택될 확률입니다. 승률이나 수의 좋고 나쁨을 나타내는 점수가 아닙니다.';
 
   @override
   String get samplingReportPartial =>
@@ -1278,7 +1278,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get resetSettingsDefaultsScope =>
-      '이 화면의 모든 설정을 기본값으로 되돌립니다. 저장된 대국과 샘플링 데이터는 유지됩니다.';
+      '이 화면의 모든 설정을 기본값으로 되돌립니다. 저장된 대국과 수 선택 데이터는 유지됩니다.';
 
   @override
   String get settingsResetError => '일부 설정을 초기화하지 못했습니다. 다시 시도해 주세요.';
@@ -1287,7 +1287,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get resetSettingsConfirmation => '모든 설정을 기본값으로 되돌릴까요?';
 
   @override
-  String get resetSettingsKeepData => '저장된 대국과 샘플링 데이터는 유지됩니다.';
+  String get resetSettingsKeepData => '저장된 대국과 수 선택 데이터는 유지됩니다.';
 
   @override
   String get resetSettingsAction => '설정 초기화';
@@ -1333,7 +1333,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingTechnicalEvidence =>
-      '79M 모델, 수순 기록 끄기, 레이팅 입력 1600의 600국에서 제안된 기본값은 1.0 / 1.0을 상대로 60.7%를 득점했습니다(95% 구간 56.8–64.6%). 이전 argmax 시험에서는 약 300 Elo의 대결 우위를 보였습니다. 이는 직접 대결 결과이며 사람의 레이팅으로 보정한 값이 아닙니다. 다섯 수는 설계상의 선택이지 검증된 최적값이 아니며, 확률 필터링이 좋은 수를 보장하지는 않습니다.';
+      '79M 모델, 이전 포지션 사용 끄기, 레이팅 입력 1600의 600국에서 제안된 기본값은 1.0 / 1.0을 상대로 60.7%를 득점했습니다(95% 구간 56.8–64.6%). 이전 argmax 시험에서는 약 300 Elo의 대결 우위를 보였습니다. 이는 직접 대결 결과이며 사람의 레이팅으로 보정한 값이 아닙니다. 다섯 수는 설계상의 선택이지 검증된 최적값이 아니며, 확률 필터링이 좋은 수를 보장하지는 않습니다.';
 
   @override
   String get samplingSimpleExplanation => '쉬운 설명';
@@ -1393,4 +1393,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get appearanceDark => '어둡게';
+
+  @override
+  String get appearanceSystemDefault => '기기 테마';
 }

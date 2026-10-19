@@ -158,7 +158,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get maxOpeningVarietyHelp =>
-      'Standardmäßig an. Nutzt Temperatur und Top-P 1.0 / 1.0 für die ersten fünf Züge beider Seiten, danach deine Einstellungen. So bleibt die Eröffnungsauswahl breit, während später unwahrscheinliche Züge entfallen können. Maßgeblich ist die Zugnummer der Stellung, auch beim Fortsetzen einer Partie.\n\nBei 1.0 / 1.0 ist dies unnötig: Der Schalter ist aus und nicht wählbar, da diese Werte bereits durchgehend volle Vielfalt bieten.';
+      'Standardmäßig an. Nutzt Temperatur und Top-P 1,0 / 1,0 für die ersten fünf Züge beider Seiten, danach deine Einstellungen. So bleibt die Eröffnungsauswahl breit, während später unwahrscheinliche Züge entfallen können. Maßgeblich ist die Zugnummer der Stellung, auch beim Fortsetzen einer Partie.\n\nBei 1,0 / 1,0 ist dies unnötig: Der Schalter ist aus und nicht wählbar, da diese Werte bereits durchgehend volle Vielfalt bieten.';
 
   @override
   String get maiaAnalysisRating => 'Maia-Rating (Analyse)';
@@ -1379,7 +1379,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get resetSettingsDefaultsScope =>
-      'Setzt alle Einstellungen auf dieser Seite zurück. Gespeicherte Partien und Sampling-Daten bleiben erhalten.';
+      'Setzt alle Einstellungen auf dieser Seite zurück. Gespeicherte Partien und Zugauswahldaten bleiben erhalten.';
 
   @override
   String get settingsResetError =>
@@ -1390,7 +1390,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get resetSettingsKeepData =>
-      'Deine gespeicherten Partien und Sampling-Daten bleiben erhalten.';
+      'Deine gespeicherten Partien und Zugauswahldaten bleiben erhalten.';
 
   @override
   String get resetSettingsAction => 'Einstellungen zurücksetzen';
@@ -1405,19 +1405,19 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingHelpDefaults =>
-      'Top-P kannst du dir als Engel auf Maias Schulter vorstellen. Bei 0 sagt der Engel Maia, sie solle wilde, unwahrscheinliche Züge ignorieren. Bei 1.0 ist der Engel verschwunden, und Maia könnte sogar den verrücktesten, unwahrscheinlichsten Zug wählen.';
+      'Top-P kannst du dir als Engel auf Maias Schulter vorstellen. Bei 0 sagt der Engel Maia, sie solle wilde, unwahrscheinliche Züge ignorieren. Bei 1,0 ist der Engel verschwunden, und Maia könnte sogar den verrücktesten, unwahrscheinlichsten Zug wählen.';
 
   @override
   String get samplingHelpStrength =>
-      'In unserer Untersuchung ergaben die Einstellungen 0 und 0 (technisch argmax genannt) das stärkste Spiel: etwa 300 Elo stärker als die Einstellungen 1.0 und 1.0. Allerdings beschränkte das auch die Eröffnungsauswahl auf einen engen Bereich, überwiegend aus Hauptvarianten.';
+      'In unserer Untersuchung ergaben die Einstellungen 0 und 0 (technisch argmax genannt) das stärkste Spiel: etwa 300 Elo stärker als die Einstellungen 1,0 und 1,0. Allerdings beschränkte das auch die Eröffnungsauswahl auf einen engen Bereich, überwiegend aus Hauptvarianten.';
 
   @override
   String get samplingHelpArgmax =>
-      'Deshalb haben wir eine Funktion für maximale Eröffnungsvielfalt eingeführt: einen Schalter, mit dem Maia für die ersten 5 Züge die Einstellungen 1.0 und 1.0 verwendet. In der Eröffnung könntest du einige verrückte Dinge sehen! Ab dem 6. Zug wechselt Maia aber zu deinen voreingestellten Werten.';
+      'Deshalb haben wir eine Funktion für maximale Eröffnungsvielfalt eingeführt: einen Schalter, mit dem Maia für die ersten 5 Züge die Einstellungen 1,0 und 1,0 verwendet. In der Eröffnung könntest du einige verrückte Dinge sehen! Ab dem 6. Zug wechselt Maia aber zu deinen voreingestellten Werten.';
 
   @override
   String get samplingHelpTopP =>
-      'Wir empfehlen, maximale Eröffnungsvielfalt eingeschaltet und Temperatur auf 1.0 sowie Top-P auf 0.95 eingestellt zu lassen. Das ist wie ein kreativer Spieler mit einem Engel auf der Schulter, der ihm zumindest die völlig abwegigen Züge ausredet: die unwahrscheinlichsten Züge, deren gemeinsame Wahrscheinlichkeit bis zu 5 % beträgt. Diese könnten zwar brillant sein, aber auch dumme grobe Fehler. So sollte eine gute Balance aus Eröffnungsvielfalt, Kreativität im Mittelspiel und stärkerem Spiel entstehen, indem einige sehr unwahrscheinliche grobe Fehler ausgeschlossen werden.\n\nWer mutig ist, kann Temperatur auf 0 setzen (Top-P hat bei Temperatur 0 keine Wirkung). Laut unserer Untersuchung ergibt das den stärksten Gegner. Viel Glück!';
+      'Wir empfehlen, maximale Eröffnungsvielfalt eingeschaltet und Temperatur auf 1,0 sowie Top-P auf 0,95 eingestellt zu lassen. Das ist wie ein kreativer Spieler mit einem Engel auf der Schulter, der ihm zumindest die völlig abwegigen Züge ausredet: die unwahrscheinlichsten Züge, deren gemeinsame Wahrscheinlichkeit bis zu 5 % beträgt. Diese könnten zwar brillant sein, aber auch dumme grobe Patzer. So sollte eine gute Balance aus Eröffnungsvielfalt, Kreativität im Mittelspiel und stärkerem Spiel entstehen, indem einige sehr unwahrscheinliche grobe Patzer ausgeschlossen werden.\n\nWer mutig ist, kann Temperatur auf 0 setzen (Top-P hat bei Temperatur 0 keine Wirkung). Laut unserer Untersuchung ergibt das den stärksten Gegner. Viel Glück!';
 
   @override
   String get samplingHelpResearchIntro =>
@@ -1429,15 +1429,15 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingTechnicalTopP =>
-      'Top-P sortiert die angepassten Wahrscheinlichkeiten absteigend und behält die kleinste Anfangsmenge, die den Schwellenwert erreicht, einschließlich des überschreitenden Zuges. Vor der Zufallsauswahl werden die verbleibenden Wahrscheinlichkeiten erneut normalisiert. P = 1 behält alle Züge, P = 0 einen mit höchster Wahrscheinlichkeit. P = 0.95 entfernt höchstens 5% der gesamten Wahrscheinlichkeit, nicht jeden Zug mit weniger als 5% Einzelwahrscheinlichkeit.';
+      'Top-P sortiert die angepassten Wahrscheinlichkeiten absteigend und behält die kleinste Anfangsmenge, die den Schwellenwert erreicht, einschließlich des überschreitenden Zuges. Vor der Zufallsauswahl werden die verbleibenden Wahrscheinlichkeiten erneut normalisiert. P = 1 behält alle Züge, P = 0 einen mit höchster Wahrscheinlichkeit. P = 0,95 entfernt höchstens 5% der gesamten Wahrscheinlichkeit, nicht jeden Zug mit weniger als 5% Einzelwahrscheinlichkeit.';
 
   @override
   String get samplingTechnicalOpening =>
-      'Standard: Temperatur 1.0, Top-P 0.95, maximale Eröffnungsvielfalt an. Für FEN-Vollzugnummern 1–5 gilt für beide Farben 1.0 / 1.0; ab Zug 6 gelten die eingestellten Werte. Das Fortsetzen einer Partie oder Stellung setzt den Zähler nicht zurück. Die Prozente im Analysebrett bleiben Modellwahrscheinlichkeiten vor Anwendung dieser Spieleinstellungen.';
+      'Standard: Temperatur 1,0, Top-P 0,95, maximale Eröffnungsvielfalt an. Für FEN-Vollzugnummern 1–5 gilt für beide Farben 1,0 / 1,0; ab Zug 6 gelten die eingestellten Werte. Das Fortsetzen einer Partie oder Stellung setzt den Zähler nicht zurück. Die Prozente im Analysebrett bleiben Modellwahrscheinlichkeiten vor Anwendung dieser Spieleinstellungen.';
 
   @override
   String get samplingTechnicalEvidence =>
-      'Mit dem 79M-Modell, ohne Stellungsverlauf und bei Rating-Eingabe 1600 erzielten die vorgeschlagenen Standardwerte in 600 Partien gegen 1.0 / 1.0 einen Score von 60.7% (95%-Intervall: 56.8–64.6%). Frühere Argmax-Tests ergaben rund 300 Elo Vorsprung im direkten Vergleich. Das sind keine gegen Menschen kalibrierten Ratings. Fünf Züge sind eine Designentscheidung, kein bewiesenes Optimum. Wahrscheinlichkeitsfilter garantieren keine guten Züge.';
+      'Mit dem 79M-Modell, ohne Stellungsverlauf und bei Rating-Eingabe 1600 erzielten die vorgeschlagenen Standardwerte in 600 Partien gegen 1,0 / 1,0 einen Score von 60,7% (95%-Intervall: 56,8–64,6%). Frühere Argmax-Tests ergaben rund 300 Elo Vorsprung im direkten Vergleich. Das sind keine gegen Menschen kalibrierten Ratings. Fünf Züge sind eine Designentscheidung, kein bewiesenes Optimum. Wahrscheinlichkeitsfilter garantieren keine guten Züge.';
 
   @override
   String get samplingSimpleExplanation => 'Einfach erklärt';
@@ -1447,7 +1447,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingFullVarietyNotice =>
-      'Mit Temperatur und Top-P 1.0 / 1.0 kann Maia häufiger ungewöhnliche grobe Fehler spielen.';
+      'Mit Temperatur und Top-P 1,0 / 1,0 kann Maia häufiger ungewöhnliche grobe Patzer spielen.';
 
   @override
   String get samplingArgmaxNotice =>
@@ -1461,7 +1461,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get topPNotUsedHelp =>
-      'Bei Temperatur 0 wählt Maia immer einen wahrscheinlichsten Zug. Top-P hat dann keinen Einfluss. Dein Top-P-Wert bleibt gespeichert und wird wieder nutzbar, wenn du die Temperatur erhöhst. Mit Eröffnungsvielfalt gilt für die ersten fünf Züge beider Seiten weiterhin 1.0 / 1.0.';
+      'Bei Temperatur 0 wählt Maia immer einen wahrscheinlichsten Zug. Top-P hat dann keinen Einfluss. Dein Top-P-Wert bleibt gespeichert und wird wieder nutzbar, wenn du die Temperatur erhöhst. Mit Eröffnungsvielfalt gilt für die ersten fünf Züge beider Seiten weiterhin 1,0 / 1,0.';
 
   @override
   String get samplingLowerNotice =>
@@ -1499,4 +1499,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get appearanceDark => 'Dunkel';
+
+  @override
+  String get appearanceSystemDefault => 'Mit Gerät synchronisieren';
 }

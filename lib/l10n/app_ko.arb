@@ -348,7 +348,7 @@
   "samplingReadable": "읽기 쉬운 보고서 (HTML)",
   "samplingReadableHint": "브라우저에서 수, 확률, 보드 그림을 볼 수 있습니다.",
   "samplingResearchHint": "기술 분석을 위한 모델의 원시 입력과 출력입니다.",
-  "samplingReportExplanation": "백분율은 당시 Temperature와 Top-P 설정을 적용한 뒤 각 수가 선택될 확률입니다. 승률이나 수의 좋고 나쁨을 나타내는 점수가 아닙니다.",
+  "samplingReportExplanation": "백분율은 당시 온도와 Top-P 설정을 적용한 뒤 각 수가 선택될 확률입니다. 승률이나 수의 좋고 나쁨을 나타내는 점수가 아닙니다.",
   "samplingReportPartial": "기록된 Maia의 판단만 표시하며, 전체 기보는 아닙니다. 무르기나 재시도로 같은 수 번호가 반복될 수 있습니다.",
   "samplingReportMissing": "일부 기록이 삭제되었거나 저장되지 않았습니다. 보고서에 누락된 내용이 있을 수 있습니다.",
   "samplingPlayed": "둔 수",
@@ -375,10 +375,10 @@
   "samplingClearConfirmation": "Maia의 수 선택 데이터를 모두 삭제할까요? 복구할 수 없습니다.",
   "analysisSettings": "분석 설정",
   "samplingData": "수 선택 데이터",
-  "resetSettingsDefaultsScope": "이 화면의 모든 설정을 기본값으로 되돌립니다. 저장된 대국과 샘플링 데이터는 유지됩니다.",
+  "resetSettingsDefaultsScope": "이 화면의 모든 설정을 기본값으로 되돌립니다. 저장된 대국과 수 선택 데이터는 유지됩니다.",
   "settingsResetError": "일부 설정을 초기화하지 못했습니다. 다시 시도해 주세요.",
   "resetSettingsConfirmation": "모든 설정을 기본값으로 되돌릴까요?",
-  "resetSettingsKeepData": "저장된 대국과 샘플링 데이터는 유지됩니다.",
+  "resetSettingsKeepData": "저장된 대국과 수 선택 데이터는 유지됩니다.",
   "resetSettingsAction": "설정 초기화",
   "samplingHelpIntro": "온도와 Top-P는 함께 Maia의 플레이가 얼마나 다양한지를 결정합니다.",
   "samplingHelpVariety": "온도가 높을수록 Maia가 후보 수를 생각할 때 더 창의적이라고 이해하면 됩니다. 온도 0은 가장 나올 법한 수(그리고 흔히 최선의 수)를 선택하는, 경험 많은 대면 체스 플레이어와 같습니다. 온도 1은 아무리 대담한 희생도 마다하지 않고, 나올 가능성이 아무리 낮아도 모든 수를 고려하는 창의적인 블리츠 플레이어와 같습니다.",
@@ -390,7 +390,7 @@
   "samplingTechnicalTemperature": "온도는 모델의 합법적인 수 로짓을 조정한 뒤 softmax를 적용합니다. T > 0이면 각 가중치는 exp((로짓 − 최대 로짓) / T)이며 이후 정규화합니다. T = 1은 모델 분포를 유지하고, 낮은 T는 높은 점수의 수에 확률을 집중시킵니다. T = 0은 argmax를 직접 선택하고 Top-P를 무시합니다.",
   "samplingTechnicalTopP": "Top-P는 온도 적용 후 확률을 내림차순으로 정렬하고, 누적 확률이 기준에 도달하는 최소 후보 집합을 남깁니다. 기준을 넘기는 수도 포함합니다. 남은 확률을 다시 정규화해 추출합니다. P = 1은 모든 수를, P = 0은 가장 확률 높은 수 하나를 남깁니다. P = 0.95는 전체 확률의 최대 5%를 제거하며, 개별 확률이 5% 미만인 모든 수를 제거하는 것은 아닙니다.",
   "samplingTechnicalOpening": "기본값은 온도 1.0, Top-P 0.95, 오프닝 다양성 켜기입니다. 어느 색이든 FEN의 전체 수 번호 1–5에는 1.0 / 1.0을, 여섯 번째 수부터는 설정값을 사용합니다. 저장 대국을 재개하거나 특정 위치에서 이어 두어도 번호는 초기화되지 않습니다. 분석 보드의 백분율은 이러한 대국 설정을 적용하기 전 모델 확률입니다.",
-  "samplingTechnicalEvidence": "79M 모델, 수순 기록 끄기, 레이팅 입력 1600의 600국에서 제안된 기본값은 1.0 / 1.0을 상대로 60.7%를 득점했습니다(95% 구간 56.8–64.6%). 이전 argmax 시험에서는 약 300 Elo의 대결 우위를 보였습니다. 이는 직접 대결 결과이며 사람의 레이팅으로 보정한 값이 아닙니다. 다섯 수는 설계상의 선택이지 검증된 최적값이 아니며, 확률 필터링이 좋은 수를 보장하지는 않습니다.",
+  "samplingTechnicalEvidence": "79M 모델, 이전 포지션 사용 끄기, 레이팅 입력 1600의 600국에서 제안된 기본값은 1.0 / 1.0을 상대로 60.7%를 득점했습니다(95% 구간 56.8–64.6%). 이전 argmax 시험에서는 약 300 Elo의 대결 우위를 보였습니다. 이는 직접 대결 결과이며 사람의 레이팅으로 보정한 값이 아닙니다. 다섯 수는 설계상의 선택이지 검증된 최적값이 아니며, 확률 필터링이 좋은 수를 보장하지는 않습니다.",
   "samplingSimpleExplanation": "쉬운 설명",
   "samplingTechnicalExplanation": "기술적 설명",
   "samplingFullVarietyNotice": "온도와 Top-P가 1.0 / 1.0이면 Maia가 뜻밖의 블런더를 더 자주 둘 수 있습니다.",
@@ -408,5 +408,6 @@
   "appearancePreferenceError": "화면 모양을 변경했지만 저장하지 못했습니다. 다시 시도해 주세요.",
   "appearanceTheme": "테마",
   "appearanceLight": "밝게",
-  "appearanceDark": "어둡게"
+  "appearanceDark": "어둡게",
+  "appearanceSystemDefault": "기기 테마"
 }

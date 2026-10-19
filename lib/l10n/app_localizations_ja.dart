@@ -1181,7 +1181,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingReportExplanation =>
-      'パーセントは、その時点のTemperatureとTop-P設定を適用した後に各指し手が選ばれる確率です。勝率や手の良し悪しを表すものではありません。';
+      'パーセントは、その時点の温度とTop-P設定を適用した後に各指し手が選ばれる確率です。勝率や手の良し悪しを表すものではありません。';
 
   @override
   String get samplingReportPartial =>
@@ -1272,7 +1272,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get analysisSettings => '解析に関する設定';
 
   @override
-  String get samplingData => '選択データ';
+  String get samplingData => '手の選択データ';
 
   @override
   String get resetSettingsDefaultsScope =>
@@ -1312,7 +1312,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      '「序盤の多様性を最大にする」はオンのまま、温度は1.0、Top-Pは0.95のままにしておくことをおすすめします。創造的なプレイヤーの肩に天使が乗り、少なくとも極端に奇抜な手は思いとどまらせるようなイメージです。除かれるのは、確率の低い手のうち、合計確率が最大5%になる部分です。そうした手には妙手もあるでしょうが、単純なブランダーもあり得ます。序盤の多様性、ミドルゲームの創造性、そして非常に確率の低いブランダーの一部を除くことによる強さの、よいバランスが期待できます。\n\n腕に自信のある方は、温度を0にしてみてください（温度0ではTop-Pは意味を持ちません）。私たちの研究では、最も手強い相手になる設定です。健闘を祈ります！';
+      '「序盤の多様性を最大にする」はオンのまま、温度は1.0、Top-Pは0.95のままにしておくことをおすすめします。創造的なプレイヤーの肩に天使が乗り、少なくとも極端に奇抜な手は思いとどまらせるようなイメージです。除かれるのは、確率の低い手のうち、合計確率が最大5%になる部分です。そうした手には妙手もあるでしょうが、単純な大悪手もあり得ます。序盤の多様性、中盤の創造性、そして非常に確率の低い大悪手の一部を除くことによる強さの、よいバランスが期待できます。\n\n腕に自信のある方は、温度を0にしてみてください（温度0ではTop-Pは意味を持ちません）。私たちの研究では、最も手強い相手になる設定です。健闘を祈ります！';
 
   @override
   String get samplingHelpResearchIntro =>
@@ -1332,7 +1332,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingTechnicalEvidence =>
-      '79Mモデル、履歴オフ、レーティング入力1600での600局では、提案する初期設定は1.0 / 1.0に対して60.7%の得点率でした（95%区間56.8〜64.6%）。以前のargmax実験では約300 Elo相当の対戦上の優位がありました。いずれも直接対戦の結果で、人間のレーティングへの換算ではありません。5手は設計上の選択で、最適と実証された値ではなく、確率による絞り込みは好手を保証しません。';
+      '79Mモデル、過去の局面を使わない設定、レーティング入力1600での600局では、提案する初期設定は1.0 / 1.0に対して60.7%の得点率でした（95%区間56.8〜64.6%）。以前のargmax実験では約300 Elo相当の対戦上の優位がありました。いずれも直接対戦の結果で、人間のレーティングへの換算ではありません。5手は設計上の選択で、最適と実証された値ではなく、確率による絞り込みは好手を保証しません。';
 
   @override
   String get samplingSimpleExplanation => 'やさしい説明';
@@ -1342,7 +1342,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get samplingFullVarietyNotice =>
-      '温度とTop-Pが1.0 / 1.0の場合、Maiaが意外なブランダーを指すことが増える可能性があります。';
+      '温度とTop-Pが1.0 / 1.0の場合、Maiaが意外な大悪手を指すことが増える可能性があります。';
 
   @override
   String get samplingArgmaxNotice => '温度またはTop-Pが0の場合、Maiaがより強くなる可能性があります。幸運を！';
@@ -1386,8 +1386,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get appearanceTheme => 'テーマ';
 
   @override
-  String get appearanceLight => '明るい';
+  String get appearanceLight => 'ライト';
 
   @override
-  String get appearanceDark => '暗い';
+  String get appearanceDark => 'ダーク';
+
+  @override
+  String get appearanceSystemDefault => 'デバイスの設定に従う';
 }

@@ -256,7 +256,7 @@ class AppearanceSettingsSection extends StatelessWidget {
               items: [
                 DropdownMenuItem(
                   value: ThemeMode.system,
-                  child: Text(strings.systemDefault),
+                  child: Text(strings.appearanceSystemDefault),
                 ),
                 DropdownMenuItem(
                   value: ThemeMode.light,

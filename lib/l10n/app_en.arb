@@ -106,7 +106,7 @@
   },
   "systemDefault": "System default",
   "@systemDefault": {
-    "description": "Settings: System default"
+    "description": "System-default option in the LANGUAGE selector only. Follows the supported device-language preference. Never reuse for theme/brightness; use appearanceSystemDefault there."
   },
   "language": "Language",
   "@language": {
@@ -178,11 +178,11 @@
   },
   "temperature": "Temperature",
   "@temperature": {
-    "description": "Settings: Temperature"
+    "description": "AI sampling temperature: rescales legal-move logits before softmax; not physical device temperature. At zero Maia selects an argmax. Use the same localized term in help, value announcements and HTML reports. Official localized AI terminology sources: docs/TRANSLATION_QUALITY_REVIEW.md."
   },
   "topP": "Top-P",
   "@topP": {
-    "description": "Settings: Top-P"
+    "description": "Top-P (nucleus sampling): retain the smallest highest-probability candidate set whose cumulative probability reaches P, including the crossing move. Keep the conventional Top-P identifier. Not a per-move percentage cutoff. Official AI terminology sources: docs/TRANSLATION_QUALITY_REVIEW.md."
   },
   "maxOpeningVariety": "Max variety in opening",
   "@maxOpeningVariety": {
@@ -1656,7 +1656,7 @@
   },
   "samplingReportExplanation": "Percentages show the chance of each move being selected after your Temperature and Top-P settings were applied. They are not winning chances or move-quality scores.",
   "@samplingReportExplanation": {
-    "description": "Offline report of recorded Maia selection probabilities after Temperature and Top-P."
+    "description": "HTML report introduction. Refer to the same translated Temperature/Top-P names as Settings; these are selection probabilities after sampling settings, not winning chances or objective quality scores."
   },
   "samplingReportPartial": "Only recorded Maia decisions are shown, not a complete game. Takebacks and retries can repeat a move number.",
   "@samplingReportPartial": {
@@ -1924,10 +1924,14 @@
   },
   "appearanceLight": "Light",
   "@appearanceLight": {
-    "description": "Appearance mode label, following Lichess."
+    "description": "Light appearance mode, not brightness intensity or piece color. Lichess baseline with documented Google platform-wording adaptations in docs/TRANSLATION_QUALITY_REVIEW.md."
   },
   "appearanceDark": "Dark",
   "@appearanceDark": {
-    "description": "Appearance mode label, following Lichess."
+    "description": "Dark appearance mode, not literal black or piece color. Pure-black backgrounds are a separate setting. Lichess baseline with documented Google platform-wording adaptations in docs/TRANSLATION_QUALITY_REVIEW.md."
+  },
+  "appearanceSystemDefault": "System default",
+  "@appearanceSystemDefault": {
+    "description": "System-default option in the THEME selector only. Follow device light/dark brightness; independent of language, Android accent colors and pure-black backgrounds. Lichess deviceTheme where available; sourced fallback in docs/TRANSLATION_QUALITY_REVIEW.md."
   }
 }

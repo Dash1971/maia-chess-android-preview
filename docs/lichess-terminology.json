@@ -1830,7 +1830,20 @@
         "hi": "हल्का",
         "pt": "Claro"
       },
-      "adaptations": {}
+      "adaptations": {
+        "ja": {
+          "value": "ライト",
+          "reason": "Use the established platform theme-selector wording in Google Chrome’s localized documentation: https://support.google.com/chrome/answer/9275525?hl=ja&co=GENIE.Platform%3DAndroid . These are appearance modes: Japanese uses katakana, French uses Clair rather than Lumineux, and Hindi distinguishes a dark theme from literal black (the separate pure-black switch). See TRANSLATION_QUALITY_REVIEW.md."
+        },
+        "fr": {
+          "value": "Clair",
+          "reason": "Use the established platform theme-selector wording in Google Chrome’s localized documentation: https://support.google.com/chrome/answer/9275525?hl=fr&co=GENIE.Platform%3DAndroid . These are appearance modes: Japanese uses katakana, French uses Clair rather than Lumineux, and Hindi distinguishes a dark theme from literal black (the separate pure-black switch). See TRANSLATION_QUALITY_REVIEW.md."
+        },
+        "hi": {
+          "value": "हल्के रंग वाली थीम",
+          "reason": "Use the established platform theme-selector wording in Google Chrome’s localized documentation: https://support.google.com/chrome/answer/9275525?hl=hi&co=GENIE.Platform%3DAndroid . These are appearance modes: Japanese uses katakana, French uses Clair rather than Lumineux, and Hindi distinguishes a dark theme from literal black (the separate pure-black switch). See TRANSLATION_QUALITY_REVIEW.md."
+        }
+      }
     },
     "appearanceDark": {
       "upstream_key": "dark",
@@ -1846,7 +1859,16 @@
         "hi": "काला",
         "pt": "Escuro"
       },
-      "adaptations": {}
+      "adaptations": {
+        "ja": {
+          "value": "ダーク",
+          "reason": "Use the established platform theme-selector wording in Google Chrome’s localized documentation: https://support.google.com/chrome/answer/9275525?hl=ja&co=GENIE.Platform%3DAndroid . These are appearance modes: Japanese uses katakana, French uses Clair rather than Lumineux, and Hindi distinguishes a dark theme from literal black (the separate pure-black switch). See TRANSLATION_QUALITY_REVIEW.md."
+        },
+        "hi": {
+          "value": "गहरे रंग वाली थीम",
+          "reason": "Use the established platform theme-selector wording in Google Chrome’s localized documentation: https://support.google.com/chrome/answer/9275525?hl=hi&co=GENIE.Platform%3DAndroid . These are appearance modes: Japanese uses katakana, French uses Clair rather than Lumineux, and Hindi distinguishes a dark theme from literal black (the separate pure-black switch). See TRANSLATION_QUALITY_REVIEW.md."
+        }
+      }
     },
     "appearanceSystemColors": {
       "upstream_key": "mobileSystemColors",
@@ -1902,6 +1924,31 @@
         "pt": {
           "value": "Usar cores do sistema",
           "reason": "Use an explicit action label for an independent switch; this does not select device brightness. Chinese makes colors explicit to distinguish this from System default brightness."
+        }
+      }
+    },
+    "appearanceSystemDefault": {
+      "upstream_key": "deviceTheme",
+      "upstream": {
+        "en": "Device theme",
+        "ja": "デバイスの設定に従う",
+        "zh": "跟随系统",
+        "ko": "기기 테마",
+        "es": "Tema del dispositivo",
+        "de": "Mit Gerät synchronisieren",
+        "fr": "Thème de l'appareil",
+        "ru": "Системная",
+        "hi": null,
+        "pt": "Tema do dispositivo"
+      },
+      "adaptations": {
+        "en": {
+          "value": "System default",
+          "reason": "Device-theme option within the Theme selector; retain the existing English label. This follows system brightness, independently of system colors and language."
+        },
+        "hi": {
+          "value": "सिस्टम डिफ़ॉल्ट",
+          "reason": "No Hindi deviceTheme translation at the pinned Lichess revision. Use Google Chrome’s Hindi theme-selector label: https://support.google.com/chrome/answer/9275525?hl=hi&co=GENIE.Platform%3DAndroid . This follows system brightness, not system language."
         }
       }
     }

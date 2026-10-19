@@ -339,5 +339,28 @@ explicit independent switch; Chinese explicitly says colors so it cannot be
 confused with following system brightness. These references are recorded in the
 terminology baseline. Appearance, OLED explanation, platform availability and
 storage-error prose are contextual app settings, translated in all ten catalogs.
-System default reuses the existing app translation. As elsewhere, automated
+The initial implementation reused the language-selector System default message;
+the October quality review below replaces that context-unsafe reuse. As elsewhere, automated
 layout/consistency checks are not native-speaker certification.
+
+
+## Platform and AI terminology quality review — 2026-10-20
+
+The [all-catalog quality review](TRANSLATION_QUALITY_REVIEW.md) supplements the
+chess baseline with official Google platform and AI references. Keep Lichess as
+the first source for equivalent chess/UI concepts. Compare context rather than
+assuming any upstream translation is automatically appropriate.
+
+Appearance now uses a dedicated `appearanceSystemDefault`, pinned to Lichess
+`deviceTheme` in nine languages, with a documented Google Hindi fallback and an
+English context adaptation. The language selector keeps `systemDefault`; its
+French/Hindi translations explicitly mean system language and cannot label a
+light/dark theme choice. Documented Google theme-selector adaptations retain the
+upstream snapshot but use Japanese ライト / ダーク, French Clair, and Hindi
+हल्के रंग वाली थीम / गहरे रंग वाली थीम. Pure black remains a separate preference.
+
+Official localized AI references corroborate Temperature vocabulary and the
+conventional Top-P identifier. Their terminology does not replace Maia's own
+sampling algorithm, edge cases, opening override, defaults or research results.
+The quality review records source-language fallbacks and editorial corrections,
+including reports, reset warnings, prose numbers and grammatical consistency.

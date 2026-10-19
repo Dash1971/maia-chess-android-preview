@@ -1164,7 +1164,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingReportExplanation =>
-      '百分比表示应用当时的 Temperature 和 Top-P 设置后，每步棋被选中的概率，并非获胜概率或走法质量评分。';
+      '百分比表示应用当时的 温度 和 Top-P 设置后，每步棋被选中的概率，并非获胜概率或走法质量评分。';
 
   @override
   String get samplingReportPartial =>
@@ -1257,7 +1257,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingData => '选招数据';
 
   @override
-  String get resetSettingsDefaultsScope => '将此页面上的所有设置恢复为默认值。已保存的对局和采样数据会保留。';
+  String get resetSettingsDefaultsScope => '将此页面上的所有设置恢复为默认值。已保存的对局和选招数据会保留。';
 
   @override
   String get settingsResetError => '部分设置未能重置，请重试。';
@@ -1266,7 +1266,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get resetSettingsConfirmation => '将所有设置恢复为默认值？';
 
   @override
-  String get resetSettingsKeepData => '已保存的对局和采样数据会保留。';
+  String get resetSettingsKeepData => '已保存的对局和选招数据会保留。';
 
   @override
   String get resetSettingsAction => '重置设置';
@@ -1292,7 +1292,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      '我们建议保持最大开局多样性开启，温度保持为1.0，Top-P保持为0.95。这就像一位富有创造力的棋手肩上有个天使，至少能劝它放弃那些特别离谱的走法——也就是概率最低、合计概率不超过5%的那些走法。它们可能是妙招，没错，但也可能是愚蠢的大漏招。因此，这应该能在开局的多样性、中局的创造力，以及通过排除部分极低概率的大漏招所获得的更强表现之间，取得良好的平衡。\n\n如果你勇于挑战，可以将温度设为0（温度为0时，Top-P没有作用）。根据我们的研究，这会带来最强的对手。祝你好运！';
+      '我们建议保持最大开局多样性开启，温度保持为1.0，Top-P保持为0.95。这就像一位富有创造力的棋手肩上有个天使，至少能劝它放弃那些特别离谱的走法——也就是概率最低、合计概率不超过5%的那些走法。它们可能是妙招，没错，但也可能是愚蠢的败着。因此，这应该能在开局的多样性、中局的创造力，以及通过排除部分极低概率的败着所获得的更强表现之间，取得良好的平衡。\n\n如果你勇于挑战，可以将温度设为0（温度为0时，Top-P没有作用）。根据我们的研究，这会带来最强的对手。祝你好运！';
 
   @override
   String get samplingHelpResearchIntro => '查看图解指南，了解这些选择背后的研究，并访问完整结果。';
@@ -1320,7 +1320,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingTechnicalExplanation => '技术说明';
 
   @override
-  String get samplingFullVarietyNotice => '温度和Top-P为1.0 / 1.0时，Maia可能走出更多意外漏着。';
+  String get samplingFullVarietyNotice =>
+      '温度和Top-P为1.0 / 1.0时，Maia可能走出更多不寻常的败着。';
 
   @override
   String get samplingArgmaxNotice => '温度或Top-P为0时，Maia可能更强。祝您好运！';
@@ -1367,4 +1368,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get appearanceDark => '深色';
+
+  @override
+  String get appearanceSystemDefault => '跟随系统';
 }

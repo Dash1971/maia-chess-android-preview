@@ -270,7 +270,7 @@ abstract class AppLocalizations {
   /// **'You'**
   String get you;
 
-  /// Settings: System default
+  /// System-default option in the LANGUAGE selector only. Follows the supported device-language preference. Never reuse for theme/brightness; use appearanceSystemDefault there.
   ///
   /// In en, this message translates to:
   /// **'System default'**
@@ -378,13 +378,13 @@ abstract class AppLocalizations {
   /// **'About Temperature and Top-P'**
   String get aboutTemperatureAndTopP;
 
-  /// Settings: Temperature
+  /// AI sampling temperature: rescales legal-move logits before softmax; not physical device temperature. At zero Maia selects an argmax. Use the same localized term in help, value announcements and HTML reports. Official localized AI terminology sources: docs/TRANSLATION_QUALITY_REVIEW.md.
   ///
   /// In en, this message translates to:
   /// **'Temperature'**
   String get temperature;
 
-  /// Settings: Top-P
+  /// Top-P (nucleus sampling): retain the smallest highest-probability candidate set whose cumulative probability reaches P, including the crossing move. Keep the conventional Top-P identifier. Not a per-move percentage cutoff. Official AI terminology sources: docs/TRANSLATION_QUALITY_REVIEW.md.
   ///
   /// In en, this message translates to:
   /// **'Top-P'**
@@ -2206,7 +2206,7 @@ abstract class AppLocalizations {
   /// **'Raw model inputs and outputs for technical analysis.'**
   String get samplingResearchHint;
 
-  /// Offline report of recorded Maia selection probabilities after Temperature and Top-P.
+  /// HTML report introduction. Refer to the same translated Temperature/Top-P names as Settings; these are selection probabilities after sampling settings, not winning chances or objective quality scores.
   ///
   /// In en, this message translates to:
   /// **'Percentages show the chance of each move being selected after your Temperature and Top-P settings were applied. They are not winning chances or move-quality scores.'**
@@ -2560,17 +2560,23 @@ abstract class AppLocalizations {
   /// **'Theme'**
   String get appearanceTheme;
 
-  /// Appearance mode label, following Lichess.
+  /// Light appearance mode, not brightness intensity or piece color. Lichess baseline with documented Google platform-wording adaptations in docs/TRANSLATION_QUALITY_REVIEW.md.
   ///
   /// In en, this message translates to:
   /// **'Light'**
   String get appearanceLight;
 
-  /// Appearance mode label, following Lichess.
+  /// Dark appearance mode, not literal black or piece color. Pure-black backgrounds are a separate setting. Lichess baseline with documented Google platform-wording adaptations in docs/TRANSLATION_QUALITY_REVIEW.md.
   ///
   /// In en, this message translates to:
   /// **'Dark'**
   String get appearanceDark;
+
+  /// System-default option in the THEME selector only. Follow device light/dark brightness; independent of language, Android accent colors and pure-black backgrounds. Lichess deviceTheme where available; sourced fallback in docs/TRANSLATION_QUALITY_REVIEW.md.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get appearanceSystemDefault;
 }
 
 class _AppLocalizationsDelegate

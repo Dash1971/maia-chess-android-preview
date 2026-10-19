@@ -16,6 +16,14 @@ and the localization widget tests after editing catalogs. New equivalent terms
 need a reference entry; unsupported upstream translations need a reasoned
 native-language fallback, not English.
 
+For platform settings without a suitable Lichess equivalent, consult official
+localized Google/Android documentation. For AI sampling vocabulary such as
+Temperature and Top-P, consult official localized AI documentation and primary
+research. Check that the requested language actually loaded. Follow
+`docs/TRANSLATION_QUALITY_REVIEW.md` for source precedence, documented platform
+context exceptions, and Maia-specific behavior. Never reuse a language-setting
+message for a theme setting just because their English labels match.
+
 ## Research publication
 
 Publish research reports, datasets and reproduction tools in the separate
