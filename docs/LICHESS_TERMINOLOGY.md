@@ -325,3 +325,8 @@ With opening variety off, lower nonzero settings show the same translated
 strength advice without the move-six qualifier or “Good luck!”, alongside the
 existing limited-opening notice. Both notices are checked at 320px/200% text in
 all ten languages.
+
+Strength notices use a separate threshold from the repertoire notice: below the
+recommended defaults (Temperature < 1.0 or Top-P < 0.95), with or without opening
+variety. The repertoire threshold remains below 1.0 with variety off. Translated
+wording and the approved explanations are unchanged.

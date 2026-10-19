@@ -17,11 +17,13 @@ appearance is shown in the screenshots; Appearance PR #156 is a separate change.
 - At Temperature 0, Top-P displays “Not used”, is disabled and has independent
   help. Its saved value is preserved, including across restart. It becomes
   usable again when Temperature rises. No silent 0/0 trap is introduced.
-- At full 1/1: a neutral notice mentions unusual blunders. Below T1/P1 with
-  variety off: both neutral strength and repertoire notices. T0 or P0: a strength notice, explicitly
-  “from move 6” when the opening override is enabled. If both restrictions apply,
-  both relevant notices appear. Lower nonzero settings with variety on show a
-  strength notice from move 6, without “Good luck!”, including the new defaults.
+- At full 1/1: a neutral notice mentions unusual blunders.
+- Strength notice: **Temperature < 1.0 OR Top-P < 0.95** (below defaults).
+  With variety on it says “from move 6”; with variety off it does not.
+  Only zero settings add “Good luck!”.
+- Repertoire notice: **Temperature < 1.0 OR Top-P < 1.0**, with variety off.
+  Both notices appear when both conditions apply. At 1.0 / 0.95, variety on has
+  no notice; variety off has only the repertoire notice.
 - Explanation selection affects text only, starts on Simple, and is not another
   stored setting. Both levels link to the same visual research guide.
 - The sampler, inference calls, analysis percentages and capture format do not change.
@@ -39,7 +41,7 @@ default dark theme. Desktop rendering fonts differ from Android. No APK build.
 | --- | --- |
 | ![Simple help](simple.png) | ![Technical help](technical.png) |
 
-[Top-P information dialog](top-p-help.png) · [Japanese help](japanese.png)
+[Top-P information dialog](top-p-help.png) · [Opening-variety information](opening-help.png) · [Japanese help](japanese.png)
 
 Long dialogs scroll; their Close action stays available. The source copy below
 includes the portions below the screenshot fold.
@@ -53,7 +55,7 @@ Top-P stays saved but disabled when Temperature is zero.
 
 | Full variety: 1.0 / 1.0 | Top-P 0.95; opening variety off |
 | --- | --- |
-| ![Full variety notice](full-variety.png) | ![Strength and restricted-opening notices at 0.95](limited-openings.png) |
+| ![Full variety notice](full-variety.png) | ![Restricted-opening notice at the default 0.95](limited-openings.png) |
 
 | Temperature 0.5 / Top-P 1.0; variety off | Temperature 0; variety on |
 | --- | --- |
@@ -67,8 +69,7 @@ Top-P stays saved but disabled when Temperature is zero.
 | --- | --- |
 | ![Both notices at Top-P zero](top-p-zero-no-opening.png) | ![Strength notice with opening variety](lower-settings-opening.png) |
 
-The default 1.0 / 0.95 with opening variety on also shows the strength notice
-without “Good luck!”; see the default
+The default 1.0 / 0.95 with opening variety on has no notice; see the default
 settings screenshot above. At 1.0 / 1.0 the opening toggle is unavailable, so there
 is no separate visible on-state for that combination.
 
@@ -129,35 +130,22 @@ that appearance dependency or qualify it for Android/F-Droid.
 Host regression coverage includes new/reset defaults, explicit preference
 preservation, malformed preference fallback, first-five-move boundaries for both
 colors, restored profiles, capture probabilities, takebacks, board reset and
-continued games. Seventeen explicit notice scenarios cover the recommendation
+continued games. Nineteen explicit notice scenarios cover the recommendation
 boundaries, deterministic settings and both opening states. All ten languages exercise Simple/Technical selection,
 research navigation, dismissal and Top-P inactive help at 320px and 200% text.
 Screenshots come from Flutter widget rendering, not an installed Android APK.
 Android/device checks remain a later publication gate.
 
-Local full-suite result: **1,084 passed, 3 skipped**. After refining the notice
-regression into explicit boundary examples, all 12 tests in
-`sampling_defaults_test.dart` passed again. Static analysis and localization
-contract/reference checks also passed.
+Earlier full-suite qualification: **1,084 passed, 3 skipped**. Latest revision:
+**165 focused tests passed**, including both notices together in all ten
+languages at 320px/200% text, fresh/reset default no-notice checks, and separate
+strength/repertoire boundaries. Static analysis and localization/reference
+checks passed (401 messages per catalog).
 
-Approved-copy follow-up: exact maintainer-approved English and translations in
-all nine other languages; the technical explanation is unchanged. All **155
-focused tests** passed after this revision, including help/layout tests in all
-ten languages at 320px and 200% text. Static analysis, catalog and Lichess-reference
-checks passed. Thirteen actual widget captures were regenerated; no Android APK
-was built. The full-suite result above records the earlier draft qualification.
-
-Lower-settings notice follow-up: all 155 focused tests and static analysis pass;
-localization checks pass for 400 messages in all ten catalogs. Default/lower
-settings and help screenshots refreshed. Zero notices keep priority and their
-“Good luck!” wording. No APK build, merge or publication.
-
-With opening variety off, lower nonzero settings show “Maia may play stronger
-with lower Temperature or Top-P.” followed by the limited-opening repertoire
-notice. There is no move-six qualifier and no “Good luck!” unless a setting is
-zero. Approved Simple/Technical help is unchanged.
-
-Latest combined-notice check: **165 focused tests passed**, including the two
-notices together in all ten languages at 320px/200% text. Static analysis and
-localization/reference checks passed (401 messages per catalog). Both affected
-widget screenshots were refreshed; no APK build, merge or publication.
+The strength threshold follows the default constants (Temperature 1.0 / Top-P
+0.95). The repertoire threshold is independently 1.0 / 1.0, with opening
+variety off. Nonzero values use the neutral strength notices; zero values keep
+“Good luck!” and never duplicate the neutral strength notice. The approved
+Simple explanation is unchanged verbatim. Current screenshots include the
+no-notice default and repertoire-only 1.0 / 0.95 cases. No APK build, merge or
+publication.

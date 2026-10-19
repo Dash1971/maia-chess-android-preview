@@ -612,10 +612,8 @@ void main() {
     expect(find.text('Temperature: 1.00'), findsOneWidget);
     expect(find.text('Top-P: 0.95'), findsOneWidget);
     expect(
-      find.text(
-        'From move 6, Maia may play stronger with lower Temperature or Top-P.',
-      ),
-      findsOneWidget,
+      find.byKey(const ValueKey('sampling-recommendation-warning')),
+      findsNothing,
     );
   });
 
@@ -713,10 +711,8 @@ void main() {
     expect(find.text('Temperature: 1.00'), findsOneWidget);
     expect(find.text('Top-P: 0.95'), findsOneWidget);
     expect(
-      find.text(
-        'From move 6, Maia may play stronger with lower Temperature or Top-P.',
-      ),
-      findsOneWidget,
+      find.byKey(const ValueKey('sampling-recommendation-warning')),
+      findsNothing,
     );
     expect(preferences.getDouble('temperatureV2'), 1.0);
     expect(preferences.getDouble('topPV2'), 0.95);

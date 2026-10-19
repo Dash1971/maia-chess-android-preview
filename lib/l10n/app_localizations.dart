@@ -2512,13 +2512,13 @@ abstract class AppLocalizations {
   /// **'At Temperature 0, Maia always chooses a most likely move, so Top-P has no effect. Your Top-P value is kept and becomes available again when you raise Temperature. If Max variety in opening is on, the first five moves by each side still use 1.0 / 1.0.'**
   String get topPNotUsedHelp;
 
-  /// Neutral strength notice when opening variety is on and either positive sampling setting is below 1. Applies from full move 6. Zero settings use the separate argmax notice with Good luck. Maia-specific, no Lichess equivalent.
+  /// Neutral strength notice when opening variety is on and either positive sampling setting is below its recommended default (Temperature < 1.0 or Top-P < 0.95). Applies from full move 6. Zero settings use the separate argmax notice with Good luck. Maia-specific, no Lichess equivalent.
   ///
   /// In en, this message translates to:
   /// **'From move 6, Maia may play stronger with lower Temperature or Top-P.'**
   String get samplingLowerAfterOpeningNotice;
 
-  /// Neutral strength notice when opening variety is off and either positive sampling setting is below 1. Display alongside the limited-opening notice. No from-move-six qualifier or Good luck. Zero settings use the separate argmax notice. Maia-specific, no Lichess equivalent.
+  /// Neutral strength notice when opening variety is off and either positive sampling setting is below its recommended default (Temperature < 1.0 or Top-P < 0.95). Display alongside the limited-opening notice, whose separate threshold is below 1.0. No from-move-six qualifier or Good luck. Zero settings use the separate argmax notice. Maia-specific, no Lichess equivalent.
   ///
   /// In en, this message translates to:
   /// **'Maia may play stronger with lower Temperature or Top-P.'**

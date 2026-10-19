@@ -1892,10 +1892,10 @@
   },
   "samplingLowerAfterOpeningNotice": "From move 6, Maia may play stronger with lower Temperature or Top-P.",
   "@samplingLowerAfterOpeningNotice": {
-    "description": "Neutral strength notice when opening variety is on and either positive sampling setting is below 1. Applies from full move 6. Zero settings use the separate argmax notice with Good luck. Maia-specific, no Lichess equivalent."
+    "description": "Neutral strength notice when opening variety is on and either positive sampling setting is below its recommended default (Temperature < 1.0 or Top-P < 0.95). Applies from full move 6. Zero settings use the separate argmax notice with Good luck. Maia-specific, no Lichess equivalent."
   },
   "samplingLowerNotice": "Maia may play stronger with lower Temperature or Top-P.",
   "@samplingLowerNotice": {
-    "description": "Neutral strength notice when opening variety is off and either positive sampling setting is below 1. Display alongside the limited-opening notice. No from-move-six qualifier or Good luck. Zero settings use the separate argmax notice. Maia-specific, no Lichess equivalent."
+    "description": "Neutral strength notice when opening variety is off and either positive sampling setting is below its recommended default (Temperature < 1.0 or Top-P < 0.95). Display alongside the limited-opening notice, whose separate threshold is below 1.0. No from-move-six qualifier or Good luck. Zero settings use the separate argmax notice. Maia-specific, no Lichess equivalent."
   }
 }

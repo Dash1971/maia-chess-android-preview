@@ -18,10 +18,12 @@ void main() {
       final lowerAfterOpening = s.samplingLowerAfterOpeningNotice;
       final lower = s.samplingLowerNotice;
       final cases = <(double, double, bool, List<String>)>[
-        (1, 0.95, true, [lowerAfterOpening]),
-        (1, 0.95, false, [lower, limited]),
-        (1, 0.99, false, [lower, limited]),
-        (1, 0.99, true, [lowerAfterOpening]),
+        (1, 0.95, true, []),
+        (1, 0.95, false, [limited]),
+        (1, 0.99, false, [limited]),
+        (1, 0.99, true, []),
+        (1, 0.94, true, [lowerAfterOpening]),
+        (1, 0.94, false, [lower, limited]),
         (0.95, 0.95, false, [lower, limited]),
         (1, 0.90, false, [lower, limited]),
         (1, 0.90, true, [lowerAfterOpening]),
@@ -73,10 +75,7 @@ void main() {
     await tester.tap(second);
     await tester.pumpAndSettle();
     expect(find.text('Second Maia analysis rating: 2600'), findsOneWidget);
-    expect(
-      tester.widget<Text>(key('sampling-recommendation-warning')).data,
-      'From move 6, Maia may play stronger with lower Temperature or Top-P.',
-    );
+    expect(key('sampling-recommendation-warning'), findsNothing);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpAndSettle();

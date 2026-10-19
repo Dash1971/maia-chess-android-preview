@@ -12,7 +12,7 @@ List<String> samplingSettingsNotices(
     openingVariety
         ? strings.samplingArgmaxAfterOpeningNotice
         : strings.samplingArgmaxNotice
-  else if (temperature < 1.0 || topP < 1.0)
+  else if (temperature < defaultMaiaTemperature || topP < defaultMaiaTopP)
     openingVariety
         ? strings.samplingLowerAfterOpeningNotice
         : strings.samplingLowerNotice,
