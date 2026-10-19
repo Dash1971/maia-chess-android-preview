@@ -158,7 +158,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get maxOpeningVarietyHelp =>
-      'Nicht nötig, wenn Temperatur und Top-P auf den Standardwerten 1,0 / 1,0 stehen. Für die ersten fünf Züge jeder Seite werden 1,0 / 1,0 verwendet. Ab dem 6. Zug gelten wieder deine eingestellten Werte.\n\nZiel ist eine möglichst große Eröffnungsvielfalt für Maia. Im weiteren Partieverlauf kann Maia möglicherweise stärker spielen, indem niedrigere Werte für Temperatur und/oder Top-P die Auswahl von Zügen mit geringer Wahrscheinlichkeit seltener machen.';
+      'Standardmäßig an. Nutzt Temperatur und Top-P 1.0 / 1.0 für die ersten fünf Züge beider Seiten, danach deine Einstellungen. So bleibt die Eröffnungsauswahl breit, während später unwahrscheinliche Züge entfallen können. Maßgeblich ist die Zugnummer der Stellung, auch beim Fortsetzen einer Partie.\n\nBei 1.0 / 1.0 ist dies unnötig: Der Schalter ist aus und nicht wählbar, da diese Werte bereits durchgehend volle Vielfalt bieten.';
 
   @override
   String get maiaAnalysisRating => 'Maia-Rating (Analyse)';
@@ -969,7 +969,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get samplingResearch => 'Vollständige Forschungsdaten (JSONL)';
 
   @override
-  String get samplingResearchLink => 'Vollständige Forschungsdaten (Englisch)';
+  String get samplingResearchLink =>
+      'Visueller Leitfaden und Forschung (Englisch)';
 
   @override
   String get close => 'Schließen';
@@ -1016,7 +1017,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'Niedrigere Werte für Temperatur oder Top-P können Maia im Mittelspiel stärker machen, verringern aber die Eröffnungsvielfalt. Näheres steht unter dem Infosymbol.';
+      'Ohne maximale Eröffnungsvielfalt kann Maias Eröffnungsrepertoire enger ausfallen.';
 
   @override
   String get couldNotOpenPgn => 'PGN konnte nicht geöffnet werden.';
@@ -1396,29 +1397,73 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingHelpIntro =>
-      'Temperatur und Top-P steuern, wie Maia zwischen den möglichen Zügen auswählt.';
+      'Temperatur und Top-P bestimmen gemeinsam die Vielfalt von Maias Zügen.';
 
   @override
   String get samplingHelpVariety =>
-      'Wenn du Temperatur und Top-P erhöhst, spielt Maia unberechenbarer, weil sie häufiger Züge mit geringer Wahrscheinlichkeit auswählt. Das können grobe Patzer sein, aber auch brillante Züge!';
+      'Die Temperatur beschreibt, wie sehr Maia ungewöhnliche Züge in Betracht zieht. Bei 0 wählt sie immer den Zug, den ein Mensch der gewählten Spielstärke ihrer Einschätzung nach am ehesten spielen würde. Bei 1.0 bleibt die ganze menschliche Zugvielfalt erhalten – wie bei einem kreativen Bullet-Spieler, der auch ein verrücktes Opfer wagt. Häufige Züge bleiben wahrscheinlicher als ausgefallene.';
 
   @override
   String get samplingHelpDefaults =>
-      'Wenn du möglichst viel Abwechslung möchtest und Maia ein breites Spektrum menschlicher Eröffnungen einschließlich Nebenvarianten spielen soll, behalte die Standardwerte 1,0 und 1,0 bei.';
+      'Top-P ist wie der Engel auf Maias Schulter. Bei 1.0 lässt er alle Kandidaten durch. Ein niedrigerer Wert entfernt die unwahrscheinlichsten Züge. Bei 0 bleibt nur ein Zug mit höchster Wahrscheinlichkeit übrig. Gefiltert wird nach Häufigkeit, nicht nach der Qualität des Zuges.';
 
   @override
   String get samplingHelpStrength =>
-      'Wenn du einen stärkeren Gegner bevorzugst, der weniger grobe Patzer macht, probiere niedrigere Werte für Temperatur und Top-P aus.';
+      'In unserer früheren Untersuchung auf Stufe 1600 war die Auswahl des wahrscheinlichsten Zuges (argmax) unter den getesteten Einstellungen am stärksten: rund 300 Elo Vorsprung gegen 1.0 / 1.0 im direkten Vergleich. Allerdings wurde die Eröffnungsauswahl enger.';
 
   @override
   String get samplingHelpArgmax =>
-      'Bei Temperatur 0 verwendet Maia argmax. Das ist der Fachbegriff dafür, dass Maia in einer Stellung immer den Zug spielt, den sie für einen Menschen als am wahrscheinlichsten vorhersagt. Achtung! In unserer Untersuchung mit der Rating-Einstellung 1600 erzielte argmax-Maia in direkten Partien gegen Maia mit 1,0 / 1,0 einen Vorsprung, der etwa 300 Elo-Punkten entspricht.';
+      'Maximale Eröffnungsvielfalt nutzt Temperatur und Top-P 1.0 / 1.0 für die ersten fünf Züge beider Seiten. Ab Zug 6 gelten deine Einstellungen. In der Eröffnung kann es also Überraschungen geben!';
 
   @override
   String get samplingHelpTopP =>
-      'Für ein ausgewogenes Spiel kannst du die Temperatur bei 1,0 belassen und Top-P auf 0,95 setzen. So bleibt Abwechslung erhalten, während Züge mit geringer Wahrscheinlichkeit ausgeschlossen werden. Diese können oft grobe Patzer sein, aber auch gute Züge. Top-P schneidet im Grunde die unwahrscheinlichsten Züge ab. Bei 0,95 bleiben so viele Züge übrig, dass sie nach Anwendung der Temperatur zusammen mindestens 95 % der Wahrscheinlichkeit abdecken. Die übrigen Züge kann Maia nicht auswählen.';
+      'Wir empfehlen Eröffnungsvielfalt an, Temperatur 1.0 und Top-P 0.95. Ein kreativer Spieler mit einem Engel auf der Schulter: Nach der Eröffnung entfallen die unwahrscheinlichsten Kandidaten, deren Wahrscheinlichkeiten zusammen höchstens 5% ergeben. Das kann grobe Fehler, aber auch gute Überraschungen ausschließen. Grobe Fehler bleiben möglich. Für einen stärkeren Gegner kannst du Temperatur 0 ausprobieren. Mit Eröffnungsvielfalt gilt das ab Zug 6. Viel Glück!';
 
   @override
   String get samplingHelpResearchIntro =>
-      'Wir haben diese Einstellungen bei 1600 Elo getestet und unsere vollständigen Ergebnisse hier veröffentlicht:';
+      'Der bebilderte Leitfaden erklärt die Forschung hinter diesen Entscheidungen und verlinkt die vollständigen Ergebnisse.';
+
+  @override
+  String get samplingTechnicalTemperature =>
+      'Die Temperatur skaliert die Modell-Logits legaler Züge vor Softmax. Bei T > 0 ist jedes Gewicht exp((Logit − maximaler Logit) / T) und wird anschließend normalisiert. T = 1 erhält die Modellverteilung; kleineres T konzentriert sie auf höher bewertete Kandidaten. T = 0 wählt direkt ein Argmax und ignoriert Top-P.';
+
+  @override
+  String get samplingTechnicalTopP =>
+      'Top-P sortiert die angepassten Wahrscheinlichkeiten absteigend und behält die kleinste Anfangsmenge, die den Schwellenwert erreicht, einschließlich des überschreitenden Zuges. Vor der Zufallsauswahl werden die verbleibenden Wahrscheinlichkeiten erneut normalisiert. P = 1 behält alle Züge, P = 0 einen mit höchster Wahrscheinlichkeit. P = 0.95 entfernt höchstens 5% der gesamten Wahrscheinlichkeit, nicht jeden Zug mit weniger als 5% Einzelwahrscheinlichkeit.';
+
+  @override
+  String get samplingTechnicalOpening =>
+      'Standard: Temperatur 1.0, Top-P 0.95, maximale Eröffnungsvielfalt an. Für FEN-Vollzugnummern 1–5 gilt für beide Farben 1.0 / 1.0; ab Zug 6 gelten die eingestellten Werte. Das Fortsetzen einer Partie oder Stellung setzt den Zähler nicht zurück. Die Prozente im Analysebrett bleiben Modellwahrscheinlichkeiten vor Anwendung dieser Spieleinstellungen.';
+
+  @override
+  String get samplingTechnicalEvidence =>
+      'Mit dem 79M-Modell, ohne Stellungsverlauf und bei Rating-Eingabe 1600 erzielten die vorgeschlagenen Standardwerte in 600 Partien gegen 1.0 / 1.0 einen Score von 60.7% (95%-Intervall: 56.8–64.6%). Frühere Argmax-Tests ergaben rund 300 Elo Vorsprung im direkten Vergleich. Das sind keine gegen Menschen kalibrierten Ratings. Fünf Züge sind eine Designentscheidung, kein bewiesenes Optimum. Wahrscheinlichkeitsfilter garantieren keine guten Züge.';
+
+  @override
+  String get samplingSimpleExplanation => 'Einfach erklärt';
+
+  @override
+  String get samplingTechnicalExplanation => 'Technische Erklärung';
+
+  @override
+  String get samplingFullVarietyNotice =>
+      'Mit Temperatur und Top-P 1.0 / 1.0 kann Maia häufiger ungewöhnliche grobe Fehler spielen.';
+
+  @override
+  String get samplingArgmaxNotice =>
+      'Mit Temperatur oder Top-P 0 kann Maia stärker spielen. Viel Glück!';
+
+  @override
+  String get samplingArgmaxAfterOpeningNotice =>
+      'Ab Zug 6 kann Maia mit Temperatur oder Top-P 0 stärker spielen. Viel Glück!';
+
+  @override
+  String get topPNotUsed => 'Top-P: Nicht verwendet';
+
+  @override
+  String get topPNotUsedTitle => 'Warum Top-P nicht verwendet wird';
+
+  @override
+  String get topPNotUsedHelp =>
+      'Bei Temperatur 0 wählt Maia immer einen wahrscheinlichsten Zug. Top-P hat dann keinen Einfluss. Dein Top-P-Wert bleibt gespeichert und wird wieder nutzbar, wenn du die Temperatur erhöhst. Mit Eröffnungsvielfalt gilt für die ersten fünf Züge beider Seiten weiterhin 1.0 / 1.0.';
 }

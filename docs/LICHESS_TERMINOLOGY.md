@@ -292,3 +292,16 @@ distinction between low move probability and poor move quality. Existing chess
 vocabulary and localized Temperature labels are retained; European-language
 translations follow the established decimal-comma convention. These are
 editorial translations, subject to the usual native-speaker review.
+
+
+## 2.5 sampling defaults and two explanation levels (draft)
+
+Both explanation levels, the contextual notices, opening-variety help and the
+Temperature-zero Top-P explanation are Maia-specific concepts without direct
+Lichess equivalents. All ten catalogs retain existing chess vocabulary and
+translate the new prose; no new English-only fallback is introduced. Research
+links are marked English in non-English catalogs. Simple prose keeps the
+creative-player/angel analogy but does not equate probability with move quality.
+Technical prose defines the crossing-move nucleus and distinguishes probability
+mass from a per-move cutoff. Research results name the tested 1600 input, not
+the new 1500 default. Editorial review is not native-speaker certification.

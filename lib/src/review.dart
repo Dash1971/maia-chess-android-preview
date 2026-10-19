@@ -107,7 +107,7 @@ class ReviewPage extends StatefulWidget {
     required this.pgn,
     this.initialVariations = const [],
     this.initialTreeIsAuthoritative = false,
-    this.maiaElo = 1600,
+    this.maiaElo = defaultMaiaAnalysisElo,
     this.secondMaiaElo,
     this.useMoveHistory = false,
     this.historyPrefix = const [],

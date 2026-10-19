@@ -156,7 +156,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get maxOpeningVarietyHelp =>
-      '온도와 Top-P가 기본값인 1.0 / 1.0이면 필요하지 않습니다. 양측이 각각 처음 다섯 수를 둘 때는 1.0 / 1.0을 사용하고, 여섯 번째 수부터는 설정한 값으로 돌아갑니다.\n\nMaia의 오프닝을 최대한 다양하게 하면서, 이후에는 온도나 Top-P를 낮춰 확률이 낮은 수를 선택할 가능성을 줄임으로써 더 강한 플레이를 할 수 있도록 하는 것이 목적입니다.';
+      '기본으로 켜져 있습니다. 양쪽의 처음 다섯 수에는 온도와 Top-P 1.0 / 1.0을 사용하고, 여섯 번째 수부터 설정값을 사용합니다. 오프닝 선택은 넓게 유지하고 이후에는 낮은 확률의 수를 걸러낼 수 있습니다. 저장 대국을 재개하거나 특정 위치에서 이어 두어도 해당 위치의 수 번호를 따릅니다.\n\n1.0 / 1.0에서는 이미 대국 내내 모든 후보를 유지하므로 스위치가 꺼진 채 비활성화됩니다.';
 
   @override
   String get maiaAnalysisRating => 'Maia 분석 레이팅';
@@ -888,7 +888,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get samplingResearch => '전체 연구 데이터 (JSONL)';
 
   @override
-  String get samplingResearchLink => '전체 연구 데이터 (영어)';
+  String get samplingResearchLink => '시각적 가이드와 연구(영어)';
 
   @override
   String get close => '닫기';
@@ -934,7 +934,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      '온도나 Top-P를 낮추면 미들게임에서 Maia가 더 강해질 수 있지만, 오프닝의 다양성은 줄어듭니다. 자세한 내용은 정보 버튼을 확인하세요.';
+      '오프닝 다양성 최대화를 끄면 Maia의 오프닝 선택이 더 좁아질 수 있습니다.';
 
   @override
   String get couldNotOpenPgn => 'PGN을 열 수 없습니다.';
@@ -1293,29 +1293,73 @@ class AppLocalizationsKo extends AppLocalizations {
   String get resetSettingsAction => '설정 초기화';
 
   @override
-  String get samplingHelpIntro => '온도와 Top-P는 Maia가 여러 수 중에서 어떤 수를 선택할지 조절합니다.';
+  String get samplingHelpIntro => '온도와 Top-P는 함께 Maia의 수가 얼마나 다양할지 정합니다.';
 
   @override
   String get samplingHelpVariety =>
-      '온도와 Top-P를 높이면 Maia가 낮은 확률의 수를 둘 가능성이 커져, 기복이 더 큰 선수처럼 플레이합니다. 이런 수는 블런더일 수도 있지만, 매우 좋은 수일 수도 있습니다!';
+      '온도는 Maia가 드문 수를 고려하는 정도라고 생각하면 됩니다. 0에서는 선택한 레이팅의 사람이 가장 둘 법하다고 예측한 수를 항상 고릅니다. 1.0에서는 사람의 수 분포를 그대로 유지합니다. 과감한 희생도 시도하는 창의적인 불릿 플레이어와 비슷합니다. 그래도 흔한 수가 기발한 수보다 선택될 가능성이 높습니다.';
 
   @override
   String get samplingHelpDefaults =>
-      '최대한 다양한 대국을 즐기고 싶고, 비주류 변화까지 포함해 사람들이 두는 폭넓은 오프닝을 Maia가 구사하길 원한다면 기본값인 1.0과 1.0을 유지하세요.';
+      'Top-P는 Maia의 어깨 위 천사와 같습니다. 1.0에서는 모든 후보를 통과시킵니다. 낮추면 확률이 가장 낮은 수부터 제외합니다. 0에서는 확률이 가장 높은 수 하나만 남습니다. 수의 좋고 나쁨이 아니라 사람이 둘 가능성으로 거릅니다.';
 
   @override
   String get samplingHelpStrength =>
-      '블런더를 덜 하는 더 강한 상대를 원한다면 온도와 Top-P 값을 낮춰 보세요.';
+      '이전 레이팅 1600 연구에서는 항상 가장 확률 높은 수를 고르는 argmax가 시험한 설정 중 가장 강했습니다. 1.0 / 1.0과의 직접 대결에서 약 300 Elo에 해당하는 우위를 보였지만, 오프닝 선택도 좁아졌습니다.';
 
   @override
   String get samplingHelpArgmax =>
-      '온도를 0으로 설정하면 Maia는 argmax라는 방식을 사용합니다. 쉽게 말해, 주어진 포지션에서 사람이 둘 가능성이 가장 높다고 Maia가 예측한 수를 항상 선택한다는 뜻입니다. 주의하세요! 레이팅을 1600으로 설정한 저희 연구에서 argmax Maia는 1.0 / 1.0 Maia와의 직접 대결에서 약 300 Elo 차이에 해당하는 우위를 보였습니다.';
+      '오프닝 다양성 최대화를 켜면 양쪽의 처음 다섯 수에는 온도와 Top-P 1.0 / 1.0을 사용하고, 여섯 번째 수부터 설정한 값으로 돌아갑니다. 오프닝에서 놀라운 수가 나올 수도 있습니다!';
 
   @override
   String get samplingHelpTopP =>
-      '강함과 다양성의 균형을 원한다면 온도를 1.0으로 유지하고 Top-P를 0.95로 설정해 보세요. 다양성을 유지하면서 낮은 확률의 수를 제외할 수 있습니다. 이런 수는 블런더인 경우가 많지만 좋은 수일 수도 있습니다. Top-P는 간단히 말해 낮은 확률의 수를 후보에서 제외하는 설정입니다. 0.95로 설정하면 온도가 적용된 뒤의 확률을 합해 최소 95%가 되는 수들을 남깁니다. 나머지 수는 Maia가 선택할 수 없습니다.';
+      '권장 기본값은 오프닝 다양성 켜기, 온도 1.0, Top-P 0.95입니다. 천사가 조언하는 창의적인 플레이어를 떠올려 보세요. 오프닝 이후에는 확률이 낮은 꼬리 부분을 합계 최대 5%만큼 제외합니다. 블런더뿐 아니라 뜻밖의 좋은 수도 빠질 수 있고, 블런더가 없어지는 것은 아닙니다. 더 강한 상대를 원하면 온도 0을 시험해 보세요. 오프닝 다양성을 켜면 여섯 번째 수부터 적용됩니다. 행운을 빕니다!';
 
   @override
   String get samplingHelpResearchIntro =>
-      '저희는 1600 Elo 설정에서 이 값들을 실험했으며, 전체 연구 결과를 여기에 공개했습니다:';
+      '이 선택의 근거가 된 연구와 전체 결과 링크를 시각적 가이드에서 확인하세요.';
+
+  @override
+  String get samplingTechnicalTemperature =>
+      '온도는 모델의 합법적인 수 로짓을 조정한 뒤 softmax를 적용합니다. T > 0이면 각 가중치는 exp((로짓 − 최대 로짓) / T)이며 이후 정규화합니다. T = 1은 모델 분포를 유지하고, 낮은 T는 높은 점수의 수에 확률을 집중시킵니다. T = 0은 argmax를 직접 선택하고 Top-P를 무시합니다.';
+
+  @override
+  String get samplingTechnicalTopP =>
+      'Top-P는 온도 적용 후 확률을 내림차순으로 정렬하고, 누적 확률이 기준에 도달하는 최소 후보 집합을 남깁니다. 기준을 넘기는 수도 포함합니다. 남은 확률을 다시 정규화해 추출합니다. P = 1은 모든 수를, P = 0은 가장 확률 높은 수 하나를 남깁니다. P = 0.95는 전체 확률의 최대 5%를 제거하며, 개별 확률이 5% 미만인 모든 수를 제거하는 것은 아닙니다.';
+
+  @override
+  String get samplingTechnicalOpening =>
+      '기본값은 온도 1.0, Top-P 0.95, 오프닝 다양성 켜기입니다. 어느 색이든 FEN의 전체 수 번호 1–5에는 1.0 / 1.0을, 여섯 번째 수부터는 설정값을 사용합니다. 저장 대국을 재개하거나 특정 위치에서 이어 두어도 번호는 초기화되지 않습니다. 분석 보드의 백분율은 이러한 대국 설정을 적용하기 전 모델 확률입니다.';
+
+  @override
+  String get samplingTechnicalEvidence =>
+      '79M 모델, 수순 기록 끄기, 레이팅 입력 1600의 600국에서 제안된 기본값은 1.0 / 1.0을 상대로 60.7%를 득점했습니다(95% 구간 56.8–64.6%). 이전 argmax 시험에서는 약 300 Elo의 대결 우위를 보였습니다. 이는 직접 대결 결과이며 사람의 레이팅으로 보정한 값이 아닙니다. 다섯 수는 설계상의 선택이지 검증된 최적값이 아니며, 확률 필터링이 좋은 수를 보장하지는 않습니다.';
+
+  @override
+  String get samplingSimpleExplanation => '쉬운 설명';
+
+  @override
+  String get samplingTechnicalExplanation => '기술적 설명';
+
+  @override
+  String get samplingFullVarietyNotice =>
+      '온도와 Top-P가 1.0 / 1.0이면 Maia가 뜻밖의 블런더를 더 자주 둘 수 있습니다.';
+
+  @override
+  String get samplingArgmaxNotice =>
+      '온도 또는 Top-P가 0이면 Maia가 더 강해질 수 있습니다. 행운을 빕니다!';
+
+  @override
+  String get samplingArgmaxAfterOpeningNotice =>
+      '온도 또는 Top-P가 0이면 여섯 번째 수부터 Maia가 더 강해질 수 있습니다. 행운을 빕니다!';
+
+  @override
+  String get topPNotUsed => 'Top-P: 사용 안 함';
+
+  @override
+  String get topPNotUsedTitle => 'Top-P를 사용하지 않는 이유';
+
+  @override
+  String get topPNotUsedHelp =>
+      '온도가 0이면 Maia는 항상 가장 확률 높은 수를 골라 Top-P가 영향을 주지 않습니다. Top-P 값은 저장되며 온도를 높이면 다시 사용할 수 있습니다. 오프닝 다양성을 켠 경우 양쪽의 처음 다섯 수에는 여전히 1.0 / 1.0을 사용합니다.';
 }

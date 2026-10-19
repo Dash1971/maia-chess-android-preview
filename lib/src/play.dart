@@ -145,10 +145,10 @@ class _GamePageState extends State<GamePage>
   final List<RecordedVariation> _takebackVariations = [];
   PlayerSide _sideChoice = PlayerSide.white;
   chess.Color _playerColor = chess.Color.WHITE;
-  int _elo = 1500;
-  int _analysisElo = 1600;
+  int _elo = defaultMaiaPlayElo;
+  int _analysisElo = defaultMaiaAnalysisElo;
   bool _secondMaiaEnabled = false;
-  int _secondMaiaElo = 2400;
+  int _secondMaiaElo = defaultSecondMaiaElo;
   GameAnalysisQuality _gameAnalysisQuality = GameAnalysisQuality.fast;
   late final cg.ChessboardController _gameBoardController;
   _PlayMessage _status = _PlayMessage.chooseSettings;
@@ -176,10 +176,10 @@ class _GamePageState extends State<GamePage>
       _isViewingLivePosition &&
       !_isPlayerTurn;
 
-  bool _maxOpeningVariety = false;
+  bool _maxOpeningVariety = defaultMaxOpeningVariety;
   MaiaPlaySettings _gameSampling = const MaiaPlaySettings();
-  double _temperature = 1.0;
-  double _topP = 1.0;
+  double _temperature = defaultMaiaTemperature;
+  double _topP = defaultMaiaTopP;
   TimePreset _timePreset = TimePreset.unlimited;
   TimePreset _preferredTimePreset = TimePreset.unlimited;
   int _customMinutes = 10;
@@ -989,7 +989,7 @@ class _GamePageState extends State<GamePage>
     final savedPlayElo = _readMaiaRatingPreference(
       preferences,
       maiaPlayEloPreferenceKey,
-      fallback: 1500,
+      fallback: defaultMaiaPlayElo,
     );
     final savedSide = _readValidatedPreference<PlayerSide>(
       preferences,
@@ -1032,7 +1032,7 @@ class _GamePageState extends State<GamePage>
     final maxOpeningVariety = _readValidatedPreference<bool>(
       preferences,
       'maxOpeningVarietyV1',
-      fallback: false,
+      fallback: defaultMaxOpeningVariety,
       decode: (value) => value is bool ? value : null,
     );
     final humanTiming = _readValidatedPreference<bool>(
@@ -1062,7 +1062,7 @@ class _GamePageState extends State<GamePage>
     final temperature = _readValidatedPreference<double>(
       preferences,
       'temperatureV2',
-      fallback: 1.0,
+      fallback: defaultMaiaTemperature,
       decode: (value) =>
           value is double && value.isFinite && value >= 0.0 && value <= 1.0
           ? value
@@ -1071,7 +1071,7 @@ class _GamePageState extends State<GamePage>
     final topP = _readValidatedPreference<double>(
       preferences,
       'topPV2',
-      fallback: 1.0,
+      fallback: defaultMaiaTopP,
       decode: (value) =>
           value is double && value.isFinite && value >= 0.0 && value <= 1.0
           ? value
@@ -1080,7 +1080,7 @@ class _GamePageState extends State<GamePage>
     final analysisElo = _readMaiaRatingPreference(
       preferences,
       'analysisElo',
-      fallback: 1600,
+      fallback: defaultMaiaAnalysisElo,
     );
     final secondMaiaEnabled = _readValidatedPreference<bool>(
       preferences,
@@ -1091,7 +1091,7 @@ class _GamePageState extends State<GamePage>
     final secondMaiaElo = _readMaiaRatingPreference(
       preferences,
       secondMaiaEloPreferenceKey,
-      fallback: 2400,
+      fallback: defaultSecondMaiaElo,
     );
     final gameAnalysisQuality = _readValidatedPreference<GameAnalysisQuality>(
       preferences,
@@ -1282,12 +1282,12 @@ class _GamePageState extends State<GamePage>
       _premovesEnabled = true;
       _premovePenalty = false;
       _multiplePremoves = false;
-      _temperature = 1.0;
-      _topP = 1.0;
-      _maxOpeningVariety = false;
-      _analysisElo = 1600;
+      _temperature = defaultMaiaTemperature;
+      _topP = defaultMaiaTopP;
+      _maxOpeningVariety = defaultMaxOpeningVariety;
+      _analysisElo = defaultMaiaAnalysisElo;
       _secondMaiaEnabled = false;
-      _secondMaiaElo = 2400;
+      _secondMaiaElo = defaultSecondMaiaElo;
       _gameAnalysisQuality = GameAnalysisQuality.fast;
       _gameSoundsEnabled = false;
       _gameHapticsEnabled = true;
@@ -1394,46 +1394,7 @@ class _GamePageState extends State<GamePage>
 
   Future<void> _showSamplingHelp() => showDialog<void>(
     context: context,
-    builder: (context) => AlertDialog(
-      scrollable: true,
-      title: Text(l10n(context).samplingTitle),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n(context).samplingDefaultsQuestion,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          const SizedBox(height: 8),
-          for (final paragraph in [
-            l10n(context).samplingHelpIntro,
-            l10n(context).samplingHelpVariety,
-            l10n(context).samplingHelpDefaults,
-            l10n(context).samplingHelpStrength,
-            l10n(context).samplingHelpArgmax,
-            l10n(context).samplingHelpTopP,
-            l10n(context).samplingHelpResearchIntro,
-          ]) ...[Text(paragraph), const SizedBox(height: 14)],
-          TextButton.icon(
-            key: const ValueKey('sampling-research-link'),
-            onPressed: () => maiaEngineChannel.invokeMethod<void>('openUrl', {
-              'url':
-                  'https://github.com/Dash1971/mobile-maia-research/blob/'
-                  'main/studies/maia3-sampling/REPORT.md',
-            }),
-            icon: const Icon(Icons.open_in_new),
-            label: Text(l10n(context).samplingResearchLink),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n(context).close),
-        ),
-      ],
-    ),
+    builder: (context) => const SamplingHelpDialog(),
   );
 
   Future<void> _showOpeningVarietyHelp() => showDialog<void>(
@@ -5028,30 +4989,66 @@ class _GamePageState extends State<GamePage>
                   ListTile(
                     key: const ValueKey('top-p-setting'),
                     title: Text(
-                      l10n(context).topPValue(
-                        displayNumber(context, _topP, decimalDigits: 2),
-                      ),
+                      _temperature == 0
+                          ? l10n(context).topPNotUsed
+                          : l10n(context).topPValue(
+                              displayNumber(context, _topP, decimalDigits: 2),
+                            ),
                     ),
+                    trailing: _temperature == 0
+                        ? IconButton(
+                            key: const ValueKey('top-p-unused-help'),
+                            tooltip: l10n(context).topPNotUsedTitle,
+                            icon: const Icon(Icons.info_outline),
+                            onPressed: () => showDialog<void>(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                scrollable: true,
+                                title: Text(l10n(context).topPNotUsedTitle),
+                                content: Text(l10n(context).topPNotUsedHelp),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                    child: Text(l10n(context).close),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : null,
                     subtitle: Slider(
                       min: 0.00,
                       max: 1.00,
                       divisions: 20,
                       value: _topP,
                       label: displayNumber(context, _topP, decimalDigits: 2),
-                      onChanged: (value) => setState(() {
-                        _topP = value;
-                        if (_temperature == 1.0 && _topP == 1.0) {
-                          _maxOpeningVariety = false;
-                        }
-                      }),
+                      onChanged: _temperature == 0
+                          ? null
+                          : (value) => setState(() {
+                              _topP = value;
+                              if (_temperature == 1.0 && _topP == 1.0) {
+                                _maxOpeningVariety = false;
+                              }
+                            }),
                       onChangeEnd: (_) => unawaited(_saveEnginePreferences()),
                     ),
                   ),
-                  if (_temperature != 1.0 || _topP != 1.0)
+                  if (samplingSettingsNotices(
+                    l10n(context),
+                    temperature: _temperature,
+                    topP: _topP,
+                    openingVariety: _maxOpeningVariety,
+                  ).isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                       child: Text(
-                        l10n(context).samplingRecommendationWarning,
+                        samplingSettingsNotices(
+                          l10n(context),
+                          temperature: _temperature,
+                          topP: _topP,
+                          openingVariety: _maxOpeningVariety,
+                        ).join('\n\n'),
                         key: const ValueKey('sampling-recommendation-warning'),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,

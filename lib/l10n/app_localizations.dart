@@ -396,10 +396,10 @@ abstract class AppLocalizations {
   /// **'Max variety in opening'**
   String get maxOpeningVariety;
 
-  /// Settings help: opening sampling override and its purpose
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'Not needed when Temperature and Top-P are at their default values of 1.0 / 1.0. Uses 1.0 / 1.0 for the first five moves by each side, then returns to your configured settings from move 6.\n\nThe goal is to give Maia maximum opening variety while allowing potentially stronger play later in the game by reducing the chance of low-probability moves through lower Temperature and/or Top-P.'**
+  /// **'On by default. Uses Temperature and Top-P 1.0 / 1.0 for the first five moves by each side, then your configured settings from move 6. This keeps broad opening choices while allowing you to trim low-probability moves later. It follows the position’s move number, including when resuming or continuing a game.\n\nNot needed at 1.0 / 1.0: the switch is off and unavailable because those settings already give full variety throughout.'**
   String get maxOpeningVarietyHelp;
 
   /// Settings: Maia analysis rating
@@ -1716,10 +1716,10 @@ abstract class AppLocalizations {
   /// **'Full research data (JSONL)'**
   String get samplingResearch;
 
-  /// Link to the English-language sampling research report, not the JSONL export. Non-English labels identify the document language.
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'Full research data'**
+  /// **'Visual guide and research'**
   String get samplingResearchLink;
 
   /// Play screen: Close
@@ -1794,10 +1794,10 @@ abstract class AppLocalizations {
   /// **'This independent community app is not an official Maia-3 or University of Toronto, Lichess, or En Croissant application.'**
   String get aboutIndependent;
 
-  /// Maia-specific sampling help: Lowering Temperature or Top-P may make Maia stronger in the middlegame, but reduce opening variety. See the information button for details.
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'Lowering Temperature or Top-P may make Maia stronger in the middlegame, but reduce opening variety. See the information button for details.'**
+  /// **'Maia may play a more limited opening repertoire with Max variety in opening disabled.'**
   String get samplingRecommendationWarning;
 
   /// Play help, about or error message: Could not open PGN.
@@ -2398,47 +2398,119 @@ abstract class AppLocalizations {
   /// **'Reset settings'**
   String get resetSettingsAction;
 
-  /// User-approved Maia-specific sampling help, paragraph 1. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'Temperature and Top-P control how Maia chooses between moves.'**
+  /// **'Temperature and Top-P combine to set the amount of variety in Maia’s play.'**
   String get samplingHelpIntro;
 
-  /// User-approved Maia-specific sampling help, paragraph 2. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'Increasing Temperature and Top-P is like making Maia a more volatile player, as Maia becomes more likely to play low-probability moves. These may be blunders, but they may also be brilliant moves!'**
+  /// **'Think of Temperature as Maia’s willingness to consider unusual moves. At 0, it always chooses the move it thinks a human at the selected rating is most likely to play. At 1.0, it keeps the full mix of human moves—like a creative bullet player willing to try a crazy sacrifice. Popular moves are still more likely than wild ones.'**
   String get samplingHelpVariety;
 
-  /// User-approved Maia-specific sampling help, paragraph 3. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'If you value maximum variety, and you also want Maia to play a broad range of human openings, including sidelines, then keep the default values of 1.0 and 1.0.'**
+  /// **'Top-P is like the angel on Maia’s shoulder. At 1.0, it lets every candidate through. Lower it, and it cuts the least likely moves from the list. At 0, only a most likely move remains. It filters by popularity, not by whether a move is good or bad.'**
   String get samplingHelpDefaults;
 
-  /// User-approved Maia-specific sampling help, paragraph 4. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'If you prefer a stronger opponent playing fewer blunders, experiment with moving Temperature and Top-P values down.'**
+  /// **'In our earlier research at the 1600 setting, always picking the most likely move (argmax) was strongest among the settings tested: about 300 Elo ahead of 1.0 / 1.0 in direct matches. But it also narrowed the opening choices.'**
   String get samplingHelpStrength;
 
-  /// User-approved Maia-specific sampling help, paragraph 5. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'Setting Temperature to 0 will cause Maia to use argmax, which is a technical way of saying that Maia will always play what it predicts is the most probable human move in a given position. Careful! In our research at the 1600 setting, argmax Maia outperformed Maia at 1.0 / 1.0 by the equivalent of about 300 Elo points in direct matches.'**
+  /// **'Max variety in opening keeps Temperature and Top-P at 1.0 / 1.0 for the first five moves by each side, then uses your settings from move 6. You might see some crazy things in the opening!'**
   String get samplingHelpArgmax;
 
-  /// User-approved Maia-specific sampling help, paragraph 6. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.'**
+  /// **'Our recommended defaults are opening variety on, Temperature 1.0 and Top-P 0.95. This keeps a creative player with an angel on its shoulder: after the opening, moves from the least likely tail, together worth up to 5% of the chance, are left out. That can remove blunders, but also good surprises. Blunders are still possible. For a tougher opponent, try Temperature 0. With opening variety on, that takes effect from move 6. Good luck!'**
   String get samplingHelpTopP;
 
-  /// User-approved Maia-specific sampling help, paragraph 7. Preserve the strength/variety distinction, the direct-match result at setting 1600, and probability mass (not number of moves). Use established local chess terminology.
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'We experimented with these settings at 1600 Elo and published our full findings here:'**
+  /// **'See the visual guide for the research behind these choices, with links to the full results.'**
   String get samplingHelpResearchIntro;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'Temperature rescales the model’s legal-move logits before softmax. At T > 0, each weight is exp((logit − maximum logit) / T), then normalized. T = 1 preserves the model distribution; lower T concentrates it on higher-scoring moves. T = 0 selects an argmax directly and ignores Top-P.'**
+  String get samplingTechnicalTemperature;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'Top-P sorts the temperature-adjusted probabilities from highest to lowest and keeps the smallest prefix reaching the threshold, including the move that crosses it. Retained probabilities are normalized again before sampling. P = 1 keeps all moves; P = 0 keeps one highest-probability move. P = 0.95 removes at most 5% of total probability, not all moves individually below 5%.'**
+  String get samplingTechnicalTopP;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'Defaults: Temperature 1.0, Top-P 0.95, Max variety in opening on. The override uses 1.0 / 1.0 at FEN full-move numbers 1–5 for either color, then the configured values from move 6. Resuming or continuing a position does not restart that count. Analysis-board percentages remain the model’s probabilities before these play settings.'**
+  String get samplingTechnicalOpening;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'With the 79M model and history off, the proposed defaults scored 60.7% against 1.0 / 1.0 in 600 games at rating input 1600 (95% interval 56.8–64.6%). Earlier argmax tests gave a roughly 300-Elo matchup advantage. These are direct-match results, not calibrated human ratings. Five moves is a design choice, not a proven optimum; probability filtering cannot guarantee good moves.'**
+  String get samplingTechnicalEvidence;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'Simple explanation'**
+  String get samplingSimpleExplanation;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical explanation'**
+  String get samplingTechnicalExplanation;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'Maia may play more unusual blunders with Temperature and Top-P at 1.0 / 1.0.'**
+  String get samplingFullVarietyNotice;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'Maia may play stronger with Temperature or Top-P at 0. Good luck!'**
+  String get samplingArgmaxNotice;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'From move 6, Maia may play stronger with Temperature or Top-P at 0. Good luck!'**
+  String get samplingArgmaxAfterOpeningNotice;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'Top-P: Not used'**
+  String get topPNotUsed;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'Why Top-P is not used'**
+  String get topPNotUsedTitle;
+
+  /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
+  ///
+  /// In en, this message translates to:
+  /// **'At Temperature 0, Maia always chooses a most likely move, so Top-P has no effect. Your Top-P value is kept and becomes available again when you raise Temperature. If Max variety in opening is on, the first five moves by each side still use 1.0 / 1.0.'**
+  String get topPNotUsedHelp;
 }
 
 class _AppLocalizationsDelegate

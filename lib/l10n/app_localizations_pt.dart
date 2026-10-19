@@ -159,7 +159,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get maxOpeningVarietyHelp =>
-      'Não é necessário quando Temperatura e Top-P estão nos valores padrão de 1,0 / 1,0. Usa 1,0 / 1,0 nos cinco primeiros lances de cada lado e volta aos valores configurados a partir do 6º lance.\n\nO objetivo é dar à Maia a máxima variedade na abertura e permitir um jogo potencialmente mais forte nas fases seguintes, reduzindo a chance de escolher lances de baixa probabilidade por meio de valores menores de Temperatura e/ou Top-P.';
+      'Ativada por padrão. Usa temperatura e Top-P 1.0 / 1.0 nos primeiros cinco lances de cada lado e suas configurações a partir do sexto. Preserva opções amplas na abertura e permite excluir lances pouco prováveis depois. Respeita o número do lance da posição, inclusive ao retomar ou continuar uma partida.\n\nDesnecessária em 1.0 / 1.0: a opção fica desligada e indisponível, pois esses valores já oferecem toda a variedade durante a partida.';
 
   @override
   String get maiaAnalysisRating => 'Rating do Maia na análise';
@@ -977,7 +977,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get samplingResearch => 'Dados completos de pesquisa (JSONL)';
 
   @override
-  String get samplingResearchLink => 'Dados completos de pesquisa (em inglês)';
+  String get samplingResearchLink => 'Guia visual e pesquisa (em inglês)';
 
   @override
   String get close => 'Fechar';
@@ -1023,7 +1023,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'Reduzir a temperatura ou o Top-P pode tornar Maia mais forte no meio-jogo, mas diminui a variedade nas aberturas. Veja o botão de informação para saber mais.';
+      'O repertório de aberturas de Maia pode ficar mais limitado com a variedade máxima na abertura desativada.';
 
   @override
   String get couldNotOpenPgn => 'Não foi possível abrir o PGN.';
@@ -1402,29 +1402,73 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingHelpIntro =>
-      'A Temperatura e o Top-P controlam como a Maia escolhe entre os lances.';
+      'Temperatura e Top-P definem juntas a variedade das jogadas de Maia.';
 
   @override
   String get samplingHelpVariety =>
-      'Aumentar a Temperatura e o Top-P é como tornar a Maia uma jogadora mais imprevisível, pois ela passa a ter mais chances de escolher lances pouco prováveis. Eles podem ser erros graves, mas também jogadas excelentes!';
+      'Pense na temperatura como a disposição de Maia para considerar lances incomuns. Em 0, ela sempre escolhe o lance que considera mais provável para uma pessoa do nível selecionado. Em 1.0, mantém toda a variedade humana, como um jogador criativo de bullet disposto a tentar um sacrifício maluco. Os lances populares continuam mais prováveis que os extravagantes.';
 
   @override
   String get samplingHelpDefaults =>
-      'Se você quer o máximo de variedade e também quer que a Maia jogue uma ampla gama de aberturas humanas, incluindo variantes secundárias, mantenha os valores padrão de 1,0 e 1,0.';
+      'Top-P é como o anjo no ombro de Maia. Em 1.0, deixa todos os candidatos passar. Ao diminuir o valor, retira os lances menos prováveis. Em 0, resta apenas um dos lances mais prováveis. O filtro considera a popularidade, não se o lance é bom ou ruim.';
 
   @override
   String get samplingHelpStrength =>
-      'Se você prefere uma adversária mais forte que cometa menos erros graves, experimente diminuir os valores de Temperatura e Top-P.';
+      'Na pesquisa anterior com o nível 1600, escolher sempre o lance mais provável (argmax) foi a opção mais forte entre as testadas: cerca de 300 Elo de vantagem contra 1.0 / 1.0 em confrontos diretos. Mas isso também restringiu as aberturas.';
 
   @override
   String get samplingHelpArgmax =>
-      'Definir a Temperatura como 0 faz a Maia usar argmax, que é uma forma técnica de dizer que ela sempre jogará o lance que prevê ser o mais provável para um humano em determinada posição. Atenção! Em nossa pesquisa com o nível definido como 1600, a Maia com argmax superou a Maia com 1,0 / 1,0 pelo equivalente a cerca de 300 pontos Elo em confrontos diretos.';
+      'A variedade máxima na abertura usa temperatura e Top-P 1.0 / 1.0 nos primeiros cinco lances de cada lado e aplica suas configurações a partir do sexto. Você pode ver surpresas na abertura!';
 
   @override
   String get samplingHelpTopP =>
-      'Para equilibrar força e variedade, você pode manter a Temperatura em 1,0 e definir o Top-P como 0,95. Isso mantém a variedade e elimina lances pouco prováveis, que muitas vezes podem ser erros graves, mas também podem ser bons lances. Basicamente, o Top-P exclui os lances menos prováveis. Ao defini-lo como 0,95, ele mantém lances que somam pelo menos 95% da probabilidade após a aplicação da Temperatura. A Maia não poderá escolher os lances restantes.';
+      'Recomendamos variedade na abertura ativada, temperatura 1.0 e Top-P 0.95. É um jogador criativo com um anjo no ombro: após a abertura, ficam de fora os candidatos da cauda menos provável, que juntos somam no máximo 5% de probabilidade. Isso pode excluir erros graves, mas também boas surpresas. Erros graves continuam possíveis. Para um adversário mais difícil, experimente temperatura 0. Com a variedade na abertura ativada, ela vale a partir do sexto lance. Boa sorte!';
 
   @override
   String get samplingHelpResearchIntro =>
-      'Experimentamos essas configurações em 1600 Elo e publicamos todos os resultados aqui:';
+      'O guia visual explica a pesquisa por trás dessas escolhas e traz links para os resultados completos.';
+
+  @override
+  String get samplingTechnicalTemperature =>
+      'A temperatura ajusta os logits dos lances legais antes do softmax. Para T > 0, cada peso é exp((logit − logit máximo) / T), seguido de normalização. T = 1 preserva a distribuição do modelo; reduzir T concentra a probabilidade nos candidatos com maior pontuação. T = 0 escolhe diretamente um argmax e ignora Top-P.';
+
+  @override
+  String get samplingTechnicalTopP =>
+      'Top-P ordena as probabilidades ajustadas da maior para a menor e mantém o menor prefixo que atinge o limite, incluindo o lance que o ultrapassa. As probabilidades restantes são normalizadas novamente antes do sorteio. P = 1 mantém todos os lances; P = 0 mantém um de maior probabilidade. P = 0.95 remove no máximo 5% da probabilidade total, e não todos os lances com probabilidade individual inferior a 5%.';
+
+  @override
+  String get samplingTechnicalOpening =>
+      'Padrões: temperatura 1.0, Top-P 0.95 e variedade máxima na abertura ativada. Para ambas as cores, os números de lance completo 1–5 do FEN usam 1.0 / 1.0, e os valores configurados valem a partir do sexto. Retomar uma partida ou continuar de uma posição não reinicia a contagem. As porcentagens do tabuleiro de análise continuam sendo as probabilidades do modelo antes desses ajustes de jogo.';
+
+  @override
+  String get samplingTechnicalEvidence =>
+      'Com o modelo 79M, histórico desativado e nível 1600, os padrões propostos marcaram 60.7% dos pontos contra 1.0 / 1.0 em 600 partidas (intervalo de 95%: 56.8–64.6%). Testes anteriores de argmax deram cerca de 300 Elo de vantagem no confronto. São resultados de confrontos diretos, não ratings calibrados contra humanos. Cinco lances é uma escolha de projeto, não um ótimo comprovado; filtrar por probabilidade não garante bons lances.';
+
+  @override
+  String get samplingSimpleExplanation => 'Explicação simples';
+
+  @override
+  String get samplingTechnicalExplanation => 'Explicação técnica';
+
+  @override
+  String get samplingFullVarietyNotice =>
+      'Maia pode cometer mais erros graves incomuns com temperatura e Top-P em 1.0 / 1.0.';
+
+  @override
+  String get samplingArgmaxNotice =>
+      'Maia pode jogar mais forte com temperatura ou Top-P em 0. Boa sorte!';
+
+  @override
+  String get samplingArgmaxAfterOpeningNotice =>
+      'A partir do sexto lance, Maia pode jogar mais forte com temperatura ou Top-P em 0. Boa sorte!';
+
+  @override
+  String get topPNotUsed => 'Top-P: Não utilizado';
+
+  @override
+  String get topPNotUsedTitle => 'Por que Top-P não é utilizado';
+
+  @override
+  String get topPNotUsedHelp =>
+      'Com temperatura 0, Maia sempre escolhe um dos lances mais prováveis, então Top-P não tem efeito. Seu valor é mantido e volta a ficar disponível ao aumentar a temperatura. Se a variedade na abertura estiver ativada, os primeiros cinco lances de cada lado continuam usando 1.0 / 1.0.';
 }
