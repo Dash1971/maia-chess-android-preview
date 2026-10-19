@@ -16,13 +16,14 @@ void main() {
       final deterministic = s.samplingArgmaxNotice;
       final afterOpening = s.samplingArgmaxAfterOpeningNotice;
       final lowerAfterOpening = s.samplingLowerAfterOpeningNotice;
+      final lower = s.samplingLowerNotice;
       final cases = <(double, double, bool, List<String>)>[
         (1, 0.95, true, [lowerAfterOpening]),
-        (1, 0.95, false, [limited]),
-        (1, 0.99, false, [limited]),
+        (1, 0.95, false, [lower, limited]),
+        (1, 0.99, false, [lower, limited]),
         (1, 0.99, true, [lowerAfterOpening]),
-        (0.95, 0.95, false, [limited]),
-        (1, 0.90, false, [limited]),
+        (0.95, 0.95, false, [lower, limited]),
+        (1, 0.90, false, [lower, limited]),
         (1, 0.90, true, [lowerAfterOpening]),
         (0.5, 1, true, [lowerAfterOpening]),
         (0.5, 0.95, true, [lowerAfterOpening]),
@@ -33,7 +34,7 @@ void main() {
         (0, 0, false, [deterministic, limited]),
         (0.5, 0, true, [afterOpening]),
         (1, 0, false, [deterministic, limited]),
-        (0.5, 1, false, [limited]),
+        (0.5, 1, false, [lower, limited]),
       ];
       for (final (temperature, topP, openingVariety, expected) in cases) {
         expect(
@@ -82,6 +83,35 @@ void main() {
   });
 
   for (final locale in AppLocalizations.supportedLocales) {
+    testWidgets(
+      'lower settings without opening variety show both notices in ${locale.languageCode}',
+      (tester) async {
+        SharedPreferences.setMockInitialValues({
+          'temperatureV2': 0.5,
+          'topPV2': 0.95,
+          'maxOpeningVarietyV1': false,
+        });
+        tester.view.physicalSize = const Size(320, 568);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final s = await AppLocalizations.delegate.load(locale);
+        await tester.pumpWidget(settingsApp(locale: locale, scale: 2));
+        await openSettings(tester);
+        final notice = key('sampling-recommendation-warning');
+        expect(
+          tester.widget<Text>(notice).data,
+          '${s.samplingLowerNotice}\n\n${s.samplingRecommendationWarning}',
+        );
+        await Scrollable.ensureVisible(tester.element(notice), alignment: 0.5);
+        await tester.pumpAndSettle();
+        expect(notice.hitTestable(), findsOneWidget);
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+      },
+    );
+
     testWidgets(
       'Temperature 0 preserves disabled Top-P and accessible help in ${locale.languageCode}',
       (tester) async {

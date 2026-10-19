@@ -1341,4 +1341,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get samplingLowerAfterOpeningNotice => '降低温度或Top-P后，Maia可能会从第6步起下得更强。';
+
+  @override
+  String get samplingLowerNotice => '降低温度或Top-P后，Maia可能会下得更强。';
 }

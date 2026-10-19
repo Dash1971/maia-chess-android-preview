@@ -12,8 +12,10 @@ List<String> samplingSettingsNotices(
     openingVariety
         ? strings.samplingArgmaxAfterOpeningNotice
         : strings.samplingArgmaxNotice
-  else if (openingVariety && (temperature < 1.0 || topP < 1.0))
-    strings.samplingLowerAfterOpeningNotice,
+  else if (temperature < 1.0 || topP < 1.0)
+    openingVariety
+        ? strings.samplingLowerAfterOpeningNotice
+        : strings.samplingLowerNotice,
   if (!openingVariety && (temperature < 1.0 || topP < 1.0))
     strings.samplingRecommendationWarning,
 ];

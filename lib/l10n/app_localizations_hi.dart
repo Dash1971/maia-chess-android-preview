@@ -1464,4 +1464,8 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get samplingLowerAfterOpeningNotice =>
       'टेम्परेचर या Top-P कम रखने पर Maia छठी चाल से अधिक मज़बूती से खेल सकती है।';
+
+  @override
+  String get samplingLowerNotice =>
+      'टेम्परेचर या Top-P कम रखने पर Maia अधिक मज़बूती से खेल सकती है।';
 }

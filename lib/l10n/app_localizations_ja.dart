@@ -1364,4 +1364,7 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get samplingLowerAfterOpeningNotice =>
       '温度またはTop-Pを低くすると、6手目からMaiaがより強くなる可能性があります。';
+
+  @override
+  String get samplingLowerNotice => '温度またはTop-Pを低くすると、Maiaがより強くなる可能性があります。';
 }

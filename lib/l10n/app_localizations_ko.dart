@@ -1366,4 +1366,7 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get samplingLowerAfterOpeningNotice =>
       '온도나 Top-P를 낮추면 6수째부터 Maia가 더 강하게 둘 수 있습니다.';
+
+  @override
+  String get samplingLowerNotice => '온도나 Top-P를 낮추면 Maia가 더 강하게 둘 수 있습니다.';
 }

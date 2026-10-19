@@ -18,7 +18,7 @@ appearance is shown in the screenshots; Appearance PR #156 is a separate change.
   help. Its saved value is preserved, including across restart. It becomes
   usable again when Temperature rises. No silent 0/0 trap is introduced.
 - At full 1/1: a neutral notice mentions unusual blunders. Below T1/P1 with
-  variety off: a neutral repertoire notice. T0 or P0: a strength notice, explicitly
+  variety off: both neutral strength and repertoire notices. T0 or P0: a strength notice, explicitly
   “from move 6” when the opening override is enabled. If both restrictions apply,
   both relevant notices appear. Lower nonzero settings with variety on show a
   strength notice from move 6, without “Good luck!”, including the new defaults.
@@ -53,11 +53,11 @@ Top-P stays saved but disabled when Temperature is zero.
 
 | Full variety: 1.0 / 1.0 | Top-P 0.95; opening variety off |
 | --- | --- |
-| ![Full variety notice](full-variety.png) | ![Restricted opening at 0.95](limited-openings.png) |
+| ![Full variety notice](full-variety.png) | ![Strength and restricted-opening notices at 0.95](limited-openings.png) |
 
 | Temperature 0.5 / Top-P 1.0; variety off | Temperature 0; variety on |
 | --- | --- |
-| ![Restricted opening from Temperature](limited-temperature.png) | ![Strength notice from move six](top-p-unused.png) |
+| ![Strength and restricted-opening notices from lower Temperature](limited-temperature.png) | ![Strength notice from move six](top-p-unused.png) |
 
 | Temperature 0; variety off | Top-P 0; variety on |
 | --- | --- |
@@ -151,3 +151,13 @@ Lower-settings notice follow-up: all 155 focused tests and static analysis pass;
 localization checks pass for 400 messages in all ten catalogs. Default/lower
 settings and help screenshots refreshed. Zero notices keep priority and their
 “Good luck!” wording. No APK build, merge or publication.
+
+With opening variety off, lower nonzero settings show “Maia may play stronger
+with lower Temperature or Top-P.” followed by the limited-opening repertoire
+notice. There is no move-six qualifier and no “Good luck!” unless a setting is
+zero. Approved Simple/Technical help is unchanged.
+
+Latest combined-notice check: **165 focused tests passed**, including the two
+notices together in all ten languages at 320px/200% text. Static analysis and
+localization/reference checks passed (401 messages per catalog). Both affected
+widget screenshots were refreshed; no APK build, merge or publication.

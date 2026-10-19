@@ -2517,6 +2517,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'From move 6, Maia may play stronger with lower Temperature or Top-P.'**
   String get samplingLowerAfterOpeningNotice;
+
+  /// Neutral strength notice when opening variety is off and either positive sampling setting is below 1. Display alongside the limited-opening notice. No from-move-six qualifier or Good luck. Zero settings use the separate argmax notice. Maia-specific, no Lichess equivalent.
+  ///
+  /// In en, this message translates to:
+  /// **'Maia may play stronger with lower Temperature or Top-P.'**
+  String get samplingLowerNotice;
 }
 
 class _AppLocalizationsDelegate

@@ -1466,4 +1466,8 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get samplingLowerAfterOpeningNotice =>
       'À partir du 6e coup, Maia peut jouer plus fort avec une température ou un Top-P plus bas.';
+
+  @override
+  String get samplingLowerNotice =>
+      'Maia peut jouer plus fort avec une température ou un Top-P plus bas.';
 }

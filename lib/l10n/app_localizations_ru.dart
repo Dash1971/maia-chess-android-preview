@@ -1486,4 +1486,8 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get samplingLowerAfterOpeningNotice =>
       'С 6-го хода Maia может играть сильнее при более низкой температуре или Top-P.';
+
+  @override
+  String get samplingLowerNotice =>
+      'Maia может играть сильнее при более низкой температуре или Top-P.';
 }

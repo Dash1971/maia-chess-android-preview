@@ -1470,4 +1470,8 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get samplingLowerAfterOpeningNotice =>
       'Ab dem 6. Zug kann Maia mit niedrigerer Temperatur oder niedrigerem Top-P stärker spielen.';
+
+  @override
+  String get samplingLowerNotice =>
+      'Maia kann mit niedrigerer Temperatur oder niedrigerem Top-P stärker spielen.';
 }

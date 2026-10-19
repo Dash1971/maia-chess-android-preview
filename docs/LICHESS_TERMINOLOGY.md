@@ -320,3 +320,8 @@ Lower nonzero sampling settings with opening variety on now also have a
 Maia-specific strength notice from move 6, translated into all ten languages.
 Only the zero-setting notices retain “Good luck!”. The approved help copy is
 unchanged.
+
+With opening variety off, lower nonzero settings show the same translated
+strength advice without the move-six qualifier or “Good luck!”, alongside the
+existing limited-opening notice. Both notices are checked at 320px/200% text in
+all ten languages.
