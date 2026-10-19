@@ -1799,6 +1799,111 @@
           "reason": "No translation for this key in the pinned upstream catalog; use native Hindi wording."
         }
       }
+    },
+    "appearanceTheme": {
+      "upstream_key": "mobileTheme",
+      "upstream": {
+        "en": "Theme",
+        "ja": "テーマ",
+        "zh": "主题",
+        "ko": "테마",
+        "es": "Tema",
+        "de": "Erscheinungsbild",
+        "fr": "Thème",
+        "ru": "Оформление",
+        "hi": "थीम",
+        "pt": "Tema"
+      },
+      "adaptations": {}
+    },
+    "appearanceLight": {
+      "upstream_key": "light",
+      "upstream": {
+        "en": "Light",
+        "ja": "明るい",
+        "zh": "浅色",
+        "ko": "밝게",
+        "es": "Claro",
+        "de": "Hell",
+        "fr": "Lumineux",
+        "ru": "Светлая",
+        "hi": "हल्का",
+        "pt": "Claro"
+      },
+      "adaptations": {}
+    },
+    "appearanceDark": {
+      "upstream_key": "dark",
+      "upstream": {
+        "en": "Dark",
+        "ja": "暗い",
+        "zh": "深色",
+        "ko": "어둡게",
+        "es": "Oscuro",
+        "de": "Dunkel",
+        "fr": "Sombre",
+        "ru": "Тёмная",
+        "hi": "काला",
+        "pt": "Escuro"
+      },
+      "adaptations": {}
+    },
+    "appearanceSystemColors": {
+      "upstream_key": "mobileSystemColors",
+      "upstream": {
+        "en": "System colors",
+        "ja": "OS と同じ色設定",
+        "zh": "跟随系统",
+        "ko": "시스템 색상",
+        "es": "Colores del sistema",
+        "de": "Systemfarben",
+        "fr": "Couleurs du système",
+        "ru": "Системные цвета",
+        "hi": "सिस्टम कलर्स",
+        "pt": "Cores do sistema"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Use system colors",
+          "reason": "Use an explicit action label for an independent switch; this does not select device brightness. Chinese makes colors explicit to distinguish this from System default brightness."
+        },
+        "ja": {
+          "value": "OS と同じ色設定を使う",
+          "reason": "Use an explicit action label for an independent switch; this does not select device brightness. Chinese makes colors explicit to distinguish this from System default brightness."
+        },
+        "zh": {
+          "value": "使用系统颜色",
+          "reason": "Use an explicit action label for an independent switch; this does not select device brightness. Chinese makes colors explicit to distinguish this from System default brightness."
+        },
+        "ko": {
+          "value": "시스템 색상 사용",
+          "reason": "Use an explicit action label for an independent switch; this does not select device brightness. Chinese makes colors explicit to distinguish this from System default brightness."
+        },
+        "es": {
+          "value": "Usar colores del sistema",
+          "reason": "Use an explicit action label for an independent switch; this does not select device brightness. Chinese makes colors explicit to distinguish this from System default brightness."
+        },
+        "de": {
+          "value": "Systemfarben verwenden",
+          "reason": "Use an explicit action label for an independent switch; this does not select device brightness. Chinese makes colors explicit to distinguish this from System default brightness."
+        },
+        "fr": {
+          "value": "Utiliser les couleurs du système",
+          "reason": "Use an explicit action label for an independent switch; this does not select device brightness. Chinese makes colors explicit to distinguish this from System default brightness."
+        },
+        "ru": {
+          "value": "Использовать системные цвета",
+          "reason": "Use an explicit action label for an independent switch; this does not select device brightness. Chinese makes colors explicit to distinguish this from System default brightness."
+        },
+        "hi": {
+          "value": "सिस्टम कलर्स का उपयोग करें",
+          "reason": "Use an explicit action label for an independent switch; this does not select device brightness. Chinese makes colors explicit to distinguish this from System default brightness."
+        },
+        "pt": {
+          "value": "Usar cores do sistema",
+          "reason": "Use an explicit action label for an independent switch; this does not select device brightness. Chinese makes colors explicit to distinguish this from System default brightness."
+        }
+      }
     }
   }
 }

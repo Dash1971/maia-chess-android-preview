@@ -38,7 +38,9 @@ We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) sp
 
 [The 79M sampling study](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/opening-variety-2026-10-18/REPORT.md) is complete: 3,000 full games, 5,400 opening rollouts and 180 quality positions. Temperature 1.0 / Top-P 0.95 with **Max variety in opening** scored 60.7% against 1.0 / 1.0 at the 1600 rating input (95% interval: 56.8–64.6%) and preserved the measured broad opening mix. Finer opening variation and human-move fidelity remain uncertain.
 
-The current **1.0 / 1.0 defaults remain unchanged** while we decide whether to adopt this candidate. The [research issue](https://github.com/Dash1971/maia-chess-android-preview/issues/155) remains open for that decision.
+The proposed **2.5 defaults** are **Temperature 1.0 / Top-P 0.95 with Max variety in opening on**. They apply to new settings and Settings resets; existing saved preferences and frozen game profiles are retained. Play and primary analysis start at 1500; the optional second analysis engine starts at 2600 and remains off until enabled. The [visual settings guide](https://github.com/Dash1971/mobile-maia-research/blob/main/guides/choosing-maia-settings/README.md) explains the choice. These source changes are not yet a published Preview APK.
+
+Engine help offers **Simple explanation** and **Technical explanation** in all ten languages. At Temperature 0, Top-P is disabled and labelled “Not used”; its value is retained for when Temperature is raised again. Contextual notices describe full sampling, narrower opening choices and deterministic play without running extra inference.
 
 **Colors and appearance**
 

@@ -153,7 +153,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get maxOpeningVarietyHelp =>
-      '当温度和Top-P均为默认值1.0 / 1.0时，无需启用。双方各自的前五步使用1.0 / 1.0，从第6步起恢复您设置的值。\n\n此设置旨在让Maia的开局尽可能多样，同时在之后的对局中通过降低温度和/或Top-P，减少选择低概率走法的机会，从而有望提升棋力。';
+      '默认开启。双方前五步使用温度和Top-P 1.0 / 1.0，从第六步开始使用您配置的设置。这样可保留广泛的开局选择，同时在之后去掉部分低概率走法。恢复对局或从某局面继续时，也按该局面的回合数执行。\n\n在1.0 / 1.0时无需此选项：这些设置已在全局保留完整多样性，因此开关显示为关闭且不可选。';
 
   @override
   String get maiaAnalysisRating => 'Maia 分析等级分';
@@ -879,7 +879,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingResearch => '完整研究数据（JSONL）';
 
   @override
-  String get samplingResearchLink => '完整研究数据（英文）';
+  String get samplingResearchLink => '图解指南与研究（英文）';
 
   @override
   String get close => '关闭';
@@ -922,8 +922,7 @@ class AppLocalizationsZh extends AppLocalizations {
       '这是一款独立的社区应用，并非 Maia-3、多伦多大学、Lichess 或 En Croissant 的官方应用。';
 
   @override
-  String get samplingRecommendationWarning =>
-      '降低温度或Top-P可能让Maia在中局更强，但会减少开局变化。详情请查看信息按钮。';
+  String get samplingRecommendationWarning => '关闭开局多样性最大化后，Maia的开局选择可能更有限。';
 
   @override
   String get couldNotOpenPgn => '无法打开 PGN。';
@@ -1273,28 +1272,106 @@ class AppLocalizationsZh extends AppLocalizations {
   String get resetSettingsAction => '重置设置';
 
   @override
-  String get samplingHelpIntro => '温度和 Top-P 控制 Maia 如何在不同走法之间做出选择。';
+  String get samplingHelpIntro => '温度和Top-P共同决定Maia走法的多样性。';
 
   @override
   String get samplingHelpVariety =>
-      '提高温度和 Top-P，就像让 Maia 成为一个发挥更不稳定的棋手，因为它更容易选择低概率的走法。这些走法可能是败着，也可能是妙着！';
+      '你可以把更高的温度理解为Maia思考候选走法时更有创造力。温度为0时，就像一位稳健的线下棋手，认真思考，努力把选择缩小到最可能出现（而且往往也是最好）的走法。温度为1时，就像一位富有创造力的快棋棋手，再疯狂的弃子也敢尝试，每一步棋，无论多么不常见，都可以纳入考虑。';
 
   @override
   String get samplingHelpDefaults =>
-      '如果你希望对局尽可能多样，也希望 Maia 能下出人类棋手使用的各种开局，包括冷门变化，那么请保留默认值 1.0 和 1.0。';
+      '你可以把Top-P想象成Maia肩上的恶魔或天使。设为0时，天使会告诉Maia忽略那些疯狂、低概率的走法。设为1.0时，恶魔会鼓动Maia大胆出手，甚至可能选择最疯狂、最不可能出现的走法。';
 
   @override
-  String get samplingHelpStrength => '如果你希望对手更强、败着更少，可以尝试降低温度和 Top-P 的值。';
+  String get samplingHelpStrength =>
+      '在我们的研究中，0和0的设置（技术上称为argmax）带来了最强的表现，比1.0和1.0的设置强约300 Elo。不过，这也把开局选择限制在以主线为主的较小范围内。';
 
   @override
   String get samplingHelpArgmax =>
-      '将温度设为 0 会让 Maia 使用 argmax。这个技术术语的意思是：在给定局面中，Maia 总会选择它预测人类最有可能下的一步。注意！在我们以 1600 为等级分设置的研究中，使用 argmax 的 Maia 在与 1.0 / 1.0 的 Maia 直接对局时，取得了相当于约 300 Elo 分优势的成绩。';
+      '因此，我们加入了最大化开局多样性的功能：打开这个开关，Maia在前5步会使用1.0和1.0的设置。你可能会在开局阶段看到一些疯狂的走法！不过，从第6步起，Maia就会切换回你预先配置的设置。';
 
   @override
   String get samplingHelpTopP =>
-      '如果想兼顾强度和多样性，可以将温度保持在 1.0，并把 Top-P 设为 0.95。这样既能保留多样性，又能排除一些低概率走法。这些走法往往可能是败着，但也可能是好棋。简单来说，Top-P 会筛掉低概率的走法。设为 0.95 时，它会保留应用温度设置后累计概率至少达到 95% 的走法。其余走法不会被 Maia 选中。';
+      '我们建议保持最大开局多样性开启，温度保持为1.0，Top-P保持为0.95。这就像一位富有创造力的棋手肩上有个天使，至少能劝它放弃那些特别离谱的走法——也就是概率最低、合计概率不超过5%的那些走法。它们可能是妙招，没错，但也可能是愚蠢的大漏招。因此，这应该能在开局的多样性、中局的创造力，以及通过排除部分极低概率的大漏招所获得的更强表现之间，取得良好的平衡。\n\n如果你勇于挑战，可以将温度设为0（温度为0时，Top-P没有作用）。根据我们的研究，这会带来最强的对手。祝你好运！';
 
   @override
-  String get samplingHelpResearchIntro =>
-      '我们在 1600 Elo 设置下试验了这些参数，完整研究结果已发布在这里：';
+  String get samplingHelpResearchIntro => '查看图解指南，了解这些选择背后的研究，并访问完整结果。';
+
+  @override
+  String get samplingTechnicalTemperature =>
+      '温度先缩放模型的合法走法logit，再应用softmax。T > 0时，各权重为exp((logit − 最大logit) / T)，随后归一化。T = 1保留模型分布；降低T会使概率集中到分数更高的走法。T = 0直接选择argmax，忽略Top-P。';
+
+  @override
+  String get samplingTechnicalTopP =>
+      'Top-P将温度调整后的概率按降序排列，保留累计概率达到阈值的最小前缀，包括跨过阈值的那一步。对保留的概率重新归一化后抽样。P = 1保留全部走法；P = 0保留一个概率最高的走法。P = 0.95最多去掉总概率的5%，并非去掉所有单独概率低于5%的走法。';
+
+  @override
+  String get samplingTechnicalOpening =>
+      '默认设置为温度 1.0、Top-P 0.95，并开启开局多样性。双方在FEN完整回合数1–5时使用1.0 / 1.0，第六回合起使用配置值。恢复对局或从某局面继续不会重新计数。分析棋盘的百分比仍是应用这些对局设置前的模型概率。';
+
+  @override
+  String get samplingTechnicalEvidence =>
+      '在79M模型、关闭历史输入、等级分输入1600的600局中，提议的默认设置对1.0 / 1.0取得60.7%的得分率（95%区间56.8–64.6%）。此前argmax测试的对战优势约为300 Elo。这些是直接对战结果，并非校准后的人类等级分。五步是设计选择，不是已证实的最优值；按概率筛选不能保证好棋。';
+
+  @override
+  String get samplingSimpleExplanation => '简单说明';
+
+  @override
+  String get samplingTechnicalExplanation => '技术说明';
+
+  @override
+  String get samplingFullVarietyNotice => '温度和Top-P为1.0 / 1.0时，Maia可能走出更多意外漏着。';
+
+  @override
+  String get samplingArgmaxNotice => '温度或Top-P为0时，Maia可能更强。祝您好运！';
+
+  @override
+  String get samplingArgmaxAfterOpeningNotice =>
+      '温度或Top-P为0时，Maia可能从第六步起更强。祝您好运！';
+
+  @override
+  String get topPNotUsed => 'Top-P：不使用';
+
+  @override
+  String get topPNotUsedTitle => '为什么不使用Top-P';
+
+  @override
+  String get topPNotUsedHelp =>
+      '温度为0时，Maia总是选择一个概率最高的走法，因此Top-P不起作用。您的Top-P值会保留，提高温度后可再次使用。如果开启开局多样性，双方的前五步仍使用1.0 / 1.0。';
+
+  @override
+  String get samplingLowerAfterOpeningNotice => '降低温度或Top-P后，Maia可能会从第6步起下得更强。';
+
+  @override
+  String get samplingLowerNotice => '降低温度或Top-P后，Maia可能会下得更强。';
+
+  @override
+  String get appearance => '外观';
+
+  @override
+  String get appearanceSystemColors => '使用系统颜色';
+
+  @override
+  String get appearanceSystemColorsHelp => '使用 Android 的配色';
+
+  @override
+  String get appearanceSystemColorsUnavailable => '此设备不支持。需要 Android 12 或更高版本。';
+
+  @override
+  String get appearancePureBlack => '纯黑背景';
+
+  @override
+  String get appearancePureBlackHelp => '在深色模式下使用纯黑背景';
+
+  @override
+  String get appearancePreferenceError => '外观已更改，但无法保存。请重试。';
+
+  @override
+  String get appearanceTheme => '主题';
+
+  @override
+  String get appearanceLight => '浅色';
+
+  @override
+  String get appearanceDark => '深色';
 }

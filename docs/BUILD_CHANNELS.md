@@ -1,12 +1,12 @@
 # Build channels and promotion status
 
-Updated 2026-10-17. Release pages are authoritative for published artifacts;
+Updated 2026-10-19. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
-| [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published 2.3.0; unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
+| [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.4.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.4.0); unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
 | [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.4.0-beta.15](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.4.0-beta.15), code 2417 | `com.dash1971.maia_chess.preview`, 79M | Maia help/history experiment and Chessnut improvements. Grand Kingdom and DGT are disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
@@ -272,3 +272,17 @@ actual 79M model. History is experimental and does not promise greater strength.
 - Actual signed beta.14 upgrade preserved UID, settings, saved games and captures. Real 79M sampling verified both colors at moves 5/6, frozen restored settings despite changed global preferences, legacy no-opt-in, new Home-game settings and restart persistence. Actual APK English/Japanese UI checks verified disabled defaults, independent help, enabling via slider, persistence and localized help dismissal. All ten languages passed narrow/large-text host regression checks.
 - Public APK and verification downloads were checked against local hashes and GitHub asset digests. The release contains compact evidence and the standalone emulator harness; test fixtures/harness are not bundled in the APK. Physical phone/Chessnut acceptance remains with owner/testers. Functional qualification does not establish increased strength or an optimal opening cutoff.
 - Grand Kingdom/DGT remain Dev-only. Stable 2.3.0 and Dev alpha.2 are unchanged; no Stable/store publication. PR #153 records task-owned build, APK and emulator cleanup. Shared toolchains/caches and signing keys are retained.
+
+## Preview 2.5.0-beta.1 candidate
+
+Combines Appearance #156 and sampling defaults/help #157. Existing installs keep
+their saved settings and the original dark green theme. New/reset engine defaults
+are Temperature 1.0, Top-P 0.95 and opening variety on; primary analysis is 1500
+and the optional second engine is 2600. Play already defaults to 1500. Appearance
+is below Language and adds Light/Dark/System, system colors and pure black.
+
+This is candidate source, not a published APK. Exact-source Linux CI, independent
+reproduction, signed upgrade and Android appearance/settings checks are required
+before publication. The release PR records the final evidence. Preview package,
+79M model, signing identity and experimental-board restrictions remain unchanged.
+Stable 2.4 and Dev alpha.2 are not part of this publication.

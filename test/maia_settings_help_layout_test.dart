@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/l10n/app_localizations.dart';
@@ -88,6 +89,28 @@ void main() {
         if (previousTop != null) expect(top, greaterThan(previousTop));
         previousTop = top;
       }
+      final technical = find.byKey(const ValueKey('sampling-help-technical'));
+      await tester.ensureVisible(technical);
+      await tester.tap(technical);
+      await tester.pumpAndSettle();
+      expect(find.text(strings.samplingTechnicalTopP), findsOneWidget);
+      for (final label in [
+        strings.samplingSimpleExplanation,
+        strings.samplingTechnicalExplanation,
+      ]) {
+        final paragraph = tester.renderObject<RenderParagraph>(
+          find.text(label),
+        );
+        expect(
+          paragraph.didExceedMaxLines,
+          isFalse,
+          reason:
+              '$code: $label / ${paragraph.constraints} / ${paragraph.maxLines} / ${paragraph.softWrap}',
+        );
+      }
+
+      expect(find.text(strings.samplingHelpVariety), findsNothing);
+      expect(tester.takeException(), isNull);
       expect(find.text(strings.samplingResearchLink), findsOneWidget);
       expect(find.text(strings.samplingResearch), findsNothing);
       expect(strings.samplingResearchLink, isNot(contains('JSONL')));
@@ -95,7 +118,7 @@ void main() {
       expect(find.text(strings.maiaHistoryHelp), findsNothing);
       expect(find.byKey(const ValueKey('history-research-link')), findsNothing);
       for (final (key, path) in [
-        ('sampling-research-link', 'studies/maia3-sampling/REPORT.md'),
+        ('sampling-research-link', 'guides/choosing-maia-settings/README.md'),
         ('history-research-link', 'studies/move-history-2026-10-09/REPORT.md'),
       ]) {
         if (key == 'history-research-link') {

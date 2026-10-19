@@ -132,6 +132,7 @@ void main() {
     SharedPreferences.setMockInitialValues({
       'temperatureV2': 0.5,
       'topPV2': 0.9,
+      'maxOpeningVarietyV1': false,
     });
     tester.view.physicalSize = const Size(320, 568);
     tester.view.devicePixelRatio = 1;
@@ -176,13 +177,15 @@ void main() {
     // Center this tall paragraph within the dialog's scroll viewport.
     await Scrollable.ensureVisible(
       tester.element(
-        find.textContaining('For balanced play, you may consider'),
+        find.textContaining('We recommend keeping max opening variety on'),
       ),
       alignment: 0.5,
     );
     await tester.pumpAndSettle();
     expect(
-      find.textContaining('For balanced play, you may consider').hitTestable(),
+      find
+          .textContaining('We recommend keeping max opening variety on')
+          .hitTestable(),
       findsOneWidget,
     );
     final researchLink = find.byKey(const ValueKey('sampling-research-link'));

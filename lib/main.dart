@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:chess/chess.dart' as chess;
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart' as dc;
@@ -64,10 +65,14 @@ part 'src/review_widgets.dart';
 part 'src/stockfish.dart';
 part 'src/maia.dart';
 part 'src/maia_play_settings.dart';
+part 'src/sampling_help.dart';
 part 'src/app_language.dart';
+part 'src/app_appearance.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Keep Flutter's overlay regions consistent with Android's edge-to-edge layout.
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   LicenseRegistry.addLicense(() async* {
     yield LicenseEntryWithLineBreaks([
       'Mobile Maia / Maia-3',
@@ -157,12 +162,15 @@ class _MaiaChessAppState extends State<MaiaChessApp>
     with WidgetsBindingObserver {
   Timer? _maiaReleaseTimer;
   final AppLanguageController _language = AppLanguageController();
+  final AppAppearanceController _appearance = AppAppearanceController();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _language.addListener(_languageChanged);
     unawaited(_language.initialize());
+    _appearance.addListener(_languageChanged);
+    unawaited(_appearance.initialize());
   }
 
   void _languageChanged() {
@@ -185,7 +193,13 @@ class _MaiaChessAppState extends State<MaiaChessApp>
       _maiaReleaseTimer = Timer(const Duration(seconds: 30), _releaseMaia);
     } else if (state == AppLifecycleState.resumed) {
       _maiaReleaseTimer?.cancel();
+      unawaited(_appearance.refreshColors());
     }
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    unawaited(_appearance.refreshColors());
   }
 
   void _releaseMaia() {
@@ -210,35 +224,67 @@ class _MaiaChessAppState extends State<MaiaChessApp>
     _maiaReleaseTimer?.cancel();
     _language.removeListener(_languageChanged);
     _language.dispose();
+    _appearance.removeListener(_languageChanged);
+    _appearance.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mobile Maia Preview',
-      locale: _language.selectedCode == null
-          ? null
-          : Locale(_language.selectedCode!),
-      localeListResolutionCallback: resolveAppLocale,
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      navigatorObservers: [maiaRouteObserver],
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xff5d735f),
-          brightness: Brightness.dark,
+    return AppAppearanceSettings(
+      controller: _appearance,
+      child: MaterialApp(
+        title: 'Mobile Maia Preview',
+        locale: _language.selectedCode == null
+            ? null
+            : Locale(_language.selectedCode!),
+        localeListResolutionCallback: resolveAppLocale,
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        navigatorObservers: [maiaRouteObserver],
+        debugShowCheckedModeBanner: false,
+        themeMode: _appearance.value.mode,
+        theme: appTheme(
+          _appearance.value,
+          Brightness.light,
+          dynamicColors: _appearance.dynamicColors,
         ),
-        scaffoldBackgroundColor: const Color(0xff171a18),
-        useMaterial3: true,
-      ),
-      home: AppLanguageSettings(
-        selectedCode: _language.selectedCode,
-        persistenceFailed: _language.persistenceFailed,
-        onChanged: _setLanguage,
-        child: const GamePage(),
+        darkTheme: appTheme(
+          _appearance.value,
+          Brightness.dark,
+          dynamicColors: _appearance.dynamicColors,
+        ),
+        builder: (context, child) {
+          final dark = Theme.of(context).brightness == Brightness.dark;
+          return AnnotatedRegion<SystemUiOverlayStyle>(
+            key: const ValueKey('app-system-ui-style'),
+            value: SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: dark
+                  ? Brightness.light
+                  : Brightness.dark,
+              statusBarBrightness: dark ? Brightness.dark : Brightness.light,
+              systemNavigationBarColor: Theme.of(context)
+                  .scaffoldBackgroundColor,
+              // Android 16 ignores navigationBarColor in edge-to-edge mode.
+              // Our Scaffold paints the safe-area background in both modes;
+              // native NormalTheme explicitly declares navigationBarColor so
+              // Android cannot override our icon brightness from its OS theme.
+              systemNavigationBarContrastEnforced: false,
+              systemNavigationBarIconBrightness: dark
+                  ? Brightness.light
+                  : Brightness.dark,
+            ),
+            child: child!,
+          );
+        },
+        home: AppLanguageSettings(
+          selectedCode: _language.selectedCode,
+          persistenceFailed: _language.persistenceFailed,
+          onChanged: _setLanguage,
+          child: const GamePage(),
+        ),
       ),
     );
   }

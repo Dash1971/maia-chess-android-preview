@@ -105,6 +105,11 @@ void main() {
         'chessnutBoardSounds': false,
         samplingCapturePreference: true,
         appLanguagePreferenceKey: 'ja',
+        appAppearancePreferenceKey: const AppAppearance(
+          mode: ThemeMode.light,
+          systemColors: true,
+          pureBlack: true,
+        ).encode(),
         'savedGame': 'saved-session-sentinel',
         'recentGames': 'saved-games-sentinel',
         maiaPlayEloPreferenceKey: 1800,
@@ -181,15 +186,17 @@ void main() {
         'humanTiming': false,
         'maiaUseMoveHistoryV1': false,
         'temperatureV2': 1.0,
-        'topPV2': 1.0,
-        'analysisElo': 1600,
+        'topPV2': 0.95,
+        'maxOpeningVarietyV1': true,
+        'analysisElo': 1500,
         secondMaiaEnabledPreferenceKey: false,
-        secondMaiaEloPreferenceKey: 2400,
+        secondMaiaEloPreferenceKey: 2600,
         gameAnalysisQualityPreferenceKey: 'fast',
         gameSoundsPreferenceKey: false,
         gameHapticsPreferenceKey: true,
         'chessnutBoardSounds': true,
         samplingCapturePreference: false,
+        appAppearancePreferenceKey: const AppAppearance().encode(),
       };
       for (final entry in defaults.entries) {
         expect(prefs.get(entry.key), entry.value);

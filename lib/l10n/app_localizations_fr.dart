@@ -159,7 +159,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get maxOpeningVarietyHelp =>
-      'Inutile si Température et Top-P sont à leurs valeurs par défaut de 1,0 / 1,0. Utilise 1,0 / 1,0 pour les cinq premiers coups de chaque camp, puis rétablit vos réglages à partir du 6e coup.\n\nL’objectif est d’offrir à Maia un maximum de variété dans l’ouverture, tout en permettant un jeu potentiellement plus fort par la suite en réduisant les chances de choisir des coups de faible probabilité grâce à des valeurs plus basses de Température et/ou de Top-P.';
+      'Activée par défaut. Utilise température et Top-P 1.0 / 1.0 pendant les cinq premiers coups de chaque camp, puis vos réglages dès le sixième. Cela préserve un large choix d’ouvertures tout en permettant d’écarter ensuite les coups peu probables. Le numéro de coup de la position est respecté, même lors d’une reprise.\n\nInutile à 1.0 / 1.0 : l’interrupteur est désactivé et non sélectionnable, car ces valeurs offrent déjà toute la variété pendant la partie.';
 
   @override
   String get maiaAnalysisRating => 'Classement de Maia pour l’analyse';
@@ -966,8 +966,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get samplingResearch => 'Données de recherche complètes (JSONL)';
 
   @override
-  String get samplingResearchLink =>
-      'Données de recherche complètes (en anglais)';
+  String get samplingResearchLink => 'Guide visuel et recherche (en anglais)';
 
   @override
   String get close => 'Fermer';
@@ -1013,7 +1012,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'Baisser la température ou Top-P peut renforcer Maia en milieu de partie, mais réduit la variété des ouvertures. Consultez le bouton d’information pour en savoir plus.';
+      'Le répertoire de Maia peut être plus limité si la variété maximale en ouverture est désactivée.';
 
   @override
   String get couldNotOpenPgn => 'Impossible d’ouvrir le PGN.';
@@ -1394,29 +1393,115 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingHelpIntro =>
-      'La Température et Top-P déterminent comment Maia choisit parmi les coups possibles.';
+      'La température et Top-P déterminent ensemble la variété du jeu de Maia.';
 
   @override
   String get samplingHelpVariety =>
-      'Augmenter la Température et Top-P rend Maia plus imprévisible, car elle a davantage de chances de jouer des coups peu probables. Il peut s’agir de gaffes, mais aussi d’excellents coups !';
+      'Vous pouvez voir une température plus élevée comme une plus grande créativité de Maia lorsqu’elle envisage des coups candidats. Une température de 0 ressemble à un joueur prudent devant un véritable échiquier, qui réfléchit longuement pour se limiter aux coups les plus probables (et assez souvent les meilleurs). Une température de 1 ressemble à un joueur de blitz créatif, pour qui aucun sacrifice n’est trop fou et chaque coup, aussi improbable soit-il, mérite d’être envisagé.';
 
   @override
   String get samplingHelpDefaults =>
-      'Si vous souhaitez un maximum de variété et voulez que Maia joue un large éventail d’ouvertures humaines, y compris des variantes secondaires, conservez les valeurs par défaut de 1,0 et 1,0.';
+      'Vous pouvez voir Top-P comme le diable ou l’ange sur l’épaule de Maia. À 0, un ange lui dit d’ignorer les coups extravagants et peu probables. À 1.0, un diable l’encourage à jouer à l’instinct et peut-être à choisir le coup le plus fou et le plus improbable.';
 
   @override
   String get samplingHelpStrength =>
-      'Si vous préférez un adversaire plus fort qui commet moins de gaffes, essayez de réduire les valeurs de Température et de Top-P.';
+      'Dans notre recherche, les réglages 0 et 0 (appelés techniquement argmax) ont produit le jeu le plus fort : environ 300 Elo de plus que les réglages 1.0 et 1.0. Cependant, cela limitait aussi les choix d’ouverture à un éventail restreint, composé surtout de variantes principales.';
 
   @override
   String get samplingHelpArgmax =>
-      'Lorsque la Température est réglée sur 0, Maia utilise argmax. C’est une façon technique de dire que Maia jouera toujours le coup qu’elle prédit comme le plus probable pour un humain dans une position donnée. Attention ! Dans notre étude avec le niveau réglé sur 1600, Maia avec argmax a surpassé Maia avec 1,0 / 1,0 d’un écart équivalent à environ 300 points Elo lors de confrontations directes.';
+      'Nous avons donc introduit une fonction pour maximiser la variété en ouverture : un interrupteur qui fait jouer Maia avec les réglages 1.0 et 1.0 pendant les 5 premiers coups. Vous pourriez voir des choses folles dans l’ouverture ! Mais à partir du 6e coup, Maia revient aux réglages que vous avez configurés.';
 
   @override
   String get samplingHelpTopP =>
-      'Pour un jeu équilibré, vous pouvez conserver la Température à 1,0 et régler Top-P sur 0,95. Cela préserve la variété tout en éliminant des coups peu probables, qui peuvent souvent être des gaffes, mais aussi de bons coups. Top-P écarte essentiellement les coups les moins probables. À 0,95, il conserve des coups dont les probabilités totalisent au moins 95 % après application de la Température. Maia ne pourra pas choisir les coups restants.';
+      'Nous recommandons de garder la variété maximale en ouverture activée, avec la température réglée sur 1.0 et Top-P sur 0.95. C’est comme un joueur créatif avec un ange sur l’épaule, qui le dissuade au moins de jouer les coups complètement farfelus : les coups les moins probables dont la probabilité cumulée représente jusqu’à 5 %. Ils pourraient certes être brillants, mais aussi être de grosses erreurs absurdes. Cela devrait offrir un bon équilibre entre variété en ouverture, créativité en milieu de partie et jeu plus fort grâce à l’exclusion de certaines grosses erreurs très peu probables.\n\nPour les plus courageux, régler la température sur 0 (Top-P n’a aucun effet lorsque la température est à 0) donnera l’adversaire le plus fort, d’après notre recherche. Bonne chance !';
 
   @override
   String get samplingHelpResearchIntro =>
-      'Nous avons expérimenté ces réglages à 1600 Elo et publié l’ensemble de nos résultats ici :';
+      'Le guide visuel présente la recherche derrière ces choix et les liens vers les résultats complets.';
+
+  @override
+  String get samplingTechnicalTemperature =>
+      'La température ajuste les logits des coups légaux avant softmax. Pour T > 0, chaque poids vaut exp((logit − logit maximal) / T), puis est normalisé. T = 1 conserve la distribution du modèle ; réduire T concentre la probabilité sur les candidats les mieux notés. T = 0 choisit directement un argmax et ignore Top-P.';
+
+  @override
+  String get samplingTechnicalTopP =>
+      'Top-P trie les probabilités ajustées par ordre décroissant et garde le plus petit préfixe atteignant le seuil, y compris le coup qui le dépasse. Les probabilités conservées sont renormalisées avant le tirage. P = 1 garde tous les coups ; P = 0, un coup de probabilité maximale. P = 0.95 retire au plus 5% de la probabilité totale, et non tous les coups dont la probabilité individuelle est inférieure à 5%.';
+
+  @override
+  String get samplingTechnicalOpening =>
+      'Valeurs par défaut : température 1.0, Top-P 0.95, variété maximale en ouverture activée. Les numéros de coup complet 1–5 du FEN utilisent 1.0 / 1.0 pour les deux couleurs, puis les valeurs configurées dès le coup 6. Reprendre une partie ou continuer depuis une position ne remet pas ce compteur à zéro. Les pourcentages du plateau d’analyse restent ceux du modèle avant ces réglages de jeu.';
+
+  @override
+  String get samplingTechnicalEvidence =>
+      'Avec le modèle 79M, l’historique désactivé et le niveau 1600, les valeurs proposées ont obtenu 60.7% des points contre 1.0 / 1.0 sur 600 parties (intervalle à 95% : 56.8–64.6%). Les anciens tests argmax donnaient environ 300 Elo d’avantage en confrontation. Ce ne sont pas des classements calibrés face aux humains. Cinq coups est un choix de conception, pas un optimum démontré ; filtrer les probabilités ne garantit pas de bons coups.';
+
+  @override
+  String get samplingSimpleExplanation => 'Explication simple';
+
+  @override
+  String get samplingTechnicalExplanation => 'Explication technique';
+
+  @override
+  String get samplingFullVarietyNotice =>
+      'Maia peut commettre davantage de gaffes inhabituelles avec température et Top-P à 1.0 / 1.0.';
+
+  @override
+  String get samplingArgmaxNotice =>
+      'Maia peut jouer plus fort avec température ou Top-P à 0. Bonne chance !';
+
+  @override
+  String get samplingArgmaxAfterOpeningNotice =>
+      'Dès le coup 6, Maia peut jouer plus fort avec température ou Top-P à 0. Bonne chance !';
+
+  @override
+  String get topPNotUsed => 'Top-P : non utilisé';
+
+  @override
+  String get topPNotUsedTitle => 'Pourquoi Top-P est inutilisé';
+
+  @override
+  String get topPNotUsedHelp =>
+      'À température 0, Maia choisit toujours un coup de probabilité maximale : Top-P est donc sans effet. Sa valeur est conservée et redevient disponible quand vous augmentez la température. Si la variété en ouverture est activée, les cinq premiers coups de chaque camp utilisent toujours 1.0 / 1.0.';
+
+  @override
+  String get samplingLowerAfterOpeningNotice =>
+      'À partir du 6e coup, Maia peut jouer plus fort avec une température ou un Top-P plus bas.';
+
+  @override
+  String get samplingLowerNotice =>
+      'Maia peut jouer plus fort avec une température ou un Top-P plus bas.';
+
+  @override
+  String get appearance => 'Apparence';
+
+  @override
+  String get appearanceSystemColors => 'Utiliser les couleurs du système';
+
+  @override
+  String get appearanceSystemColorsHelp =>
+      'Utiliser la palette de couleurs Android';
+
+  @override
+  String get appearanceSystemColorsUnavailable =>
+      'Indisponible sur cet appareil. Nécessite Android 12 ou une version ultérieure.';
+
+  @override
+  String get appearancePureBlack => 'Fond noir pur';
+
+  @override
+  String get appearancePureBlackHelp =>
+      'Utiliser des fonds noirs en mode sombre';
+
+  @override
+  String get appearancePreferenceError =>
+      'L’apparence a changé, mais n’a pas pu être enregistrée. Veuillez réessayer.';
+
+  @override
+  String get appearanceTheme => 'Thème';
+
+  @override
+  String get appearanceLight => 'Lumineux';
+
+  @override
+  String get appearanceDark => 'Sombre';
 }

@@ -158,7 +158,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get maxOpeningVarietyHelp =>
-      'Not needed when Temperature and Top-P are at their default values of 1.0 / 1.0. Uses 1.0 / 1.0 for the first five moves by each side, then returns to your configured settings from move 6.\n\nThe goal is to give Maia maximum opening variety while allowing potentially stronger play later in the game by reducing the chance of low-probability moves through lower Temperature and/or Top-P.';
+      'On by default. Uses Temperature and Top-P 1.0 / 1.0 for the first five moves by each side, then your configured settings from move 6. This keeps broad opening choices while allowing you to trim low-probability moves later. It follows the position’s move number, including when resuming or continuing a game.\n\nNot needed at 1.0 / 1.0: the switch is off and unavailable because those settings already give full variety throughout.';
 
   @override
   String get maiaAnalysisRating => 'Maia analysis rating';
@@ -952,7 +952,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get samplingResearch => 'Full research data (JSONL)';
 
   @override
-  String get samplingResearchLink => 'Full research data';
+  String get samplingResearchLink => 'Visual guide and research';
 
   @override
   String get close => 'Close';
@@ -998,7 +998,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingRecommendationWarning =>
-      'Lowering Temperature or Top-P may make Maia stronger in the middlegame, but reduce opening variety. See the information button for details.';
+      'Maia may play a more limited opening repertoire with Max variety in opening disabled.';
 
   @override
   String get couldNotOpenPgn => 'Could not open PGN.';
@@ -1374,29 +1374,113 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingHelpIntro =>
-      'Temperature and Top-P control how Maia chooses between moves.';
+      'Temperature and Top-P combine to set the amount of variety in Maia’s play.';
 
   @override
   String get samplingHelpVariety =>
-      'Increasing Temperature and Top-P is like making Maia a more volatile player, as Maia becomes more likely to play low-probability moves. These may be blunders, but they may also be brilliant moves!';
+      'You can think of higher Temperature as how creative Maia is in thinking of candidate moves. A Temperature of 0 is like a conservative OTB player, thinking hard to try to narrow down to the most likely (and quite often best) moves. A Temperature of 1 is like a creative blitz player, where no sac is too crazy, and every move, no matter how unlikely, is to be considered.';
 
   @override
   String get samplingHelpDefaults =>
-      'If you value maximum variety, and you also want Maia to play a broad range of human openings, including sidelines, then keep the default values of 1.0 and 1.0.';
+      'You can think of Top-P as the devil or angel on Maia’s shoulder. At 0, Maia has an angel on its shoulder telling it to ignore the wild, low-probability moves. At 1.0, Maia has a devil, encouraging Maia to shoot from the hip and possibly select the wildest, most unlikely move.';
 
   @override
   String get samplingHelpStrength =>
-      'If you prefer a stronger opponent playing fewer blunders, experiment with moving Temperature and Top-P values down.';
+      'In our research, we found that settings of 0 and 0 (technically called argmax) produced the strongest play—some 300 Elo stronger than settings of 1.0 and 1.0. However, this also limited opening choices to a narrow range of mainly main lines.';
 
   @override
   String get samplingHelpArgmax =>
-      'Setting Temperature to 0 will cause Maia to use argmax, which is a technical way of saying that Maia will always play what it predicts is the most probable human move in a given position. Careful! In our research at the 1600 setting, argmax Maia outperformed Maia at 1.0 / 1.0 by the equivalent of about 300 Elo points in direct matches.';
+      'So, we introduced the feature to maximize opening variety: a toggle which sets Maia to play with settings of 1.0 and 1.0 for the first 5 moves. You might see some crazy things in the opening phase! But from the 6th move, Maia switches to your preconfigured settings.';
 
   @override
   String get samplingHelpTopP =>
-      'For balanced play, you may consider keeping Temperature at 1.0 and setting Top-P to 0.95. This maintains variety while eliminating low-probability moves, which can often be blunders—but can also be good moves. Top-P essentially cuts off low-probability moves. Setting it to 0.95 keeps moves accounting for at least 95% of the probability after Temperature is applied. The remaining moves cannot be selected by Maia.';
+      'We recommend keeping max opening variety on and Temperature set to 1.0 and Top-P set to 0.95. This is like having a creative player with an angel on its shoulder that at least talks it out of playing the totally far-out moves—the least likely moves whose combined probability is up to 5%. These might be brilliant, true, but they can also be silly blunders. So this should make for a good balance of variety in the opening, creativity in the middle game, and stronger play through the exclusion of some very low-probability blunders.\n\nFor those feeling brave, setting Temperature to 0 (Top-P doesn’t mean anything when Temperature is 0) will produce the strongest opponent, based on our research. Good luck!';
 
   @override
   String get samplingHelpResearchIntro =>
-      'We experimented with these settings at 1600 Elo and published our full findings here:';
+      'See the visual guide for the research behind these choices, with links to the full results.';
+
+  @override
+  String get samplingTechnicalTemperature =>
+      'Temperature rescales the model’s legal-move logits before softmax. At T > 0, each weight is exp((logit − maximum logit) / T), then normalized. T = 1 preserves the model distribution; lower T concentrates it on higher-scoring moves. T = 0 selects an argmax directly and ignores Top-P.';
+
+  @override
+  String get samplingTechnicalTopP =>
+      'Top-P sorts the temperature-adjusted probabilities from highest to lowest and keeps the smallest prefix reaching the threshold, including the move that crosses it. Retained probabilities are normalized again before sampling. P = 1 keeps all moves; P = 0 keeps one highest-probability move. P = 0.95 removes at most 5% of total probability, not all moves individually below 5%.';
+
+  @override
+  String get samplingTechnicalOpening =>
+      'Defaults: Temperature 1.0, Top-P 0.95, Max variety in opening on. The override uses 1.0 / 1.0 at FEN full-move numbers 1–5 for either color, then the configured values from move 6. Resuming or continuing a position does not restart that count. Analysis-board percentages remain the model’s probabilities before these play settings.';
+
+  @override
+  String get samplingTechnicalEvidence =>
+      'With the 79M model and history off, the proposed defaults scored 60.7% against 1.0 / 1.0 in 600 games at rating input 1600 (95% interval 56.8–64.6%). Earlier argmax tests gave a roughly 300-Elo matchup advantage. These are direct-match results, not calibrated human ratings. Five moves is a design choice, not a proven optimum; probability filtering cannot guarantee good moves.';
+
+  @override
+  String get samplingSimpleExplanation => 'Simple explanation';
+
+  @override
+  String get samplingTechnicalExplanation => 'Technical explanation';
+
+  @override
+  String get samplingFullVarietyNotice =>
+      'Maia may play more unusual blunders with Temperature and Top-P at 1.0 / 1.0.';
+
+  @override
+  String get samplingArgmaxNotice =>
+      'Maia may play stronger with Temperature or Top-P at 0. Good luck!';
+
+  @override
+  String get samplingArgmaxAfterOpeningNotice =>
+      'From move 6, Maia may play stronger with Temperature or Top-P at 0. Good luck!';
+
+  @override
+  String get topPNotUsed => 'Top-P: Not used';
+
+  @override
+  String get topPNotUsedTitle => 'Why Top-P is not used';
+
+  @override
+  String get topPNotUsedHelp =>
+      'At Temperature 0, Maia always chooses a most likely move, so Top-P has no effect. Your Top-P value is kept and becomes available again when you raise Temperature. If Max variety in opening is on, the first five moves by each side still use 1.0 / 1.0.';
+
+  @override
+  String get samplingLowerAfterOpeningNotice =>
+      'From move 6, Maia may play stronger with lower Temperature or Top-P.';
+
+  @override
+  String get samplingLowerNotice =>
+      'Maia may play stronger with lower Temperature or Top-P.';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get appearanceSystemColors => 'Use system colors';
+
+  @override
+  String get appearanceSystemColorsHelp => 'Match your Android color palette';
+
+  @override
+  String get appearanceSystemColorsUnavailable =>
+      'Unavailable on this device. Requires Android 12 or later.';
+
+  @override
+  String get appearancePureBlack => 'Pure black background';
+
+  @override
+  String get appearancePureBlackHelp => 'Use black backgrounds in dark mode';
+
+  @override
+  String get appearancePreferenceError =>
+      'Appearance changed, but could not be saved. Please try again.';
+
+  @override
+  String get appearanceTheme => 'Theme';
+
+  @override
+  String get appearanceLight => 'Light';
+
+  @override
+  String get appearanceDark => 'Dark';
 }

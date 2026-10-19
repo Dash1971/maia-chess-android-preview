@@ -292,3 +292,52 @@ distinction between low move probability and poor move quality. Existing chess
 vocabulary and localized Temperature labels are retained; European-language
 translations follow the established decimal-comma convention. These are
 editorial translations, subject to the usual native-speaker review.
+
+
+## 2.5 sampling defaults and two explanation levels (draft)
+
+Both explanation levels, the contextual notices, opening-variety help and the
+Temperature-zero Top-P explanation are Maia-specific concepts without direct
+Lichess equivalents. All ten catalogs retain existing chess vocabulary and
+translate the new prose; no new English-only fallback is introduced. Research
+links are marked English in non-English catalogs. Simple prose keeps the
+creative-player/angel analogy but does not equate probability with move quality.
+Technical prose defines the crossing-move nucleus and distinguishes probability
+mass from a per-move cutoff. Research results name the tested 1600 input, not
+the new 1500 default. Editorial review is not native-speaker certification.
+
+### Approved simple sampling explanation follow-up
+
+The Simple explanation now uses the maintainer-approved English copy verbatim
+and faithful translations in all nine other languages, preserving the
+conservative OTB / creative blitz and angel / devil analogies. This remains
+Maia-specific prose with no complete Lichess equivalent; the existing localized
+Temperature and chess vocabulary is retained. Technical guidance is unchanged.
+The restricted-opening notice now applies below Temperature 1 or Top-P 1 when
+opening variety is off, including the recommended Top-P 0.95.
+
+Lower nonzero sampling settings with opening variety on now also have a
+Maia-specific strength notice from move 6, translated into all ten languages.
+Only the zero-setting notices retain “Good luck!”. The approved help copy is
+unchanged.
+
+With opening variety off, lower nonzero settings show the same translated
+strength advice without the move-six qualifier or “Good luck!”, alongside the
+existing limited-opening notice. Both notices are checked at 320px/200% text in
+all ten languages.
+
+Strength notices use a separate threshold from the repertoire notice: below the
+recommended defaults (Temperature < 1.0 or Top-P < 0.95), with or without opening
+variety. The repertoire threshold remains below 1.0 with variety off. Translated
+wording and the approved explanations are unchanged.
+
+## Appearance settings (#124)
+
+Theme, Light and Dark follow the pinned Lichess mobile catalogs in all ten
+languages. The system-colors label adapts the pinned `mobileSystemColors` to an
+explicit independent switch; Chinese explicitly says colors so it cannot be
+confused with following system brightness. These references are recorded in the
+terminology baseline. Appearance, OLED explanation, platform availability and
+storage-error prose are contextual app settings, translated in all ten catalogs.
+System default reuses the existing app translation. As elsewhere, automated
+layout/consistency checks are not native-speaker certification.
