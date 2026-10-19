@@ -1417,7 +1417,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      'Wir empfehlen, maximale Eröffnungsvielfalt einzuschalten und Temperatur auf 1.0 sowie Top-P auf 0.95 zu setzen. Das ist wie ein kreativer Spieler mit einem Engel auf der Schulter, der ihm zumindest die völlig abwegigen Züge ausredet: die unwahrscheinlichsten Züge, deren gemeinsame Wahrscheinlichkeit bis zu 5 % beträgt. Diese könnten zwar brillant sein, aber auch dumme grobe Fehler. So sollte eine gute Balance aus Eröffnungsvielfalt, Kreativität im Mittelspiel und stärkerem Spiel entstehen, indem einige sehr unwahrscheinliche grobe Fehler ausgeschlossen werden.\n\nWer mutig ist, kann Temperatur auf 0 setzen (Top-P hat bei Temperatur 0 keine Wirkung). Laut unserer Untersuchung ergibt das den stärksten Gegner. Viel Glück!';
+      'Wir empfehlen, maximale Eröffnungsvielfalt eingeschaltet und Temperatur auf 1.0 sowie Top-P auf 0.95 eingestellt zu lassen. Das ist wie ein kreativer Spieler mit einem Engel auf der Schulter, der ihm zumindest die völlig abwegigen Züge ausredet: die unwahrscheinlichsten Züge, deren gemeinsame Wahrscheinlichkeit bis zu 5 % beträgt. Diese könnten zwar brillant sein, aber auch dumme grobe Fehler. So sollte eine gute Balance aus Eröffnungsvielfalt, Kreativität im Mittelspiel und stärkerem Spiel entstehen, indem einige sehr unwahrscheinliche grobe Fehler ausgeschlossen werden.\n\nWer mutig ist, kann Temperatur auf 0 setzen (Top-P hat bei Temperatur 0 keine Wirkung). Laut unserer Untersuchung ergibt das den stärksten Gegner. Viel Glück!';
 
   @override
   String get samplingHelpResearchIntro =>

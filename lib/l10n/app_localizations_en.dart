@@ -1394,7 +1394,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      'We recommend turning max opening variety on and setting Temperature to 1.0 and Top-P to 0.95. This is like having a creative player with an angel on its shoulder that at least talks it out of playing the totally far-out moves—the least likely moves whose combined probability is up to 5%. These might be brilliant, true, but they can also be silly blunders. So this should make for a good balance of variety in the opening, creativity in the middle game, and stronger play through the exclusion of some very low-probability blunders.\n\nFor those feeling brave, setting Temperature to 0 (Top-P doesn’t mean anything when Temperature is 0) will produce the strongest opponent, based on our research. Good luck!';
+      'We recommend keeping max opening variety on and Temperature set to 1.0 and Top-P set to 0.95. This is like having a creative player with an angel on its shoulder that at least talks it out of playing the totally far-out moves—the least likely moves whose combined probability is up to 5%. These might be brilliant, true, but they can also be silly blunders. So this should make for a good balance of variety in the opening, creativity in the middle game, and stronger play through the exclusion of some very low-probability blunders.\n\nFor those feeling brave, setting Temperature to 0 (Top-P doesn’t mean anything when Temperature is 0) will produce the strongest opponent, based on our research. Good luck!';
 
   @override
   String get samplingHelpResearchIntro =>

@@ -177,14 +177,14 @@ void main() {
     // Center this tall paragraph within the dialog's scroll viewport.
     await Scrollable.ensureVisible(
       tester.element(
-        find.textContaining('We recommend turning max opening variety on'),
+        find.textContaining('We recommend keeping max opening variety on'),
       ),
       alignment: 0.5,
     );
     await tester.pumpAndSettle();
     expect(
       find
-          .textContaining('We recommend turning max opening variety on')
+          .textContaining('We recommend keeping max opening variety on')
           .hitTestable(),
       findsOneWidget,
     );

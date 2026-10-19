@@ -1422,7 +1422,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      'Recomendamos ativar a variedade máxima na abertura e definir a temperatura como 1.0 e o Top-P como 0.95. É como ter um jogador criativo com um anjo no ombro, que pelo menos o convence a não jogar os lances totalmente descabidos: os menos prováveis, cuja probabilidade somada chega a até 5%. Eles podem ser brilhantes, é verdade, mas também podem ser erros graves e bobos. Assim, deve haver um bom equilíbrio entre variedade na abertura, criatividade no meio-jogo e um jogo mais forte ao excluir alguns erros graves de probabilidade muito baixa.\n\nPara quem tem coragem, definir a temperatura como 0 (o Top-P não tem efeito quando a temperatura é 0) produzirá o adversário mais forte, segundo nossa pesquisa. Boa sorte!';
+      'Recomendamos manter a variedade máxima na abertura ativada, com a temperatura em 1.0 e o Top-P em 0.95. É como ter um jogador criativo com um anjo no ombro, que pelo menos o convence a não jogar os lances totalmente descabidos: os menos prováveis, cuja probabilidade somada chega a até 5%. Eles podem ser brilhantes, é verdade, mas também podem ser erros graves e bobos. Assim, deve haver um bom equilíbrio entre variedade na abertura, criatividade no meio-jogo e um jogo mais forte ao excluir alguns erros graves de probabilidade muito baixa.\n\nPara quem tem coragem, definir a temperatura como 0 (o Top-P não tem efeito quando a temperatura é 0) produzirá o adversário mais forte, segundo nossa pesquisa. Boa sorte!';
 
   @override
   String get samplingHelpResearchIntro =>

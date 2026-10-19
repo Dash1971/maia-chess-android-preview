@@ -1413,7 +1413,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingHelpTopP =>
-      'Nous recommandons d’activer la variété maximale en ouverture et de régler la température sur 1.0 et Top-P sur 0.95. C’est comme un joueur créatif avec un ange sur l’épaule, qui le dissuade au moins de jouer les coups complètement farfelus : les coups les moins probables dont la probabilité cumulée représente jusqu’à 5 %. Ils pourraient certes être brillants, mais aussi être de grosses erreurs absurdes. Cela devrait offrir un bon équilibre entre variété en ouverture, créativité en milieu de partie et jeu plus fort grâce à l’exclusion de certaines grosses erreurs très peu probables.\n\nPour les plus courageux, régler la température sur 0 (Top-P n’a aucun effet lorsque la température est à 0) donnera l’adversaire le plus fort, d’après notre recherche. Bonne chance !';
+      'Nous recommandons de garder la variété maximale en ouverture activée, avec la température réglée sur 1.0 et Top-P sur 0.95. C’est comme un joueur créatif avec un ange sur l’épaule, qui le dissuade au moins de jouer les coups complètement farfelus : les coups les moins probables dont la probabilité cumulée représente jusqu’à 5 %. Ils pourraient certes être brillants, mais aussi être de grosses erreurs absurdes. Cela devrait offrir un bon équilibre entre variété en ouverture, créativité en milieu de partie et jeu plus fort grâce à l’exclusion de certaines grosses erreurs très peu probables.\n\nPour les plus courageux, régler la température sur 0 (Top-P n’a aucun effet lorsque la température est à 0) donnera l’adversaire le plus fort, d’après notre recherche. Bonne chance !';
 
   @override
   String get samplingHelpResearchIntro =>
