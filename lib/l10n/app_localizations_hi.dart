@@ -1460,4 +1460,8 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       'टेम्परेचर 0 पर Maia हमेशा सबसे अधिक संभावना वाली चाल चुनती है, इसलिए Top-P का कोई प्रभाव नहीं होता। आपका Top-P मान सुरक्षित रहता है और टेम्परेचर बढ़ाने पर फिर उपलब्ध होता है। ओपनिंग विविधता चालू हो तो दोनों पक्षों की पहली पाँच चालें अभी भी 1.0 / 1.0 का उपयोग करती हैं।';
+
+  @override
+  String get samplingLowerAfterOpeningNotice =>
+      'टेम्परेचर या Top-P कम रखने पर Maia छठी चाल से अधिक मज़बूती से खेल सकती है।';
 }

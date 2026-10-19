@@ -1462,4 +1462,8 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       'À température 0, Maia choisit toujours un coup de probabilité maximale : Top-P est donc sans effet. Sa valeur est conservée et redevient disponible quand vous augmentez la température. Si la variété en ouverture est activée, les cinq premiers coups de chaque camp utilisent toujours 1.0 / 1.0.';
+
+  @override
+  String get samplingLowerAfterOpeningNotice =>
+      'À partir du 6e coup, Maia peut jouer plus fort avec une température ou un Top-P plus bas.';
 }

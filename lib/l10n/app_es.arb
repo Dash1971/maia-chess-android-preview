@@ -398,5 +398,6 @@
   "samplingArgmaxAfterOpeningNotice": "Desde la sexta jugada, Maia puede jugar más fuerte con temperatura o Top-P en 0. ¡Buena suerte!",
   "topPNotUsed": "Top-P: No se usa",
   "topPNotUsedTitle": "Por qué no se usa Top-P",
-  "topPNotUsedHelp": "Con temperatura 0, Maia siempre elige una de las jugadas más probables, así que Top-P no tiene efecto. Su valor se conserva y vuelve a estar disponible al subir la temperatura. Si la máxima variedad en la apertura está activada, las primeras cinco jugadas de cada bando siguen usando 1.0 / 1.0."
+  "topPNotUsedHelp": "Con temperatura 0, Maia siempre elige una de las jugadas más probables, así que Top-P no tiene efecto. Su valor se conserva y vuelve a estar disponible al subir la temperatura. Si la máxima variedad en la apertura está activada, las primeras cinco jugadas de cada bando siguen usando 1.0 / 1.0.",
+  "samplingLowerAfterOpeningNotice": "A partir de la sexta jugada, Maia puede jugar más fuerte con una temperatura o un Top-P más bajos."
 }

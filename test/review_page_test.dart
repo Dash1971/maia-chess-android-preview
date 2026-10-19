@@ -572,7 +572,10 @@ void main() {
     expect(find.text('Simple explanation'), findsOneWidget);
     expect(find.text('Technical explanation'), findsOneWidget);
     expect(find.textContaining('some 300 Elo stronger'), findsOneWidget);
-    expect(find.textContaining('some very low-probability blunders'), findsOneWidget);
+    expect(
+      find.textContaining('some very low-probability blunders'),
+      findsOneWidget,
+    );
     await tester.tap(find.byKey(const ValueKey('sampling-help-technical')));
     await tester.pumpAndSettle();
     expect(find.textContaining('exp((logit'), findsOneWidget);
@@ -609,8 +612,10 @@ void main() {
     expect(find.text('Temperature: 1.00'), findsOneWidget);
     expect(find.text('Top-P: 0.95'), findsOneWidget);
     expect(
-      find.byKey(const ValueKey('sampling-recommendation-warning')),
-      findsNothing,
+      find.text(
+        'From move 6, Maia may play stronger with lower Temperature or Top-P.',
+      ),
+      findsOneWidget,
     );
   });
 
@@ -708,8 +713,10 @@ void main() {
     expect(find.text('Temperature: 1.00'), findsOneWidget);
     expect(find.text('Top-P: 0.95'), findsOneWidget);
     expect(
-      find.byKey(const ValueKey('sampling-recommendation-warning')),
-      findsNothing,
+      find.text(
+        'From move 6, Maia may play stronger with lower Temperature or Top-P.',
+      ),
+      findsOneWidget,
     );
     expect(preferences.getDouble('temperatureV2'), 1.0);
     expect(preferences.getDouble('topPV2'), 0.95);

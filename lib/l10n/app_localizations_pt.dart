@@ -1471,4 +1471,8 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       'Com temperatura 0, Maia sempre escolhe um dos lances mais prováveis, então Top-P não tem efeito. Seu valor é mantido e volta a ficar disponível ao aumentar a temperatura. Se a variedade na abertura estiver ativada, os primeiros cinco lances de cada lado continuam usando 1.0 / 1.0.';
+
+  @override
+  String get samplingLowerAfterOpeningNotice =>
+      'A partir do 6º lance, Maia pode jogar mais forte com uma temperatura ou um Top-P mais baixos.';
 }

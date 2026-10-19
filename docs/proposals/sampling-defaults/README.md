@@ -20,7 +20,8 @@ appearance is shown in the screenshots; Appearance PR #156 is a separate change.
 - At full 1/1: a neutral notice mentions unusual blunders. Below T1/P1 with
   variety off: a neutral repertoire notice. T0 or P0: a strength notice, explicitly
   “from move 6” when the opening override is enabled. If both restrictions apply,
-  both relevant notices appear. New recommended defaults need no warning.
+  both relevant notices appear. Lower nonzero settings with variety on show a
+  strength notice from move 6, without “Good luck!”, including the new defaults.
 - Explanation selection affects text only, starts on Simple, and is not another
   stored setting. Both levels link to the same visual research guide.
 - The sampler, inference calls, analysis percentages and capture format do not change.
@@ -47,7 +48,7 @@ includes the portions below the screenshot fold.
 
 The restricted-opening notice applies when **Temperature < 1.0 OR Top-P < 1.0**,
 and opening variety is off. These examples include both controls independently,
-all distinct notice combinations, and the absence of a notice with variety on.
+all distinct notice combinations, including the strength notice with variety on.
 Top-P stays saved but disabled when Temperature is zero.
 
 | Full variety: 1.0 / 1.0 | Top-P 0.95; opening variety off |
@@ -64,9 +65,10 @@ Top-P stays saved but disabled when Temperature is zero.
 
 | Top-P 0; variety off | Temperature 0.5 / Top-P 0.95; variety on |
 | --- | --- |
-| ![Both notices at Top-P zero](top-p-zero-no-opening.png) | ![No warning with opening variety](lower-settings-opening.png) |
+| ![Both notices at Top-P zero](top-p-zero-no-opening.png) | ![Strength notice with opening variety](lower-settings-opening.png) |
 
-The default 1.0 / 0.95 with opening variety on also has no notice; see the default
+The default 1.0 / 0.95 with opening variety on also shows the strength notice
+without “Good luck!”; see the default
 settings screenshot above. At 1.0 / 1.0 the opening toggle is unavailable, so there
 is no separate visible on-state for that combination.
 
@@ -127,7 +129,7 @@ that appearance dependency or qualify it for Android/F-Droid.
 Host regression coverage includes new/reset defaults, explicit preference
 preservation, malformed preference fallback, first-five-move boundaries for both
 colors, restored profiles, capture probabilities, takebacks, board reset and
-continued games. Fifteen explicit notice scenarios cover the recommendation
+continued games. Seventeen explicit notice scenarios cover the recommendation
 boundaries, deterministic settings and both opening states. All ten languages exercise Simple/Technical selection,
 research navigation, dismissal and Top-P inactive help at 320px and 200% text.
 Screenshots come from Flutter widget rendering, not an installed Android APK.
@@ -144,3 +146,8 @@ focused tests** passed after this revision, including help/layout tests in all
 ten languages at 320px and 200% text. Static analysis, catalog and Lichess-reference
 checks passed. Thirteen actual widget captures were regenerated; no Android APK
 was built. The full-suite result above records the earlier draft qualification.
+
+Lower-settings notice follow-up: all 155 focused tests and static analysis pass;
+localization checks pass for 400 messages in all ten catalogs. Default/lower
+settings and help screenshots refreshed. Zero notices keep priority and their
+“Good luck!” wording. No APK build, merge or publication.

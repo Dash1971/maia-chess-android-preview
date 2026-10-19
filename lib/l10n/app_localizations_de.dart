@@ -1466,4 +1466,8 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get topPNotUsedHelp =>
       'Bei Temperatur 0 wählt Maia immer einen wahrscheinlichsten Zug. Top-P hat dann keinen Einfluss. Dein Top-P-Wert bleibt gespeichert und wird wieder nutzbar, wenn du die Temperatur erhöhst. Mit Eröffnungsvielfalt gilt für die ersten fünf Züge beider Seiten weiterhin 1.0 / 1.0.';
+
+  @override
+  String get samplingLowerAfterOpeningNotice =>
+      'Ab dem 6. Zug kann Maia mit niedrigerer Temperatur oder niedrigerem Top-P stärker spielen.';
 }

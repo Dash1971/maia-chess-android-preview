@@ -315,3 +315,8 @@ Maia-specific prose with no complete Lichess equivalent; the existing localized
 Temperature and chess vocabulary is retained. Technical guidance is unchanged.
 The restricted-opening notice now applies below Temperature 1 or Top-P 1 when
 opening variety is off, including the recommended Top-P 0.95.
+
+Lower nonzero sampling settings with opening variety on now also have a
+Maia-specific strength notice from move 6, translated into all ten languages.
+Only the zero-setting notices retain “Good luck!”. The approved help copy is
+unchanged.
