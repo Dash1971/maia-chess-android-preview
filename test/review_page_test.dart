@@ -571,8 +571,8 @@ void main() {
     expect(find.text('Temperature and Top-P'), findsOneWidget);
     expect(find.text('Simple explanation'), findsOneWidget);
     expect(find.text('Technical explanation'), findsOneWidget);
-    expect(find.textContaining('about 300 Elo ahead'), findsOneWidget);
-    expect(find.textContaining('Blunders are still possible'), findsOneWidget);
+    expect(find.textContaining('some 300 Elo stronger'), findsOneWidget);
+    expect(find.textContaining('some very low-probability blunders'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('sampling-help-technical')));
     await tester.pumpAndSettle();
     expect(find.textContaining('exp((logit'), findsOneWidget);

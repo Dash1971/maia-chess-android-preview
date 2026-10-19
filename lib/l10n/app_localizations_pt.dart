@@ -1402,27 +1402,27 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get samplingHelpIntro =>
-      'Temperatura e Top-P definem juntas a variedade das jogadas de Maia.';
+      'A temperatura e o Top-P determinam juntos a variedade no jogo da Maia.';
 
   @override
   String get samplingHelpVariety =>
-      'Pense na temperatura como a disposição de Maia para considerar lances incomuns. Em 0, ela sempre escolhe o lance que considera mais provável para uma pessoa do nível selecionado. Em 1.0, mantém toda a variedade humana, como um jogador criativo de bullet disposto a tentar um sacrifício maluco. Os lances populares continuam mais prováveis que os extravagantes.';
+      'Você pode pensar em uma temperatura mais alta como mais criatividade da Maia ao considerar lances candidatos. Uma temperatura de 0 é como um jogador conservador de xadrez presencial, que pensa bastante para restringir as opções aos lances mais prováveis (e, com bastante frequência, os melhores). Uma temperatura de 1 é como um jogador criativo de blitz, para quem nenhum sacrifício é louco demais e todo lance, por mais improvável que seja, merece ser considerado.';
 
   @override
   String get samplingHelpDefaults =>
-      'Top-P é como o anjo no ombro de Maia. Em 1.0, deixa todos os candidatos passar. Ao diminuir o valor, retira os lances menos prováveis. Em 0, resta apenas um dos lances mais prováveis. O filtro considera a popularidade, não se o lance é bom ou ruim.';
+      'Você pode imaginar o Top-P como o diabo ou o anjo no ombro da Maia. Em 0, Maia tem um anjo dizendo para ignorar os lances malucos e pouco prováveis. Em 1.0, tem um diabo incentivando-a a agir por impulso e talvez escolher o lance mais maluco e improvável.';
 
   @override
   String get samplingHelpStrength =>
-      'Na pesquisa anterior com o nível 1600, escolher sempre o lance mais provável (argmax) foi a opção mais forte entre as testadas: cerca de 300 Elo de vantagem contra 1.0 / 1.0 em confrontos diretos. Mas isso também restringiu as aberturas.';
+      'Na nossa pesquisa, as configurações de 0 e 0 (tecnicamente chamadas de argmax) produziram o jogo mais forte: cerca de 300 Elo acima das configurações de 1.0 e 1.0. No entanto, isso também limitou as opções de abertura a um repertório restrito, composto principalmente por linhas principais.';
 
   @override
   String get samplingHelpArgmax =>
-      'A variedade máxima na abertura usa temperatura e Top-P 1.0 / 1.0 nos primeiros cinco lances de cada lado e aplica suas configurações a partir do sexto. Você pode ver surpresas na abertura!';
+      'Por isso, introduzimos o recurso de maximizar a variedade na abertura: uma opção que faz a Maia usar as configurações de 1.0 e 1.0 nos primeiros 5 lances. Você pode ver algumas loucuras na abertura! Mas, a partir do 6º lance, Maia volta às configurações que você definiu.';
 
   @override
   String get samplingHelpTopP =>
-      'Recomendamos variedade na abertura ativada, temperatura 1.0 e Top-P 0.95. É um jogador criativo com um anjo no ombro: após a abertura, ficam de fora os candidatos da cauda menos provável, que juntos somam no máximo 5% de probabilidade. Isso pode excluir erros graves, mas também boas surpresas. Erros graves continuam possíveis. Para um adversário mais difícil, experimente temperatura 0. Com a variedade na abertura ativada, ela vale a partir do sexto lance. Boa sorte!';
+      'Recomendamos ativar a variedade máxima na abertura e definir a temperatura como 1.0 e o Top-P como 0.95. É como ter um jogador criativo com um anjo no ombro, que pelo menos o convence a não jogar os lances totalmente descabidos: os menos prováveis, cuja probabilidade somada chega a até 5%. Eles podem ser brilhantes, é verdade, mas também podem ser erros graves e bobos. Assim, deve haver um bom equilíbrio entre variedade na abertura, criatividade no meio-jogo e um jogo mais forte ao excluir alguns erros graves de probabilidade muito baixa.\n\nPara quem tem coragem, definir a temperatura como 0 (o Top-P não tem efeito quando a temperatura é 0) produzirá o adversário mais forte, segundo nossa pesquisa. Boa sorte!';
 
   @override
   String get samplingHelpResearchIntro =>

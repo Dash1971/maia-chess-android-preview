@@ -305,3 +305,13 @@ creative-player/angel analogy but does not equate probability with move quality.
 Technical prose defines the crossing-move nucleus and distinguishes probability
 mass from a per-move cutoff. Research results name the tested 1600 input, not
 the new 1500 default. Editorial review is not native-speaker certification.
+
+### Approved simple sampling explanation follow-up
+
+The Simple explanation now uses the maintainer-approved English copy verbatim
+and faithful translations in all nine other languages, preserving the
+conservative OTB / creative blitz and angel / devil analogies. This remains
+Maia-specific prose with no complete Lichess equivalent; the existing localized
+Temperature and chess vocabulary is retained. Technical guidance is unchanged.
+The restricted-opening notice now applies below Temperature 1 or Top-P 1 when
+opening variety is off, including the recommended Top-P 0.95.

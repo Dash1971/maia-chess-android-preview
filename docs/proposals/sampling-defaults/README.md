@@ -17,7 +17,7 @@ appearance is shown in the screenshots; Appearance PR #156 is a separate change.
 - At Temperature 0, Top-P displays “Not used”, is disabled and has independent
   help. Its saved value is preserved, including across restart. It becomes
   usable again when Temperature rises. No silent 0/0 trap is introduced.
-- At full 1/1: a neutral notice mentions unusual blunders. Below T1/P0.95 with
+- At full 1/1: a neutral notice mentions unusual blunders. Below T1/P1 with
   variety off: a neutral repertoire notice. T0 or P0: a strength notice, explicitly
   “from move 6” when the opening override is enabled. If both restrictions apply,
   both relevant notices appear. New recommended defaults need no warning.
@@ -43,21 +43,50 @@ default dark theme. Desktop rendering fonts differ from Android. No APK build.
 Long dialogs scroll; their Close action stays available. The source copy below
 includes the portions below the screenshot fold.
 
+## Warning-state screenshots
+
+The restricted-opening notice applies when **Temperature < 1.0 OR Top-P < 1.0**,
+and opening variety is off. These examples include both controls independently,
+all distinct notice combinations, and the absence of a notice with variety on.
+Top-P stays saved but disabled when Temperature is zero.
+
+| Full variety: 1.0 / 1.0 | Top-P 0.95; opening variety off |
+| --- | --- |
+| ![Full variety notice](full-variety.png) | ![Restricted opening at 0.95](limited-openings.png) |
+
+| Temperature 0.5 / Top-P 1.0; variety off | Temperature 0; variety on |
+| --- | --- |
+| ![Restricted opening from Temperature](limited-temperature.png) | ![Strength notice from move six](top-p-unused.png) |
+
+| Temperature 0; variety off | Top-P 0; variety on |
+| --- | --- |
+| ![Both strength and opening notices](argmax-no-opening.png) | ![Top-P zero after the opening](top-p-zero-opening.png) |
+
+| Top-P 0; variety off | Temperature 0.5 / Top-P 0.95; variety on |
+| --- | --- |
+| ![Both notices at Top-P zero](top-p-zero-no-opening.png) | ![No warning with opening variety](lower-settings-opening.png) |
+
+The default 1.0 / 0.95 with opening variety on also has no notice; see the default
+settings screenshot above. At 1.0 / 1.0 the opening toggle is unavailable, so there
+is no separate visible on-state for that combination.
+
 ## Review copy
 
 ### Simple explanation
 
 Temperature and Top-P combine to set the amount of variety in Maia’s play.
 
-Think of Temperature as Maia’s willingness to consider unusual moves. At 0, it always chooses the move it thinks a human at the selected rating is most likely to play. At 1.0, it keeps the full mix of human moves—like a creative bullet player willing to try a crazy sacrifice. Popular moves are still more likely than wild ones.
+You can think of higher Temperature as how creative Maia is in thinking of candidate moves. A Temperature of 0 is like a conservative OTB player, thinking hard to try to narrow down to the most likely (and quite often best) moves. A Temperature of 1 is like a creative blitz player, where no sac is too crazy, and every move, no matter how unlikely, is to be considered.
 
-Top-P is like the angel on Maia’s shoulder. At 1.0, it lets every candidate through. Lower it, and it cuts the least likely moves from the list. At 0, only a most likely move remains. It filters by popularity, not by whether a move is good or bad.
+You can think of Top-P as the devil or angel on Maia’s shoulder. At 0, Maia has an angel on its shoulder telling it to ignore the wild, low-probability moves. At 1.0, Maia has a devil, encouraging Maia to shoot from the hip and possibly select the wildest, most unlikely move.
 
-In our earlier research at the 1600 setting, always picking the most likely move (argmax) was strongest among the settings tested: about 300 Elo ahead of 1.0 / 1.0 in direct matches. But it also narrowed the opening choices.
+In our research, we found that settings of 0 and 0 (technically called argmax) produced the strongest play—some 300 Elo stronger than settings of 1.0 and 1.0. However, this also limited opening choices to a narrow range of mainly main lines.
 
-Max variety in opening keeps Temperature and Top-P at 1.0 / 1.0 for the first five moves by each side, then uses your settings from move 6. You might see some crazy things in the opening!
+So, we introduced the feature to maximize opening variety: a toggle which sets Maia to play with settings of 1.0 and 1.0 for the first 5 moves. You might see some crazy things in the opening phase! But from the 6th move, Maia switches to your preconfigured settings.
 
-Our recommended defaults are opening variety on, Temperature 1.0 and Top-P 0.95. This keeps a creative player with an angel on its shoulder: after the opening, moves from the least likely tail, together worth up to 5% of the chance, are left out. That can remove blunders, but also good surprises. Blunders are still possible. For a tougher opponent, try Temperature 0. With opening variety on, that takes effect from move 6. Good luck!
+We recommend turning max opening variety on and setting Temperature to 1.0 and Top-P to 0.95. This is like having a creative player with an angel on its shoulder that at least talks it out of playing the totally far-out moves—the least likely moves whose combined probability is up to 5%. These might be brilliant, true, but they can also be silly blunders. So this should make for a good balance of variety in the opening, creativity in the middle game, and stronger play through the exclusion of some very low-probability blunders.
+
+For those feeling brave, setting Temperature to 0 (Top-P doesn’t mean anything when Temperature is 0) will produce the strongest opponent, based on our research. Good luck!
 
 ### Technical explanation
 
@@ -98,7 +127,7 @@ that appearance dependency or qualify it for Android/F-Droid.
 Host regression coverage includes new/reset defaults, explicit preference
 preservation, malformed preference fallback, first-five-move boundaries for both
 colors, restored profiles, capture probabilities, takebacks, board reset and
-continued games. Thirteen explicit notice scenarios cover the recommendation
+continued games. Fifteen explicit notice scenarios cover the recommendation
 boundaries, deterministic settings and both opening states. All ten languages exercise Simple/Technical selection,
 research navigation, dismissal and Top-P inactive help at 320px and 200% text.
 Screenshots come from Flutter widget rendering, not an installed Android APK.
@@ -108,3 +137,10 @@ Local full-suite result: **1,084 passed, 3 skipped**. After refining the notice
 regression into explicit boundary examples, all 12 tests in
 `sampling_defaults_test.dart` passed again. Static analysis and localization
 contract/reference checks also passed.
+
+Approved-copy follow-up: exact maintainer-approved English and translations in
+all nine other languages; the technical explanation is unchanged. All **155
+focused tests** passed after this revision, including help/layout tests in all
+ten languages at 320px and 200% text. Static analysis, catalog and Lichess-reference
+checks passed. Thirteen actual widget captures were regenerated; no Android APK
+was built. The full-suite result above records the earlier draft qualification.

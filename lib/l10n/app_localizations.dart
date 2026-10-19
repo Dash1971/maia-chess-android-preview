@@ -2407,31 +2407,31 @@ abstract class AppLocalizations {
   /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'Think of Temperature as Maia’s willingness to consider unusual moves. At 0, it always chooses the move it thinks a human at the selected rating is most likely to play. At 1.0, it keeps the full mix of human moves—like a creative bullet player willing to try a crazy sacrifice. Popular moves are still more likely than wild ones.'**
+  /// **'You can think of higher Temperature as how creative Maia is in thinking of candidate moves. A Temperature of 0 is like a conservative OTB player, thinking hard to try to narrow down to the most likely (and quite often best) moves. A Temperature of 1 is like a creative blitz player, where no sac is too crazy, and every move, no matter how unlikely, is to be considered.'**
   String get samplingHelpVariety;
 
   /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'Top-P is like the angel on Maia’s shoulder. At 1.0, it lets every candidate through. Lower it, and it cuts the least likely moves from the list. At 0, only a most likely move remains. It filters by popularity, not by whether a move is good or bad.'**
+  /// **'You can think of Top-P as the devil or angel on Maia’s shoulder. At 0, Maia has an angel on its shoulder telling it to ignore the wild, low-probability moves. At 1.0, Maia has a devil, encouraging Maia to shoot from the hip and possibly select the wildest, most unlikely move.'**
   String get samplingHelpDefaults;
 
   /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'In our earlier research at the 1600 setting, always picking the most likely move (argmax) was strongest among the settings tested: about 300 Elo ahead of 1.0 / 1.0 in direct matches. But it also narrowed the opening choices.'**
+  /// **'In our research, we found that settings of 0 and 0 (technically called argmax) produced the strongest play—some 300 Elo stronger than settings of 1.0 and 1.0. However, this also limited opening choices to a narrow range of mainly main lines.'**
   String get samplingHelpStrength;
 
   /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'Max variety in opening keeps Temperature and Top-P at 1.0 / 1.0 for the first five moves by each side, then uses your settings from move 6. You might see some crazy things in the opening!'**
+  /// **'So, we introduced the feature to maximize opening variety: a toggle which sets Maia to play with settings of 1.0 and 1.0 for the first 5 moves. You might see some crazy things in the opening phase! But from the 6th move, Maia switches to your preconfigured settings.'**
   String get samplingHelpArgmax;
 
   /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.
   ///
   /// In en, this message translates to:
-  /// **'Our recommended defaults are opening variety on, Temperature 1.0 and Top-P 0.95. This keeps a creative player with an angel on its shoulder: after the opening, moves from the least likely tail, together worth up to 5% of the chance, are left out. That can remove blunders, but also good surprises. Blunders are still possible. For a tougher opponent, try Temperature 0. With opening variety on, that takes effect from move 6. Good luck!'**
+  /// **'We recommend turning max opening variety on and setting Temperature to 1.0 and Top-P to 0.95. This is like having a creative player with an angel on its shoulder that at least talks it out of playing the totally far-out moves—the least likely moves whose combined probability is up to 5%. These might be brilliant, true, but they can also be silly blunders. So this should make for a good balance of variety in the opening, creativity in the middle game, and stronger play through the exclusion of some very low-probability blunders.\n\nFor those feeling brave, setting Temperature to 0 (Top-P doesn’t mean anything when Temperature is 0) will produce the strongest opponent, based on our research. Good luck!'**
   String get samplingHelpTopP;
 
   /// Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.

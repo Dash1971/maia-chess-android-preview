@@ -12,7 +12,7 @@ List<String> samplingSettingsNotices(
     openingVariety
         ? strings.samplingArgmaxAfterOpeningNotice
         : strings.samplingArgmaxNotice,
-  if (!openingVariety && (temperature < 1.0 || topP < 0.95))
+  if (!openingVariety && (temperature < 1.0 || topP < 1.0))
     strings.samplingRecommendationWarning,
 ];
 

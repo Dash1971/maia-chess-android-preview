@@ -1397,27 +1397,27 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingHelpIntro =>
-      'Temperatur und Top-P bestimmen gemeinsam die Vielfalt von Maias Zügen.';
+      'Temperatur und Top-P bestimmen gemeinsam, wie abwechslungsreich Maia spielt.';
 
   @override
   String get samplingHelpVariety =>
-      'Die Temperatur beschreibt, wie sehr Maia ungewöhnliche Züge in Betracht zieht. Bei 0 wählt sie immer den Zug, den ein Mensch der gewählten Spielstärke ihrer Einschätzung nach am ehesten spielen würde. Bei 1.0 bleibt die ganze menschliche Zugvielfalt erhalten – wie bei einem kreativen Bullet-Spieler, der auch ein verrücktes Opfer wagt. Häufige Züge bleiben wahrscheinlicher als ausgefallene.';
+      'Eine höhere Temperatur kannst du dir als mehr Kreativität bei der Suche nach Kandidatenzügen vorstellen. Temperatur 0 ist wie ein konservativer Spieler am echten Brett, der gründlich nachdenkt, um die Auswahl auf die wahrscheinlichsten (und recht oft besten) Züge einzugrenzen. Temperatur 1 ist wie ein kreativer Blitzspieler, dem kein Opfer zu verrückt ist und der jeden Zug in Betracht zieht, so unwahrscheinlich er auch sein mag.';
 
   @override
   String get samplingHelpDefaults =>
-      'Top-P ist wie der Engel auf Maias Schulter. Bei 1.0 lässt er alle Kandidaten durch. Ein niedrigerer Wert entfernt die unwahrscheinlichsten Züge. Bei 0 bleibt nur ein Zug mit höchster Wahrscheinlichkeit übrig. Gefiltert wird nach Häufigkeit, nicht nach der Qualität des Zuges.';
+      'Top-P kannst du dir als Teufel oder Engel auf Maias Schulter vorstellen. Bei 0 sitzt dort ein Engel, der Maia sagt, sie solle wilde, unwahrscheinliche Züge ignorieren. Bei 1.0 sitzt dort ein Teufel, der Maia zu einem Schuss aus der Hüfte ermutigt – vielleicht sogar zum wildesten, unwahrscheinlichsten Zug.';
 
   @override
   String get samplingHelpStrength =>
-      'In unserer früheren Untersuchung auf Stufe 1600 war die Auswahl des wahrscheinlichsten Zuges (argmax) unter den getesteten Einstellungen am stärksten: rund 300 Elo Vorsprung gegen 1.0 / 1.0 im direkten Vergleich. Allerdings wurde die Eröffnungsauswahl enger.';
+      'In unserer Untersuchung ergaben die Einstellungen 0 und 0 (technisch argmax genannt) das stärkste Spiel: etwa 300 Elo stärker als die Einstellungen 1.0 und 1.0. Allerdings beschränkte das auch die Eröffnungsauswahl auf einen engen Bereich, überwiegend aus Hauptvarianten.';
 
   @override
   String get samplingHelpArgmax =>
-      'Maximale Eröffnungsvielfalt nutzt Temperatur und Top-P 1.0 / 1.0 für die ersten fünf Züge beider Seiten. Ab Zug 6 gelten deine Einstellungen. In der Eröffnung kann es also Überraschungen geben!';
+      'Deshalb haben wir eine Funktion für maximale Eröffnungsvielfalt eingeführt: einen Schalter, mit dem Maia für die ersten 5 Züge die Einstellungen 1.0 und 1.0 verwendet. In der Eröffnung könntest du einige verrückte Dinge sehen! Ab dem 6. Zug wechselt Maia aber zu deinen voreingestellten Werten.';
 
   @override
   String get samplingHelpTopP =>
-      'Wir empfehlen Eröffnungsvielfalt an, Temperatur 1.0 und Top-P 0.95. Ein kreativer Spieler mit einem Engel auf der Schulter: Nach der Eröffnung entfallen die unwahrscheinlichsten Kandidaten, deren Wahrscheinlichkeiten zusammen höchstens 5% ergeben. Das kann grobe Fehler, aber auch gute Überraschungen ausschließen. Grobe Fehler bleiben möglich. Für einen stärkeren Gegner kannst du Temperatur 0 ausprobieren. Mit Eröffnungsvielfalt gilt das ab Zug 6. Viel Glück!';
+      'Wir empfehlen, maximale Eröffnungsvielfalt einzuschalten und Temperatur auf 1.0 sowie Top-P auf 0.95 zu setzen. Das ist wie ein kreativer Spieler mit einem Engel auf der Schulter, der ihm zumindest die völlig abwegigen Züge ausredet: die unwahrscheinlichsten Züge, deren gemeinsame Wahrscheinlichkeit bis zu 5 % beträgt. Diese könnten zwar brillant sein, aber auch dumme grobe Fehler. So sollte eine gute Balance aus Eröffnungsvielfalt, Kreativität im Mittelspiel und stärkerem Spiel entstehen, indem einige sehr unwahrscheinliche grobe Fehler ausgeschlossen werden.\n\nWer mutig ist, kann Temperatur auf 0 setzen (Top-P hat bei Temperatur 0 keine Wirkung). Laut unserer Untersuchung ergibt das den stärksten Gegner. Viel Glück!';
 
   @override
   String get samplingHelpResearchIntro =>

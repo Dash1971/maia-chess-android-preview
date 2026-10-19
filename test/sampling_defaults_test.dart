@@ -17,7 +17,9 @@ void main() {
       final afterOpening = s.samplingArgmaxAfterOpeningNotice;
       final cases = <(double, double, bool, List<String>)>[
         (1, 0.95, true, []),
-        (1, 0.95, false, []),
+        (1, 0.95, false, [limited]),
+        (1, 0.99, false, [limited]),
+        (1, 0.99, true, []),
         (0.95, 0.95, false, [limited]),
         (1, 0.90, false, [limited]),
         (1, 0.90, true, []),

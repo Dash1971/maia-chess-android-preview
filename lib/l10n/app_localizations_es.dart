@@ -1394,27 +1394,27 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingHelpIntro =>
-      'La temperatura y Top-P determinan juntas la variedad de las jugadas de Maia.';
+      'La temperatura y Top-P se combinan para determinar cuánta variedad hay en el juego de Maia.';
 
   @override
   String get samplingHelpVariety =>
-      'Piensa en la temperatura como la disposición de Maia a considerar jugadas poco habituales. Con 0, siempre elige la jugada que cree más probable para una persona del nivel seleccionado. Con 1.0, conserva toda la variedad humana: como un jugador creativo de bala dispuesto a probar un sacrificio disparatado. Las jugadas populares siguen siendo más probables que las extravagantes.';
+      'Puedes pensar en una temperatura más alta como una mayor creatividad de Maia al considerar jugadas candidatas. Una temperatura de 0 es como un jugador conservador de ajedrez presencial, que piensa detenidamente para reducir sus opciones a las jugadas más probables (y, con bastante frecuencia, las mejores). Una temperatura de 1 es como un jugador creativo de blitz, para quien ningún sacrificio es demasiado loco y toda jugada, por improbable que sea, merece considerarse.';
 
   @override
   String get samplingHelpDefaults =>
-      'Top-P es como el ángel sobre el hombro de Maia. Con 1.0, deja pasar todas las candidatas. Al bajarlo, elimina las menos probables. Con 0, solo queda una de las jugadas más probables. Filtra por popularidad, no por si una jugada es buena o mala.';
+      'Puedes imaginar Top-P como el diablo o el ángel en el hombro de Maia. Con 0, Maia tiene un ángel que le dice que ignore las jugadas disparatadas y poco probables. Con 1.0, tiene un diablo que la anima a improvisar y quizá elegir la jugada más disparatada e improbable.';
 
   @override
   String get samplingHelpStrength =>
-      'En nuestra investigación anterior con el nivel 1600, elegir siempre la jugada más probable (argmax) fue la opción más fuerte entre las probadas: unos 300 Elo de ventaja frente a 1.0 / 1.0 en enfrentamientos directos. Pero también redujo las opciones de apertura.';
+      'En nuestra investigación, los ajustes de 0 y 0 (lo que técnicamente se llama argmax) produjeron el juego más fuerte: unos 300 Elo por encima de los ajustes de 1.0 y 1.0. Sin embargo, también limitaron las opciones de apertura a un repertorio reducido, compuesto principalmente por líneas principales.';
 
   @override
   String get samplingHelpArgmax =>
-      'La máxima variedad en la apertura mantiene la temperatura y Top-P en 1.0 / 1.0 durante las primeras cinco jugadas de cada bando y aplica tus ajustes desde la sexta. ¡Puede haber sorpresas en la apertura!';
+      'Por eso introdujimos la función para maximizar la variedad en la apertura: un interruptor que hace que Maia use los ajustes de 1.0 y 1.0 durante las primeras 5 jugadas. ¡Puede que veas alguna locura en la apertura! Pero, a partir de la sexta jugada, Maia vuelve a los ajustes que hayas configurado.';
 
   @override
   String get samplingHelpTopP =>
-      'Recomendamos activar la variedad en la apertura, con temperatura 1.0 y Top-P 0.95. Es un jugador creativo con un ángel al hombro: tras la apertura, descarta las jugadas de la cola menos probable, que juntas suman como máximo un 5% de probabilidad. Puede eliminar errores graves, pero también buenas sorpresas. Sigue siendo posible cometer errores graves. Para un rival más difícil, prueba la temperatura 0. Con la variedad en la apertura activada, se aplica desde la sexta jugada. ¡Buena suerte!';
+      'Recomendamos activar la máxima variedad en la apertura y ajustar la temperatura a 1.0 y Top-P a 0.95. Es como tener un jugador creativo con un ángel en el hombro que, al menos, lo disuade de jugar las jugadas más descabelladas: las menos probables, cuya probabilidad conjunta suma hasta un 5%. Es cierto que podrían ser brillantes, pero también pueden ser errores graves y absurdos. Así se busca un buen equilibrio entre variedad en la apertura, creatividad en el medio juego y un juego más fuerte al excluir algunos errores graves de probabilidad muy baja.\n\nPara quienes se atrevan, ajustar la temperatura a 0 (Top-P no tiene efecto cuando la temperatura es 0) ofrecerá el rival más fuerte, según nuestra investigación. ¡Buena suerte!';
 
   @override
   String get samplingHelpResearchIntro =>
