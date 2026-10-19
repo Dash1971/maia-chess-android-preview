@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.4.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.4.0); unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.1](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.1), code 2501 | `com.dash1971.maia_chess.preview`, 79M | Optional appearance themes, revised Maia defaults and Simple/Technical help. Grand Kingdom and DGT are disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.2](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.2), code 2502 | `com.dash1971.maia_chess.preview`, 79M | Optional appearance themes with darker pure-black panels, revised Maia defaults, simpler notices and updated Simple/Technical help. Grand Kingdom and DGT are disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -35,6 +35,16 @@ installations update in place using the established Preview certificate.
   5M measurements are not evidence of 79M performance.
 - Physical Chessnut acceptance remains with the owner/testers. Automated tests
   cannot confirm radio reliability, physical LEDs or button behavior on hardware.
+
+## Preview 2.5.0-beta.2 qualification
+
+Published through [PR #160](https://github.com/Dash1971/maia-chess-android-preview/pull/160).
+Darker neutral panels apply only to pure-black dark mode. The strength notices
+omit “From move 6”, and the approved Simple explanation is updated in all ten
+languages. Engine behavior, defaults, stored games and other themes are unchanged.
+[Qualification](releases/preview-2.5.0-beta.2.md) records final-source CI,
+independent build equality, signed beta.1 upgrade and Android 16 checks.
+Stable 2.4.0 and Dev remain unchanged.
 
 ## Preview 2.5.0-beta.1 qualification
 
