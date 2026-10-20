@@ -1,5 +1,11 @@
 # Repeatable release verification
 
+Follow [build storage and cleanup](../../docs/BUILD_WORKSPACE.md) before creating
+builds, toolchains or emulators and after publication or an abandoned build.
+Use the configured Linux builder by default; Mac compilation/emulator creation
+needs explicit user authorization. Keep compact evidence outside bulk output
+and record cleanup on every participating host before task completion.
+
 These tools run on macOS or Linux. They accept paths and package/version
 information as arguments; no developer home directory or private download is
 required. Run them from the repository root. Python tooling does not add an

@@ -63,6 +63,12 @@ refuses any unexpected Flutter revision or source shape.
 
 ## Verification
 
+Follow [build storage and cleanup](docs/BUILD_WORKSPACE.md) on every build,
+signing and test host. The build wrappers run a disk preflight and block Mac
+compilation unless explicitly authorized. Keep artifacts until the published
+download is verified, then clean task-owned intermediates and bulk output while
+retaining compact evidence. Cleanup is required before release-task completion.
+
 For Preview version `2.1.0-beta.21` and later, the GitHub Actions build and a
 clean independent Linux build from the same revision must have identical
 SHA-256 hashes. The workflow requires the expected full source SHA, refuses a
