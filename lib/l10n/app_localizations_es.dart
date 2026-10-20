@@ -159,7 +159,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get maxOpeningVarietyHelp =>
-      'Activada por defecto. Usa temperatura y Top-P 1.0 / 1.0 durante las primeras cinco jugadas de cada bando y tus ajustes desde la sexta. Mantiene opciones amplias en la apertura y permite descartar jugadas poco probables después. Respeta el número de jugada de la posición, también al reanudar o continuar una partida.\n\nNo hace falta con 1.0 / 1.0: el interruptor queda apagado y no se puede activar porque esos ajustes ya ofrecen toda la variedad durante la partida.';
+      'Activada por defecto. Usa temperatura y Top-P 1,0 / 1,0 durante las primeras cinco jugadas de cada bando y tus ajustes desde la sexta. Mantiene opciones amplias en la apertura y permite descartar jugadas poco probables después. Respeta el número de jugada de la posición, también al reanudar o continuar una partida.\n\nNo hace falta con 1,0 / 1,0: el interruptor queda apagado y no se puede activar porque esos ajustes ya ofrecen toda la variedad durante la partida.';
 
   @override
   String get maiaAnalysisRating => 'Elo de Maia para analizar';
@@ -723,7 +723,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recentCancelSelection => 'Cancelar selección';
 
   @override
-  String get recentClearSelection => 'Borrar selección';
+  String get recentClearSelection => 'Deseleccionar todo';
 
   @override
   String get recentSelectAll => 'Seleccionar todas las partidas';
@@ -1375,7 +1375,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get resetSettingsDefaultsScope =>
-      'Restablece todos los ajustes de esta pantalla. Se conservan las partidas guardadas y los datos de muestreo.';
+      'Restablece todos los ajustes de esta pantalla. Se conservan las partidas guardadas y los datos de selección de jugadas.';
 
   @override
   String get settingsResetError =>
@@ -1387,7 +1387,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get resetSettingsKeepData =>
-      'Se conservarán tus partidas guardadas y los datos de muestreo.';
+      'Se conservarán tus partidas guardadas y los datos de selección de jugadas.';
 
   @override
   String get resetSettingsAction => 'Restablecer ajustes';
@@ -1402,19 +1402,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingHelpDefaults =>
-      'Puedes imaginar Top-P como un ángel en el hombro de Maia. Con 0, el ángel le dice a Maia que ignore las jugadas disparatadas y poco probables. Con 1.0, el ángel se ha ido y Maia podría elegir incluso la jugada más disparatada e improbable.';
+      'Puedes imaginar Top-P como un ángel en el hombro de Maia. Con 0, el ángel le dice a Maia que ignore las jugadas disparatadas y poco probables. Con 1,0, el ángel se ha ido y Maia podría elegir incluso la jugada más disparatada e improbable.';
 
   @override
   String get samplingHelpStrength =>
-      'En nuestra investigación, los ajustes de 0 y 0 (lo que técnicamente se llama argmax) produjeron el juego más fuerte: unos 300 Elo por encima de los ajustes de 1.0 y 1.0. Sin embargo, también limitaron las opciones de apertura a un repertorio reducido, compuesto principalmente por líneas principales.';
+      'En nuestra investigación, los ajustes de 0 y 0 (lo que técnicamente se llama argmax) produjeron el juego más fuerte: unos 300 Elo por encima de los ajustes de 1,0 y 1,0. Sin embargo, también limitaron las opciones de apertura a un repertorio reducido, compuesto principalmente por líneas principales.';
 
   @override
   String get samplingHelpArgmax =>
-      'Por eso introdujimos la función para maximizar la variedad en la apertura: un interruptor que hace que Maia use los ajustes de 1.0 y 1.0 durante las primeras 5 jugadas. ¡Puede que veas alguna locura en la apertura! Pero, a partir de la sexta jugada, Maia vuelve a los ajustes que hayas configurado.';
+      'Por eso introdujimos la función para maximizar la variedad en la apertura: un interruptor que hace que Maia use los ajustes de 1,0 y 1,0 durante las primeras 5 jugadas. ¡Puede que veas alguna locura en la apertura! Pero, a partir de la sexta jugada, Maia vuelve a los ajustes que hayas configurado.';
 
   @override
   String get samplingHelpTopP =>
-      'Recomendamos mantener activada la máxima variedad en la apertura, con la temperatura en 1.0 y Top-P en 0.95. Es como tener un jugador creativo con un ángel en el hombro que, al menos, lo disuade de jugar las jugadas más descabelladas: las menos probables, cuya probabilidad conjunta suma hasta un 5%. Es cierto que podrían ser brillantes, pero también pueden ser errores graves y absurdos. Así se busca un buen equilibrio entre variedad en la apertura, creatividad en el medio juego y un juego más fuerte al excluir algunos errores graves de probabilidad muy baja.\n\nPara quienes se atrevan, ajustar la temperatura a 0 (Top-P no tiene efecto cuando la temperatura es 0) ofrecerá el rival más fuerte, según nuestra investigación. ¡Buena suerte!';
+      'Recomendamos mantener activada la máxima variedad en la apertura, con la temperatura en 1,0 y Top-P en 0,95. Es como tener un jugador creativo con un ángel en el hombro que, al menos, lo disuade de jugar las jugadas más descabelladas: las menos probables, cuya probabilidad conjunta suma hasta un 5%. Es cierto que podrían ser brillantes, pero también pueden ser errores graves y absurdos. Así se busca un buen equilibrio entre variedad en la apertura, creatividad en el medio juego y un juego más fuerte al excluir algunos errores graves de probabilidad muy baja.\n\nPara quienes se atrevan, ajustar la temperatura a 0 (Top-P no tiene efecto cuando la temperatura es 0) ofrecerá el rival más fuerte, según nuestra investigación. ¡Buena suerte!';
 
   @override
   String get samplingHelpResearchIntro =>
@@ -1426,15 +1426,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingTechnicalTopP =>
-      'Top-P ordena las probabilidades ajustadas de mayor a menor y conserva el menor conjunto inicial que alcanza el umbral, incluida la jugada que lo supera. Renormaliza las probabilidades conservadas antes de sortear la jugada. P = 1 conserva todas; P = 0, una de máxima probabilidad. P = 0.95 elimina como máximo un 5% de la probabilidad total, no todas las jugadas cuya probabilidad individual sea inferior al 5%.';
+      'Top-P ordena las probabilidades ajustadas de mayor a menor y conserva el menor conjunto inicial que alcanza el umbral, incluida la jugada que lo supera. Renormaliza las probabilidades conservadas antes de sortear la jugada. P = 1 conserva todas; P = 0, una de máxima probabilidad. P = 0,95 elimina como máximo un 5% de la probabilidad total, no todas las jugadas cuya probabilidad individual sea inferior al 5%.';
 
   @override
   String get samplingTechnicalOpening =>
-      'Valores predeterminados: temperatura 1.0, Top-P 0.95 y máxima variedad en la apertura activada. Se usa 1.0 / 1.0 en los números de jugada completa 1–5 del FEN para ambos bandos, y los valores configurados desde la sexta. Reanudar o continuar desde una posición no reinicia la cuenta. Los porcentajes del tablero de análisis siguen siendo las probabilidades del modelo antes de estos ajustes de juego.';
+      'Valores predeterminados: temperatura 1,0, Top-P 0,95 y máxima variedad en la apertura activada. Se usa 1,0 / 1,0 en los números de jugada completa 1–5 del FEN para ambos bandos, y los valores configurados desde la sexta. Reanudar o continuar desde una posición no reinicia la cuenta. Los porcentajes del tablero de análisis siguen siendo las probabilidades del modelo antes de estos ajustes de juego.';
 
   @override
   String get samplingTechnicalEvidence =>
-      'Con el modelo 79M, el historial desactivado y el nivel 1600, los valores propuestos obtuvieron un 60.7% de los puntos frente a 1.0 / 1.0 en 600 partidas (intervalo del 95%: 56.8–64.6%). Las pruebas anteriores de argmax dieron una ventaja de unos 300 Elo. Son resultados de enfrentamientos directos, no valoraciones calibradas frente a humanos. Cinco jugadas es una decisión de diseño, no un óptimo demostrado; filtrar por probabilidad no garantiza buenas jugadas.';
+      'Con el modelo 79M, el historial desactivado y el nivel 1600, los valores propuestos obtuvieron un 60,7% de los puntos frente a 1,0 / 1,0 en 600 partidas (intervalo del 95%: 56,8–64,6%). Las pruebas anteriores de argmax dieron una ventaja de unos 300 Elo. Son resultados de enfrentamientos directos, no valoraciones calibradas frente a humanos. Cinco jugadas es una decisión de diseño, no un óptimo demostrado; filtrar por probabilidad no garantiza buenas jugadas.';
 
   @override
   String get samplingSimpleExplanation => 'Explicación sencilla';
@@ -1444,7 +1444,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get samplingFullVarietyNotice =>
-      'Maia puede cometer más errores graves poco habituales con temperatura y Top-P en 1.0 / 1.0.';
+      'Maia puede cometer más errores graves poco habituales con temperatura y Top-P en 1,0 / 1,0.';
 
   @override
   String get samplingArgmaxNotice =>
@@ -1458,7 +1458,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get topPNotUsedHelp =>
-      'Con temperatura 0, Maia siempre elige una de las jugadas más probables, así que Top-P no tiene efecto. Su valor se conserva y vuelve a estar disponible al subir la temperatura. Si la máxima variedad en la apertura está activada, las primeras cinco jugadas de cada bando siguen usando 1.0 / 1.0.';
+      'Con temperatura 0, Maia siempre elige una de las jugadas más probables, así que Top-P no tiene efecto. Su valor se conserva y vuelve a estar disponible al subir la temperatura. Si la máxima variedad en la apertura está activada, las primeras cinco jugadas de cada bando siguen usando 1,0 / 1,0.';
 
   @override
   String get samplingLowerNotice =>
@@ -1496,4 +1496,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get appearanceDark => 'Oscuro';
+
+  @override
+  String get appearanceSystemDefault => 'Tema del dispositivo';
 }

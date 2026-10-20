@@ -437,6 +437,7 @@ void main() {
     testWidgets(
       'appearance controls fit ${locale.languageCode} at 200% in light and dark',
       (tester) async {
+        final strings = await AppLocalizations.delegate.load(locale);
         tester.view.physicalSize = const Size(320, 1200);
         tester.view.devicePixelRatio = 1;
         addTearDown(tester.view.resetPhysicalSize);
@@ -473,6 +474,28 @@ void main() {
           );
           await tester.pumpAndSettle();
           expect(tester.takeException(), isNull);
+          // Exercise the open popup as well as its closed label. System theme
+          // must use its own message: French/Hindi language defaults explicitly
+          // name language and are incorrect in this control.
+          for (final (mode, label) in [
+            (ThemeMode.system, strings.appearanceSystemDefault),
+            (ThemeMode.light, strings.appearanceLight),
+            (ThemeMode.dark, strings.appearanceDark),
+          ]) {
+            final field = find.byType(DropdownButtonFormField<ThemeMode>);
+            await tester.ensureVisible(field);
+            await tester.tap(field);
+            await tester.pumpAndSettle();
+            final option = find.text(label).last;
+            await tester.ensureVisible(option);
+            await tester.tap(option);
+            await tester.pumpAndSettle();
+            expect(controller.value.mode, mode);
+            expect(tester.takeException(), isNull);
+          }
+          if (['fr', 'hi'].contains(locale.languageCode)) {
+            expect(find.text(strings.systemDefault), findsNothing);
+          }
         }
         await tester.pumpWidget(const SizedBox.shrink());
         controller.dispose();

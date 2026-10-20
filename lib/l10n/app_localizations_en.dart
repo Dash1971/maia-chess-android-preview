@@ -1475,4 +1475,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appearanceDark => 'Dark';
+
+  @override
+  String get appearanceSystemDefault => 'System default';
 }

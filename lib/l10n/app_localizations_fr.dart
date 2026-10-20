@@ -159,7 +159,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get maxOpeningVarietyHelp =>
-      'Activée par défaut. Utilise température et Top-P 1.0 / 1.0 pendant les cinq premiers coups de chaque camp, puis vos réglages dès le sixième. Cela préserve un large choix d’ouvertures tout en permettant d’écarter ensuite les coups peu probables. Le numéro de coup de la position est respecté, même lors d’une reprise.\n\nInutile à 1.0 / 1.0 : l’interrupteur est désactivé et non sélectionnable, car ces valeurs offrent déjà toute la variété pendant la partie.';
+      'Activée par défaut. Utilise température et Top-P 1,0 / 1,0 pendant les cinq premiers coups de chaque camp, puis vos réglages dès le sixième. Cela préserve un large choix d’ouvertures tout en permettant d’écarter ensuite les coups peu probables. Le numéro de coup de la position est respecté, même lors d’une reprise.\n\nInutile à 1,0 / 1,0 : l’interrupteur est désactivé et non sélectionnable, car ces valeurs offrent déjà toute la variété pendant la partie.';
 
   @override
   String get maiaAnalysisRating => 'Classement de Maia pour l’analyse';
@@ -725,7 +725,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get recentCancelSelection => 'Annuler la sélection';
 
   @override
-  String get recentClearSelection => 'Effacer la sélection';
+  String get recentClearSelection => 'Tout désélectionner';
 
   @override
   String get recentSelectAll => 'Sélectionner toutes les parties';
@@ -1374,7 +1374,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get resetSettingsDefaultsScope =>
-      'Rétablit tous les réglages de cet écran. Les parties et les données d’échantillonnage enregistrées sont conservées.';
+      'Rétablit tous les réglages de cet écran. Les parties et les données de choix de coups enregistrées sont conservées.';
 
   @override
   String get settingsResetError =>
@@ -1386,7 +1386,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get resetSettingsKeepData =>
-      'Vos parties et données d’échantillonnage enregistrées seront conservées.';
+      'Vos parties et données de choix de coups enregistrées seront conservées.';
 
   @override
   String get resetSettingsAction => 'Rétablir les réglages';
@@ -1401,19 +1401,19 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingHelpDefaults =>
-      'Vous pouvez voir Top-P comme un ange sur l’épaule de Maia. À 0, l’ange dit à Maia d’ignorer les coups extravagants et peu probables. À 1.0, l’ange est parti, et Maia pourrait même choisir le coup le plus fou et le plus improbable.';
+      'Vous pouvez voir Top-P comme un ange sur l’épaule de Maia. À 0, l’ange dit à Maia d’ignorer les coups extravagants et peu probables. À 1,0, l’ange est parti, et Maia pourrait même choisir le coup le plus fou et le plus improbable.';
 
   @override
   String get samplingHelpStrength =>
-      'Dans notre recherche, les réglages 0 et 0 (appelés techniquement argmax) ont produit le jeu le plus fort : environ 300 Elo de plus que les réglages 1.0 et 1.0. Cependant, cela limitait aussi les choix d’ouverture à un éventail restreint, composé surtout de variantes principales.';
+      'Dans notre recherche, les réglages 0 et 0 (appelés techniquement argmax) ont produit le jeu le plus fort : environ 300 Elo de plus que les réglages 1,0 et 1,0. Cependant, cela limitait aussi les choix d’ouverture à un éventail restreint, composé surtout de variantes principales.';
 
   @override
   String get samplingHelpArgmax =>
-      'Nous avons donc introduit une fonction pour maximiser la variété en ouverture : un interrupteur qui fait jouer Maia avec les réglages 1.0 et 1.0 pendant les 5 premiers coups. Vous pourriez voir des choses folles dans l’ouverture ! Mais à partir du 6e coup, Maia revient aux réglages que vous avez configurés.';
+      'Nous avons donc introduit une fonction pour maximiser la variété en ouverture : un interrupteur qui fait jouer Maia avec les réglages 1,0 et 1,0 pendant les 5 premiers coups. Vous pourriez voir des choses folles dans l’ouverture ! Mais à partir du 6e coup, Maia revient aux réglages que vous avez configurés.';
 
   @override
   String get samplingHelpTopP =>
-      'Nous recommandons de garder la variété maximale en ouverture activée, avec la température réglée sur 1.0 et Top-P sur 0.95. C’est comme un joueur créatif avec un ange sur l’épaule, qui le dissuade au moins de jouer les coups complètement farfelus : les coups les moins probables dont la probabilité cumulée représente jusqu’à 5 %. Ils pourraient certes être brillants, mais aussi être de grosses erreurs absurdes. Cela devrait offrir un bon équilibre entre variété en ouverture, créativité en milieu de partie et jeu plus fort grâce à l’exclusion de certaines grosses erreurs très peu probables.\n\nPour les plus courageux, régler la température sur 0 (Top-P n’a aucun effet lorsque la température est à 0) donnera l’adversaire le plus fort, d’après notre recherche. Bonne chance !';
+      'Nous recommandons de garder la variété maximale en ouverture activée, avec la température réglée sur 1,0 et Top-P sur 0,95. C’est comme un joueur créatif avec un ange sur l’épaule, qui le dissuade au moins de jouer les coups complètement farfelus : les coups les moins probables dont la probabilité cumulée représente jusqu’à 5 %. Ils pourraient certes être brillants, mais aussi être des gaffes absurdes. Cela devrait offrir un bon équilibre entre variété en ouverture, créativité en milieu de partie et jeu plus fort grâce à l’exclusion de certaines gaffes très peu probables.\n\nPour les plus courageux, régler la température sur 0 (Top-P n’a aucun effet lorsque la température est à 0) donnera l’adversaire le plus fort, d’après notre recherche. Bonne chance !';
 
   @override
   String get samplingHelpResearchIntro =>
@@ -1425,15 +1425,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingTechnicalTopP =>
-      'Top-P trie les probabilités ajustées par ordre décroissant et garde le plus petit préfixe atteignant le seuil, y compris le coup qui le dépasse. Les probabilités conservées sont renormalisées avant le tirage. P = 1 garde tous les coups ; P = 0, un coup de probabilité maximale. P = 0.95 retire au plus 5% de la probabilité totale, et non tous les coups dont la probabilité individuelle est inférieure à 5%.';
+      'Top-P trie les probabilités ajustées par ordre décroissant et garde le plus petit préfixe atteignant le seuil, y compris le coup qui le dépasse. Les probabilités conservées sont renormalisées avant le tirage. P = 1 garde tous les coups ; P = 0, un coup de probabilité maximale. P = 0,95 retire au plus 5% de la probabilité totale, et non tous les coups dont la probabilité individuelle est inférieure à 5%.';
 
   @override
   String get samplingTechnicalOpening =>
-      'Valeurs par défaut : température 1.0, Top-P 0.95, variété maximale en ouverture activée. Les numéros de coup complet 1–5 du FEN utilisent 1.0 / 1.0 pour les deux couleurs, puis les valeurs configurées dès le coup 6. Reprendre une partie ou continuer depuis une position ne remet pas ce compteur à zéro. Les pourcentages du plateau d’analyse restent ceux du modèle avant ces réglages de jeu.';
+      'Valeurs par défaut : température 1,0, Top-P 0,95, variété maximale en ouverture activée. Les numéros de coup complet 1–5 du FEN utilisent 1,0 / 1,0 pour les deux couleurs, puis les valeurs configurées dès le coup 6. Reprendre une partie ou continuer depuis une position ne remet pas ce compteur à zéro. Les pourcentages du plateau d’analyse restent ceux du modèle avant ces réglages de jeu.';
 
   @override
   String get samplingTechnicalEvidence =>
-      'Avec le modèle 79M, l’historique désactivé et le niveau 1600, les valeurs proposées ont obtenu 60.7% des points contre 1.0 / 1.0 sur 600 parties (intervalle à 95% : 56.8–64.6%). Les anciens tests argmax donnaient environ 300 Elo d’avantage en confrontation. Ce ne sont pas des classements calibrés face aux humains. Cinq coups est un choix de conception, pas un optimum démontré ; filtrer les probabilités ne garantit pas de bons coups.';
+      'Avec le modèle 79M, l’historique désactivé et le niveau 1600, les valeurs proposées ont obtenu 60,7% des points contre 1,0 / 1,0 sur 600 parties (intervalle à 95% : 56,8–64,6%). Les anciens tests argmax donnaient environ 300 Elo d’avantage en confrontation. Ce ne sont pas des classements calibrés face aux humains. Cinq coups est un choix de conception, pas un optimum démontré ; filtrer les probabilités ne garantit pas de bons coups.';
 
   @override
   String get samplingSimpleExplanation => 'Explication simple';
@@ -1443,7 +1443,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingFullVarietyNotice =>
-      'Maia peut commettre davantage de gaffes inhabituelles avec température et Top-P à 1.0 / 1.0.';
+      'Maia peut commettre davantage de gaffes inhabituelles avec température et Top-P à 1,0 / 1,0.';
 
   @override
   String get samplingArgmaxNotice =>
@@ -1457,7 +1457,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get topPNotUsedHelp =>
-      'À température 0, Maia choisit toujours un coup de probabilité maximale : Top-P est donc sans effet. Sa valeur est conservée et redevient disponible quand vous augmentez la température. Si la variété en ouverture est activée, les cinq premiers coups de chaque camp utilisent toujours 1.0 / 1.0.';
+      'À température 0, Maia choisit toujours un coup de probabilité maximale : Top-P est donc sans effet. Sa valeur est conservée et redevient disponible quand vous augmentez la température. Si la variété en ouverture est activée, les cinq premiers coups de chaque camp utilisent toujours 1,0 / 1,0.';
 
   @override
   String get samplingLowerNotice =>
@@ -1492,8 +1492,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get appearanceTheme => 'Thème';
 
   @override
-  String get appearanceLight => 'Lumineux';
+  String get appearanceLight => 'Clair';
 
   @override
   String get appearanceDark => 'Sombre';
+
+  @override
+  String get appearanceSystemDefault => 'Thème de l\'appareil';
 }
