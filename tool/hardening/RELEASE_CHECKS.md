@@ -1,5 +1,11 @@
 # Repeatable release verification
 
+Follow [build storage and cleanup](../../docs/BUILD_WORKSPACE.md) before creating
+builds, toolchains or emulators and after publication or an abandoned build.
+Mac builds and ARM64 emulator checks remain supported. Keep compact evidence
+outside bulk output and record cleanup on every participating host before task
+completion.
+
 These tools run on macOS or Linux. They accept paths and package/version
 information as arguments; no developer home directory or private download is
 required. Run them from the repository root. Python tooling does not add an
