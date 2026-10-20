@@ -40,6 +40,15 @@ and the Preview restriction tests. Stable releases use the Stable repository's
 authoritative release procedure, including its Zapstore and F-Droid follow-up.
 Preview/Dev publication does not authorize a Stable or app-store release.
 
+## Shared build process
+
+Read `docs/SHARED_BUILD_PROCESS.md` when changing build, CI, verification or
+cleanup tooling. Assess the counterpart in Stable or Preview in the same task.
+Port applicable improvements with a linked companion PR; document a concrete
+reason for any intentional difference. Preserve channel-specific behavior and
+Stable's authoritative release gates. Shared tooling changes do not authorize
+an app promotion or publication.
+
 ## Release and workspace cleanup
 
 Read `docs/BUILD_WORKSPACE.md` before building or qualifying a release. Preserve

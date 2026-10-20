@@ -8,7 +8,7 @@ hardware-accelerated ARM64 Android emulator checks
 Choose the host appropriate
 to each check and preserve the existing reproducibility requirements.
 
-The release, snapshot and development-run wrappers call
+The build wrappers call
 `python3 tool/build_workspace.py preflight` before Flutter or Gradle. Mac builds
 require at least 25 GiB free; Linux requires at least 10 GiB free. No host opt-in
 environment variable is required.
