@@ -1,15 +1,17 @@
 # Build storage and cleanup
 
 Canonical releases build on GitHub Linux; independent reproduction uses the
-configured Mac mini Linux machine. Signing the verified APK on the Mac does
-not require a Mac compilation. Use a Linux host for native/emulator checks
-where supported. A check that needs macOS requires explicit user authorization;
-record that exception without weakening release qualification.
+configured Mac mini Linux machine. Mac builds and tests remain supported
+without an additional authorization gate. Apple Silicon is useful for
+hardware-accelerated ARM64 Android emulator checks
+([Android documentation](https://developer.android.com/studio/run/emulator-acceleration)).
+Choose the host appropriate
+to each check and preserve the existing reproducibility requirements.
 
 The release, snapshot and development-run wrappers call
-`python3 tool/build_workspace.py preflight` before Flutter or Gradle. They refuse
-macOS by default. After user authorization, `MAIA_ALLOW_MAC_BUILD=1` enables
-one command, with at least 25 GiB free. Linux requires at least 10 GiB free.
+`python3 tool/build_workspace.py preflight` before Flutter or Gradle. Mac builds
+require at least 25 GiB free; Linux requires at least 10 GiB free. No host opt-in
+environment variable is required.
 These are starting thresholds, not estimates of the space a build will use.
 Before large downloads, builds or emulator creation, check the actual target
 volume and allow expected growth plus a 10 GiB reserve. Monitor long jobs and
@@ -74,10 +76,19 @@ Only `build/`, `.dart_tool/`, `.flutter-plugins-dependencies`, `android/.gradle/
 scratch directory are eligible. The tool rejects tracked files in generated
 paths, symlinked cleanup roots, nested Git checkouts and possible signing
 keys/secrets. Internal virtualenv links are unlinked without following them. It
-keeps source, model assets, Git history, shared toolchains/caches and evidence.
+keeps tracked source assets, Git history, shared toolchains/caches and evidence.
 It writes a cleanup plan before deletion, updates removed paths after each
 removal and records disk space. If it refuses a path, inspect it; do not widen
 the deletion scope to bypass the check.
+
+Model binaries do not need a separate archive for each release. Delete copied
+models in bulk output and APKs with those artifacts. Keep pinned Git LFS
+references, expected hashes and verification results so the exact models can
+be retrieved and checked again. A completed task-owned checkout's materialized
+models can be removed by safely retiring that checkout after its source is
+preserved. Keep models needed by active work; a useful shared LFS cache may be
+retained to avoid repeated downloads. The generic cleanup command does not
+individually delete tracked files from a working checkout.
 
 Remove task-owned remote containers/checkouts and AVD registrations separately,
 using their recorded identities after stopping them. Delete merged temporary

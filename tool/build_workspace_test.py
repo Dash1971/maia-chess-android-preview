@@ -160,20 +160,20 @@ class BuildWorkspaceTest(unittest.TestCase):
             self.assertTrue((self.repo / 'build/output.apk').exists())
         self.assertEqual(self.evidence.read_text(), 'retained evidence')
 
-    def test_macos_opt_in_and_disk_thresholds(self):
+    def test_macos_builds_need_no_opt_in_and_disk_thresholds_still_apply(self):
         disk = argparse.Namespace(free=30 * workspace.GIB)
         with patch.object(workspace.platform, 'system', return_value='Darwin'), \
                 patch.dict(workspace.os.environ, {}, clear=True), \
                 patch.object(workspace.shutil, 'disk_usage', return_value=disk):
-            with self.assertRaisesRegex(ValueError, 'disabled'):
+            # A supported Mac build passes with no opt-in environment setting.
+            with contextlib.redirect_stdout(io.StringIO()):
                 workspace.preflight(self.repo)
-            with patch.dict(workspace.os.environ, {'MAIA_ALLOW_MAC_BUILD': '1'}):
-                disk.free = 24 * workspace.GIB
-                with self.assertRaisesRegex(ValueError, '25 GiB'):
-                    workspace.preflight(self.repo)
-                disk.free = 25 * workspace.GIB
-                with contextlib.redirect_stdout(io.StringIO()):
-                    workspace.preflight(self.repo)
+            disk.free = 24 * workspace.GIB
+            with self.assertRaisesRegex(ValueError, '25 GiB'):
+                workspace.preflight(self.repo)
+            disk.free = 25 * workspace.GIB
+            with contextlib.redirect_stdout(io.StringIO()):
+                workspace.preflight(self.repo)
         with patch.object(workspace.platform, 'system', return_value='Linux'), \
                 patch.object(workspace.shutil, 'disk_usage', return_value=disk):
             disk.free = 9 * workspace.GIB

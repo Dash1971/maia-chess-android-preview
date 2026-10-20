@@ -7,7 +7,6 @@ from pathlib import Path
 import platform
 import shutil
 import subprocess
-import sys
 
 
 REPO = Path(__file__).resolve().parents[1]
@@ -33,10 +32,6 @@ def git(repo, *args):
 
 def preflight(repo):
     mac = platform.system() == 'Darwin'
-    require(not mac or os.environ.get('MAIA_ALLOW_MAC_BUILD') == '1',
-            'Mac builds are disabled by default. Use GitHub Linux and the '
-            'independent Linux builder. Only after explicit user authorization, '
-            'set MAIA_ALLOW_MAC_BUILD=1 for this command.')
     minimum = 25 if mac else 10
     free = shutil.disk_usage(repo).free / GIB
     require(free >= minimum,

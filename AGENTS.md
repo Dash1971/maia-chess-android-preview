@@ -42,13 +42,12 @@ Preview/Dev publication does not authorize a Stable or app-store release.
 
 ## Release and workspace cleanup
 
-Read `docs/BUILD_WORKSPACE.md` before building or qualifying a release. Use
-GitHub Linux for the canonical build and the configured Mac mini Linux machine
-for independent builds and suitable native checks. Do not start a Mac build,
-download another SDK/NDK or create a Mac emulator merely because the chat is
-running on the Mac. If a required check needs macOS, explain why and obtain
-explicit user authorization first. Never skip required qualification checks.
-The build wrappers enforce the Mac opt-in and a minimum free-space check.
+Read `docs/BUILD_WORKSPACE.md` before building or qualifying a release. Preserve
+the existing canonical Linux build and independent Linux reproduction process.
+Mac builds and ARM64 emulator checks remain supported without an additional
+authorization gate. Choose the host appropriate to the check and preserve all
+required qualification checks. The build wrappers enforce a minimum free-space
+check on both platforms.
 
 Keep bulk output in one task-owned scratch directory, outside the source
 checkout, created with `tool/build_workspace.py init`. Keep compact evidence
@@ -57,7 +56,7 @@ clone toolchains or caches per release. Record the host, checkout, scratch,
 container and emulator ownership, disk budget and cleanup command before work.
 Check free space before large downloads and emulator creation as well as builds;
 reserve at least 10 GiB beyond expected growth and stop before that reserve is
-consumed. A Mac exception requires at least 25 GiB free at build start.
+consumed. Mac builds require at least 25 GiB free at build start.
 
 Cleanup is part of release completion: immediately after verifying the actual
 published download and saving compact evidence, stop task-owned processes and
@@ -68,6 +67,13 @@ must have an explicit retention reason, owner and expiry. Never delete another
 chat's current build. Include before/after disk space, removed paths and any
 retained output with its reason/expiry in the release PR. Do not report a release
 task complete until cleanup is recorded or a concrete blocker is reported.
+
+Do not archive full model binaries per release. Remove model copies in generated
+output, APKs and scratch with that output. Preserve pinned Git LFS references
+and model checksums. Materialized models in a completed task-owned checkout can
+go when that checkout is safely retired; an active checkout or useful shared
+LFS cache is not disposable bulk output. The generic cleanup command protects
+tracked source assets rather than deleting them individually.
 
 After a verified publication, delete merged PR branches and temporary release-build
 branches once their source is preserved by a release tag and they have no unique
