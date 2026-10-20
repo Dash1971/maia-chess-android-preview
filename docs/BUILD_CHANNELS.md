@@ -1,13 +1,13 @@
 # Build channels and promotion status
 
-Updated 2026-10-19. Release pages are authoritative for published artifacts;
+Updated 2026-10-21. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.4.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.4.0); unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.2](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.2), code 2502 | `com.dash1971.maia_chess.preview`, 79M | Optional appearance themes with darker pure-black panels, revised Maia defaults, simpler notices and updated Simple/Technical help. Grand Kingdom and DGT are disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.3), code 2503 | `com.dash1971.maia_chess.preview`, 79M | Includes the completed translation corrections in all ten languages. Gameplay, defaults, engine and model are preserved. Grand Kingdom and DGT remain disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -35,6 +35,10 @@ installations update in place using the established Preview certificate.
   5M measurements are not evidence of 79M performance.
 - Physical Chessnut acceptance remains with the owner/testers. Automated tests
   cannot confirm radio reliability, physical LEDs or button behavior on hardware.
+
+## Preview 2.5.0-beta.3 qualification
+
+Published through [PR #164](https://github.com/Dash1971/maia-chess-android-preview/pull/164) after #162. The completed translation review is included without repetition; clearer theme names and consistent chess/sampling terminology do not change gameplay or defaults. [Qualification](releases/preview-2.5.0-beta.3.md) records exact-source CI, independent Linux reproduction, full Preview native checks and signed beta.2 upgrade. Stable and Dev remain unchanged.
 
 ## Preview 2.5.0-beta.2 qualification
 
