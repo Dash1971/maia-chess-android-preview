@@ -33,12 +33,26 @@ research bundles or datasets to application source or release distributions.
 
 ## Distribution channels
 
-Read `docs/BUILD_CHANNELS.md` before promoting or publishing a build. Update
-its channel status and the release PR's evidence when publishing. Grand Kingdom
+Read `docs/RELEASING.md` and `docs/BUILD_CHANNELS.md` before promoting or
+publishing a build. Update the channel status and the release PR's evidence when publishing. Grand Kingdom
 and DGT adapters remain Dev-only: preserve both Dart and native flavor gates
 and the Preview restriction tests. Stable releases use the Stable repository's
 authoritative release procedure, including its Zapstore and F-Droid follow-up.
 Preview/Dev publication does not authorize a Stable or app-store release.
+
+Before every Preview release, the release agent must review upstream advisories
+and available updates without waiting for a user reminder. Record dated sources
+plus upgrade/deferral decisions. A passing
+Gradle-pin/lockfile check is not that review. Prepare release notes, then complete
+a post-publication README/roadmap pass where appropriate; Preview requires no
+screenshot maintenance. Preserve full exact-source Preview qualification.
+
+Dev releases use the lightweight procedure in `docs/RELEASING.md#dev`: relevant
+checks, one ARM64/5M development-signed build and a changed-feature smoke test,
+then publication to the separate Dev repository by default. Dev requires no
+second matching build, full official-release qualification or published-download
+check. Build-only requests remain build-only. Clean after the successful upload
+and retained compact evidence; preserve Stable/Preview download checks.
 
 ## Shared build process
 
@@ -68,7 +82,8 @@ reserve at least 10 GiB beyond expected growth and stop before that reserve is
 consumed. Mac builds require at least 25 GiB free at build start.
 
 Cleanup is part of release completion: immediately after verifying the actual
-published download and saving compact evidence, stop task-owned processes and
+published download (Preview), or confirming successful publication without a
+download check (Dev), and saving compact evidence, stop task-owned processes and
 run the documented cleanup command on every build/signing/test host. Do not
 defer bulk cleanup until a documentation PR merges. On failure or cancellation,
 retain diagnostics and clean abandoned bulk output before handoff; active work
@@ -91,6 +106,7 @@ automatic deletion of merged branches enabled.
 
 Remove only task-owned build containers/checkouts, downloaded or reconstructed
 APKs, test virtual environments and emulator test data after retaining compact
-verification evidence and checking the published download. Stop task-owned
+verification evidence and checking the published download for Preview; Dev needs
+only successful publication as described above. Stop task-owned
 emulators. Preserve shared SDK/Gradle caches, signing keys and other people's
 work. Record cleanup in the release PR, including anything intentionally retained.

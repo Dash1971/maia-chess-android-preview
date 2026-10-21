@@ -1,5 +1,11 @@
 # Repeatable release verification
 
+For the release sequence, required Preview upstream review and documentation
+pass, use [Preview and Dev release instructions](../../docs/RELEASING.md).
+This guide describes full Preview/Stable qualification tools. Dev publication
+uses the lightweight [Dev procedure](../../docs/RELEASING.md#dev), which requires
+neither a second matching build nor a published-download check.
+
 Follow [build storage and cleanup](../../docs/BUILD_WORKSPACE.md) before creating
 builds, toolchains or emulators and after publication or an abandoned build.
 Mac builds and ARM64 emulator checks remain supported. Keep compact evidence

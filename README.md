@@ -16,7 +16,8 @@ For the current stable release, complete user guide, feature overview, and
 screenshots, see the
 [Mobile Maia repository](https://github.com/Dash1971/maia-chess-android).
 
-[Build-channel status and testing scope](docs/BUILD_CHANNELS.md)
+[Build-channel status and testing scope](docs/BUILD_CHANNELS.md) ·
+[Preview and Dev release instructions](docs/RELEASING.md)
 
 ## Roadmap
 
@@ -233,13 +234,14 @@ adb install -r build/app/outputs/flutter-apk/Mobile-Maia-Preview-Dev-arm64.apk
 ```
 
 The snapshot retains release mode, R8, and model-integrity checks, but uses the
-smaller Maia3-5M model and Android's development signer. It is not a
-reproducible or publishable release artifact by itself. Do not tag or attach an
-arbitrary local snapshot to this official Preview repository, and do not use it
-as Stable-release evidence. When a tested Dev snapshot is requested, rebuild
-and verify it through the Dev publication workflow, then publish it only to the
-separate Dev repository above. Use `tool/build_android_release.sh` and the full
-qualification process once a feature is substantially settled.
+smaller Maia3-5M model and Android's development signer. For a Dev release, run
+relevant automated checks, build once, smoke-test the changed functionality and
+publish that tested APK to the separate Dev repository by default. No second
+matching build or published-download check is required. Follow the
+[lightweight Dev release instructions](docs/RELEASING.md#dev), including cleanup.
+Keep local snapshots out of this official Preview release feed. Dev results do
+not qualify Stable or Preview; use `tool/build_android_release.sh` and the full
+Preview qualification process once a feature is substantially settled.
 
 The [release verification guide](tool/hardening/RELEASE_CHECKS.md) includes
 portable APK checks, sanitized saved-game upgrade fixtures, emulator commands,
