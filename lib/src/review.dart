@@ -558,9 +558,9 @@ class _ReviewPageState extends State<ReviewPage>
     super.dispose();
   }
 
-  cg.GameData _boardGameData() => cg.GameData(
+  cg.GameData _boardGameData({bool interactive = true}) => cg.GameData(
     fen: _boardPosition.fen,
-    playerSide: _boardPosition.isGameOver
+    playerSide: !interactive || _boardPosition.isGameOver
         ? cg.PlayerSide.none
         : cg.PlayerSide.both,
     sideToMove: _boardPosition.turn,
@@ -615,14 +615,25 @@ class _ReviewPageState extends State<ReviewPage>
     _boardPosition = dc.Chess.fromSetup(
       dc.Setup.parseFen(widget.positions[_ply]),
     );
-    _boardController.updatePosition(
-      _boardGameData(),
-      animate: false,
-      resetPremove: true,
-    );
+    _syncBoardAfterNavigation();
     unawaited(_analyzePosition(_ply));
     unawaited(_analyzeConfiguredMaiaPosition(_ply));
     _notifySessionChanged();
+  }
+
+  void _syncBoardAfterNavigation() {
+    // Updating the position/resetting premoves alone preserves Chessground's
+    // selected square. Disable interaction to clear selection and active
+    // gestures, then restore it synchronously before the next frame.
+    _boardController.updatePosition(
+      _boardGameData(interactive: false),
+      animate: false,
+      resetPremove: true,
+    );
+    _boardController.updatePosition(
+      _boardGameData(),
+      animate: false,
+    );
   }
 
   void _onAnalysisMove(dc.Move move, {bool? viaDragAndDrop}) {
@@ -1488,11 +1499,7 @@ class _ReviewPageState extends State<ReviewPage>
       _variationReview = null;
       _variationMaiaAnalysis = null;
       _secondVariationMaiaAnalysis = null;
-      _boardController.updatePosition(
-        _boardGameData(),
-        animate: false,
-        resetPremove: true,
-      );
+      _syncBoardAfterNavigation();
     });
     unawaited(_analyzeVariation());
     _notifySessionChanged();
@@ -2604,11 +2611,7 @@ class _ReviewPageState extends State<ReviewPage>
         _variationReview = null;
         _variationMaiaAnalysis = null;
         _secondVariationMaiaAnalysis = null;
-        _boardController.updatePosition(
-          _boardGameData(),
-          animate: false,
-          resetPremove: true,
-        );
+        _syncBoardAfterNavigation();
       });
       unawaited(_analyzeVariation());
       _notifySessionChanged();
