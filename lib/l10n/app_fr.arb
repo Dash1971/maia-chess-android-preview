@@ -124,6 +124,7 @@
   "expandVariations": "Afficher les variantes",
   "collapseVariations": "Masquer les variantes",
   "promoteVariation": "Promouvoir la variante",
+  "mainLine": "variante principale",
   "makeMainLine": "En faire la variante principale",
   "deleteFromHere": "Supprimer à partir d'ici",
   "analyzing": "Analyse en cours…",

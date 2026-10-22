@@ -496,6 +496,10 @@
   "@promoteVariation": {
     "description": "Review-tree action: promote a variation one parent level; a top-level variation moves to the first position. Not pawn promotion. Distinct from Make main line, which promotes repeatedly to the top."
   },
+  "mainLine": "main line",
+  "@mainLine": {
+    "description": "Destination in the navigation hint Hold for main line. Returns from a variation to its main-line branch point without changing moves."
+  },
   "makeMainLine": "Make main line",
   "@makeMainLine": {
     "description": "Review-tree action: promote a variation repeatedly until it becomes the main line. This changes the displayed analysis tree, not the historical moves actually played."

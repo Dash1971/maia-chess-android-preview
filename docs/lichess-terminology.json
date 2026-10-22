@@ -1951,6 +1951,63 @@
           "reason": "No Hindi deviceTheme translation at the pinned Lichess revision. Use Google Chrome’s Hindi theme-selector label: https://support.google.com/chrome/answer/9275525?hl=hi&co=GENIE.Platform%3DAndroid . This follows system brightness, not system language."
         }
       }
+    },
+    "mainLine": {
+      "upstream_key": "makeMainLine",
+      "upstream": {
+        "en": "Make main line",
+        "ja": "主手順にする",
+        "zh": "设为主线",
+        "ko": "주 라인으로 하기",
+        "es": "Convertir en línea principal",
+        "de": "Zur Hauptvariante machen",
+        "fr": "En faire la variante principale",
+        "ru": "Сделать этот вариант главным",
+        "hi": "मुख्य लाइन बनाएं",
+        "pt": "Transformar em linha principal"
+      },
+      "adaptations": {
+        "en": {
+          "value": "main line",
+          "reason": "Use the main-line noun as a navigation destination, not the upstream action that promotes a variation. Include any article required by the existing localized Hold for destination phrase."
+        },
+        "ja": {
+          "value": "主手順",
+          "reason": "Use the main-line noun as a navigation destination, not the upstream action that promotes a variation. Include any article required by the existing localized Hold for destination phrase."
+        },
+        "zh": {
+          "value": "主线",
+          "reason": "Use the main-line noun as a navigation destination, not the upstream action that promotes a variation. Include any article required by the existing localized Hold for destination phrase."
+        },
+        "ko": {
+          "value": "주 라인",
+          "reason": "Use the main-line noun as a navigation destination, not the upstream action that promotes a variation. Include any article required by the existing localized Hold for destination phrase."
+        },
+        "es": {
+          "value": "la línea principal",
+          "reason": "Use the main-line noun as a navigation destination, not the upstream action that promotes a variation. Include any article required by the existing localized Hold for destination phrase."
+        },
+        "de": {
+          "value": "Hauptvariante",
+          "reason": "Use the main-line noun as a navigation destination, not the upstream action that promotes a variation. Include any article required by the existing localized Hold for destination phrase."
+        },
+        "fr": {
+          "value": "variante principale",
+          "reason": "Use the main-line noun as a navigation destination, not the upstream action that promotes a variation. Include any article required by the existing localized Hold for destination phrase."
+        },
+        "ru": {
+          "value": "главный вариант",
+          "reason": "Use the main-line noun as a navigation destination, not the upstream action that promotes a variation. Include any article required by the existing localized Hold for destination phrase."
+        },
+        "hi": {
+          "value": "मुख्य लाइन",
+          "reason": "Use the main-line noun as a navigation destination, not the upstream action that promotes a variation. Include any article required by the existing localized Hold for destination phrase."
+        },
+        "pt": {
+          "value": "linha principal",
+          "reason": "Use the main-line noun as a navigation destination, not the upstream action that promotes a variation. Include any article required by the existing localized Hold for destination phrase."
+        }
+      }
     }
   }
 }

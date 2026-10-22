@@ -124,6 +124,7 @@
   "expandVariations": "라인 펼치기",
   "collapseVariations": "라인 접기",
   "promoteVariation": "라인 승격하기",
+  "mainLine": "주 라인",
   "makeMainLine": "주 라인으로 하기",
   "deleteFromHere": "여기서부터 삭제",
   "analyzing": "분석 중…",

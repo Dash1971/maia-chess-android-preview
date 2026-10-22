@@ -124,6 +124,7 @@
   "expandVariations": "変化手順を表示する",
   "collapseVariations": "変化手順をかくす",
   "promoteVariation": "変化を上位の手順にする",
+  "mainLine": "主手順",
   "makeMainLine": "主手順にする",
   "deleteFromHere": "これ以降を削除",
   "analyzing": "解析中…",

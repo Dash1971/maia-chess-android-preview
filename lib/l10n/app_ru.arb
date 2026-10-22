@@ -124,6 +124,7 @@
   "expandVariations": "Развернуть варианты",
   "collapseVariations": "Свернуть варианты",
   "promoteVariation": "Повысить приоритет варианта",
+  "mainLine": "главный вариант",
   "makeMainLine": "Сделать этот вариант главным",
   "deleteFromHere": "Удалить с этого места",
   "analyzing": "Анализ…",

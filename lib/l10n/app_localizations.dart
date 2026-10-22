@@ -858,6 +858,12 @@ abstract class AppLocalizations {
   /// **'Promote variation'**
   String get promoteVariation;
 
+  /// Destination in the navigation hint Hold for main line. Returns from a variation to its main-line branch point without changing moves.
+  ///
+  /// In en, this message translates to:
+  /// **'main line'**
+  String get mainLine;
+
   /// Review-tree action: promote a variation repeatedly until it becomes the main line. This changes the displayed analysis tree, not the historical moves actually played.
   ///
   /// In en, this message translates to:

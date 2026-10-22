@@ -2574,7 +2574,26 @@ class _ReviewPageState extends State<ReviewPage>
         : null,
   );
 
+  bool get _inSideVariation =>
+      _inVariation &&
+      (_rootMainline == null || !identical(_openedVariation, _rootMainline));
+
+  void _returnToMainline() {
+    if (!_inSideVariation) return;
+    final opened = _openedVariation;
+    final path = opened == null ? null : _pathToVariation(opened);
+    // A nested variation shares its immediate branch point only with its
+    // parent. Return to the first divergence from the actual main line.
+    final root = _rootMainline;
+    final branch = path?.where((line) => !identical(line, root)).firstOrNull;
+    final ply = branch?.basePly ?? _variationBasePly!;
+    setState(() => _showMainPly(ply));
+  }
+
   void _step(int delta) {
+    // A stale button callback at a boundary must not cancel/restart engines or
+    // recreate the board without moving to another node.
+    if (delta > 0 && _atAnalysisEnd || delta < 0 && _atAnalysisStart) return;
     _cancelSelectedWork();
     if (_inVariation) {
       final root = _rootMainline;
@@ -2646,13 +2665,9 @@ class _ReviewPageState extends State<ReviewPage>
         _variationIndex == 0;
   }
 
-  bool get _atAnalysisEnd {
-    final root = _rootMainline;
-    return root != null
-        ? identical(_openedVariation, root) &&
-              _variationIndex == root.sanMoves.length
-        : !_inVariation && _ply == _maximumPly;
-  }
+  bool get _atAnalysisEnd => _inVariation
+      ? _variationIndex == _variationSan.length
+      : _ply == _maximumPly;
 
   String _exportReviewPgn() => PgnVariationExporter.export(
     widget.pgn,
@@ -2816,11 +2831,16 @@ class _ReviewPageState extends State<ReviewPage>
       nextKey: const ValueKey('next-move-button'),
       canGoBack: !_atAnalysisStart,
       canGoForward: !_atAnalysisEnd,
-      onFirst: _jumpToStart,
+      canHoldPrevious: _inSideVariation || !_atAnalysisStart,
+      canHoldNext: _inSideVariation || !_atAnalysisEnd,
+      onFirst: _inSideVariation ? _returnToMainline : _jumpToStart,
       onPrevious: () => _step(-1),
       onNext: () => _step(1),
-      onLast: _jumpToEnd,
-      endTooltip: l10n(context).endPosition,
+      onLast: _inSideVariation ? _returnToMainline : _jumpToEnd,
+      startTooltip: _inSideVariation ? l10n(context).mainLine : null,
+      endTooltip: _inSideVariation
+          ? l10n(context).mainLine
+          : l10n(context).endPosition,
       headerActionWidth: MediaQuery.textScalerOf(context).scale(1) > 1.3
           ? 84
           : 56,

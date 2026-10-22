@@ -395,6 +395,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get promoteVariation => 'वैकल्पिक चालक्रम का स्तर बढ़ाएँ';
 
   @override
+  String get mainLine => 'मुख्य लाइन';
+
+  @override
   String get makeMainLine => 'मुख्य लाइन बनाएं';
 
   @override
