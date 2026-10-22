@@ -1,13 +1,13 @@
 # Build channels and promotion status
 
-Updated 2026-10-22. Release pages are authoritative for published artifacts;
+Updated 2026-10-23. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.4.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.4.0); unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.5](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.5), code 2505 | `com.dash1971.maia_chess.preview`, 79M | Variation arrows have separate tap/hold availability; either hold returns to the main-line branch point. Grand Kingdom and DGT remain disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.6](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.6), code 2506 | `com.dash1971.maia_chess.preview`, 79M | Hold Right advances one main-line ply beyond the branch point; Hold Left is unchanged. Grand Kingdom and DGT remain disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -43,6 +43,10 @@ installations update in place using the established Preview certificate.
   5M measurements are not evidence of 79M performance.
 - Physical Chessnut acceptance remains with the owner/testers. Automated tests
   cannot confirm radio reliability, physical LEDs or button behavior on hardware.
+
+## Preview 2.5.0-beta.6 qualification
+
+Published through [PR #175](https://github.com/Dash1971/maia-chess-android-preview/pull/175) after reviewed #174. Hold Right inside an analysis variation selects one main-line move after the outermost branch point, matching Hold Left followed by one normal Right tap. The destination is independent of variation length, nesting and selected move, and clamps at the game end. Hold Left, ordinary taps and main-line endpoint holds are unchanged. [Qualification](releases/preview-2.5.0-beta.6.md) records exact-source CI, independent Linux equality, full 79M native suite, signed beta.5 upgrade, changed-feature checks and completed cleanup. Stable and Dev remain unchanged.
 
 ## Preview 2.5.0-beta.5 qualification
 
