@@ -206,6 +206,7 @@ class _ReviewPageState extends State<ReviewPage>
   final Map<int, MaiaPositionAnalysis> _secondMaiaAnalyses = {};
   final Set<int> _secondMaiaLoading = {};
   late final cg.ChessboardController _boardController;
+  int _boardNavigationRevision = 0;
   late dc.Chess _boardPosition;
   late final List<RecordedVariation> _variations;
   RecordedVariation? _openedVariation;
@@ -622,18 +623,17 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   void _syncBoardAfterNavigation() {
-    // Updating the position/resetting premoves alone preserves Chessground's
-    // selected square. Disable interaction to clear selection and active
-    // gestures, then restore it synchronously before the next frame.
+    // Cancel selection, promotion and active gestures synchronously. Chessground
+    // also retains private tap-release flags when interaction is disabled, so
+    // recreate only the board widget's interaction state on the next frame.
+    // Keep the controller and leave ordinary moves/engine updates untouched.
+    _boardNavigationRevision++;
     _boardController.updatePosition(
       _boardGameData(interactive: false),
       animate: false,
       resetPremove: true,
     );
-    _boardController.updatePosition(
-      _boardGameData(),
-      animate: false,
-    );
+    _boardController.updatePosition(_boardGameData(), animate: false);
   }
 
   void _onAnalysisMove(dc.Move move, {bool? viaDragAndDrop}) {
@@ -3182,6 +3182,9 @@ class _ReviewPageState extends State<ReviewPage>
                     width: size,
                     height: size,
                     child: Stack(
+                      // Key the single-child surface so the old board detaches
+                      // before its replacement attaches to the same controller.
+                      key: ValueKey(_boardNavigationRevision),
                       children: [
                         cg.Chessboard(
                           controller: _boardController,

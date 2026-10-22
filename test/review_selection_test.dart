@@ -191,4 +191,89 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpAndSettle();
   });
+
+  testWidgets(
+    'fresh selection works after navigating during a reselected-piece drag',
+    (tester) async {
+      usePortraitSize(tester);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ReviewPage(
+            positions: session.positions,
+            uciMoves: session.uciMoves,
+            sanMoves: session.sanMoves,
+            pgn: session.pgn,
+            playerIsWhite: true,
+            initialCurrentFen: session.positions[40],
+            onHome: () {},
+            evaluator: (_) async => const StockfishReview(0, 'e5b8'),
+            maiaEvaluator: (_, _) async => null,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await touch(tester, dc.Square.e5);
+      expectQueenSelected(tester);
+      final size = board(tester).size / 8;
+      final origin =
+          tester.getTopLeft(boardFinder) + Offset(4.5 * size, 3.5 * size);
+      final gesture = await tester.startGesture(origin, pointer: 7);
+      await gesture.moveBy(const Offset(15, 0));
+      await tester.pump();
+      await tester.tap(
+        find.byKey(const ValueKey('next-move-button')),
+        pointer: 8,
+      );
+      await tester.pumpAndSettle();
+      expect(board(tester).controller.fen, session.positions[41]);
+      await gesture.up();
+      await tester.pumpAndSettle();
+      await touch(tester, dc.Square.b6);
+      expect(
+        board(tester).controller.highlightNotifier.selected,
+        dc.Square.b6,
+        reason: 'First fresh tap must select the black queen after cancelling the old drag.',
+      );
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+    },
+  );
+
+  testWidgets('navigation cancels promotion and permits a fresh promotion', (
+    tester,
+  ) async {
+    usePortraitSize(tester);
+    final promotionSession = AnalysisSession.fromPgn(
+      '[SetUp "1"]\n[FEN "4k3/P7/8/8/8/8/8/4K3 w - - 0 1"]\n[Result "*"]\n\n1. a8=Q+ Ke7 *',
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ReviewPage(
+          positions: promotionSession.positions,
+          uciMoves: promotionSession.uciMoves,
+          sanMoves: promotionSession.sanMoves,
+          pgn: promotionSession.pgn,
+          playerIsWhite: true,
+          onHome: () {},
+          evaluator: (_) async => const StockfishReview(0, 'a7a8q'),
+          maiaEvaluator: (_, _) async => null,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await touch(tester, dc.Square.a7);
+    await touch(tester, dc.Square.a8);
+    expect(board(tester).controller.pendingPromotion, isNotNull);
+    await tester.tap(find.byKey(const ValueKey('next-move-button')));
+    await tester.pumpAndSettle();
+    expect(board(tester).controller.pendingPromotion, isNull);
+    expectCleared(tester);
+    await tester.tap(find.byKey(const ValueKey('previous-move-button')));
+    await tester.pumpAndSettle();
+    await touch(tester, dc.Square.a7);
+    await touch(tester, dc.Square.a8);
+    expect(board(tester).controller.pendingPromotion, isNotNull);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
+  });
 }
