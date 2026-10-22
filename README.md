@@ -33,7 +33,7 @@ These changes are delivered in Preview and await separate Stable acceptance/prom
 
 ## Preview 2.5.0-beta.6
 
-[Beta.5](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.6) improves variation navigation. Hold Right inside an analysis variation selects one main-line move after the outermost branch point, matching Hold Left followed by one normal Right tap. The destination is independent of variation length, nesting and selected move, and clamps at the game end. Hold Left, ordinary taps and main-line endpoint holds are unchanged. See [qualification](docs/releases/preview-2.5.0-beta.6.md).
+[Beta.6](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.6) improves variation navigation. Hold Right inside an analysis variation selects one main-line move after the outermost branch point, matching Hold Left followed by one normal Right tap. The destination is independent of variation length, nesting and selected move, and clamps at the game end. Hold Left, ordinary taps and main-line endpoint holds are unchanged. See [qualification](docs/releases/preview-2.5.0-beta.6.md).
 
 These changes are delivered in Preview and await separate Stable acceptance/promotion. Stable and Dev remain unchanged.
 

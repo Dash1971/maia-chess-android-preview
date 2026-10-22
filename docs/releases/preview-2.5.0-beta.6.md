@@ -17,6 +17,6 @@ Hold Right inside an analysis variation selects one main-line move after the out
 
 ## Scope and cleanup
 
-Stable and Dev remain unchanged. Grand Kingdom/DGT remain Dev-only. Physical phones/vendor rendering and Chessnut remain tester acceptance. The completed translation review was not repeated; the newly added main-line noun and automated localization contracts were checked. Preview requires no screenshot-maintenance pass.
+Stable and Dev remain unchanged. Grand Kingdom/DGT remain Dev-only. Physical phones/vendor rendering and Chessnut remain tester acceptance. No catalogs changed or translation review was repeated; automated localization contracts passed. Preview requires no screenshot-maintenance pass.
 
 Immediately after public-download verification, task processes/emulator were stopped and the checked cleaner removed task bulk, APK/archive copies, virtual environments, emulator data and intermediates on all three hosts. Completed source/model checkouts and the Linux container were retired. Shared SDK/JDK/Flutter/Gradle/pub installations, useful LFS caches and secure signing keys were preserved. Compact reports/commands/hashes remain with the release and release PR. The inspected public pip CA bundle was retained separately as a public certificate bundle; it contains no private key. README/roadmap documentation followed cleanup in a source-only checkout.
