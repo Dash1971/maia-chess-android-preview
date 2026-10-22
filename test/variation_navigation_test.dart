@@ -467,16 +467,17 @@ void main() {
             expect(tester.widget<InkResponse>(_next).onLongPress, isNotNull);
             await tester.longPress(control);
             await tester.pumpAndSettle();
+            final destination = control == _back ? 1 : 2;
             _expectSelection(
               tester,
-              find.byKey(const ValueKey('mainline-move-0')),
-              session.positions[1],
+              find.byKey(ValueKey('mainline-move-${destination - 1}')),
+              session.positions[destination],
             );
             await _tap(tester, _next);
             _expectSelection(
               tester,
-              find.byKey(const ValueKey('mainline-move-1')),
-              session.positions[2],
+              find.byKey(ValueKey('mainline-move-$destination')),
+              session.positions[destination + 1],
             );
             // On the main line, the same holds still go to game endpoints.
             await tester.longPress(_next);
@@ -523,9 +524,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         tester.widget<cg.Chessboard>(find.byType(cg.Chessboard)).controller.fen,
-        _canonical(session.positions.first),
+        _canonical(session.positions[1]),
       );
-      await _tap(tester, _next);
+      expect(tester.widget<InkResponse>(_next).onTap, isNull);
       _expectSelection(
         tester,
         find.byKey(const ValueKey('mainline-move-0')),
@@ -602,8 +603,8 @@ void main() {
       await tester.pump();
       _expectSelection(
         tester,
-        find.byKey(const ValueKey('mainline-move-0')),
-        session.positions[1],
+        find.byKey(const ValueKey('mainline-move-1')),
+        session.positions[2],
       );
       for (final completer in pending) {
         completer.complete(const StockfishReview(999, ''));
@@ -611,11 +612,86 @@ void main() {
       await tester.pumpAndSettle();
       _expectSelection(
         tester,
-        find.byKey(const ValueKey('mainline-move-0')),
-        session.positions[1],
+        find.byKey(const ValueKey('mainline-move-1')),
+        session.positions[2],
       );
       expect(find.text('+10.0'), findsNothing);
       expect(find.text('+1.3'), findsWidgets);
     },
   );
+
+  testWidgets(
+    'holding Right from a continuation beyond the game stops at the final main-line position',
+    (tester) async {
+      final session = AnalysisSession.fromPgn('1. e4 e5 2. Nf3 *');
+      await _open(tester, session, session.positions.last, persistent: false);
+      tester.widget<cg.Chessboard>(find.byType(cg.Chessboard)).onMove!(
+        dc.NormalMove.fromUci('b8c6'),
+      );
+      await tester.pumpAndSettle();
+      expect(tester.widget<InkResponse>(_next).onTap, isNull);
+      expect(tester.widget<InkResponse>(_next).onLongPress, isNotNull);
+      await tester.longPress(_next);
+      await tester.pumpAndSettle();
+      _expectSelection(
+        tester,
+        find.byKey(const ValueKey('mainline-move-2')),
+        session.positions.last,
+      );
+      expect(tester.widget<InkResponse>(_next).onTap, isNull);
+      expect(tester.widget<InkResponse>(_next).onLongPress, isNull);
+    },
+  );
+
+  for (final persistent in [true, false]) {
+    for (final whiteBranch in [true, false]) {
+      for (final longVariation in [false, true]) {
+        testWidgets(
+          'Hold Right advances one main-line move independent of variation length (saved=$persistent, white=$whiteBranch, long=$longVariation)',
+          (tester) async {
+            final moves = whiteBranch
+                ? (longVariation ? 'Bc4 Bc5 3. d3 d6' : 'Bc4')
+                : (longVariation ? 'c5 2. Nf3 d6 3. d4 cxd4' : 'c5');
+            final pgn = whiteBranch
+                ? '1. e4 e5 2. Nf3 (2. $moves) Nc6 3. Bb5 a6 *'
+                : '1. e4 e5 (1... $moves) 2. Nf3 Nc6 3. Bb5 a6 *';
+            final session = AnalysisSession.fromPgn(pgn);
+            final branch = PgnVariationExporter.parseTree(pgn)
+                .single
+                .children
+                .single;
+            final destination = branch.basePly + 1;
+            await _open(
+              tester,
+              session,
+              _fen(branch, branch.sanMoves.length),
+              persistent: persistent,
+            );
+            await tester.longPress(_next);
+            await tester.pumpAndSettle();
+            _expectSelection(
+              tester,
+              find.byKey(ValueKey('mainline-move-${destination - 1}')),
+              session.positions[destination],
+            );
+            // Selecting the FIRST branch move must produce the same exit.
+            await _tap(tester, _move(branch.sanMoves.first));
+            await tester.longPress(_next);
+            await tester.pumpAndSettle();
+            _expectSelection(
+              tester,
+              find.byKey(ValueKey('mainline-move-${destination - 1}')),
+              session.positions[destination],
+            );
+            await _tap(tester, _back);
+            _expectSelection(
+              tester,
+              find.byKey(ValueKey('mainline-move-${branch.basePly - 1}')),
+              session.positions[branch.basePly],
+            );
+          },
+        );
+      }
+    }
+  }
 }
