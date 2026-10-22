@@ -2578,7 +2578,7 @@ class _ReviewPageState extends State<ReviewPage>
       _inVariation &&
       (_rootMainline == null || !identical(_openedVariation, _rootMainline));
 
-  void _returnToMainline() {
+  void _returnToMainline({bool advance = false}) {
     if (!_inSideVariation) return;
     final opened = _openedVariation;
     final path = opened == null ? null : _pathToVariation(opened);
@@ -2587,7 +2587,9 @@ class _ReviewPageState extends State<ReviewPage>
     final root = _rootMainline;
     final branch = path?.where((line) => !identical(line, root)).firstOrNull;
     final ply = branch?.basePly ?? _variationBasePly!;
-    setState(() => _showMainPly(ply));
+    // Right advances one main-line ply from the branch point, never from the
+    // variation's current position or end. _showMainPly clamps at the game end.
+    setState(() => _showMainPly(ply + (advance ? 1 : 0)));
   }
 
   void _step(int delta) {
@@ -2836,7 +2838,9 @@ class _ReviewPageState extends State<ReviewPage>
       onFirst: _inSideVariation ? _returnToMainline : _jumpToStart,
       onPrevious: () => _step(-1),
       onNext: () => _step(1),
-      onLast: _inSideVariation ? _returnToMainline : _jumpToEnd,
+      onLast: _inSideVariation
+          ? () => _returnToMainline(advance: true)
+          : _jumpToEnd,
       startTooltip: _inSideVariation ? l10n(context).mainLine : null,
       endTooltip: _inSideVariation
           ? l10n(context).mainLine
