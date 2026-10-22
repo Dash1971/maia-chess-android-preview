@@ -25,6 +25,12 @@ screenshots, see the
 
 The 2.5 defaults, optional appearance settings, latest translation corrections and this analysis fix are delivered in Preview and await separate Stable acceptance/promotion. Stable 2.4.0 and Dev remain unchanged.
 
+## Preview 2.5.0-beta.5
+
+[Beta.5](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.5) improves variation navigation. Analysis arrows step along the current line. At a side-variation end, Right is dimmed for tapping while either arrow can be held to return to the outermost main-line branch point. The corresponding move stays selected and further taps follow the main line. Main-line holds retain their beginning/end behavior; live-game navigation is unchanged. See [qualification](docs/releases/preview-2.5.0-beta.5.md).
+
+These changes are delivered in Preview and await separate Stable acceptance/promotion. Stable and Dev remain unchanged.
+
 ## Roadmap
 
 These are the areas we would like to work on next.
@@ -45,7 +51,7 @@ We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) sp
 
 [The 79M sampling study](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/opening-variety-2026-10-18/REPORT.md) is complete: 3,000 full games, 5,400 opening rollouts and 180 quality positions. Temperature 1.0 / Top-P 0.95 with **Max variety in opening** scored 60.7% against 1.0 / 1.0 at the 1600 rating input (95% interval: 56.8–64.6%) and preserved the measured broad opening mix. Finer opening variation and human-move fidelity remain uncertain.
 
-The **Preview 2.5 defaults** are **Temperature 1.0 / Top-P 0.95 with Max variety in opening on**. They apply to new settings and Settings resets; existing saved preferences and frozen game profiles are retained. Play and primary analysis start at 1500; the optional second analysis engine starts at 2600 and remains off until enabled. The [visual settings guide](https://github.com/Dash1971/mobile-maia-research/blob/main/guides/choosing-maia-settings/README.md) explains the choice. These changes are available in [Preview 2.5.0-beta.4](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.4), including the refined Simple explanation, shorter settings notices and completed translation corrections; Stable 2.4.0 is unchanged.
+The **Preview 2.5 defaults** are **Temperature 1.0 / Top-P 0.95 with Max variety in opening on**. They apply to new settings and Settings resets; existing saved preferences and frozen game profiles are retained. Play and primary analysis start at 1500; the optional second analysis engine starts at 2600 and remains off until enabled. The [visual settings guide](https://github.com/Dash1971/mobile-maia-research/blob/main/guides/choosing-maia-settings/README.md) explains the choice. These changes are available in [Preview 2.5.0-beta.5](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.5), including the refined Simple explanation, shorter settings notices and completed translation corrections; Stable 2.4.0 is unchanged.
 
 Engine help offers **Simple explanation** and **Technical explanation** in all ten languages. At Temperature 0, Top-P is disabled and labelled “Not used”; its value is retained for when Temperature is raised again. Contextual notices describe full sampling, narrower opening choices and deterministic play without running extra inference.
 

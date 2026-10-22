@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.4.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.4.0); unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.4](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.4), code 2504 | `com.dash1971.maia_chess.preview`, 79M | Analysis navigation clears stale selection/gesture state; existing 2.5 defaults, appearance and translations are retained. Grand Kingdom and DGT remain disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.5](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.5), code 2505 | `com.dash1971.maia_chess.preview`, 79M | Variation arrows have separate tap/hold availability; either hold returns to the main-line branch point. Grand Kingdom and DGT remain disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -43,6 +43,10 @@ installations update in place using the established Preview certificate.
   5M measurements are not evidence of 79M performance.
 - Physical Chessnut acceptance remains with the owner/testers. Automated tests
   cannot confirm radio reliability, physical LEDs or button behavior on hardware.
+
+## Preview 2.5.0-beta.5 qualification
+
+Published through [PR #172](https://github.com/Dash1971/maia-chess-android-preview/pull/172) after reviewed #171. Analysis arrows step along the current line. At a side-variation end, Right is dimmed for tapping while either arrow can be held to return to the outermost main-line branch point. The corresponding move stays selected and further taps follow the main line. Main-line holds retain their beginning/end behavior; live-game navigation is unchanged. [Qualification](releases/preview-2.5.0-beta.5.md) records exact-source CI, independent Linux equality, full 79M native suite, signed beta.4 upgrade, changed-feature checks and completed cleanup. Stable and Dev remain unchanged.
 
 ## Preview 2.5.0-beta.4 qualification
 
