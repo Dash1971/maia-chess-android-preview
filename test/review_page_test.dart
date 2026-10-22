@@ -2027,6 +2027,10 @@ void main() {
     board = tester.widget<cg.Chessboard>(find.byType(cg.Chessboard));
     expect(positionCore(board.controller.fen), positionCore(positions.first));
 
+    // Exercise a separate Game Review, as a new route does in the app.
+    // Reusing the previous ReviewPage state would retain its authored tree.
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
     await tester.pumpWidget(
       MaterialApp(
         home: ReviewPage(

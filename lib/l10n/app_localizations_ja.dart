@@ -388,6 +388,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get promoteVariation => '変化を上位の手順にする';
 
   @override
+  String get mainLine => '主手順';
+
+  @override
   String get makeMainLine => '主手順にする';
 
   @override

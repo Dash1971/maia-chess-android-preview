@@ -389,6 +389,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get promoteVariation => '라인 승격하기';
 
   @override
+  String get mainLine => '주 라인';
+
+  @override
   String get makeMainLine => '주 라인으로 하기';
 
   @override

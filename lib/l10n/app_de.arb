@@ -124,6 +124,7 @@
   "expandVariations": "Varianten ausklappen",
   "collapseVariations": "Varianten einklappen",
   "promoteVariation": "Variante aufwerten",
+  "mainLine": "Hauptvariante",
   "makeMainLine": "Zur Hauptvariante machen",
   "deleteFromHere": "Ab hier löschen",
   "analyzing": "Analyse läuft…",

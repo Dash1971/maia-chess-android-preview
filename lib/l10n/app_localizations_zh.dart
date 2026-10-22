@@ -386,6 +386,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get promoteVariation => '提升变着';
 
   @override
+  String get mainLine => '主线';
+
+  @override
   String get makeMainLine => '设为主线';
 
   @override

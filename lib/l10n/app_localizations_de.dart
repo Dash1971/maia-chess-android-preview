@@ -394,6 +394,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get promoteVariation => 'Variante aufwerten';
 
   @override
+  String get mainLine => 'Hauptvariante';
+
+  @override
   String get makeMainLine => 'Zur Hauptvariante machen';
 
   @override

@@ -395,6 +395,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get promoteVariation => 'Повысить приоритет варианта';
 
   @override
+  String get mainLine => 'главный вариант';
+
+  @override
   String get makeMainLine => 'Сделать этот вариант главным';
 
   @override

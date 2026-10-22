@@ -394,6 +394,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get promoteVariation => 'Promote variation';
 
   @override
+  String get mainLine => 'main line';
+
+  @override
   String get makeMainLine => 'Make main line';
 
   @override

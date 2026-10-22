@@ -395,6 +395,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get promoteVariation => 'Promover variante';
 
   @override
+  String get mainLine => 'linha principal';
+
+  @override
   String get makeMainLine => 'Transformar em linha principal';
 
   @override
