@@ -206,6 +206,7 @@ class _ReviewPageState extends State<ReviewPage>
   final Map<int, MaiaPositionAnalysis> _secondMaiaAnalyses = {};
   final Set<int> _secondMaiaLoading = {};
   late final cg.ChessboardController _boardController;
+  int _boardNavigationRevision = 0;
   late dc.Chess _boardPosition;
   late final List<RecordedVariation> _variations;
   RecordedVariation? _openedVariation;
@@ -558,9 +559,9 @@ class _ReviewPageState extends State<ReviewPage>
     super.dispose();
   }
 
-  cg.GameData _boardGameData() => cg.GameData(
+  cg.GameData _boardGameData({bool interactive = true}) => cg.GameData(
     fen: _boardPosition.fen,
-    playerSide: _boardPosition.isGameOver
+    playerSide: !interactive || _boardPosition.isGameOver
         ? cg.PlayerSide.none
         : cg.PlayerSide.both,
     sideToMove: _boardPosition.turn,
@@ -615,14 +616,24 @@ class _ReviewPageState extends State<ReviewPage>
     _boardPosition = dc.Chess.fromSetup(
       dc.Setup.parseFen(widget.positions[_ply]),
     );
-    _boardController.updatePosition(
-      _boardGameData(),
-      animate: false,
-      resetPremove: true,
-    );
+    _syncBoardAfterNavigation();
     unawaited(_analyzePosition(_ply));
     unawaited(_analyzeConfiguredMaiaPosition(_ply));
     _notifySessionChanged();
+  }
+
+  void _syncBoardAfterNavigation() {
+    // Cancel selection, promotion and active gestures synchronously. Chessground
+    // also retains private tap-release flags when interaction is disabled, so
+    // recreate only the board widget's interaction state on the next frame.
+    // Keep the controller and leave ordinary moves/engine updates untouched.
+    _boardNavigationRevision++;
+    _boardController.updatePosition(
+      _boardGameData(interactive: false),
+      animate: false,
+      resetPremove: true,
+    );
+    _boardController.updatePosition(_boardGameData(), animate: false);
   }
 
   void _onAnalysisMove(dc.Move move, {bool? viaDragAndDrop}) {
@@ -1488,11 +1499,7 @@ class _ReviewPageState extends State<ReviewPage>
       _variationReview = null;
       _variationMaiaAnalysis = null;
       _secondVariationMaiaAnalysis = null;
-      _boardController.updatePosition(
-        _boardGameData(),
-        animate: false,
-        resetPremove: true,
-      );
+      _syncBoardAfterNavigation();
     });
     unawaited(_analyzeVariation());
     _notifySessionChanged();
@@ -2604,11 +2611,7 @@ class _ReviewPageState extends State<ReviewPage>
         _variationReview = null;
         _variationMaiaAnalysis = null;
         _secondVariationMaiaAnalysis = null;
-        _boardController.updatePosition(
-          _boardGameData(),
-          animate: false,
-          resetPremove: true,
-        );
+        _syncBoardAfterNavigation();
       });
       unawaited(_analyzeVariation());
       _notifySessionChanged();
@@ -3179,6 +3182,9 @@ class _ReviewPageState extends State<ReviewPage>
                     width: size,
                     height: size,
                     child: Stack(
+                      // Key the single-child surface so the old board detaches
+                      // before its replacement attaches to the same controller.
+                      key: ValueKey(_boardNavigationRevision),
                       children: [
                         cg.Chessboard(
                           controller: _boardController,
