@@ -27,7 +27,7 @@ The 2.5 cycle adds optional appearance settings, revised Maia defaults and help,
 
 Game Review and imported-PGN analysis clear stale piece selection and legal-move dots when navigating. Navigation cancels held drags and pending promotion, while engine-result updates retain selection and played moves retain their tap/drag animation. See [beta.4 qualification](docs/releases/preview-2.5.0-beta.4.md).
 
-Analysis arrows step along the current variation. Hold Left returns to the outermost main-line branch point; Hold Right selects one main-line move after that point, clamping at the game end. The destination is independent of variation length, nesting and selected move. Ordinary taps and main-line endpoint holds retain their behavior; live-game navigation is unchanged. See [beta.6 qualification](docs/releases/preview-2.5.0-beta.6.md).
+Analysis arrows step along the current line. Within an analysis variation, Hold Left returns to the outermost main-line branch point; Hold Right selects one main-line move after that point, clamping at the game end. The destination is independent of variation length, nesting and selected move. Ordinary taps and main-line endpoint holds retain their behavior; live-game navigation is unchanged. See [beta.6 qualification](docs/releases/preview-2.5.0-beta.6.md).
 
 For release notes and verification from earlier development cycles, see the [release history](https://github.com/Dash1971/maia-chess-android-preview/releases).
 
@@ -43,7 +43,7 @@ We’re looking for owners of these boards who are willing to help test and repo
 
 **Languages and native-speaker review**
 
-Mobile Maia currently supports **English, Japanese, Simplified Chinese, Korean, Spanish, German, French, Russian, Hindi, and Brazilian Portuguese**. We have no general expansion beyond these ten languages planned, but we will consider requests when native speakers are willing to help us validate the translations in the app.
+Mobile Maia currently supports **English, Japanese, Simplified Chinese, Korean, Spanish, German, French, Russian, Hindi, and Brazilian Portuguese**. We have no general expansion beyond these ten languages planned, but we will consider requests when native speakers are willing to help us validate the translations in the app. Choose a language in Settings or follow the device language. See the [localization guide](docs/L10N_REVIEW.md) for coverage and contributor instructions.
 
 We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) speakers**. We would love to add these languages, but right-to-left layouts—especially alongside chess notation, clocks, and evaluations—need careful testing. See the [right-to-left language issue](https://github.com/Dash1971/maia-chess-android-preview/issues/84).
 
