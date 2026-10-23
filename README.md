@@ -19,23 +19,17 @@ screenshots, see the
 [Build-channel status and testing scope](docs/BUILD_CHANNELS.md) ·
 [Preview and Dev release instructions](docs/RELEASING.md)
 
-## Preview 2.5.0-beta.4
+## Preview 2.5.0 beta
 
-[Beta.4](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.4) fixes stale piece selection and legal-move dots when navigating Game Review or imported-PGN analysis. Navigation cancels held drags and pending promotion; a fresh touch works immediately. Engine-result updates retain selection, and played moves retain their tap/drag animation behavior. See [release qualification](docs/releases/preview-2.5.0-beta.4.md).
+The latest release in this development cycle is [2.5.0-beta.6](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.6).
 
-The 2.5 defaults, optional appearance settings, latest translation corrections and this analysis fix are delivered in Preview and await separate Stable acceptance/promotion. Stable 2.4.0 and Dev remain unchanged.
+The 2.5 cycle adds optional appearance settings, revised Maia defaults and help, translation corrections, and analysis-board interaction improvements. Existing saved preferences are retained. These changes are delivered in Preview and await separate Stable acceptance and promotion; Stable and Dev remain unchanged.
 
-## Preview 2.5.0-beta.5
+Game Review and imported-PGN analysis clear stale piece selection and legal-move dots when navigating. Navigation cancels held drags and pending promotion, while engine-result updates retain selection and played moves retain their tap/drag animation. See [beta.4 qualification](docs/releases/preview-2.5.0-beta.4.md).
 
-[Beta.5](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.5) improves variation navigation. Analysis arrows step along the current line. At a side-variation end, Right is dimmed for tapping while either arrow can be held to return to the outermost main-line branch point. The corresponding move stays selected and further taps follow the main line. Main-line holds retain their beginning/end behavior; live-game navigation is unchanged. See [qualification](docs/releases/preview-2.5.0-beta.5.md).
+Analysis arrows step along the current variation. Hold Left returns to the outermost main-line branch point; Hold Right selects one main-line move after that point, clamping at the game end. The destination is independent of variation length, nesting and selected move. Ordinary taps and main-line endpoint holds retain their behavior; live-game navigation is unchanged. See [beta.6 qualification](docs/releases/preview-2.5.0-beta.6.md).
 
-These changes are delivered in Preview and await separate Stable acceptance/promotion. Stable and Dev remain unchanged.
-
-## Preview 2.5.0-beta.6
-
-[Beta.6](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.6) improves variation navigation. Hold Right inside an analysis variation selects one main-line move after the outermost branch point, matching Hold Left followed by one normal Right tap. The destination is independent of variation length, nesting and selected move, and clamps at the game end. Hold Left, ordinary taps and main-line endpoint holds are unchanged. See [qualification](docs/releases/preview-2.5.0-beta.6.md).
-
-These changes are delivered in Preview and await separate Stable acceptance/promotion. Stable and Dev remain unchanged.
+For release notes and verification from earlier development cycles, see the [release history](https://github.com/Dash1971/maia-chess-android-preview/releases).
 
 ## Roadmap
 
@@ -57,7 +51,7 @@ We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) sp
 
 [The 79M sampling study](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/opening-variety-2026-10-18/REPORT.md) is complete: 3,000 full games, 5,400 opening rollouts and 180 quality positions. Temperature 1.0 / Top-P 0.95 with **Max variety in opening** scored 60.7% against 1.0 / 1.0 at the 1600 rating input (95% interval: 56.8–64.6%) and preserved the measured broad opening mix. Finer opening variation and human-move fidelity remain uncertain.
 
-The **Preview 2.5 defaults** are **Temperature 1.0 / Top-P 0.95 with Max variety in opening on**. They apply to new settings and Settings resets; existing saved preferences and frozen game profiles are retained. Play and primary analysis start at 1500; the optional second analysis engine starts at 2600 and remains off until enabled. The [visual settings guide](https://github.com/Dash1971/mobile-maia-research/blob/main/guides/choosing-maia-settings/README.md) explains the choice. These changes are available in [Preview 2.5.0-beta.6](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.6), including the refined Simple explanation, shorter settings notices and completed translation corrections; Stable 2.4.0 is unchanged.
+The **Preview 2.5 defaults** are **Temperature 1.0 / Top-P 0.95 with Max variety in opening on**. They apply to new settings and Settings resets; existing saved preferences and frozen game profiles are retained. Play and primary analysis start at 1500; the optional second analysis engine starts at 2600 and remains off until enabled. The [visual settings guide](https://github.com/Dash1971/mobile-maia-research/blob/main/guides/choosing-maia-settings/README.md) explains the choice. These changes are available in [Preview 2.5.0-beta.6](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.6), including the refined Simple explanation, shorter settings notices and completed translation corrections; Stable is unchanged.
 
 Engine help offers **Simple explanation** and **Technical explanation** in all ten languages. At Temperature 0, Top-P is disabled and labelled “Not used”; its value is retained for when Temperature is raised again. Contextual notices describe full sampling, narrower opening choices and deterministic play without running extra inference.
 
@@ -80,92 +74,6 @@ We want to improve the existing side-by-side layout so the board makes better us
 **Suggestions from users**
 
 Suggestions are always welcome. Please open an issue in the [Preview repository](https://github.com/Dash1971/maia-chess-android-preview/issues) or the [Stable repository](https://github.com/Dash1971/maia-chess-android/issues) so we can discuss and consider it.
-
-## Preview 2.4.0-beta.15
-
-**Max variety in opening** is an optional Engine settings switch. When enabled,
-Maia uses Temperature 1.0 and Top-P 1.0 for the first five moves by each side,
-then your configured values from move 6. It also works with Temperature 0:
-varied opening moves followed by the most likely human move.
-
-The option is off by default and disabled when both sliders are already 1.0.
-Returning both sliders to their defaults clears it. Each new game retains its
-sampling settings when resumed; older saved games do not automatically enable
-the opening override. Takebacks and Continue from here use the position's move
-number. Sampling reports show the probabilities actually used for each move;
-analysis probabilities are unchanged. This adds no extra model inference.
-
-Beta.14's approved help, Stable-ready Chessnut flow and Gradle 9.8.1 update are
-retained. Grand Kingdom and DGT remain Dev-only. Beta.15 was subsequently promoted to Stable 2.4.0; the 2.5 changes above await separate Stable acceptance and promotion.
-
-### Beta.10 settings improvements
-
-Settings is easier to scan: premove options are grouped beneath Premoves,
-analysis ratings and quality have their own section, and Sampling data has
-adjacent Save/Share and delete actions. Use move history has a dedicated info
-button and research link; its recommendation remains unchanged. Reset explains
-which settings it affects. All ten languages support the revised layout,
-including large text and independently accessible help buttons.
-
-### Earlier Preview changes
-
-Beta.9: clearing Maia sampling data asks for confirmation. Cancel or dismiss the
-warning to keep your data; **Delete data** removes the captures stored in the app.
-Saved games and separately exported reports are unaffected.
-
-Beta.8: opt-in Maia move reports now show the latest ten recorded games, newest first,
-including unfinished games. Jump links and compact headings show who played each
-color, the result, opening, time control and original game date when known.
-Result colors match Recent Games. The readable HTML and detailed JSONL contain
-the same games; a 64 MiB safety ceiling keeps capture storage bounded.
-
-Beta.7 introduced readable reports with boards, the actual in-game selection
-probabilities and “1 in X” explanations, plus Save/Share and reliable recovery
-when Android recreates a pending Save dialog. Recording stays off by default.
-
-Restored post-game analysis now returns directly Home in one tap after Android
-restarts the app in the background. Unfinished-game analysis still returns to
-the game. This release also includes the beta.4 board messages described below.
-
-Beta.4 names the connected board (for example, “Chessnut Go connected”) and
-retains that name in disconnect guidance. Messages are localized in all ten
-languages; connection readiness and setup guidance work as before.
-
-Beta.3 keeps queued pieces at their projected destinations as multiple premoves
-are consumed, removing the brief jump back to the real position. Completed
-premove highlights disappear as the queue progresses.
-
-Beta.2 shortens fresh Chessnut discovery to three seconds and keeps confirmed
-NEW GAME resets on the play screen. Colors and settings stay the same; LEDs
-guide piece replacement, and play starts automatically when the board is ready.
-
-This Preview promotes the reviewed Maia settings and Chessnut improvements for
-broader testing, retaining Preview's separate package, signing identity and
-79M Maia model. Grand Kingdom and DGT remain Dev experiments, not Preview support.
-
-Temperature and Top-P help now uses plain-language examples and neutral guidance.
-Research links point to the dedicated
-[research repository](https://github.com/Dash1971/mobile-maia-research).
-Existing Stable research URLs remain available for older app versions.
-
-Preview 2.4 also adds **Use move history**, off by default.
-It lets Maia consider up to seven earlier positions without changing the sampling
-settings. New sessions use the preference; saved sessions retain their original
-choice. See the [behavior and test contract](docs/MAIA_MOVE_HISTORY.md) and the
-[79M move-history research](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/move-history-2026-10-09/REPORT.md).
-The study found better human-move prediction but more repeated copying in a
-specific low-rated opening; it does not establish a strength gain. Preview uses
-the 79M model; Dev snapshots use the smaller 5M model.
-
-The source includes German, French, Russian, Hindi, Brazilian Portuguese, Japanese,
-Simplified Chinese, Korean and Spanish UI catalogs alongside English.
-Choose a language in Settings or follow the device language. Native-speaker review is still pending; see the
-[localization guide](docs/L10N_REVIEW.md) for coverage, intentional technical-text
-exceptions, contributor instructions and the ARB reviewer guide.
-
-Development snapshots use the same Preview source with a separate Dev package,
-development signer, ARM64-only APK, and smaller 5M Maia model for rapid phone
-testing. They are not production-parity or qualified Preview releases.
 
 ## Install and update with Obtainium
 
