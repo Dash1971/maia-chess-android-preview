@@ -65,9 +65,17 @@ Engine help offers **Simple explanation** and **Technical explanation** in all t
 
 Preview 2.5.0-beta.1 adds **Appearance** below Language: Light, Dark or System, optional Android system colors, and a pure-black background in dark mode. Beta.2 darkens the panels when pure-black mode is enabled; other themes are unchanged. The current green dark theme stays the default. System colors require Android 12 or later and a supported palette. Board, clock and analysis colors retain their chess meaning. See the [theme issue](https://github.com/Dash1971/maia-chess-android-preview/issues/124).
 
+**Board and piece designs**
+
+We plan to add independent board-design and piece-set choices in Settings, with visual previews and offline availability. Mobile Maia already uses Lichess’s chessboard library, which provides the designs; the work is to expose suitable styles consistently across play, review and the board editor while preserving the current appearance for existing users. Included assets need verified redistribution rights and attribution. See the [board and piece design issue](https://github.com/Dash1971/maia-chess-android-preview/issues/177).
+
+**Configurable board aids**
+
+Last-move highlighting, legal-move dots, coordinates, piece animation, magnified dragging and a circular drag target already work in Mobile Maia. We plan to make these configurable in Settings, retaining today’s behavior by default and saving the choices across restarts. See the [configurable board aids issue](https://github.com/Dash1971/maia-chess-android-preview/issues/178).
+
 **Landscape and tablet layouts**
 
-We want to make better use of wider screens, keeping the board comfortable to use alongside the game and analysis controls. We’re considering buying an Android tablet to help test this properly. Feedback from tablet users is welcome in the [landscape layout issue](https://github.com/Dash1971/maia-chess-android-preview/issues/29).
+We want to improve the existing side-by-side layout so the board makes better use of the available space on landscape phones and tablets, with clocks and essential controls easy to reach. This includes constrained-width windows and large text, plus physical-device testing of comfortable touch input. The work can share board configuration and visual checks with the design and board-aid settings above. Feedback from phone and tablet users is welcome in the [landscape layout issue](https://github.com/Dash1971/maia-chess-android-preview/issues/29).
 
 **Suggestions from users**
 
