@@ -1957,5 +1957,13 @@
   "boardPreferenceError": "Could not save board settings. Please try again.",
   "@boardPreferenceError": {
     "description": "Board preference persistence failed; the displayed choice can be retried."
+  },
+  "boardDesign": "Board",
+  "@boardDesign": {
+    "description": "Visual board design selector. Style names are upstream artwork names and remain unchanged."
+  },
+  "boardPieceSet": "Piece set",
+  "@boardPieceSet": {
+    "description": "Visual piece set selector. Style names are upstream artwork names and remain unchanged."
   }
 }

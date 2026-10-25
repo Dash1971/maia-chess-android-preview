@@ -69,6 +69,7 @@ part 'src/sampling_help.dart';
 part 'src/app_language.dart';
 part 'src/app_appearance.dart';
 part 'src/board_preferences.dart';
+part 'src/board_styles.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -81,6 +82,22 @@ Future<void> main() async {
     yield LicenseEntryWithLineBreaks([
       'Mobile Maia third-party notices',
     ], await rootBundle.loadString('THIRD_PARTY_NOTICES.md'));
+  });
+  LicenseRegistry.addLicense(() async* {
+    for (final file in [
+      'lila-COPYING.md',
+      'chess-art-MIT.txt',
+      'chessnut-Apache-2.0.txt',
+      'GPL-2.0.txt',
+      'AGPL-3.0.txt',
+      'CC-BY-4.0.txt',
+      'CC-BY-SA-4.0.txt',
+      'CC0-1.0.txt',
+    ]) {
+      yield LicenseEntryWithLineBreaks([
+        'Mobile Maia board and piece artwork',
+      ], await rootBundle.loadString('third_party/chessground/notices/$file'));
+    }
   });
   FlutterError.onError = (details) {
     FlutterError.presentError(details);

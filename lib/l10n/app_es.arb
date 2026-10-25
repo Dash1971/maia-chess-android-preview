@@ -415,5 +415,7 @@
   "boardTargetCircle": "Círculo",
   "boardTargetSquare": "Cuadrado",
   "boardTargetNone": "Ninguna",
-  "boardPreferenceError": "No se han podido guardar los ajustes del tablero. Inténtalo de nuevo."
+  "boardPreferenceError": "No se han podido guardar los ajustes del tablero. Inténtalo de nuevo.",
+  "boardDesign": "Tablero",
+  "boardPieceSet": "Estilo de piezas"
 }

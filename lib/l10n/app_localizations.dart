@@ -2613,6 +2613,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not save board settings. Please try again.'**
   String get boardPreferenceError;
+
+  /// Visual board design selector. Style names are upstream artwork names and remain unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Board'**
+  String get boardDesign;
+
+  /// Visual piece set selector. Style names are upstream artwork names and remain unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Piece set'**
+  String get boardPieceSet;
 }
 
 class _AppLocalizationsDelegate

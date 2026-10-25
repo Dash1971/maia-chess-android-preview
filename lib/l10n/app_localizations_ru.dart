@@ -1534,4 +1534,10 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get boardPreferenceError =>
       'Не удалось сохранить настройки доски. Повторите попытку.';
+
+  @override
+  String get boardDesign => 'Доска';
+
+  @override
+  String get boardPieceSet => 'Оформление фигур';
 }

@@ -37,7 +37,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   chess: ^0.8.1
-  chessground: ^10.0.1
+  # Same pinned renderer, with a reviewed offline asset allowlist.
+  chessground:
+    path: third_party/chessground
   dartchess: ^0.13.1
   intl: 0.20.3
   multistockfish: ^0.6.1
@@ -79,6 +81,7 @@ flutter:
   assets:
     - LICENSE
     - THIRD_PARTY_NOTICES.md
+    - third_party/chessground/notices/
     - path: assets/models/maia3-5m.onnx
       flavors:
         - dev

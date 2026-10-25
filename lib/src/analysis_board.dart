@@ -604,6 +604,27 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
                     children: List.generate(
                       pieces.length,
                       (index) => ChoiceChip(
+                        avatar: Image(
+                          image:
+                              boardPreferencesOf(context)
+                                  .pieces
+                                  .assets[dc.Piece(
+                                color: _color == chess.Color.WHITE
+                                    ? dc.Side.white
+                                    : dc.Side.black,
+                                role: [
+                                  dc.Role.king,
+                                  dc.Role.queen,
+                                  dc.Role.rook,
+                                  dc.Role.bishop,
+                                  dc.Role.knight,
+                                  dc.Role.pawn,
+                                ][index],
+                              ).kind]!,
+                          width: 24,
+                          height: 24,
+                          excludeFromSemantics: true,
+                        ),
                         label: Text(labels[index]),
                         selected: _piece == pieces[index],
                         onSelected: (_) =>

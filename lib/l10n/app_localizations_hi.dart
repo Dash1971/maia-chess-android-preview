@@ -1511,4 +1511,10 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get boardPreferenceError =>
       'बोर्ड की सेटिंग सहेजी नहीं जा सकीं। कृपया फिर से प्रयास करें।';
+
+  @override
+  String get boardDesign => 'बोर्ड की डिज़ाइन';
+
+  @override
+  String get boardPieceSet => 'मोहरे';
 }

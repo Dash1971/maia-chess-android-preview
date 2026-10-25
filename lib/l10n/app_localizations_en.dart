@@ -1493,4 +1493,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get boardPreferenceError =>
       'Could not save board settings. Please try again.';
+
+  @override
+  String get boardDesign => 'Board';
+
+  @override
+  String get boardPieceSet => 'Piece set';
 }

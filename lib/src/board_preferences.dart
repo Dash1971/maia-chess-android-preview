@@ -5,6 +5,8 @@ const boardPreferenceKey = 'boardPreferencesV1';
 @immutable
 class BoardPreferences {
   const BoardPreferences({
+    this.board = BoardDesign.brown,
+    this.pieces = PieceDesign.cburnett,
     this.coordinates = true,
     this.legalMoves = true,
     this.lastMove = true,
@@ -13,6 +15,8 @@ class BoardPreferences {
     this.dragTarget = cg.DragTargetKind.circle,
   });
 
+  final BoardDesign board;
+  final PieceDesign pieces;
   final bool coordinates, legalMoves, lastMove, animation, magnify;
   final cg.DragTargetKind dragTarget;
 
@@ -23,6 +27,16 @@ class BoardPreferences {
       // A malformed field falls back independently, preserving valid choices.
       bool flag(String key) => data[key] is bool ? data[key] as bool : true;
       return BoardPreferences(
+        board:
+            BoardDesign.values
+                .where((value) => value.name == data['board'])
+                .firstOrNull ??
+            BoardDesign.brown,
+        pieces:
+            PieceDesign.values
+                .where((value) => value.name == data['pieces'])
+                .firstOrNull ??
+            PieceDesign.cburnett,
         coordinates: flag('coordinates'),
         legalMoves: flag('legalMoves'),
         lastMove: flag('lastMove'),
@@ -40,6 +54,8 @@ class BoardPreferences {
   }
 
   String encode() => jsonEncode({
+    'board': board.name,
+    'pieces': pieces.name,
     'coordinates': coordinates,
     'legalMoves': legalMoves,
     'lastMove': lastMove,
@@ -49,6 +65,8 @@ class BoardPreferences {
   });
 
   BoardPreferences copyWith({
+    BoardDesign? board,
+    PieceDesign? pieces,
     bool? coordinates,
     bool? legalMoves,
     bool? lastMove,
@@ -56,6 +74,8 @@ class BoardPreferences {
     bool? magnify,
     cg.DragTargetKind? dragTarget,
   }) => BoardPreferences(
+    board: board ?? this.board,
+    pieces: pieces ?? this.pieces,
     coordinates: coordinates ?? this.coordinates,
     legalMoves: legalMoves ?? this.legalMoves,
     lastMove: lastMove ?? this.lastMove,
@@ -66,6 +86,8 @@ class BoardPreferences {
 
   cg.ChessboardSettings get interactiveSettings =>
       mobileMaiaInteractiveBoardSettings.copyWith(
+        colorScheme: board.scheme,
+        pieceAssets: pieces.assets,
         enableCoordinates: coordinates,
         showValidMoves: legalMoves,
         showLastMove: lastMove,
@@ -79,6 +101,8 @@ class BoardPreferences {
       );
 
   cg.StaticChessboardSettings get editorSettings => cg.StaticChessboardSettings(
+    colorScheme: board.scheme,
+    pieceAssets: pieces.assets,
     enableCoordinates: coordinates,
     // Preserve the editor's previous 200 ms duration when enabled.
     animationDuration: animation
@@ -122,6 +146,7 @@ class BoardPreferencesController extends ChangeNotifier {
       if (!_disposed && revision == _revision) {
         value = BoardPreferences.decode(stored);
         notifyListeners();
+        _releaseUnusedPieceImages();
       }
     } catch (error, stack) {
       _failure(revision, error, stack);
@@ -134,6 +159,7 @@ class BoardPreferencesController extends ChangeNotifier {
     value = next;
     persistenceFailed = false;
     notifyListeners();
+    _releaseUnusedPieceImages();
     return _pendingWrite = _pendingWrite.then((_) async {
       try {
         await _write(next.encode());
@@ -143,6 +169,24 @@ class BoardPreferencesController extends ChangeNotifier {
         }
       } catch (error, stack) {
         _failure(revision, error, stack);
+      }
+    });
+  }
+
+  // All app boards read this scope. Wait until their settings/painters have
+  // switched before disposing old raw images; never evict during a paint.
+  void _releaseUnusedPieceImages() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_disposed) return;
+      final scheme = value.board.scheme;
+      final keep = {
+        ...value.pieces.assets.values,
+        if (scheme.lastMove.image != null) scheme.lastMove.image!,
+        if (scheme.selected.image != null) scheme.selected.image!,
+      };
+      final cache = cg.ChessgroundImages.instance;
+      for (final key in cache.keys) {
+        if (!keep.contains(key)) cache.evict(key);
       }
     });
   }
@@ -266,6 +310,40 @@ class BoardSettingsSection extends StatelessWidget {
               child: Text(
                 strings.boardSettings,
                 style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          const Divider(height: 1),
+          ListTile(
+            key: const ValueKey('board-design-selector'),
+            leading: SizedBox.square(
+              dimension: 44,
+              child: value.board.scheme.background,
+            ),
+            title: Text(strings.boardDesign),
+            subtitle: Text(value.board.label),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const BoardStylePicker(pieceSets: false),
+              ),
+            ),
+          ),
+          ListTile(
+            key: const ValueKey('board-piece-selector'),
+            leading: SizedBox.square(
+              dimension: 44,
+              child: Image(
+                image: value.pieces.assets[dc.PieceKind.whiteKnight]!,
+                excludeFromSemantics: true,
+              ),
+            ),
+            title: Text(strings.boardPieceSet),
+            subtitle: Text(value.pieces.label),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const BoardStylePicker(pieceSets: true),
               ),
             ),
           ),

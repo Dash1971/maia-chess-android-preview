@@ -57,6 +57,8 @@ void main() {
         final boardState = tester.state(find.byType(cg.Chessboard));
         await prefs.select(
           BoardPreferences(
+            board: BoardDesign.blue,
+            pieces: PieceDesign.merida,
             coordinates: !disabled,
             legalMoves: !disabled,
             lastMove: !disabled,

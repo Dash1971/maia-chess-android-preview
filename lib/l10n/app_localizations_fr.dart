@@ -1514,4 +1514,10 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get boardPreferenceError =>
       'Impossible d’enregistrer les réglages de l’échiquier. Réessayez.';
+
+  @override
+  String get boardDesign => 'Échiquier';
+
+  @override
+  String get boardPieceSet => 'Jeu de pièces';
 }

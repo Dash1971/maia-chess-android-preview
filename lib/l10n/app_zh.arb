@@ -415,5 +415,7 @@
   "boardTargetCircle": "圆形",
   "boardTargetSquare": "方形",
   "boardTargetNone": "无",
-  "boardPreferenceError": "无法保存棋盘设置。请重试。"
+  "boardPreferenceError": "无法保存棋盘设置。请重试。",
+  "boardDesign": "棋盘",
+  "boardPieceSet": "棋子样式"
 }

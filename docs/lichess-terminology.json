@@ -2337,6 +2337,43 @@
         "pt": "Nenhum"
       },
       "adaptations": {}
+    },
+    "boardDesign": {
+      "upstream_key": "board",
+      "upstream": {
+        "en": "Board",
+        "ja": "盤のデザイン",
+        "zh": "棋盘",
+        "ko": "보드",
+        "es": "Tablero",
+        "de": "Brett",
+        "fr": "Échiquier",
+        "ru": "Доска",
+        "hi": null,
+        "pt": "Tabuleiro"
+      },
+      "adaptations": {
+        "hi": {
+          "value": "बोर्ड की डिज़ाइन",
+          "reason": "Pinned upstream catalog has no value; use a native Hindi label for this visual selector."
+        }
+      }
+    },
+    "boardPieceSet": {
+      "upstream_key": "pieceSet",
+      "upstream": {
+        "en": "Piece set",
+        "ja": "駒のデザイン",
+        "zh": "棋子样式",
+        "ko": "기물 세트",
+        "es": "Estilo de piezas",
+        "de": "Figurenstil",
+        "fr": "Jeu de pièces",
+        "ru": "Оформление фигур",
+        "hi": "मोहरे",
+        "pt": "Estilo das peças"
+      },
+      "adaptations": {}
     }
   }
 }

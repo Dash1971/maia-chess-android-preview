@@ -415,5 +415,7 @@
   "boardTargetCircle": "Круглая",
   "boardTargetSquare": "Квадратная",
   "boardTargetNone": "Нет",
-  "boardPreferenceError": "Не удалось сохранить настройки доски. Повторите попытку."
+  "boardPreferenceError": "Не удалось сохранить настройки доски. Повторите попытку.",
+  "boardDesign": "Доска",
+  "boardPieceSet": "Оформление фигур"
 }

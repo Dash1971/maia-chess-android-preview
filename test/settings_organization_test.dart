@@ -111,6 +111,8 @@ void main() {
           pureBlack: true,
         ).encode(),
         boardPreferenceKey: const BoardPreferences(
+          board: BoardDesign.blue,
+          pieces: PieceDesign.merida,
           coordinates: false,
           lastMove: false,
         ).encode(),
@@ -297,7 +299,10 @@ void main() {
           'humanTiming': true,
           samplingCapturePreference: true,
           appLanguagePreferenceKey: locale.languageCode,
-          boardPreferenceKey: const BoardPreferences(coordinates: false, magnify: false).encode(),
+          boardPreferenceKey: const BoardPreferences(
+            coordinates: false,
+            magnify: false,
+          ).encode(),
         };
         SharedPreferences.setMockInitialValues(before);
         await tester.pumpWidget(settingsApp(locale: locale, scale: 2));

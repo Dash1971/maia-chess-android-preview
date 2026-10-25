@@ -401,3 +401,11 @@ Japanese animation wording omits the upstream speed qualifier because this is a
 boolean switch. Each adaptation is recorded in the terminology reference. The
 persistence error is app-specific prose. These translations remain subject to
 native-speaker review.
+
+## Board and piece design selectors (#177)
+
+Board design and Piece set use pinned Lichess `board` and `pieceSet` terms,
+including native Hindi fallbacks where the upstream catalog has no value.
+Design names remain Lichess's artwork proper names, including Cburnett and
+Kiwen-suwi, in every language. Selected state is exposed through native semantics
+in addition to its visible checkmark. Persistence errors reuse the board-aid text.
