@@ -1427,28 +1427,6 @@ class AppLocalizationsDe extends AppLocalizations {
       'Der bebilderte Leitfaden erklärt die Forschung hinter diesen Entscheidungen und verlinkt die vollständigen Ergebnisse.';
 
   @override
-  String get samplingTechnicalTemperature =>
-      'Die Temperatur skaliert die Modell-Logits legaler Züge vor Softmax. Bei T > 0 ist jedes Gewicht exp((Logit − maximaler Logit) / T) und wird anschließend normalisiert. T = 1 erhält die Modellverteilung; kleineres T konzentriert sie auf höher bewertete Kandidaten. T = 0 wählt direkt ein Argmax und ignoriert Top-P.';
-
-  @override
-  String get samplingTechnicalTopP =>
-      'Top-P sortiert die angepassten Wahrscheinlichkeiten absteigend und behält die kleinste Anfangsmenge, die den Schwellenwert erreicht, einschließlich des überschreitenden Zuges. Vor der Zufallsauswahl werden die verbleibenden Wahrscheinlichkeiten erneut normalisiert. P = 1 behält alle Züge, P = 0 einen mit höchster Wahrscheinlichkeit. P = 0,95 entfernt höchstens 5% der gesamten Wahrscheinlichkeit, nicht jeden Zug mit weniger als 5% Einzelwahrscheinlichkeit.';
-
-  @override
-  String get samplingTechnicalOpening =>
-      'Standard: Temperatur 1,0, Top-P 0,95, maximale Eröffnungsvielfalt an. Für FEN-Vollzugnummern 1–5 gilt für beide Farben 1,0 / 1,0; ab Zug 6 gelten die eingestellten Werte. Das Fortsetzen einer Partie oder Stellung setzt den Zähler nicht zurück. Die Prozente im Analysebrett bleiben Modellwahrscheinlichkeiten vor Anwendung dieser Spieleinstellungen.';
-
-  @override
-  String get samplingTechnicalEvidence =>
-      'Mit dem 79M-Modell, ohne Stellungsverlauf und bei Rating-Eingabe 1600 erzielten die vorgeschlagenen Standardwerte in 600 Partien gegen 1,0 / 1,0 einen Score von 60,7% (95%-Intervall: 56,8–64,6%). Frühere Argmax-Tests ergaben rund 300 Elo Vorsprung im direkten Vergleich. Das sind keine gegen Menschen kalibrierten Ratings. Fünf Züge sind eine Designentscheidung, kein bewiesenes Optimum. Wahrscheinlichkeitsfilter garantieren keine guten Züge.';
-
-  @override
-  String get samplingSimpleExplanation => 'Einfach erklärt';
-
-  @override
-  String get samplingTechnicalExplanation => 'Technische Erklärung';
-
-  @override
   String get samplingFullVarietyNotice =>
       'Mit Temperatur und Top-P 1,0 / 1,0 kann Maia häufiger ungewöhnliche grobe Patzer spielen.';
 

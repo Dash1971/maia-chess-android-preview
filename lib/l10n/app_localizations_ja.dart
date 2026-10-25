@@ -1322,28 +1322,6 @@ class AppLocalizationsJa extends AppLocalizations {
       '設定を選んだ理由を図で紹介しています。詳しい研究結果へのリンクもあります。';
 
   @override
-  String get samplingTechnicalTemperature =>
-      '温度は、モデルの合法手のロジットを調整してからsoftmaxを適用します。T > 0では各重みをexp((ロジット − 最大ロジット) / T)として正規化します。T = 1はモデルの分布を保ち、Tを下げるほど上位の手に確率が集中します。T = 0ではargmaxを直接選び、Top-Pは無視されます。';
-
-  @override
-  String get samplingTechnicalTopP =>
-      'Top-Pは温度適用後の確率を降順に並べ、合計がしきい値に達する最小の候補群を残します。しきい値を超える手も含めます。残った確率を再正規化して抽選します。P = 1は全候補、P = 0は最高確率の1手を残します。P = 0.95が除くのは全確率の最大5%であり、個別に5%未満の手すべてではありません。';
-
-  @override
-  String get samplingTechnicalOpening =>
-      '初期設定は温度 1.0、Top-P 0.95、序盤の多様性オンです。どちらの色でもFENの手数1〜5では1.0 / 1.0を使い、6手目から設定値を使います。保存した対局の再開や途中局面からの対局で手数はリセットされません。解析盤の割合表示は、これらの対局設定を適用する前のモデルの確率です。';
-
-  @override
-  String get samplingTechnicalEvidence =>
-      '79Mモデル、過去の局面を使わない設定、レーティング入力1600での600局では、提案する初期設定は1.0 / 1.0に対して60.7%の得点率でした（95%区間56.8〜64.6%）。以前のargmax実験では約300 Elo相当の対戦上の優位がありました。いずれも直接対戦の結果で、人間のレーティングへの換算ではありません。5手は設計上の選択で、最適と実証された値ではなく、確率による絞り込みは好手を保証しません。';
-
-  @override
-  String get samplingSimpleExplanation => 'やさしい説明';
-
-  @override
-  String get samplingTechnicalExplanation => '技術的な説明';
-
-  @override
   String get samplingFullVarietyNotice =>
       '温度とTop-Pが1.0 / 1.0の場合、Maiaが意外な大悪手を指すことが増える可能性があります。';
 

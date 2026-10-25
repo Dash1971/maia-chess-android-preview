@@ -1424,28 +1424,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Consulta la guía visual para conocer la investigación que respalda estas decisiones y acceder a los resultados completos.';
 
   @override
-  String get samplingTechnicalTemperature =>
-      'La temperatura ajusta los logits de las jugadas legales antes de aplicar softmax. Con T > 0, cada peso es exp((logit − logit máximo) / T), y después se normaliza. T = 1 conserva la distribución del modelo; un T menor concentra la probabilidad en las jugadas con mayor puntuación. T = 0 elige directamente un argmax e ignora Top-P.';
-
-  @override
-  String get samplingTechnicalTopP =>
-      'Top-P ordena las probabilidades ajustadas de mayor a menor y conserva el menor conjunto inicial que alcanza el umbral, incluida la jugada que lo supera. Renormaliza las probabilidades conservadas antes de sortear la jugada. P = 1 conserva todas; P = 0, una de máxima probabilidad. P = 0,95 elimina como máximo un 5% de la probabilidad total, no todas las jugadas cuya probabilidad individual sea inferior al 5%.';
-
-  @override
-  String get samplingTechnicalOpening =>
-      'Valores predeterminados: temperatura 1,0, Top-P 0,95 y máxima variedad en la apertura activada. Se usa 1,0 / 1,0 en los números de jugada completa 1–5 del FEN para ambos bandos, y los valores configurados desde la sexta. Reanudar o continuar desde una posición no reinicia la cuenta. Los porcentajes del tablero de análisis siguen siendo las probabilidades del modelo antes de estos ajustes de juego.';
-
-  @override
-  String get samplingTechnicalEvidence =>
-      'Con el modelo 79M, el historial desactivado y el nivel 1600, los valores propuestos obtuvieron un 60,7% de los puntos frente a 1,0 / 1,0 en 600 partidas (intervalo del 95%: 56,8–64,6%). Las pruebas anteriores de argmax dieron una ventaja de unos 300 Elo. Son resultados de enfrentamientos directos, no valoraciones calibradas frente a humanos. Cinco jugadas es una decisión de diseño, no un óptimo demostrado; filtrar por probabilidad no garantiza buenas jugadas.';
-
-  @override
-  String get samplingSimpleExplanation => 'Explicación sencilla';
-
-  @override
-  String get samplingTechnicalExplanation => 'Explicación técnica';
-
-  @override
   String get samplingFullVarietyNotice =>
       'Maia puede cometer más errores graves poco habituales con temperatura y Top-P en 1,0 / 1,0.';
 

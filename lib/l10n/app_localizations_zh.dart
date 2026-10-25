@@ -1301,28 +1301,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get samplingHelpResearchIntro => '查看图解指南，了解这些选择背后的研究，并访问完整结果。';
 
   @override
-  String get samplingTechnicalTemperature =>
-      '温度先缩放模型的合法走法logit，再应用softmax。T > 0时，各权重为exp((logit − 最大logit) / T)，随后归一化。T = 1保留模型分布；降低T会使概率集中到分数更高的走法。T = 0直接选择argmax，忽略Top-P。';
-
-  @override
-  String get samplingTechnicalTopP =>
-      'Top-P将温度调整后的概率按降序排列，保留累计概率达到阈值的最小前缀，包括跨过阈值的那一步。对保留的概率重新归一化后抽样。P = 1保留全部走法；P = 0保留一个概率最高的走法。P = 0.95最多去掉总概率的5%，并非去掉所有单独概率低于5%的走法。';
-
-  @override
-  String get samplingTechnicalOpening =>
-      '默认设置为温度 1.0、Top-P 0.95，并开启开局多样性。双方在FEN完整回合数1–5时使用1.0 / 1.0，第六回合起使用配置值。恢复对局或从某局面继续不会重新计数。分析棋盘的百分比仍是应用这些对局设置前的模型概率。';
-
-  @override
-  String get samplingTechnicalEvidence =>
-      '在79M模型、关闭历史输入、等级分输入1600的600局中，提议的默认设置对1.0 / 1.0取得60.7%的得分率（95%区间56.8–64.6%）。此前argmax测试的对战优势约为300 Elo。这些是直接对战结果，并非校准后的人类等级分。五步是设计选择，不是已证实的最优值；按概率筛选不能保证好棋。';
-
-  @override
-  String get samplingSimpleExplanation => '简单说明';
-
-  @override
-  String get samplingTechnicalExplanation => '技术说明';
-
-  @override
   String get samplingFullVarietyNotice =>
       '温度和Top-P为1.0 / 1.0时，Maia可能走出更多不寻常的败着。';
 

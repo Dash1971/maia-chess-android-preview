@@ -1323,28 +1323,6 @@ class AppLocalizationsKo extends AppLocalizations {
       '이 선택의 근거가 된 연구와 전체 결과 링크를 시각적 가이드에서 확인하세요.';
 
   @override
-  String get samplingTechnicalTemperature =>
-      '온도는 모델의 합법적인 수 로짓을 조정한 뒤 softmax를 적용합니다. T > 0이면 각 가중치는 exp((로짓 − 최대 로짓) / T)이며 이후 정규화합니다. T = 1은 모델 분포를 유지하고, 낮은 T는 높은 점수의 수에 확률을 집중시킵니다. T = 0은 argmax를 직접 선택하고 Top-P를 무시합니다.';
-
-  @override
-  String get samplingTechnicalTopP =>
-      'Top-P는 온도 적용 후 확률을 내림차순으로 정렬하고, 누적 확률이 기준에 도달하는 최소 후보 집합을 남깁니다. 기준을 넘기는 수도 포함합니다. 남은 확률을 다시 정규화해 추출합니다. P = 1은 모든 수를, P = 0은 가장 확률 높은 수 하나를 남깁니다. P = 0.95는 전체 확률의 최대 5%를 제거하며, 개별 확률이 5% 미만인 모든 수를 제거하는 것은 아닙니다.';
-
-  @override
-  String get samplingTechnicalOpening =>
-      '기본값은 온도 1.0, Top-P 0.95, 오프닝 다양성 켜기입니다. 어느 색이든 FEN의 전체 수 번호 1–5에는 1.0 / 1.0을, 여섯 번째 수부터는 설정값을 사용합니다. 저장 대국을 재개하거나 특정 위치에서 이어 두어도 번호는 초기화되지 않습니다. 분석 보드의 백분율은 이러한 대국 설정을 적용하기 전 모델 확률입니다.';
-
-  @override
-  String get samplingTechnicalEvidence =>
-      '79M 모델, 이전 포지션 사용 끄기, 레이팅 입력 1600의 600국에서 제안된 기본값은 1.0 / 1.0을 상대로 60.7%를 득점했습니다(95% 구간 56.8–64.6%). 이전 argmax 시험에서는 약 300 Elo의 대결 우위를 보였습니다. 이는 직접 대결 결과이며 사람의 레이팅으로 보정한 값이 아닙니다. 다섯 수는 설계상의 선택이지 검증된 최적값이 아니며, 확률 필터링이 좋은 수를 보장하지는 않습니다.';
-
-  @override
-  String get samplingSimpleExplanation => '쉬운 설명';
-
-  @override
-  String get samplingTechnicalExplanation => '기술적 설명';
-
-  @override
   String get samplingFullVarietyNotice =>
       '온도와 Top-P가 1.0 / 1.0이면 Maia가 뜻밖의 블런더를 더 자주 둘 수 있습니다.';
 

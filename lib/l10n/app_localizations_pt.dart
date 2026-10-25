@@ -1432,28 +1432,6 @@ class AppLocalizationsPt extends AppLocalizations {
       'O guia visual explica a pesquisa por trás dessas escolhas e traz links para os resultados completos.';
 
   @override
-  String get samplingTechnicalTemperature =>
-      'A temperatura ajusta os logits dos lances legais antes do softmax. Para T > 0, cada peso é exp((logit − logit máximo) / T), seguido de normalização. T = 1 preserva a distribuição do modelo; reduzir T concentra a probabilidade nos candidatos com maior pontuação. T = 0 escolhe diretamente um argmax e ignora Top-P.';
-
-  @override
-  String get samplingTechnicalTopP =>
-      'Top-P ordena as probabilidades ajustadas da maior para a menor e mantém o menor prefixo que atinge o limite, incluindo o lance que o ultrapassa. As probabilidades restantes são normalizadas novamente antes do sorteio. P = 1 mantém todos os lances; P = 0 mantém um de maior probabilidade. P = 0,95 remove no máximo 5% da probabilidade total, e não todos os lances com probabilidade individual inferior a 5%.';
-
-  @override
-  String get samplingTechnicalOpening =>
-      'Padrões: temperatura 1,0, Top-P 0,95 e variedade máxima na abertura ativada. Para ambas as cores, os números de lance completo 1–5 do FEN usam 1,0 / 1,0, e os valores configurados valem a partir do sexto. Retomar uma partida ou continuar de uma posição não reinicia a contagem. As porcentagens do tabuleiro de análise continuam sendo as probabilidades do modelo antes desses ajustes de jogo.';
-
-  @override
-  String get samplingTechnicalEvidence =>
-      'Com o modelo 79M, histórico desativado e nível 1600, os padrões propostos marcaram 60,7% dos pontos contra 1,0 / 1,0 em 600 partidas (intervalo de 95%: 56,8–64,6%). Testes anteriores de argmax deram cerca de 300 Elo de vantagem no confronto. São resultados de confrontos diretos, não ratings calibrados contra humanos. Cinco lances é uma escolha de projeto, não um ótimo comprovado; filtrar por probabilidade não garante bons lances.';
-
-  @override
-  String get samplingSimpleExplanation => 'Explicação simples';
-
-  @override
-  String get samplingTechnicalExplanation => 'Explicação técnica';
-
-  @override
   String get samplingFullVarietyNotice =>
       'Maia pode cometer mais erros graves incomuns com temperatura e Top-P em 1,0 / 1,0.';
 

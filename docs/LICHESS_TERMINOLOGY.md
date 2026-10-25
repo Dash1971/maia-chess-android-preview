@@ -364,3 +364,23 @@ conventional Top-P identifier. Their terminology does not replace Maia's own
 sampling algorithm, edge cases, opening override, defaults or research results.
 The quality review records source-language fallbacks and editorial corrections,
 including reports, reset warnings, prose numbers and grammatical consistency.
+
+## English engine help review (2026-10-25)
+
+The English Temperature/Top-P dialog now uses the approved single explanation,
+including opening probabilities, the Temperature 0.5 example, cumulative Top-P
+filtering, and the first-five-moves override. Its technical/simple selector and
+six obsolete localization messages were removed in all catalogs. The English
+move-history help is shorter and retains the research link and off recommendation.
+
+This is an English copy review. The nine other languages retain their previous
+simple explanation and history help pending translation review; they do not fall
+back to English. The six existing samplingHelp message IDs remain in reading
+order, with revised English section boundaries documented in their descriptions.
+No direct Lichess equivalents were introduced. Regenerate the review CSV and
+localization code; verify the dialog and both research links at 200% text size.
+
+This Preview change describes Preview's 1.0 / 0.95 defaults with opening variety
+on. Stable retains its own 1.0 / 1.0 defaults; the full text must not be copied
+there until those defaults are promoted. No build, CI or cleanup tooling changes
+require a companion PR.
