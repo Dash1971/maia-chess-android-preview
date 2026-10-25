@@ -1480,4 +1480,38 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appearanceSystemDefault => 'Thème de l\'appareil';
+
+  @override
+  String get boardSettings => 'Échiquier';
+
+  @override
+  String get boardCoordinates => 'Coordonnées';
+
+  @override
+  String get boardLegalMoves => 'Destinations des coups légaux';
+
+  @override
+  String get boardLastMove => 'Surbrillance du dernier coup';
+
+  @override
+  String get boardAnimation => 'Animation des pièces';
+
+  @override
+  String get boardMagnify => 'Grossir la pièce déplacée';
+
+  @override
+  String get boardDragTarget => 'Cible de la pièce déplacée';
+
+  @override
+  String get boardTargetCircle => 'Cercle';
+
+  @override
+  String get boardTargetSquare => 'Carré';
+
+  @override
+  String get boardTargetNone => 'Aucune';
+
+  @override
+  String get boardPreferenceError =>
+      'Impossible d’enregistrer les réglages de l’échiquier. Réessayez.';
 }

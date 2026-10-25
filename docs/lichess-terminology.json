@@ -2008,6 +2008,335 @@
           "reason": "Use the main-line noun as a navigation destination, not the upstream action that promotes a variation. Include any article required by the existing localized Hold for destination phrase."
         }
       }
+    },
+    "boardSettings": {
+      "upstream_key": "mobileBoardSettings",
+      "upstream": {
+        "en": "Board settings",
+        "ja": "盤面の設定",
+        "zh": "棋盘设置",
+        "ko": "체스판 설정",
+        "es": "Configuración del tablero",
+        "de": "Bretteinstellungen",
+        "fr": "Paramètres de l'échiquier",
+        "ru": "Настройки доски",
+        "hi": "बोर्ड सेटिंग्स",
+        "pt": "Configurações do tabuleiro"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Board",
+          "reason": "Compact section heading; covers appearance and board aids, not only board artwork."
+        },
+        "ja": {
+          "value": "盤",
+          "reason": "Compact section heading; covers appearance and board aids, not only board artwork."
+        },
+        "zh": {
+          "value": "棋盘",
+          "reason": "Compact section heading; covers appearance and board aids, not only board artwork."
+        },
+        "ko": {
+          "value": "보드",
+          "reason": "Compact section heading; covers appearance and board aids, not only board artwork."
+        },
+        "es": {
+          "value": "Tablero",
+          "reason": "Compact section heading; covers appearance and board aids, not only board artwork."
+        },
+        "de": {
+          "value": "Brett",
+          "reason": "Compact section heading; covers appearance and board aids, not only board artwork."
+        },
+        "fr": {
+          "value": "Échiquier",
+          "reason": "Compact section heading; covers appearance and board aids, not only board artwork."
+        },
+        "ru": {
+          "value": "Доска",
+          "reason": "Compact section heading; covers appearance and board aids, not only board artwork."
+        },
+        "hi": {
+          "value": "बोर्ड",
+          "reason": "Compact section heading; covers appearance and board aids, not only board artwork."
+        },
+        "pt": {
+          "value": "Tabuleiro",
+          "reason": "Compact section heading; covers appearance and board aids, not only board artwork."
+        }
+      }
+    },
+    "boardCoordinates": {
+      "upstream_key": "preferencesBoardCoordinates",
+      "upstream": {
+        "en": "Board coordinates (A-H, 1-8)",
+        "ja": "マスの座標（A-H, 1-8）",
+        "zh": "棋盘坐标 (A-H, 1-8)",
+        "ko": "보드 좌표 (A-H, 1-8)",
+        "es": "Coordenadas del tablero (A-H, 1-8)",
+        "de": "Brettkoordinaten (A-H, 1-8)",
+        "fr": "Coordonnées (a-h, 1-8)",
+        "ru": "Координаты доски (A–H, 1–8)",
+        "hi": "बोर्ड का निर्देशांक (A-H, 1-8)",
+        "pt": "Coordenadas do tabuleiro (A-H, 1-8)"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Board coordinates",
+          "reason": "Omit the explanatory coordinate range in this compact switch label."
+        },
+        "ja": {
+          "value": "マスの座標",
+          "reason": "Omit the explanatory coordinate range in this compact switch label."
+        },
+        "zh": {
+          "value": "棋盘坐标",
+          "reason": "Omit the explanatory coordinate range in this compact switch label."
+        },
+        "ko": {
+          "value": "보드 좌표",
+          "reason": "Omit the explanatory coordinate range in this compact switch label."
+        },
+        "es": {
+          "value": "Coordenadas del tablero",
+          "reason": "Omit the explanatory coordinate range in this compact switch label."
+        },
+        "de": {
+          "value": "Brettkoordinaten",
+          "reason": "Omit the explanatory coordinate range in this compact switch label."
+        },
+        "fr": {
+          "value": "Coordonnées",
+          "reason": "Omit the explanatory coordinate range in this compact switch label."
+        },
+        "ru": {
+          "value": "Координаты доски",
+          "reason": "Omit the explanatory coordinate range in this compact switch label."
+        },
+        "hi": {
+          "value": "बोर्ड के निर्देशांक",
+          "reason": "Omit the explanatory coordinate range in this compact switch label."
+        },
+        "pt": {
+          "value": "Coordenadas do tabuleiro",
+          "reason": "Omit the explanatory coordinate range in this compact switch label."
+        }
+      }
+    },
+    "boardLegalMoves": {
+      "upstream_key": "preferencesPieceDestinations",
+      "upstream": {
+        "en": "Piece destinations (valid moves and premoves)",
+        "ja": "駒の行き先（ルール上動けるマス、プリムーブ）",
+        "zh": "棋子落点（有效着法及预走棋）",
+        "ko": "기물 착지점 표시 (유효한 움직임 및 미리두기)",
+        "es": "Destino de las piezas (movimientos válidos y anticipados)",
+        "de": "Zielfelder markieren (gültige Züge und Vorauszüge)",
+        "fr": "Cases de destination (coups et pré-coups légaux)",
+        "ru": "Показывать допустимые ходы",
+        "hi": "मोहरों का गंतव्य (मान्य चालें और पहले से चुनी आई चालें)",
+        "pt": "Destino das peças (movimentos válidos e pré-movimentos)"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Legal-move destinations",
+          "reason": "Name legal destination marks explicitly; committed premove overlays remain separate. Available premove destination dots follow the Chessground destination switch."
+        },
+        "ja": {
+          "value": "合法手の移動先",
+          "reason": "Name legal destination marks explicitly; committed premove overlays remain separate. Available premove destination dots follow the Chessground destination switch."
+        },
+        "zh": {
+          "value": "合法走法落点",
+          "reason": "Name legal destination marks explicitly; committed premove overlays remain separate. Available premove destination dots follow the Chessground destination switch."
+        },
+        "ko": {
+          "value": "합법적인 이동 칸",
+          "reason": "Name legal destination marks explicitly; committed premove overlays remain separate. Available premove destination dots follow the Chessground destination switch."
+        },
+        "es": {
+          "value": "Destinos de movimientos legales",
+          "reason": "Name legal destination marks explicitly; committed premove overlays remain separate. Available premove destination dots follow the Chessground destination switch."
+        },
+        "de": {
+          "value": "Legale Zielfelder",
+          "reason": "Name legal destination marks explicitly; committed premove overlays remain separate. Available premove destination dots follow the Chessground destination switch."
+        },
+        "fr": {
+          "value": "Destinations des coups légaux",
+          "reason": "Name legal destination marks explicitly; committed premove overlays remain separate. Available premove destination dots follow the Chessground destination switch."
+        },
+        "ru": {
+          "value": "Поля допустимых ходов",
+          "reason": "Name legal destination marks explicitly; committed premove overlays remain separate. Available premove destination dots follow the Chessground destination switch."
+        },
+        "hi": {
+          "value": "वैध चालों के गंतव्य",
+          "reason": "Name legal destination marks explicitly; committed premove overlays remain separate. Available premove destination dots follow the Chessground destination switch."
+        },
+        "pt": {
+          "value": "Destinos de lances legais",
+          "reason": "Name legal destination marks explicitly; committed premove overlays remain separate. Available premove destination dots follow the Chessground destination switch."
+        }
+      }
+    },
+    "boardLastMove": {
+      "upstream_key": "preferencesBoardHighlights",
+      "upstream": {
+        "en": "Board highlights (last move and check)",
+        "ja": "盤上のハイライト表示（最後の手、チェック）",
+        "zh": "棋盘高亮（最后一步与将军）",
+        "ko": "보드 하이라이트 (마지막 수 및 체크)",
+        "es": "Destacar casillas del tablero (último movimiento y jaque)",
+        "de": "Markierungen auf dem Brett (letzter Zug und Schach)",
+        "fr": "Mettre en évidence les cases (dernier coup et échec)",
+        "ru": "Подсвечивать последний ход и шах",
+        "hi": "बोर्ड का हाइलाइट (आख़िरी चाल और शह)",
+        "pt": "Destacar casas do tabuleiro (último movimento e xeque)"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Last-move highlight",
+          "reason": "This switch affects only the last move, never check or selected-square highlights."
+        },
+        "ja": {
+          "value": "直前の手の強調表示",
+          "reason": "This switch affects only the last move, never check or selected-square highlights."
+        },
+        "zh": {
+          "value": "上一步高亮",
+          "reason": "This switch affects only the last move, never check or selected-square highlights."
+        },
+        "ko": {
+          "value": "마지막 수 강조",
+          "reason": "This switch affects only the last move, never check or selected-square highlights."
+        },
+        "es": {
+          "value": "Resaltar el último movimiento",
+          "reason": "This switch affects only the last move, never check or selected-square highlights."
+        },
+        "de": {
+          "value": "Letzten Zug hervorheben",
+          "reason": "This switch affects only the last move, never check or selected-square highlights."
+        },
+        "fr": {
+          "value": "Surbrillance du dernier coup",
+          "reason": "This switch affects only the last move, never check or selected-square highlights."
+        },
+        "ru": {
+          "value": "Подсветка последнего хода",
+          "reason": "This switch affects only the last move, never check or selected-square highlights."
+        },
+        "hi": {
+          "value": "पिछली चाल को उभारें",
+          "reason": "This switch affects only the last move, never check or selected-square highlights."
+        },
+        "pt": {
+          "value": "Destacar o último lance",
+          "reason": "This switch affects only the last move, never check or selected-square highlights."
+        }
+      }
+    },
+    "boardAnimation": {
+      "upstream_key": "preferencesPieceAnimation",
+      "upstream": {
+        "en": "Piece animation",
+        "ja": "駒のアニメーション速度",
+        "zh": "棋子动画",
+        "ko": "기물 움직임 애니메이션",
+        "es": "Animación de las piezas",
+        "de": "Figurenanimation",
+        "fr": "Animation des pièces",
+        "ru": "Анимация фигур",
+        "hi": "मोहरों का एनीमेशन",
+        "pt": "Animação das peças"
+      },
+      "adaptations": {
+        "ja": {
+          "value": "駒のアニメーション",
+          "reason": "Boolean animation control, not a speed selector."
+        }
+      }
+    },
+    "boardMagnify": {
+      "upstream_key": "mobilePrefMagnifyDraggedPiece",
+      "upstream": {
+        "en": "Magnify dragged piece",
+        "ja": "ドラッグ中の駒を拡大",
+        "zh": "放大拖动的棋子",
+        "ko": "드래그 중 기물 확대",
+        "es": "Aumentar la pieza arrastrada",
+        "de": "Vergrößern der gezogenen Figur",
+        "fr": "Grossir la pièce déplacée",
+        "ru": "Увеличивать перетаскиваемую фигуру",
+        "hi": "घसीटते वक्त पीस बड़ा दिखाएं",
+        "pt": "Ampliar peça segurada"
+      },
+      "adaptations": {}
+    },
+    "boardDragTarget": {
+      "upstream_key": "mobileSettingsDraggedPieceTarget",
+      "upstream": {
+        "en": "Dragged piece target",
+        "ja": "ドラッグ移動時の駒の照準",
+        "zh": "拖动棋子落点标记",
+        "ko": "드래그 중 착지점 강조",
+        "es": "Marcador de destino de la pieza arrastrada",
+        "de": "Ziel der gezogenen Figur",
+        "fr": "Cible de la pièce déplacée",
+        "ru": "Цель передвинутой фигуры",
+        "hi": "खींचा गया टुकड़े का लक्ष्य",
+        "pt": "Alvo da peça arrastada"
+      },
+      "adaptations": {}
+    },
+    "boardTargetCircle": {
+      "upstream_key": "mobileSettingsDraggedTargetCircle",
+      "upstream": {
+        "en": "Circle",
+        "ja": "円形",
+        "zh": "圆形",
+        "ko": "원",
+        "es": "Círculo",
+        "de": "Kreis",
+        "fr": "Cercle",
+        "ru": "Круглая",
+        "hi": "घेरा",
+        "pt": "Círculo"
+      },
+      "adaptations": {}
+    },
+    "boardTargetSquare": {
+      "upstream_key": "mobileSettingsDraggedTargetSquare",
+      "upstream": {
+        "en": "Square",
+        "ja": "四角形",
+        "zh": "方形",
+        "ko": "칸",
+        "es": "Cuadrado",
+        "de": "Quadrat",
+        "fr": "Carré",
+        "ru": "Квадратная",
+        "hi": "वर्ग",
+        "pt": "Casa"
+      },
+      "adaptations": {}
+    },
+    "boardTargetNone": {
+      "upstream_key": "none",
+      "upstream": {
+        "en": "None",
+        "ja": "無効",
+        "zh": "无",
+        "ko": "없음",
+        "es": "Ninguna",
+        "de": "Keine",
+        "fr": "Aucune",
+        "ru": "Нет",
+        "hi": "कोई नहीं",
+        "pt": "Nenhum"
+      },
+      "adaptations": {}
     }
   }
 }

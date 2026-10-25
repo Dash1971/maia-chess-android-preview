@@ -1483,4 +1483,38 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get appearanceSystemDefault => 'Mit Gerät synchronisieren';
+
+  @override
+  String get boardSettings => 'Brett';
+
+  @override
+  String get boardCoordinates => 'Brettkoordinaten';
+
+  @override
+  String get boardLegalMoves => 'Legale Zielfelder';
+
+  @override
+  String get boardLastMove => 'Letzten Zug hervorheben';
+
+  @override
+  String get boardAnimation => 'Figurenanimation';
+
+  @override
+  String get boardMagnify => 'Vergrößern der gezogenen Figur';
+
+  @override
+  String get boardDragTarget => 'Ziel der gezogenen Figur';
+
+  @override
+  String get boardTargetCircle => 'Kreis';
+
+  @override
+  String get boardTargetSquare => 'Quadrat';
+
+  @override
+  String get boardTargetNone => 'Keine';
+
+  @override
+  String get boardPreferenceError =>
+      'Bretteinstellungen konnten nicht gespeichert werden. Bitte erneut versuchen.';
 }

@@ -1374,4 +1374,37 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get appearanceSystemDefault => 'デバイスの設定に従う';
+
+  @override
+  String get boardSettings => '盤';
+
+  @override
+  String get boardCoordinates => 'マスの座標';
+
+  @override
+  String get boardLegalMoves => '合法手の移動先';
+
+  @override
+  String get boardLastMove => '直前の手の強調表示';
+
+  @override
+  String get boardAnimation => '駒のアニメーション';
+
+  @override
+  String get boardMagnify => 'ドラッグ中の駒を拡大';
+
+  @override
+  String get boardDragTarget => 'ドラッグ移動時の駒の照準';
+
+  @override
+  String get boardTargetCircle => '円形';
+
+  @override
+  String get boardTargetSquare => '四角形';
+
+  @override
+  String get boardTargetNone => '無効';
+
+  @override
+  String get boardPreferenceError => '盤の設定を保存できませんでした。もう一度お試しください。';
 }

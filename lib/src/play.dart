@@ -1275,6 +1275,7 @@ class _GamePageState extends State<GamePage>
     if (_resettingSettings || SamplingCapture.instance.busy) return;
     final language = AppLanguageSettings.maybeOf(context);
     final appearance = AppAppearanceSettings.maybeOf(context);
+    final board = BoardPreferencesScope.maybeOf(context);
     _cancelGameFeedback();
     setState(() {
       _resettingSettings = true;
@@ -1310,6 +1311,14 @@ class _GamePageState extends State<GamePage>
       } else {
         await AppAppearanceController._writePreference(
           const AppAppearance().encode(),
+        );
+      }
+      if (board != null) {
+        await board.select(const BoardPreferences());
+        if (board.persistenceFailed) throw StateError("Board reset failed");
+      } else {
+        await BoardPreferencesController.writePreference(
+          const BoardPreferences().encode(),
         );
       }
       if (!mounted) return;
@@ -4874,6 +4883,8 @@ class _GamePageState extends State<GamePage>
                 const AppearanceSettingsSection(),
                 const SizedBox(height: 8),
               ],
+              const BoardSettingsSection(),
+              const SizedBox(height: 8),
               _settingsSection(
                 key: const ValueKey('game-settings-section'),
                 title: l10n(context).gameSettings,
@@ -5564,9 +5575,8 @@ class _GamePageState extends State<GamePage>
               orientation: _boardOrientation,
               controller: _gameBoardController,
               onMove: _onGameBoardMove,
-              settings: mobileMaiaInteractiveBoardSettings.copyWith(
-                enablePremoves: _premovesEnabled,
-              ),
+              settings: boardPreferencesOf(context).interactiveSettings
+                  .copyWith(enablePremoves: _premovesEnabled),
             ),
             if (_showPremovePlan)
               Positioned.fill(
@@ -5575,7 +5585,8 @@ class _GamePageState extends State<GamePage>
                     painter: PremoveHighlights(
                       _premoves.destinations,
                       _boardOrientation,
-                      mobileMaiaInteractiveBoardSettings
+                      boardPreferencesOf(context)
+                          .interactiveSettings
                           .colorScheme
                           .validPremoves,
                     ),

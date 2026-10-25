@@ -404,5 +404,16 @@
   "appearanceTheme": "Erscheinungsbild",
   "appearanceLight": "Hell",
   "appearanceDark": "Dunkel",
-  "appearanceSystemDefault": "Mit Gerät synchronisieren"
+  "appearanceSystemDefault": "Mit Gerät synchronisieren",
+  "boardSettings": "Brett",
+  "boardCoordinates": "Brettkoordinaten",
+  "boardLegalMoves": "Legale Zielfelder",
+  "boardLastMove": "Letzten Zug hervorheben",
+  "boardAnimation": "Figurenanimation",
+  "boardMagnify": "Vergrößern der gezogenen Figur",
+  "boardDragTarget": "Ziel der gezogenen Figur",
+  "boardTargetCircle": "Kreis",
+  "boardTargetSquare": "Quadrat",
+  "boardTargetNone": "Keine",
+  "boardPreferenceError": "Bretteinstellungen konnten nicht gespeichert werden. Bitte erneut versuchen."
 }

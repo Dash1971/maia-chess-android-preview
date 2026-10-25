@@ -3216,7 +3216,8 @@ class _ReviewPageState extends State<ReviewPage>
                           orientation: boardOrientation,
                           onMove: _onAnalysisMove,
                           shapes: _arrows,
-                          settings: mobileMaiaInteractiveBoardSettings,
+                          settings: boardPreferencesOf(context)
+                              .interactiveSettings,
                         ),
                         if (agreements.isNotEmpty || boardAnnotation != null)
                           Positioned.fill(

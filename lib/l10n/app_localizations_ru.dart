@@ -1500,4 +1500,38 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get appearanceSystemDefault => 'Системная';
+
+  @override
+  String get boardSettings => 'Доска';
+
+  @override
+  String get boardCoordinates => 'Координаты доски';
+
+  @override
+  String get boardLegalMoves => 'Поля допустимых ходов';
+
+  @override
+  String get boardLastMove => 'Подсветка последнего хода';
+
+  @override
+  String get boardAnimation => 'Анимация фигур';
+
+  @override
+  String get boardMagnify => 'Увеличивать перетаскиваемую фигуру';
+
+  @override
+  String get boardDragTarget => 'Цель передвинутой фигуры';
+
+  @override
+  String get boardTargetCircle => 'Круглая';
+
+  @override
+  String get boardTargetSquare => 'Квадратная';
+
+  @override
+  String get boardTargetNone => 'Нет';
+
+  @override
+  String get boardPreferenceError =>
+      'Не удалось сохранить настройки доски. Повторите попытку.';
 }

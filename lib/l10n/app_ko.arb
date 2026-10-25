@@ -404,5 +404,16 @@
   "appearanceTheme": "테마",
   "appearanceLight": "밝게",
   "appearanceDark": "어둡게",
-  "appearanceSystemDefault": "기기 테마"
+  "appearanceSystemDefault": "기기 테마",
+  "boardSettings": "보드",
+  "boardCoordinates": "보드 좌표",
+  "boardLegalMoves": "합법적인 이동 칸",
+  "boardLastMove": "마지막 수 강조",
+  "boardAnimation": "기물 움직임 애니메이션",
+  "boardMagnify": "드래그 중 기물 확대",
+  "boardDragTarget": "드래그 중 착지점 강조",
+  "boardTargetCircle": "원",
+  "boardTargetSquare": "칸",
+  "boardTargetNone": "없음",
+  "boardPreferenceError": "보드 설정을 저장하지 못했습니다. 다시 시도해 주세요."
 }

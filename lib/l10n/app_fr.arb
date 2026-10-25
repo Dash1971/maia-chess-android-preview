@@ -404,5 +404,16 @@
   "appearanceTheme": "Thème",
   "appearanceLight": "Clair",
   "appearanceDark": "Sombre",
-  "appearanceSystemDefault": "Thème de l'appareil"
+  "appearanceSystemDefault": "Thème de l'appareil",
+  "boardSettings": "Échiquier",
+  "boardCoordinates": "Coordonnées",
+  "boardLegalMoves": "Destinations des coups légaux",
+  "boardLastMove": "Surbrillance du dernier coup",
+  "boardAnimation": "Animation des pièces",
+  "boardMagnify": "Grossir la pièce déplacée",
+  "boardDragTarget": "Cible de la pièce déplacée",
+  "boardTargetCircle": "Cercle",
+  "boardTargetSquare": "Carré",
+  "boardTargetNone": "Aucune",
+  "boardPreferenceError": "Impossible d’enregistrer les réglages de l’échiquier. Réessayez."
 }

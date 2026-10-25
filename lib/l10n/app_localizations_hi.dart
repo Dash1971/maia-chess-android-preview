@@ -1477,4 +1477,38 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get appearanceSystemDefault => 'सिस्टम डिफ़ॉल्ट';
+
+  @override
+  String get boardSettings => 'बोर्ड';
+
+  @override
+  String get boardCoordinates => 'बोर्ड के निर्देशांक';
+
+  @override
+  String get boardLegalMoves => 'वैध चालों के गंतव्य';
+
+  @override
+  String get boardLastMove => 'पिछली चाल को उभारें';
+
+  @override
+  String get boardAnimation => 'मोहरों का एनीमेशन';
+
+  @override
+  String get boardMagnify => 'घसीटते वक्त पीस बड़ा दिखाएं';
+
+  @override
+  String get boardDragTarget => 'खींचा गया टुकड़े का लक्ष्य';
+
+  @override
+  String get boardTargetCircle => 'घेरा';
+
+  @override
+  String get boardTargetSquare => 'वर्ग';
+
+  @override
+  String get boardTargetNone => 'कोई नहीं';
+
+  @override
+  String get boardPreferenceError =>
+      'बोर्ड की सेटिंग सहेजी नहीं जा सकीं। कृपया फिर से प्रयास करें।';
 }

@@ -110,6 +110,10 @@ void main() {
           systemColors: true,
           pureBlack: true,
         ).encode(),
+        boardPreferenceKey: const BoardPreferences(
+          coordinates: false,
+          lastMove: false,
+        ).encode(),
         'savedGame': 'saved-session-sentinel',
         'recentGames': 'saved-games-sentinel',
         maiaPlayEloPreferenceKey: 1800,
@@ -197,6 +201,7 @@ void main() {
         'chessnutBoardSounds': true,
         samplingCapturePreference: false,
         appAppearancePreferenceKey: const AppAppearance().encode(),
+        boardPreferenceKey: const BoardPreferences().encode(),
       };
       for (final entry in defaults.entries) {
         expect(prefs.get(entry.key), entry.value);
@@ -292,6 +297,7 @@ void main() {
           'humanTiming': true,
           samplingCapturePreference: true,
           appLanguagePreferenceKey: locale.languageCode,
+          boardPreferenceKey: const BoardPreferences(coordinates: false, magnify: false).encode(),
         };
         SharedPreferences.setMockInitialValues(before);
         await tester.pumpWidget(settingsApp(locale: locale, scale: 2));

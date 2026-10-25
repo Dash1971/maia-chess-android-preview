@@ -68,6 +68,7 @@ part 'src/maia_play_settings.dart';
 part 'src/sampling_help.dart';
 part 'src/app_language.dart';
 part 'src/app_appearance.dart';
+part 'src/board_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -163,6 +164,8 @@ class _MaiaChessAppState extends State<MaiaChessApp>
   Timer? _maiaReleaseTimer;
   final AppLanguageController _language = AppLanguageController();
   final AppAppearanceController _appearance = AppAppearanceController();
+  final BoardPreferencesController _boardPreferences =
+      BoardPreferencesController();
   @override
   void initState() {
     super.initState();
@@ -171,6 +174,7 @@ class _MaiaChessAppState extends State<MaiaChessApp>
     unawaited(_language.initialize());
     _appearance.addListener(_languageChanged);
     unawaited(_appearance.initialize());
+    unawaited(_boardPreferences.initialize());
   }
 
   void _languageChanged() {
@@ -226,64 +230,68 @@ class _MaiaChessAppState extends State<MaiaChessApp>
     _language.dispose();
     _appearance.removeListener(_languageChanged);
     _appearance.dispose();
+    _boardPreferences.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AppAppearanceSettings(
-      controller: _appearance,
-      child: MaterialApp(
-        title: 'Mobile Maia Preview',
-        locale: _language.selectedCode == null
-            ? null
-            : Locale(_language.selectedCode!),
-        localeListResolutionCallback: resolveAppLocale,
-        supportedLocales: AppLocalizations.supportedLocales,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        navigatorObservers: [maiaRouteObserver],
-        debugShowCheckedModeBanner: false,
-        themeMode: _appearance.value.mode,
-        theme: appTheme(
-          _appearance.value,
-          Brightness.light,
-          dynamicColors: _appearance.dynamicColors,
-        ),
-        darkTheme: appTheme(
-          _appearance.value,
-          Brightness.dark,
-          dynamicColors: _appearance.dynamicColors,
-        ),
-        builder: (context, child) {
-          final dark = Theme.of(context).brightness == Brightness.dark;
-          return AnnotatedRegion<SystemUiOverlayStyle>(
-            key: const ValueKey('app-system-ui-style'),
-            value: SystemUiOverlayStyle(
-              statusBarColor: Colors.transparent,
-              statusBarIconBrightness: dark
-                  ? Brightness.light
-                  : Brightness.dark,
-              statusBarBrightness: dark ? Brightness.dark : Brightness.light,
-              systemNavigationBarColor: Theme.of(context)
-                  .scaffoldBackgroundColor,
-              // Android 16 ignores navigationBarColor in edge-to-edge mode.
-              // Our Scaffold paints the safe-area background in both modes;
-              // native NormalTheme explicitly declares navigationBarColor so
-              // Android cannot override our icon brightness from its OS theme.
-              systemNavigationBarContrastEnforced: false,
-              systemNavigationBarIconBrightness: dark
-                  ? Brightness.light
-                  : Brightness.dark,
-            ),
-            child: child!,
-          );
-        },
-        home: AppLanguageSettings(
-          selectedCode: _language.selectedCode,
-          persistenceFailed: _language.persistenceFailed,
-          onChanged: _setLanguage,
-          child: const GamePage(),
+    return BoardPreferencesScope(
+      controller: _boardPreferences,
+      child: AppAppearanceSettings(
+        controller: _appearance,
+        child: MaterialApp(
+          title: 'Mobile Maia Preview',
+          locale: _language.selectedCode == null
+              ? null
+              : Locale(_language.selectedCode!),
+          localeListResolutionCallback: resolveAppLocale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          navigatorObservers: [maiaRouteObserver],
+          debugShowCheckedModeBanner: false,
+          themeMode: _appearance.value.mode,
+          theme: appTheme(
+            _appearance.value,
+            Brightness.light,
+            dynamicColors: _appearance.dynamicColors,
+          ),
+          darkTheme: appTheme(
+            _appearance.value,
+            Brightness.dark,
+            dynamicColors: _appearance.dynamicColors,
+          ),
+          builder: (context, child) {
+            final dark = Theme.of(context).brightness == Brightness.dark;
+            return AnnotatedRegion<SystemUiOverlayStyle>(
+              key: const ValueKey('app-system-ui-style'),
+              value: SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: dark
+                    ? Brightness.light
+                    : Brightness.dark,
+                statusBarBrightness: dark ? Brightness.dark : Brightness.light,
+                systemNavigationBarColor: Theme.of(context)
+                    .scaffoldBackgroundColor,
+                // Android 16 ignores navigationBarColor in edge-to-edge mode.
+                // Our Scaffold paints the safe-area background in both modes;
+                // native NormalTheme explicitly declares navigationBarColor so
+                // Android cannot override our icon brightness from its OS theme.
+                systemNavigationBarContrastEnforced: false,
+                systemNavigationBarIconBrightness: dark
+                    ? Brightness.light
+                    : Brightness.dark,
+              ),
+              child: child!,
+            );
+          },
+          home: AppLanguageSettings(
+            selectedCode: _language.selectedCode,
+            persistenceFailed: _language.persistenceFailed,
+            onChanged: _setLanguage,
+            child: const GamePage(),
+          ),
         ),
       ),
     );

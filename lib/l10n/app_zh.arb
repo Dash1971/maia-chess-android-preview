@@ -404,5 +404,16 @@
   "appearanceTheme": "主题",
   "appearanceLight": "浅色",
   "appearanceDark": "深色",
-  "appearanceSystemDefault": "跟随系统"
+  "appearanceSystemDefault": "跟随系统",
+  "boardSettings": "棋盘",
+  "boardCoordinates": "棋盘坐标",
+  "boardLegalMoves": "合法走法落点",
+  "boardLastMove": "上一步高亮",
+  "boardAnimation": "棋子动画",
+  "boardMagnify": "放大拖动的棋子",
+  "boardDragTarget": "拖动棋子落点标记",
+  "boardTargetCircle": "圆形",
+  "boardTargetSquare": "方形",
+  "boardTargetNone": "无",
+  "boardPreferenceError": "无法保存棋盘设置。请重试。"
 }
