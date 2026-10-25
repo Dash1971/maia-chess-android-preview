@@ -21,13 +21,15 @@ screenshots, see the
 
 ## Preview 2.5.0 beta
 
-The latest release in this development cycle is [2.5.0-beta.6](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.6).
+The latest release in this development cycle is [2.5.0-beta.7](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.7).
 
 The 2.5 cycle adds optional appearance settings, revised Maia defaults and help, translation corrections, and analysis-board interaction improvements. Existing saved preferences are retained. These changes are delivered in Preview and await separate Stable acceptance and promotion; Stable and Dev remain unchanged.
 
 Game Review and imported-PGN analysis clear stale piece selection and legal-move dots when navigating. Navigation cancels held drags and pending promotion, while engine-result updates retain selection and played moves retain their tap/drag animation. See [beta.4 qualification](docs/releases/preview-2.5.0-beta.4.md).
 
 Analysis arrows step along the current line. Within an analysis variation, Hold Left returns to the outermost main-line branch point; Hold Right selects one main-line move after that point, clamping at the game end. The destination is independent of variation length, nesting and selected move. Ordinary taps and main-line endpoint holds retain their behavior; live-game navigation is unchanged. See [beta.6 qualification](docs/releases/preview-2.5.0-beta.6.md).
+
+Beta.7 also rebuilds with patched Flutter 3.47.8 / Dart 3.13.7 for the published TLS advisory. Stable and Dev releases remain unchanged; the [Stable tooling companion](https://github.com/Dash1971/maia-chess-android/pull/61) is a draft for separate review.
 
 For release notes and verification from earlier development cycles, see the [release history](https://github.com/Dash1971/maia-chess-android-preview/releases).
 
@@ -51,9 +53,9 @@ We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) sp
 
 [The 79M sampling study](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/opening-variety-2026-10-18/REPORT.md) is complete: 3,000 full games, 5,400 opening rollouts and 180 quality positions. Temperature 1.0 / Top-P 0.95 with **Max variety in opening** scored 60.7% against 1.0 / 1.0 at the 1600 rating input (95% interval: 56.8–64.6%) and preserved the measured broad opening mix. Finer opening variation and human-move fidelity remain uncertain.
 
-The **Preview 2.5 defaults** are **Temperature 1.0 / Top-P 0.95 with Max variety in opening on**. They apply to new settings and Settings resets; existing saved preferences and frozen game profiles are retained. Play and primary analysis start at 1500; the optional second analysis engine starts at 2600 and remains off until enabled. The [visual settings guide](https://github.com/Dash1971/mobile-maia-research/blob/main/guides/choosing-maia-settings/README.md) explains the choice. These changes are available in [Preview 2.5.0-beta.6](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.6), including the refined Simple explanation, shorter settings notices and completed translation corrections; Stable is unchanged.
+The **Preview 2.5 defaults** are **Temperature 1.0 / Top-P 0.95 with Max variety in opening on**. They apply to new settings and Settings resets; existing saved preferences and frozen game profiles are retained. Play and primary analysis start at 1500; the optional second analysis engine starts at 2600 and remains off until enabled. The [visual settings guide](https://github.com/Dash1971/mobile-maia-research/blob/main/guides/choosing-maia-settings/README.md) explains the choice. These changes are available in [Preview 2.5.0-beta.7](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.7), including unified engine help, shorter settings notices and completed translation corrections; Stable is unchanged.
 
-Engine help offers **Simple explanation** and **Technical explanation** in all ten languages. At Temperature 0, Top-P is disabled and labelled “Not used”; its value is retained for when Temperature is raised again. Contextual notices describe full sampling, narrower opening choices and deterministic play without running extra inference.
+Engine help offers one scrollable Temperature and Top-P explanation in all ten languages, including opening probabilities, cumulative Top-P filtering and the full recommendation. Move-history help is shorter and retains its research link and off recommendation. See [beta.7 qualification](docs/releases/preview-2.5.0-beta.7.md). At Temperature 0, Top-P is disabled and labelled “Not used”; its value is retained for when Temperature is raised again. Contextual notices describe full sampling, narrower opening choices and deterministic play without running extra inference.
 
 **Colors and appearance**
 
