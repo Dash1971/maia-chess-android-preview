@@ -1219,7 +1219,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get maiaHistoryHelp =>
-      'Lass Maia neben der aktuellen Stellung bis zu sieben vorherige Stellungen berücksichtigen. In unseren Tests mit dem 79M-Modell verbesserte dies die Genauigkeit der Vorhersage menschlicher Züge um etwa 2 Prozentpunkte, förderte aber manchmal das wiederholte Nachahmen von Zügen in Eröffnungen bei niedrigen Ratings. Eine Steigerung der Spielstärke konnten wir nicht feststellen. Vorerst empfehlen wir, diese Option ausgeschaltet zu lassen.';
+      'Lass Maia bei der Zugwahl bis zu sieben vorherige Stellungen nutzen. In unseren Tests mit dem 79M-Modell verbesserte dies die Genauigkeit der Vorhersage menschlicher Züge um etwa 2 Prozentpunkte, führte aber bei niedrigen Spielstärken in der Eröffnung manchmal zum wiederholten Nachahmen von Zügen. Vorerst empfehlen wir, diese Option ausgeschaltet zu lassen.';
 
   @override
   String get maiaHistoryResearch =>
@@ -1400,27 +1400,27 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get samplingHelpIntro =>
-      'Temperatur und Top-P bestimmen gemeinsam, wie abwechslungsreich Maia spielt.';
+      'Temperatur und Top-P bestimmen gemeinsam, wie abwechslungsreich Maia spielt.\n\nWir empfehlen Temperatur 1,0, Top-P 0,95 und die aktivierte Option „Maximale Vielfalt in der Eröffnung“. Das sind die Standardeinstellungen. Laut unserer Untersuchung bieten sie eine gute Balance zwischen menschenähnlichem Spiel, Eröffnungsvielfalt und weniger ungewöhnlichen groben Patzern.\n\nIm Folgenden erfährst du, wie diese Einstellungen funktionieren.';
 
   @override
   String get samplingHelpVariety =>
-      'Eine höhere Temperatur kannst du dir als mehr Kreativität bei der Suche nach Kandidatenzügen vorstellen. Temperatur 0 ist wie ein erfahrener Spieler am echten Brett, der den wahrscheinlichsten (und oft besten) Zug wählt. Temperatur 1 ist wie ein kreativer Blitzspieler, dem kein Opfer zu verrückt ist und der jeden Zug in Betracht zieht, so unwahrscheinlich er auch sein mag.';
+      'Temperatur\n\nBei Temperatur 0 spielt Maia immer den Zug, den ein Spieler mit der gewählten Elo laut Maias Vorhersage am wahrscheinlichsten spielen würde. Technisch nennt man das argmax.\n\nBei Temperatur 1 berücksichtigt Maia alle Züge, die ein Spieler mit der gewählten Elo laut ihrer Vorhersage spielen könnte, und wählt entsprechend ihren Wahrscheinlichkeiten aus.\n\nBei einer Temperatur zwischen 0 und 1 gewichtet Maia die Züge stärker, die sie für wahrscheinlicher hält. Je niedriger die Temperatur, desto vorhersehbarer wird ihre Zugwahl.\n\nIn unseren Tests mit dem 79M-Modell und einer Rating-Eingabe von 1600 für beide Spieler hatte Maia als Weiß zum Beispiel ungefähr diese Wahrscheinlichkeiten für den ersten Zug:\n\n• 1. e4: 64 %\n• 1. d4: 25 %\n• 1. c4: 3 %\n• Alle übrigen Züge zusammen: 8 %\n\nBei Temperatur 0 spielte Maia immer 1. e4.\n\nBei Temperatur 0,5 spielte sie in etwa 86 % der Fälle 1. e4 und in etwa 13 % der Fälle 1. d4. Andere Züge blieben möglich, kamen zusammen aber auf weniger als 1 %.\n\nBei Temperatur 1 folgte Maia den oben angegebenen ursprünglichen Wahrscheinlichkeiten.';
 
   @override
   String get samplingHelpDefaults =>
-      'Top-P kannst du dir als Engel auf Maias Schulter vorstellen. Bei 0 sagt der Engel Maia, sie solle wilde, unwahrscheinliche Züge ignorieren. Bei 1,0 ist der Engel verschwunden, und Maia könnte sogar den verrücktesten, unwahrscheinlichsten Zug wählen.';
+      'Top-P\n\nTop-P filtert die verfügbaren Züge, nachdem die Temperatur ihre Wahrscheinlichkeiten angepasst hat.\n\nBei Top-P 1 wird nicht gefiltert. Alle verfügbaren Züge können entsprechend ihren durch die Temperatur angepassten Wahrscheinlichkeiten gespielt werden.\n\nBei Top-P 0,95 behält Maia die wahrscheinlichsten Züge, bis ihre gemeinsame Wahrscheinlichkeit mindestens 95 % erreicht, und wählt dann unter ihnen aus. Die ausgeschlossenen Züge machen höchstens 5 % der Wahrscheinlichkeit aus.\n\nBei Top-P 0 wählt Maia immer den wahrscheinlichsten Zug. Das hat dieselbe Wirkung wie Temperatur 0: Es reicht, einen der beiden Werte auf 0 zu setzen, um argmax zu erhalten.\n\nIn unserem Eröffnungsbeispiel würde Maia mit Temperatur 1 und Top-P 0,60 immer 1. e4 spielen. Dieser Zug allein macht etwa 64 % der Wahrscheinlichkeit aus. Um die Schwelle von 60 % zu erreichen, sind also keine weiteren Züge nötig.';
 
   @override
   String get samplingHelpStrength =>
-      'In unserer Untersuchung ergaben die Einstellungen 0 und 0 (technisch argmax genannt) das stärkste Spiel: etwa 300 Elo stärker als die Einstellungen 1,0 und 1,0. Allerdings beschränkte das auch die Eröffnungsauswahl auf einen engen Bereich, überwiegend aus Hauptvarianten.';
+      'Wie beeinflussen diese Einstellungen Maias Spiel?\n\nTop-P kannst du dir als Engel auf Maias Schulter vorstellen. Bei 0 sagt der Engel Maia, sie solle weniger wahrscheinliche Züge ignorieren, darunter möglicherweise grobe Patzer oder fragwürdige Züge. Bei 1,0 ist der Engel verschwunden, und Maia könnte sogar den verrücktesten, unwahrscheinlichsten Zug wählen.\n\nIn unseren direkten Vergleichspartien bei der Einstellung 1600 war argmax gegenüber Temperatur 1,0 / Top-P 1,0 im Vorteil, entsprechend etwa 300 Elo-Punkten. Allerdings beschränkte argmax auch die Eröffnungsauswahl auf einen engen Bereich, überwiegend aus Hauptvarianten.';
 
   @override
   String get samplingHelpArgmax =>
-      'Deshalb haben wir eine Funktion für maximale Eröffnungsvielfalt eingeführt: einen Schalter, mit dem Maia für die ersten 5 Züge die Einstellungen 1,0 und 1,0 verwendet. In der Eröffnung könntest du einige verrückte Dinge sehen! Ab dem 6. Zug wechselt Maia aber zu deinen voreingestellten Werten.';
+      'Deshalb haben wir „Maximale Vielfalt in der Eröffnung“ eingeführt: einen Schalter, mit dem Maia für die ersten fünf Züge jeder Seite Temperatur 1,0 und Top-P 1,0 verwendet. In der Eröffnung könntest du einige verrückte Dinge sehen! Ab dem sechsten Zug wechselt Maia zu deinen eingestellten Werten.';
 
   @override
   String get samplingHelpTopP =>
-      'Wir empfehlen, maximale Eröffnungsvielfalt eingeschaltet und Temperatur auf 1,0 sowie Top-P auf 0,95 eingestellt zu lassen. Das ist wie ein kreativer Spieler mit einem Engel auf der Schulter, der ihm zumindest die völlig abwegigen Züge ausredet: die unwahrscheinlichsten Züge, deren gemeinsame Wahrscheinlichkeit bis zu 5 % beträgt. Diese könnten zwar brillant sein, aber auch dumme grobe Patzer. So sollte eine gute Balance aus Eröffnungsvielfalt, Kreativität im Mittelspiel und stärkerem Spiel entstehen, indem einige sehr unwahrscheinliche grobe Patzer ausgeschlossen werden.\n\nWer mutig ist, kann Temperatur auf 0 setzen (Top-P hat bei Temperatur 0 keine Wirkung). Laut unserer Untersuchung ergibt das den stärksten Gegner. Viel Glück!';
+      'Wir empfehlen, „Maximale Vielfalt in der Eröffnung“ eingeschaltet und Temperatur auf 1,0 sowie Top-P auf 0,95 eingestellt zu lassen. Das ist wie ein kreativer Spieler mit einem Engel auf der Schulter, der ihm zumindest die völlig abwegigen Züge ausredet: die unwahrscheinlichsten Züge, deren gemeinsame Wahrscheinlichkeit bis zu 5 % beträgt. Diese könnten zwar brillant sein, aber auch dumme grobe Patzer. So sollte eine gute Balance aus Eröffnungsvielfalt, Kreativität im Mittelspiel und stärkerem Spiel entstehen, indem einige sehr unwahrscheinliche grobe Patzer ausgeschlossen werden.\n\nWer mutig ist: Temperatur 0 führte in unseren Tests zum stärksten Spiel. Viel Glück!';
 
   @override
   String get samplingHelpResearchIntro =>

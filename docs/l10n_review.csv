@@ -350,7 +350,7 @@ boardMotorRecovery,Electronic board Dev support: Motorized-board safety recovery
 boardConfirmPosition,Electronic board Dev support: Button to explicitly confirm physical-board setup matches the current logical position.,Confirm the physical position,チェス盤の局面を確認,确认实体棋盘局面,실제 체스보드 포지션 확인,Confirmar la posición del tablero físico,Stellung auf dem Brett bestätigen,Confirmer la position sur l’échiquier physique,Подтвердить позицию на физической доске,वास्तविक बोर्ड की स्थिति की पुष्टि करें,Confirmar a posição do tabuleiro físico,lib/src/play.dart:2490; lib/src/board_flow.dart:570,,,Needs native review
 boardConfirmPositionHelp,"Electronic board Dev support: Help for explicit physical-position confirmation, including piece identities.",Check that every piece matches the position on screen.,すべての駒が画面の局面と一致していることを確認してください。,请确认每个棋子的位置都与屏幕上显示的局面一致。,모든 기물이 화면에 표시된 포지션과 일치하는지 확인하세요.,Comprueba que todas las piezas coincidan con la posición en pantalla.,"Prüfe, ob jede Figur mit der Stellung auf dem Bildschirm übereinstimmt.",Vérifiez que chaque pièce correspond à la position affichée à l’écran.,"Проверьте, что каждая фигура соответствует позиции на экране.",जाँचें कि हर मोहरा स्क्रीन पर दिखाई गई स्थिति से मेल खाता है।,Confira se todas as peças correspondem à posição na tela.,lib/src/board_flow.dart:571,,,Needs native review
 maiaHistorySetting,Maia-specific history setting/help: Use move history,Use move history,過去の局面を使う,使用历史局面,이전 포지션 사용,Usar el historial de jugadas,Stellungsverlauf verwenden,Utiliser l’historique des positions,Учитывать историю позиций,पिछली स्थितियों का उपयोग करें,Usar histórico de posições,lib/src/play.dart:1430; lib/src/play.dart:5089,,,Needs native review
-maiaHistoryHelp,"Maia-specific move-history help. The prediction gain is about 2 percentage points (57.00% to 59.36%), not a relative 2%. A playing-strength increase was not established; do not imply a full-game strength trial.","Let Maia use up to seven previous positions when choosing a move. In our tests with the 79M model, this improved prediction of human moves by about 2 percentage points, but sometimes led to repeated copying in lower-rated openings. We recommend leaving this off for now.",現在の局面に加えて、最大7つ前までの局面をMaiaに考慮させます。79Mモデルを使った私たちのテストでは、人間の指し手の予測精度が約2パーセントポイント向上しましたが、低レーティングの序盤で相手の手を繰り返しまねる傾向が強まることもありました。強さの向上は確認できませんでした。当面はオフをおすすめします。,让 Maia 在考虑当前局面的同时，参考最多七个先前局面。在我们使用 79M 模型的测试中，这使人类走法的预测准确率提高了约 2 个百分点，但有时也会使低等级分的开局更容易反复模仿对手的走法。我们未能确认棋力有所提高。目前建议关闭。,"Maia가 현재 포지션과 함께 이전 포지션을 최대 7개까지 고려하도록 합니다. 79M 모델을 사용한 저희 테스트에서는 사람의 수를 예측하는 정확도가 약 2%포인트 높아졌지만, 낮은 레이팅의 오프닝에서 상대의 수를 계속 따라 하는 경향이 강해지기도 했습니다. 실력 향상은 확인하지 못했습니다. 현재는 끄는 것을 권장합니다.","Permite que Maia tenga en cuenta hasta siete posiciones anteriores, además de la posición actual. Esto mejoró la precisión al predecir jugadas humanas en unos 2 puntos porcentuales en nuestras pruebas con el modelo 79M, pero a veces favoreció la imitación repetida de jugadas en aperturas de bajo nivel. No pudimos confirmar una mejora en la fuerza de juego. Por ahora, recomendamos dejarlo desactivado.","Lass Maia neben der aktuellen Stellung bis zu sieben vorherige Stellungen berücksichtigen. In unseren Tests mit dem 79M-Modell verbesserte dies die Genauigkeit der Vorhersage menschlicher Züge um etwa 2 Prozentpunkte, förderte aber manchmal das wiederholte Nachahmen von Zügen in Eröffnungen bei niedrigen Ratings. Eine Steigerung der Spielstärke konnten wir nicht feststellen. Vorerst empfehlen wir, diese Option ausgeschaltet zu lassen.","Permet à Maia de prendre en compte jusqu’à sept positions précédentes en plus de la position actuelle. Cela a amélioré la précision des prédictions des coups humains d’environ 2 points de pourcentage dans nos tests avec le modèle 79M, mais a parfois favorisé l’imitation répétée des coups dans les ouvertures à faible classement. Nous n’avons pas pu établir de gain de force de jeu. Pour l’instant, nous recommandons de laisser cette option désactivée.","Позвольте Maia учитывать до семи предыдущих позиций вместе с текущей. В наших тестах с моделью 79M это повысило точность предсказания человеческих ходов примерно на 2 процентных пункта, но иногда усиливало склонность многократно копировать ходы соперника в дебютах при низком рейтинге. Установить повышение силы игры нам не удалось. Пока рекомендуем оставить эту настройку выключенной.","Maia को मौजूदा स्थिति के साथ पिछली अधिकतम सात स्थितियों पर भी विचार करने दें। 79M मॉडल के साथ हमारे परीक्षणों में इससे इंसानी चालों के अनुमान की सटीकता लगभग 2 प्रतिशत अंक बढ़ी, लेकिन कम रेटिंग वाली ओपनिंग में कभी-कभी प्रतिद्वंद्वी की चालों की बार-बार नकल करने की प्रवृत्ति भी बढ़ी। हम खेलने की ताकत में बढ़ोतरी की पुष्टि नहीं कर सके। फ़िलहाल इसे बंद रखने की सलाह है।","Permita que o Maia considere até sete posições anteriores, além da posição atual. Isso melhorou a precisão das previsões de lances humanos em cerca de 2 pontos percentuais nos nossos testes com o modelo 79M, mas às vezes incentivou a imitação repetida de lances em aberturas de rating baixo. Não conseguimos confirmar um aumento na força de jogo. Por enquanto, recomendamos deixar esta opção desativada.",lib/src/play.dart:1435,,,Needs native review
+maiaHistoryHelp,"Maia-specific move-history help. The prediction gain is about 2 percentage points (57.00% to 59.36%), not a relative 2%. A playing-strength increase was not established; do not imply a full-game strength trial.","Let Maia use up to seven previous positions when choosing a move. In our tests with the 79M model, this improved prediction of human moves by about 2 percentage points, but sometimes led to repeated copying in lower-rated openings. We recommend leaving this off for now.",Maiaが指し手を選ぶ際に、最大7つ前までの局面を使えるようにします。79Mモデルを使った私たちのテストでは、人間の指し手の予測精度が約2パーセントポイント向上しましたが、低レーティングの序盤で相手の手を繰り返しまねることもありました。当面はオフのままにしておくことをおすすめします。,让Maia在选择走法时参考最多七个先前局面。在我们使用79M模型的测试中，这使人类走法的预测准确率提高了约2个百分点，但有时也会导致低等级分的开局中反复模仿对手的走法。目前建议保持关闭。,"Maia가 수를 선택할 때 이전 포지션을 최대 7개까지 활용하도록 합니다. 79M 모델을 사용한 저희 테스트에서는 사람의 수를 예측하는 정확도가 약 2%포인트 높아졌지만, 낮은 레이팅의 오프닝에서 상대의 수를 반복해서 따라 하기도 했습니다. 현재는 꺼 두는 것을 권장합니다.","Permite que Maia use hasta siete posiciones anteriores al elegir una jugada. En nuestras pruebas con el modelo 79M, esto mejoró la precisión al predecir jugadas humanas en unos 2 puntos porcentuales, pero a veces llevó a imitar repetidamente jugadas en aperturas de jugadores con menor Elo. Por ahora, recomendamos dejarlo desactivado.","Lass Maia bei der Zugwahl bis zu sieben vorherige Stellungen nutzen. In unseren Tests mit dem 79M-Modell verbesserte dies die Genauigkeit der Vorhersage menschlicher Züge um etwa 2 Prozentpunkte, führte aber bei niedrigen Spielstärken in der Eröffnung manchmal zum wiederholten Nachahmen von Zügen. Vorerst empfehlen wir, diese Option ausgeschaltet zu lassen.","Permet à Maia d’utiliser jusqu’à sept positions précédentes pour choisir un coup. Dans nos tests avec le modèle 79M, cela a amélioré la précision des prédictions des coups humains d’environ 2 points de pourcentage, mais a parfois entraîné une imitation répétée des coups dans les ouvertures à faible niveau Elo. Pour l’instant, nous recommandons de laisser cette option désactivée.","Позвольте Maia использовать до семи предыдущих позиций при выборе хода. В наших тестах с моделью 79M это повысило точность предсказания человеческих ходов примерно на 2 процентных пункта, но иногда приводило к многократному копированию ходов соперника в дебютах при низком рейтинге. Пока рекомендуем оставить эту настройку выключенной.","Maia को चाल चुनते समय पिछली अधिकतम सात स्थितियों का उपयोग करने दें। 79M मॉडल के साथ हमारे परीक्षणों में इससे इंसानी चालों के अनुमान की सटीकता लगभग 2 प्रतिशत अंक बढ़ी, लेकिन कम रेटिंग वाली ओपनिंग में कभी-कभी प्रतिद्वंद्वी की चालों की बार-बार नकल भी होने लगी। फ़िलहाल इसे बंद रखने की सलाह है।","Permita que o Maia use até sete posições anteriores ao escolher um lance. Nos nossos testes com o modelo 79M, isso melhorou a precisão das previsões de lances humanos em cerca de 2 pontos percentuais, mas às vezes levou à imitação repetida de lances em aberturas de jogadores com rating mais baixo. Por enquanto, recomendamos deixar esta opção desativada.",lib/src/play.dart:1435,,,Needs native review
 maiaHistoryResearch,Maia-specific history setting/help: Read the move-history research,Read the move-history research,過去の局面の研究を読む（英文）,阅读历史局面研究（英文）,이전 포지션 연구 읽기 (영어),Leer la investigación sobre el historial de jugadas (en inglés),Studie zum Stellungsverlauf lesen (Englisch),Lire l’étude sur l’historique des positions (en anglais),Читать исследование истории позиций (на английском),पिछली स्थितियों पर शोध पढ़ें (अंग्रेज़ी में),Ler a pesquisa sobre o histórico de posições (em inglês),lib/src/play.dart:1444,,,Needs native review
 maiaHistoryOn,Maia-specific history setting/help: Move history: on,Move history: on,過去の局面：使用,历史局面：开启,이전 포지션: 켜짐,Historial de jugadas: activado,Stellungsverlauf: an,Historique des positions : activé,История позиций: включена,पिछली स्थितियाँ: चालू,Histórico de posições: ativado,lib/src/review.dart:2001; lib/src/review.dart:2063; lib/src/review.dart:2083; lib/src/sampling_report.dart:328,,,Needs native review
 maiaHistoryOff,Maia-specific history setting/help: Move history: off,Move history: off,過去の局面：不使用,历史局面：关闭,이전 포지션: 꺼짐,Historial de jugadas: desactivado,Stellungsverlauf: aus,Historique des positions : désactivé,История позиций: выключена,पिछली स्थितियाँ: बंद,Histórico de posições: desativado,lib/src/review.dart:2002; lib/src/review.dart:2064; lib/src/review.dart:2084; lib/src/sampling_report.dart:329,,,Needs native review
@@ -480,12 +480,48 @@ settingsResetError,Settings reset persistence failure; retry is safe and saved g
 resetSettingsConfirmation,Settings reset confirmation: question.,Reset all settings to default?,すべての設定を初期値に戻しますか？,将所有设置恢复为默认值？,모든 설정을 기본값으로 되돌릴까요?,¿Restablecer todos los ajustes predeterminados?,Alle Einstellungen zurücksetzen?,Rétablir tous les réglages par défaut ?,Восстановить все настройки по умолчанию?,सभी सेटिंग्स को डिफ़ॉल्ट पर रीसेट करें?,Restaurar todas as configurações padrão?,lib/src/play.dart:1245,,,Needs native review
 resetSettingsKeepData,Settings reset confirmation: preservation notice.,Your saved games and sampling data will be kept.,保存済みの対局と手の選択データは残ります。,已保存的对局和选招数据会保留。,저장된 대국과 수 선택 데이터는 유지됩니다.,Se conservarán tus partidas guardadas y los datos de selección de jugadas.,Deine gespeicherten Partien und Zugauswahldaten bleiben erhalten.,Vos parties et données de choix de coups enregistrées seront conservées.,Ваши сохранённые партии и данные о выборе ходов сохранятся.,आपकी सहेजी गई बाज़ियाँ और चाल चयन का डेटा बने रहेंगे।,Suas partidas salvas e os dados de seleção de jogadas serão mantidos.,lib/src/play.dart:1247,,,Needs native review
 resetSettingsAction,Settings reset confirmation: explicit confirmation action.,Reset settings,設定を初期値に戻す,重置设置,설정 초기화,Restablecer ajustes,Einstellungen zurücksetzen,Rétablir les réglages,Сбросить настройки,सेटिंग्स रीसेट करें,Restaurar configurações,lib/src/play.dart:1258,,,Needs native review
-samplingHelpIntro,"Engine help: Introduction and recommended defaults. Legacy message ID retained; English revised 2026-10-25. Other languages retain the previous simple explanation pending translation review. Maia-specific, not a Lichess equivalent.","Temperature and Top-P combine to set the amount of variety in Maia’s play.
+samplingHelpIntro,"Engine help: Introduction and recommended defaults. Legacy message ID retained; English revised 2026-10-25. All supported languages translate this approved English explanation. Maia-specific, not a Lichess equivalent.","Temperature and Top-P combine to set the amount of variety in Maia’s play.
 
 We recommend Temperature 1.0, Top-P 0.95, and Max variety in opening enabled. These are the default settings. Based on our research, they offer a good balance of human-like play, opening variety and fewer unusual blunders.
 
-Read on to learn how these settings work.",温度とTop-Pを組み合わせることで、Maiaの指し手にどのくらい多様性を持たせるかが決まります。,温度和Top-P共同决定Maia走法的多样性。,온도와 Top-P는 함께 Maia의 플레이가 얼마나 다양한지를 결정합니다.,La temperatura y Top-P se combinan para determinar cuánta variedad hay en el juego de Maia.,"Temperatur und Top-P bestimmen gemeinsam, wie abwechslungsreich Maia spielt.",La température et Top-P déterminent ensemble la variété du jeu de Maia.,Температура и Top-P вместе определяют разнообразие игры Maia.,तापमान और Top-P मिलकर तय करते हैं कि Maia के खेल में कितनी विविधता होगी।,A temperatura e o Top-P determinam juntos a variedade no jogo do Maia.,lib/src/sampling_help.dart:31,,,Needs native review
-samplingHelpVariety,"Engine help: Temperature section and opening probability examples. Legacy message ID retained; English revised 2026-10-25. Other languages retain the previous simple explanation pending translation review. Maia-specific, not a Lichess equivalent.","Temperature
+Read on to learn how these settings work.","温度とTop-Pを組み合わせることで、Maiaの指し手にどのくらい多様性を持たせるかが決まります。
+
+温度1.0、Top-P 0.95、「序盤の多様性を最大にする」をオンにすることをおすすめします。これらが初期設定です。私たちの研究では、人間らしい指し方、序盤の多様性、意外な大悪手の少なさの、よいバランスが得られました。
+
+それぞれの設定の仕組みを以下で説明します。","温度和Top-P共同决定Maia走法的多样性。
+
+我们建议将温度设为1.0、Top-P设为0.95，并开启“开局多样性最大化”。这些就是默认设置。根据我们的研究，这些设置能在拟人化的走法、开局多样性和减少不寻常的败着之间取得良好的平衡。
+
+下面介绍这些设置的工作原理。","온도와 Top-P는 함께 Maia의 플레이가 얼마나 다양한지를 결정합니다.
+
+온도 1.0, Top-P 0.95로 설정하고 오프닝 다양성 최대화를 켜 두는 것을 권장합니다. 이것이 기본 설정입니다. 저희 연구에 따르면 사람다운 플레이, 다양한 오프닝, 뜻밖의 블런더 감소 사이에서 좋은 균형을 이룹니다.
+
+아래에서 각 설정의 작동 방식을 설명합니다.","La temperatura y Top-P se combinan para determinar la variedad en el juego de Maia.
+
+Recomendamos una temperatura de 1,0, Top-P de 0,95 y Máxima variedad en la apertura activada. Estos son los ajustes predeterminados. Según nuestra investigación, ofrecen un buen equilibrio entre un juego parecido al humano, variedad en la apertura y menos errores graves poco habituales.
+
+Sigue leyendo para saber cómo funcionan estos ajustes.","Temperatur und Top-P bestimmen gemeinsam, wie abwechslungsreich Maia spielt.
+
+Wir empfehlen Temperatur 1,0, Top-P 0,95 und die aktivierte Option „Maximale Vielfalt in der Eröffnung“. Das sind die Standardeinstellungen. Laut unserer Untersuchung bieten sie eine gute Balance zwischen menschenähnlichem Spiel, Eröffnungsvielfalt und weniger ungewöhnlichen groben Patzern.
+
+Im Folgenden erfährst du, wie diese Einstellungen funktionieren.","La température et Top-P déterminent ensemble la variété dans le jeu de Maia.
+
+Nous recommandons une température de 1,0, Top-P à 0,95 et l’option « Variété maximale dans l’ouverture » activée. Ce sont les réglages par défaut. D’après notre recherche, ils offrent un bon équilibre entre un jeu proche de celui des humains, des ouvertures variées et moins de gaffes inhabituelles.
+
+La suite explique comment fonctionnent ces réglages.","Температура и Top-P вместе определяют разнообразие игры Maia.
+
+Мы рекомендуем температуру 1,0, Top-P 0,95 и включённое «Максимальное разнообразие в дебюте». Это настройки по умолчанию. Согласно нашему исследованию, они дают хороший баланс между игрой, похожей на человеческую, разнообразием дебютов и меньшим количеством необычных зевков.
+
+Ниже объясняется, как работают эти настройки.","तापमान और Top-P मिलकर Maia के खेल में विविधता की मात्रा तय करते हैं।
+
+हम तापमान 1.0, Top-P 0.95 और ओपनिंग में अधिकतम विविधता चालू रखने की सलाह देते हैं। यही डिफ़ॉल्ट सेटिंग हैं। हमारे शोध के अनुसार, इनसे इंसानों जैसा खेल, ओपनिंग में विविधता और असामान्य बड़ी गलतियों में कमी के बीच अच्छा संतुलन मिलता है।
+
+ये सेटिंग कैसे काम करती हैं, यह जानने के लिए आगे पढ़ें।","A temperatura e o Top-P se combinam para definir a variedade no jogo do Maia.
+
+Recomendamos temperatura 1,0, Top-P 0,95 e Máxima variedade na abertura ativada. Essas são as configurações padrão. Segundo nossa pesquisa, elas oferecem um bom equilíbrio entre um jogo parecido com o humano, variedade na abertura e menos erros graves incomuns.
+
+Continue lendo para entender como essas configurações funcionam.",lib/src/sampling_help.dart:31,,,Needs native review
+samplingHelpVariety,"Engine help: Temperature section and opening probability examples. Legacy message ID retained; English revised 2026-10-25. All supported languages translate this approved English explanation. Maia-specific, not a Lichess equivalent.","Temperature
 
 At Temperature 0, Maia always plays the move it predicts a player at the selected Elo is most likely to play. This is technically called argmax.
 
@@ -504,8 +540,179 @@ At Temperature 0, Maia always played 1. e4
 
 At Temperature 0.5, it played 1. e4 about 86% of the time and 1. d4 about 13% of the time. Other moves remained possible, but together accounted for less than 1%.
 
-At Temperature 1, Maia followed the original probabilities listed above.",温度を高くするほど、Maiaが候補手を考えるときの創造性が増す、と考えてください。温度0は、最も指されそうな手（そして、多くの場合は最善手）を選ぶ、経験豊富な対面対局のプレイヤーのようなものです。温度1は、どんな大胆なサクリファイスも恐れず、どれほど指されにくい手でも候補に入れる、創造的なブリッツプレイヤーのようなものです。,你可以把更高的温度理解为Maia思考候选走法时更有创造力。温度为0时，就像一位经验丰富的线下棋手，选择最可能出现（而且往往也是最好）的走法。温度为1时，就像一位富有创造力的快棋棋手，再疯狂的弃子也敢尝试，每一步棋，无论多么不常见，都可以纳入考虑。,"온도가 높을수록 Maia가 후보 수를 생각할 때 더 창의적이라고 이해하면 됩니다. 온도 0은 가장 나올 법한 수(그리고 흔히 최선의 수)를 선택하는, 경험 많은 대면 체스 플레이어와 같습니다. 온도 1은 아무리 대담한 희생도 마다하지 않고, 나올 가능성이 아무리 낮아도 모든 수를 고려하는 창의적인 블리츠 플레이어와 같습니다.","Puedes pensar en una temperatura más alta como una mayor creatividad de Maia al considerar jugadas candidatas. Una temperatura de 0 es como un jugador experimentado de ajedrez presencial, que elige la jugada más probable (y a menudo la mejor). Una temperatura de 1 es como un jugador creativo de blitz, para quien ningún sacrificio es demasiado loco y toda jugada, por improbable que sea, merece considerarse.","Eine höhere Temperatur kannst du dir als mehr Kreativität bei der Suche nach Kandidatenzügen vorstellen. Temperatur 0 ist wie ein erfahrener Spieler am echten Brett, der den wahrscheinlichsten (und oft besten) Zug wählt. Temperatur 1 ist wie ein kreativer Blitzspieler, dem kein Opfer zu verrückt ist und der jeden Zug in Betracht zieht, so unwahrscheinlich er auch sein mag.","Vous pouvez voir une température plus élevée comme une plus grande créativité de Maia lorsqu’elle envisage des coups candidats. Une température de 0 ressemble à un joueur expérimenté devant un véritable échiquier, qui choisit le coup le plus probable (et souvent le meilleur). Une température de 1 ressemble à un joueur de blitz créatif, pour qui aucun sacrifice n’est trop fou et chaque coup, aussi improbable soit-il, mérite d’être envisagé.","Повышенную температуру можно представить как большую изобретательность Maia при выборе ходов-кандидатов. Температура 0 — это как опытный игрок за настоящей доской, который выбирает наиболее вероятный (и часто лучший) ход. Температура 1 — это как изобретательный блицор, для которого нет слишком безумных жертв и который готов рассмотреть любой ход, каким бы маловероятным он ни был.","ज़्यादा तापमान का मतलब आप यह समझ सकते हैं कि संभावित चालें सोचते समय Maia कितना रचनात्मक होगा। तापमान 0 एक अनुभवी खिलाड़ी जैसा है, जो असली बिसात पर सबसे संभावित (और अक्सर सबसे अच्छी) चाल चुनता है। तापमान 1 एक रचनात्मक ब्लिट्ज़ खिलाड़ी जैसा है, जिसके लिए कोई भी बलिदान बहुत पागलपन भरा नहीं है और हर चाल पर विचार किया जा सकता है, चाहे उसकी संभावना कितनी भी कम हो।","Você pode pensar em uma temperatura mais alta como mais criatividade do Maia ao considerar lances candidatos. Uma temperatura de 0 é como um jogador experiente de xadrez presencial, que escolhe o lance mais provável (e muitas vezes o melhor). Uma temperatura de 1 é como um jogador criativo de blitz, para quem nenhum sacrifício é louco demais e todo lance, por mais improvável que seja, merece ser considerado.",lib/src/sampling_help.dart:32,,,Needs native review
-samplingHelpDefaults,"Engine help: Top-P section and filtering example. Legacy message ID retained; English revised 2026-10-25. Other languages retain the previous simple explanation pending translation review. Maia-specific, not a Lichess equivalent.","Top-P
+At Temperature 1, Maia followed the original probabilities listed above.","温度
+
+温度0では、選択したEloのプレイヤーが最も指しそうだとMaiaが予測する手を必ず指します。これは技術的にはargmaxと呼ばれます。
+
+温度1では、選択したEloのプレイヤーが指す可能性があるとMaiaが予測するすべての手を候補とし、それぞれの確率に応じて選びます。
+
+温度が0と1の間の場合、Maiaはより指されやすいと判断した手を重視します。温度を下げるほど、Maiaの選ぶ手は予測しやすくなります。
+
+例えば、79Mモデルを使い、両プレイヤーのレーティング入力を1600にした私たちのテストでは、Maiaが白番で最初に指す手の確率はおよそ次のとおりでした。
+
+• 1. e4：64%
+• 1. d4：25%
+• 1. c4：3%
+• その他の手の合計：8%
+
+温度0では、Maiaは必ず1. e4を指しました。
+
+温度0.5では、1. e4を約86%、1. d4を約13%の割合で指しました。その他の手も選ばれる可能性はありましたが、合計で1%未満でした。
+
+温度1では、Maiaは上記の元の確率に従って指しました。","温度
+
+温度为0时，Maia总是选择它预测所选Elo等级分的棋手最有可能走的一步。这在技术上称为argmax。
+
+温度为1时，Maia会考虑它预测所选Elo等级分的棋手可能采用的全部走法，并按各自的概率从中选择。
+
+温度介于0和1之间时，Maia会更偏重它认为最可能的走法。温度越低，Maia的选择就越容易预测。
+
+例如，在我们使用79M模型、将双方等级分输入均设为1600的测试中，Maia执白时的第一步走法概率大致如下：
+
+• 1. e4：64%
+• 1. d4：25%
+• 1. c4：3%
+• 其他所有走法合计：8%
+
+温度为0时，Maia总是走1. e4。
+
+温度为0.5时，约86%的时候走1. e4，约13%的时候走1. d4。其他走法仍有可能出现，但合计不到1%。
+
+温度为1时，Maia按上面列出的原始概率选择走法。","온도
+
+온도가 0이면 Maia는 선택한 Elo의 플레이어가 가장 많이 둘 것으로 예측한 수를 항상 둡니다. 이를 기술적으로 argmax라고 합니다.
+
+온도가 1이면 Maia는 선택한 Elo의 플레이어가 둘 수 있다고 예측한 모든 수를 고려하고, 각 수의 확률에 따라 선택합니다.
+
+온도가 0과 1 사이이면 Maia는 더 가능성이 높다고 판단한 수에 더 큰 비중을 둡니다. 온도가 낮을수록 Maia의 선택을 예측하기 쉬워집니다.
+
+예를 들어, 79M 모델에서 양쪽 플레이어의 레이팅 입력을 모두 1600으로 설정한 저희 테스트에서 Maia가 백으로 두는 첫 수의 확률은 대략 다음과 같았습니다.
+
+• 1. e4: 64%
+• 1. d4: 25%
+• 1. c4: 3%
+• 나머지 모든 수의 합계: 8%
+
+온도가 0이면 Maia는 항상 1. e4를 두었습니다.
+
+온도가 0.5이면 약 86%는 1. e4, 약 13%는 1. d4를 두었습니다. 다른 수도 가능했지만, 모두 합쳐 1% 미만이었습니다.
+
+온도가 1이면 Maia는 위에 나열된 원래 확률을 따랐습니다.","Temperatura
+
+Con temperatura 0, Maia siempre juega la jugada que predice como la más probable para un jugador del Elo seleccionado. Esto se llama técnicamente argmax.
+
+Con temperatura 1, Maia considera todas las jugadas que predice que podría hacer un jugador del Elo seleccionado y elige entre ellas según sus probabilidades.
+
+Con una temperatura entre 0 y 1, Maia da más peso a las jugadas que considera más probables. Cuanto menor es la temperatura, más predecibles son sus elecciones.
+
+Por ejemplo, en nuestras pruebas con el modelo 79M y un Elo de entrada de 1600 para ambos jugadores, las probabilidades de apertura de Maia con blancas fueron aproximadamente:
+
+• 1. e4: 64%
+• 1. d4: 25%
+• 1. c4: 3%
+• Todas las demás jugadas juntas: 8%
+
+Con temperatura 0, Maia siempre jugó 1. e4.
+
+Con temperatura 0,5, jugó 1. e4 aproximadamente el 86% de las veces y 1. d4 aproximadamente el 13%. Las demás jugadas seguían siendo posibles, pero juntas sumaban menos del 1%.
+
+Con temperatura 1, Maia siguió las probabilidades originales indicadas arriba.","Temperatur
+
+Bei Temperatur 0 spielt Maia immer den Zug, den ein Spieler mit der gewählten Elo laut Maias Vorhersage am wahrscheinlichsten spielen würde. Technisch nennt man das argmax.
+
+Bei Temperatur 1 berücksichtigt Maia alle Züge, die ein Spieler mit der gewählten Elo laut ihrer Vorhersage spielen könnte, und wählt entsprechend ihren Wahrscheinlichkeiten aus.
+
+Bei einer Temperatur zwischen 0 und 1 gewichtet Maia die Züge stärker, die sie für wahrscheinlicher hält. Je niedriger die Temperatur, desto vorhersehbarer wird ihre Zugwahl.
+
+In unseren Tests mit dem 79M-Modell und einer Rating-Eingabe von 1600 für beide Spieler hatte Maia als Weiß zum Beispiel ungefähr diese Wahrscheinlichkeiten für den ersten Zug:
+
+• 1. e4: 64 %
+• 1. d4: 25 %
+• 1. c4: 3 %
+• Alle übrigen Züge zusammen: 8 %
+
+Bei Temperatur 0 spielte Maia immer 1. e4.
+
+Bei Temperatur 0,5 spielte sie in etwa 86 % der Fälle 1. e4 und in etwa 13 % der Fälle 1. d4. Andere Züge blieben möglich, kamen zusammen aber auf weniger als 1 %.
+
+Bei Temperatur 1 folgte Maia den oben angegebenen ursprünglichen Wahrscheinlichkeiten.","Température
+
+À température 0, Maia joue toujours le coup qu’elle prédit comme le plus probable pour un joueur de l’Elo sélectionné. C’est ce que l’on appelle techniquement argmax.
+
+À température 1, Maia envisage tous les coups qu’elle prédit qu’un joueur de l’Elo sélectionné pourrait jouer, et choisit parmi eux selon leurs probabilités.
+
+Avec une température entre 0 et 1, Maia donne davantage de poids aux coups qu’elle estime les plus probables. Plus la température est basse, plus ses choix sont prévisibles.
+
+Par exemple, dans nos tests avec le modèle 79M et une valeur Elo de 1600 en entrée pour les deux joueurs, les probabilités du premier coup de Maia avec les blancs étaient approximativement les suivantes :
+
+• 1. e4 : 64 %
+• 1. d4 : 25 %
+• 1. c4 : 3 %
+• Tous les autres coups réunis : 8 %
+
+À température 0, Maia jouait toujours 1. e4.
+
+À température 0,5, elle jouait 1. e4 environ 86 % du temps et 1. d4 environ 13 % du temps. Les autres coups restaient possibles, mais représentaient ensemble moins de 1 %.
+
+À température 1, Maia suivait les probabilités d’origine indiquées ci-dessus.","Температура
+
+При температуре 0 Maia всегда делает ход, который, по её прогнозу, с наибольшей вероятностью выбрал бы игрок с указанным Elo. Технически это называется argmax.
+
+При температуре 1 Maia рассматривает весь набор ходов, которые, по её прогнозу, мог бы сделать игрок с указанным Elo, и выбирает из них в соответствии с их вероятностями.
+
+При температуре между 0 и 1 Maia придаёт больший вес ходам, которые считает наиболее вероятными. Чем ниже температура, тем предсказуемее её выбор.
+
+Например, в наших тестах модели 79M при входном рейтинге 1600 для обоих игроков вероятности первого хода Maia белыми были примерно такими:
+
+• 1. e4: 64%
+• 1. d4: 25%
+• 1. c4: 3%
+• Все остальные ходы вместе: 8%
+
+При температуре 0 Maia всегда играла 1. e4.
+
+При температуре 0,5 она играла 1. e4 примерно в 86% случаев, а 1. d4 — примерно в 13%. Остальные ходы оставались возможными, но в сумме составляли менее 1%.
+
+При температуре 1 Maia следовала исходным вероятностям, приведённым выше.","तापमान
+
+तापमान 0 पर Maia हमेशा वही चाल खेलता है जिसे उसके अनुमान में चुने गए Elo वाला खिलाड़ी सबसे अधिक संभावना से खेलेगा। इसे तकनीकी भाषा में argmax कहते हैं।
+
+तापमान 1 पर Maia उन सभी चालों पर विचार करता है जिन्हें उसके अनुमान में चुने गए Elo वाला खिलाड़ी खेल सकता है, और उनकी संभावनाओं के अनुसार उनमें से एक चुनता है।
+
+तापमान 0 और 1 के बीच होने पर Maia उन चालों को ज़्यादा वज़न देता है जिन्हें वह सबसे अधिक संभावित मानता है। तापमान जितना कम होगा, Maia के चुनाव का अनुमान लगाना उतना ही आसान होगा।
+
+उदाहरण के लिए, 79M मॉडल के साथ हमारे परीक्षणों में, जब दोनों खिलाड़ियों की रेटिंग इनपुट 1600 थी, तो सफ़ेद मोहरों से Maia की पहली चाल की संभावनाएँ लगभग ये थीं:
+
+• 1. e4: 64%
+• 1. d4: 25%
+• 1. c4: 3%
+• बाकी सभी चालें मिलाकर: 8%
+
+तापमान 0 पर Maia ने हमेशा 1. e4 खेला।
+
+तापमान 0.5 पर उसने लगभग 86% बार 1. e4 और लगभग 13% बार 1. d4 खेला। बाकी चालें भी संभव थीं, लेकिन कुल मिलाकर उनका हिस्सा 1% से कम था।
+
+तापमान 1 पर Maia ने ऊपर दी गई मूल संभावनाओं के अनुसार चालें चुनीं।","Temperatura
+
+Com temperatura 0, o Maia sempre joga o lance que prevê ser o mais provável para um jogador com o Elo selecionado. Isso é chamado tecnicamente de argmax.
+
+Com temperatura 1, o Maia considera todos os lances que prevê que um jogador com o Elo selecionado poderia jogar, escolhendo entre eles de acordo com suas probabilidades.
+
+Com uma temperatura entre 0 e 1, o Maia dá mais peso aos lances que considera mais prováveis. Quanto menor a temperatura, mais previsíveis ficam suas escolhas.
+
+Por exemplo, nos nossos testes com o modelo 79M e entradas de rating de 1600 para ambos os jogadores, as probabilidades do primeiro lance do Maia com as brancas foram aproximadamente:
+
+• 1. e4: 64%
+• 1. d4: 25%
+• 1. c4: 3%
+• Todos os outros lances juntos: 8%
+
+Com temperatura 0, o Maia sempre jogou 1. e4.
+
+Com temperatura 0,5, jogou 1. e4 em cerca de 86% das vezes e 1. d4 em cerca de 13%. Outros lances continuaram possíveis, mas juntos representaram menos de 1%.
+
+Com temperatura 1, o Maia seguiu as probabilidades originais listadas acima.",lib/src/sampling_help.dart:32,,,Needs native review
+samplingHelpDefaults,"Engine help: Top-P section and filtering example. Legacy message ID retained; English revised 2026-10-25. All supported languages translate this approved English explanation. Maia-specific, not a Lichess equivalent.","Top-P
 
 Top-P filters the available moves after Temperature adjusts their probabilities.
 
@@ -515,34 +722,160 @@ At Top-P 0.95, Maia keeps the most likely moves whose combined probability reach
 
 At Top-P 0, Maia always chooses the most likely move. This has the same effect as Temperature 0: either setting is sufficient to produce argmax.
 
-In our opening example, Temperature 1 and Top-P 0.60 would make Maia always play 1. e4. That move alone accounts for about 64% of the probability, so no other moves are needed to reach the 60% threshold.",Top-Pは、Maiaの肩に乗った天使だと考えてください。0では、天使が「奇抜で確率の低い手は無視しよう」とMaiaに助言します。1.0では、天使はいなくなり、Maiaは最も奇抜で指されにくい手さえ選ぶことがあります。,你可以把Top-P想象成Maia肩上的天使。设为0时，天使会告诉Maia忽略那些疯狂、低概率的走法。设为1.0时，天使离开了，Maia甚至可能选择最疯狂、最不可能出现的走法。,"Top-P는 Maia의 어깨 위에 앉은 천사라고 생각하면 됩니다. 0에서는 천사가 Maia에게 엉뚱하고 확률이 낮은 수를 무시하라고 말합니다. 1.0에서는 천사가 떠나고, Maia는 가장 엉뚱하고 나올 가능성이 낮은 수까지 고를 수 있습니다.","Puedes imaginar Top-P como un ángel en el hombro de Maia. Con 0, el ángel le dice a Maia que ignore las jugadas disparatadas y poco probables. Con 1,0, el ángel se ha ido y Maia podría elegir incluso la jugada más disparatada e improbable.","Top-P kannst du dir als Engel auf Maias Schulter vorstellen. Bei 0 sagt der Engel Maia, sie solle wilde, unwahrscheinliche Züge ignorieren. Bei 1,0 ist der Engel verschwunden, und Maia könnte sogar den verrücktesten, unwahrscheinlichsten Zug wählen.","Vous pouvez voir Top-P comme un ange sur l’épaule de Maia. À 0, l’ange dit à Maia d’ignorer les coups extravagants et peu probables. À 1,0, l’ange est parti, et Maia pourrait même choisir le coup le plus fou et le plus improbable.","Top-P можно представить как ангела на плече Maia. При 0 ангел советует Maia не обращать внимания на безумные, маловероятные ходы. При 1,0 ангел исчезает, и Maia может выбрать даже самый безумный и маловероятный ход.","Top-P को आप Maia के कंधे पर बैठे फ़रिश्ते की तरह समझ सकते हैं। 0 पर फ़रिश्ता Maia को अजीब और कम संभावना वाली चालों को नज़रअंदाज़ करने को कहता है। 1.0 पर फ़रिश्ता चला जाता है, और Maia सबसे अजीब और सबसे कम संभावित चाल भी चुन सकता है।","Você pode imaginar o Top-P como um anjo no ombro do Maia. Em 0, o anjo diz ao Maia para ignorar os lances malucos e pouco prováveis. Em 1,0, o anjo foi embora, e Maia pode escolher até o lance mais maluco e improvável.",lib/src/sampling_help.dart:33,,,Needs native review
-samplingHelpStrength,"Engine help: Effect on play, analogy and direct-match research. Legacy message ID retained; English revised 2026-10-25. Other languages retain the previous simple explanation pending translation review. Maia-specific, not a Lichess equivalent.","How do these settings affect Maia’s play?
+In our opening example, Temperature 1 and Top-P 0.60 would make Maia always play 1. e4. That move alone accounts for about 64% of the probability, so no other moves are needed to reach the 60% threshold.","Top-P
+
+Top-Pは、温度によって確率が調整された後に、候補となる手を絞り込みます。
+
+Top-P 1では、絞り込みは行われません。すべての候補手が、温度適用後の確率に応じて選ばれます。
+
+Top-P 0.95では、確率の高い順に、合計確率が95%以上に達するまでの手を残し、その中から選びます。除かれる手の合計確率は最大5%です。
+
+Top-P 0では、Maiaは必ず最も確率の高い手を選びます。これは温度0と同じ効果です。どちらか一方を0にするだけでargmaxになります。
+
+先ほどの初手の例では、温度1、Top-P 0.60にすると、Maiaは必ず1. e4を指します。この手だけで確率の約64%を占めるため、60%のしきい値に達するのに他の手は必要ありません。","Top-P
+
+Top-P在温度调整概率之后，筛选可供选择的走法。
+
+Top-P为1时，不进行筛选。所有候选走法都可以按温度调整后的概率被选中。
+
+Top-P为0.95时，Maia按概率从高到低保留走法，直到累计概率达到至少95%，然后从中选择。被排除走法的累计概率最多为5%。
+
+Top-P为0时，Maia总是选择概率最高的走法。这与温度为0的效果相同：只要其中一个设为0，就会使用argmax。
+
+在前面的开局示例中，温度为1、Top-P为0.60时，Maia总是会走1. e4。仅这一步就占约64%的概率，因此无需其他走法便能达到60%的阈值。","Top-P
+
+Top-P는 온도로 확률을 조정한 뒤 선택할 수 있는 수를 걸러 냅니다.
+
+Top-P가 1이면 필터링하지 않습니다. 모든 후보 수가 온도로 조정된 확률에 따라 선택될 수 있습니다.
+
+Top-P가 0.95이면 Maia는 확률이 높은 수부터 합계 확률이 95% 이상이 될 때까지 남긴 다음, 그중에서 선택합니다. 제외된 수들의 합계 확률은 최대 5%입니다.
+
+Top-P가 0이면 Maia는 항상 가장 확률이 높은 수를 선택합니다. 온도 0과 효과가 같습니다. 둘 중 하나만 0으로 설정해도 argmax가 됩니다.
+
+앞의 오프닝 예에서 온도 1, Top-P 0.60으로 설정하면 Maia는 항상 1. e4를 둡니다. 이 수 하나만으로 확률의 약 64%를 차지하므로, 60% 기준에 도달하는 데 다른 수가 필요하지 않습니다.","Top-P
+
+Top-P filtra las jugadas disponibles después de que la temperatura ajuste sus probabilidades.
+
+Con Top-P 1, no se aplica ningún filtro. Todas las jugadas disponibles pueden jugarse según sus probabilidades ajustadas por la temperatura.
+
+Con Top-P 0,95, Maia conserva las jugadas más probables hasta que su probabilidad conjunta alcanza al menos el 95% y después elige entre ellas. Las jugadas excluidas representan como máximo el 5% de la probabilidad.
+
+Con Top-P 0, Maia siempre elige la jugada más probable. Tiene el mismo efecto que temperatura 0: basta con poner cualquiera de los dos ajustes a 0 para obtener argmax.
+
+En nuestro ejemplo de apertura, temperatura 1 y Top-P 0,60 harían que Maia siempre jugara 1. e4. Esa jugada por sí sola representa alrededor del 64% de la probabilidad, así que no hacen falta otras para alcanzar el umbral del 60%.","Top-P
+
+Top-P filtert die verfügbaren Züge, nachdem die Temperatur ihre Wahrscheinlichkeiten angepasst hat.
+
+Bei Top-P 1 wird nicht gefiltert. Alle verfügbaren Züge können entsprechend ihren durch die Temperatur angepassten Wahrscheinlichkeiten gespielt werden.
+
+Bei Top-P 0,95 behält Maia die wahrscheinlichsten Züge, bis ihre gemeinsame Wahrscheinlichkeit mindestens 95 % erreicht, und wählt dann unter ihnen aus. Die ausgeschlossenen Züge machen höchstens 5 % der Wahrscheinlichkeit aus.
+
+Bei Top-P 0 wählt Maia immer den wahrscheinlichsten Zug. Das hat dieselbe Wirkung wie Temperatur 0: Es reicht, einen der beiden Werte auf 0 zu setzen, um argmax zu erhalten.
+
+In unserem Eröffnungsbeispiel würde Maia mit Temperatur 1 und Top-P 0,60 immer 1. e4 spielen. Dieser Zug allein macht etwa 64 % der Wahrscheinlichkeit aus. Um die Schwelle von 60 % zu erreichen, sind also keine weiteren Züge nötig.","Top-P
+
+Top-P filtre les coups disponibles après que la température a ajusté leurs probabilités.
+
+Avec Top-P à 1, aucun filtrage n’est appliqué. Tous les coups disponibles peuvent être joués selon leurs probabilités ajustées par la température.
+
+Avec Top-P à 0,95, Maia conserve les coups les plus probables jusqu’à ce que leur probabilité cumulée atteigne au moins 95 %, puis choisit parmi eux. Les coups exclus représentent au maximum 5 % de la probabilité.
+
+Avec Top-P à 0, Maia choisit toujours le coup le plus probable. L’effet est le même qu’avec une température de 0 : mettre l’un ou l’autre réglage à 0 suffit pour obtenir argmax.
+
+Dans notre exemple d’ouverture, une température de 1 et Top-P à 0,60 feraient toujours jouer 1. e4 à Maia. Ce coup représente à lui seul environ 64 % de la probabilité ; aucun autre coup n’est donc nécessaire pour atteindre le seuil de 60 %.","Top-P
+
+Top-P отфильтровывает доступные ходы после того, как температура скорректирует их вероятности.
+
+При Top-P 1 фильтрации нет. Все доступные ходы могут быть выбраны в соответствии с вероятностями после применения температуры.
+
+При Top-P 0,95 Maia сохраняет наиболее вероятные ходы, пока их суммарная вероятность не достигнет как минимум 95%, а затем выбирает из них. На исключённые ходы приходится не более 5% вероятности.
+
+При Top-P 0 Maia всегда выбирает наиболее вероятный ход. Эффект тот же, что и при температуре 0: достаточно установить любой из этих двух параметров в 0, чтобы получить argmax.
+
+В нашем примере дебюта при температуре 1 и Top-P 0,60 Maia всегда играла бы 1. e4. На этот ход приходится около 64% вероятности, поэтому для достижения порога 60% другие ходы не нужны.","Top-P
+
+तापमान से संभावनाएँ बदलने के बाद Top-P उपलब्ध चालों की छँटाई करता है।
+
+Top-P 1 पर कोई छँटाई नहीं होती। सभी उपलब्ध चालें तापमान से बदली हुई अपनी संभावनाओं के अनुसार खेली जा सकती हैं।
+
+Top-P 0.95 पर Maia सबसे अधिक संभावित चालों को तब तक रखता है जब तक उनकी कुल संभावना कम से कम 95% न हो जाए, फिर उनमें से एक चुनता है। हटाई गई चालों की कुल संभावना अधिकतम 5% होती है।
+
+Top-P 0 पर Maia हमेशा सबसे अधिक संभावित चाल चुनता है। इसका असर तापमान 0 जैसा ही है: दोनों में से किसी एक को 0 करना argmax के लिए काफ़ी है।
+
+हमारे ओपनिंग उदाहरण में, तापमान 1 और Top-P 0.60 पर Maia हमेशा 1. e4 खेलेगा। अकेली इस चाल की संभावना लगभग 64% है, इसलिए 60% की सीमा तक पहुँचने के लिए किसी दूसरी चाल की ज़रूरत नहीं है।","Top-P
+
+O Top-P filtra os lances disponíveis depois que a temperatura ajusta suas probabilidades.
+
+Com Top-P 1, não há filtragem. Todos os lances disponíveis podem ser jogados de acordo com suas probabilidades ajustadas pela temperatura.
+
+Com Top-P 0,95, o Maia mantém os lances mais prováveis até que sua probabilidade somada atinja pelo menos 95%, e então escolhe entre eles. Os lances excluídos representam no máximo 5% da probabilidade.
+
+Com Top-P 0, o Maia sempre escolhe o lance mais provável. O efeito é o mesmo que o da temperatura 0: basta definir qualquer um dos dois como 0 para obter argmax.
+
+No nosso exemplo de abertura, temperatura 1 e Top-P 0,60 fariam o Maia sempre jogar 1. e4. Esse lance sozinho representa cerca de 64% da probabilidade, então não são necessários outros lances para atingir o limite de 60%.",lib/src/sampling_help.dart:33,,,Needs native review
+samplingHelpStrength,"Engine help: Effect on play, analogy and direct-match research. Legacy message ID retained; English revised 2026-10-25. All supported languages translate this approved English explanation. Maia-specific, not a Lichess equivalent.","How do these settings affect Maia’s play?
 
 You can think of Top-P as an angel on Maia’s shoulder. At 0, the angel tells Maia to ignore lower-probability moves, which can include blunders or unsound moves. At 1.0, the angel has gone, and Maia could select even the craziest, most improbable move.
 
-In our direct-match tests at the 1600 setting, argmax outperformed Temperature 1.0 / Top-P 1.0 by the equivalent of about 300 Elo points. However, argmax also limited opening choices to a narrow range of mainly main lines.",私たちの研究では、0と0の設定（技術的にはargmaxと呼びます）が最も強い指し方となり、1.0と1.0の設定より約300 Elo強くなりました。ただし、オープニングの選択肢も、主にメインラインの狭い範囲に限られるようになりました。,在我们的研究中，0和0的设置（技术上称为argmax）带来了最强的表现，比1.0和1.0的设置强约300 Elo。不过，这也把开局选择限制在以主线为主的较小范围内。,"연구 결과, 0과 0 설정(기술적으로 argmax라고 부릅니다)이 가장 강한 플레이를 보였으며, 1.0과 1.0 설정보다 약 300 Elo 더 강했습니다. 하지만 오프닝 선택도 주로 메인라인 위주의 좁은 범위로 제한되었습니다.","En nuestra investigación, los ajustes de 0 y 0 (lo que técnicamente se llama argmax) produjeron el juego más fuerte: unos 300 Elo por encima de los ajustes de 1,0 y 1,0. Sin embargo, también limitaron las opciones de apertura a un repertorio reducido, compuesto principalmente por líneas principales.","In unserer Untersuchung ergaben die Einstellungen 0 und 0 (technisch argmax genannt) das stärkste Spiel: etwa 300 Elo stärker als die Einstellungen 1,0 und 1,0. Allerdings beschränkte das auch die Eröffnungsauswahl auf einen engen Bereich, überwiegend aus Hauptvarianten.","Dans notre recherche, les réglages 0 et 0 (appelés techniquement argmax) ont produit le jeu le plus fort : environ 300 Elo de plus que les réglages 1,0 et 1,0. Cependant, cela limitait aussi les choix d’ouverture à un éventail restreint, composé surtout de variantes principales.","В нашем исследовании настройки 0 и 0 (технически это называется argmax) дали самую сильную игру — примерно на 300 Elo сильнее, чем настройки 1,0 и 1,0. Однако это также ограничило выбор дебютов узким набором преимущественно основных вариантов.","हमारे शोध में 0 और 0 की सेटिंग (जिसे तकनीकी भाषा में argmax कहते हैं) से सबसे मज़बूत खेल मिला—1.0 और 1.0 की सेटिंग से लगभग 300 Elo अधिक मज़बूत। हालांकि, इससे ओपनिंग के विकल्प भी सीमित हो गए और ज़्यादातर मुख्य लाइनों तक सिमट गए।","Na nossa pesquisa, as configurações de 0 e 0 (tecnicamente chamadas de argmax) produziram o jogo mais forte: cerca de 300 Elo acima das configurações de 1,0 e 1,0. No entanto, isso também limitou as opções de abertura a um repertório restrito, composto principalmente por linhas principais.",lib/src/sampling_help.dart:34,,,Needs native review
-samplingHelpArgmax,"Engine help: Opening variety override. Legacy message ID retained; English revised 2026-10-25. Other languages retain the previous simple explanation pending translation review. Maia-specific, not a Lichess equivalent.","So, we introduced Max variety in opening: a toggle which sets Maia to play with Temperature 1.0 and Top-P 1.0 for the first five moves by each side. You might see some crazy things in the opening phase! From move six, Maia switches to your configured settings.",そこで、序盤の多様性を最大にする機能を導入しました。最初の5手はMaiaの設定を1.0と1.0にするスイッチです。序盤には驚くような手が出るかもしれません！ ただし、6手目からは、あらかじめ指定した設定に切り替わります。,因此，我们加入了最大化开局多样性的功能：打开这个开关，Maia在前5步会使用1.0和1.0的设置。你可能会在开局阶段看到一些疯狂的走法！不过，从第6步起，Maia就会切换回你预先配置的设置。,그래서 오프닝 다양성을 최대화하는 기능을 도입했습니다. 이 스위치를 켜면 처음 5수 동안 Maia가 1.0과 1.0 설정으로 둡니다. 오프닝에서 놀라운 수를 볼 수도 있습니다! 하지만 6수째부터는 미리 지정한 설정으로 돌아갑니다.,"Por eso introdujimos la función para maximizar la variedad en la apertura: un interruptor que hace que Maia use los ajustes de 1,0 y 1,0 durante las primeras 5 jugadas. ¡Puede que veas alguna locura en la apertura! Pero, a partir de la sexta jugada, Maia vuelve a los ajustes que hayas configurado.","Deshalb haben wir eine Funktion für maximale Eröffnungsvielfalt eingeführt: einen Schalter, mit dem Maia für die ersten 5 Züge die Einstellungen 1,0 und 1,0 verwendet. In der Eröffnung könntest du einige verrückte Dinge sehen! Ab dem 6. Zug wechselt Maia aber zu deinen voreingestellten Werten.","Nous avons donc introduit une fonction pour maximiser la variété en ouverture : un interrupteur qui fait jouer Maia avec les réglages 1,0 et 1,0 pendant les 5 premiers coups. Vous pourriez voir des choses folles dans l’ouverture ! Mais à partir du 6e coup, Maia revient aux réglages que vous avez configurés.","Поэтому мы добавили функцию максимального разнообразия в дебюте: переключатель, с которым Maia использует настройки 1,0 и 1,0 на первых 5 ходах. В дебюте можно увидеть что-нибудь безумное! Но с 6-го хода Maia переходит к заданным вами настройкам.",इसलिए हमने ओपनिंग में अधिकतम विविधता की सुविधा जोड़ी: एक स्विच जो पहली 5 चालों के लिए Maia की सेटिंग 1.0 और 1.0 कर देता है। ओपनिंग में आपको कुछ अजीबोगरीब चालें दिख सकती हैं! लेकिन छठी चाल से Maia आपकी पहले से तय की गई सेटिंग पर लौट आता है।,"Por isso, introduzimos o recurso de maximizar a variedade na abertura: uma opção que faz o Maia usar as configurações de 1,0 e 1,0 nos primeiros 5 lances. Você pode ver algumas loucuras na abertura! Mas, a partir do 6º lance, Maia volta às configurações que você definiu.",lib/src/sampling_help.dart:35,,,Needs native review
-samplingHelpTopP,"Engine help: Recommended play and strongest tested setting. Legacy message ID retained; English revised 2026-10-25. Other languages retain the previous simple explanation pending translation review. Maia-specific, not a Lichess equivalent.","We recommend keeping max opening variety on and Temperature set to 1.0 and Top-P set to 0.95. This is like having a creative player with an angel on its shoulder that at least talks it out of playing the totally far-out moves—the least likely moves whose combined probability is up to 5%. These might be brilliant, true, but they can also be silly blunders. So this should make for a good balance of variety in the opening, creativity in the middle game, and stronger play through the exclusion of some very low-probability blunders.
+In our direct-match tests at the 1600 setting, argmax outperformed Temperature 1.0 / Top-P 1.0 by the equivalent of about 300 Elo points. However, argmax also limited opening choices to a narrow range of mainly main lines.","これらの設定はMaiaの指し方にどう影響するのでしょうか？
+
+Top-Pは、Maiaの肩に乗った天使だと考えてください。0では、天使がMaiaに、確率の低い手は無視するよう助言します。そうした手には大悪手や無理のある手も含まれます。1.0では、天使はいなくなり、Maiaは最も奇抜で指されにくい手さえ選ぶことがあります。
+
+レーティング設定1600での直接対戦テストでは、argmaxは温度1.0 / Top-P 1.0を約300 Elo相当上回る成績を収めました。ただし、オープニングの選択肢も、主にメインラインの狭い範囲に限られるようになりました。","这些设置会怎样影响Maia的走法？
+
+你可以把Top-P想象成Maia肩上的天使。设为0时，天使会告诉Maia忽略概率较低的走法，其中可能包括败着或不合理的走法。设为1.0时，天使离开了，Maia甚至可能选择最疯狂、最不可能出现的走法。
+
+在等级分设置为1600的直接对局测试中，argmax的表现优于温度1.0 / Top-P 1.0，相当于约300个Elo等级分的差距。不过，argmax也把开局选择限制在以主线为主的较小范围内。","이 설정들은 Maia의 플레이에 어떤 영향을 줄까요?
+
+Top-P는 Maia의 어깨 위에 앉은 천사라고 생각하면 됩니다. 0에서는 천사가 Maia에게 확률이 낮은 수를 무시하라고 말합니다. 여기에는 블런더나 무리한 수도 포함될 수 있습니다. 1.0에서는 천사가 떠나고, Maia는 가장 엉뚱하고 나올 가능성이 낮은 수까지 고를 수 있습니다.
+
+레이팅 설정 1600에서 진행한 직접 대결 테스트에서는 argmax가 온도 1.0 / Top-P 1.0보다 약 300 Elo에 해당하는 우위를 보였습니다. 하지만 argmax는 오프닝 선택도 주로 메인라인 위주의 좁은 범위로 제한했습니다.","¿Cómo afectan estos ajustes al juego de Maia?
+
+Puedes imaginar Top-P como un ángel en el hombro de Maia. Con 0, el ángel le dice a Maia que ignore las jugadas menos probables, que pueden incluir errores graves o jugadas poco sólidas. Con 1,0, el ángel se ha ido y Maia podría elegir incluso la jugada más disparatada e improbable.
+
+En nuestras pruebas de enfrentamientos directos con el ajuste de 1600, argmax superó a temperatura 1,0 / Top-P 1,0 por el equivalente a unos 300 puntos Elo. Sin embargo, argmax también limitó las opciones de apertura a un repertorio reducido, compuesto principalmente por líneas principales.","Wie beeinflussen diese Einstellungen Maias Spiel?
+
+Top-P kannst du dir als Engel auf Maias Schulter vorstellen. Bei 0 sagt der Engel Maia, sie solle weniger wahrscheinliche Züge ignorieren, darunter möglicherweise grobe Patzer oder fragwürdige Züge. Bei 1,0 ist der Engel verschwunden, und Maia könnte sogar den verrücktesten, unwahrscheinlichsten Zug wählen.
+
+In unseren direkten Vergleichspartien bei der Einstellung 1600 war argmax gegenüber Temperatur 1,0 / Top-P 1,0 im Vorteil, entsprechend etwa 300 Elo-Punkten. Allerdings beschränkte argmax auch die Eröffnungsauswahl auf einen engen Bereich, überwiegend aus Hauptvarianten.","Comment ces réglages influencent-ils le jeu de Maia ?
+
+Vous pouvez voir Top-P comme un ange sur l’épaule de Maia. À 0, l’ange dit à Maia d’ignorer les coups moins probables, qui peuvent comprendre des gaffes ou des coups peu solides. À 1,0, l’ange est parti, et Maia pourrait même choisir le coup le plus fou et le plus improbable.
+
+Dans nos tests en confrontation directe au réglage 1600, argmax a surpassé température 1,0 / Top-P 1,0 d’un écart équivalant à environ 300 points Elo. Cependant, argmax limitait aussi les choix d’ouverture à un éventail restreint, composé surtout de variantes principales.","Как эти настройки влияют на игру Maia?
+
+Top-P можно представить как ангела на плече Maia. При 0 ангел советует Maia игнорировать менее вероятные ходы, среди которых могут быть зевки или необоснованные решения. При 1,0 ангел исчезает, и Maia может выбрать даже самый безумный и маловероятный ход.
+
+В наших тестах с прямыми матчами при настройке 1600 argmax превзошёл температуру 1,0 / Top-P 1,0 с преимуществом, эквивалентным примерно 300 пунктам Elo. Однако argmax также ограничил выбор дебютов узким набором преимущественно основных вариантов.","इन सेटिंग से Maia के खेल पर क्या असर पड़ता है?
+
+Top-P को आप Maia के कंधे पर बैठे फ़रिश्ते की तरह समझ सकते हैं। 0 पर फ़रिश्ता Maia को कम संभावना वाली चालों को नज़रअंदाज़ करने को कहता है, जिनमें बड़ी गलतियाँ या कमज़ोर चालें भी हो सकती हैं। 1.0 पर फ़रिश्ता चला जाता है, और Maia सबसे अजीब और सबसे कम संभावित चाल भी चुन सकता है।
+
+1600 की सेटिंग पर हमारे सीधे मुकाबलों के परीक्षणों में argmax ने तापमान 1.0 / Top-P 1.0 के मुकाबले लगभग 300 Elo अंकों के बराबर बेहतर प्रदर्शन किया। हालांकि, argmax ने ओपनिंग के विकल्प भी सीमित कर दिए और वे ज़्यादातर मुख्य लाइनों तक सिमट गए।","Como essas configurações afetam o jogo do Maia?
+
+Você pode imaginar o Top-P como um anjo no ombro do Maia. Em 0, o anjo diz ao Maia para ignorar os lances menos prováveis, que podem incluir erros graves ou lances pouco sólidos. Em 1,0, o anjo foi embora, e o Maia pode escolher até o lance mais maluco e improvável.
+
+Nos nossos testes de confronto direto com a configuração de 1600, argmax superou temperatura 1,0 / Top-P 1,0 pelo equivalente a cerca de 300 pontos Elo. No entanto, argmax também limitou as opções de abertura a um repertório restrito, composto principalmente por linhas principais.",lib/src/sampling_help.dart:34,,,Needs native review
+samplingHelpArgmax,"Engine help: Opening variety override. Legacy message ID retained; English revised 2026-10-25. All supported languages translate this approved English explanation. Maia-specific, not a Lichess equivalent.","So, we introduced Max variety in opening: a toggle which sets Maia to play with Temperature 1.0 and Top-P 1.0 for the first five moves by each side. You might see some crazy things in the opening phase! From move six, Maia switches to your configured settings.",そこで、「序盤の多様性を最大にする」を導入しました。白黒それぞれの最初の5手は、温度1.0、Top-P 1.0でMaiaに指させるスイッチです。序盤には驚くような手が出るかもしれません！ 6手目からは、指定した設定に切り替わります。,因此，我们加入了“开局多样性最大化”：开启后，Maia会在双方各自的前五步使用温度1.0和Top-P 1.0。你可能会在开局阶段看到一些疯狂的走法！从第六步起，Maia就会切换回你配置的设置。,"그래서 오프닝 다양성 최대화를 도입했습니다. 이 스위치를 켜면 양쪽이 각각 두는 처음 다섯 수 동안 Maia가 온도 1.0, Top-P 1.0으로 둡니다. 오프닝에서 놀라운 수를 볼 수도 있습니다! 여섯 번째 수부터는 지정한 설정으로 돌아갑니다.","Por eso introdujimos Máxima variedad en la apertura: un interruptor que hace que Maia juegue con temperatura 1,0 y Top-P 1,0 durante las primeras cinco jugadas de cada bando. ¡Puede que veas alguna locura en la apertura! A partir de la sexta jugada, Maia vuelve a los ajustes que hayas configurado.","Deshalb haben wir „Maximale Vielfalt in der Eröffnung“ eingeführt: einen Schalter, mit dem Maia für die ersten fünf Züge jeder Seite Temperatur 1,0 und Top-P 1,0 verwendet. In der Eröffnung könntest du einige verrückte Dinge sehen! Ab dem sechsten Zug wechselt Maia zu deinen eingestellten Werten.","Nous avons donc introduit « Variété maximale dans l’ouverture » : un interrupteur qui fait jouer Maia avec une température de 1,0 et Top-P à 1,0 pendant les cinq premiers coups de chaque camp. Vous pourriez voir des choses folles dans l’ouverture ! À partir du sixième coup, Maia revient aux réglages que vous avez configurés.","Поэтому мы добавили «Максимальное разнообразие в дебюте»: переключатель, с которым Maia использует температуру 1,0 и Top-P 1,0 на первых пяти ходах каждой стороны. В дебюте можно увидеть что-нибудь безумное! С шестого хода Maia переходит к заданным вами настройкам.",इसलिए हमने ओपनिंग में अधिकतम विविधता की सुविधा जोड़ी: एक स्विच जो दोनों पक्षों की अपनी-अपनी पहली पाँच चालों तक Maia को तापमान 1.0 और Top-P 1.0 पर खिलाता है। ओपनिंग में आपको कुछ अजीबोगरीब चालें दिख सकती हैं! छठी चाल से Maia आपकी तय की गई सेटिंग पर लौट आता है।,"Por isso, introduzimos Máxima variedade na abertura: uma opção que faz o Maia jogar com temperatura 1,0 e Top-P 1,0 nos primeiros cinco lances de cada lado. Você pode ver algumas loucuras na abertura! A partir do sexto lance, o Maia volta às configurações que você definiu.",lib/src/sampling_help.dart:35,,,Needs native review
+samplingHelpTopP,"Engine help: Recommended play and strongest tested setting. Legacy message ID retained; English revised 2026-10-25. All supported languages translate this approved English explanation. Maia-specific, not a Lichess equivalent.","We recommend keeping max opening variety on and Temperature set to 1.0 and Top-P set to 0.95. This is like having a creative player with an angel on its shoulder that at least talks it out of playing the totally far-out moves—the least likely moves whose combined probability is up to 5%. These might be brilliant, true, but they can also be silly blunders. So this should make for a good balance of variety in the opening, creativity in the middle game, and stronger play through the exclusion of some very low-probability blunders.
 
 For those feeling brave, Temperature 0 produced the strongest play in our tests. Good luck!","「序盤の多様性を最大にする」はオンのまま、温度は1.0、Top-Pは0.95のままにしておくことをおすすめします。創造的なプレイヤーの肩に天使が乗り、少なくとも極端に奇抜な手は思いとどまらせるようなイメージです。除かれるのは、確率の低い手のうち、合計確率が最大5%になる部分です。そうした手には妙手もあるでしょうが、単純な大悪手もあり得ます。序盤の多様性、中盤の創造性、そして非常に確率の低い大悪手の一部を除くことによる強さの、よいバランスが期待できます。
 
-腕に自信のある方は、温度を0にしてみてください（温度0ではTop-Pは意味を持ちません）。私たちの研究では、最も手強い相手になる設定です。健闘を祈ります！","我们建议保持最大开局多样性开启，温度保持为1.0，Top-P保持为0.95。这就像一位富有创造力的棋手肩上有个天使，至少能劝它放弃那些特别离谱的走法——也就是概率最低、合计概率不超过5%的那些走法。它们可能是妙招，没错，但也可能是愚蠢的败着。因此，这应该能在开局的多样性、中局的创造力，以及通过排除部分极低概率的败着所获得的更强表现之间，取得良好的平衡。
+腕に自信のある方は、温度を0にしてみてください。私たちのテストでは、最も強い指し方となりました。健闘を祈ります！","我们建议保持“开局多样性最大化”开启，温度保持为1.0，Top-P保持为0.95。这就像一位富有创造力的棋手肩上有个天使，至少能劝它放弃那些特别离谱的走法——也就是概率最低、合计概率不超过5%的那些走法。它们可能是妙招，没错，但也可能是愚蠢的败着。因此，这应该能在开局的多样性、中局的创造力，以及通过排除部分极低概率的败着所获得的更强表现之间，取得良好的平衡。
 
-如果你勇于挑战，可以将温度设为0（温度为0时，Top-P没有作用）。根据我们的研究，这会带来最强的对手。祝你好运！","오프닝 다양성 최대화를 켜 둔 채 온도는 1.0, Top-P는 0.95로 유지하는 것을 권장합니다. 창의적인 플레이어의 어깨 위에 천사가 앉아 적어도 지나치게 엉뚱한 수는 두지 않도록 말려 주는 셈입니다. 제외되는 것은 확률이 가장 낮은 수들 중 합계 확률이 최대 5%인 부분입니다. 이런 수는 묘수일 수도 있지만, 어이없는 블런더일 수도 있습니다. 따라서 오프닝의 다양성, 미들게임의 창의성, 그리고 확률이 매우 낮은 블런더 일부를 제외해 얻는 더 강한 플레이 사이에서 좋은 균형을 기대할 수 있습니다.
+如果你勇于挑战，温度0在我们的测试中表现最强。祝你好运！","오프닝 다양성 최대화를 켜 둔 채 온도는 1.0, Top-P는 0.95로 유지하는 것을 권장합니다. 창의적인 플레이어의 어깨 위에 천사가 앉아 적어도 지나치게 엉뚱한 수는 두지 않도록 말려 주는 셈입니다. 제외되는 것은 확률이 가장 낮은 수들 중 합계 확률이 최대 5%인 부분입니다. 이런 수는 묘수일 수도 있지만, 어이없는 블런더일 수도 있습니다. 따라서 오프닝의 다양성, 미들게임의 창의성, 그리고 확률이 매우 낮은 블런더 일부를 제외해 얻는 더 강한 플레이 사이에서 좋은 균형을 기대할 수 있습니다.
 
-자신 있다면 온도를 0으로 설정해 보세요(온도가 0이면 Top-P는 의미가 없습니다). 연구 결과에 따르면 가장 강한 상대가 됩니다. 행운을 빕니다!","Recomendamos mantener activada la máxima variedad en la apertura, con la temperatura en 1,0 y Top-P en 0,95. Es como tener un jugador creativo con un ángel en el hombro que, al menos, lo disuade de jugar las jugadas más descabelladas: las menos probables, cuya probabilidad conjunta suma hasta un 5%. Es cierto que podrían ser brillantes, pero también pueden ser errores graves y absurdos. Así se busca un buen equilibrio entre variedad en la apertura, creatividad en el medio juego y un juego más fuerte al excluir algunos errores graves de probabilidad muy baja.
+도전할 자신이 있다면 온도 0을 선택해 보세요. 저희 테스트에서 가장 강한 플레이를 보였습니다. 행운을 빕니다!","Recomendamos mantener activada Máxima variedad en la apertura, con la temperatura en 1,0 y Top-P en 0,95. Es como tener un jugador creativo con un ángel en el hombro que, al menos, lo disuade de jugar las jugadas más descabelladas: las menos probables, cuya probabilidad conjunta suma hasta un 5%. Es cierto que podrían ser brillantes, pero también pueden ser errores graves y absurdos. Así se busca un buen equilibrio entre variedad en la apertura, creatividad en el medio juego y un juego más fuerte al excluir algunos errores graves de probabilidad muy baja.
 
-Para quienes se atrevan, ajustar la temperatura a 0 (Top-P no tiene efecto cuando la temperatura es 0) ofrecerá el rival más fuerte, según nuestra investigación. ¡Buena suerte!","Wir empfehlen, maximale Eröffnungsvielfalt eingeschaltet und Temperatur auf 1,0 sowie Top-P auf 0,95 eingestellt zu lassen. Das ist wie ein kreativer Spieler mit einem Engel auf der Schulter, der ihm zumindest die völlig abwegigen Züge ausredet: die unwahrscheinlichsten Züge, deren gemeinsame Wahrscheinlichkeit bis zu 5 % beträgt. Diese könnten zwar brillant sein, aber auch dumme grobe Patzer. So sollte eine gute Balance aus Eröffnungsvielfalt, Kreativität im Mittelspiel und stärkerem Spiel entstehen, indem einige sehr unwahrscheinliche grobe Patzer ausgeschlossen werden.
+Para quienes se atrevan, la temperatura 0 produjo el juego más fuerte en nuestras pruebas. ¡Buena suerte!","Wir empfehlen, „Maximale Vielfalt in der Eröffnung“ eingeschaltet und Temperatur auf 1,0 sowie Top-P auf 0,95 eingestellt zu lassen. Das ist wie ein kreativer Spieler mit einem Engel auf der Schulter, der ihm zumindest die völlig abwegigen Züge ausredet: die unwahrscheinlichsten Züge, deren gemeinsame Wahrscheinlichkeit bis zu 5 % beträgt. Diese könnten zwar brillant sein, aber auch dumme grobe Patzer. So sollte eine gute Balance aus Eröffnungsvielfalt, Kreativität im Mittelspiel und stärkerem Spiel entstehen, indem einige sehr unwahrscheinliche grobe Patzer ausgeschlossen werden.
 
-Wer mutig ist, kann Temperatur auf 0 setzen (Top-P hat bei Temperatur 0 keine Wirkung). Laut unserer Untersuchung ergibt das den stärksten Gegner. Viel Glück!","Nous recommandons de garder la variété maximale en ouverture activée, avec la température réglée sur 1,0 et Top-P sur 0,95. C’est comme un joueur créatif avec un ange sur l’épaule, qui le dissuade au moins de jouer les coups complètement farfelus : les coups les moins probables dont la probabilité cumulée représente jusqu’à 5 %. Ils pourraient certes être brillants, mais aussi être des gaffes absurdes. Cela devrait offrir un bon équilibre entre variété en ouverture, créativité en milieu de partie et jeu plus fort grâce à l’exclusion de certaines gaffes très peu probables.
+Wer mutig ist: Temperatur 0 führte in unseren Tests zum stärksten Spiel. Viel Glück!","Nous recommandons de garder « Variété maximale dans l’ouverture » activée, avec la température réglée sur 1,0 et Top-P sur 0,95. C’est comme un joueur créatif avec un ange sur l’épaule, qui le dissuade au moins de jouer les coups complètement farfelus : les coups les moins probables dont la probabilité cumulée représente jusqu’à 5 %. Ils pourraient certes être brillants, mais aussi être des gaffes absurdes. Cela devrait offrir un bon équilibre entre variété en ouverture, créativité en milieu de partie et jeu plus fort grâce à l’exclusion de certaines gaffes très peu probables.
 
-Pour les plus courageux, régler la température sur 0 (Top-P n’a aucun effet lorsque la température est à 0) donnera l’adversaire le plus fort, d’après notre recherche. Bonne chance !","Мы рекомендуем оставить максимальное разнообразие в дебюте включённым, температуру — на 1,0, а Top-P — на 0,95. Это как изобретательный игрок с ангелом на плече, который хотя бы отговаривает его от совсем уж нелепых ходов — наименее вероятных, суммарная вероятность которых составляет до 5%. Конечно, они могут оказаться блестящими, но могут быть и глупыми зевками. Это должно дать хороший баланс разнообразия в дебюте, изобретательности в миттельшпиле и более сильной игры за счёт исключения некоторых крайне маловероятных зевков.
+Pour les plus courageux, la température 0 a produit le jeu le plus fort dans nos tests. Bonne chance !","Мы рекомендуем оставить «Максимальное разнообразие в дебюте» включённым, температуру — на 1,0, а Top-P — на 0,95. Это как изобретательный игрок с ангелом на плече, который хотя бы отговаривает его от совсем уж нелепых ходов — наименее вероятных, суммарная вероятность которых составляет до 5%. Конечно, они могут оказаться блестящими, но могут быть и глупыми зевками. Это должно дать хороший баланс разнообразия в дебюте, изобретательности в миттельшпиле и более сильной игры за счёт исключения некоторых крайне маловероятных зевков.
 
-Если вы готовы рискнуть, установите температуру 0 (при температуре 0 Top-P ни на что не влияет): по данным нашего исследования, это даст самого сильного соперника. Удачи!","हम ओपनिंग में अधिकतम विविधता चालू रखने और तापमान 1.0 तथा Top-P 0.95 रखने की सलाह देते हैं। यह एक रचनात्मक खिलाड़ी के कंधे पर बैठे फ़रिश्ते जैसा है, जो कम से कम उसे बिल्कुल बेतुकी चालें खेलने से रोकता है—यानी सबसे कम संभावित चालें, जिनकी कुल संभावना अधिकतम 5% होती है। ये चालें शानदार हो सकती हैं, लेकिन बेवकूफ़ी भरी बड़ी गलतियाँ भी हो सकती हैं। इससे ओपनिंग में विविधता, मध्य खेल में रचनात्मकता और बहुत कम संभावना वाली कुछ बड़ी गलतियों को हटाकर अधिक मज़बूत खेल के बीच अच्छा संतुलन मिलना चाहिए।
+Для тех, кто готов рискнуть: температура 0 дала самую сильную игру в наших тестах. Удачи!","हम ओपनिंग में अधिकतम विविधता चालू रखने और तापमान 1.0 तथा Top-P 0.95 रखने की सलाह देते हैं। यह एक रचनात्मक खिलाड़ी के कंधे पर बैठे फ़रिश्ते जैसा है, जो कम से कम उसे बिल्कुल बेतुकी चालें खेलने से रोकता है—यानी सबसे कम संभावित चालें, जिनकी कुल संभावना अधिकतम 5% होती है। ये चालें शानदार हो सकती हैं, लेकिन बेवकूफ़ी भरी बड़ी गलतियाँ भी हो सकती हैं। इससे ओपनिंग में विविधता, मध्य खेल में रचनात्मकता और बहुत कम संभावना वाली कुछ बड़ी गलतियों को हटाकर अधिक मज़बूत खेल के बीच अच्छा संतुलन मिलना चाहिए।
 
-अगर आप चुनौती के लिए तैयार हैं, तो तापमान 0 रखें (तापमान 0 होने पर Top-P का कोई असर नहीं होता)। हमारे शोध के अनुसार, इससे सबसे मज़बूत प्रतिद्वंद्वी मिलेगा। शुभकामनाएँ!","Recomendamos manter a variedade máxima na abertura ativada, com a temperatura em 1,0 e o Top-P em 0,95. É como ter um jogador criativo com um anjo no ombro, que pelo menos o convence a não jogar os lances totalmente descabidos: os menos prováveis, cuja probabilidade somada chega a até 5%. Eles podem ser brilhantes, é verdade, mas também podem ser erros graves e bobos. Assim, deve haver um bom equilíbrio entre variedade na abertura, criatividade no meio-jogo e um jogo mais forte ao excluir alguns erros graves de probabilidade muito baixa.
+अगर आप चुनौती के लिए तैयार हैं, तो हमारे परीक्षणों में तापमान 0 से सबसे मज़बूत खेल मिला। शुभकामनाएँ!","Recomendamos manter Máxima variedade na abertura ativada, com a temperatura em 1,0 e o Top-P em 0,95. É como ter um jogador criativo com um anjo no ombro, que pelo menos o convence a não jogar os lances totalmente descabidos: os menos prováveis, cuja probabilidade somada chega a até 5%. Eles podem ser brilhantes, é verdade, mas também podem ser erros graves e bobos. Assim, deve haver um bom equilíbrio entre variedade na abertura, criatividade no meio-jogo e um jogo mais forte ao excluir alguns erros graves de probabilidade muito baixa.
 
-Para quem tem coragem, definir a temperatura como 0 (o Top-P não tem efeito quando a temperatura é 0) produzirá o adversário mais forte, segundo nossa pesquisa. Boa sorte!",lib/src/sampling_help.dart:36,,,Needs native review
+Para quem tem coragem, a temperatura 0 produziu o jogo mais forte nos nossos testes. Boa sorte!",lib/src/sampling_help.dart:36,,,Needs native review
 samplingHelpResearchIntro,"Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.","See the visual guide for the research behind these choices, with links to the full results.",設定を選んだ理由を図で紹介しています。詳しい研究結果へのリンクもあります。,查看图解指南，了解这些选择背后的研究，并访问完整结果。,이 선택의 근거가 된 연구와 전체 결과 링크를 시각적 가이드에서 확인하세요.,Consulta la guía visual para conocer la investigación que respalda estas decisiones y acceder a los resultados completos.,Der bebilderte Leitfaden erklärt die Forschung hinter diesen Entscheidungen und verlinkt die vollständigen Ergebnisse.,Le guide visuel présente la recherche derrière ces choix et les liens vers les résultats complets.,"В наглядном руководстве объяснено исследование, на котором основан этот выбор, и приведены ссылки на полные результаты.",इन विकल्पों के पीछे का शोध और पूरे परिणामों के लिंक चित्रों वाली मार्गदर्शिका में देखें।,O guia visual explica a pesquisa por trás dessas escolhas e traz links para os resultados completos.,lib/src/sampling_help.dart:51,,,Needs native review
 samplingFullVarietyNotice,"Maia-specific sampling guidance for the 2.5 default proposal. Preserve probability mass versus individual move probability, the five-full-move boundary and conditional direct-match strength claims. Not a Lichess equivalent. Explanation selector changes prose only.",Maia may play more unusual blunders with Temperature and Top-P at 1.0 / 1.0.,温度とTop-Pが1.0 / 1.0の場合、Maiaが意外な大悪手を指すことが増える可能性があります。,温度和Top-P为1.0 / 1.0时，Maia可能走出更多不寻常的败着。,온도와 Top-P가 1.0 / 1.0이면 Maia가 뜻밖의 블런더를 더 자주 둘 수 있습니다.,"Maia puede cometer más errores graves poco habituales con temperatura y Top-P en 1,0 / 1,0.","Mit Temperatur und Top-P 1,0 / 1,0 kann Maia häufiger ungewöhnliche grobe Patzer spielen.","Maia peut commettre davantage de gaffes inhabituelles avec température et Top-P à 1,0 / 1,0.","При температуре и Top-P 1,0 / 1,0 Maia может чаще допускать необычные зевки.",तापमान और Top-P 1.0 / 1.0 पर Maia अधिक असामान्य बड़ी गलतियाँ कर सकता है।,"Maia pode cometer mais erros graves incomuns com temperatura e Top-P em 1,0 / 1,0.",lib/src/sampling_help.dart:10,,,Needs native review
 samplingArgmaxNotice,"Strength notice when Temperature or Top-P is zero, with or without opening variety. Includes Good luck. The opening override timing is explained in the help, not this short notice. Maia-specific, no Lichess equivalent.",Maia may play stronger with Temperature or Top-P at 0. Good luck!,温度またはTop-Pが0の場合、Maiaがより強くなる可能性があります。幸運を！,温度或Top-P为0时，Maia可能更强。祝您好运！,온도 또는 Top-P가 0이면 Maia가 더 강해질 수 있습니다. 행운을 빕니다!,Maia puede jugar más fuerte con temperatura o Top-P en 0. ¡Buena suerte!,Mit Temperatur oder Top-P 0 kann Maia stärker spielen. Viel Glück!,Maia peut jouer plus fort avec température ou Top-P à 0. Bonne chance !,При температуре или Top-P 0 Maia может играть сильнее. Удачи!,तापमान या Top-P 0 पर Maia अधिक मज़बूती से खेल सकता है। शुभकामनाएँ!,Maia pode jogar mais forte com temperatura ou Top-P em 0. Boa sorte!,lib/src/sampling_help.dart:12,,,Needs native review
