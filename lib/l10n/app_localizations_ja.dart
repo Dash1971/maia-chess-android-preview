@@ -1413,4 +1413,31 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get boardPieceSet => '駒のデザイン';
+
+  @override
+  String get editorMoveTool => '駒を移動';
+
+  @override
+  String get editorEraseTool => '駒を削除';
+
+  @override
+  String get editorEmptySquare => '空きマス';
+
+  @override
+  String get editorPositionSettings => '局面の設定';
+
+  @override
+  String get editorImageImportUnavailable => '画像から局面を読み込む（準備中）';
+
+  @override
+  String get editorShareFen => 'FENを共有';
+
+  @override
+  String get editorFenMetadata => 'FENの詳細';
+
+  @override
+  String get editorHalfmoveClock => '半手カウンター';
+
+  @override
+  String get editorFullmoveNumber => '手数';
 }

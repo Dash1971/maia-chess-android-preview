@@ -417,5 +417,14 @@
   "boardTargetNone": "Nenhum",
   "boardPreferenceError": "Não foi possível salvar as configurações do tabuleiro. Tente novamente.",
   "boardDesign": "Tabuleiro",
-  "boardPieceSet": "Estilo das peças"
+  "boardPieceSet": "Estilo das peças",
+  "editorMoveTool": "Mover peças",
+  "editorEraseTool": "Apagar peças",
+  "editorEmptySquare": "Casa vazia",
+  "editorPositionSettings": "Configurações da posição",
+  "editorImageImportUnavailable": "Importar posição de imagem (ainda indisponível)",
+  "editorShareFen": "Compartilhar FEN",
+  "editorFenMetadata": "Metadados FEN",
+  "editorHalfmoveClock": "Contador de meios-lances",
+  "editorFullmoveNumber": "Número do lance"
 }

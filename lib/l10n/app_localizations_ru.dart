@@ -1540,4 +1540,32 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'Оформление фигур';
+
+  @override
+  String get editorMoveTool => 'Перемещать фигуры';
+
+  @override
+  String get editorEraseTool => 'Удалять фигуры';
+
+  @override
+  String get editorEmptySquare => 'Пустое поле';
+
+  @override
+  String get editorPositionSettings => 'Настройки позиции';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'Импорт позиции из изображения (пока недоступен)';
+
+  @override
+  String get editorShareFen => 'Поделиться FEN';
+
+  @override
+  String get editorFenMetadata => 'Параметры FEN';
+
+  @override
+  String get editorHalfmoveClock => 'Счётчик полуходов';
+
+  @override
+  String get editorFullmoveNumber => 'Номер хода';
 }

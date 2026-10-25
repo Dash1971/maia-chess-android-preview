@@ -1527,4 +1527,32 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'Estilo das peças';
+
+  @override
+  String get editorMoveTool => 'Mover peças';
+
+  @override
+  String get editorEraseTool => 'Apagar peças';
+
+  @override
+  String get editorEmptySquare => 'Casa vazia';
+
+  @override
+  String get editorPositionSettings => 'Configurações da posição';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'Importar posição de imagem (ainda indisponível)';
+
+  @override
+  String get editorShareFen => 'Compartilhar FEN';
+
+  @override
+  String get editorFenMetadata => 'Metadados FEN';
+
+  @override
+  String get editorHalfmoveClock => 'Contador de meios-lances';
+
+  @override
+  String get editorFullmoveNumber => 'Número do lance';
 }

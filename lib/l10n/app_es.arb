@@ -417,5 +417,14 @@
   "boardTargetNone": "Ninguna",
   "boardPreferenceError": "No se han podido guardar los ajustes del tablero. Inténtalo de nuevo.",
   "boardDesign": "Tablero",
-  "boardPieceSet": "Estilo de piezas"
+  "boardPieceSet": "Estilo de piezas",
+  "editorMoveTool": "Mover piezas",
+  "editorEraseTool": "Borrar piezas",
+  "editorEmptySquare": "Casilla vacía",
+  "editorPositionSettings": "Ajustes de la posición",
+  "editorImageImportUnavailable": "Importar posición desde una imagen (aún no disponible)",
+  "editorShareFen": "Compartir FEN",
+  "editorFenMetadata": "Metadatos FEN",
+  "editorHalfmoveClock": "Contador de medias jugadas",
+  "editorFullmoveNumber": "Número de jugada"
 }

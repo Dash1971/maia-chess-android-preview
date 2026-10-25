@@ -247,3 +247,18 @@ The CC BY / CC BY-SA / CC0 license names above link to the corresponding
 bundled full terms; source and author links are preserved in Lila's bundled
 COPYING notice. Restricted, noncommercial and unresolved sets are omitted
 from both the selector and the distributed package asset declarations.
+
+## Lichess mobile board editor interaction reference
+
+- Source: https://github.com/lichess-org/mobile
+- Revision: v0.30.1, `243b19b532c86101a389072becce60e51c71bbd0`
+- Files: `lib/src/view/board_editor/board_editor_screen.dart` and
+  `lib/src/model/board_editor/board_editor_controller.dart`
+- Authors: Lichess contributors; license: GNU GPL v3.
+
+Mobile Maia's editor layout and placement/drag/castling behavior are adapted from
+this reference with its own standard-chess draft state, accessible touch tools,
+local analysis/continuation and FEN flows. Variant/challenge/image recognition are
+not copied as working features. The adapted component remains subject to GPL v3;
+the combined application is distributed under AGPL-3.0-only as permitted by
+section 13. The existing bundled GPL license text is available in license information.

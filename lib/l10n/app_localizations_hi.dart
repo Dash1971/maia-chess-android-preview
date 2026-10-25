@@ -1517,4 +1517,32 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'मोहरे';
+
+  @override
+  String get editorMoveTool => 'मोहरे चलाएँ';
+
+  @override
+  String get editorEraseTool => 'मोहरे हटाएँ';
+
+  @override
+  String get editorEmptySquare => 'खाली खाना';
+
+  @override
+  String get editorPositionSettings => 'स्थिति की सेटिंग';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'चित्र से स्थिति आयात करें (अभी उपलब्ध नहीं)';
+
+  @override
+  String get editorShareFen => 'FEN साझा करें';
+
+  @override
+  String get editorFenMetadata => 'FEN की अतिरिक्त जानकारी';
+
+  @override
+  String get editorHalfmoveClock => 'आधी चालों की गिनती';
+
+  @override
+  String get editorFullmoveNumber => 'चाल संख्या';
 }

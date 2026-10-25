@@ -1520,4 +1520,32 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'Jeu de pièces';
+
+  @override
+  String get editorMoveTool => 'Déplacer les pièces';
+
+  @override
+  String get editorEraseTool => 'Effacer les pièces';
+
+  @override
+  String get editorEmptySquare => 'Case vide';
+
+  @override
+  String get editorPositionSettings => 'Réglages de la position';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'Importer une position depuis une image (pas encore disponible)';
+
+  @override
+  String get editorShareFen => 'Partager la FEN';
+
+  @override
+  String get editorFenMetadata => 'Métadonnées FEN';
+
+  @override
+  String get editorHalfmoveClock => 'Compteur de demi-coups';
+
+  @override
+  String get editorFullmoveNumber => 'Numéro du coup';
 }

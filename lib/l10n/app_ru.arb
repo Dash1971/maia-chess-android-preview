@@ -417,5 +417,14 @@
   "boardTargetNone": "Нет",
   "boardPreferenceError": "Не удалось сохранить настройки доски. Повторите попытку.",
   "boardDesign": "Доска",
-  "boardPieceSet": "Оформление фигур"
+  "boardPieceSet": "Оформление фигур",
+  "editorMoveTool": "Перемещать фигуры",
+  "editorEraseTool": "Удалять фигуры",
+  "editorEmptySquare": "Пустое поле",
+  "editorPositionSettings": "Настройки позиции",
+  "editorImageImportUnavailable": "Импорт позиции из изображения (пока недоступен)",
+  "editorShareFen": "Поделиться FEN",
+  "editorFenMetadata": "Параметры FEN",
+  "editorHalfmoveClock": "Счётчик полуходов",
+  "editorFullmoveNumber": "Номер хода"
 }

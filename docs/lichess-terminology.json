@@ -2374,6 +2374,177 @@
         "pt": "Estilo das peças"
       },
       "adaptations": {}
+    },
+    "editorMoveTool": {
+      "upstream_key": "move",
+      "upstream": {
+        "en": "Move",
+        "ja": "手",
+        "zh": "着法",
+        "ko": "수",
+        "es": "Movimiento",
+        "de": "Zug",
+        "fr": "Coup",
+        "ru": "Ход",
+        "hi": "चाल",
+        "pt": "Movimentos"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Move pieces",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "ja": {
+          "value": "駒を移動",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "zh": {
+          "value": "移动棋子",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "ko": {
+          "value": "기물 이동",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "es": {
+          "value": "Mover piezas",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "de": {
+          "value": "Figuren verschieben",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "fr": {
+          "value": "Déplacer les pièces",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "ru": {
+          "value": "Перемещать фигуры",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "hi": {
+          "value": "मोहरे चलाएँ",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "pt": {
+          "value": "Mover peças",
+          "reason": "Name the editor piece tool explicitly."
+        }
+      }
+    },
+    "editorEraseTool": {
+      "upstream_key": "delete",
+      "upstream": {
+        "en": "Delete",
+        "ja": "削除",
+        "zh": "删除",
+        "ko": "삭제",
+        "es": "Borrar",
+        "de": "Löschen",
+        "fr": "Effacer",
+        "ru": "Удалить",
+        "hi": "हटाएँ",
+        "pt": "Excluir"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Erase pieces",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "ja": {
+          "value": "駒を削除",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "zh": {
+          "value": "移除棋子",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "ko": {
+          "value": "기물 지우기",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "es": {
+          "value": "Borrar piezas",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "de": {
+          "value": "Figuren entfernen",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "fr": {
+          "value": "Effacer les pièces",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "ru": {
+          "value": "Удалять фигуры",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "hi": {
+          "value": "मोहरे हटाएँ",
+          "reason": "Name the editor piece tool explicitly."
+        },
+        "pt": {
+          "value": "Apagar peças",
+          "reason": "Name the editor piece tool explicitly."
+        }
+      }
+    },
+    "editorShareFen": {
+      "upstream_key": "mobileShareGamePGN",
+      "upstream": {
+        "en": "Share PGN",
+        "ja": "PGN を共有",
+        "zh": "分享 PGN",
+        "ko": "PGN 공유",
+        "es": "Compartir PGN",
+        "de": "PGN teilen",
+        "fr": "Partager le PGN",
+        "ru": "Поделиться PGN",
+        "hi": "पीजीएन शेयर करें",
+        "pt": "Compartilhar PGN"
+      },
+      "adaptations": {
+        "en": {
+          "value": "Share FEN",
+          "reason": "Share a FEN position rather than a PGN game; preserve the format name."
+        },
+        "ja": {
+          "value": "FENを共有",
+          "reason": "Share a FEN position rather than a PGN game; preserve the format name."
+        },
+        "zh": {
+          "value": "分享 FEN",
+          "reason": "Share a FEN position rather than a PGN game; preserve the format name."
+        },
+        "ko": {
+          "value": "FEN 공유",
+          "reason": "Share a FEN position rather than a PGN game; preserve the format name."
+        },
+        "es": {
+          "value": "Compartir FEN",
+          "reason": "Share a FEN position rather than a PGN game; preserve the format name."
+        },
+        "de": {
+          "value": "FEN teilen",
+          "reason": "Share a FEN position rather than a PGN game; preserve the format name."
+        },
+        "fr": {
+          "value": "Partager la FEN",
+          "reason": "Share a FEN position rather than a PGN game; preserve the format name."
+        },
+        "ru": {
+          "value": "Поделиться FEN",
+          "reason": "Share a FEN position rather than a PGN game; preserve the format name."
+        },
+        "hi": {
+          "value": "FEN साझा करें",
+          "reason": "Share a FEN position rather than a PGN game; preserve the format name."
+        },
+        "pt": {
+          "value": "Compartilhar FEN",
+          "reason": "Share a FEN position rather than a PGN game; preserve the format name."
+        }
+      }
     }
   }
 }

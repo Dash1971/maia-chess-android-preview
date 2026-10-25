@@ -409,3 +409,13 @@ including native Hindi fallbacks where the upstream catalog has no value.
 Design names remain Lichess's artwork proper names, including Cburnett and
 Kiwen-suwi, in every language. Selected state is exposed through native semantics
 in addition to its visible checkmark. Persistence errors reuse the board-aid text.
+
+## Lichess-style board editor (#189)
+
+The Move/Delete actions name pieces explicitly in tooltips and screen-reader
+labels, and Share game becomes Share FEN for the editor's exported position.
+These adaptations are recorded against the pinned upstream catalogs. Position
+settings, unavailable image import, empty squares and FEN counter descriptions
+are editor-specific labels in all ten languages. No Variant/Challenge labels or
+camera-working-state claims are introduced. Source interaction reference and
+layout adaptations are pinned in `docs/BOARD_EDITOR.md`.

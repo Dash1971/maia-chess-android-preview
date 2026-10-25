@@ -417,5 +417,14 @@
   "boardTargetNone": "Aucune",
   "boardPreferenceError": "Impossible d’enregistrer les réglages de l’échiquier. Réessayez.",
   "boardDesign": "Échiquier",
-  "boardPieceSet": "Jeu de pièces"
+  "boardPieceSet": "Jeu de pièces",
+  "editorMoveTool": "Déplacer les pièces",
+  "editorEraseTool": "Effacer les pièces",
+  "editorEmptySquare": "Case vide",
+  "editorPositionSettings": "Réglages de la position",
+  "editorImageImportUnavailable": "Importer une position depuis une image (pas encore disponible)",
+  "editorShareFen": "Partager la FEN",
+  "editorFenMetadata": "Métadonnées FEN",
+  "editorHalfmoveClock": "Compteur de demi-coups",
+  "editorFullmoveNumber": "Numéro du coup"
 }

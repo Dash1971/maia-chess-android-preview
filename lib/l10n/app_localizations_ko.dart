@@ -1417,4 +1417,31 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get boardPieceSet => '기물 세트';
+
+  @override
+  String get editorMoveTool => '기물 이동';
+
+  @override
+  String get editorEraseTool => '기물 지우기';
+
+  @override
+  String get editorEmptySquare => '빈 칸';
+
+  @override
+  String get editorPositionSettings => '포지션 설정';
+
+  @override
+  String get editorImageImportUnavailable => '이미지에서 포지션 가져오기 (아직 사용할 수 없음)';
+
+  @override
+  String get editorShareFen => 'FEN 공유';
+
+  @override
+  String get editorFenMetadata => 'FEN 메타데이터';
+
+  @override
+  String get editorHalfmoveClock => '반수 카운터';
+
+  @override
+  String get editorFullmoveNumber => '수 번호';
 }

@@ -417,5 +417,14 @@
   "boardTargetNone": "없음",
   "boardPreferenceError": "보드 설정을 저장하지 못했습니다. 다시 시도해 주세요.",
   "boardDesign": "보드",
-  "boardPieceSet": "기물 세트"
+  "boardPieceSet": "기물 세트",
+  "editorMoveTool": "기물 이동",
+  "editorEraseTool": "기물 지우기",
+  "editorEmptySquare": "빈 칸",
+  "editorPositionSettings": "포지션 설정",
+  "editorImageImportUnavailable": "이미지에서 포지션 가져오기 (아직 사용할 수 없음)",
+  "editorShareFen": "FEN 공유",
+  "editorFenMetadata": "FEN 메타데이터",
+  "editorHalfmoveClock": "반수 카운터",
+  "editorFullmoveNumber": "수 번호"
 }

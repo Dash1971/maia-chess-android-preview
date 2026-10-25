@@ -1523,4 +1523,32 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'Figurenstil';
+
+  @override
+  String get editorMoveTool => 'Figuren verschieben';
+
+  @override
+  String get editorEraseTool => 'Figuren entfernen';
+
+  @override
+  String get editorEmptySquare => 'Leeres Feld';
+
+  @override
+  String get editorPositionSettings => 'Stellungseinstellungen';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'Stellung aus Bild importieren (noch nicht verfügbar)';
+
+  @override
+  String get editorShareFen => 'FEN teilen';
+
+  @override
+  String get editorFenMetadata => 'FEN-Metadaten';
+
+  @override
+  String get editorHalfmoveClock => 'Halbzugzähler';
+
+  @override
+  String get editorFullmoveNumber => 'Zugnummer';
 }

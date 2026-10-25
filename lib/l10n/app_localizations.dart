@@ -2625,6 +2625,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Piece set'**
   String get boardPieceSet;
+
+  /// Standard-chess board editor: Move pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Move pieces'**
+  String get editorMoveTool;
+
+  /// Standard-chess board editor: Erase pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase pieces'**
+  String get editorEraseTool;
+
+  /// Standard-chess board editor: Empty square. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty square'**
+  String get editorEmptySquare;
+
+  /// Standard-chess board editor: Position settings. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Position settings'**
+  String get editorPositionSettings;
+
+  /// Standard-chess board editor: Import position from image (not yet available). Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Import position from image (not yet available)'**
+  String get editorImageImportUnavailable;
+
+  /// Standard-chess board editor: Share FEN. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Share FEN'**
+  String get editorShareFen;
+
+  /// Standard-chess board editor: FEN metadata. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'FEN metadata'**
+  String get editorFenMetadata;
+
+  /// Standard-chess board editor: Halfmove clock. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Halfmove clock'**
+  String get editorHalfmoveClock;
+
+  /// Standard-chess board editor: Move number. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Move number'**
+  String get editorFullmoveNumber;
 }
 
 class _AppLocalizationsDelegate

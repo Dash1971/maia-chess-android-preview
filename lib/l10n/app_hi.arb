@@ -417,5 +417,14 @@
   "boardTargetNone": "कोई नहीं",
   "boardPreferenceError": "बोर्ड की सेटिंग सहेजी नहीं जा सकीं। कृपया फिर से प्रयास करें।",
   "boardDesign": "बोर्ड की डिज़ाइन",
-  "boardPieceSet": "मोहरे"
+  "boardPieceSet": "मोहरे",
+  "editorMoveTool": "मोहरे चलाएँ",
+  "editorEraseTool": "मोहरे हटाएँ",
+  "editorEmptySquare": "खाली खाना",
+  "editorPositionSettings": "स्थिति की सेटिंग",
+  "editorImageImportUnavailable": "चित्र से स्थिति आयात करें (अभी उपलब्ध नहीं)",
+  "editorShareFen": "FEN साझा करें",
+  "editorFenMetadata": "FEN की अतिरिक्त जानकारी",
+  "editorHalfmoveClock": "आधी चालों की गिनती",
+  "editorFullmoveNumber": "चाल संख्या"
 }

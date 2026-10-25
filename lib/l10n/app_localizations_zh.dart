@@ -1392,4 +1392,31 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get boardPieceSet => '棋子样式';
+
+  @override
+  String get editorMoveTool => '移动棋子';
+
+  @override
+  String get editorEraseTool => '移除棋子';
+
+  @override
+  String get editorEmptySquare => '空格';
+
+  @override
+  String get editorPositionSettings => '局面设置';
+
+  @override
+  String get editorImageImportUnavailable => '从图片导入局面（尚不可用）';
+
+  @override
+  String get editorShareFen => '分享 FEN';
+
+  @override
+  String get editorFenMetadata => 'FEN 元数据';
+
+  @override
+  String get editorHalfmoveClock => '半回合计数';
+
+  @override
+  String get editorFullmoveNumber => '回合数';
 }
