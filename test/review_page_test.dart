@@ -569,20 +569,16 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Temperature and Top-P'), findsOneWidget);
-    expect(find.text('Simple explanation'), findsOneWidget);
-    expect(find.text('Technical explanation'), findsOneWidget);
-    expect(find.textContaining('some 300 Elo stronger'), findsOneWidget);
+    expect(find.text('Simple explanation'), findsNothing);
+    expect(find.text('Technical explanation'), findsNothing);
+    expect(find.textContaining('about 300 Elo points'), findsOneWidget);
     expect(
       find.textContaining('some very low-probability blunders'),
       findsOneWidget,
     );
-    await tester.tap(find.byKey(const ValueKey('sampling-help-technical')));
-    await tester.pumpAndSettle();
-    expect(find.textContaining('exp((logit'), findsOneWidget);
-    expect(
-      find.textContaining('not all moves individually below 5%'),
-      findsOneWidget,
-    );
+    expect(find.byKey(const ValueKey('sampling-help-technical')), findsNothing);
+    expect(find.textContaining('exp((logit'), findsNothing);
+    expect(find.textContaining('Top-P 0.60'), findsOneWidget);
 
     final link = find.byKey(const ValueKey('sampling-research-link'));
     await tester.ensureVisible(link);

@@ -1214,7 +1214,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get maiaHistoryHelp =>
-      'Permet à Maia de prendre en compte jusqu’à sept positions précédentes en plus de la position actuelle. Cela a amélioré la précision des prédictions des coups humains d’environ 2 points de pourcentage dans nos tests avec le modèle 79M, mais a parfois favorisé l’imitation répétée des coups dans les ouvertures à faible classement. Nous n’avons pas pu établir de gain de force de jeu. Pour l’instant, nous recommandons de laisser cette option désactivée.';
+      'Permet à Maia d’utiliser jusqu’à sept positions précédentes pour choisir un coup. Dans nos tests avec le modèle 79M, cela a amélioré la précision des prédictions des coups humains d’environ 2 points de pourcentage, mais a parfois entraîné une imitation répétée des coups dans les ouvertures à faible niveau Elo. Pour l’instant, nous recommandons de laisser cette option désactivée.';
 
   @override
   String get maiaHistoryResearch =>
@@ -1396,53 +1396,31 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get samplingHelpIntro =>
-      'La température et Top-P déterminent ensemble la variété du jeu de Maia.';
+      'La température et Top-P déterminent ensemble la variété dans le jeu de Maia.\n\nNous recommandons une température de 1,0, Top-P à 0,95 et l’option « Variété maximale dans l’ouverture » activée. Ce sont les réglages par défaut. D’après notre recherche, ils offrent un bon équilibre entre un jeu proche de celui des humains, des ouvertures variées et moins de gaffes inhabituelles.\n\nLa suite explique comment fonctionnent ces réglages.';
 
   @override
   String get samplingHelpVariety =>
-      'Vous pouvez voir une température plus élevée comme une plus grande créativité de Maia lorsqu’elle envisage des coups candidats. Une température de 0 ressemble à un joueur expérimenté devant un véritable échiquier, qui choisit le coup le plus probable (et souvent le meilleur). Une température de 1 ressemble à un joueur de blitz créatif, pour qui aucun sacrifice n’est trop fou et chaque coup, aussi improbable soit-il, mérite d’être envisagé.';
+      'Température\n\nÀ température 0, Maia joue toujours le coup qu’elle prédit comme le plus probable pour un joueur de l’Elo sélectionné. C’est ce que l’on appelle techniquement argmax.\n\nÀ température 1, Maia envisage tous les coups qu’elle prédit qu’un joueur de l’Elo sélectionné pourrait jouer, et choisit parmi eux selon leurs probabilités.\n\nAvec une température entre 0 et 1, Maia donne davantage de poids aux coups qu’elle estime les plus probables. Plus la température est basse, plus ses choix sont prévisibles.\n\nPar exemple, dans nos tests avec le modèle 79M et une valeur Elo de 1600 en entrée pour les deux joueurs, les probabilités du premier coup de Maia avec les blancs étaient approximativement les suivantes :\n\n• 1. e4 : 64 %\n• 1. d4 : 25 %\n• 1. c4 : 3 %\n• Tous les autres coups réunis : 8 %\n\nÀ température 0, Maia jouait toujours 1. e4.\n\nÀ température 0,5, elle jouait 1. e4 environ 86 % du temps et 1. d4 environ 13 % du temps. Les autres coups restaient possibles, mais représentaient ensemble moins de 1 %.\n\nÀ température 1, Maia suivait les probabilités d’origine indiquées ci-dessus.';
 
   @override
   String get samplingHelpDefaults =>
-      'Vous pouvez voir Top-P comme un ange sur l’épaule de Maia. À 0, l’ange dit à Maia d’ignorer les coups extravagants et peu probables. À 1,0, l’ange est parti, et Maia pourrait même choisir le coup le plus fou et le plus improbable.';
+      'Top-P\n\nTop-P filtre les coups disponibles après que la température a ajusté leurs probabilités.\n\nAvec Top-P à 1, aucun filtrage n’est appliqué. Tous les coups disponibles peuvent être joués selon leurs probabilités ajustées par la température.\n\nAvec Top-P à 0,95, Maia conserve les coups les plus probables jusqu’à ce que leur probabilité cumulée atteigne au moins 95 %, puis choisit parmi eux. Les coups exclus représentent au maximum 5 % de la probabilité.\n\nAvec Top-P à 0, Maia choisit toujours le coup le plus probable. L’effet est le même qu’avec une température de 0 : mettre l’un ou l’autre réglage à 0 suffit pour obtenir argmax.\n\nDans notre exemple d’ouverture, une température de 1 et Top-P à 0,60 feraient toujours jouer 1. e4 à Maia. Ce coup représente à lui seul environ 64 % de la probabilité ; aucun autre coup n’est donc nécessaire pour atteindre le seuil de 60 %.';
 
   @override
   String get samplingHelpStrength =>
-      'Dans notre recherche, les réglages 0 et 0 (appelés techniquement argmax) ont produit le jeu le plus fort : environ 300 Elo de plus que les réglages 1,0 et 1,0. Cependant, cela limitait aussi les choix d’ouverture à un éventail restreint, composé surtout de variantes principales.';
+      'Comment ces réglages influencent-ils le jeu de Maia ?\n\nVous pouvez voir Top-P comme un ange sur l’épaule de Maia. À 0, l’ange dit à Maia d’ignorer les coups moins probables, qui peuvent comprendre des gaffes ou des coups peu solides. À 1,0, l’ange est parti, et Maia pourrait même choisir le coup le plus fou et le plus improbable.\n\nDans nos tests en confrontation directe au réglage 1600, argmax a surpassé température 1,0 / Top-P 1,0 d’un écart équivalant à environ 300 points Elo. Cependant, argmax limitait aussi les choix d’ouverture à un éventail restreint, composé surtout de variantes principales.';
 
   @override
   String get samplingHelpArgmax =>
-      'Nous avons donc introduit une fonction pour maximiser la variété en ouverture : un interrupteur qui fait jouer Maia avec les réglages 1,0 et 1,0 pendant les 5 premiers coups. Vous pourriez voir des choses folles dans l’ouverture ! Mais à partir du 6e coup, Maia revient aux réglages que vous avez configurés.';
+      'Nous avons donc introduit « Variété maximale dans l’ouverture » : un interrupteur qui fait jouer Maia avec une température de 1,0 et Top-P à 1,0 pendant les cinq premiers coups de chaque camp. Vous pourriez voir des choses folles dans l’ouverture ! À partir du sixième coup, Maia revient aux réglages que vous avez configurés.';
 
   @override
   String get samplingHelpTopP =>
-      'Nous recommandons de garder la variété maximale en ouverture activée, avec la température réglée sur 1,0 et Top-P sur 0,95. C’est comme un joueur créatif avec un ange sur l’épaule, qui le dissuade au moins de jouer les coups complètement farfelus : les coups les moins probables dont la probabilité cumulée représente jusqu’à 5 %. Ils pourraient certes être brillants, mais aussi être des gaffes absurdes. Cela devrait offrir un bon équilibre entre variété en ouverture, créativité en milieu de partie et jeu plus fort grâce à l’exclusion de certaines gaffes très peu probables.\n\nPour les plus courageux, régler la température sur 0 (Top-P n’a aucun effet lorsque la température est à 0) donnera l’adversaire le plus fort, d’après notre recherche. Bonne chance !';
+      'Nous recommandons de garder « Variété maximale dans l’ouverture » activée, avec la température réglée sur 1,0 et Top-P sur 0,95. C’est comme un joueur créatif avec un ange sur l’épaule, qui le dissuade au moins de jouer les coups complètement farfelus : les coups les moins probables dont la probabilité cumulée représente jusqu’à 5 %. Ils pourraient certes être brillants, mais aussi être des gaffes absurdes. Cela devrait offrir un bon équilibre entre variété en ouverture, créativité en milieu de partie et jeu plus fort grâce à l’exclusion de certaines gaffes très peu probables.\n\nPour les plus courageux, la température 0 a produit le jeu le plus fort dans nos tests. Bonne chance !';
 
   @override
   String get samplingHelpResearchIntro =>
       'Le guide visuel présente la recherche derrière ces choix et les liens vers les résultats complets.';
-
-  @override
-  String get samplingTechnicalTemperature =>
-      'La température ajuste les logits des coups légaux avant softmax. Pour T > 0, chaque poids vaut exp((logit − logit maximal) / T), puis est normalisé. T = 1 conserve la distribution du modèle ; réduire T concentre la probabilité sur les candidats les mieux notés. T = 0 choisit directement un argmax et ignore Top-P.';
-
-  @override
-  String get samplingTechnicalTopP =>
-      'Top-P trie les probabilités ajustées par ordre décroissant et garde le plus petit préfixe atteignant le seuil, y compris le coup qui le dépasse. Les probabilités conservées sont renormalisées avant le tirage. P = 1 garde tous les coups ; P = 0, un coup de probabilité maximale. P = 0,95 retire au plus 5% de la probabilité totale, et non tous les coups dont la probabilité individuelle est inférieure à 5%.';
-
-  @override
-  String get samplingTechnicalOpening =>
-      'Valeurs par défaut : température 1,0, Top-P 0,95, variété maximale en ouverture activée. Les numéros de coup complet 1–5 du FEN utilisent 1,0 / 1,0 pour les deux couleurs, puis les valeurs configurées dès le coup 6. Reprendre une partie ou continuer depuis une position ne remet pas ce compteur à zéro. Les pourcentages du plateau d’analyse restent ceux du modèle avant ces réglages de jeu.';
-
-  @override
-  String get samplingTechnicalEvidence =>
-      'Avec le modèle 79M, l’historique désactivé et le niveau 1600, les valeurs proposées ont obtenu 60,7% des points contre 1,0 / 1,0 sur 600 parties (intervalle à 95% : 56,8–64,6%). Les anciens tests argmax donnaient environ 300 Elo d’avantage en confrontation. Ce ne sont pas des classements calibrés face aux humains. Cinq coups est un choix de conception, pas un optimum démontré ; filtrer les probabilités ne garantit pas de bons coups.';
-
-  @override
-  String get samplingSimpleExplanation => 'Explication simple';
-
-  @override
-  String get samplingTechnicalExplanation => 'Explication technique';
 
   @override
   String get samplingFullVarietyNotice =>
