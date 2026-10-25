@@ -1517,4 +1517,29 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'मोहरे';
+
+  @override
+  String get showMaiaScore => 'Maia का स्कोर % दिखाएँ';
+
+  @override
+  String get maiaScore => 'Maia स्कोर';
+
+  @override
+  String get maiaScoreEqual => 'बराबरी';
+
+  @override
+  String get maiaScoreHelp =>
+      'हर Maia अपनी विश्लेषण रेटिंग के अनुसार मौजूदा स्थिति का अनुमान दिखाती है। ड्रॉ को आधा अंक गिना जाता है। Stockfish का मूल्यांकन भी दिखता रहता है।';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      'यह अपेक्षित स्कोर है, जीत की वास्तविक संभावना नहीं। डिफ़ॉल्ट रूप से बंद है।';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      'हर अनुमान दोनों खिलाड़ियों के लिए उस Maia की विश्लेषण रेटिंग और मौजूदा चाल-इतिहास इनपुट का उपयोग करता है। तापमान, Top-P और Stockfish की गुणवत्ता इस प्रतिशत को तय नहीं करती।';
+
+  @override
+  String get maiaScorePreferenceError =>
+      'Maia स्कोर की सेटिंग सहेजी नहीं जा सकीं। कृपया फिर से प्रयास करें।';
 }

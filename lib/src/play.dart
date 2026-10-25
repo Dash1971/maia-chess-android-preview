@@ -1276,6 +1276,7 @@ class _GamePageState extends State<GamePage>
     final language = AppLanguageSettings.maybeOf(context);
     final appearance = AppAppearanceSettings.maybeOf(context);
     final board = BoardPreferencesScope.maybeOf(context);
+    final maiaScore = MaiaScoreScope.maybeOf(context);
     _cancelGameFeedback();
     setState(() {
       _resettingSettings = true;
@@ -1320,6 +1321,14 @@ class _GamePageState extends State<GamePage>
         await BoardPreferencesController.writePreference(
           const BoardPreferences().encode(),
         );
+      }
+      if (maiaScore != null) {
+        await maiaScore.select(false);
+        if (maiaScore.persistenceFailed) {
+          throw StateError('Maia score reset failed');
+        }
+      } else {
+        await MaiaScoreController.writePreference(false);
       }
       if (!mounted) return;
       if (language != null) {
@@ -5163,6 +5172,7 @@ class _GamePageState extends State<GamePage>
                         onChangeEnd: (_) => unawaited(_saveEnginePreferences()),
                       ),
                     ),
+                  const MaiaScoreSetting(),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
                     child: Column(

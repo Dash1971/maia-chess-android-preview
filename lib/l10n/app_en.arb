@@ -1965,5 +1965,33 @@
   "boardPieceSet": "Piece set",
   "@boardPieceSet": {
     "description": "Visual piece set selector. Style names are upstream artwork names and remain unchanged."
+  },
+  "showMaiaScore": "Show Maia score %",
+  "@showMaiaScore": {
+    "description": "Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish."
+  },
+  "maiaScore": "Maia score",
+  "@maiaScore": {
+    "description": "Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish."
+  },
+  "maiaScoreEqual": "Equal",
+  "@maiaScoreEqual": {
+    "description": "Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish."
+  },
+  "maiaScoreHelp": "Shows each Maia’s estimate for the current position at its analysis rating. Draws count as half a point. Stockfish stays visible.",
+  "@maiaScoreHelp": {
+    "description": "Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish."
+  },
+  "maiaScoreExpectedHelp": "This is an expected score, not a literal chance of winning. Off by default.",
+  "@maiaScoreExpectedHelp": {
+    "description": "Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish."
+  },
+  "maiaScoreInputsHelp": "Each estimate uses that Maia’s analysis rating for both players and the current move-history input. Temperature, Top-P and Stockfish quality do not set this percentage.",
+  "@maiaScoreInputsHelp": {
+    "description": "Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish."
+  },
+  "maiaScorePreferenceError": "Could not save Maia score settings. Please try again.",
+  "@maiaScorePreferenceError": {
+    "description": "Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish."
   }
 }

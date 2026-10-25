@@ -1417,4 +1417,27 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get boardPieceSet => '기물 세트';
+
+  @override
+  String get showMaiaScore => 'Maia 점수 % 표시';
+
+  @override
+  String get maiaScore => 'Maia 점수';
+
+  @override
+  String get maiaScoreEqual => '대등';
+
+  @override
+  String get maiaScoreHelp =>
+      '각 Maia가 분석 레이팅에 따라 현재 포지션을 평가합니다. 무승부는 반 점으로 계산합니다. Stockfish 평가도 계속 표시됩니다.';
+
+  @override
+  String get maiaScoreExpectedHelp => '이는 기대 점수이며 실제 승리 확률과는 다릅니다. 기본값은 꺼짐입니다.';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      '각 추정치는 해당 Maia의 분석 레이팅을 양쪽 선수에 적용하고 현재 이전 포지션 입력을 사용합니다. 온도, Top-P, Stockfish 분석 품질은 이 백분율을 결정하지 않습니다.';
+
+  @override
+  String get maiaScorePreferenceError => 'Maia 점수 설정을 저장하지 못했습니다. 다시 시도해 주세요.';
 }

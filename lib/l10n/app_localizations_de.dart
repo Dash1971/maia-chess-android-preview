@@ -1523,4 +1523,29 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'Figurenstil';
+
+  @override
+  String get showMaiaScore => 'Maia-Punktwert (%) anzeigen';
+
+  @override
+  String get maiaScore => 'Maia-Punktwert';
+
+  @override
+  String get maiaScoreEqual => 'Ausgeglichen';
+
+  @override
+  String get maiaScoreHelp =>
+      'Zeigt die Einschätzung jeder Maia für die aktuelle Stellung mit ihrer Analysewertung. Remis zählt als halber Punkt. Stockfish bleibt sichtbar.';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      'Dies ist ein erwarteter Punktwert, keine reine Gewinnwahrscheinlichkeit. Standardmäßig ausgeschaltet.';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      'Jede Einschätzung verwendet die Analysewertung dieser Maia für beide Spieler sowie die aktuelle Zugverlaufseingabe. Temperatur, Top-P und die Stockfish-Qualität bestimmen diesen Prozentsatz nicht.';
+
+  @override
+  String get maiaScorePreferenceError =>
+      'Die Maia-Punktwerteinstellungen konnten nicht gespeichert werden. Bitte erneut versuchen.';
 }

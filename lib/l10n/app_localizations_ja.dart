@@ -1413,4 +1413,27 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get boardPieceSet => '駒のデザイン';
+
+  @override
+  String get showMaiaScore => 'Maiaのスコア（%）を表示';
+
+  @override
+  String get maiaScore => 'Maiaスコア';
+
+  @override
+  String get maiaScoreEqual => '互角';
+
+  @override
+  String get maiaScoreHelp =>
+      '各Maiaが解析レーティングに応じて現在の局面を評価します。引き分けは半点として数えます。Stockfishの評価も表示されます。';
+
+  @override
+  String get maiaScoreExpectedHelp => 'これは期待スコアであり、勝つ確率そのものではありません。初期設定ではオフです。';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      '各評価では、そのMaiaの解析レーティングを両者に適用し、現在の指し手履歴の入力を使います。温度、Top-P、Stockfishの解析品質は、この割合を決める設定ではありません。';
+
+  @override
+  String get maiaScorePreferenceError => 'Maiaスコアの設定を保存できませんでした。もう一度お試しください。';
 }

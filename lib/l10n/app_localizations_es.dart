@@ -1520,4 +1520,29 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'Estilo de piezas';
+
+  @override
+  String get showMaiaScore => 'Mostrar puntuación de Maia (%)';
+
+  @override
+  String get maiaScore => 'Puntuación Maia';
+
+  @override
+  String get maiaScoreEqual => 'Igualada';
+
+  @override
+  String get maiaScoreHelp =>
+      'Muestra la estimación de cada Maia para la posición actual según su puntuación de análisis. Las tablas cuentan como medio punto. Stockfish sigue visible.';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      'Es una puntuación esperada, no una probabilidad literal de victoria. Está desactivada de forma predeterminada.';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      'Cada estimación usa la puntuación de análisis de esa Maia para ambos jugadores y el historial de jugadas actual. Temperatura, Top-P y la calidad de Stockfish no determinan este porcentaje.';
+
+  @override
+  String get maiaScorePreferenceError =>
+      'No se han podido guardar los ajustes de puntuación Maia. Inténtalo de nuevo.';
 }

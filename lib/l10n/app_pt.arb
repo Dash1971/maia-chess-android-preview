@@ -417,5 +417,12 @@
   "boardTargetNone": "Nenhum",
   "boardPreferenceError": "Não foi possível salvar as configurações do tabuleiro. Tente novamente.",
   "boardDesign": "Tabuleiro",
-  "boardPieceSet": "Estilo das peças"
+  "boardPieceSet": "Estilo das peças",
+  "showMaiaScore": "Mostrar pontuação Maia (%)",
+  "maiaScore": "Pontuação Maia",
+  "maiaScoreEqual": "Equilibrado",
+  "maiaScoreHelp": "Mostra a estimativa de cada Maia para a posição atual na sua classificação de análise. Empates contam como meio ponto. Stockfish continua visível.",
+  "maiaScoreExpectedHelp": "É uma pontuação esperada, não uma probabilidade literal de vitória. Desativado por padrão.",
+  "maiaScoreInputsHelp": "Cada estimativa usa a classificação de análise dessa Maia para os dois jogadores e a entrada atual de posições anteriores. Temperatura, Top-P e a qualidade do Stockfish não definem essa porcentagem.",
+  "maiaScorePreferenceError": "Não foi possível salvar as configurações da pontuação Maia. Tente novamente."
 }

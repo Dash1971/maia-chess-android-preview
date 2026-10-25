@@ -1520,4 +1520,29 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'Jeu de pièces';
+
+  @override
+  String get showMaiaScore => 'Afficher le score Maia (%)';
+
+  @override
+  String get maiaScore => 'Score Maia';
+
+  @override
+  String get maiaScoreEqual => 'Équilibré';
+
+  @override
+  String get maiaScoreHelp =>
+      'Affiche l’estimation de chaque Maia pour la position actuelle selon son classement d’analyse. Une nulle compte pour un demi-point. Stockfish reste visible.';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      'Il s’agit d’un score attendu, pas d’une probabilité stricte de victoire. Désactivé par défaut.';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      'Chaque estimation utilise le classement d’analyse de cette Maia pour les deux joueurs et l’historique de positions actuel. La température, Top-P et la qualité Stockfish ne déterminent pas ce pourcentage.';
+
+  @override
+  String get maiaScorePreferenceError =>
+      'Impossible d’enregistrer les réglages du score Maia. Réessayez.';
 }

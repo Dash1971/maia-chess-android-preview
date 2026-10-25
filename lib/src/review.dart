@@ -118,6 +118,7 @@ class ReviewPage extends StatefulWidget {
     this.stockfishAnalyzer,
     this.maiaEvaluator,
     this.maiaPolicyEvaluator,
+    this.maiaInferenceEvaluator,
     this.classifier,
     this.title,
     this.onLoadFen,
@@ -156,6 +157,8 @@ class ReviewPage extends StatefulWidget {
   maiaEvaluator;
   final Future<List<double>?> Function(List<String> positions, int elo)?
   maiaPolicyEvaluator;
+  final Future<MaiaInferenceResult?> Function(List<String> positions, int elo)?
+  maiaInferenceEvaluator;
   final MoveClassificationRunner? classifier;
   final String? title;
   final Future<void> Function()? onLoadFen;
@@ -501,7 +504,8 @@ class _ReviewPageState extends State<ReviewPage>
   @override
   void didUpdateWidget(covariant ReviewPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.useMoveHistory != widget.useMoveHistory ||
+    if (oldWidget.maiaInferenceEvaluator != widget.maiaInferenceEvaluator ||
+        oldWidget.useMoveHistory != widget.useMoveHistory ||
         oldWidget.maiaElo != widget.maiaElo ||
         oldWidget.secondMaiaElo != widget.secondMaiaElo ||
         !listEquals(oldWidget.positions, widget.positions) ||
@@ -842,7 +846,8 @@ class _ReviewPageState extends State<ReviewPage>
     // Maia channel in that case unless a Maia test double was also supplied.
     if (widget.evaluator != null &&
         widget.maiaEvaluator == null &&
-        widget.maiaPolicyEvaluator == null) {
+        widget.maiaPolicyEvaluator == null &&
+        widget.maiaInferenceEvaluator == null) {
       return;
     }
     final analyses = secondary ? _secondMaiaAnalyses : _maiaAnalyses;
@@ -856,6 +861,23 @@ class _ReviewPageState extends State<ReviewPage>
         ...widget.historyPrefix,
         ...widget.positions.take(ply + 1),
       ];
+      final inferenceEvaluator = widget.maiaInferenceEvaluator;
+      if (inferenceEvaluator != null) {
+        final response = await inferenceEvaluator(positions, elo);
+        final analysis = response == null
+            ? null
+            : _maiaAnalysisFromPolicy(
+                positions.last,
+                response.moveLogits,
+                outcome: response.outcome,
+              );
+        if (analysis != null &&
+            mounted &&
+            generation == _maiaContextGeneration) {
+          setState(() => analyses[ply] = analysis);
+        }
+        return;
+      }
       final policyEvaluator = widget.maiaPolicyEvaluator;
       if (policyEvaluator != null) {
         final response = await policyEvaluator(positions, elo);
@@ -877,7 +899,7 @@ class _ReviewPageState extends State<ReviewPage>
         }
         return;
       }
-      final response = await MaiaInferenceQueue.predict({
+      final response = await MaiaInferenceQueue.analyze({
         'tokens': MaiaEncoding.historicalTokens(
           positions,
           useMoveHistory: widget.useMoveHistory,
@@ -886,7 +908,11 @@ class _ReviewPageState extends State<ReviewPage>
         'opponentElo': elo,
       }, replaceableScope: scope);
       if (response == null) return;
-      final analysis = _maiaAnalysisFromPolicy(positions.last, response);
+      final analysis = _maiaAnalysisFromPolicy(
+        positions.last,
+        response.moveLogits,
+        outcome: response.outcome,
+      );
       if (analysis != null && mounted && generation == _maiaContextGeneration) {
         setState(() => analyses[ply] = analysis);
       }
@@ -907,13 +933,14 @@ class _ReviewPageState extends State<ReviewPage>
 
   MaiaPositionAnalysis? _maiaAnalysisFromPolicy(
     String fen,
-    List<double> response,
-  ) {
+    List<double> response, {
+    MaiaOutcome? outcome,
+  }) {
     if (response.length != 4352) return null;
     final game = chess.Chess.fromFEN(fen);
     if (game.game_over) return null;
     final moves = MaiaEncoding.legalMoveProbabilities(game, response);
-    return moves.isEmpty ? null : MaiaPositionAnalysis(moves);
+    return moves.isEmpty ? null : MaiaPositionAnalysis(moves, outcome: outcome);
   }
 
   Future<StockfishReview> _stockfishForVariation(String fen) {
@@ -1028,6 +1055,17 @@ class _ReviewPageState extends State<ReviewPage>
     required bool secondary,
   }) async {
     if (chess.Chess.fromFEN(fen).game_over) return null;
+    final inferenceEvaluator = widget.maiaInferenceEvaluator;
+    if (inferenceEvaluator != null) {
+      final response = await inferenceEvaluator(positions, elo);
+      return response == null
+          ? null
+          : _maiaAnalysisFromPolicy(
+              fen,
+              response.moveLogits,
+              outcome: response.outcome,
+            );
+    }
     final policyEvaluator = widget.maiaPolicyEvaluator;
     if (policyEvaluator != null) {
       final response = await policyEvaluator(positions, elo);
@@ -1039,7 +1077,7 @@ class _ReviewPageState extends State<ReviewPage>
       return move == null ? null : MaiaPositionAnalysis.single(move);
     }
     if (widget.evaluator != null) return null;
-    final response = await MaiaInferenceQueue.predict(
+    final response = await MaiaInferenceQueue.analyze(
       {
         'tokens': MaiaEncoding.historicalTokens(
           positions,
@@ -1052,7 +1090,13 @@ class _ReviewPageState extends State<ReviewPage>
           ? _secondMaiaInferenceScope
           : _maiaInferenceScope,
     );
-    return response == null ? null : _maiaAnalysisFromPolicy(fen, response);
+    return response == null
+        ? null
+        : _maiaAnalysisFromPolicy(
+            fen,
+            response.moveLogits,
+            outcome: response.outcome,
+          );
   }
 
   Future<void> _analyzeVariationMaia(
@@ -2270,7 +2314,71 @@ class _ReviewPageState extends State<ReviewPage>
               lineKey: const ValueKey('second-maia-engine-line'),
               otherKey: const ValueKey('second-maia-other'),
             ),
+          if (MaiaScoreScope.maybeOf(context)?.enabled == true)
+            _maiaScoreCaption(),
         ],
+      ),
+    );
+  }
+
+  Widget _maiaScoreCaption() {
+    final game = chess.Chess.fromFEN(_currentFen);
+    final strings = l10n(context);
+    String text(MaiaPositionAnalysis? analysis, bool loading) {
+      if (game.game_over) {
+        if (game.in_checkmate) {
+          return game.turn == chess.Color.WHITE
+              ? strings.blackIsVictorious
+              : strings.whiteIsVictorious;
+        }
+        return strings.theGameIsADraw;
+      }
+      if (loading) return strings.analyzing;
+      final outcome = analysis?.outcome;
+      if (outcome == null) return strings.unavailable;
+      final white = outcome.whiteScore(_currentFen);
+      final score = max(white, 1 - white);
+      if ((score * 100).round() == 50) {
+        return '${strings.maiaScoreEqual} ${_formatMaiaProbability(.5)}';
+      }
+      return '${white >= .5 ? strings.white : strings.black} ${_formatMaiaProbability(score)}';
+    }
+
+    final primaryLoading = _inVariation
+        ? _variationMaiaLoading
+        : _maiaLoading.contains(_ply);
+    final secondaryLoading = _inVariation
+        ? _secondVariationMaiaLoading
+        : _secondMaiaLoading.contains(_ply);
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Tooltip(
+        message:
+            '${strings.maiaScoreHelp} ${strings.maiaScoreExpectedHelp} ${strings.maiaScoreInputsHelp}',
+        child: Semantics(
+          liveRegion: true,
+          child: DefaultTextStyle(
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            child: Wrap(
+              spacing: 12,
+              runSpacing: 4,
+              children: [
+                Text(strings.maiaScore),
+                Text(
+                  'M${displayNumber(context, widget.maiaElo)} ${text(_selectedMaiaAnalysis, primaryLoading)}',
+                  key: const ValueKey('maia-score-primary'),
+                ),
+                if (widget.secondMaiaElo case final elo?)
+                  Text(
+                    'M${displayNumber(context, elo)} ${text(_selectedSecondMaiaAnalysis, secondaryLoading)}',
+                    key: const ValueKey('maia-score-secondary'),
+                  ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

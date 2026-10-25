@@ -417,5 +417,12 @@
   "boardTargetNone": "Keine",
   "boardPreferenceError": "Bretteinstellungen konnten nicht gespeichert werden. Bitte erneut versuchen.",
   "boardDesign": "Brett",
-  "boardPieceSet": "Figurenstil"
+  "boardPieceSet": "Figurenstil",
+  "showMaiaScore": "Maia-Punktwert (%) anzeigen",
+  "maiaScore": "Maia-Punktwert",
+  "maiaScoreEqual": "Ausgeglichen",
+  "maiaScoreHelp": "Zeigt die Einschätzung jeder Maia für die aktuelle Stellung mit ihrer Analysewertung. Remis zählt als halber Punkt. Stockfish bleibt sichtbar.",
+  "maiaScoreExpectedHelp": "Dies ist ein erwarteter Punktwert, keine reine Gewinnwahrscheinlichkeit. Standardmäßig ausgeschaltet.",
+  "maiaScoreInputsHelp": "Jede Einschätzung verwendet die Analysewertung dieser Maia für beide Spieler sowie die aktuelle Zugverlaufseingabe. Temperatur, Top-P und die Stockfish-Qualität bestimmen diesen Prozentsatz nicht.",
+  "maiaScorePreferenceError": "Die Maia-Punktwerteinstellungen konnten nicht gespeichert werden. Bitte erneut versuchen."
 }

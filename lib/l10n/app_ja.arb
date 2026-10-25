@@ -417,5 +417,12 @@
   "boardTargetNone": "無効",
   "boardPreferenceError": "盤の設定を保存できませんでした。もう一度お試しください。",
   "boardDesign": "盤のデザイン",
-  "boardPieceSet": "駒のデザイン"
+  "boardPieceSet": "駒のデザイン",
+  "showMaiaScore": "Maiaのスコア（%）を表示",
+  "maiaScore": "Maiaスコア",
+  "maiaScoreEqual": "互角",
+  "maiaScoreHelp": "各Maiaが解析レーティングに応じて現在の局面を評価します。引き分けは半点として数えます。Stockfishの評価も表示されます。",
+  "maiaScoreExpectedHelp": "これは期待スコアであり、勝つ確率そのものではありません。初期設定ではオフです。",
+  "maiaScoreInputsHelp": "各評価では、そのMaiaの解析レーティングを両者に適用し、現在の指し手履歴の入力を使います。温度、Top-P、Stockfishの解析品質は、この割合を決める設定ではありません。",
+  "maiaScorePreferenceError": "Maiaスコアの設定を保存できませんでした。もう一度お試しください。"
 }

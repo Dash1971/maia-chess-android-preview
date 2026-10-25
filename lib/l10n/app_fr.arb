@@ -417,5 +417,12 @@
   "boardTargetNone": "Aucune",
   "boardPreferenceError": "Impossible d’enregistrer les réglages de l’échiquier. Réessayez.",
   "boardDesign": "Échiquier",
-  "boardPieceSet": "Jeu de pièces"
+  "boardPieceSet": "Jeu de pièces",
+  "showMaiaScore": "Afficher le score Maia (%)",
+  "maiaScore": "Score Maia",
+  "maiaScoreEqual": "Équilibré",
+  "maiaScoreHelp": "Affiche l’estimation de chaque Maia pour la position actuelle selon son classement d’analyse. Une nulle compte pour un demi-point. Stockfish reste visible.",
+  "maiaScoreExpectedHelp": "Il s’agit d’un score attendu, pas d’une probabilité stricte de victoire. Désactivé par défaut.",
+  "maiaScoreInputsHelp": "Chaque estimation utilise le classement d’analyse de cette Maia pour les deux joueurs et l’historique de positions actuel. La température, Top-P et la qualité Stockfish ne déterminent pas ce pourcentage.",
+  "maiaScorePreferenceError": "Impossible d’enregistrer les réglages du score Maia. Réessayez."
 }

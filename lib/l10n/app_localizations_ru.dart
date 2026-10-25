@@ -1540,4 +1540,29 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'Оформление фигур';
+
+  @override
+  String get showMaiaScore => 'Показывать оценку Maia в %';
+
+  @override
+  String get maiaScore => 'Оценка Maia';
+
+  @override
+  String get maiaScoreEqual => 'Равенство';
+
+  @override
+  String get maiaScoreHelp =>
+      'Показывает оценку текущей позиции каждой Maia при её рейтинге анализа. Ничья считается за пол-очка. Оценка Stockfish остаётся видимой.';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      'Это ожидаемое количество очков, а не точная вероятность победы. По умолчанию выключено.';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      'Каждая оценка использует рейтинг анализа соответствующей Maia для обоих игроков и текущий ввод истории ходов. Температура, Top-P и качество анализа Stockfish не определяют этот процент.';
+
+  @override
+  String get maiaScorePreferenceError =>
+      'Не удалось сохранить настройки оценки Maia. Повторите попытку.';
 }

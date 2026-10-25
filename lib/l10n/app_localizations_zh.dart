@@ -1392,4 +1392,27 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get boardPieceSet => '棋子样式';
+
+  @override
+  String get showMaiaScore => '显示 Maia 得分百分比';
+
+  @override
+  String get maiaScore => 'Maia 得分';
+
+  @override
+  String get maiaScoreEqual => '均势';
+
+  @override
+  String get maiaScoreHelp =>
+      '显示每个 Maia 在其分析等级分下对当前局面的估计。和棋计为半分。Stockfish 评估仍会显示。';
+
+  @override
+  String get maiaScoreExpectedHelp => '这是预期得分，而非严格的获胜概率。默认关闭。';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      '每个估计使用该 Maia 的分析等级分作为双方等级分，并使用当前的走棋历史输入。温度、Top-P 和 Stockfish 分析质量不决定该百分比。';
+
+  @override
+  String get maiaScorePreferenceError => '无法保存 Maia 得分设置。请重试。';
 }

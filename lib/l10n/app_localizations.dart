@@ -2625,6 +2625,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Piece set'**
   String get boardPieceSet;
+
+  /// Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Maia score %'**
+  String get showMaiaScore;
+
+  /// Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Maia score'**
+  String get maiaScore;
+
+  /// Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Equal'**
+  String get maiaScoreEqual;
+
+  /// Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows each Maia’s estimate for the current position at its analysis rating. Draws count as half a point. Stockfish stays visible.'**
+  String get maiaScoreHelp;
+
+  /// Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish.
+  ///
+  /// In en, this message translates to:
+  /// **'This is an expected score, not a literal chance of winning. Off by default.'**
+  String get maiaScoreExpectedHelp;
+
+  /// Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Each estimate uses that Maia’s analysis rating for both players and the current move-history input. Temperature, Top-P and Stockfish quality do not set this percentage.'**
+  String get maiaScoreInputsHelp;
+
+  /// Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save Maia score settings. Please try again.'**
+  String get maiaScorePreferenceError;
 }
 
 class _AppLocalizationsDelegate
