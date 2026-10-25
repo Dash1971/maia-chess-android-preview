@@ -573,7 +573,7 @@ void main() {
     expect(find.text('Technical explanation'), findsNothing);
     expect(find.textContaining('about 300 Elo points'), findsOneWidget);
     expect(
-      find.textContaining('Filtering out the least likely moves'),
+      find.textContaining('some very low-probability blunders'),
       findsOneWidget,
     );
     expect(find.byKey(const ValueKey('sampling-help-technical')), findsNothing);
