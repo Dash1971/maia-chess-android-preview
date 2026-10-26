@@ -404,5 +404,16 @@
   "appearanceTheme": "Tema",
   "appearanceLight": "Claro",
   "appearanceDark": "Escuro",
-  "appearanceSystemDefault": "Tema do dispositivo"
+  "appearanceSystemDefault": "Tema do dispositivo",
+  "boardSettings": "Tabuleiro",
+  "boardCoordinates": "Coordenadas do tabuleiro",
+  "boardLegalMoves": "Destinos de lances legais",
+  "boardLastMove": "Destacar o último lance",
+  "boardAnimation": "Animação das peças",
+  "boardMagnify": "Ampliar peça segurada",
+  "boardDragTarget": "Alvo da peça arrastada",
+  "boardTargetCircle": "Círculo",
+  "boardTargetSquare": "Casa",
+  "boardTargetNone": "Nenhum",
+  "boardPreferenceError": "Não foi possível salvar as configurações do tabuleiro. Tente novamente."
 }

@@ -2547,6 +2547,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System default'**
   String get appearanceSystemDefault;
+
+  /// Compact Board section heading, including board display and touch-drag aids.
+  ///
+  /// In en, this message translates to:
+  /// **'Board'**
+  String get boardSettings;
+
+  /// Board settings control; see the pinned Lichess terminology reference for scope.
+  ///
+  /// In en, this message translates to:
+  /// **'Board coordinates'**
+  String get boardCoordinates;
+
+  /// Switch for legal destination dots. Already committed premove overlays are independent.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal-move destinations'**
+  String get boardLegalMoves;
+
+  /// Switch for last-move highlights only. Check, selection, premoves and arrows stay independent.
+  ///
+  /// In en, this message translates to:
+  /// **'Last-move highlight'**
+  String get boardLastMove;
+
+  /// Board settings control; see the pinned Lichess terminology reference for scope.
+  ///
+  /// In en, this message translates to:
+  /// **'Piece animation'**
+  String get boardAnimation;
+
+  /// Board settings control; see the pinned Lichess terminology reference for scope.
+  ///
+  /// In en, this message translates to:
+  /// **'Magnify dragged piece'**
+  String get boardMagnify;
+
+  /// Board settings control; see the pinned Lichess terminology reference for scope.
+  ///
+  /// In en, this message translates to:
+  /// **'Dragged piece target'**
+  String get boardDragTarget;
+
+  /// Board settings control; see the pinned Lichess terminology reference for scope.
+  ///
+  /// In en, this message translates to:
+  /// **'Circle'**
+  String get boardTargetCircle;
+
+  /// Board settings control; see the pinned Lichess terminology reference for scope.
+  ///
+  /// In en, this message translates to:
+  /// **'Square'**
+  String get boardTargetSquare;
+
+  /// Board settings control; see the pinned Lichess terminology reference for scope.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get boardTargetNone;
+
+  /// Board preference persistence failed; the displayed choice can be retried.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save board settings. Please try again.'**
+  String get boardPreferenceError;
 }
 
 class _AppLocalizationsDelegate

@@ -404,5 +404,16 @@
   "appearanceTheme": "テーマ",
   "appearanceLight": "ライト",
   "appearanceDark": "ダーク",
-  "appearanceSystemDefault": "デバイスの設定に従う"
+  "appearanceSystemDefault": "デバイスの設定に従う",
+  "boardSettings": "盤",
+  "boardCoordinates": "マスの座標",
+  "boardLegalMoves": "合法手の移動先",
+  "boardLastMove": "直前の手の強調表示",
+  "boardAnimation": "駒のアニメーション",
+  "boardMagnify": "ドラッグ中の駒を拡大",
+  "boardDragTarget": "ドラッグ移動時の駒の照準",
+  "boardTargetCircle": "円形",
+  "boardTargetSquare": "四角形",
+  "boardTargetNone": "無効",
+  "boardPreferenceError": "盤の設定を保存できませんでした。もう一度お試しください。"
 }

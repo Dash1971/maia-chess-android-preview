@@ -1459,4 +1459,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appearanceSystemDefault => 'System default';
+
+  @override
+  String get boardSettings => 'Board';
+
+  @override
+  String get boardCoordinates => 'Board coordinates';
+
+  @override
+  String get boardLegalMoves => 'Legal-move destinations';
+
+  @override
+  String get boardLastMove => 'Last-move highlight';
+
+  @override
+  String get boardAnimation => 'Piece animation';
+
+  @override
+  String get boardMagnify => 'Magnify dragged piece';
+
+  @override
+  String get boardDragTarget => 'Dragged piece target';
+
+  @override
+  String get boardTargetCircle => 'Circle';
+
+  @override
+  String get boardTargetSquare => 'Square';
+
+  @override
+  String get boardTargetNone => 'None';
+
+  @override
+  String get boardPreferenceError =>
+      'Could not save board settings. Please try again.';
 }

@@ -1487,4 +1487,38 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get appearanceSystemDefault => 'Tema do dispositivo';
+
+  @override
+  String get boardSettings => 'Tabuleiro';
+
+  @override
+  String get boardCoordinates => 'Coordenadas do tabuleiro';
+
+  @override
+  String get boardLegalMoves => 'Destinos de lances legais';
+
+  @override
+  String get boardLastMove => 'Destacar o último lance';
+
+  @override
+  String get boardAnimation => 'Animação das peças';
+
+  @override
+  String get boardMagnify => 'Ampliar peça segurada';
+
+  @override
+  String get boardDragTarget => 'Alvo da peça arrastada';
+
+  @override
+  String get boardTargetCircle => 'Círculo';
+
+  @override
+  String get boardTargetSquare => 'Casa';
+
+  @override
+  String get boardTargetNone => 'Nenhum';
+
+  @override
+  String get boardPreferenceError =>
+      'Não foi possível salvar as configurações do tabuleiro. Tente novamente.';
 }

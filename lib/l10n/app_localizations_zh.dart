@@ -1353,4 +1353,37 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get appearanceSystemDefault => '跟随系统';
+
+  @override
+  String get boardSettings => '棋盘';
+
+  @override
+  String get boardCoordinates => '棋盘坐标';
+
+  @override
+  String get boardLegalMoves => '合法走法落点';
+
+  @override
+  String get boardLastMove => '上一步高亮';
+
+  @override
+  String get boardAnimation => '棋子动画';
+
+  @override
+  String get boardMagnify => '放大拖动的棋子';
+
+  @override
+  String get boardDragTarget => '拖动棋子落点标记';
+
+  @override
+  String get boardTargetCircle => '圆形';
+
+  @override
+  String get boardTargetSquare => '方形';
+
+  @override
+  String get boardTargetNone => '无';
+
+  @override
+  String get boardPreferenceError => '无法保存棋盘设置。请重试。';
 }

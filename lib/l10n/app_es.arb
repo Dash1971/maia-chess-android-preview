@@ -404,5 +404,16 @@
   "appearanceTheme": "Tema",
   "appearanceLight": "Claro",
   "appearanceDark": "Oscuro",
-  "appearanceSystemDefault": "Tema del dispositivo"
+  "appearanceSystemDefault": "Tema del dispositivo",
+  "boardSettings": "Tablero",
+  "boardCoordinates": "Coordenadas del tablero",
+  "boardLegalMoves": "Destinos de movimientos legales",
+  "boardLastMove": "Resaltar el último movimiento",
+  "boardAnimation": "Animación de las piezas",
+  "boardMagnify": "Aumentar la pieza arrastrada",
+  "boardDragTarget": "Marcador de destino de la pieza arrastrada",
+  "boardTargetCircle": "Círculo",
+  "boardTargetSquare": "Cuadrado",
+  "boardTargetNone": "Ninguna",
+  "boardPreferenceError": "No se han podido guardar los ajustes del tablero. Inténtalo de nuevo."
 }

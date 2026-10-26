@@ -389,3 +389,19 @@ This Preview change describes Preview's 1.0 / 0.95 defaults with opening variety
 on. Stable retains its own 1.0 / 1.0 defaults; the full text must not be copied
 there until those defaults are promoted. No build, CI or cleanup tooling changes
 require a companion PR.
+
+## Configurable board aids (#178)
+
+The Board section uses the pinned board, coordinates, animation, drag magnification,
+shape and target terms in all ten languages. Compact headings omit coordinate
+ranges. Last-move highlighting is narrower than Lichess's combined last-move/check
+setting, so its translations explicitly name only the last move. Legal destinations
+name the destination marks; committed premove overlays remain independent.
+Japanese animation wording omits the upstream speed qualifier because this is a
+boolean switch. Each adaptation is recorded in the terminology reference. The
+persistence error is app-specific prose. These translations remain subject to
+native-speaker review.
+
+The Hindi dragged-piece target label corrects upstream grammatical agreement
+and uses मोहरा for a chess piece. The original reference is retained with a
+documented adaptation; the terminology regression rejects restoring the typo.

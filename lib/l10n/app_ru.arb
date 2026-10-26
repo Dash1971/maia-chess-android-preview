@@ -404,5 +404,16 @@
   "appearanceTheme": "Оформление",
   "appearanceLight": "Светлая",
   "appearanceDark": "Тёмная",
-  "appearanceSystemDefault": "Системная"
+  "appearanceSystemDefault": "Системная",
+  "boardSettings": "Доска",
+  "boardCoordinates": "Координаты доски",
+  "boardLegalMoves": "Поля допустимых ходов",
+  "boardLastMove": "Подсветка последнего хода",
+  "boardAnimation": "Анимация фигур",
+  "boardMagnify": "Увеличивать перетаскиваемую фигуру",
+  "boardDragTarget": "Цель передвинутой фигуры",
+  "boardTargetCircle": "Круглая",
+  "boardTargetSquare": "Квадратная",
+  "boardTargetNone": "Нет",
+  "boardPreferenceError": "Не удалось сохранить настройки доски. Повторите попытку."
 }

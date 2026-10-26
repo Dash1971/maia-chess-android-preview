@@ -1378,4 +1378,37 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get appearanceSystemDefault => '기기 테마';
+
+  @override
+  String get boardSettings => '보드';
+
+  @override
+  String get boardCoordinates => '보드 좌표';
+
+  @override
+  String get boardLegalMoves => '합법적인 이동 칸';
+
+  @override
+  String get boardLastMove => '마지막 수 강조';
+
+  @override
+  String get boardAnimation => '기물 움직임 애니메이션';
+
+  @override
+  String get boardMagnify => '드래그 중 기물 확대';
+
+  @override
+  String get boardDragTarget => '드래그 중 착지점 강조';
+
+  @override
+  String get boardTargetCircle => '원';
+
+  @override
+  String get boardTargetSquare => '칸';
+
+  @override
+  String get boardTargetNone => '없음';
+
+  @override
+  String get boardPreferenceError => '보드 설정을 저장하지 못했습니다. 다시 시도해 주세요.';
 }

@@ -1913,5 +1913,49 @@
   "appearanceSystemDefault": "System default",
   "@appearanceSystemDefault": {
     "description": "System-default option in the THEME selector only. Follow device light/dark brightness; independent of language, Android accent colors and pure-black backgrounds. Lichess deviceTheme where available; sourced fallback in docs/TRANSLATION_QUALITY_REVIEW.md."
+  },
+  "boardSettings": "Board",
+  "@boardSettings": {
+    "description": "Compact Board section heading, including board display and touch-drag aids."
+  },
+  "boardCoordinates": "Board coordinates",
+  "@boardCoordinates": {
+    "description": "Board settings control; see the pinned Lichess terminology reference for scope."
+  },
+  "boardLegalMoves": "Legal-move destinations",
+  "@boardLegalMoves": {
+    "description": "Switch for legal destination dots. Already committed premove overlays are independent."
+  },
+  "boardLastMove": "Last-move highlight",
+  "@boardLastMove": {
+    "description": "Switch for last-move highlights only. Check, selection, premoves and arrows stay independent."
+  },
+  "boardAnimation": "Piece animation",
+  "@boardAnimation": {
+    "description": "Board settings control; see the pinned Lichess terminology reference for scope."
+  },
+  "boardMagnify": "Magnify dragged piece",
+  "@boardMagnify": {
+    "description": "Board settings control; see the pinned Lichess terminology reference for scope."
+  },
+  "boardDragTarget": "Dragged piece target",
+  "@boardDragTarget": {
+    "description": "Board settings control; see the pinned Lichess terminology reference for scope."
+  },
+  "boardTargetCircle": "Circle",
+  "@boardTargetCircle": {
+    "description": "Board settings control; see the pinned Lichess terminology reference for scope."
+  },
+  "boardTargetSquare": "Square",
+  "@boardTargetSquare": {
+    "description": "Board settings control; see the pinned Lichess terminology reference for scope."
+  },
+  "boardTargetNone": "None",
+  "@boardTargetNone": {
+    "description": "Board settings control; see the pinned Lichess terminology reference for scope."
+  },
+  "boardPreferenceError": "Could not save board settings. Please try again.",
+  "@boardPreferenceError": {
+    "description": "Board preference persistence failed; the displayed choice can be retried."
   }
 }

@@ -573,11 +573,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
                         size: box.biggest.shortestSide,
                         orientation: _flipped ? dc.Side.black : dc.Side.white,
                         fen: _position.fen,
-                        settings: const cg.StaticChessboardSettings(
-                          colorScheme: cg.ChessboardColorScheme.brown,
-                          pieceAssets: cg.PieceSet.cburnettAssets,
-                          enableCoordinates: true,
-                        ),
+                        settings: boardPreferencesOf(context).editorSettings,
                         onTouchedSquare: (square) => _touch(square.name),
                       ),
                     ),
