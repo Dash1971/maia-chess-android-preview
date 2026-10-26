@@ -264,7 +264,7 @@
   "resignGameQuestion": "¿Abandonar la partida?",
   "resignEndsImmediately": "La partida terminará inmediatamente.",
   "premoveLimit": "Puedes preparar hasta 64 movimientos anticipados.",
-  "chessnutGameRestriction": "Chessnut solo admite partidas sin límite de tiempo desde la posición inicial estándar.",
+  "chessnutGameRestriction": "Las partidas con Chessnut no tienen límite de tiempo.",
   "samplingTitle": "Temperatura y Top-P",
   "samplingDefaultsQuestion": "Elige cuánta variedad quieres",
   "samplingResearch": "Datos completos de investigación (JSONL)",
@@ -313,7 +313,7 @@
   "boardStartingPosition": "Coloca la posición inicial estándar en tu tablero.",
   "boardReady": "Tablero listo",
   "boardExperimentalNotice": "La compatibilidad con nuevos tableros es experimental. Verifica las jugadas en ambas pantallas e informa de los problemas de conexión.",
-  "boardGameRestriction": "Las partidas con tablero electrónico empiezan desde la posición inicial estándar y sin límite de tiempo.",
+  "boardGameRestriction": "Las partidas con tablero electrónico no tienen límite de tiempo.",
   "boardConfirmSetup": "He colocado la posición inicial",
   "boardConfirmSetupHelp": "Comprueba todas las piezas antes de empezar. Este tablero no puede identificar el tipo de pieza.",
   "boardChooseMove": "Confirma tu jugada en el tablero",
@@ -446,5 +446,11 @@
   "editorBlackBishop": "Alfil negro",
   "editorBlackRook": "Torre negra",
   "editorBlackQueen": "Dama negra",
-  "editorBlackKing": "Rey negro"
+  "editorBlackKing": "Rey negro",
+  "continuationUseBoard": "Usar tablero electrónico",
+  "continuationConnectHelp": "Conecta un tablero compatible.",
+  "continuationBoardUntimed": "Las partidas con tablero electrónico no tienen límite de tiempo.",
+  "continuationSetUpBoard": "Preparar el tablero",
+  "continuationSetupHelp": "Coloca en tu tablero la posición que aparece en pantalla. La partida empieza cuando las piezas coinciden.",
+  "continuationBoardUnsupported": "Por ahora, continuar desde una posición solo es compatible con los tableros Chessnut."
 }

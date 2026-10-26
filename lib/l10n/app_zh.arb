@@ -264,7 +264,7 @@
   "resignGameQuestion": "认输？",
   "resignEndsImmediately": "这将立即结束对局。",
   "premoveLimit": "最多可设置 64 步预走棋。",
-  "chessnutGameRestriction": "Chessnut 仅支持从标准初始局面开始的无时限对局。",
+  "chessnutGameRestriction": "Chessnut 对局不限时。",
   "samplingTitle": "温度和 Top-P",
   "samplingDefaultsQuestion": "选择你想要的变化程度",
   "samplingResearch": "完整研究数据（JSONL）",
@@ -313,7 +313,7 @@
   "boardStartingPosition": "请在棋盘上摆好标准起始局面。",
   "boardReady": "棋盘已就绪",
   "boardExperimentalNotice": "新棋盘支持仍处于实验阶段。请核对两个屏幕上的走法，并报告连接问题。",
-  "boardGameRestriction": "电子棋盘对局从标准起始局面开始，时间不限。",
+  "boardGameRestriction": "电子棋盘对局不限时。",
   "boardConfirmSetup": "我已摆好起始局面",
   "boardConfirmSetupHelp": "开始前请检查每个棋子。此棋盘无法识别棋子种类。",
   "boardChooseMove": "确认棋盘上的走法",
@@ -446,5 +446,11 @@
   "editorBlackBishop": "黑象",
   "editorBlackRook": "黑车",
   "editorBlackQueen": "黑后",
-  "editorBlackKing": "黑王"
+  "editorBlackKing": "黑王",
+  "continuationUseBoard": "使用电子棋盘",
+  "continuationConnectHelp": "请连接受支持的棋盘。",
+  "continuationBoardUntimed": "电子棋盘对局不限时。",
+  "continuationSetUpBoard": "摆好棋盘",
+  "continuationSetupHelp": "请在棋盘上摆出屏幕所示的局面。棋子位置一致后，对局即开始。",
+  "continuationBoardUnsupported": "目前仅支持使用 Chessnut 棋盘从指定局面继续对局。"
 }

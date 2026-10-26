@@ -264,7 +264,7 @@
   "resignGameQuestion": "हार मान लें?",
   "resignEndsImmediately": "इससे खेल तुरंत समाप्त हो जाएगा।",
   "premoveLimit": "अधिकतम 64 चालें पहले से चुनी जा सकती हैं।",
-  "chessnutGameRestriction": "Chessnut पर केवल मानक शुरुआती स्थिति से, बिना समय सीमा के खेल सकते हैं।",
+  "chessnutGameRestriction": "Chessnut पर खेलों में समय सीमा नहीं होती।",
   "samplingTitle": "तापमान और Top-P",
   "samplingDefaultsQuestion": "तय करें कि चालों में कितनी विविधता चाहिए",
   "samplingResearch": "शोध का पूरा डेटा (JSONL)",
@@ -313,7 +313,7 @@
   "boardStartingPosition": "अपने बोर्ड पर मानक शुरुआती स्थिति में मोहरे रखें।",
   "boardReady": "बोर्ड तैयार है",
   "boardExperimentalNotice": "नए बोर्ड का समर्थन प्रायोगिक है। दोनों स्क्रीन पर चालों की जाँच करें और कनेक्शन की समस्याएँ बताएँ।",
-  "boardGameRestriction": "इलेक्ट्रॉनिक बोर्ड पर खेल मानक शुरुआती स्थिति से और बिना समय सीमा के शुरू होते हैं।",
+  "boardGameRestriction": "इलेक्ट्रॉनिक बोर्ड पर खेलों में समय सीमा नहीं होती।",
   "boardConfirmSetup": "मैंने शुरुआती स्थिति में मोहरे रख दिए हैं",
   "boardConfirmSetupHelp": "शुरू करने से पहले हर मोहरे की जाँच करें। यह बोर्ड मोहरे का प्रकार नहीं पहचान सकता।",
   "boardChooseMove": "बोर्ड पर चली गई चाल की पुष्टि करें",
@@ -446,5 +446,11 @@
   "editorBlackBishop": "काला ऊँट",
   "editorBlackRook": "काला हाथी",
   "editorBlackQueen": "काला वज़ीर",
-  "editorBlackKing": "काला राजा"
+  "editorBlackKing": "काला राजा",
+  "continuationUseBoard": "इलेक्ट्रॉनिक बोर्ड का उपयोग करें",
+  "continuationConnectHelp": "समर्थित बोर्ड कनेक्ट करें।",
+  "continuationBoardUntimed": "इलेक्ट्रॉनिक बोर्ड पर खेलों में समय सीमा नहीं होती।",
+  "continuationSetUpBoard": "बोर्ड पर मोहरे रखें",
+  "continuationSetupHelp": "स्क्रीन पर दिखाई गई स्थिति के अनुसार अपने बोर्ड पर मोहरे रखें। मोहरों की स्थिति मेल खाने पर खेल शुरू होगा।",
+  "continuationBoardUnsupported": "किसी स्थिति से आगे खेलने के लिए फ़िलहाल केवल Chessnut बोर्ड समर्थित हैं।"
 }

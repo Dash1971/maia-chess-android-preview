@@ -160,3 +160,15 @@ appearance widgets exercise all three options in the open selector in every
 locale at 320px/200% text in light and dark contexts. Review native device fonts
 and seek native-speaking chess/AI reviewers before calling translations approved.
 Validation results for this change are recorded in the draft PR.
+
+## Continue from here with an electronic board (#182)
+
+The six continuation connection/setup messages are app-specific hardware guidance
+with no direct equivalent in the pinned Lichess catalogs. All ten languages reuse
+the existing vocabulary for boards, positions, pieces and unlimited time. “Set up
+board” means arranging physical pieces to match the selected position displayed
+in the app, rather than opening the board editor. Setup help explains that play
+starts only when those pieces match; the supported-hardware notice explicitly
+limits position continuation to Chessnut. Restriction copy now describes the
+absence of a clock without incorrectly requiring the standard starting position.
+These are editorial translations, subject to native-speaker review.

@@ -956,7 +956,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get chessnutGameRestriction =>
-      'Sur Chessnut, seules les parties sans limite de temps depuis la position initiale standard sont prises en charge.';
+      'Les parties sur Chessnut sont sans limite de temps.';
 
   @override
   String get samplingTitle => 'Température et Top-P';
@@ -1148,7 +1148,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get boardGameRestriction =>
-      'Les parties sur échiquier électronique commencent depuis la position de départ standard et sans limite de temps.';
+      'Les parties sur échiquier électronique sont sans limite de temps.';
 
   @override
   String get boardConfirmSetup => 'J’ai placé la position de départ';
@@ -1613,4 +1613,25 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get editorBlackKing => 'Roi noir';
+
+  @override
+  String get continuationUseBoard => 'Utiliser un échiquier électronique';
+
+  @override
+  String get continuationConnectHelp => 'Connectez un échiquier compatible.';
+
+  @override
+  String get continuationBoardUntimed =>
+      'Les parties sur échiquier électronique sont sans limite de temps.';
+
+  @override
+  String get continuationSetUpBoard => 'Placer les pièces';
+
+  @override
+  String get continuationSetupHelp =>
+      'Reproduisez la position affichée sur votre échiquier. La partie commence lorsque les pièces correspondent.';
+
+  @override
+  String get continuationBoardUnsupported =>
+      'Pour le moment, seuls les échiquiers Chessnut permettent de continuer depuis une position.';
 }

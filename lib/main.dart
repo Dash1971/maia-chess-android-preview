@@ -52,6 +52,7 @@ part 'src/session_model.dart';
 part 'src/openings.dart';
 part 'src/chessnut.dart';
 part 'src/electronic_board.dart';
+part 'src/board_connection_session.dart';
 part 'src/board_reset.dart';
 part 'src/board_flow.dart';
 part 'src/history_navigation.dart';

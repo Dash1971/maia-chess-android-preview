@@ -968,7 +968,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get chessnutGameRestriction =>
-      'No Chessnut, só é possível jogar partidas sem limite de tempo a partir da posição inicial padrão.';
+      'As partidas com Chessnut não têm limite de tempo.';
 
   @override
   String get samplingTitle => 'Temperatura e Top-P';
@@ -1159,7 +1159,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get boardGameRestriction =>
-      'As partidas com tabuleiro eletrônico começam na posição inicial padrão e sem limite de tempo.';
+      'As partidas com tabuleiro eletrônico não têm limite de tempo.';
 
   @override
   String get boardConfirmSetup => 'Montei a posição inicial';
@@ -1620,4 +1620,25 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get editorBlackKing => 'Rei preto';
+
+  @override
+  String get continuationUseBoard => 'Usar tabuleiro eletrônico';
+
+  @override
+  String get continuationConnectHelp => 'Conecte um tabuleiro compatível.';
+
+  @override
+  String get continuationBoardUntimed =>
+      'As partidas com tabuleiro eletrônico não têm limite de tempo.';
+
+  @override
+  String get continuationSetUpBoard => 'Preparar tabuleiro';
+
+  @override
+  String get continuationSetupHelp =>
+      'Monte no seu tabuleiro a posição mostrada na tela. A partida começa quando a posição das peças coincidir.';
+
+  @override
+  String get continuationBoardUnsupported =>
+      'No momento, continuar a partir de uma posição só é compatível com tabuleiros Chessnut.';
 }

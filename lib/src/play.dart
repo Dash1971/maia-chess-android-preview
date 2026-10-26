@@ -92,6 +92,7 @@ List<String> restoreMaiaHistoryPrefix(Object? value, String initialFen) {
 class GamePage extends StatefulWidget {
   const GamePage({
     this.startingFen,
+    this.startingBoardLease,
     this.startingUseMoveHistory,
     this.startingPositionHistory,
     this.startingSide,
@@ -114,6 +115,7 @@ class GamePage extends StatefulWidget {
   // Independent of move sampling; injectable for deterministic timing tests.
   final Random? humanTimingRandom;
   final String? startingFen;
+  final BoardConnectionLease? startingBoardLease;
   final bool? startingUseMoveHistory;
   final List<String>? startingPositionHistory;
   final PlayerSide? startingSide;
@@ -246,6 +248,7 @@ class _GamePageState extends State<GamePage>
   int? _chessnutBatteryPercent;
   bool _chessnutCharging = false;
   Map<String, String>? _chessnutPosition;
+  late final BoardConnectionLease _boardLease;
   bool _useChessnutGo = false;
   bool _chessnutSoundsEnabled = true;
   bool _chessnutGameActive = false;
@@ -334,8 +337,14 @@ class _GamePageState extends State<GamePage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _clockDisplay = ValueNotifier(const ClockSnapshot(0, 0));
-    _chessnut =
-        widget.electronicBoardTransport ?? ChessnutPlatformTransport.instance;
+    _boardLease =
+        widget.startingBoardLease ??
+        BoardConnectionSession.forTransport(
+          widget.electronicBoardTransport ?? ChessnutPlatformTransport.instance,
+        ).lease();
+    _chessnut = _boardLease;
+    _boardLease.onSuspended = _suspendBoardOwnership;
+    _useChessnutGo = widget.startingBoardLease != null;
     _chessnutLeds = ChessnutLedController(_chessnut);
     _gameBoardController = cg.ChessboardController(game: _gameBoardData());
     _gameBoardController.premoveNotifier.addListener(_onPremoveChanged);
@@ -360,7 +369,10 @@ class _GamePageState extends State<GamePage>
     await _loadEnginePreferences();
     if (!mounted) return;
     if (widget.startingFen != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _startGame());
+      if (widget.startingBoardLease != null) _ensureChessnutListening();
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => _startGame(waitForBoardSetup: widget.startingBoardLease != null),
+      );
     } else {
       await _restoreActiveSession();
       if (!mounted || _storageFailed) return;
@@ -452,6 +464,7 @@ class _GamePageState extends State<GamePage>
           Navigator.of(context).push(
             MaterialPageRoute<void>(
               builder: (_) => AnalysisBoardPage(
+                electronicBoardTransport: _boardLease.rawTransport,
                 initialSession: session,
                 useMoveHistory: saved['maiaUseMoveHistory'] == true,
                 historyPrefix: restoreMaiaHistoryPrefix(
@@ -1654,6 +1667,7 @@ class _GamePageState extends State<GamePage>
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (_) => AnalysisBoardPage(
+            electronicBoardTransport: _boardLease.rawTransport,
             initialSession: session,
             useMoveHistory: _useMoveHistory,
             maiaElo: _analysisElo,
@@ -1686,6 +1700,7 @@ class _GamePageState extends State<GamePage>
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) => AnalysisBoardPage(
+          electronicBoardTransport: _boardLease.rawTransport,
           initialSession: AnalysisSession.start(),
           useMoveHistory: _useMoveHistory,
           maiaElo: _analysisElo,
@@ -1697,7 +1712,25 @@ class _GamePageState extends State<GamePage>
     );
   }
 
+  void _suspendBoardOwnership() {
+    _cancelBoardInteractions();
+    _stopChessnutLedRefresh();
+    _chessnutLeds.invalidate();
+    _queuedChessnutPosition = null;
+    _gameGeneration++;
+    _gameInferenceScope.invalidate();
+    _pauseGame();
+    if (!mounted) return;
+    setState(() {
+      _chessnutState = ElectronicBoardConnectionState.disconnected;
+      _chessnutPosition = null;
+      _chessnutMessage = _PlayMessage.chessnutIsDisconnected;
+      if (_chessnutGameActive) _status = _PlayMessage.reconnectChessnut;
+    });
+  }
+
   void _ensureChessnutListening() {
+    _boardLease.activate();
     _chessnutSubscription ??= _chessnut.events.listen(
       _handleChessnutEvent,
       onError: (Object error, StackTrace stackTrace) {
@@ -2074,6 +2107,7 @@ class _GamePageState extends State<GamePage>
         epoch == _boardInteractionEpoch &&
         sourceFen == _game.fen;
     if (!_started) {
+      if (widget.startingBoardLease != null) return;
       final expected = ChessnutProtocol.pieceMapFromFen(
         chess.Chess.DEFAULT_POSITION,
       );
@@ -2439,8 +2473,9 @@ class _GamePageState extends State<GamePage>
     if (action == 'sounds-off') await _setChessnutSoundsEnabled(false);
   }
 
-  double get _chessnutStatusHeight =>
-      max(32, MediaQuery.textScalerOf(context).scale(12) + 12);
+  double get _chessnutStatusHeight => _chessnutResetPending
+      ? max(60, MediaQuery.textScalerOf(context).scale(12) * 3 + 16)
+      : max(32, MediaQuery.textScalerOf(context).scale(12) + 12);
 
   bool get _stackChessnutActions =>
       MediaQuery.textScalerOf(context).scale(14) > 21;
@@ -2450,14 +2485,17 @@ class _GamePageState extends State<GamePage>
       (_stackChessnutActions ? 2 : 1);
 
   double get _chessnutBannerHeight =>
-      _chessnutStatusHeight + (_chessnutReady ? 0 : _chessnutActionsHeight);
+      _chessnutStatusHeight +
+      (_chessnutReady && !_chessnutResetPending ? 0 : _chessnutActionsHeight);
 
   Widget _chessnutStatusBanner() {
     final connecting =
         _chessnutState == ElectronicBoardConnectionState.scanning ||
         _chessnutState == ElectronicBoardConnectionState.connecting ||
         _chessnutState == ElectronicBoardConnectionState.connected;
-    final message = _chessnutReady
+    final message = _chessnutResetPending && _chessnutReady
+        ? l10n(context).continuationSetupHelp
+        : _chessnutReady
         ? _boardText(_status)
         : connecting
         ? (_genericBoards
@@ -2493,7 +2531,7 @@ class _GamePageState extends State<GamePage>
                   Expanded(
                     child: Text(
                       message,
-                      maxLines: 1,
+                      maxLines: _chessnutResetPending ? 3 : 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 12),
                     ),
@@ -2520,7 +2558,7 @@ class _GamePageState extends State<GamePage>
               ),
             ),
           ),
-          if (!_chessnutReady)
+          if (!_chessnutReady || _chessnutResetPending)
             SizedBox(
               height: _chessnutActionsHeight,
               child: Flex(
@@ -2529,16 +2567,17 @@ class _GamePageState extends State<GamePage>
                     : Axis.horizontal,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(
-                    child: TextButton(
-                      key: const ValueKey('chessnut-inline-reconnect'),
-                      onPressed: connecting ? null : _connectChessnut,
-                      child: Text(
-                        l10n(context).reconnect,
-                        textAlign: TextAlign.center,
+                  if (!_chessnutReady)
+                    Expanded(
+                      child: TextButton(
+                        key: const ValueKey('chessnut-inline-reconnect'),
+                        onPressed: connecting ? null : _connectChessnut,
+                        child: Text(
+                          l10n(context).reconnect,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
-                  ),
                   Expanded(
                     child: TextButton(
                       key: const ValueKey('chessnut-play-in-app'),
@@ -2690,9 +2729,13 @@ class _GamePageState extends State<GamePage>
   Future<void> _startGame({
     bool archiveCurrent = true,
     bool resetChessnutBoard = false,
+    bool waitForBoardSetup = false,
   }) async {
     if (_storageBlocked || _startingGame || !mounted) return;
-    if (_useChessnutGo && !resetChessnutBoard && !_chessnutStartPositionReady) {
+    if (_useChessnutGo &&
+        !resetChessnutBoard &&
+        !waitForBoardSetup &&
+        !_chessnutStartPositionReady) {
       final message = !_chessnutReady
           ? _PlayMessage.connectChessnutFirst
           : _PlayMessage.chessnutStartingPosition;
@@ -2803,7 +2846,7 @@ class _GamePageState extends State<GamePage>
         _chessnutGameActive = _useChessnutGo;
         _pendingPhysicalMaiaMove = null;
         _chessnutTakebackRestoreActive = false;
-        _chessnutResetPending = resetChessnutBoard;
+        _chessnutResetPending = resetChessnutBoard || waitForBoardSetup;
         _lastChessnutIllegalPosition = null;
         _started = true;
         final startingMillis = _baseMinutes * 60 * 1000;
@@ -2815,7 +2858,7 @@ class _GamePageState extends State<GamePage>
         _clockHistory
           ..clear()
           ..add(ClockSnapshot(_whiteMillis, _blackMillis));
-        _status = resetChessnutBoard
+        _status = _chessnutResetPending
             ? _PlayMessage.restoreLitSquares
             : _chessnutGameActive
             ? (_isPlayerTurn
@@ -5626,6 +5669,10 @@ class _GamePageState extends State<GamePage>
     _clockDisplay.dispose();
     _liveMovesController.dispose();
     unawaited(_chessnutSubscription?.cancel());
+    _boardLease.onSuspended = null;
+    unawaited(
+      _boardLease.release(disconnect: widget.startingBoardLease != null),
+    );
     _gameBoardController.premoveNotifier.removeListener(_onPremoveChanged);
     _gameBoardController.dispose();
     super.dispose();

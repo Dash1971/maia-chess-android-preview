@@ -1698,10 +1698,10 @@ abstract class AppLocalizations {
   /// **'Up to 64 premoves can be queued.'**
   String get premoveLimit;
 
-  /// Play screen: Chessnut play supports standard-position, unlimited games only.
+  /// Play screen: Chessnut games have no clock.
   ///
   /// In en, this message translates to:
-  /// **'Chessnut play supports standard-position, unlimited games only.'**
+  /// **'Chessnut games use unlimited time.'**
   String get chessnutGameRestriction;
 
   /// Play screen: Temperature and Top-P
@@ -1996,10 +1996,10 @@ abstract class AppLocalizations {
   /// **'New board support is experimental. Please verify moves on both screens and report connection problems.'**
   String get boardExperimentalNotice;
 
-  /// Electronic board Dev support: Physical-board game constraint: standard initial position and no clock.
+  /// Electronic board support: physical-board games have no clock.
   ///
   /// In en, this message translates to:
-  /// **'Electronic-board games start from the standard position and use unlimited time.'**
+  /// **'Electronic-board games use unlimited time.'**
   String get boardGameRestriction;
 
   /// Electronic board Dev support: User confirmation of physical standard initial-position setup.
@@ -2799,6 +2799,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Black king'**
   String get editorBlackKing;
+
+  /// Continue from here dialog: toggle for playing the selected position on a physical electronic chessboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Use electronic board'**
+  String get continuationUseBoard;
+
+  /// Continue from here dialog: instruction shown before a supported physical board is connected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect a supported board.'**
+  String get continuationConnectHelp;
+
+  /// Continue from here dialog: explains that physical-board games do not use a clock.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronic-board games are untimed.'**
+  String get continuationBoardUntimed;
+
+  /// Continuation game setup: heading while the player arranges physical pieces to match the selected position.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up board'**
+  String get continuationSetUpBoard;
+
+  /// Continuation game setup: arrange the position displayed in the app on the physical board; play begins automatically when the pieces match.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up the position shown on your board. The game starts when the pieces match.'**
+  String get continuationSetupHelp;
+
+  /// Continue from here dialog: explains that custom-position continuation currently supports only Chessnut hardware.
+  ///
+  /// In en, this message translates to:
+  /// **'Continuing from a position currently supports Chessnut boards only.'**
+  String get continuationBoardUnsupported;
 }
 
 class _AppLocalizationsDelegate

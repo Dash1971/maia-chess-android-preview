@@ -264,7 +264,7 @@
   "resignGameQuestion": "投了しますか？",
   "resignEndsImmediately": "対局は直ちに終了します。",
   "premoveLimit": "プリムーブは64手まで予約できます。",
-  "chessnutGameRestriction": "Chessnutでの対局は、標準の初期配置・持ち時間無制限の場合のみ対応しています。",
+  "chessnutGameRestriction": "Chessnutでの対局は持ち時間無制限です。",
   "samplingTitle": "温度とTop-P",
   "samplingDefaultsQuestion": "指し手の多様さを選ぶ",
   "samplingResearch": "研究用の全データ（JSONL）",
@@ -313,7 +313,7 @@
   "boardStartingPosition": "チェス盤に標準の初期配置を並べてください。",
   "boardReady": "チェス盤の準備ができました",
   "boardExperimentalNotice": "新しいチェス盤への対応は試験段階です。両方の画面で指し手を確認し、接続の問題をご報告ください。",
-  "boardGameRestriction": "電子チェス盤での対局は、標準の初期配置・持ち時間無制限で開始します。",
+  "boardGameRestriction": "電子チェス盤での対局は持ち時間無制限です。",
   "boardConfirmSetup": "初期配置を並べました",
   "boardConfirmSetupHelp": "開始前にすべての駒を確認してください。このチェス盤は駒の種類を識別できません。",
   "boardChooseMove": "チェス盤での指し手を確定",
@@ -446,5 +446,11 @@
   "editorBlackBishop": "黒のビショップ",
   "editorBlackRook": "黒のルーク",
   "editorBlackQueen": "黒のクイーン",
-  "editorBlackKing": "黒のキング"
+  "editorBlackKing": "黒のキング",
+  "continuationUseBoard": "電子チェス盤を使用",
+  "continuationConnectHelp": "対応するチェス盤を接続してください。",
+  "continuationBoardUntimed": "電子チェス盤での対局は持ち時間無制限です。",
+  "continuationSetUpBoard": "駒を配置",
+  "continuationSetupHelp": "画面に表示された局面をチェス盤に並べてください。駒の配置が一致すると対局が始まります。",
+  "continuationBoardUnsupported": "指定した局面からの対局は、現在Chessnutのチェス盤のみ対応しています。"
 }

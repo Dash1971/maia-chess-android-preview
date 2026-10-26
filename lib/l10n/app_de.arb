@@ -264,7 +264,7 @@
   "resignGameQuestion": "Partie aufgeben?",
   "resignEndsImmediately": "Dadurch wird die Partie sofort beendet.",
   "premoveLimit": "Es können bis zu 64 Vorauszüge vorgemerkt werden.",
-  "chessnutGameRestriction": "Mit Chessnut sind nur Partien ohne Zeitbegrenzung aus der Grundstellung möglich.",
+  "chessnutGameRestriction": "Partien mit Chessnut haben keine Zeitbegrenzung.",
   "samplingTitle": "Temperatur und Top-P",
   "samplingDefaultsQuestion": "Wähle, wie abwechslungsreich Maia spielen soll",
   "samplingResearch": "Vollständige Forschungsdaten (JSONL)",
@@ -313,7 +313,7 @@
   "boardStartingPosition": "Baue die normale Anfangsposition auf deinem Brett auf.",
   "boardReady": "Brett bereit",
   "boardExperimentalNotice": "Die Unterstützung neuer Bretter ist experimentell. Prüfe die Züge auf beiden Bildschirmen und melde Verbindungsprobleme.",
-  "boardGameRestriction": "Partien mit elektronischem Brett beginnen in der normalen Anfangsposition und ohne Zeitlimit.",
+  "boardGameRestriction": "Partien mit elektronischem Brett haben keine Zeitbegrenzung.",
   "boardConfirmSetup": "Ich habe die Anfangsposition aufgebaut",
   "boardConfirmSetupHelp": "Prüfe vor dem Start jede Figur. Dieses Brett kann die Figurenart nicht erkennen.",
   "boardChooseMove": "Brettzug bestätigen",
@@ -446,5 +446,11 @@
   "editorBlackBishop": "Schwarzer Läufer",
   "editorBlackRook": "Schwarzer Turm",
   "editorBlackQueen": "Schwarze Dame",
-  "editorBlackKing": "Schwarzer König"
+  "editorBlackKing": "Schwarzer König",
+  "continuationUseBoard": "Elektronisches Brett verwenden",
+  "continuationConnectHelp": "Verbinde ein unterstütztes Brett.",
+  "continuationBoardUntimed": "Partien mit elektronischem Brett haben keine Zeitbegrenzung.",
+  "continuationSetUpBoard": "Stellung aufbauen",
+  "continuationSetupHelp": "Baue die angezeigte Stellung auf deinem Brett auf. Die Partie beginnt, sobald die Figurenpositionen übereinstimmen.",
+  "continuationBoardUnsupported": "Das Weiterspielen aus einer Stellung wird derzeit nur mit Chessnut-Brettern unterstützt."
 }
