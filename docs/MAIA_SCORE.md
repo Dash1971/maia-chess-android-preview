@@ -13,7 +13,10 @@ large text, ratings are omitted visually; tapping the 48 dp score target opens
 scrollable details with full rating/side labels and help. The page title can wrap
 within the existing toolbar; long translations use an ellipsis and full tooltip.
 Board, Stockfish, engine rows, move list and navigation retain their bounds when
-the preference changes. No evaluation is added to ordinary play.
+the preference changes. Rating, side-marker and score columns reserve space for
+all loading, unavailable, percentage, equal-score and terminal states. The rating
+visibility breakpoint uses this reserved width, never the current score, so async
+results cannot move the labels or make them flicker into/out of view. No evaluation is added to ordinary play.
 
 Settings → Analysis → **Show Maia win (score) %** is off by default. The boolean
 `maiaScoreVisibleV1` persists, participates in the existing confirmed Settings

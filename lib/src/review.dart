@@ -2409,7 +2409,11 @@ class _ReviewPageState extends State<ReviewPage>
     return LayoutBuilder(
       builder: (context, constraints) {
         final scaler = MediaQuery.textScalerOf(context);
-        const scoreStyle = TextStyle(fontSize: 12, height: 1);
+        final scoreStyle = DefaultTextStyle.of(context).style.copyWith(
+          fontSize: 12,
+          height: 1,
+          fontFeatures: const [ui.FontFeature.tabularFigures()],
+        );
         double width(String text, TextStyle style) {
           final painter = TextPainter(
             text: TextSpan(text: text, style: style),
@@ -2426,16 +2430,26 @@ class _ReviewPageState extends State<ReviewPage>
         // Narrow screens/large text omit ratings visually; the tappable details and
         // accessibility labels always retain each engine's complete identity.
         final titleWidth = width(title, DefaultTextStyle.of(context).style);
-        final scoreWidth = rows
+        // Reserve the same columns during loading, errors, draws and results.
+        // Fit decisions must not depend on the current inference result either:
+        // otherwise the rating itself can appear/disappear near the breakpoint.
+        final ratingWidth = rows
             .map(
               (row) =>
-                  width(
-                    'M${displayNumber(context, row.elo)}  ${row.score.value}',
-                    scoreStyle,
-                  ) +
-                  14,
+                  width('M${displayNumber(context, row.elo)} ', scoreStyle),
             )
-            .reduce(max);
+            .reduce(max)
+            .ceilToDouble();
+        final valueWidth = [
+          _formatMaiaProbability(1),
+          '= ${_formatMaiaProbability(.5)}',
+          '1–0',
+          '0–1',
+          '½–½',
+          '…',
+          '—',
+        ].map((value) => width(value, scoreStyle)).reduce(max).ceilToDouble();
+        final scoreWidth = ratingWidth + 12 + valueWidth;
         final ratingsFit = titleWidth + scoreWidth + 8 <= constraints.maxWidth;
         return Row(
           children: [
@@ -2479,36 +2493,50 @@ class _ReviewPageState extends State<ReviewPage>
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (ratingsFit)
-                                    Text(
-                                      'M${displayNumber(context, rows[i].elo)} ',
+                                    SizedBox(
+                                      width: ratingWidth,
+                                      child: Text(
+                                        'M${displayNumber(context, rows[i].elo)} ',
+                                        style: scoreStyle.copyWith(
+                                          color: chessTextColor(
+                                            context,
+                                            rows[i].color,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  SizedBox(
+                                    width: 12,
+                                    child: Align(
+                                      alignment:
+                                          AlignmentDirectional.centerStart,
+                                      child: rows[i].score.white == null
+                                          ? null
+                                          : Container(
+                                              width: 9,
+                                              height: 9,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: rows[i].score.white!
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                border: Border.all(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: valueWidth,
+                                    child: Text(
+                                      rows[i].score.value,
+                                      textAlign: TextAlign.end,
                                       style: scoreStyle.copyWith(
                                         color: chessTextColor(
                                           context,
                                           rows[i].color,
                                         ),
-                                      ),
-                                    ),
-                                  if (rows[i].score.white
-                                      case final white?) ...[
-                                    Container(
-                                      width: 9,
-                                      height: 9,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: white
-                                            ? Colors.white
-                                            : Colors.black,
-                                        border: Border.all(color: Colors.grey),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 3),
-                                  ],
-                                  Text(
-                                    rows[i].score.value,
-                                    style: scoreStyle.copyWith(
-                                      color: chessTextColor(
-                                        context,
-                                        rows[i].color,
                                       ),
                                     ),
                                   ),
