@@ -1522,6 +1522,35 @@ class AppLocalizationsEs extends AppLocalizations {
   String get boardPieceSet => 'Estilo de piezas';
 
   @override
+  String get showMaiaScore => 'Mostrar victoria (puntuación) de Maia en %';
+
+  @override
+  String get maiaScore => 'Puntuación Maia';
+
+  @override
+  String get maiaScoreEqual => 'Igualada';
+
+  @override
+  String get maiaScoreHelp =>
+      'Muestra en la parte superior de la pantalla la evaluación de Maia sobre las posibilidades de ganar (puntuar).\nEl punto blanco o negro indica a qué bando se refiere el porcentaje.';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      'Por ejemplo, Blancas 60% significa que Maia estima que las blancas conseguirían unos 60 puntos en 100 partidas desde esta posición. Una victoria vale 1 punto; unas tablas, ½.';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      'La estimación supone que ambos jugadores tienen el Elo de análisis seleccionado para Maia. Si activas dos Maias, cada una calcula su estimación con su propio Elo.';
+
+  @override
+  String get maiaScorePreferenceError =>
+      'No se han podido guardar los ajustes de puntuación Maia. Inténtalo de nuevo.';
+
+  @override
+  String get maiaScoreStockfishHelp =>
+      'Puede ser útil compararla con la evaluación de Stockfish. Que Stockfish considere que un bando está mejor no significa que a una persona le resulte fácil encontrar las jugadas correctas para convertir esa ventaja en victoria.';
+
+  @override
   String get editorMoveTool => 'Mover piezas';
 
   @override

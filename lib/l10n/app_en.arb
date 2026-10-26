@@ -1966,6 +1966,38 @@
   "@boardPieceSet": {
     "description": "Visual piece set selector. Style names are upstream artwork names and remain unchanged."
   },
+  "showMaiaScore": "Show Maia win (score) %",
+  "@showMaiaScore": {
+    "description": "User-approved Maia win (score) percentage setting/help, 2026-10-26. The model estimates expected game points including half-point draws. Preserve the 60 points in 100 games example, independent rating inputs and human/Stockfish comparison. Maia-specific, not a direct Lichess equivalent."
+  },
+  "maiaScore": "Maia score",
+  "@maiaScore": {
+    "description": "Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish."
+  },
+  "maiaScoreEqual": "Equal",
+  "@maiaScoreEqual": {
+    "description": "Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish."
+  },
+  "maiaScoreHelp": "Shows Maia’s assessment of winning (scoring) chances at the top of the screen.\nThe white or black dot tells you which side the percentage describes.",
+  "@maiaScoreHelp": {
+    "description": "User-approved Maia win (score) percentage setting/help, 2026-10-26. The model estimates expected game points including half-point draws. Preserve the 60 points in 100 games example, independent rating inputs and human/Stockfish comparison. Maia-specific, not a direct Lichess equivalent."
+  },
+  "maiaScoreExpectedHelp": "For example, White 60% means Maia estimates White would score about 60 points across 100 games from this position. A win earns 1 point; a draw earns ½.",
+  "@maiaScoreExpectedHelp": {
+    "description": "User-approved Maia win (score) percentage setting/help, 2026-10-26. The model estimates expected game points including half-point draws. Preserve the 60 points in 100 games example, independent rating inputs and human/Stockfish comparison. Maia-specific, not a direct Lichess equivalent."
+  },
+  "maiaScoreInputsHelp": "The estimate uses the selected Maia analysis rating for both players. With two Maias enabled, each shows its own estimate at its own rating.",
+  "@maiaScoreInputsHelp": {
+    "description": "User-approved Maia win (score) percentage setting/help, 2026-10-26. The model estimates expected game points including half-point draws. Preserve the 60 points in 100 games example, independent rating inputs and human/Stockfish comparison. Maia-specific, not a direct Lichess equivalent."
+  },
+  "maiaScorePreferenceError": "Could not save Maia score settings. Please try again.",
+  "@maiaScorePreferenceError": {
+    "description": "Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish."
+  },
+  "maiaScoreStockfishHelp": "It can be useful to contrast with Stockfish evaluation. Just because Stockfish thinks one side is better, does not mean that it is easy for a human to find the right moves to convert!",
+  "@maiaScoreStockfishHelp": {
+    "description": "User-approved Maia win (score) percentage setting/help, 2026-10-26. The model estimates expected game points including half-point draws. Preserve the 60 points in 100 games example, independent rating inputs and human/Stockfish comparison. Maia-specific, not a direct Lichess equivalent."
+  },
   "editorMoveTool": "Move pieces",
   "@editorMoveTool": {
     "description": "Standard-chess board editor: Move pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."

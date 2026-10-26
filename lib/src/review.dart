@@ -118,6 +118,7 @@ class ReviewPage extends StatefulWidget {
     this.stockfishAnalyzer,
     this.maiaEvaluator,
     this.maiaPolicyEvaluator,
+    this.maiaInferenceEvaluator,
     this.classifier,
     this.title,
     this.onLoadFen,
@@ -156,6 +157,8 @@ class ReviewPage extends StatefulWidget {
   maiaEvaluator;
   final Future<List<double>?> Function(List<String> positions, int elo)?
   maiaPolicyEvaluator;
+  final Future<MaiaInferenceResult?> Function(List<String> positions, int elo)?
+  maiaInferenceEvaluator;
   final MoveClassificationRunner? classifier;
   final String? title;
   final Future<void> Function()? onLoadFen;
@@ -501,7 +504,8 @@ class _ReviewPageState extends State<ReviewPage>
   @override
   void didUpdateWidget(covariant ReviewPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.useMoveHistory != widget.useMoveHistory ||
+    if (oldWidget.maiaInferenceEvaluator != widget.maiaInferenceEvaluator ||
+        oldWidget.useMoveHistory != widget.useMoveHistory ||
         oldWidget.maiaElo != widget.maiaElo ||
         oldWidget.secondMaiaElo != widget.secondMaiaElo ||
         !listEquals(oldWidget.positions, widget.positions) ||
@@ -842,7 +846,8 @@ class _ReviewPageState extends State<ReviewPage>
     // Maia channel in that case unless a Maia test double was also supplied.
     if (widget.evaluator != null &&
         widget.maiaEvaluator == null &&
-        widget.maiaPolicyEvaluator == null) {
+        widget.maiaPolicyEvaluator == null &&
+        widget.maiaInferenceEvaluator == null) {
       return;
     }
     final analyses = secondary ? _secondMaiaAnalyses : _maiaAnalyses;
@@ -856,6 +861,23 @@ class _ReviewPageState extends State<ReviewPage>
         ...widget.historyPrefix,
         ...widget.positions.take(ply + 1),
       ];
+      final inferenceEvaluator = widget.maiaInferenceEvaluator;
+      if (inferenceEvaluator != null) {
+        final response = await inferenceEvaluator(positions, elo);
+        final analysis = response == null
+            ? null
+            : _maiaAnalysisFromPolicy(
+                positions.last,
+                response.moveLogits,
+                outcome: response.outcome,
+              );
+        if (analysis != null &&
+            mounted &&
+            generation == _maiaContextGeneration) {
+          setState(() => analyses[ply] = analysis);
+        }
+        return;
+      }
       final policyEvaluator = widget.maiaPolicyEvaluator;
       if (policyEvaluator != null) {
         final response = await policyEvaluator(positions, elo);
@@ -877,7 +899,7 @@ class _ReviewPageState extends State<ReviewPage>
         }
         return;
       }
-      final response = await MaiaInferenceQueue.predict({
+      final response = await MaiaInferenceQueue.analyze({
         'tokens': MaiaEncoding.historicalTokens(
           positions,
           useMoveHistory: widget.useMoveHistory,
@@ -886,7 +908,11 @@ class _ReviewPageState extends State<ReviewPage>
         'opponentElo': elo,
       }, replaceableScope: scope);
       if (response == null) return;
-      final analysis = _maiaAnalysisFromPolicy(positions.last, response);
+      final analysis = _maiaAnalysisFromPolicy(
+        positions.last,
+        response.moveLogits,
+        outcome: response.outcome,
+      );
       if (analysis != null && mounted && generation == _maiaContextGeneration) {
         setState(() => analyses[ply] = analysis);
       }
@@ -907,13 +933,14 @@ class _ReviewPageState extends State<ReviewPage>
 
   MaiaPositionAnalysis? _maiaAnalysisFromPolicy(
     String fen,
-    List<double> response,
-  ) {
+    List<double> response, {
+    MaiaOutcome? outcome,
+  }) {
     if (response.length != 4352) return null;
     final game = chess.Chess.fromFEN(fen);
     if (game.game_over) return null;
     final moves = MaiaEncoding.legalMoveProbabilities(game, response);
-    return moves.isEmpty ? null : MaiaPositionAnalysis(moves);
+    return moves.isEmpty ? null : MaiaPositionAnalysis(moves, outcome: outcome);
   }
 
   Future<StockfishReview> _stockfishForVariation(String fen) {
@@ -1028,6 +1055,17 @@ class _ReviewPageState extends State<ReviewPage>
     required bool secondary,
   }) async {
     if (chess.Chess.fromFEN(fen).game_over) return null;
+    final inferenceEvaluator = widget.maiaInferenceEvaluator;
+    if (inferenceEvaluator != null) {
+      final response = await inferenceEvaluator(positions, elo);
+      return response == null
+          ? null
+          : _maiaAnalysisFromPolicy(
+              fen,
+              response.moveLogits,
+              outcome: response.outcome,
+            );
+    }
     final policyEvaluator = widget.maiaPolicyEvaluator;
     if (policyEvaluator != null) {
       final response = await policyEvaluator(positions, elo);
@@ -1039,7 +1077,7 @@ class _ReviewPageState extends State<ReviewPage>
       return move == null ? null : MaiaPositionAnalysis.single(move);
     }
     if (widget.evaluator != null) return null;
-    final response = await MaiaInferenceQueue.predict(
+    final response = await MaiaInferenceQueue.analyze(
       {
         'tokens': MaiaEncoding.historicalTokens(
           positions,
@@ -1052,7 +1090,13 @@ class _ReviewPageState extends State<ReviewPage>
           ? _secondMaiaInferenceScope
           : _maiaInferenceScope,
     );
-    return response == null ? null : _maiaAnalysisFromPolicy(fen, response);
+    return response == null
+        ? null
+        : _maiaAnalysisFromPolicy(
+            fen,
+            response.moveLogits,
+            outcome: response.outcome,
+          );
   }
 
   Future<void> _analyzeVariationMaia(
@@ -2275,6 +2319,215 @@ class _ReviewPageState extends State<ReviewPage>
     );
   }
 
+  /// Reuses the existing toolbar; score visibility never changes body geometry.
+  Widget _analysisTitle() {
+    final title = widget.title ?? l10n(context).gameReview;
+    if (MaiaScoreScope.maybeOf(context)?.enabled != true) return Text(title);
+    final game = chess.Chess.fromFEN(_currentFen);
+    final strings = l10n(context);
+    ({String label, String value, bool? white}) score(
+      MaiaPositionAnalysis? analysis,
+      bool loading,
+    ) {
+      if (game.game_over) {
+        if (game.in_checkmate) {
+          final white = game.turn == chess.Color.BLACK;
+          return (
+            label: white
+                ? strings.whiteIsVictorious
+                : strings.blackIsVictorious,
+            value: white ? '1–0' : '0–1',
+            white: null,
+          );
+        }
+        return (label: strings.theGameIsADraw, value: '½–½', white: null);
+      }
+      if (loading) return (label: strings.analyzing, value: '…', white: null);
+      final outcome = analysis?.outcome;
+      if (outcome == null) {
+        return (label: strings.unavailable, value: '—', white: null);
+      }
+      final white = outcome.whiteScore(_currentFen);
+      final value = _formatMaiaProbability(max(white, 1 - white));
+      final equal = (max(white, 1 - white) * 100).round() == 50;
+      return (
+        label:
+            '${equal
+                ? strings.maiaScoreEqual
+                : white >= .5
+                ? strings.white
+                : strings.black} $value',
+        value: equal ? '= $value' : value,
+        white: equal ? null : white >= .5,
+      );
+    }
+
+    final primary = score(
+      _selectedMaiaAnalysis,
+      _inVariation ? _variationMaiaLoading : _maiaLoading.contains(_ply),
+    );
+    final secondary = score(
+      _selectedSecondMaiaAnalysis,
+      _inVariation
+          ? _secondVariationMaiaLoading
+          : _secondMaiaLoading.contains(_ply),
+    );
+    final rows = [
+      (
+        elo: widget.maiaElo,
+        score: primary,
+        color: primaryMaiaAnalysisColor,
+        key: 'maia-score-primary',
+      ),
+      if (widget.secondMaiaElo case final elo?)
+        (
+          elo: elo,
+          score: secondary,
+          color: secondaryMaiaAnalysisColor,
+          key: 'maia-score-secondary',
+        ),
+    ];
+    final labels = rows
+        .map((row) => 'M${displayNumber(context, row.elo)} ${row.score.label}')
+        .toList();
+    void details() => showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        scrollable: true,
+        title: Text(strings.maiaScore),
+        content: Text(
+          '${labels.join('\n')}\n\n${strings.maiaScoreHelp}\n\n${strings.maiaScoreExpectedHelp}\n\n${strings.maiaScoreInputsHelp}\n\n${strings.maiaScoreStockfishHelp}',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(strings.close),
+          ),
+        ],
+      ),
+    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final scaler = MediaQuery.textScalerOf(context);
+        const scoreStyle = TextStyle(fontSize: 12, height: 1);
+        double width(String text, TextStyle style) {
+          final painter = TextPainter(
+            text: TextSpan(text: text, style: style),
+            textDirection: Directionality.of(context),
+            textScaler: scaler,
+            locale: Localizations.maybeLocaleOf(context),
+          )..layout();
+          final value = painter.width;
+          painter.dispose();
+          return value;
+        }
+
+        // Keep the full page title whenever its ordinary size and the ratings fit.
+        // Narrow screens/large text omit ratings visually; the tappable details and
+        // accessibility labels always retain each engine's complete identity.
+        final titleWidth = width(title, DefaultTextStyle.of(context).style);
+        final scoreWidth = rows
+            .map(
+              (row) =>
+                  width(
+                    'M${displayNumber(context, row.elo)}  ${row.score.value}',
+                    scoreStyle,
+                  ) +
+                  14,
+            )
+            .reduce(max);
+        final ratingsFit = titleWidth + scoreWidth + 8 <= constraints.maxWidth;
+        return Row(
+          children: [
+            Expanded(
+              child: Tooltip(
+                message: title,
+                child: Text(
+                  title,
+                  maxLines: scaler.scale(12) <= 15 ? 2 : 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Semantics(
+              button: true,
+              label: strings.maiaScore,
+              child: InkWell(
+                key: const ValueKey('maia-score-details'),
+                onTap: details,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minHeight: 48,
+                    minWidth: 48,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      for (var i = 0; i < rows.length; i++)
+                        Semantics(
+                          key: ValueKey(rows[i].key),
+                          container: true,
+                          label: labels[i],
+                          liveRegion: true,
+                          child: ExcludeSemantics(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 1),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (ratingsFit)
+                                    Text(
+                                      'M${displayNumber(context, rows[i].elo)} ',
+                                      style: scoreStyle.copyWith(
+                                        color: chessTextColor(
+                                          context,
+                                          rows[i].color,
+                                        ),
+                                      ),
+                                    ),
+                                  if (rows[i].score.white
+                                      case final white?) ...[
+                                    Container(
+                                      width: 9,
+                                      height: 9,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: white
+                                            ? Colors.white
+                                            : Colors.black,
+                                        border: Border.all(color: Colors.grey),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 3),
+                                  ],
+                                  Text(
+                                    rows[i].score.value,
+                                    style: scoreStyle.copyWith(
+                                      color: chessTextColor(
+                                        context,
+                                        rows[i].color,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   String _formatLineEvaluation(StockfishLine line) {
     if (line.mate != null) return '#${line.mate}';
     final pawns = line.evaluation / 100;
@@ -3124,7 +3377,7 @@ class _ReviewPageState extends State<ReviewPage>
               ? l10n(context).backToGame
               : l10n(context).home),
         ),
-        title: Text(widget.title ?? l10n(context).gameReview),
+        title: _analysisTitle(),
         actions: [
           PopupMenuButton<String>(
             key: const ValueKey('analysis-share-menu'),

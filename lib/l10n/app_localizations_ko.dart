@@ -1419,6 +1419,34 @@ class AppLocalizationsKo extends AppLocalizations {
   String get boardPieceSet => '기물 세트';
 
   @override
+  String get showMaiaScore => 'Maia 승리(득점) % 표시';
+
+  @override
+  String get maiaScore => 'Maia 점수';
+
+  @override
+  String get maiaScoreEqual => '대등';
+
+  @override
+  String get maiaScoreHelp =>
+      '화면 상단에 Maia가 평가한 승리(득점) 가능성을 표시합니다.\n흰색 또는 검은색 점은 이 백분율이 어느 쪽을 나타내는지 알려 줍니다.';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      '예를 들어 “백 60%”는 이 포지션에서 100판을 두면 백이 약 60점을 얻을 것으로 Maia가 추정한다는 뜻입니다. 승리는 1점, 무승부는 ½점입니다.';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      '추정치는 선택한 Maia 분석 레이팅을 양쪽 선수에 적용합니다. Maia 두 개를 활성화하면 각각 자신의 레이팅에 따른 추정치를 표시합니다.';
+
+  @override
+  String get maiaScorePreferenceError => 'Maia 점수 설정을 저장하지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get maiaScoreStockfishHelp =>
+      'Stockfish 평가와 비교하면 도움이 될 수 있습니다. Stockfish가 한쪽이 더 낫다고 평가하더라도, 사람이 그 이점을 승리로 연결할 올바른 수를 찾기 쉽다는 뜻은 아닙니다!';
+
+  @override
   String get editorMoveTool => '기물 이동';
 
   @override

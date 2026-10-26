@@ -1519,6 +1519,35 @@ class AppLocalizationsHi extends AppLocalizations {
   String get boardPieceSet => 'मोहरे';
 
   @override
+  String get showMaiaScore => 'Maia की जीत (स्कोर) का % दिखाएँ';
+
+  @override
+  String get maiaScore => 'Maia स्कोर';
+
+  @override
+  String get maiaScoreEqual => 'बराबरी';
+
+  @override
+  String get maiaScoreHelp =>
+      'स्क्रीन के ऊपर Maia का जीतने (अंक पाने) की संभावना का आकलन दिखाता है।\nसफेद या काला बिंदु बताता है कि प्रतिशत किस पक्ष के लिए है।';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      'उदाहरण के लिए, सफेद 60% का मतलब है कि Maia के अनुमान में इस स्थिति से शुरू होने वाली 100 बाज़ियों में सफेद लगभग 60 अंक पाएगा। जीत पर 1 अंक और ड्रॉ पर ½ अंक मिलता है।';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      'यह अनुमान दोनों खिलाड़ियों के लिए चुनी हुई Maia विश्लेषण रेटिंग का उपयोग करता है। दो Maia चालू होने पर, हर Maia अपनी रेटिंग के अनुसार अपना अनुमान दिखाती है।';
+
+  @override
+  String get maiaScorePreferenceError =>
+      'Maia स्कोर की सेटिंग सहेजी नहीं जा सकीं। कृपया फिर से प्रयास करें।';
+
+  @override
+  String get maiaScoreStockfishHelp =>
+      'इसकी तुलना Stockfish के मूल्यांकन से करना उपयोगी हो सकता है। Stockfish किसी पक्ष को बेहतर मानता है, तो इसका मतलब यह नहीं कि इंसान के लिए उस बढ़त को जीत में बदलने वाली सही चालें खोजना आसान है!';
+
+  @override
   String get editorMoveTool => 'मोहरे चलाएँ';
 
   @override

@@ -2626,6 +2626,54 @@ abstract class AppLocalizations {
   /// **'Piece set'**
   String get boardPieceSet;
 
+  /// User-approved Maia win (score) percentage setting/help, 2026-10-26. The model estimates expected game points including half-point draws. Preserve the 60 points in 100 games example, independent rating inputs and human/Stockfish comparison. Maia-specific, not a direct Lichess equivalent.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Maia win (score) %'**
+  String get showMaiaScore;
+
+  /// Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Maia score'**
+  String get maiaScore;
+
+  /// Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Equal'**
+  String get maiaScoreEqual;
+
+  /// User-approved Maia win (score) percentage setting/help, 2026-10-26. The model estimates expected game points including half-point draws. Preserve the 60 points in 100 games example, independent rating inputs and human/Stockfish comparison. Maia-specific, not a direct Lichess equivalent.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows Maia’s assessment of winning (scoring) chances at the top of the screen.\nThe white or black dot tells you which side the percentage describes.'**
+  String get maiaScoreHelp;
+
+  /// User-approved Maia win (score) percentage setting/help, 2026-10-26. The model estimates expected game points including half-point draws. Preserve the 60 points in 100 games example, independent rating inputs and human/Stockfish comparison. Maia-specific, not a direct Lichess equivalent.
+  ///
+  /// In en, this message translates to:
+  /// **'For example, White 60% means Maia estimates White would score about 60 points across 100 games from this position. A win earns 1 point; a draw earns ½.'**
+  String get maiaScoreExpectedHelp;
+
+  /// User-approved Maia win (score) percentage setting/help, 2026-10-26. The model estimates expected game points including half-point draws. Preserve the 60 points in 100 games example, independent rating inputs and human/Stockfish comparison. Maia-specific, not a direct Lichess equivalent.
+  ///
+  /// In en, this message translates to:
+  /// **'The estimate uses the selected Maia analysis rating for both players. With two Maias enabled, each shows its own estimate at its own rating.'**
+  String get maiaScoreInputsHelp;
+
+  /// Maia outcome/expected-score feature. The percentage is P(win)+half P(draw), rating-conditioned for both players, not strict P(win). Keep separate from human move-choice probabilities and Stockfish.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save Maia score settings. Please try again.'**
+  String get maiaScorePreferenceError;
+
+  /// User-approved Maia win (score) percentage setting/help, 2026-10-26. The model estimates expected game points including half-point draws. Preserve the 60 points in 100 games example, independent rating inputs and human/Stockfish comparison. Maia-specific, not a direct Lichess equivalent.
+  ///
+  /// In en, this message translates to:
+  /// **'It can be useful to contrast with Stockfish evaluation. Just because Stockfish thinks one side is better, does not mean that it is easy for a human to find the right moves to convert!'**
+  String get maiaScoreStockfishHelp;
+
   /// Standard-chess board editor: Move pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
   ///
   /// In en, this message translates to:

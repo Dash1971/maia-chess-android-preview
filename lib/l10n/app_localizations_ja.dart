@@ -1415,6 +1415,34 @@ class AppLocalizationsJa extends AppLocalizations {
   String get boardPieceSet => '駒のデザイン';
 
   @override
+  String get showMaiaScore => 'Maiaの勝利（得点）率を表示';
+
+  @override
+  String get maiaScore => 'Maiaスコア';
+
+  @override
+  String get maiaScoreEqual => '互角';
+
+  @override
+  String get maiaScoreHelp =>
+      '画面上部に、Maiaが評価した勝利（得点）の見込みを表示します。\n白または黒の点は、その割合がどちらの側を表しているかを示します。';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      '例えば「白 60%」は、この局面から100局指した場合に、白が合計約60点を獲得するとMaiaが見積もっていることを意味します。勝ちは1点、引き分けは½点です。';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      'この評価では、選択したMaiaの解析レーティングを両者に適用します。Maiaを2つ有効にすると、それぞれが自身のレーティングでの評価を表示します。';
+
+  @override
+  String get maiaScorePreferenceError => 'Maiaスコアの設定を保存できませんでした。もう一度お試しください。';
+
+  @override
+  String get maiaScoreStockfishHelp =>
+      'Stockfishの評価と比べるのも役立ちます。Stockfishが一方を有利と評価していても、人間がその優位を勝ちに結び付ける正しい手を見つけやすいとは限りません！';
+
+  @override
   String get editorMoveTool => '駒を移動';
 
   @override

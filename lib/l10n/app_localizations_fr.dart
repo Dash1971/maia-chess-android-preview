@@ -1522,6 +1522,35 @@ class AppLocalizationsFr extends AppLocalizations {
   String get boardPieceSet => 'Jeu de pièces';
 
   @override
+  String get showMaiaScore => 'Afficher les chances de gain (score) Maia en %';
+
+  @override
+  String get maiaScore => 'Score Maia';
+
+  @override
+  String get maiaScoreEqual => 'Équilibré';
+
+  @override
+  String get maiaScoreHelp =>
+      'Affiche en haut de l’écran l’évaluation par Maia des chances de gagner (de marquer des points).\nLe point blanc ou noir indique à quel camp correspond le pourcentage.';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      'Par exemple, Blancs 60% signifie que Maia estime que les Blancs marqueraient environ 60 points sur 100 parties à partir de cette position. Une victoire rapporte 1 point ; une nulle, ½ point.';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      'L’estimation utilise le classement d’analyse Maia sélectionné pour les deux joueurs. Si deux Maias sont activées, chacune affiche sa propre estimation à son propre classement.';
+
+  @override
+  String get maiaScorePreferenceError =>
+      'Impossible d’enregistrer les réglages du score Maia. Réessayez.';
+
+  @override
+  String get maiaScoreStockfishHelp =>
+      'Il peut être utile de comparer cette estimation à l’évaluation de Stockfish. Ce n’est pas parce que Stockfish juge un camp meilleur qu’il est facile pour un humain de trouver les bons coups pour concrétiser cet avantage !';
+
+  @override
   String get editorMoveTool => 'Déplacer les pièces';
 
   @override

@@ -105,6 +105,7 @@ void main() {
         'chessnutBoardSounds': false,
         samplingCapturePreference: true,
         appLanguagePreferenceKey: 'ja',
+        maiaScorePreferenceKey: true,
         appAppearancePreferenceKey: const AppAppearance(
           mode: ThemeMode.light,
           systemColors: true,
@@ -203,6 +204,7 @@ void main() {
         'chessnutBoardSounds': true,
         samplingCapturePreference: false,
         appAppearancePreferenceKey: const AppAppearance().encode(),
+        maiaScorePreferenceKey: false,
         boardPreferenceKey: const BoardPreferences().encode(),
       };
       for (final entry in defaults.entries) {
@@ -299,6 +301,7 @@ void main() {
           'humanTiming': true,
           samplingCapturePreference: true,
           appLanguagePreferenceKey: locale.languageCode,
+          maiaScorePreferenceKey: true,
           boardPreferenceKey: const BoardPreferences(
             coordinates: false,
             magnify: false,

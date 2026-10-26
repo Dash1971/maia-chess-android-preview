@@ -1394,6 +1394,33 @@ class AppLocalizationsZh extends AppLocalizations {
   String get boardPieceSet => '棋子样式';
 
   @override
+  String get showMaiaScore => '显示 Maia 胜率（得分率）';
+
+  @override
+  String get maiaScore => 'Maia 得分';
+
+  @override
+  String get maiaScoreEqual => '均势';
+
+  @override
+  String get maiaScoreHelp => '在屏幕顶部显示 Maia 对获胜（得分）机会的评估。\n白色或黑色圆点表示该百分比对应哪一方。';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      '例如，“白方 60%”表示 Maia 估计，从此局面开始下100盘棋，白方大约能得到60分。获胜得1分，和棋得½分。';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      '该估计将所选的 Maia 分析等级分应用于双方。启用两个 Maia 时，每个 Maia 都会按各自的等级分显示自己的估计。';
+
+  @override
+  String get maiaScorePreferenceError => '无法保存 Maia 得分设置。请重试。';
+
+  @override
+  String get maiaScoreStockfishHelp =>
+      '与 Stockfish 的评估对照来看可能会很有用。Stockfish 认为某一方更好，并不意味着人类就能轻易找到将优势转化为胜利的正确着法！';
+
+  @override
   String get editorMoveTool => '移动棋子';
 
   @override

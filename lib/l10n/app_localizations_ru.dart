@@ -1542,6 +1542,36 @@ class AppLocalizationsRu extends AppLocalizations {
   String get boardPieceSet => 'Оформление фигур';
 
   @override
+  String get showMaiaScore =>
+      'Показывать шансы на победу (набор очков) Maia в %';
+
+  @override
+  String get maiaScore => 'Оценка Maia';
+
+  @override
+  String get maiaScoreEqual => 'Равенство';
+
+  @override
+  String get maiaScoreHelp =>
+      'Вверху экрана отображается оценка Maia шансов на победу (набор очков).\nБелая или чёрная точка показывает, к какой стороне относится процент.';
+
+  @override
+  String get maiaScoreExpectedHelp =>
+      'Например, «Белые 60%» означает, что, по оценке Maia, белые набрали бы около 60 очков в 100 партиях из этой позиции. Победа приносит 1 очко, ничья — ½ очка.';
+
+  @override
+  String get maiaScoreInputsHelp =>
+      'Оценка использует выбранный рейтинг анализа Maia для обоих игроков. Если включены две Maia, каждая показывает свою оценку при своём рейтинге.';
+
+  @override
+  String get maiaScorePreferenceError =>
+      'Не удалось сохранить настройки оценки Maia. Повторите попытку.';
+
+  @override
+  String get maiaScoreStockfishHelp =>
+      'Полезно сравнивать эту оценку с оценкой Stockfish. Даже если Stockfish считает одну сторону сильнее, человеку не обязательно легко найти правильные ходы, чтобы реализовать преимущество!';
+
+  @override
   String get editorMoveTool => 'Перемещать фигуры';
 
   @override

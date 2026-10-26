@@ -410,6 +410,14 @@ Design names remain Lichess's artwork proper names, including Cburnett and
 Kiwen-suwi, in every language. Selected state is exposed through native semantics
 in addition to its visible checkmark. Persistence errors reuse the board-aid text.
 
+## Optional Maia expected score (#186)
+
+The eight new score/settings/help/error messages describe Maia-specific model
+outcomes and have no direct Lichess equivalent. Existing White/Black, analysis,
+draw and victory labels retain the pinned translations. All ten catalogs follow the requester’s approved English: the 60 points in
+100 games example explains half-point draws; each engine uses its own rating
+for both players; Stockfish advantage can be difficult for a human to convert. These
+translations remain subject to native-speaker review.
 ## Lichess-style board editor (#189)
 
 The Move/Delete actions name pieces explicitly in tooltips and screen-reader
@@ -429,3 +437,6 @@ no complete coloured-piece labels; existing Lichess role names are retained with
 native word order and grammatical agreement (for example Rey blanco / Dama blanca,
 Roi blanc / Dame blanche). Dedicated messages cover all twelve kinds in all
 ten languages, including palette tooltips and board-square accessibility labels.
+
+Spanish Maia-score help explicitly names Elo as the rating input for both players,
+keeping it distinct from the predicted game score. The English meaning is unchanged.
