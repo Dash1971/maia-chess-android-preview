@@ -1407,4 +1407,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get boardPreferenceError => '盤の設定を保存できませんでした。もう一度お試しください。';
+
+  @override
+  String get boardDesign => '盤のデザイン';
+
+  @override
+  String get boardPieceSet => '駒のデザイン';
 }

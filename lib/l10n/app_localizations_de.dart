@@ -1517,4 +1517,10 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get boardPreferenceError =>
       'Bretteinstellungen konnten nicht gespeichert werden. Bitte erneut versuchen.';
+
+  @override
+  String get boardDesign => 'Brett';
+
+  @override
+  String get boardPieceSet => 'Figurenstil';
 }

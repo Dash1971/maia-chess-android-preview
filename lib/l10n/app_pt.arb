@@ -415,5 +415,7 @@
   "boardTargetCircle": "Círculo",
   "boardTargetSquare": "Casa",
   "boardTargetNone": "Nenhum",
-  "boardPreferenceError": "Não foi possível salvar as configurações do tabuleiro. Tente novamente."
+  "boardPreferenceError": "Não foi possível salvar as configurações do tabuleiro. Tente novamente.",
+  "boardDesign": "Tabuleiro",
+  "boardPieceSet": "Estilo das peças"
 }

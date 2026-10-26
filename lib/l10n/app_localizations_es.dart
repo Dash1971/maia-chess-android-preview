@@ -1514,4 +1514,10 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get boardPreferenceError =>
       'No se han podido guardar los ajustes del tablero. Inténtalo de nuevo.';
+
+  @override
+  String get boardDesign => 'Tablero';
+
+  @override
+  String get boardPieceSet => 'Estilo de piezas';
 }

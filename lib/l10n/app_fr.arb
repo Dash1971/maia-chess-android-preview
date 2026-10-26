@@ -415,5 +415,7 @@
   "boardTargetCircle": "Cercle",
   "boardTargetSquare": "Carré",
   "boardTargetNone": "Aucune",
-  "boardPreferenceError": "Impossible d’enregistrer les réglages de l’échiquier. Réessayez."
+  "boardPreferenceError": "Impossible d’enregistrer les réglages de l’échiquier. Réessayez.",
+  "boardDesign": "Échiquier",
+  "boardPieceSet": "Jeu de pièces"
 }

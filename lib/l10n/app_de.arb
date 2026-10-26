@@ -415,5 +415,7 @@
   "boardTargetCircle": "Kreis",
   "boardTargetSquare": "Quadrat",
   "boardTargetNone": "Keine",
-  "boardPreferenceError": "Bretteinstellungen konnten nicht gespeichert werden. Bitte erneut versuchen."
+  "boardPreferenceError": "Bretteinstellungen konnten nicht gespeichert werden. Bitte erneut versuchen.",
+  "boardDesign": "Brett",
+  "boardPieceSet": "Figurenstil"
 }

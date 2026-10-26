@@ -16,6 +16,8 @@ void main() {
     try {
       await controller.initialize();
       const choice = BoardPreferences(
+        board: BoardDesign.blue,
+        pieces: PieceDesign.merida,
         coordinates: false,
         animation: false,
         lastMove: false,

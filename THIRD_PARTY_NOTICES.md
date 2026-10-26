@@ -195,3 +195,55 @@ No external image requests are made when opening a report.
 - Copyright: The Material Flutter authors
 - Licence: Apache License 2.0 (included in Flutter's generated package licences)
 - Reads Android's system palette locally for the optional appearance setting.
+
+## Board and piece artwork (Preview #177)
+
+The offline catalogue uses byte-identical assets from flutter-chessground 10.1.1,
+commit `0bd34fbe720097c4a51172e2c0d8f697637eda01`. Its renderer remains GPL-3.0;
+only its asset declarations have been filtered. Asset-specific terms follow
+[Lila COPYING.md at `995e7ccc4a719bf45923202a1e8d55121df78283`](https://github.com/lichess-org/lila/blob/995e7ccc4a719bf45923202a1e8d55121df78283/COPYING.md).
+The exact source paths, Git blobs, SHA-256 hashes, exclusions and changes are
+recorded in `docs/board-style-assets.json` in the app source.
+
+| Artwork | Author | License |
+| --- | --- | --- |
+| boards | the lila authors and pirouetti | AGPL-3.0-or-later |
+| cburnett | Colin M.L. Burnett | GPL-2.0-or-later |
+| merida | Armando Hernandez Marroquin | GPL-2.0-or-later |
+| pirouetti | pirouetti | AGPL-3.0-or-later |
+| chessnut | Alexis Luengas | Apache-2.0 |
+| kosal | the lila authors | AGPL-3.0-or-later |
+| fantasy | Maurizio Monge | MIT |
+| spatial | Maurizio Monge | MIT |
+| celtic | Maurizio Monge | MIT |
+| pixel | therealqtpi | AGPL-3.0-or-later |
+| firi | James Faure | CC-BY-4.0 |
+| rhosgfx | RhosGFX | CC0-1.0 |
+| governor | the lila authors | AGPL-3.0-or-later |
+| mpchess | Maxime Chupin | GPL-3.0-or-later |
+| shapes | flugsio | CC-BY-SA-4.0 |
+| kiwen-suwi | neverRare | CC-BY-4.0 |
+| letter | usolando | AGPL-3.0-or-later |
+
+Piece artwork was rasterized upstream from Lila SVGs into WebP in multiple
+resolutions using the preserved `scripts/convert_svgs_to_webp.sh`; Mobile Maia
+makes no image conversion or artwork changes. Board textures are unchanged.
+The source for piece sets is `public/piece/<set>` and for boards
+`public/images/board` in Lila; the renderer source supplies the exact packaged
+files. Kosal and Governor use Lila's default AGPLv3+ grant for files without a
+separate exception. Horsey **board** artwork is covered by the board grant;
+the separately licensed Horsey **pieces** are excluded.
+
+Complete license texts and upstream notices are bundled under
+`third_party/chessground/notices/` and available through the app's license
+information. Attribution links: [Chessnut](https://github.com/LexLuengas/chessnut-pieces),
+[Maurizio Monge's art](https://github.com/maurimo/chess-art),
+[Shapes](https://github.com/flugsio/chess_shapes),
+[Firi](https://github.com/jfaure/Firi-pieceset),
+[Mpchess](https://github.com/chupinmaxime),
+[Kiwen-suwi](https://github.com/neverRare),
+[RhosGFX](https://rhosgfx.itch.io/).
+The CC BY / CC BY-SA / CC0 license names above link to the corresponding
+bundled full terms; source and author links are preserved in Lila's bundled
+COPYING notice. Restricted, noncommercial and unresolved sets are omitted
+from both the selector and the distributed package asset declarations.

@@ -1411,4 +1411,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get boardPreferenceError => '보드 설정을 저장하지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get boardDesign => '보드';
+
+  @override
+  String get boardPieceSet => '기물 세트';
 }

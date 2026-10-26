@@ -415,5 +415,7 @@
   "boardTargetCircle": "घेरा",
   "boardTargetSquare": "वर्ग",
   "boardTargetNone": "कोई नहीं",
-  "boardPreferenceError": "बोर्ड की सेटिंग सहेजी नहीं जा सकीं। कृपया फिर से प्रयास करें।"
+  "boardPreferenceError": "बोर्ड की सेटिंग सहेजी नहीं जा सकीं। कृपया फिर से प्रयास करें।",
+  "boardDesign": "बोर्ड की डिज़ाइन",
+  "boardPieceSet": "मोहरे"
 }

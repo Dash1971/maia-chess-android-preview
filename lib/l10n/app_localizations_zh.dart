@@ -1386,4 +1386,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get boardPreferenceError => '无法保存棋盘设置。请重试。';
+
+  @override
+  String get boardDesign => '棋盘';
+
+  @override
+  String get boardPieceSet => '棋子样式';
 }

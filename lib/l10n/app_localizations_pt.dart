@@ -1521,4 +1521,10 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get boardPreferenceError =>
       'Não foi possível salvar as configurações do tabuleiro. Tente novamente.';
+
+  @override
+  String get boardDesign => 'Tabuleiro';
+
+  @override
+  String get boardPieceSet => 'Estilo das peças';
 }

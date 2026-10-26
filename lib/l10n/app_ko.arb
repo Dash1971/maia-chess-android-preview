@@ -415,5 +415,7 @@
   "boardTargetCircle": "원",
   "boardTargetSquare": "칸",
   "boardTargetNone": "없음",
-  "boardPreferenceError": "보드 설정을 저장하지 못했습니다. 다시 시도해 주세요."
+  "boardPreferenceError": "보드 설정을 저장하지 못했습니다. 다시 시도해 주세요.",
+  "boardDesign": "보드",
+  "boardPieceSet": "기물 세트"
 }

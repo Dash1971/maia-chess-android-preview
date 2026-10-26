@@ -402,6 +402,13 @@ boolean switch. Each adaptation is recorded in the terminology reference. The
 persistence error is app-specific prose. These translations remain subject to
 native-speaker review.
 
+## Board and piece design selectors (#177)
+
+Board design and Piece set use pinned Lichess `board` and `pieceSet` terms,
+including native Hindi fallbacks where the upstream catalog has no value.
+Design names remain Lichess's artwork proper names, including Cburnett and
+Kiwen-suwi, in every language. Selected state is exposed through native semantics
+in addition to its visible checkmark. Persistence errors reuse the board-aid text.
 The Hindi dragged-piece target label corrects upstream grammatical agreement
 and uses मोहरा for a chess piece. The original reference is retained with a
 documented adaptation; the terminology regression rejects restoring the typo.

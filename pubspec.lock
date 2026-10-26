@@ -36,10 +36,9 @@ packages:
   chessground:
     dependency: "direct main"
     description:
-      name: chessground
-      sha256: "1599bfd0a75a0ed1bdb401ad4399c3b185d17a6eb79236b2a5c504a1d8a4e660"
-      url: "https://pub.dev"
-    source: hosted
+      path: "third_party/chessground"
+      relative: true
+    source: path
     version: "10.1.1"
   clock:
     dependency: transitive
