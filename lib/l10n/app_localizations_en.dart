@@ -942,8 +942,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premoveLimit => 'Up to 64 premoves can be queued.';
 
   @override
-  String get chessnutGameRestriction =>
-      'Chessnut play supports standard-position, unlimited games only.';
+  String get chessnutGameRestriction => 'Chessnut games use unlimited time.';
 
   @override
   String get samplingTitle => 'Temperature and Top-P';
@@ -1133,7 +1132,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get boardGameRestriction =>
-      'Electronic-board games start from the standard position and use unlimited time.';
+      'Electronic-board games use unlimited time.';
 
   @override
   String get boardConfirmSetup => 'I have set up the starting position';
@@ -1592,4 +1591,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get editorBlackKing => 'Black king';
+
+  @override
+  String get continuationUseBoard => 'Use electronic board';
+
+  @override
+  String get continuationConnectHelp => 'Connect a supported board.';
+
+  @override
+  String get continuationBoardUntimed => 'Electronic-board games are untimed.';
+
+  @override
+  String get continuationSetUpBoard => 'Set up board';
+
+  @override
+  String get continuationSetupHelp =>
+      'Set up the position shown on your board. The game starts when the pieces match.';
+
+  @override
+  String get continuationBoardUnsupported =>
+      'Continuing from a position currently supports Chessnut boards only.';
 }

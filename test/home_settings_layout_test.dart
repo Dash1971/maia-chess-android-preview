@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'board_connection_widget_test.dart' show DiscoveryBoard;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -98,7 +99,11 @@ void main() {
   testWidgets('Home owns the expanded Chessnut connection flow', (
     tester,
   ) async {
-    await tester.pumpWidget(const MaterialApp(home: GamePage()));
+    final board = DiscoveryBoard();
+    addTearDown(board.controller.close);
+    await tester.pumpWidget(
+      MaterialApp(home: GamePage(electronicBoardTransport: board)),
+    );
     await tester.pumpAndSettle();
 
     final toggle = find.byKey(const ValueKey('home-chessnut-toggle'));
@@ -111,11 +116,7 @@ void main() {
       findsOneWidget,
     );
     expect(
-      find.text(
-        (appFlavor == 'dev' || appFlavor == 'preview')
-            ? 'Electronic-board games start from the standard position and use unlimited time.'
-            : 'Chessnut play supports standard-position, unlimited games only.',
-      ),
+      find.text('Electronic-board games use unlimited time.'),
       findsOneWidget,
     );
     expect(find.byKey(const ValueKey('chessnut-sounds-toggle')), findsNothing);
@@ -124,6 +125,8 @@ void main() {
     await tester.ensureVisible(start);
     expect(start, findsOneWidget);
     expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
   });
 
   testWidgets('compact large-text layouts keep all actions reachable', (

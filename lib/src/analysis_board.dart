@@ -7,6 +7,7 @@ class _ContinuationSettings {
     required this.timePreset,
     required this.customMinutes,
     required this.customIncrement,
+    this.boardLease,
   });
 
   final PlayerSide side;
@@ -14,119 +15,453 @@ class _ContinuationSettings {
   final TimePreset timePreset;
   final int customMinutes;
   final int customIncrement;
+  final BoardConnectionLease? boardLease;
 }
 
 class _ContinueFromHereDialog extends StatefulWidget {
-  const _ContinueFromHereDialog({required this.defaults});
+  const _ContinueFromHereDialog({
+    required this.defaults,
+    required this.transport,
+  });
 
   final _ContinuationSettings defaults;
+  final ElectronicBoardTransport transport;
 
   @override
   State<_ContinueFromHereDialog> createState() =>
       _ContinueFromHereDialogState();
 }
 
-class _ContinueFromHereDialogState extends State<_ContinueFromHereDialog> {
+class _ContinueFromHereDialogState extends State<_ContinueFromHereDialog>
+    with WidgetsBindingObserver {
   late PlayerSide _side = widget.defaults.side;
   late int _elo = widget.defaults.elo;
   late TimePreset _timePreset = widget.defaults.timePreset;
   late int _customMinutes = widget.defaults.customMinutes;
   late int _customIncrement = widget.defaults.customIncrement;
 
+  bool _useBoard = false, _transferred = false, _borrowed = false;
+  bool _busy = false, _choosing = false;
+  int _epoch = 0;
+  BoardConnectionLease? _lease;
+  StreamSubscription<ElectronicBoardEvent>? _subscription;
+  ElectronicBoardConnectionState _state =
+      ElectronicBoardConnectionState.disconnected;
+  String? _error;
+  BuildContext? _chooserContext;
+  List<BoardCandidate>? _pendingCandidates;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  void _cancelChooser() {
+    final dialog = _chooserContext;
+    _chooserContext = null;
+    if (dialog != null && dialog.mounted) {
+      final route = ModalRoute.of(dialog);
+      if (route != null) Navigator.of(dialog).removeRoute(route);
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed && _choosing) {
+      _cancelChooser();
+    } else if (state == AppLifecycleState.resumed &&
+        _pendingCandidates != null &&
+        _useBoard) {
+      final pending = _pendingCandidates!;
+      _pendingCandidates = null;
+      unawaited(_chooseBoard(pending));
+    }
+  }
+
+  Future<void> _toggleBoard(bool enabled) async {
+    if (_busy) return;
+    final epoch = ++_epoch;
+    _pendingCandidates = null;
+    _cancelChooser();
+    setState(() {
+      _useBoard = enabled;
+      _busy = true;
+      _error = null;
+    });
+    if (!enabled) {
+      await _releaseBoard();
+    } else {
+      final lease = BoardConnectionSession.forTransport(widget.transport)
+          .lease();
+      _lease = lease;
+      _borrowed = switch (lease.status?.connectionState) {
+        ElectronicBoardConnectionState.scanning ||
+        ElectronicBoardConnectionState.choosing ||
+        ElectronicBoardConnectionState.connecting ||
+        ElectronicBoardConnectionState.connected ||
+        ElectronicBoardConnectionState.ready => true,
+        _ => false,
+      };
+      _subscription = lease.events.listen(
+        _boardEvent,
+        onError: (Object error, StackTrace stack) {
+          if (mounted && identical(_lease, lease)) {
+            setState(() {
+              _state = ElectronicBoardConnectionState.error;
+              _error = l10n(context).boardConnectionError;
+            });
+            unawaited(
+              AppDiagnostics.record('continuation-board', error, stack),
+            );
+          }
+        },
+      );
+      lease.activate();
+      if (lease.ready) {
+        final supported =
+            (lease.status?.boardKind ?? BoardKind.chessnut) ==
+            BoardKind.chessnut;
+        _state = supported
+            ? ElectronicBoardConnectionState.ready
+            : ElectronicBoardConnectionState.error;
+        if (!supported) _error = l10n(context).continuationBoardUnsupported;
+      } else if (_borrowed) {
+        _state = lease.status!.connectionState!;
+      } else {
+        // Bluetooth may take time; allow switching back to phone play meanwhile.
+        setState(() => _busy = false);
+        await _connect();
+      }
+    }
+    if (mounted && epoch == _epoch) setState(() => _busy = false);
+  }
+
+  Future<void> _connect() async {
+    final lease = _lease;
+    if (lease == null) return;
+    final epoch = _epoch;
+    setState(() {
+      _state = ElectronicBoardConnectionState.scanning;
+      _error = null;
+    });
+    try {
+      await lease.connect();
+    } catch (error, stack) {
+      if (!mounted || epoch != _epoch) return;
+      setState(() {
+        _state = ElectronicBoardConnectionState.error;
+        _error = error is PlatformException
+            ? _PlayMessage.fromPlatformError(error.code).text(context)
+            : l10n(context).boardConnectionError;
+      });
+      unawaited(
+        AppDiagnostics.record('continuation-board-connect', error, stack),
+      );
+    }
+  }
+
+  void _boardEvent(ElectronicBoardEvent event) {
+    if (!mounted || !_useBoard) return;
+    if (event.type == 'candidates') {
+      unawaited(_chooseBoard(event.candidates ?? const []));
+    } else if (event.connectionState != null) {
+      final supported =
+          (event.boardKind ??
+              _lease?.status?.boardKind ??
+              BoardKind.chessnut) ==
+          BoardKind.chessnut;
+      setState(() {
+        _state = supported
+            ? event.connectionState!
+            : ElectronicBoardConnectionState.error;
+        _error = supported ? null : l10n(context).continuationBoardUnsupported;
+      });
+      if (!supported &&
+          !_borrowed &&
+          (event.connectionState == ElectronicBoardConnectionState.ready ||
+              event.connectionState ==
+                  ElectronicBoardConnectionState.connected)) {
+        unawaited(
+          _lease?.disconnect().catchError((Object error, StackTrace stack) {
+            unawaited(
+              AppDiagnostics.record(
+                'continuation-unsupported-board',
+                error,
+                stack,
+              ),
+            );
+          }),
+        );
+      }
+    }
+  }
+
+  Future<void> _chooseBoard(List<BoardCandidate> candidates) async {
+    if (WidgetsBinding.instance.lifecycleState != null &&
+        WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed) {
+      _pendingCandidates = candidates;
+      return;
+    }
+    final lease = _lease;
+    if (_choosing || lease is! DiscoverableBoardTransport) return;
+    final supported = candidates
+        .where(
+          (c) =>
+              c.kind == BoardKind.chessnut &&
+              BoardChannelPolicy.supports(appFlavor, c.kind),
+        )
+        .toList();
+    if (supported.isEmpty) {
+      setState(() {
+        _state = ElectronicBoardConnectionState.error;
+        _error = l10n(context).boardNoResults;
+      });
+      return;
+    }
+    _choosing = true;
+    final epoch = _epoch;
+    final id = await showDialog<String>(
+      context: context,
+      builder: (dialog) {
+        _chooserContext = dialog;
+        return AlertDialog(
+          scrollable: true,
+          title: Text(l10n(dialog).chooseBoard),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final candidate in supported)
+                ListTile(
+                  key: ValueKey('board-candidate-${candidate.id}'),
+                  leading: const Icon(Icons.bluetooth),
+                  title: Text(candidate.name),
+                  onTap: () => Navigator.pop(dialog, candidate.id),
+                ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialog),
+              child: Text(l10n(dialog).cancel),
+            ),
+          ],
+        );
+      },
+    );
+    _chooserContext = null;
+    _choosing = false;
+    if (!mounted || epoch != _epoch || !_useBoard) return;
+    if (id == null) {
+      await _toggleBoard(false);
+      return;
+    }
+    try {
+      await (lease as DiscoverableBoardTransport).selectBoard(id);
+    } catch (error, stack) {
+      if (!mounted || epoch != _epoch) return;
+      setState(() {
+        _state = ElectronicBoardConnectionState.error;
+        _error = l10n(context).boardConnectionError;
+      });
+      unawaited(
+        AppDiagnostics.record('continuation-board-select', error, stack),
+      );
+    }
+  }
+
+  Future<void> _releaseBoard() async {
+    final lease = _lease;
+    _lease = null;
+    unawaited(_subscription?.cancel());
+    _subscription = null;
+    await lease?.release(disconnect: !_borrowed, restorePrevious: true);
+  }
+
+  Future<void> _finish() async {
+    if (_busy ||
+        (_useBoard &&
+            (_state != ElectronicBoardConnectionState.ready ||
+                _lease?.isOwner != true ||
+                (_lease?.status?.boardKind ?? BoardKind.chessnut) !=
+                    BoardKind.chessnut))) {
+      return;
+    }
+    setState(() => _busy = true);
+    unawaited(_subscription?.cancel());
+    _subscription = null;
+    if (!mounted) return;
+    _transferred = _useBoard;
+    Navigator.pop(
+      context,
+      _ContinuationSettings(
+        side: _side,
+        elo: _elo,
+        timePreset: _useBoard ? TimePreset.unlimited : _timePreset,
+        customMinutes: _customMinutes,
+        customIncrement: _customIncrement,
+        boardLease: _useBoard ? _lease : null,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _epoch++;
+    WidgetsBinding.instance.removeObserver(this);
+    if (!_transferred) unawaited(_releaseBoard());
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => AlertDialog(
+    scrollable: true,
     title: Text(l10n(context).continueFromHere),
     content: SizedBox(
       width: 400,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            DropdownButtonFormField<PlayerSide>(
-              key: const ValueKey('continuation-side'),
-              initialValue: _side,
-              decoration: InputDecoration(labelText: l10n(context).yourSide),
-              items: [
-                DropdownMenuItem(
-                  value: PlayerSide.white,
-                  child: Text(l10n(context).white),
-                ),
-                DropdownMenuItem(
-                  value: PlayerSide.black,
-                  child: Text(l10n(context).black),
-                ),
-                DropdownMenuItem(
-                  value: PlayerSide.random,
-                  child: Text(l10n(context).random),
-                ),
-              ],
-              onChanged: (value) {
-                if (value != null) setState(() => _side = value);
-              },
-            ),
-            const SizedBox(height: 12),
-            Text(l10n(context).playRatingValue(displayNumber(context, _elo))),
-            Slider(
-              key: const ValueKey('continuation-rating'),
-              min: maiaMinimumRating.toDouble(),
-              max: maiaMaximumRating.toDouble(),
-              divisions: maiaRatingDivisions,
-              value: _elo.toDouble(),
-              label: displayNumber(context, _elo),
-              onChanged: (value) => setState(() => _elo = value.round()),
-            ),
-            DropdownButtonFormField<TimePreset>(
-              key: const ValueKey('continuation-time-control'),
-              initialValue: _timePreset,
-              isExpanded: true,
-              decoration: InputDecoration(labelText: l10n(context).timeControl),
-              items: TimePreset.values
-                  .map(
-                    (preset) => DropdownMenuItem(
-                      value: preset,
-                      child: Text(localizedTimePreset(context, preset)),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                if (value != null) setState(() => _timePreset = value);
-              },
-            ),
-            if (_timePreset == TimePreset.custom) ...[
-              const SizedBox(height: 12),
-              Text(
-                l10n(context)
-                    .minutesValue(displayNumber(context, _customMinutes)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          DropdownButtonFormField<PlayerSide>(
+            key: const ValueKey('continuation-side'),
+            isExpanded: true,
+            itemHeight: null,
+            initialValue: _side,
+            decoration: InputDecoration(labelText: l10n(context).yourSide),
+            items: [
+              DropdownMenuItem(
+                value: PlayerSide.white,
+                child: Text(l10n(context).white),
               ),
-              Slider(
-                key: const ValueKey('continuation-custom-minutes'),
-                min: 1,
-                max: 60,
-                divisions: 59,
-                value: _customMinutes.toDouble(),
-                label: displayNumber(context, _customMinutes),
-                onChanged: (value) =>
-                    setState(() => _customMinutes = value.round()),
+              DropdownMenuItem(
+                value: PlayerSide.black,
+                child: Text(l10n(context).black),
               ),
-              Text(
-                l10n(context).incrementSecondsValue(
-                  displayNumber(context, _customIncrement),
-                ),
-              ),
-              Slider(
-                key: const ValueKey('continuation-custom-increment'),
-                min: 0,
-                max: 30,
-                divisions: 30,
-                value: _customIncrement.toDouble(),
-                label: displayNumber(context, _customIncrement),
-                onChanged: (value) =>
-                    setState(() => _customIncrement = value.round()),
+              DropdownMenuItem(
+                value: PlayerSide.random,
+                child: Text(l10n(context).random),
               ),
             ],
+            onChanged: (value) {
+              if (value != null) setState(() => _side = value);
+            },
+          ),
+          const SizedBox(height: 12),
+          Text(l10n(context).playRatingValue(displayNumber(context, _elo))),
+          Slider(
+            key: const ValueKey('continuation-rating'),
+            min: maiaMinimumRating.toDouble(),
+            max: maiaMaximumRating.toDouble(),
+            divisions: maiaRatingDivisions,
+            value: _elo.toDouble(),
+            label: displayNumber(context, _elo),
+            onChanged: (value) => setState(() => _elo = value.round()),
+          ),
+          DropdownButtonFormField<TimePreset>(
+            key: ValueKey(
+              'continuation-time-control${_useBoard ? '-board' : ''}',
+            ),
+            initialValue: _useBoard ? TimePreset.unlimited : _timePreset,
+            isExpanded: true,
+            decoration: InputDecoration(labelText: l10n(context).timeControl),
+            items: TimePreset.values
+                .map(
+                  (preset) => DropdownMenuItem(
+                    value: preset,
+                    child: Text(localizedTimePreset(context, preset)),
+                  ),
+                )
+                .toList(),
+            onChanged: _useBoard
+                ? null
+                : (value) {
+                    if (value != null) setState(() => _timePreset = value);
+                  },
+          ),
+          if (!_useBoard && _timePreset == TimePreset.custom) ...[
+            const SizedBox(height: 12),
+            Text(
+              l10n(context)
+                  .minutesValue(displayNumber(context, _customMinutes)),
+            ),
+            Slider(
+              key: const ValueKey('continuation-custom-minutes'),
+              min: 1,
+              max: 60,
+              divisions: 59,
+              value: _customMinutes.toDouble(),
+              label: displayNumber(context, _customMinutes),
+              onChanged: (value) =>
+                  setState(() => _customMinutes = value.round()),
+            ),
+            Text(
+              l10n(
+                context,
+              ).incrementSecondsValue(displayNumber(context, _customIncrement)),
+            ),
+            Slider(
+              key: const ValueKey('continuation-custom-increment'),
+              min: 0,
+              max: 30,
+              divisions: 30,
+              value: _customIncrement.toDouble(),
+              label: displayNumber(context, _customIncrement),
+              onChanged: (value) =>
+                  setState(() => _customIncrement = value.round()),
+            ),
           ],
-        ),
+          const SizedBox(height: 16),
+          SwitchListTile(
+            key: const ValueKey('continuation-use-board'),
+            contentPadding: EdgeInsets.zero,
+            title: Text(l10n(context).continuationUseBoard),
+            value: _useBoard,
+            onChanged: _busy ? null : _toggleBoard,
+          ),
+          Text(
+            _useBoard
+                ? (_error ??
+                      switch (_state) {
+                        ElectronicBoardConnectionState.ready =>
+                          l10n(context).namedBoardConnected(
+                            electronicBoardDisplayName(
+                              l10n(context),
+                              _lease?.status?.boardKind ?? BoardKind.chessnut,
+                              _lease?.status?.deviceName,
+                            ),
+                          ),
+                        ElectronicBoardConnectionState.scanning => l10n(
+                          context,
+                        ).boardSearching,
+                        ElectronicBoardConnectionState.choosing => l10n(
+                          context,
+                        ).boardWaitingForSelection,
+                        ElectronicBoardConnectionState.connecting ||
+                        ElectronicBoardConnectionState.connected => l10n(
+                          context,
+                        ).boardConnecting,
+                        _ => l10n(context).boardConnectionError,
+                      })
+                : l10n(context).continuationConnectHelp,
+            key: const ValueKey('continuation-board-status'),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          if (_useBoard) ...[
+            const SizedBox(height: 8),
+            Text(
+              l10n(context).continuationBoardUntimed,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            if (_state == ElectronicBoardConnectionState.error ||
+                _state == ElectronicBoardConnectionState.disconnected)
+              TextButton(
+                key: const ValueKey('continuation-board-retry'),
+                onPressed: _busy ? null : _connect,
+                child: Text(l10n(context).retry),
+              ),
+          ],
+        ],
       ),
     ),
     actions: [
@@ -136,17 +471,16 @@ class _ContinueFromHereDialogState extends State<_ContinueFromHereDialog> {
       ),
       FilledButton(
         key: const ValueKey('continuation-start-game'),
-        onPressed: () => Navigator.pop(
-          context,
-          _ContinuationSettings(
-            side: _side,
-            elo: _elo,
-            timePreset: _timePreset,
-            customMinutes: _customMinutes,
-            customIncrement: _customIncrement,
-          ),
+        onPressed:
+            _busy ||
+                (_useBoard && _state != ElectronicBoardConnectionState.ready)
+            ? null
+            : _finish,
+        child: Text(
+          _useBoard
+              ? l10n(context).continuationSetUpBoard
+              : l10n(context).startGame,
         ),
-        child: Text(l10n(context).startGame),
       ),
     ],
   );
@@ -212,9 +546,11 @@ class AnalysisBoardPage extends StatefulWidget {
     this.evaluator,
     this.maiaEvaluator,
     this.maiaPolicyEvaluator,
+    this.electronicBoardTransport,
     super.key,
   });
 
+  final ElectronicBoardTransport? electronicBoardTransport;
   final AnalysisSession initialSession;
   final int maiaElo;
   final int? secondMaiaElo;
@@ -408,13 +744,23 @@ class _AnalysisBoardPageState extends State<AnalysisBoardPage> {
     );
     final selection = await showDialog<_ContinuationSettings>(
       context: context,
-      builder: (context) => _ContinueFromHereDialog(defaults: defaults),
+      builder: (context) => _ContinueFromHereDialog(
+        defaults: defaults,
+        transport:
+            widget.electronicBoardTransport ??
+            ChessnutPlatformTransport.instance,
+      ),
     );
-    if (selection == null || !mounted) return;
+    if (selection == null) return;
+    if (!mounted) {
+      await selection.boardLease?.release(disconnect: true);
+      return;
+    }
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => GamePage(
           startingFen: fen,
+          startingBoardLease: selection.boardLease,
           startingUseMoveHistory: widget.useMoveHistory,
           startingPositionHistory: positions,
           startingSide: selection.side,

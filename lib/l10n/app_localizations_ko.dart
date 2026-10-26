@@ -878,8 +878,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premoveLimit => '최대 64수까지 미리 입력할 수 있습니다.';
 
   @override
-  String get chessnutGameRestriction =>
-      'Chessnut 대국은 표준 시작 포지션에서 시작하는 시간 무제한 대국만 지원합니다.';
+  String get chessnutGameRestriction => 'Chessnut 대국에는 시간 제한이 없습니다.';
 
   @override
   String get samplingTitle => '온도와 Top-P';
@@ -1063,7 +1062,7 @@ class AppLocalizationsKo extends AppLocalizations {
       '새 체스보드 지원은 실험 단계입니다. 두 화면에서 수를 확인하고 연결 문제를 알려 주세요.';
 
   @override
-  String get boardGameRestriction => '전자 체스보드 대국은 표준 시작 포지션에서 무제한 시간으로 시작합니다.';
+  String get boardGameRestriction => '전자 체스보드 대국에는 시간 제한이 없습니다.';
 
   @override
   String get boardConfirmSetup => '시작 포지션을 배치했습니다';
@@ -1508,4 +1507,24 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get editorBlackKing => '흑 킹';
+
+  @override
+  String get continuationUseBoard => '전자 체스보드 사용';
+
+  @override
+  String get continuationConnectHelp => '지원되는 체스보드를 연결하세요.';
+
+  @override
+  String get continuationBoardUntimed => '전자 체스보드 대국에는 시간 제한이 없습니다.';
+
+  @override
+  String get continuationSetUpBoard => '기물 배치';
+
+  @override
+  String get continuationSetupHelp =>
+      '화면에 표시된 포지션을 체스보드에 배치하세요. 기물 배치가 일치하면 대국이 시작됩니다.';
+
+  @override
+  String get continuationBoardUnsupported =>
+      '현재 특정 포지션에서 이어서 두는 기능은 Chessnut 체스보드만 지원합니다.';
 }

@@ -877,8 +877,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premoveLimit => 'プリムーブは64手まで予約できます。';
 
   @override
-  String get chessnutGameRestriction =>
-      'Chessnutでの対局は、標準の初期配置・持ち時間無制限の場合のみ対応しています。';
+  String get chessnutGameRestriction => 'Chessnutでの対局は持ち時間無制限です。';
 
   @override
   String get samplingTitle => '温度とTop-P';
@@ -1063,7 +1062,7 @@ class AppLocalizationsJa extends AppLocalizations {
       '新しいチェス盤への対応は試験段階です。両方の画面で指し手を確認し、接続の問題をご報告ください。';
 
   @override
-  String get boardGameRestriction => '電子チェス盤での対局は、標準の初期配置・持ち時間無制限で開始します。';
+  String get boardGameRestriction => '電子チェス盤での対局は持ち時間無制限です。';
 
   @override
   String get boardConfirmSetup => '初期配置を並べました';
@@ -1504,4 +1503,24 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get editorBlackKing => '黒のキング';
+
+  @override
+  String get continuationUseBoard => '電子チェス盤を使用';
+
+  @override
+  String get continuationConnectHelp => '対応するチェス盤を接続してください。';
+
+  @override
+  String get continuationBoardUntimed => '電子チェス盤での対局は持ち時間無制限です。';
+
+  @override
+  String get continuationSetUpBoard => '駒を配置';
+
+  @override
+  String get continuationSetupHelp =>
+      '画面に表示された局面をチェス盤に並べてください。駒の配置が一致すると対局が始まります。';
+
+  @override
+  String get continuationBoardUnsupported =>
+      '指定した局面からの対局は、現在Chessnutのチェス盤のみ対応しています。';
 }

@@ -955,7 +955,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get chessnutGameRestriction =>
-      'Chessnut पर केवल मानक शुरुआती स्थिति से, बिना समय सीमा के खेल सकते हैं।';
+      'Chessnut पर खेलों में समय सीमा नहीं होती।';
 
   @override
   String get samplingTitle => 'तापमान और Top-P';
@@ -1148,7 +1148,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get boardGameRestriction =>
-      'इलेक्ट्रॉनिक बोर्ड पर खेल मानक शुरुआती स्थिति से और बिना समय सीमा के शुरू होते हैं।';
+      'इलेक्ट्रॉनिक बोर्ड पर खेलों में समय सीमा नहीं होती।';
 
   @override
   String get boardConfirmSetup => 'मैंने शुरुआती स्थिति में मोहरे रख दिए हैं';
@@ -1610,4 +1610,25 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get editorBlackKing => 'काला राजा';
+
+  @override
+  String get continuationUseBoard => 'इलेक्ट्रॉनिक बोर्ड का उपयोग करें';
+
+  @override
+  String get continuationConnectHelp => 'समर्थित बोर्ड कनेक्ट करें।';
+
+  @override
+  String get continuationBoardUntimed =>
+      'इलेक्ट्रॉनिक बोर्ड पर खेलों में समय सीमा नहीं होती।';
+
+  @override
+  String get continuationSetUpBoard => 'बोर्ड पर मोहरे रखें';
+
+  @override
+  String get continuationSetupHelp =>
+      'स्क्रीन पर दिखाई गई स्थिति के अनुसार अपने बोर्ड पर मोहरे रखें। मोहरों की स्थिति मेल खाने पर खेल शुरू होगा।';
+
+  @override
+  String get continuationBoardUnsupported =>
+      'किसी स्थिति से आगे खेलने के लिए फ़िलहाल केवल Chessnut बोर्ड समर्थित हैं।';
 }

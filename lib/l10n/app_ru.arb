@@ -264,7 +264,7 @@
   "resignGameQuestion": "Сдаться?",
   "resignEndsImmediately": "Это немедленно завершит партию.",
   "premoveLimit": "Можно задать до 64 предварительных ходов.",
-  "chessnutGameRestriction": "Chessnut поддерживает только партии без ограничения времени из стандартной начальной позиции.",
+  "chessnutGameRestriction": "Партии на Chessnut идут без ограничения времени.",
   "samplingTitle": "Температура и Top-P",
   "samplingDefaultsQuestion": "Выберите, насколько разнообразной будет игра",
   "samplingResearch": "Полные данные для исследования (JSONL)",
@@ -313,7 +313,7 @@
   "boardStartingPosition": "Расставьте фигуры на доске в стандартной начальной позиции.",
   "boardReady": "Доска готова",
   "boardExperimentalNotice": "Поддержка новых досок экспериментальная. Проверяйте ходы на обоих экранах и сообщайте о проблемах с подключением.",
-  "boardGameRestriction": "Партии на электронной доске начинаются со стандартной начальной позиции и идут без ограничения времени.",
+  "boardGameRestriction": "Партии на электронной доске идут без ограничения времени.",
   "boardConfirmSetup": "Я расставил фигуры в начальной позиции",
   "boardConfirmSetupHelp": "Перед началом проверьте каждую фигуру. Эта доска не может определять тип фигуры.",
   "boardChooseMove": "Подтвердите ход на доске",
@@ -446,5 +446,11 @@
   "editorBlackBishop": "Чёрный слон",
   "editorBlackRook": "Чёрная ладья",
   "editorBlackQueen": "Чёрный ферзь",
-  "editorBlackKing": "Чёрный король"
+  "editorBlackKing": "Чёрный король",
+  "continuationUseBoard": "Использовать электронную доску",
+  "continuationConnectHelp": "Подключите поддерживаемую доску.",
+  "continuationBoardUntimed": "Партии на электронной доске идут без ограничения времени.",
+  "continuationSetUpBoard": "Расставить фигуры",
+  "continuationSetupHelp": "Расставьте фигуры на доске согласно позиции на экране. Партия начнётся, когда расположение фигур совпадёт.",
+  "continuationBoardUnsupported": "Продолжение игры из заданной позиции пока поддерживается только на досках Chessnut."
 }

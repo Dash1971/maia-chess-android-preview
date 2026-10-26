@@ -264,7 +264,7 @@
   "resignGameQuestion": "기권할까요?",
   "resignEndsImmediately": "대국이 즉시 종료됩니다.",
   "premoveLimit": "최대 64수까지 미리 입력할 수 있습니다.",
-  "chessnutGameRestriction": "Chessnut 대국은 표준 시작 포지션에서 시작하는 시간 무제한 대국만 지원합니다.",
+  "chessnutGameRestriction": "Chessnut 대국에는 시간 제한이 없습니다.",
   "samplingTitle": "온도와 Top-P",
   "samplingDefaultsQuestion": "원하는 수의 다양성을 선택하세요",
   "samplingResearch": "전체 연구 데이터 (JSONL)",
@@ -313,7 +313,7 @@
   "boardStartingPosition": "체스보드에 표준 시작 포지션을 배치하세요.",
   "boardReady": "체스보드가 준비되었습니다",
   "boardExperimentalNotice": "새 체스보드 지원은 실험 단계입니다. 두 화면에서 수를 확인하고 연결 문제를 알려 주세요.",
-  "boardGameRestriction": "전자 체스보드 대국은 표준 시작 포지션에서 무제한 시간으로 시작합니다.",
+  "boardGameRestriction": "전자 체스보드 대국에는 시간 제한이 없습니다.",
   "boardConfirmSetup": "시작 포지션을 배치했습니다",
   "boardConfirmSetupHelp": "시작 전에 모든 기물을 확인하세요. 이 체스보드는 기물의 종류를 식별할 수 없습니다.",
   "boardChooseMove": "체스보드에서 둔 수 확인",
@@ -446,5 +446,11 @@
   "editorBlackBishop": "흑 비숍",
   "editorBlackRook": "흑 룩",
   "editorBlackQueen": "흑 퀸",
-  "editorBlackKing": "흑 킹"
+  "editorBlackKing": "흑 킹",
+  "continuationUseBoard": "전자 체스보드 사용",
+  "continuationConnectHelp": "지원되는 체스보드를 연결하세요.",
+  "continuationBoardUntimed": "전자 체스보드 대국에는 시간 제한이 없습니다.",
+  "continuationSetUpBoard": "기물 배치",
+  "continuationSetupHelp": "화면에 표시된 포지션을 체스보드에 배치하세요. 기물 배치가 일치하면 대국이 시작됩니다.",
+  "continuationBoardUnsupported": "현재 특정 포지션에서 이어서 두는 기능은 Chessnut 체스보드만 지원합니다."
 }

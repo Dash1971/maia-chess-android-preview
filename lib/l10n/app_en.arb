@@ -1223,9 +1223,9 @@
   "@premoveLimit": {
     "description": "Play screen: Up to 64 premoves can be queued."
   },
-  "chessnutGameRestriction": "Chessnut play supports standard-position, unlimited games only.",
+  "chessnutGameRestriction": "Chessnut games use unlimited time.",
   "@chessnutGameRestriction": {
-    "description": "Play screen: Chessnut play supports standard-position, unlimited games only."
+    "description": "Play screen: Chessnut games have no clock."
   },
   "samplingTitle": "Temperature and Top-P",
   "@samplingTitle": {
@@ -1497,9 +1497,9 @@
   "@boardExperimentalNotice": {
     "description": "Electronic board Dev support: Experimental support notice; compare the app screens and report connection issues."
   },
-  "boardGameRestriction": "Electronic-board games start from the standard position and use unlimited time.",
+  "boardGameRestriction": "Electronic-board games use unlimited time.",
   "@boardGameRestriction": {
-    "description": "Electronic board Dev support: Physical-board game constraint: standard initial position and no clock."
+    "description": "Electronic board support: physical-board games have no clock."
   },
   "boardConfirmSetup": "I have set up the starting position",
   "@boardConfirmSetup": {
@@ -2081,5 +2081,29 @@
   "editorBlackKing": "Black king",
   "@editorBlackKing": {
     "description": "Complete singular name of a black king, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "continuationUseBoard": "Use electronic board",
+  "@continuationUseBoard": {
+    "description": "Continue from here dialog: toggle for playing the selected position on a physical electronic chessboard."
+  },
+  "continuationConnectHelp": "Connect a supported board.",
+  "@continuationConnectHelp": {
+    "description": "Continue from here dialog: instruction shown before a supported physical board is connected."
+  },
+  "continuationBoardUntimed": "Electronic-board games are untimed.",
+  "@continuationBoardUntimed": {
+    "description": "Continue from here dialog: explains that physical-board games do not use a clock."
+  },
+  "continuationSetUpBoard": "Set up board",
+  "@continuationSetUpBoard": {
+    "description": "Continuation game setup: heading while the player arranges physical pieces to match the selected position."
+  },
+  "continuationSetupHelp": "Set up the position shown on your board. The game starts when the pieces match.",
+  "@continuationSetupHelp": {
+    "description": "Continuation game setup: arrange the position displayed in the app on the physical board; play begins automatically when the pieces match."
+  },
+  "continuationBoardUnsupported": "Continuing from a position currently supports Chessnut boards only.",
+  "@continuationBoardUnsupported": {
+    "description": "Continue from here dialog: explains that custom-position continuation currently supports only Chessnut hardware."
   }
 }

@@ -870,7 +870,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premoveLimit => '最多可设置 64 步预走棋。';
 
   @override
-  String get chessnutGameRestriction => 'Chessnut 仅支持从标准初始局面开始的无时限对局。';
+  String get chessnutGameRestriction => 'Chessnut 对局不限时。';
 
   @override
   String get samplingTitle => '温度和 Top-P';
@@ -1049,7 +1049,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get boardExperimentalNotice => '新棋盘支持仍处于实验阶段。请核对两个屏幕上的走法，并报告连接问题。';
 
   @override
-  String get boardGameRestriction => '电子棋盘对局从标准起始局面开始，时间不限。';
+  String get boardGameRestriction => '电子棋盘对局不限时。';
 
   @override
   String get boardConfirmSetup => '我已摆好起始局面';
@@ -1482,4 +1482,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get editorBlackKing => '黑王';
+
+  @override
+  String get continuationUseBoard => '使用电子棋盘';
+
+  @override
+  String get continuationConnectHelp => '请连接受支持的棋盘。';
+
+  @override
+  String get continuationBoardUntimed => '电子棋盘对局不限时。';
+
+  @override
+  String get continuationSetUpBoard => '摆好棋盘';
+
+  @override
+  String get continuationSetupHelp => '请在棋盘上摆出屏幕所示的局面。棋子位置一致后，对局即开始。';
+
+  @override
+  String get continuationBoardUnsupported => '目前仅支持使用 Chessnut 棋盘从指定局面继续对局。';
 }

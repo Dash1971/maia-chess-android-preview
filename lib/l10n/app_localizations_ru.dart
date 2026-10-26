@@ -977,7 +977,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get chessnutGameRestriction =>
-      'Chessnut поддерживает только партии без ограничения времени из стандартной начальной позиции.';
+      'Партии на Chessnut идут без ограничения времени.';
 
   @override
   String get samplingTitle => 'Температура и Top-P';
@@ -1170,7 +1170,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get boardGameRestriction =>
-      'Партии на электронной доске начинаются со стандартной начальной позиции и идут без ограничения времени.';
+      'Партии на электронной доске идут без ограничения времени.';
 
   @override
   String get boardConfirmSetup => 'Я расставил фигуры в начальной позиции';
@@ -1634,4 +1634,25 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get editorBlackKing => 'Чёрный король';
+
+  @override
+  String get continuationUseBoard => 'Использовать электронную доску';
+
+  @override
+  String get continuationConnectHelp => 'Подключите поддерживаемую доску.';
+
+  @override
+  String get continuationBoardUntimed =>
+      'Партии на электронной доске идут без ограничения времени.';
+
+  @override
+  String get continuationSetUpBoard => 'Расставить фигуры';
+
+  @override
+  String get continuationSetupHelp =>
+      'Расставьте фигуры на доске согласно позиции на экране. Партия начнётся, когда расположение фигур совпадёт.';
+
+  @override
+  String get continuationBoardUnsupported =>
+      'Продолжение игры из заданной позиции пока поддерживается только на досках Chessnut.';
 }

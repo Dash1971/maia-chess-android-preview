@@ -264,7 +264,7 @@
   "resignGameQuestion": "Desistir da partida?",
   "resignEndsImmediately": "Isso encerrará a partida imediatamente.",
   "premoveLimit": "É possível programar até 64 pré-movimentos.",
-  "chessnutGameRestriction": "No Chessnut, só é possível jogar partidas sem limite de tempo a partir da posição inicial padrão.",
+  "chessnutGameRestriction": "As partidas com Chessnut não têm limite de tempo.",
   "samplingTitle": "Temperatura e Top-P",
   "samplingDefaultsQuestion": "Escolha quanta variedade você quer",
   "samplingResearch": "Dados completos de pesquisa (JSONL)",
@@ -313,7 +313,7 @@
   "boardStartingPosition": "Monte a posição inicial padrão no seu tabuleiro.",
   "boardReady": "Tabuleiro pronto",
   "boardExperimentalNotice": "O suporte a novos tabuleiros é experimental. Confira os lances nas duas telas e relate problemas de conexão.",
-  "boardGameRestriction": "As partidas com tabuleiro eletrônico começam na posição inicial padrão e sem limite de tempo.",
+  "boardGameRestriction": "As partidas com tabuleiro eletrônico não têm limite de tempo.",
   "boardConfirmSetup": "Montei a posição inicial",
   "boardConfirmSetupHelp": "Confira cada peça antes de começar. Este tabuleiro não consegue identificar o tipo de peça.",
   "boardChooseMove": "Confirme seu lance no tabuleiro",
@@ -446,5 +446,11 @@
   "editorBlackBishop": "Bispo preto",
   "editorBlackRook": "Torre preta",
   "editorBlackQueen": "Dama preta",
-  "editorBlackKing": "Rei preto"
+  "editorBlackKing": "Rei preto",
+  "continuationUseBoard": "Usar tabuleiro eletrônico",
+  "continuationConnectHelp": "Conecte um tabuleiro compatível.",
+  "continuationBoardUntimed": "As partidas com tabuleiro eletrônico não têm limite de tempo.",
+  "continuationSetUpBoard": "Preparar tabuleiro",
+  "continuationSetupHelp": "Monte no seu tabuleiro a posição mostrada na tela. A partida começa quando a posição das peças coincidir.",
+  "continuationBoardUnsupported": "No momento, continuar a partir de uma posição só é compatível com tabuleiros Chessnut."
 }

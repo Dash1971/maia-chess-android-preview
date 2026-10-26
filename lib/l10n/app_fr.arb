@@ -264,7 +264,7 @@
   "resignGameQuestion": "Abandonner la partie ?",
   "resignEndsImmediately": "Cela mettra immédiatement fin à la partie.",
   "premoveLimit": "Vous pouvez préparer jusqu’à 64 pré-coups.",
-  "chessnutGameRestriction": "Sur Chessnut, seules les parties sans limite de temps depuis la position initiale standard sont prises en charge.",
+  "chessnutGameRestriction": "Les parties sur Chessnut sont sans limite de temps.",
   "samplingTitle": "Température et Top-P",
   "samplingDefaultsQuestion": "Choisissez la variété de jeu souhaitée",
   "samplingResearch": "Données de recherche complètes (JSONL)",
@@ -313,7 +313,7 @@
   "boardStartingPosition": "Placez la position de départ standard sur votre échiquier.",
   "boardReady": "Échiquier prêt",
   "boardExperimentalNotice": "La prise en charge de nouveaux échiquiers est expérimentale. Vérifiez les coups sur les deux écrans et signalez les problèmes de connexion.",
-  "boardGameRestriction": "Les parties sur échiquier électronique commencent depuis la position de départ standard et sans limite de temps.",
+  "boardGameRestriction": "Les parties sur échiquier électronique sont sans limite de temps.",
   "boardConfirmSetup": "J’ai placé la position de départ",
   "boardConfirmSetupHelp": "Vérifiez chaque pièce avant de commencer. Cet échiquier ne peut pas identifier le type de pièce.",
   "boardChooseMove": "Confirmer votre coup sur l’échiquier",
@@ -446,5 +446,11 @@
   "editorBlackBishop": "Fou noir",
   "editorBlackRook": "Tour noire",
   "editorBlackQueen": "Dame noire",
-  "editorBlackKing": "Roi noir"
+  "editorBlackKing": "Roi noir",
+  "continuationUseBoard": "Utiliser un échiquier électronique",
+  "continuationConnectHelp": "Connectez un échiquier compatible.",
+  "continuationBoardUntimed": "Les parties sur échiquier électronique sont sans limite de temps.",
+  "continuationSetUpBoard": "Placer les pièces",
+  "continuationSetupHelp": "Reproduisez la position affichée sur votre échiquier. La partie commence lorsque les pièces correspondent.",
+  "continuationBoardUnsupported": "Pour le moment, seuls les échiquiers Chessnut permettent de continuer depuis une position."
 }

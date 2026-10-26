@@ -959,7 +959,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get chessnutGameRestriction =>
-      'Mit Chessnut sind nur Partien ohne Zeitbegrenzung aus der Grundstellung möglich.';
+      'Partien mit Chessnut haben keine Zeitbegrenzung.';
 
   @override
   String get samplingTitle => 'Temperatur und Top-P';
@@ -1153,7 +1153,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get boardGameRestriction =>
-      'Partien mit elektronischem Brett beginnen in der normalen Anfangsposition und ohne Zeitlimit.';
+      'Partien mit elektronischem Brett haben keine Zeitbegrenzung.';
 
   @override
   String get boardConfirmSetup => 'Ich habe die Anfangsposition aufgebaut';
@@ -1616,4 +1616,25 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get editorBlackKing => 'Schwarzer König';
+
+  @override
+  String get continuationUseBoard => 'Elektronisches Brett verwenden';
+
+  @override
+  String get continuationConnectHelp => 'Verbinde ein unterstütztes Brett.';
+
+  @override
+  String get continuationBoardUntimed =>
+      'Partien mit elektronischem Brett haben keine Zeitbegrenzung.';
+
+  @override
+  String get continuationSetUpBoard => 'Stellung aufbauen';
+
+  @override
+  String get continuationSetupHelp =>
+      'Baue die angezeigte Stellung auf deinem Brett auf. Die Partie beginnt, sobald die Figurenpositionen übereinstimmen.';
+
+  @override
+  String get continuationBoardUnsupported =>
+      'Das Weiterspielen aus einer Stellung wird derzeit nur mit Chessnut-Brettern unterstützt.';
 }
