@@ -1497,7 +1497,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get boardMagnify => 'घसीटते वक्त पीस बड़ा दिखाएं';
 
   @override
-  String get boardDragTarget => 'खींचा गया टुकड़े का लक्ष्य';
+  String get boardDragTarget => 'खींचे जा रहे मोहरे का लक्ष्य';
 
   @override
   String get boardTargetCircle => 'घेरा';
