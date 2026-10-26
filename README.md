@@ -21,15 +21,17 @@ screenshots, see the
 
 ## Preview 2.5.0 beta
 
-The latest release in this development cycle is [2.5.0-beta.7](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.7).
+The latest release in this development cycle is [2.5.0-beta.8](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.8).
 
 The 2.5 cycle adds optional appearance settings, revised Maia defaults and help, translation corrections, and analysis-board interaction improvements. Existing saved preferences are retained. These changes are delivered in Preview and await separate Stable acceptance and promotion; Stable and Dev remain unchanged.
+
+Beta.8 adds **Board** settings for aids and offline designs, a graphical board editor and optional **Show Maia win (score) %** in the existing analysis title bar. Each Maia uses its own rating; the expected game score counts a draw as half a point. It defaults off. See [beta.8 qualification](docs/releases/preview-2.5.0-beta.8.md).
 
 Game Review and imported-PGN analysis clear stale piece selection and legal-move dots when navigating. Navigation cancels held drags and pending promotion, while engine-result updates retain selection and played moves retain their tap/drag animation. See [beta.4 qualification](docs/releases/preview-2.5.0-beta.4.md).
 
 Analysis arrows step along the current line. Within an analysis variation, Hold Left returns to the outermost main-line branch point; Hold Right selects one main-line move after that point, clamping at the game end. The destination is independent of variation length, nesting and selected move. Ordinary taps and main-line endpoint holds retain their behavior; live-game navigation is unchanged. See [beta.6 qualification](docs/releases/preview-2.5.0-beta.6.md).
 
-Beta.7 also rebuilds with patched Flutter 3.47.8 / Dart 3.13.7 for the published TLS advisory. Stable and Dev releases remain unchanged; the [Stable tooling companion](https://github.com/Dash1971/maia-chess-android/pull/61) is a draft for separate review.
+Beta.7 also rebuilds with patched Flutter 3.47.8 / Dart 3.13.7 for the published TLS advisory. The [Stable tooling companion](https://github.com/Dash1971/maia-chess-android/pull/61) was merged separately. Stable and Dev releases remain unchanged.
 
 For release notes and verification from earlier development cycles, see the [release history](https://github.com/Dash1971/maia-chess-android-preview/releases).
 
@@ -63,11 +65,15 @@ Preview 2.5.0-beta.1 adds **Appearance** below Language: Light, Dark or System, 
 
 **Board and piece designs**
 
-We plan to add independent board-design and piece-set choices in Settings, with visual previews and offline availability. Mobile Maia already uses Lichess’s chessboard library, which provides the designs; the work is to expose suitable styles consistently across play, review and the board editor while preserving the current appearance for existing users. Included assets need verified redistribution rights and attribution. See the [board and piece design issue](https://github.com/Dash1971/maia-chess-android-preview/issues/177).
+Delivered in Preview beta.8: independent board and piece selectors with visual previews, 25 fixed boards and 16 audited piece sets available offline. Play, review, the editor and promotion share the selection; existing installs retain Brown/Cburnett. The release APK enforces the approved artwork and licence notices. System-colored boards remain deferred for readability review. [Design details](docs/BOARD_PREFERENCES.md). Separate Stable acceptance/promotion remains pending.
 
 **Configurable board aids**
 
-Last-move highlighting, legal-move dots, coordinates, piece animation, magnified dragging and a circular drag target already work in Mobile Maia. We plan to make these configurable in Settings, retaining today’s behavior by default and saving the choices across restarts. See the [configurable board aids issue](https://github.com/Dash1971/maia-chess-android-preview/issues/178).
+Delivered in Preview beta.8: coordinates, legal-move destinations, last-move highlighting, animation, magnified dragging and drag targets are configurable in the inline Board card. Choices persist across restarts and participate in confirmed Settings reset; existing behavior remains the default. [Preference details](docs/BOARD_PREFERENCES.md). Separate Stable acceptance/promotion remains pending.
+
+**Graphical board editor**
+
+Delivered in Preview beta.8: palettes and move/place/erase tools, touch/drag editing, flip, a position-settings sheet and FEN copy/share. Valid positions can enter analysis or the existing play flow. [Editor details](docs/BOARD_EDITOR.md). Camera/image import remains unavailable pending [#179](https://github.com/Dash1971/maia-chess-android-preview/issues/179); physical-board editing is not delivered by this feature.
 
 **Landscape and tablet layouts**
 
@@ -102,7 +108,7 @@ Maia Preview releases. Android may ask you to confirm each update.
 
 ## Build
 
-Requirements: **Flutter 3.47.5** (pinned in `.fvmrc`), JDK 17, Android SDK 36,
+Requirements: **Flutter 3.47.8** (pinned in `.fvmrc`), JDK 17, Android SDK 36,
 Python 3, and Git LFS. Use the locked dependencies. A GitHub source ZIP contains
 an LFS pointer rather than the 316 MB Maia model, so clone with Git LFS:
 
