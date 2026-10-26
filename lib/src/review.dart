@@ -2436,7 +2436,7 @@ class _ReviewPageState extends State<ReviewPage>
         final ratingWidth = rows
             .map(
               (row) =>
-                  width('M${displayNumber(context, row.elo)} ', scoreStyle),
+                  width('M${displayNumber(context, row.elo)}', scoreStyle),
             )
             .reduce(max)
             .ceilToDouble();
@@ -2449,7 +2449,9 @@ class _ReviewPageState extends State<ReviewPage>
           '…',
           '—',
         ].map((value) => width(value, scoreStyle)).reduce(max).ceilToDouble();
-        final scoreWidth = ratingWidth + 12 + valueWidth;
+        const ratingGap = 8.0;
+        const markerWidth = 13.0; // 9 dp disc followed by a 4 dp gap.
+        final scoreWidth = ratingWidth + ratingGap + markerWidth + valueWidth;
         final ratingsFit = titleWidth + scoreWidth + 8 <= constraints.maxWidth;
         return Row(
           children: [
@@ -2496,7 +2498,7 @@ class _ReviewPageState extends State<ReviewPage>
                                     SizedBox(
                                       width: ratingWidth,
                                       child: Text(
-                                        'M${displayNumber(context, rows[i].elo)} ',
+                                        'M${displayNumber(context, rows[i].elo)}',
                                         style: scoreStyle.copyWith(
                                           color: chessTextColor(
                                             context,
@@ -2505,14 +2507,18 @@ class _ReviewPageState extends State<ReviewPage>
                                         ),
                                       ),
                                     ),
+                                  if (ratingsFit) const SizedBox(width: ratingGap),
                                   SizedBox(
-                                    width: 12,
+                                    key: ValueKey('${rows[i].key}-marker-slot'),
+                                    width: markerWidth,
+                                    height: 9,
                                     child: Align(
                                       alignment:
                                           AlignmentDirectional.centerStart,
                                       child: rows[i].score.white == null
                                           ? null
                                           : Container(
+                                              key: ValueKey('${rows[i].key}-disc'),
                                               width: 9,
                                               height: 9,
                                               decoration: BoxDecoration(
@@ -2531,7 +2537,8 @@ class _ReviewPageState extends State<ReviewPage>
                                     width: valueWidth,
                                     child: Text(
                                       rows[i].score.value,
-                                      textAlign: TextAlign.end,
+                                      key: ValueKey('${rows[i].key}-value'),
+                                      textAlign: TextAlign.start,
                                       style: scoreStyle.copyWith(
                                         color: chessTextColor(
                                           context,
