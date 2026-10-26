@@ -437,3 +437,6 @@ no complete coloured-piece labels; existing Lichess role names are retained with
 native word order and grammatical agreement (for example Rey blanco / Dama blanca,
 Roi blanc / Dame blanche). Dedicated messages cover all twelve kinds in all
 ten languages, including palette tooltips and board-square accessibility labels.
+
+Spanish Maia-score help explicitly names Elo as the rating input for both players,
+keeping it distinct from the predicted game score. The English meaning is unchanged.

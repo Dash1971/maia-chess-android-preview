@@ -1540,7 +1540,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get maiaScoreInputsHelp =>
-      'La estimación usa la puntuación de análisis de Maia seleccionada para ambos jugadores. Con dos Maias activadas, cada una muestra su propia estimación con su propia puntuación.';
+      'La estimación supone que ambos jugadores tienen el Elo de análisis seleccionado para Maia. Si activas dos Maias, cada una calcula su estimación con su propio Elo.';
 
   @override
   String get maiaScorePreferenceError =>

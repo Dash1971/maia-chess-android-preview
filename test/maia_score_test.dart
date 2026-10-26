@@ -376,6 +376,18 @@ void main() {
           await tester.tap(find.byKey(const ValueKey('maia-score-help')));
           await tester.pumpAndSettle();
           expect(find.byType(AlertDialog), findsOneWidget);
+          if (locale.languageCode == 'es') {
+            expect(
+              find.textContaining(
+                'La estimación supone que ambos jugadores tienen el Elo de análisis '
+                'seleccionado para Maia. Si activas dos Maias, cada una calcula su '
+                'estimación con su propio Elo.',
+              ),
+              findsOneWidget,
+            );
+            expect(find.textContaining('puntuación de análisis'), findsNothing);
+          }
+
           expect(tester.takeException(), isNull);
           await tester.binding.handlePopRoute();
           await tester.pumpAndSettle();
