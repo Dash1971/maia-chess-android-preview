@@ -21,11 +21,13 @@ screenshots, see the
 
 ## Preview 2.5.0 beta
 
-The latest release in this development cycle is [2.5.0-beta.8](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.8).
+The latest release in this development cycle is [2.5.0-beta.9](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.9).
 
 The 2.5 cycle adds optional appearance settings, revised Maia defaults and help, translation corrections, and analysis-board interaction improvements. Existing saved preferences are retained. These changes are delivered in Preview and await separate Stable acceptance and promotion; Stable and Dev remain unchanged.
 
 Beta.8 adds **Board** settings for aids and offline designs, a graphical board editor and optional **Show Maia win (score) %** in the existing analysis title bar. Each Maia uses its own rating; the expected game score counts a draw as half a point. It defaults off. See [beta.8 qualification](docs/releases/preview-2.5.0-beta.8.md).
+
+Beta.9 keeps the Maia score title’s rating and value columns fixed while results load or change, including near the responsive cutoff. [Qualification](docs/releases/preview-2.5.0-beta.9.md) records release and upgrade verification. Score meaning, inference and saved settings are unchanged.
 
 Game Review and imported-PGN analysis clear stale piece selection and legal-move dots when navigating. Navigation cancels held drags and pending promotion, while engine-result updates retain selection and played moves retain their tap/drag animation. See [beta.4 qualification](docs/releases/preview-2.5.0-beta.4.md).
 

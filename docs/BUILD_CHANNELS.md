@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.4.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.4.0); unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.8](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.8), code 2508 | `com.dash1971.maia_chess.preview`, 79M | Board aids/designs, graphical editor and optional Maia expected scores. Grand Kingdom/DGT remain disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.9](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.9), code 2509 | `com.dash1971.maia_chess.preview`, 79M | Maia score columns stay fixed; beta.8 board/editor features retained. Grand Kingdom/DGT remain disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -43,6 +43,10 @@ installations update in place using the established Preview certificate.
   5M measurements are not evidence of 79M performance.
 - Physical Chessnut acceptance remains with the owner/testers. Automated tests
   cannot confirm radio reliability, physical LEDs or button behavior on hardware.
+
+## Preview 2.5.0-beta.9 qualification
+
+Published through [PR #196](https://github.com/Dash1971/maia-chess-android-preview/pull/196) after reviewed #195. Maia rating labels and score columns stay anchored through loading, missing results, changing percentages and terminal positions. Rating visibility uses reserved space rather than the current inference result; narrow screens and large text keep the compact presentation and accessible details. [Qualification](releases/preview-2.5.0-beta.9.md) records exact-source CI, independent Linux equality, production signing, full native suite, signed beta.8 upgrade, score anchoring checks and completed cleanup. Stable and Dev releases are unchanged.
 
 ## Preview 2.5.0-beta.8 qualification
 
