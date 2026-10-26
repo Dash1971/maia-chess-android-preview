@@ -220,6 +220,110 @@ void main() {
       expect(find.bySemanticsLabel('M2600 Black 70%'), findsOneWidget);
     },
   );
+  for (final locale in AppLocalizations.supportedLocales) {
+    for (final second in <int?>[null, 2600]) {
+      testWidgets(
+        '${locale.languageCode} score labels stay anchored (second=$second)',
+        (tester) async {
+          tester.view.devicePixelRatio = 1;
+          addTearDown(tester.view.resetPhysicalSize);
+          addTearDown(tester.view.resetDevicePixelRatio);
+          final controller = MaiaScoreController();
+          addTearDown(controller.dispose);
+          await controller.select(true);
+          for (final config in [(560.0, 1.0), (390.0, 1.0), (320.0, 2.0)]) {
+            await tester.pumpWidget(const SizedBox());
+            tester.view.physicalSize = Size(config.$1, 844);
+            final pending = <String, Completer<MaiaInferenceResult?>>{};
+            Future<MaiaInferenceResult?> infer(List<String> history, int elo) =>
+                pending
+                    .putIfAbsent('${history.length}:$elo', () => Completer())
+                    .future;
+            await tester.pumpWidget(
+              app(
+                controller,
+                locale: locale,
+                scale: config.$2,
+                second: second,
+                infer: infer,
+              ),
+            );
+            await tester.pumpAndSettle();
+            final keys = [
+              'maia-score-primary',
+              if (second != null) 'maia-score-secondary',
+            ];
+            Map<String, Rect> geometry() {
+              final result = <String, Rect>{
+                'details': tester.getRect(
+                  find.byKey(const ValueKey('maia-score-details')),
+                ),
+                'board': tester.getRect(find.byType(cg.Chessboard)),
+              };
+              for (final key in keys) {
+                final row = find.byKey(ValueKey(key));
+                result[key] = tester.getRect(row);
+                final rating = find.descendant(
+                  of: row,
+                  matching: find.byWidgetPredicate(
+                    (w) => w is Text && (w.data?.startsWith('M') ?? false),
+                  ),
+                );
+                if (rating.evaluate().isNotEmpty) {
+                  result['$key-label'] = tester.getRect(rating);
+                }
+              }
+              return result;
+            }
+
+            final initial = geometry();
+            if (config.$1 == 560 && locale.languageCode == 'en') {
+              expect(initial.containsKey('maia-score-primary-label'), isTrue);
+            }
+            void unchanged() {
+              expect(geometry(), initial);
+              expect(tester.takeException(), isNull);
+            }
+
+            // The two engines complete independently; neither can move a label.
+            pending['1:1500']!.complete(result(.2, .4, .4));
+            await tester.pumpAndSettle();
+            unchanged();
+            if (second != null) {
+              pending['1:$second']!.complete(result(.9998, .0001, .0001));
+              await tester.pumpAndSettle();
+              unchanged();
+            }
+            await tester.tap(find.byKey(const ValueKey('next-move-button')));
+            await tester.pumpAndSettle();
+            unchanged();
+            pending['2:1500']!.complete(result(.25, .5, .25));
+            if (second != null) pending['2:$second']!.complete(null);
+            await tester.pumpAndSettle();
+            unchanged();
+            // Terminal states have different text but the same reserved columns.
+            await tester.pumpWidget(const SizedBox());
+            await tester.pumpWidget(
+              app(
+                controller,
+                locale: locale,
+                scale: config.$2,
+                second: second,
+                positionSession: AnalysisSession.fromFen(
+                  '7k/6Q1/5K2/8/8/8/8/8 b - - 0 1',
+                ),
+                infer: (_, _) async =>
+                    throw StateError('terminal position must not infer'),
+              ),
+            );
+            await tester.pumpAndSettle();
+            unchanged();
+          }
+        },
+      );
+    }
+  }
+
   testWidgets('late results cannot replace the selected rating and position', (
     tester,
   ) async {
