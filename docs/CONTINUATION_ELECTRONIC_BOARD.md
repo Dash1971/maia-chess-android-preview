@@ -1,6 +1,6 @@
 # Continue from here on an electronic board (#182)
 
-Draft feature for Preview 2.5; not published by this PR.
+Preview 2.5 feature. Physical Chessnut acceptance is pending owner testing with the published Preview build.
 
 The existing continuation dialog keeps side, Maia rating and phone time-control
 choices, and adds **Use electronic board** (off on each opening). Selecting it
@@ -52,8 +52,9 @@ connection reuse, cancellation, retry, FEN/history/clock preservation, setup wai
 phone fallback, localization/layout, and existing board reset/reconnect behavior.
 These use controlled transports, not physical Bluetooth hardware.
 
-Before publication, complete the normal Preview Android/reproduction gates and
-physical acceptance on Chessnut: connect from analysis, reuse a home connection,
+Publication requires the normal automated Preview Android/reproduction, signing,
+upgrade and download gates. The requester explicitly authorized publishing this
+Preview for physical testing. Physical Chessnut acceptance remains pending: connect from analysis, reuse a home connection,
 place a custom position, verify mismatch LEDs, start for either side, disconnect
 and reconnect during setup/play, cancel, and switch to phone play. Check an
 existing saved game and ordinary home-board play as regressions.
