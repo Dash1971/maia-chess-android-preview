@@ -1444,4 +1444,40 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get editorFullmoveNumber => '수 번호';
+
+  @override
+  String get editorWhitePawn => '백 폰';
+
+  @override
+  String get editorWhiteKnight => '백 나이트';
+
+  @override
+  String get editorWhiteBishop => '백 비숍';
+
+  @override
+  String get editorWhiteRook => '백 룩';
+
+  @override
+  String get editorWhiteQueen => '백 퀸';
+
+  @override
+  String get editorWhiteKing => '백 킹';
+
+  @override
+  String get editorBlackPawn => '흑 폰';
+
+  @override
+  String get editorBlackKnight => '흑 나이트';
+
+  @override
+  String get editorBlackBishop => '흑 비숍';
+
+  @override
+  String get editorBlackRook => '흑 룩';
+
+  @override
+  String get editorBlackQueen => '흑 퀸';
+
+  @override
+  String get editorBlackKing => '흑 킹';
 }

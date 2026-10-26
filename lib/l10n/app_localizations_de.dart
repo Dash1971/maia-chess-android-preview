@@ -1551,4 +1551,40 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get editorFullmoveNumber => 'Zugnummer';
+
+  @override
+  String get editorWhitePawn => 'Weißer Bauer';
+
+  @override
+  String get editorWhiteKnight => 'Weißer Springer';
+
+  @override
+  String get editorWhiteBishop => 'Weißer Läufer';
+
+  @override
+  String get editorWhiteRook => 'Weißer Turm';
+
+  @override
+  String get editorWhiteQueen => 'Weiße Dame';
+
+  @override
+  String get editorWhiteKing => 'Weißer König';
+
+  @override
+  String get editorBlackPawn => 'Schwarzer Bauer';
+
+  @override
+  String get editorBlackKnight => 'Schwarzer Springer';
+
+  @override
+  String get editorBlackBishop => 'Schwarzer Läufer';
+
+  @override
+  String get editorBlackRook => 'Schwarzer Turm';
+
+  @override
+  String get editorBlackQueen => 'Schwarze Dame';
+
+  @override
+  String get editorBlackKing => 'Schwarzer König';
 }

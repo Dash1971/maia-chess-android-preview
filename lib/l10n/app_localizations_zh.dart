@@ -1419,4 +1419,40 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get editorFullmoveNumber => '回合数';
+
+  @override
+  String get editorWhitePawn => '白兵';
+
+  @override
+  String get editorWhiteKnight => '白马';
+
+  @override
+  String get editorWhiteBishop => '白象';
+
+  @override
+  String get editorWhiteRook => '白车';
+
+  @override
+  String get editorWhiteQueen => '白后';
+
+  @override
+  String get editorWhiteKing => '白王';
+
+  @override
+  String get editorBlackPawn => '黑兵';
+
+  @override
+  String get editorBlackKnight => '黑马';
+
+  @override
+  String get editorBlackBishop => '黑象';
+
+  @override
+  String get editorBlackRook => '黑车';
+
+  @override
+  String get editorBlackQueen => '黑后';
+
+  @override
+  String get editorBlackKing => '黑王';
 }

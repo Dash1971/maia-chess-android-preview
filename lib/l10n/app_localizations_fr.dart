@@ -1548,4 +1548,40 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get editorFullmoveNumber => 'Numéro du coup';
+
+  @override
+  String get editorWhitePawn => 'Pion blanc';
+
+  @override
+  String get editorWhiteKnight => 'Cavalier blanc';
+
+  @override
+  String get editorWhiteBishop => 'Fou blanc';
+
+  @override
+  String get editorWhiteRook => 'Tour blanche';
+
+  @override
+  String get editorWhiteQueen => 'Dame blanche';
+
+  @override
+  String get editorWhiteKing => 'Roi blanc';
+
+  @override
+  String get editorBlackPawn => 'Pion noir';
+
+  @override
+  String get editorBlackKnight => 'Cavalier noir';
+
+  @override
+  String get editorBlackBishop => 'Fou noir';
+
+  @override
+  String get editorBlackRook => 'Tour noire';
+
+  @override
+  String get editorBlackQueen => 'Dame noire';
+
+  @override
+  String get editorBlackKing => 'Roi noir';
 }

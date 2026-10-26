@@ -426,5 +426,17 @@
   "editorShareFen": "分享 FEN",
   "editorFenMetadata": "FEN 元数据",
   "editorHalfmoveClock": "半回合计数",
-  "editorFullmoveNumber": "回合数"
+  "editorFullmoveNumber": "回合数",
+  "editorWhitePawn": "白兵",
+  "editorWhiteKnight": "白马",
+  "editorWhiteBishop": "白象",
+  "editorWhiteRook": "白车",
+  "editorWhiteQueen": "白后",
+  "editorWhiteKing": "白王",
+  "editorBlackPawn": "黑兵",
+  "editorBlackKnight": "黑马",
+  "editorBlackBishop": "黑象",
+  "editorBlackRook": "黑车",
+  "editorBlackQueen": "黑后",
+  "editorBlackKing": "黑王"
 }

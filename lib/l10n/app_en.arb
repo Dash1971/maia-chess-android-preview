@@ -2001,5 +2001,53 @@
   "editorFullmoveNumber": "Move number",
   "@editorFullmoveNumber": {
     "description": "Standard-chess board editor: Move number. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
+  },
+  "editorWhitePawn": "White pawn",
+  "@editorWhitePawn": {
+    "description": "Complete singular name of a white pawn, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "editorWhiteKnight": "White knight",
+  "@editorWhiteKnight": {
+    "description": "Complete singular name of a white knight, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "editorWhiteBishop": "White bishop",
+  "@editorWhiteBishop": {
+    "description": "Complete singular name of a white bishop, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "editorWhiteRook": "White rook",
+  "@editorWhiteRook": {
+    "description": "Complete singular name of a white rook, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "editorWhiteQueen": "White queen",
+  "@editorWhiteQueen": {
+    "description": "Complete singular name of a white queen, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "editorWhiteKing": "White king",
+  "@editorWhiteKing": {
+    "description": "Complete singular name of a white king, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "editorBlackPawn": "Black pawn",
+  "@editorBlackPawn": {
+    "description": "Complete singular name of a black pawn, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "editorBlackKnight": "Black knight",
+  "@editorBlackKnight": {
+    "description": "Complete singular name of a black knight, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "editorBlackBishop": "Black bishop",
+  "@editorBlackBishop": {
+    "description": "Complete singular name of a black bishop, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "editorBlackRook": "Black rook",
+  "@editorBlackRook": {
+    "description": "Complete singular name of a black rook, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "editorBlackQueen": "Black queen",
+  "@editorBlackQueen": {
+    "description": "Complete singular name of a black queen, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
+  },
+  "editorBlackKing": "Black king",
+  "@editorBlackKing": {
+    "description": "Complete singular name of a black king, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology."
   }
 }

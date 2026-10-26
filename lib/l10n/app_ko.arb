@@ -426,5 +426,17 @@
   "editorShareFen": "FEN 공유",
   "editorFenMetadata": "FEN 메타데이터",
   "editorHalfmoveClock": "반수 카운터",
-  "editorFullmoveNumber": "수 번호"
+  "editorFullmoveNumber": "수 번호",
+  "editorWhitePawn": "백 폰",
+  "editorWhiteKnight": "백 나이트",
+  "editorWhiteBishop": "백 비숍",
+  "editorWhiteRook": "백 룩",
+  "editorWhiteQueen": "백 퀸",
+  "editorWhiteKing": "백 킹",
+  "editorBlackPawn": "흑 폰",
+  "editorBlackKnight": "흑 나이트",
+  "editorBlackBishop": "흑 비숍",
+  "editorBlackRook": "흑 룩",
+  "editorBlackQueen": "흑 퀸",
+  "editorBlackKing": "흑 킹"
 }

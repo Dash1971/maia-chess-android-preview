@@ -215,6 +215,70 @@ void main() {
       expect(find.byType(BoardEditorPage), findsOneWidget);
     },
   );
+  // These are whole singular phrases, not the plural White/Black player labels
+  // joined to a role. King/queen exercise both grammatical genders where needed.
+  const pieceNames = {
+    'en': ['White king', 'White queen', 'Black king', 'Black queen'],
+    'es': ['Rey blanco', 'Dama blanca', 'Rey negro', 'Dama negra'],
+    'pt': ['Rei branco', 'Dama branca', 'Rei preto', 'Dama preta'],
+    'fr': ['Roi blanc', 'Dame blanche', 'Roi noir', 'Dame noire'],
+    'de': ['Weißer König', 'Weiße Dame', 'Schwarzer König', 'Schwarze Dame'],
+    'ru': ['Белый король', 'Белый ферзь', 'Чёрный король', 'Чёрный ферзь'],
+    'hi': ['सफेद राजा', 'सफेद वज़ीर', 'काला राजा', 'काला वज़ीर'],
+    'ja': ['白のキング', '白のクイーン', '黒のキング', '黒のクイーン'],
+    'ko': ['백 킹', '백 퀸', '흑 킹', '흑 퀸'],
+    'zh': ['白王', '白后', '黑王', '黑后'],
+  };
+  for (final locale in AppLocalizations.supportedLocales) {
+    testWidgets(
+      '${locale.languageCode} editor uses singular coloured-piece labels',
+      (tester) async {
+        final semantics = tester.ensureSemantics();
+        try {
+          await tester.pumpWidget(app(locale: locale));
+          await tester.pumpAndSettle();
+          const kinds = [
+            dc.PieceKind.whiteKing,
+            dc.PieceKind.whiteQueen,
+            dc.PieceKind.blackKing,
+            dc.PieceKind.blackQueen,
+          ];
+          const squares = ['e1', 'd1', 'e8', 'd8'];
+          final expected = pieceNames[locale.languageCode]!;
+          for (var i = 0; i < kinds.length; i++) {
+            final kind = kinds[i];
+            final tool = find.byKey(
+              ValueKey('editor-${kind.role.name}-${kind.side.name}'),
+            );
+            expect(tester.getSemantics(tool).label, expected[i]);
+            final tooltip = tester.widget<Tooltip>(
+              find.descendant(of: tool, matching: find.byType(Tooltip)),
+            );
+            expect(tooltip.message, expected[i]);
+            final square = find.byKey(ValueKey('editor-square-${squares[i]}'));
+            expect(
+              tester.getSemantics(square).label,
+              '${squares[i]}: ${expected[i]}',
+            );
+          }
+          // Every kind is present, distinct, and translated; no generic fallback.
+          final labels = <String>{};
+          for (final kind in dc.PieceKind.values) {
+            final tool = find.byKey(
+              ValueKey('editor-${kind.role.name}-${kind.side.name}'),
+            );
+            final label = tester.getSemantics(tool).label;
+            expect(label, isNotEmpty);
+            labels.add(label);
+          }
+          expect(labels, hasLength(12));
+        } finally {
+          semantics.dispose();
+        }
+      },
+    );
+  }
+
   for (final locale in AppLocalizations.supportedLocales) {
     testWidgets(
       '${locale.languageCode} editor and sheet fit narrow/landscape at 200%',

@@ -426,5 +426,17 @@
   "editorShareFen": "Compartir FEN",
   "editorFenMetadata": "Metadatos FEN",
   "editorHalfmoveClock": "Contador de medias jugadas",
-  "editorFullmoveNumber": "Número de jugada"
+  "editorFullmoveNumber": "Número de jugada",
+  "editorWhitePawn": "Peón blanco",
+  "editorWhiteKnight": "Caballo blanco",
+  "editorWhiteBishop": "Alfil blanco",
+  "editorWhiteRook": "Torre blanca",
+  "editorWhiteQueen": "Dama blanca",
+  "editorWhiteKing": "Rey blanco",
+  "editorBlackPawn": "Peón negro",
+  "editorBlackKnight": "Caballo negro",
+  "editorBlackBishop": "Alfil negro",
+  "editorBlackRook": "Torre negra",
+  "editorBlackQueen": "Dama negra",
+  "editorBlackKing": "Rey negro"
 }

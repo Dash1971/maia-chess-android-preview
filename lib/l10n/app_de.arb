@@ -426,5 +426,17 @@
   "editorShareFen": "FEN teilen",
   "editorFenMetadata": "FEN-Metadaten",
   "editorHalfmoveClock": "Halbzugzähler",
-  "editorFullmoveNumber": "Zugnummer"
+  "editorFullmoveNumber": "Zugnummer",
+  "editorWhitePawn": "Weißer Bauer",
+  "editorWhiteKnight": "Weißer Springer",
+  "editorWhiteBishop": "Weißer Läufer",
+  "editorWhiteRook": "Weißer Turm",
+  "editorWhiteQueen": "Weiße Dame",
+  "editorWhiteKing": "Weißer König",
+  "editorBlackPawn": "Schwarzer Bauer",
+  "editorBlackKnight": "Schwarzer Springer",
+  "editorBlackBishop": "Schwarzer Läufer",
+  "editorBlackRook": "Schwarzer Turm",
+  "editorBlackQueen": "Schwarze Dame",
+  "editorBlackKing": "Schwarzer König"
 }

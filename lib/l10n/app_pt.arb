@@ -426,5 +426,17 @@
   "editorShareFen": "Compartilhar FEN",
   "editorFenMetadata": "Metadados FEN",
   "editorHalfmoveClock": "Contador de meios-lances",
-  "editorFullmoveNumber": "Número do lance"
+  "editorFullmoveNumber": "Número do lance",
+  "editorWhitePawn": "Peão branco",
+  "editorWhiteKnight": "Cavalo branco",
+  "editorWhiteBishop": "Bispo branco",
+  "editorWhiteRook": "Torre branca",
+  "editorWhiteQueen": "Dama branca",
+  "editorWhiteKing": "Rei branco",
+  "editorBlackPawn": "Peão preto",
+  "editorBlackKnight": "Cavalo preto",
+  "editorBlackBishop": "Bispo preto",
+  "editorBlackRook": "Torre preta",
+  "editorBlackQueen": "Dama preta",
+  "editorBlackKing": "Rei preto"
 }

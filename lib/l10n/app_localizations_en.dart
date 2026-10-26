@@ -1527,4 +1527,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get editorFullmoveNumber => 'Move number';
+
+  @override
+  String get editorWhitePawn => 'White pawn';
+
+  @override
+  String get editorWhiteKnight => 'White knight';
+
+  @override
+  String get editorWhiteBishop => 'White bishop';
+
+  @override
+  String get editorWhiteRook => 'White rook';
+
+  @override
+  String get editorWhiteQueen => 'White queen';
+
+  @override
+  String get editorWhiteKing => 'White king';
+
+  @override
+  String get editorBlackPawn => 'Black pawn';
+
+  @override
+  String get editorBlackKnight => 'Black knight';
+
+  @override
+  String get editorBlackBishop => 'Black bishop';
+
+  @override
+  String get editorBlackRook => 'Black rook';
+
+  @override
+  String get editorBlackQueen => 'Black queen';
+
+  @override
+  String get editorBlackKing => 'Black king';
 }

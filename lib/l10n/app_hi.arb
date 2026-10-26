@@ -426,5 +426,17 @@
   "editorShareFen": "FEN साझा करें",
   "editorFenMetadata": "FEN की अतिरिक्त जानकारी",
   "editorHalfmoveClock": "आधी चालों की गिनती",
-  "editorFullmoveNumber": "चाल संख्या"
+  "editorFullmoveNumber": "चाल संख्या",
+  "editorWhitePawn": "सफेद प्यादा",
+  "editorWhiteKnight": "सफेद घोड़ा",
+  "editorWhiteBishop": "सफेद ऊँट",
+  "editorWhiteRook": "सफेद हाथी",
+  "editorWhiteQueen": "सफेद वज़ीर",
+  "editorWhiteKing": "सफेद राजा",
+  "editorBlackPawn": "काला प्यादा",
+  "editorBlackKnight": "काला घोड़ा",
+  "editorBlackBishop": "काला ऊँट",
+  "editorBlackRook": "काला हाथी",
+  "editorBlackQueen": "काला वज़ीर",
+  "editorBlackKing": "काला राजा"
 }

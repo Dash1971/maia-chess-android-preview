@@ -1548,4 +1548,40 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get editorFullmoveNumber => 'Número de jugada';
+
+  @override
+  String get editorWhitePawn => 'Peón blanco';
+
+  @override
+  String get editorWhiteKnight => 'Caballo blanco';
+
+  @override
+  String get editorWhiteBishop => 'Alfil blanco';
+
+  @override
+  String get editorWhiteRook => 'Torre blanca';
+
+  @override
+  String get editorWhiteQueen => 'Dama blanca';
+
+  @override
+  String get editorWhiteKing => 'Rey blanco';
+
+  @override
+  String get editorBlackPawn => 'Peón negro';
+
+  @override
+  String get editorBlackKnight => 'Caballo negro';
+
+  @override
+  String get editorBlackBishop => 'Alfil negro';
+
+  @override
+  String get editorBlackRook => 'Torre negra';
+
+  @override
+  String get editorBlackQueen => 'Dama negra';
+
+  @override
+  String get editorBlackKing => 'Rey negro';
 }

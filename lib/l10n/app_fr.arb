@@ -426,5 +426,17 @@
   "editorShareFen": "Partager la FEN",
   "editorFenMetadata": "Métadonnées FEN",
   "editorHalfmoveClock": "Compteur de demi-coups",
-  "editorFullmoveNumber": "Numéro du coup"
+  "editorFullmoveNumber": "Numéro du coup",
+  "editorWhitePawn": "Pion blanc",
+  "editorWhiteKnight": "Cavalier blanc",
+  "editorWhiteBishop": "Fou blanc",
+  "editorWhiteRook": "Tour blanche",
+  "editorWhiteQueen": "Dame blanche",
+  "editorWhiteKing": "Roi blanc",
+  "editorBlackPawn": "Pion noir",
+  "editorBlackKnight": "Cavalier noir",
+  "editorBlackBishop": "Fou noir",
+  "editorBlackRook": "Tour noire",
+  "editorBlackQueen": "Dame noire",
+  "editorBlackKing": "Roi noir"
 }

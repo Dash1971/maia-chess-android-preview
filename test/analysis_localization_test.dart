@@ -25,7 +25,7 @@ void main() {
       final strings = AppLocalizations.of(context)!;
       expect(find.text(strings.boardEditor), findsOneWidget);
       expect(
-        find.byTooltip('${strings.white} ${strings.pieceKing}'),
+        find.byTooltip(strings.editorWhiteKing),
         findsOneWidget,
       );
       expect(find.byKey(const ValueKey('editor-move-white')), findsOneWidget);

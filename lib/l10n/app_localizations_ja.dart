@@ -1440,4 +1440,40 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get editorFullmoveNumber => '手数';
+
+  @override
+  String get editorWhitePawn => '白のポーン';
+
+  @override
+  String get editorWhiteKnight => '白のナイト';
+
+  @override
+  String get editorWhiteBishop => '白のビショップ';
+
+  @override
+  String get editorWhiteRook => '白のルーク';
+
+  @override
+  String get editorWhiteQueen => '白のクイーン';
+
+  @override
+  String get editorWhiteKing => '白のキング';
+
+  @override
+  String get editorBlackPawn => '黒のポーン';
+
+  @override
+  String get editorBlackKnight => '黒のナイト';
+
+  @override
+  String get editorBlackBishop => '黒のビショップ';
+
+  @override
+  String get editorBlackRook => '黒のルーク';
+
+  @override
+  String get editorBlackQueen => '黒のクイーン';
+
+  @override
+  String get editorBlackKing => '黒のキング';
 }

@@ -426,5 +426,17 @@
   "editorShareFen": "FENを共有",
   "editorFenMetadata": "FENの詳細",
   "editorHalfmoveClock": "半手カウンター",
-  "editorFullmoveNumber": "手数"
+  "editorFullmoveNumber": "手数",
+  "editorWhitePawn": "白のポーン",
+  "editorWhiteKnight": "白のナイト",
+  "editorWhiteBishop": "白のビショップ",
+  "editorWhiteRook": "白のルーク",
+  "editorWhiteQueen": "白のクイーン",
+  "editorWhiteKing": "白のキング",
+  "editorBlackPawn": "黒のポーン",
+  "editorBlackKnight": "黒のナイト",
+  "editorBlackBishop": "黒のビショップ",
+  "editorBlackRook": "黒のルーク",
+  "editorBlackQueen": "黒のクイーン",
+  "editorBlackKing": "黒のキング"
 }

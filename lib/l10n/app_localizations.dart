@@ -2679,6 +2679,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Move number'**
   String get editorFullmoveNumber;
+
+  /// Complete singular name of a white pawn, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White pawn'**
+  String get editorWhitePawn;
+
+  /// Complete singular name of a white knight, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White knight'**
+  String get editorWhiteKnight;
+
+  /// Complete singular name of a white bishop, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White bishop'**
+  String get editorWhiteBishop;
+
+  /// Complete singular name of a white rook, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White rook'**
+  String get editorWhiteRook;
+
+  /// Complete singular name of a white queen, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White queen'**
+  String get editorWhiteQueen;
+
+  /// Complete singular name of a white king, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White king'**
+  String get editorWhiteKing;
+
+  /// Complete singular name of a black pawn, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black pawn'**
+  String get editorBlackPawn;
+
+  /// Complete singular name of a black knight, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black knight'**
+  String get editorBlackKnight;
+
+  /// Complete singular name of a black bishop, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black bishop'**
+  String get editorBlackBishop;
+
+  /// Complete singular name of a black rook, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black rook'**
+  String get editorBlackRook;
+
+  /// Complete singular name of a black queen, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black queen'**
+  String get editorBlackQueen;
+
+  /// Complete singular name of a black king, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black king'**
+  String get editorBlackKing;
 }
 
 class _AppLocalizationsDelegate

@@ -1555,4 +1555,40 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get editorFullmoveNumber => 'Número do lance';
+
+  @override
+  String get editorWhitePawn => 'Peão branco';
+
+  @override
+  String get editorWhiteKnight => 'Cavalo branco';
+
+  @override
+  String get editorWhiteBishop => 'Bispo branco';
+
+  @override
+  String get editorWhiteRook => 'Torre branca';
+
+  @override
+  String get editorWhiteQueen => 'Dama branca';
+
+  @override
+  String get editorWhiteKing => 'Rei branco';
+
+  @override
+  String get editorBlackPawn => 'Peão preto';
+
+  @override
+  String get editorBlackKnight => 'Cavalo preto';
+
+  @override
+  String get editorBlackBishop => 'Bispo preto';
+
+  @override
+  String get editorBlackRook => 'Torre preta';
+
+  @override
+  String get editorBlackQueen => 'Dama preta';
+
+  @override
+  String get editorBlackKing => 'Rei preto';
 }

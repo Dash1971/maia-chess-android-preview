@@ -1545,4 +1545,40 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get editorFullmoveNumber => 'चाल संख्या';
+
+  @override
+  String get editorWhitePawn => 'सफेद प्यादा';
+
+  @override
+  String get editorWhiteKnight => 'सफेद घोड़ा';
+
+  @override
+  String get editorWhiteBishop => 'सफेद ऊँट';
+
+  @override
+  String get editorWhiteRook => 'सफेद हाथी';
+
+  @override
+  String get editorWhiteQueen => 'सफेद वज़ीर';
+
+  @override
+  String get editorWhiteKing => 'सफेद राजा';
+
+  @override
+  String get editorBlackPawn => 'काला प्यादा';
+
+  @override
+  String get editorBlackKnight => 'काला घोड़ा';
+
+  @override
+  String get editorBlackBishop => 'काला ऊँट';
+
+  @override
+  String get editorBlackRook => 'काला हाथी';
+
+  @override
+  String get editorBlackQueen => 'काला वज़ीर';
+
+  @override
+  String get editorBlackKing => 'काला राजा';
 }

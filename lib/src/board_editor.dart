@@ -113,15 +113,20 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
     _mode = mode;
     _placement = piece;
   });
-  String _pieceLabel(dc.Piece piece) =>
-      '${piece.color == dc.Side.white ? l10n(context).white : l10n(context).black} ${switch (piece.role) {
-        dc.Role.pawn => l10n(context).piecePawn,
-        dc.Role.knight => l10n(context).pieceKnight,
-        dc.Role.bishop => l10n(context).pieceBishop,
-        dc.Role.rook => l10n(context).pieceRook,
-        dc.Role.queen => l10n(context).pieceQueen,
-        dc.Role.king => l10n(context).pieceKing,
-      }}';
+  String _pieceLabel(dc.Piece piece) => switch (piece.kind) {
+    dc.PieceKind.whitePawn => l10n(context).editorWhitePawn,
+    dc.PieceKind.whiteKnight => l10n(context).editorWhiteKnight,
+    dc.PieceKind.whiteBishop => l10n(context).editorWhiteBishop,
+    dc.PieceKind.whiteRook => l10n(context).editorWhiteRook,
+    dc.PieceKind.whiteQueen => l10n(context).editorWhiteQueen,
+    dc.PieceKind.whiteKing => l10n(context).editorWhiteKing,
+    dc.PieceKind.blackPawn => l10n(context).editorBlackPawn,
+    dc.PieceKind.blackKnight => l10n(context).editorBlackKnight,
+    dc.PieceKind.blackBishop => l10n(context).editorBlackBishop,
+    dc.PieceKind.blackRook => l10n(context).editorBlackRook,
+    dc.PieceKind.blackQueen => l10n(context).editorBlackQueen,
+    dc.PieceKind.blackKing => l10n(context).editorBlackKing,
+  };
   void _touch(dc.Square square) {
     if (_mode == cg.EditorPointerMode.edit) {
       _change(() => _draft.edit(square, _placement));

@@ -422,3 +422,10 @@ layout adaptations are pinned in `docs/BOARD_EDITOR.md`.
 The Hindi dragged-piece target label corrects upstream grammatical agreement
 and uses मोहरा for a chess piece. The original reference is retained with a
 documented adaptation; the terminology regression rejects restoring the typo.
+
+Editor piece names use complete singular phrases for each colour and role, rather
+than concatenating the White/Black player labels. The pinned Lichess catalog has
+no complete coloured-piece labels; existing Lichess role names are retained with
+native word order and grammatical agreement (for example Rey blanco / Dama blanca,
+Roi blanc / Dame blanche). Dedicated messages cover all twelve kinds in all
+ten languages, including palette tooltips and board-square accessibility labels.
