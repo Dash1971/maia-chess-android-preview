@@ -401,3 +401,7 @@ Japanese animation wording omits the upstream speed qualifier because this is a
 boolean switch. Each adaptation is recorded in the terminology reference. The
 persistence error is app-specific prose. These translations remain subject to
 native-speaker review.
+
+The Hindi dragged-piece target label corrects upstream grammatical agreement
+and uses मोहरा for a chess piece. The original reference is retained with a
+documented adaptation; the terminology regression rejects restoring the typo.

@@ -2288,7 +2288,12 @@
         "hi": "खींचा गया टुकड़े का लक्ष्य",
         "pt": "Alvo da peça arrastada"
       },
-      "adaptations": {}
+      "adaptations": {
+        "hi": {
+          "value": "खींचे जा रहे मोहरे का लक्ष्य",
+          "reason": "Correct Hindi agreement for the piece being dragged and use the chess term मोहरा rather than the literal fragment टुकड़ा; preserve the upstream target concept."
+        }
+      }
     },
     "boardTargetCircle": {
       "upstream_key": "mobileSettingsDraggedTargetCircle",
