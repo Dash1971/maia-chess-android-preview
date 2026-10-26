@@ -21,13 +21,15 @@ screenshots, see the
 
 ## Preview 2.5.0 beta
 
-The latest release in this development cycle is [2.5.0-beta.9](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.9).
+The latest release in this development cycle is [2.5.0-beta.10](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.10).
 
 The 2.5 cycle adds optional appearance settings, revised Maia defaults and help, translation corrections, and analysis-board interaction improvements. Existing saved preferences are retained. These changes are delivered in Preview and await separate Stable acceptance and promotion; Stable and Dev remain unchanged.
 
 Beta.8 adds **Board** settings for aids and offline designs, a graphical board editor and optional **Show Maia win (score) %** in the existing analysis title bar. Each Maia uses its own rating; the expected game score counts a draw as half a point. It defaults off. See [beta.8 qualification](docs/releases/preview-2.5.0-beta.8.md).
 
 Beta.9 keeps the Maia score title’s rating and value columns fixed while results load or change, including near the responsive cutoff. [Qualification](docs/releases/preview-2.5.0-beta.9.md) records release and upgrade verification. Score meaning, inference and saved settings are unchanged.
+
+Beta.10 aligns Maia score circles and tightens percentage spacing. **Continue from here** can connect/reuse Chessnut and wait for a custom board position before untimed play, with phone fallback. The [Preview is ready for owner hardware testing](docs/CONTINUATION_ELECTRONIC_BOARD.md); physical Bluetooth/LED acceptance is pending. [Qualification](docs/releases/preview-2.5.0-beta.10.md) records the automated, signed-upgrade and download checks.
 
 Game Review and imported-PGN analysis clear stale piece selection and legal-move dots when navigating. Navigation cancels held drags and pending promotion, while engine-result updates retain selection and played moves retain their tap/drag animation. See [beta.4 qualification](docs/releases/preview-2.5.0-beta.4.md).
 
@@ -42,6 +44,8 @@ For release notes and verification from earlier development cycles, see the [rel
 These are the areas we would like to work on next.
 
 **Expand electronic-board support**
+
+Delivered in Preview beta.10: [Chessnut continuation from analysis](docs/CONTINUATION_ELECTRONIC_BOARD.md), including connection reuse and custom-position setup. Physical acceptance is pending owner testing with this Preview; separate Stable acceptance and promotion remain pending. [#182](https://github.com/Dash1971/maia-chess-android-preview/issues/182).
 
 Experimental work on **Square Off Grand Kingdom** and **DGT Pegasus** is available in Dev builds, but neither board is enabled in Preview or Stable yet. Grand Kingdom needs physical testing of piece movement, resets, reconnection, and recovery. Pegasus also needs a FOSS-compatible way to initialize boards with locked firmware before we can offer support.
 

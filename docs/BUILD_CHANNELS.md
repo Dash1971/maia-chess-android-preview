@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.4.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.4.0); unchanged by this promotion | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.9](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.9), code 2509 | `com.dash1971.maia_chess.preview`, 79M | Maia score columns stay fixed; beta.8 board/editor features retained. Grand Kingdom/DGT remain disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.10](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.10), code 2510 | `com.dash1971.maia_chess.preview`, 79M | Aligned Maia scores and Chessnut continuation; physical acceptance pending owner testing. Grand Kingdom/DGT stay disabled. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.4.0-alpha.2-dev) | Published 2.4.0-alpha.2-dev, code 2402 | `com.dash1971.maia_chess.preview.dev`, 5M | Prototype Grand Kingdom/DGT work remains here. This release retains the previous, longer history subtitle. |
 
 The three packages install side by side. Obtainium users should select the
@@ -43,6 +43,10 @@ installations update in place using the established Preview certificate.
   5M measurements are not evidence of 79M performance.
 - Physical Chessnut acceptance remains with the owner/testers. Automated tests
   cannot confirm radio reliability, physical LEDs or button behavior on hardware.
+
+## Preview 2.5.0-beta.10 qualification
+
+Published through [PR #201](https://github.com/Dash1971/maia-chess-android-preview/pull/201) after reviewed #198/#199 and an ownership regression correction. Maia score circles/percentages use aligned columns with 8 dp after the rating and 4 dp after the circle. Continue from here can connect to or reuse a Chessnut board, then wait for the selected physical position before untimed play. Full FEN, side, castling/en-passant rights, rating and validated history are retained; phone continuation remains available. [Qualification](releases/preview-2.5.0-beta.10.md) records exact-source CI, independent Linux equality, signing, full native suite, controlled-board/real 79M continuation, signed beta.9 upgrade, actual APK checks and cleanup. Physical Chessnut acceptance is explicitly pending the requester’s testing with this Preview. Stable/Dev releases are unchanged.
 
 ## Preview 2.5.0-beta.9 qualification
 
