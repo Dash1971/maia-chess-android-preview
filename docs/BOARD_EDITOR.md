@@ -30,7 +30,8 @@ replaces the parent analysis. Continue uses the existing side/rating/time-contro
 dialog and GamePage callback, leaving the editor/parent unchanged if cancelled.
 No e-board adapter, connection owner or synchronization policy is replaced. The
 inspected base has no separate transport in BoardEditorPage; existing continuation
-connection setup remains the same flow and is not a delivery of #182 or #39.
+connection setup remains the same flow and is not a delivery of #182. Issue #39
+was closed as not planned; this change does not reintroduce physical-board editing.
 
 The menu contains Starting position, Load FEN, Continue from here and Clear board.
 The toolbar has menu, flip, Analysis and position settings. Sharing uses Android's
