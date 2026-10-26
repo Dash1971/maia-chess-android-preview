@@ -263,6 +263,21 @@ void main() {
               for (final key in keys) {
                 final row = find.byKey(ValueKey(key));
                 result[key] = tester.getRect(row);
+                for (final column in ['marker-slot', 'value']) {
+                  result['$key-$column'] = tester.getRect(
+                    find.byKey(ValueKey('$key-$column')),
+                  );
+                }
+                final value = tester.widget<Text>(
+                  find.byKey(ValueKey('$key-value')),
+                );
+                expect(value.textAlign, TextAlign.start);
+                final disc = find.byKey(ValueKey('$key-disc'));
+                if (disc.evaluate().isNotEmpty) {
+                  final circle = tester.getRect(disc);
+                  final number = result['$key-value']!;
+                  expect(number.left - circle.right, closeTo(4, .01));
+                }
                 final rating = find.descendant(
                   of: row,
                   matching: find.byWidgetPredicate(
@@ -271,6 +286,14 @@ void main() {
                 );
                 if (rating.evaluate().isNotEmpty) {
                   result['$key-label'] = tester.getRect(rating);
+                }
+              }
+              if (second != null) {
+                for (final column in ['marker-slot', 'value']) {
+                  expect(
+                    result['maia-score-primary-$column']!.left,
+                    result['maia-score-secondary-$column']!.left,
+                  );
                 }
               }
               return result;
