@@ -1413,4 +1413,67 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get boardPieceSet => '駒のデザイン';
+
+  @override
+  String get editorMoveTool => '駒を移動';
+
+  @override
+  String get editorEraseTool => '駒を削除';
+
+  @override
+  String get editorEmptySquare => '空きマス';
+
+  @override
+  String get editorPositionSettings => '局面の設定';
+
+  @override
+  String get editorImageImportUnavailable => '画像から局面を読み込む（準備中）';
+
+  @override
+  String get editorShareFen => 'FENを共有';
+
+  @override
+  String get editorFenMetadata => 'FENの詳細';
+
+  @override
+  String get editorHalfmoveClock => '半手カウンター';
+
+  @override
+  String get editorFullmoveNumber => '手数';
+
+  @override
+  String get editorWhitePawn => '白のポーン';
+
+  @override
+  String get editorWhiteKnight => '白のナイト';
+
+  @override
+  String get editorWhiteBishop => '白のビショップ';
+
+  @override
+  String get editorWhiteRook => '白のルーク';
+
+  @override
+  String get editorWhiteQueen => '白のクイーン';
+
+  @override
+  String get editorWhiteKing => '白のキング';
+
+  @override
+  String get editorBlackPawn => '黒のポーン';
+
+  @override
+  String get editorBlackKnight => '黒のナイト';
+
+  @override
+  String get editorBlackBishop => '黒のビショップ';
+
+  @override
+  String get editorBlackRook => '黒のルーク';
+
+  @override
+  String get editorBlackQueen => '黒のクイーン';
+
+  @override
+  String get editorBlackKing => '黒のキング';
 }

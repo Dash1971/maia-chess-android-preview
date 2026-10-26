@@ -1523,4 +1523,68 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'Figurenstil';
+
+  @override
+  String get editorMoveTool => 'Figuren verschieben';
+
+  @override
+  String get editorEraseTool => 'Figuren entfernen';
+
+  @override
+  String get editorEmptySquare => 'Leeres Feld';
+
+  @override
+  String get editorPositionSettings => 'Stellungseinstellungen';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'Stellung aus Bild importieren (noch nicht verfügbar)';
+
+  @override
+  String get editorShareFen => 'FEN teilen';
+
+  @override
+  String get editorFenMetadata => 'FEN-Metadaten';
+
+  @override
+  String get editorHalfmoveClock => 'Halbzugzähler';
+
+  @override
+  String get editorFullmoveNumber => 'Zugnummer';
+
+  @override
+  String get editorWhitePawn => 'Weißer Bauer';
+
+  @override
+  String get editorWhiteKnight => 'Weißer Springer';
+
+  @override
+  String get editorWhiteBishop => 'Weißer Läufer';
+
+  @override
+  String get editorWhiteRook => 'Weißer Turm';
+
+  @override
+  String get editorWhiteQueen => 'Weiße Dame';
+
+  @override
+  String get editorWhiteKing => 'Weißer König';
+
+  @override
+  String get editorBlackPawn => 'Schwarzer Bauer';
+
+  @override
+  String get editorBlackKnight => 'Schwarzer Springer';
+
+  @override
+  String get editorBlackBishop => 'Schwarzer Läufer';
+
+  @override
+  String get editorBlackRook => 'Schwarzer Turm';
+
+  @override
+  String get editorBlackQueen => 'Schwarze Dame';
+
+  @override
+  String get editorBlackKing => 'Schwarzer König';
 }

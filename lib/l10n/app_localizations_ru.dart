@@ -1540,4 +1540,68 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'Оформление фигур';
+
+  @override
+  String get editorMoveTool => 'Перемещать фигуры';
+
+  @override
+  String get editorEraseTool => 'Удалять фигуры';
+
+  @override
+  String get editorEmptySquare => 'Пустое поле';
+
+  @override
+  String get editorPositionSettings => 'Настройки позиции';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'Импорт позиции из изображения (пока недоступен)';
+
+  @override
+  String get editorShareFen => 'Поделиться FEN';
+
+  @override
+  String get editorFenMetadata => 'Параметры FEN';
+
+  @override
+  String get editorHalfmoveClock => 'Счётчик полуходов';
+
+  @override
+  String get editorFullmoveNumber => 'Номер хода';
+
+  @override
+  String get editorWhitePawn => 'Белая пешка';
+
+  @override
+  String get editorWhiteKnight => 'Белый конь';
+
+  @override
+  String get editorWhiteBishop => 'Белый слон';
+
+  @override
+  String get editorWhiteRook => 'Белая ладья';
+
+  @override
+  String get editorWhiteQueen => 'Белый ферзь';
+
+  @override
+  String get editorWhiteKing => 'Белый король';
+
+  @override
+  String get editorBlackPawn => 'Чёрная пешка';
+
+  @override
+  String get editorBlackKnight => 'Чёрный конь';
+
+  @override
+  String get editorBlackBishop => 'Чёрный слон';
+
+  @override
+  String get editorBlackRook => 'Чёрная ладья';
+
+  @override
+  String get editorBlackQueen => 'Чёрный ферзь';
+
+  @override
+  String get editorBlackKing => 'Чёрный король';
 }

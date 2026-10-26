@@ -1527,4 +1527,68 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'Estilo das peças';
+
+  @override
+  String get editorMoveTool => 'Mover peças';
+
+  @override
+  String get editorEraseTool => 'Apagar peças';
+
+  @override
+  String get editorEmptySquare => 'Casa vazia';
+
+  @override
+  String get editorPositionSettings => 'Configurações da posição';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'Importar posição de imagem (ainda indisponível)';
+
+  @override
+  String get editorShareFen => 'Compartilhar FEN';
+
+  @override
+  String get editorFenMetadata => 'Metadados FEN';
+
+  @override
+  String get editorHalfmoveClock => 'Contador de meios-lances';
+
+  @override
+  String get editorFullmoveNumber => 'Número do lance';
+
+  @override
+  String get editorWhitePawn => 'Peão branco';
+
+  @override
+  String get editorWhiteKnight => 'Cavalo branco';
+
+  @override
+  String get editorWhiteBishop => 'Bispo branco';
+
+  @override
+  String get editorWhiteRook => 'Torre branca';
+
+  @override
+  String get editorWhiteQueen => 'Dama branca';
+
+  @override
+  String get editorWhiteKing => 'Rei branco';
+
+  @override
+  String get editorBlackPawn => 'Peão preto';
+
+  @override
+  String get editorBlackKnight => 'Cavalo preto';
+
+  @override
+  String get editorBlackBishop => 'Bispo preto';
+
+  @override
+  String get editorBlackRook => 'Torre preta';
+
+  @override
+  String get editorBlackQueen => 'Dama preta';
+
+  @override
+  String get editorBlackKing => 'Rei preto';
 }

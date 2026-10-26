@@ -292,23 +292,30 @@ void main() {
       ),
     );
 
-    var board = tester.widget<cg.StaticChessboard>(
-      find.byType(cg.StaticChessboard),
+    var board = tester.widget<cg.ChessboardEditor>(
+      find.byType(cg.ChessboardEditor),
     );
-    expect(board.fen, contains('PPPPPPPP'));
-    board.onTouchedSquare!(dc.Square.e2);
+    await tester.tap(find.byKey(const ValueKey('editor-pawn-white')));
     await tester.pump();
-    board = tester.widget<cg.StaticChessboard>(
-      find.byType(cg.StaticChessboard),
+    expect(cg.writeFen(board.pieces), contains('PPPPPPPP'));
+    await tester.tap(find.byKey(const ValueKey('editor-pawn-white')));
+    await tester.pump();
+    board = tester.widget<cg.ChessboardEditor>(
+      find.byType(cg.ChessboardEditor),
     );
-    expect(cg.readFen(board.fen)[dc.Square.e2], isNull);
+    board.onEditedSquare!(dc.Square.e2);
+    await tester.pump();
+    board = tester.widget<cg.ChessboardEditor>(
+      find.byType(cg.ChessboardEditor),
+    );
+    expect(board.pieces[dc.Square.e2], isNull);
 
-    board.onTouchedSquare!(dc.Square.e4);
+    board.onEditedSquare!(dc.Square.e4);
     await tester.pump();
-    board = tester.widget<cg.StaticChessboard>(
-      find.byType(cg.StaticChessboard),
+    board = tester.widget<cg.ChessboardEditor>(
+      find.byType(cg.ChessboardEditor),
     );
-    expect(cg.readFen(board.fen)[dc.Square.e4], isNotNull);
+    expect(board.pieces[dc.Square.e4], isNotNull);
     expect(find.text('Continue'), findsNothing);
   });
 
@@ -321,34 +328,39 @@ void main() {
       ),
     );
 
-    var board = tester.widget<cg.StaticChessboard>(
-      find.byType(cg.StaticChessboard),
+    var board = tester.widget<cg.ChessboardEditor>(
+      find.byType(cg.ChessboardEditor),
     );
-    final initialFen = board.fen;
+    final initialFen = cg.writeFen(board.pieces);
     expect(board.orientation, dc.Side.white);
 
     await tester.tap(find.byKey(const ValueKey('board-editor-flip')));
     await tester.pump();
-    board = tester.widget<cg.StaticChessboard>(
-      find.byType(cg.StaticChessboard),
+    board = tester.widget<cg.ChessboardEditor>(
+      find.byType(cg.ChessboardEditor),
     );
     expect(board.orientation, dc.Side.black);
-    expect(board.fen, initialFen);
+    expect(cg.writeFen(board.pieces), initialFen);
 
-    board.onTouchedSquare!(dc.Square.e2);
+    await tester.tap(find.byKey(const ValueKey('editor-pawn-white')));
     await tester.pump();
-    board = tester.widget<cg.StaticChessboard>(
-      find.byType(cg.StaticChessboard),
+    board = tester.widget<cg.ChessboardEditor>(
+      find.byType(cg.ChessboardEditor),
     );
-    expect(cg.readFen(board.fen)[dc.Square.e2], isNull);
+    board.onEditedSquare!(dc.Square.e2);
+    await tester.pump();
+    board = tester.widget<cg.ChessboardEditor>(
+      find.byType(cg.ChessboardEditor),
+    );
+    expect(board.pieces[dc.Square.e2], isNull);
 
     await tester.tap(find.byKey(const ValueKey('board-editor-flip')));
     await tester.pump();
-    board = tester.widget<cg.StaticChessboard>(
-      find.byType(cg.StaticChessboard),
+    board = tester.widget<cg.ChessboardEditor>(
+      find.byType(cg.ChessboardEditor),
     );
     expect(board.orientation, dc.Side.white);
-    expect(cg.readFen(board.fen)[dc.Square.e2], isNull);
+    expect(board.pieces[dc.Square.e2], isNull);
     expect(find.byTooltip('Flip board'), findsOneWidget);
   });
 

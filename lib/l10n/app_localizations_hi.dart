@@ -1517,4 +1517,68 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get boardPieceSet => 'मोहरे';
+
+  @override
+  String get editorMoveTool => 'मोहरे चलाएँ';
+
+  @override
+  String get editorEraseTool => 'मोहरे हटाएँ';
+
+  @override
+  String get editorEmptySquare => 'खाली खाना';
+
+  @override
+  String get editorPositionSettings => 'स्थिति की सेटिंग';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'चित्र से स्थिति आयात करें (अभी उपलब्ध नहीं)';
+
+  @override
+  String get editorShareFen => 'FEN साझा करें';
+
+  @override
+  String get editorFenMetadata => 'FEN की अतिरिक्त जानकारी';
+
+  @override
+  String get editorHalfmoveClock => 'आधी चालों की गिनती';
+
+  @override
+  String get editorFullmoveNumber => 'चाल संख्या';
+
+  @override
+  String get editorWhitePawn => 'सफेद प्यादा';
+
+  @override
+  String get editorWhiteKnight => 'सफेद घोड़ा';
+
+  @override
+  String get editorWhiteBishop => 'सफेद ऊँट';
+
+  @override
+  String get editorWhiteRook => 'सफेद हाथी';
+
+  @override
+  String get editorWhiteQueen => 'सफेद वज़ीर';
+
+  @override
+  String get editorWhiteKing => 'सफेद राजा';
+
+  @override
+  String get editorBlackPawn => 'काला प्यादा';
+
+  @override
+  String get editorBlackKnight => 'काला घोड़ा';
+
+  @override
+  String get editorBlackBishop => 'काला ऊँट';
+
+  @override
+  String get editorBlackRook => 'काला हाथी';
+
+  @override
+  String get editorBlackQueen => 'काला वज़ीर';
+
+  @override
+  String get editorBlackKing => 'काला राजा';
 }

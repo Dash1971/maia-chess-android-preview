@@ -1417,4 +1417,67 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get boardPieceSet => '기물 세트';
+
+  @override
+  String get editorMoveTool => '기물 이동';
+
+  @override
+  String get editorEraseTool => '기물 지우기';
+
+  @override
+  String get editorEmptySquare => '빈 칸';
+
+  @override
+  String get editorPositionSettings => '포지션 설정';
+
+  @override
+  String get editorImageImportUnavailable => '이미지에서 포지션 가져오기 (아직 사용할 수 없음)';
+
+  @override
+  String get editorShareFen => 'FEN 공유';
+
+  @override
+  String get editorFenMetadata => 'FEN 메타데이터';
+
+  @override
+  String get editorHalfmoveClock => '반수 카운터';
+
+  @override
+  String get editorFullmoveNumber => '수 번호';
+
+  @override
+  String get editorWhitePawn => '백 폰';
+
+  @override
+  String get editorWhiteKnight => '백 나이트';
+
+  @override
+  String get editorWhiteBishop => '백 비숍';
+
+  @override
+  String get editorWhiteRook => '백 룩';
+
+  @override
+  String get editorWhiteQueen => '백 퀸';
+
+  @override
+  String get editorWhiteKing => '백 킹';
+
+  @override
+  String get editorBlackPawn => '흑 폰';
+
+  @override
+  String get editorBlackKnight => '흑 나이트';
+
+  @override
+  String get editorBlackBishop => '흑 비숍';
+
+  @override
+  String get editorBlackRook => '흑 룩';
+
+  @override
+  String get editorBlackQueen => '흑 퀸';
+
+  @override
+  String get editorBlackKing => '흑 킹';
 }
