@@ -1497,7 +1497,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get boardMagnify => 'घसीटते वक्त पीस बड़ा दिखाएं';
 
   @override
-  String get boardDragTarget => 'खींचा गया टुकड़े का लक्ष्य';
+  String get boardDragTarget => 'खींचे जा रहे मोहरे का लक्ष्य';
 
   @override
   String get boardTargetCircle => 'घेरा';
@@ -1546,4 +1546,68 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get maiaScoreStockfishHelp =>
       'इसकी तुलना Stockfish के मूल्यांकन से करना उपयोगी हो सकता है। Stockfish किसी पक्ष को बेहतर मानता है, तो इसका मतलब यह नहीं कि इंसान के लिए उस बढ़त को जीत में बदलने वाली सही चालें खोजना आसान है!';
+
+  @override
+  String get editorMoveTool => 'मोहरे चलाएँ';
+
+  @override
+  String get editorEraseTool => 'मोहरे हटाएँ';
+
+  @override
+  String get editorEmptySquare => 'खाली खाना';
+
+  @override
+  String get editorPositionSettings => 'स्थिति की सेटिंग';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'चित्र से स्थिति आयात करें (अभी उपलब्ध नहीं)';
+
+  @override
+  String get editorShareFen => 'FEN साझा करें';
+
+  @override
+  String get editorFenMetadata => 'FEN की अतिरिक्त जानकारी';
+
+  @override
+  String get editorHalfmoveClock => 'आधी चालों की गिनती';
+
+  @override
+  String get editorFullmoveNumber => 'चाल संख्या';
+
+  @override
+  String get editorWhitePawn => 'सफेद प्यादा';
+
+  @override
+  String get editorWhiteKnight => 'सफेद घोड़ा';
+
+  @override
+  String get editorWhiteBishop => 'सफेद ऊँट';
+
+  @override
+  String get editorWhiteRook => 'सफेद हाथी';
+
+  @override
+  String get editorWhiteQueen => 'सफेद वज़ीर';
+
+  @override
+  String get editorWhiteKing => 'सफेद राजा';
+
+  @override
+  String get editorBlackPawn => 'काला प्यादा';
+
+  @override
+  String get editorBlackKnight => 'काला घोड़ा';
+
+  @override
+  String get editorBlackBishop => 'काला ऊँट';
+
+  @override
+  String get editorBlackRook => 'काला हाथी';
+
+  @override
+  String get editorBlackQueen => 'काला वज़ीर';
+
+  @override
+  String get editorBlackKing => 'काला राजा';
 }

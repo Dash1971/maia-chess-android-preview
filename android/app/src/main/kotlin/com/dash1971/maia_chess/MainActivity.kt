@@ -279,6 +279,23 @@ class MainActivity : FlutterActivity() {
                     "openPgnFile" -> documents.open(result)
                     "savePgnFile" -> documents.save(call.argument<String>("pgn") ?: "", result)
                     "sharePgn" -> documents.share(call.argument<String>("pgn") ?: "", result, call.argument<String>("shareTitle") ?: "Share PGN")
+                    "shareFen" -> {
+                        val fen = call.argument<String>("fen")
+                        if (fen.isNullOrBlank() || fen.length > 512) {
+                            result.error("bad_arguments", "Expected a FEN position", null)
+                        } else {
+                            try {
+                                val intent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_TEXT, fen)
+                                }
+                                startActivity(Intent.createChooser(intent, call.argument<String>("shareTitle") ?: "FEN"))
+                                result.success(null)
+                            } catch (error: Exception) {
+                                result.error("share_failed", error.javaClass.simpleName, null)
+                            }
+                        }
+                    }
                     "openUrl" -> {
                         val uri = call.argument<String>("url")?.let(Uri::parse)
                         if (uri == null || uri.scheme?.lowercase() !in setOf("http", "https")) {

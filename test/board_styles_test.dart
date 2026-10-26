@@ -194,7 +194,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     final settings = tester
-        .widget<cg.StaticChessboard>(find.byType(cg.StaticChessboard))
+        .widget<cg.ChessboardEditor>(find.byType(cg.ChessboardEditor))
         .settings;
     expect(settings.colorScheme, cg.ChessboardColorScheme.blue);
     expect(settings.pieceAssets, PieceDesign.chessnut.assets);
@@ -206,7 +206,7 @@ void main() {
             w.image is AssetImage &&
             (w.image as AssetImage).assetName.contains('/chessnut/'),
       ),
-      findsNWidgets(6),
+      findsNWidgets(12),
     );
   });
 

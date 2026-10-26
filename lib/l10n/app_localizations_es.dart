@@ -1549,4 +1549,68 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get maiaScoreStockfishHelp =>
       'Puede ser útil compararla con la evaluación de Stockfish. Que Stockfish considere que un bando está mejor no significa que a una persona le resulte fácil encontrar las jugadas correctas para convertir esa ventaja en victoria.';
+
+  @override
+  String get editorMoveTool => 'Mover piezas';
+
+  @override
+  String get editorEraseTool => 'Borrar piezas';
+
+  @override
+  String get editorEmptySquare => 'Casilla vacía';
+
+  @override
+  String get editorPositionSettings => 'Ajustes de la posición';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'Importar posición desde una imagen (aún no disponible)';
+
+  @override
+  String get editorShareFen => 'Compartir FEN';
+
+  @override
+  String get editorFenMetadata => 'Metadatos FEN';
+
+  @override
+  String get editorHalfmoveClock => 'Contador de medias jugadas';
+
+  @override
+  String get editorFullmoveNumber => 'Número de jugada';
+
+  @override
+  String get editorWhitePawn => 'Peón blanco';
+
+  @override
+  String get editorWhiteKnight => 'Caballo blanco';
+
+  @override
+  String get editorWhiteBishop => 'Alfil blanco';
+
+  @override
+  String get editorWhiteRook => 'Torre blanca';
+
+  @override
+  String get editorWhiteQueen => 'Dama blanca';
+
+  @override
+  String get editorWhiteKing => 'Rey blanco';
+
+  @override
+  String get editorBlackPawn => 'Peón negro';
+
+  @override
+  String get editorBlackKnight => 'Caballo negro';
+
+  @override
+  String get editorBlackBishop => 'Alfil negro';
+
+  @override
+  String get editorBlackRook => 'Torre negra';
+
+  @override
+  String get editorBlackQueen => 'Dama negra';
+
+  @override
+  String get editorBlackKing => 'Rey negro';
 }

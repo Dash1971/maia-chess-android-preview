@@ -1445,4 +1445,67 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get maiaScoreStockfishHelp =>
       'Stockfish 평가와 비교하면 도움이 될 수 있습니다. Stockfish가 한쪽이 더 낫다고 평가하더라도, 사람이 그 이점을 승리로 연결할 올바른 수를 찾기 쉽다는 뜻은 아닙니다!';
+
+  @override
+  String get editorMoveTool => '기물 이동';
+
+  @override
+  String get editorEraseTool => '기물 지우기';
+
+  @override
+  String get editorEmptySquare => '빈 칸';
+
+  @override
+  String get editorPositionSettings => '포지션 설정';
+
+  @override
+  String get editorImageImportUnavailable => '이미지에서 포지션 가져오기 (아직 사용할 수 없음)';
+
+  @override
+  String get editorShareFen => 'FEN 공유';
+
+  @override
+  String get editorFenMetadata => 'FEN 메타데이터';
+
+  @override
+  String get editorHalfmoveClock => '반수 카운터';
+
+  @override
+  String get editorFullmoveNumber => '수 번호';
+
+  @override
+  String get editorWhitePawn => '백 폰';
+
+  @override
+  String get editorWhiteKnight => '백 나이트';
+
+  @override
+  String get editorWhiteBishop => '백 비숍';
+
+  @override
+  String get editorWhiteRook => '백 룩';
+
+  @override
+  String get editorWhiteQueen => '백 퀸';
+
+  @override
+  String get editorWhiteKing => '백 킹';
+
+  @override
+  String get editorBlackPawn => '흑 폰';
+
+  @override
+  String get editorBlackKnight => '흑 나이트';
+
+  @override
+  String get editorBlackBishop => '흑 비숍';
+
+  @override
+  String get editorBlackRook => '흑 룩';
+
+  @override
+  String get editorBlackQueen => '흑 퀸';
+
+  @override
+  String get editorBlackKing => '흑 킹';
 }

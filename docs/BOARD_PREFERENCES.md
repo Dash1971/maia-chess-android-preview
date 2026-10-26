@@ -67,12 +67,21 @@ hashes and record actual compressed/uncompressed asset size. A selector-only
 check does not establish packaging. Compare qualified release APK sizes before
 marking the draft ready; a debug integration APK does not establish release size.
 
-The checker is specific to this new Preview catalogue and local package. Stable
-main `5f6743eed5491d2e8413fe0dfd1f8ef612d0aa84` still uses hosted Chessground and
-has neither this feature manifest nor a filtered local package; transplanting the
-checker alone cannot run there. No shared helper, wrapper, toolchain or CI policy
-is modified. A Stable feature/asset promotion is outside this Preview request;
-there is no applicable standalone tooling port in these drafts.
+The source allowlist check runs automatically in every GitHub Checks test job.
+The existing release APK verifier also checks packaged artwork and bundled licence
+notices, before Android SDK checks. Both fail closed on added, removed or changed
+assets/notices; Python optimization cannot disable the checks. Unit tests use tiny
+synthetic ZIPs, not Android builds. Build wrappers do not duplicate these gates.
+On the review Mac, the source check took 0.039 seconds and its 14 regression tests
+0.23 seconds. These are development checks: no app code or runtime cost is added.
+
+Stable main `5f6743eed5491d2e8413fe0dfd1f8ef612d0aa84` was rechecked during this
+review. It still uses hosted Chessground and has neither this feature manifest nor
+the filtered local package. This feature-specific CI/APK gate cannot run there
+without promoting the artwork feature, so no standalone Stable port applies.
+Carry the checker, its tests and both gate integrations together when promoting
+this feature; do not port it conditionally with a silent missing-manifest bypass.
+Shared workspace/toolchain helpers and channel release requirements are unchanged.
 
 ### Draft measurement
 

@@ -2673,6 +2673,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'It can be useful to contrast with Stockfish evaluation. Just because Stockfish thinks one side is better, does not mean that it is easy for a human to find the right moves to convert!'**
   String get maiaScoreStockfishHelp;
+
+  /// Standard-chess board editor: Move pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Move pieces'**
+  String get editorMoveTool;
+
+  /// Standard-chess board editor: Erase pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase pieces'**
+  String get editorEraseTool;
+
+  /// Standard-chess board editor: Empty square. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty square'**
+  String get editorEmptySquare;
+
+  /// Standard-chess board editor: Position settings. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Position settings'**
+  String get editorPositionSettings;
+
+  /// Standard-chess board editor: Import position from image (not yet available). Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Import position from image (not yet available)'**
+  String get editorImageImportUnavailable;
+
+  /// Standard-chess board editor: Share FEN. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Share FEN'**
+  String get editorShareFen;
+
+  /// Standard-chess board editor: FEN metadata. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'FEN metadata'**
+  String get editorFenMetadata;
+
+  /// Standard-chess board editor: Halfmove clock. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Halfmove clock'**
+  String get editorHalfmoveClock;
+
+  /// Standard-chess board editor: Move number. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Move number'**
+  String get editorFullmoveNumber;
+
+  /// Complete singular name of a white pawn, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White pawn'**
+  String get editorWhitePawn;
+
+  /// Complete singular name of a white knight, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White knight'**
+  String get editorWhiteKnight;
+
+  /// Complete singular name of a white bishop, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White bishop'**
+  String get editorWhiteBishop;
+
+  /// Complete singular name of a white rook, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White rook'**
+  String get editorWhiteRook;
+
+  /// Complete singular name of a white queen, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White queen'**
+  String get editorWhiteQueen;
+
+  /// Complete singular name of a white king, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'White king'**
+  String get editorWhiteKing;
+
+  /// Complete singular name of a black pawn, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black pawn'**
+  String get editorBlackPawn;
+
+  /// Complete singular name of a black knight, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black knight'**
+  String get editorBlackKnight;
+
+  /// Complete singular name of a black bishop, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black bishop'**
+  String get editorBlackBishop;
+
+  /// Complete singular name of a black rook, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black rook'**
+  String get editorBlackRook;
+
+  /// Complete singular name of a black queen, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black queen'**
+  String get editorBlackQueen;
+
+  /// Complete singular name of a black king, used in editor palette tooltips and board-square accessibility labels. Use natural word order and gender agreement; keep the pinned Lichess piece-name terminology.
+  ///
+  /// In en, this message translates to:
+  /// **'Black king'**
+  String get editorBlackKing;
 }
 
 class _AppLocalizationsDelegate

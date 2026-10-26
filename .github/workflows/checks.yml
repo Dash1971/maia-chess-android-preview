@@ -24,6 +24,8 @@ jobs:
         run: python3 -m unittest discover -s tool -p 'prepare_reproducible_flutter_sdk_test.py'
       - name: Verify reviewed Gradle security pin
         run: python3 tool/verify_gradle_wrapper.py
+      - name: Verify approved board artwork and licence notices
+        run: python3 tool/check_board_style_assets.py
       - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: temurin

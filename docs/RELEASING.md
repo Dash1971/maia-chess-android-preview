@@ -22,7 +22,7 @@ own [authoritative procedure](https://github.com/Dash1971/maia-chess-android/blo
 5. Independently build that same source on Linux using the pinned release wrapper.
    Compare unsigned APK SHA-256 values with GitHub: require an exact match.
 6. Sign the verified Linux APK with the existing Preview key. Verify package,
-   version, model, payloads, signature continuity and signature reconstruction
+   version, model, payloads, approved board artwork/licence notices, signature continuity and signature reconstruction
    from the independent unsigned APK using the release verification tools.
 7. Run the full Preview native suite on an ARM64 Android emulator for the exact
    candidate source, using the real 79M model. Test the actual signed upgrade

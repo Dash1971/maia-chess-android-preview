@@ -1549,4 +1549,68 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get maiaScoreStockfishHelp =>
       'Il peut être utile de comparer cette estimation à l’évaluation de Stockfish. Ce n’est pas parce que Stockfish juge un camp meilleur qu’il est facile pour un humain de trouver les bons coups pour concrétiser cet avantage !';
+
+  @override
+  String get editorMoveTool => 'Déplacer les pièces';
+
+  @override
+  String get editorEraseTool => 'Effacer les pièces';
+
+  @override
+  String get editorEmptySquare => 'Case vide';
+
+  @override
+  String get editorPositionSettings => 'Réglages de la position';
+
+  @override
+  String get editorImageImportUnavailable =>
+      'Importer une position depuis une image (pas encore disponible)';
+
+  @override
+  String get editorShareFen => 'Partager la FEN';
+
+  @override
+  String get editorFenMetadata => 'Métadonnées FEN';
+
+  @override
+  String get editorHalfmoveClock => 'Compteur de demi-coups';
+
+  @override
+  String get editorFullmoveNumber => 'Numéro du coup';
+
+  @override
+  String get editorWhitePawn => 'Pion blanc';
+
+  @override
+  String get editorWhiteKnight => 'Cavalier blanc';
+
+  @override
+  String get editorWhiteBishop => 'Fou blanc';
+
+  @override
+  String get editorWhiteRook => 'Tour blanche';
+
+  @override
+  String get editorWhiteQueen => 'Dame blanche';
+
+  @override
+  String get editorWhiteKing => 'Roi blanc';
+
+  @override
+  String get editorBlackPawn => 'Pion noir';
+
+  @override
+  String get editorBlackKnight => 'Cavalier noir';
+
+  @override
+  String get editorBlackBishop => 'Fou noir';
+
+  @override
+  String get editorBlackRook => 'Tour noire';
+
+  @override
+  String get editorBlackQueen => 'Dame noire';
+
+  @override
+  String get editorBlackKing => 'Roi noir';
 }
