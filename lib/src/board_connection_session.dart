@@ -131,6 +131,9 @@ class BoardConnectionSession {
 
   void _activate(BoardConnectionLease lease) {
     if (lease._disposed || identical(_owner, lease)) return;
+    // Keep in-flight writes ordered, but retire queued work from any prior
+    // ownership period, even when cancellation later restores the same lease.
+    _commandEpoch++;
     _listen();
     // Reactivating a covered lease must not create a cycle in the return chain.
     for (var cursor = _owner; cursor != null; cursor = cursor._previous) {
@@ -184,6 +187,7 @@ class BoardConnectionSession {
       }
     }
     if (lease.isOwner) {
+      _commandEpoch++;
       _owner = null;
       var previous = lease._previous;
       while (previous != null && previous._disposed) {

@@ -318,6 +318,30 @@ void main() {
     );
 
     test(
+      'cancelled borrowing invalidates the restored owners old queued commands',
+      () async {
+        final home = lease();
+        home.activate();
+        board.ready('current');
+        final gate = Completer<void>();
+        gates.add(gate);
+        board.ledGate = gate;
+        final inFlight = home.setLeds(['a1']);
+        await board.ledEntered.future;
+        final obsolete = home.setLeds(['b1']);
+        final dialog = lease();
+        dialog.activate();
+        await dialog.release(restorePrevious: true);
+        expect(home.isOwner, isTrue);
+        final current = home.setLeds(['e4']);
+        gate.complete();
+        await Future.wait([inFlight, obsolete, current]);
+        expect(board.commands, ['led:a1', 'led:e4']);
+        expect(board.displayedLeds, ['e4']);
+      },
+    );
+
+    test(
       'obsolete connection sessions cannot overwrite or replay current state',
       () async {
         final owner = lease();
