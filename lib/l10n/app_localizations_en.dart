@@ -1501,7 +1501,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get boardPieceSet => 'Piece set';
 
   @override
-  String get showMaiaScore => 'Show Maia score %';
+  String get showMaiaScore => 'Show Maia win (score) %';
 
   @override
   String get maiaScore => 'Maia score';
@@ -1511,17 +1511,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get maiaScoreHelp =>
-      'Shows each Maia’s estimate for the current position at its analysis rating. Draws count as half a point. Stockfish stays visible.';
+      'Shows Maia’s assessment of winning (scoring) chances at the top of the screen.\nThe white or black dot tells you which side the percentage describes.';
 
   @override
   String get maiaScoreExpectedHelp =>
-      'This is an expected score, not a literal chance of winning. Off by default.';
+      'For example, White 60% means Maia estimates White would score about 60 points across 100 games from this position. A win earns 1 point; a draw earns ½.';
 
   @override
   String get maiaScoreInputsHelp =>
-      'Each estimate uses that Maia’s analysis rating for both players and the current move-history input. Temperature, Top-P and Stockfish quality do not set this percentage.';
+      'The estimate uses the selected Maia analysis rating for both players. With two Maias enabled, each shows its own estimate at its own rating.';
 
   @override
   String get maiaScorePreferenceError =>
       'Could not save Maia score settings. Please try again.';
+
+  @override
+  String get maiaScoreStockfishHelp =>
+      'It can be useful to contrast with Stockfish evaluation. Just because Stockfish thinks one side is better, does not mean that it is easy for a human to find the right moves to convert!';
 }

@@ -418,11 +418,12 @@
   "boardPreferenceError": "无法保存棋盘设置。请重试。",
   "boardDesign": "棋盘",
   "boardPieceSet": "棋子样式",
-  "showMaiaScore": "显示 Maia 得分百分比",
+  "showMaiaScore": "显示 Maia 胜率（得分率）",
   "maiaScore": "Maia 得分",
   "maiaScoreEqual": "均势",
-  "maiaScoreHelp": "显示每个 Maia 在其分析等级分下对当前局面的估计。和棋计为半分。Stockfish 评估仍会显示。",
-  "maiaScoreExpectedHelp": "这是预期得分，而非严格的获胜概率。默认关闭。",
-  "maiaScoreInputsHelp": "每个估计使用该 Maia 的分析等级分作为双方等级分，并使用当前的走棋历史输入。温度、Top-P 和 Stockfish 分析质量不决定该百分比。",
-  "maiaScorePreferenceError": "无法保存 Maia 得分设置。请重试。"
+  "maiaScoreHelp": "在屏幕顶部显示 Maia 对获胜（得分）机会的评估。\n白色或黑色圆点表示该百分比对应哪一方。",
+  "maiaScoreExpectedHelp": "例如，“白方 60%”表示 Maia 估计，从此局面开始下100盘棋，白方大约能得到60分。获胜得1分，和棋得½分。",
+  "maiaScoreInputsHelp": "该估计将所选的 Maia 分析等级分应用于双方。启用两个 Maia 时，每个 Maia 都会按各自的等级分显示自己的估计。",
+  "maiaScorePreferenceError": "无法保存 Maia 得分设置。请重试。",
+  "maiaScoreStockfishHelp": "与 Stockfish 的评估对照来看可能会很有用。Stockfish 认为某一方更好，并不意味着人类就能轻易找到将优势转化为胜利的正确着法！"
 }

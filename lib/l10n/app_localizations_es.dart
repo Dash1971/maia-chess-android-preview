@@ -1522,7 +1522,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get boardPieceSet => 'Estilo de piezas';
 
   @override
-  String get showMaiaScore => 'Mostrar puntuación de Maia (%)';
+  String get showMaiaScore => 'Mostrar victoria (puntuación) de Maia en %';
 
   @override
   String get maiaScore => 'Puntuación Maia';
@@ -1532,17 +1532,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get maiaScoreHelp =>
-      'Muestra la estimación de cada Maia para la posición actual según su puntuación de análisis. Las tablas cuentan como medio punto. Stockfish sigue visible.';
+      'Muestra en la parte superior de la pantalla la evaluación de Maia sobre las posibilidades de ganar (puntuar).\nEl punto blanco o negro indica a qué bando se refiere el porcentaje.';
 
   @override
   String get maiaScoreExpectedHelp =>
-      'Es una puntuación esperada, no una probabilidad literal de victoria. Está desactivada de forma predeterminada.';
+      'Por ejemplo, Blancas 60% significa que Maia estima que las blancas conseguirían unos 60 puntos en 100 partidas desde esta posición. Una victoria vale 1 punto; unas tablas, ½.';
 
   @override
   String get maiaScoreInputsHelp =>
-      'Cada estimación usa la puntuación de análisis de esa Maia para ambos jugadores y el historial de jugadas actual. Temperatura, Top-P y la calidad de Stockfish no determinan este porcentaje.';
+      'La estimación usa la puntuación de análisis de Maia seleccionada para ambos jugadores. Con dos Maias activadas, cada una muestra su propia estimación con su propia puntuación.';
 
   @override
   String get maiaScorePreferenceError =>
       'No se han podido guardar los ajustes de puntuación Maia. Inténtalo de nuevo.';
+
+  @override
+  String get maiaScoreStockfishHelp =>
+      'Puede ser útil compararla con la evaluación de Stockfish. Que Stockfish considere que un bando está mejor no significa que a una persona le resulte fácil encontrar las jugadas correctas para convertir esa ventaja en victoria.';
 }

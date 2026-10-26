@@ -418,11 +418,12 @@
   "boardPreferenceError": "Impossible d’enregistrer les réglages de l’échiquier. Réessayez.",
   "boardDesign": "Échiquier",
   "boardPieceSet": "Jeu de pièces",
-  "showMaiaScore": "Afficher le score Maia (%)",
+  "showMaiaScore": "Afficher les chances de gain (score) Maia en %",
   "maiaScore": "Score Maia",
   "maiaScoreEqual": "Équilibré",
-  "maiaScoreHelp": "Affiche l’estimation de chaque Maia pour la position actuelle selon son classement d’analyse. Une nulle compte pour un demi-point. Stockfish reste visible.",
-  "maiaScoreExpectedHelp": "Il s’agit d’un score attendu, pas d’une probabilité stricte de victoire. Désactivé par défaut.",
-  "maiaScoreInputsHelp": "Chaque estimation utilise le classement d’analyse de cette Maia pour les deux joueurs et l’historique de positions actuel. La température, Top-P et la qualité Stockfish ne déterminent pas ce pourcentage.",
-  "maiaScorePreferenceError": "Impossible d’enregistrer les réglages du score Maia. Réessayez."
+  "maiaScoreHelp": "Affiche en haut de l’écran l’évaluation par Maia des chances de gagner (de marquer des points).\nLe point blanc ou noir indique à quel camp correspond le pourcentage.",
+  "maiaScoreExpectedHelp": "Par exemple, Blancs 60% signifie que Maia estime que les Blancs marqueraient environ 60 points sur 100 parties à partir de cette position. Une victoire rapporte 1 point ; une nulle, ½ point.",
+  "maiaScoreInputsHelp": "L’estimation utilise le classement d’analyse Maia sélectionné pour les deux joueurs. Si deux Maias sont activées, chacune affiche sa propre estimation à son propre classement.",
+  "maiaScorePreferenceError": "Impossible d’enregistrer les réglages du score Maia. Réessayez.",
+  "maiaScoreStockfishHelp": "Il peut être utile de comparer cette estimation à l’évaluation de Stockfish. Ce n’est pas parce que Stockfish juge un camp meilleur qu’il est facile pour un humain de trouver les bons coups pour concrétiser cet avantage !"
 }

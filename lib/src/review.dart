@@ -2314,72 +2314,217 @@ class _ReviewPageState extends State<ReviewPage>
               lineKey: const ValueKey('second-maia-engine-line'),
               otherKey: const ValueKey('second-maia-other'),
             ),
-          if (MaiaScoreScope.maybeOf(context)?.enabled == true)
-            _maiaScoreCaption(),
         ],
       ),
     );
   }
 
-  Widget _maiaScoreCaption() {
+  /// Reuses the existing toolbar; score visibility never changes body geometry.
+  Widget _analysisTitle() {
+    final title = widget.title ?? l10n(context).gameReview;
+    if (MaiaScoreScope.maybeOf(context)?.enabled != true) return Text(title);
     final game = chess.Chess.fromFEN(_currentFen);
     final strings = l10n(context);
-    String text(MaiaPositionAnalysis? analysis, bool loading) {
+    ({String label, String value, bool? white}) score(
+      MaiaPositionAnalysis? analysis,
+      bool loading,
+    ) {
       if (game.game_over) {
         if (game.in_checkmate) {
-          return game.turn == chess.Color.WHITE
-              ? strings.blackIsVictorious
-              : strings.whiteIsVictorious;
+          final white = game.turn == chess.Color.BLACK;
+          return (
+            label: white
+                ? strings.whiteIsVictorious
+                : strings.blackIsVictorious,
+            value: white ? '1–0' : '0–1',
+            white: null,
+          );
         }
-        return strings.theGameIsADraw;
+        return (label: strings.theGameIsADraw, value: '½–½', white: null);
       }
-      if (loading) return strings.analyzing;
+      if (loading) return (label: strings.analyzing, value: '…', white: null);
       final outcome = analysis?.outcome;
-      if (outcome == null) return strings.unavailable;
-      final white = outcome.whiteScore(_currentFen);
-      final score = max(white, 1 - white);
-      if ((score * 100).round() == 50) {
-        return '${strings.maiaScoreEqual} ${_formatMaiaProbability(.5)}';
+      if (outcome == null) {
+        return (label: strings.unavailable, value: '—', white: null);
       }
-      return '${white >= .5 ? strings.white : strings.black} ${_formatMaiaProbability(score)}';
+      final white = outcome.whiteScore(_currentFen);
+      final value = _formatMaiaProbability(max(white, 1 - white));
+      final equal = (max(white, 1 - white) * 100).round() == 50;
+      return (
+        label:
+            '${equal
+                ? strings.maiaScoreEqual
+                : white >= .5
+                ? strings.white
+                : strings.black} $value',
+        value: equal ? '= $value' : value,
+        white: equal ? null : white >= .5,
+      );
     }
 
-    final primaryLoading = _inVariation
-        ? _variationMaiaLoading
-        : _maiaLoading.contains(_ply);
-    final secondaryLoading = _inVariation
-        ? _secondVariationMaiaLoading
-        : _secondMaiaLoading.contains(_ply);
-    return Padding(
-      padding: const EdgeInsets.only(top: 4),
-      child: Tooltip(
-        message:
-            '${strings.maiaScoreHelp} ${strings.maiaScoreExpectedHelp} ${strings.maiaScoreInputsHelp}',
-        child: Semantics(
-          liveRegion: true,
-          child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            child: Wrap(
-              spacing: 12,
-              runSpacing: 4,
-              children: [
-                Text(strings.maiaScore),
-                Text(
-                  'M${displayNumber(context, widget.maiaElo)} ${text(_selectedMaiaAnalysis, primaryLoading)}',
-                  key: const ValueKey('maia-score-primary'),
-                ),
-                if (widget.secondMaiaElo case final elo?)
-                  Text(
-                    'M${displayNumber(context, elo)} ${text(_selectedSecondMaiaAnalysis, secondaryLoading)}',
-                    key: const ValueKey('maia-score-secondary'),
-                  ),
-              ],
-            ),
-          ),
-        ),
+    final primary = score(
+      _selectedMaiaAnalysis,
+      _inVariation ? _variationMaiaLoading : _maiaLoading.contains(_ply),
+    );
+    final secondary = score(
+      _selectedSecondMaiaAnalysis,
+      _inVariation
+          ? _secondVariationMaiaLoading
+          : _secondMaiaLoading.contains(_ply),
+    );
+    final rows = [
+      (
+        elo: widget.maiaElo,
+        score: primary,
+        color: primaryMaiaAnalysisColor,
+        key: 'maia-score-primary',
       ),
+      if (widget.secondMaiaElo case final elo?)
+        (
+          elo: elo,
+          score: secondary,
+          color: secondaryMaiaAnalysisColor,
+          key: 'maia-score-secondary',
+        ),
+    ];
+    final labels = rows
+        .map((row) => 'M${displayNumber(context, row.elo)} ${row.score.label}')
+        .toList();
+    void details() => showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        scrollable: true,
+        title: Text(strings.maiaScore),
+        content: Text(
+          '${labels.join('\n')}\n\n${strings.maiaScoreHelp}\n\n${strings.maiaScoreExpectedHelp}\n\n${strings.maiaScoreInputsHelp}\n\n${strings.maiaScoreStockfishHelp}',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(strings.close),
+          ),
+        ],
+      ),
+    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final scaler = MediaQuery.textScalerOf(context);
+        const scoreStyle = TextStyle(fontSize: 12, height: 1);
+        double width(String text, TextStyle style) {
+          final painter = TextPainter(
+            text: TextSpan(text: text, style: style),
+            textDirection: Directionality.of(context),
+            textScaler: scaler,
+            locale: Localizations.maybeLocaleOf(context),
+          )..layout();
+          final value = painter.width;
+          painter.dispose();
+          return value;
+        }
+
+        // Keep the full page title whenever its ordinary size and the ratings fit.
+        // Narrow screens/large text omit ratings visually; the tappable details and
+        // accessibility labels always retain each engine's complete identity.
+        final titleWidth = width(title, DefaultTextStyle.of(context).style);
+        final scoreWidth = rows
+            .map(
+              (row) =>
+                  width(
+                    'M${displayNumber(context, row.elo)}  ${row.score.value}',
+                    scoreStyle,
+                  ) +
+                  14,
+            )
+            .reduce(max);
+        final ratingsFit = titleWidth + scoreWidth + 8 <= constraints.maxWidth;
+        return Row(
+          children: [
+            Expanded(
+              child: Tooltip(
+                message: title,
+                child: Text(
+                  title,
+                  maxLines: scaler.scale(12) <= 15 ? 2 : 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Semantics(
+              button: true,
+              label: strings.maiaScore,
+              child: InkWell(
+                key: const ValueKey('maia-score-details'),
+                onTap: details,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minHeight: 48,
+                    minWidth: 48,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      for (var i = 0; i < rows.length; i++)
+                        Semantics(
+                          key: ValueKey(rows[i].key),
+                          container: true,
+                          label: labels[i],
+                          liveRegion: true,
+                          child: ExcludeSemantics(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 1),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (ratingsFit)
+                                    Text(
+                                      'M${displayNumber(context, rows[i].elo)} ',
+                                      style: scoreStyle.copyWith(
+                                        color: chessTextColor(
+                                          context,
+                                          rows[i].color,
+                                        ),
+                                      ),
+                                    ),
+                                  if (rows[i].score.white
+                                      case final white?) ...[
+                                    Container(
+                                      width: 9,
+                                      height: 9,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: white
+                                            ? Colors.white
+                                            : Colors.black,
+                                        border: Border.all(color: Colors.grey),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 3),
+                                  ],
+                                  Text(
+                                    rows[i].score.value,
+                                    style: scoreStyle.copyWith(
+                                      color: chessTextColor(
+                                        context,
+                                        rows[i].color,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -3232,7 +3377,7 @@ class _ReviewPageState extends State<ReviewPage>
               ? l10n(context).backToGame
               : l10n(context).home),
         ),
-        title: Text(widget.title ?? l10n(context).gameReview),
+        title: _analysisTitle(),
         actions: [
           PopupMenuButton<String>(
             key: const ValueKey('analysis-share-menu'),

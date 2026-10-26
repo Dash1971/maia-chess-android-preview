@@ -1415,7 +1415,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get boardPieceSet => '駒のデザイン';
 
   @override
-  String get showMaiaScore => 'Maiaのスコア（%）を表示';
+  String get showMaiaScore => 'Maiaの勝利（得点）率を表示';
 
   @override
   String get maiaScore => 'Maiaスコア';
@@ -1425,15 +1425,20 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get maiaScoreHelp =>
-      '各Maiaが解析レーティングに応じて現在の局面を評価します。引き分けは半点として数えます。Stockfishの評価も表示されます。';
+      '画面上部に、Maiaが評価した勝利（得点）の見込みを表示します。\n白または黒の点は、その割合がどちらの側を表しているかを示します。';
 
   @override
-  String get maiaScoreExpectedHelp => 'これは期待スコアであり、勝つ確率そのものではありません。初期設定ではオフです。';
+  String get maiaScoreExpectedHelp =>
+      '例えば「白 60%」は、この局面から100局指した場合に、白が合計約60点を獲得するとMaiaが見積もっていることを意味します。勝ちは1点、引き分けは½点です。';
 
   @override
   String get maiaScoreInputsHelp =>
-      '各評価では、そのMaiaの解析レーティングを両者に適用し、現在の指し手履歴の入力を使います。温度、Top-P、Stockfishの解析品質は、この割合を決める設定ではありません。';
+      'この評価では、選択したMaiaの解析レーティングを両者に適用します。Maiaを2つ有効にすると、それぞれが自身のレーティングでの評価を表示します。';
 
   @override
   String get maiaScorePreferenceError => 'Maiaスコアの設定を保存できませんでした。もう一度お試しください。';
+
+  @override
+  String get maiaScoreStockfishHelp =>
+      'Stockfishの評価と比べるのも役立ちます。Stockfishが一方を有利と評価していても、人間がその優位を勝ちに結び付ける正しい手を見つけやすいとは限りません！';
 }

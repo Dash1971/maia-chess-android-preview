@@ -51,8 +51,9 @@ void main() {
         [1.0, 2.0, 3.0, 4.0],
         [double.nan, 0.0, 0.0],
         [double.infinity, 0.0, 0.0],
-      ])
+      ]) {
         expect(MaiaOutcome.fromLogits(logits), isNull);
+      }
     },
   );
   test(
@@ -85,7 +86,7 @@ void main() {
     () async {
       for (final value in [null, 7, 'true', false]) {
         SharedPreferences.setMockInitialValues({
-          if (value != null) maiaScorePreferenceKey: value,
+          maiaScorePreferenceKey: ?value,
         });
         final controller = MaiaScoreController();
         await controller.initialize();
@@ -148,6 +149,7 @@ void main() {
     int? second = 2600,
     Locale locale = const Locale('en'),
     double scale = 1,
+    AnalysisSession? positionSession,
     Future<MaiaInferenceResult?> Function(List<String>, int)? infer,
   }) => MaiaScoreScope(
     controller: controller,
@@ -161,10 +163,10 @@ void main() {
         child: child!,
       ),
       home: ReviewPage(
-        positions: session.positions,
-        uciMoves: session.uciMoves,
-        sanMoves: session.sanMoves,
-        pgn: session.pgn,
+        positions: (positionSession ?? session).positions,
+        uciMoves: (positionSession ?? session).uciMoves,
+        sanMoves: (positionSession ?? session).sanMoves,
+        pgn: (positionSession ?? session).pgn,
         playerIsWhite: true,
         onHome: () {},
         maiaElo: elo,
@@ -188,23 +190,34 @@ void main() {
       addTearDown(controller.dispose);
       await tester.pumpWidget(app(controller));
       await tester.pumpAndSettle();
+      final moveRect = tester.getRect(
+        find.byKey(const ValueKey('analysis-tab-panel')),
+      );
       final before = tester
           .widget<cg.Chessboard>(find.byType(cg.Chessboard))
           .size;
       expect(find.byKey(const ValueKey('maia-score-primary')), findsNothing);
       await controller.select(true);
       await tester.pumpAndSettle();
-      expect(find.text('M1500 White 60%'), findsOneWidget);
-      expect(find.text('M2600 Black 70%'), findsOneWidget);
+      expect(find.bySemanticsLabel('M1500 White 60%'), findsOneWidget);
+      expect(find.bySemanticsLabel('M2600 Black 70%'), findsOneWidget);
       expect(
         tester.widget<cg.Chessboard>(find.byType(cg.Chessboard)).size,
         before,
       );
+      expect(
+        tester.getRect(find.byKey(const ValueKey('analysis-tab-panel'))),
+        moveRect,
+      );
+      expect(
+        tester.getRect(find.byKey(const ValueKey('maia-score-details'))).bottom,
+        lessThanOrEqualTo(tester.getRect(find.byType(AppBar)).bottom),
+      );
       expect(find.byType(EvaluationBar), findsOneWidget);
       await tester.tap(find.byKey(const ValueKey('analysis-flip-button')));
       await tester.pumpAndSettle();
-      expect(find.text('M1500 White 60%'), findsOneWidget);
-      expect(find.text('M2600 Black 70%'), findsOneWidget);
+      expect(find.bySemanticsLabel('M1500 White 60%'), findsOneWidget);
+      expect(find.bySemanticsLabel('M2600 Black 70%'), findsOneWidget);
     },
   );
   testWidgets('late results cannot replace the selected rating and position', (
@@ -228,7 +241,7 @@ void main() {
     expect(find.textContaining('90%'), findsNothing);
     current.complete(result(.2, .2, .6));
     await tester.pumpAndSettle();
-    expect(find.text('M1800 White 70%'), findsOneWidget);
+    expect(find.bySemanticsLabel('M1800 White 70%'), findsOneWidget);
     expect(find.textContaining('M1500 White'), findsNothing);
   });
   testWidgets(
@@ -247,13 +260,55 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text('M1500 White 60%'), findsOneWidget);
+      expect(find.bySemanticsLabel('M1500 White 60%'), findsOneWidget);
       await tester.tap(find.byKey(const ValueKey('next-move-button')));
       await tester.pumpAndSettle();
-      expect(find.text('M1500 White 60%'), findsNothing);
+      expect(find.bySemanticsLabel('M1500 White 60%'), findsNothing);
       after.complete(result(.2, .4, .4));
       await tester.pumpAndSettle();
-      expect(find.text('M1500 Black 60%'), findsOneWidget);
+      expect(find.bySemanticsLabel('M1500 Black 60%'), findsOneWidget);
+    },
+  );
+  testWidgets(
+    'missing outcomes and terminal positions do not invent percentages',
+    (tester) async {
+      final controller = MaiaScoreController();
+      addTearDown(controller.dispose);
+      await controller.select(true);
+      await tester.pumpWidget(
+        app(
+          controller,
+          second: null,
+          infer: (_, _) async => MaiaInferenceResult(Float32List(4352)),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.bySemanticsLabel('M1500 Unavailable'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('maia-score-primary')),
+          matching: find.text('—'),
+        ),
+        findsOneWidget,
+      );
+      await tester.pumpWidget(
+        app(
+          controller,
+          second: null,
+          positionSession: AnalysisSession.fromFen(
+            '7k/6Q1/5K2/8/8/8/8/8 b - - 0 1',
+          ),
+          infer: (_, _) async =>
+              throw StateError('terminal position must not infer'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.bySemanticsLabel('M1500 White is victorious'),
+        findsOneWidget,
+      );
+      expect(find.text('1–0'), findsOneWidget);
+      expect(tester.takeException(), isNull);
     },
   );
   for (final locale in AppLocalizations.supportedLocales) {
@@ -268,8 +323,27 @@ void main() {
         addTearDown(tester.view.resetDevicePixelRatio);
         for (final size in [const Size(320, 640), const Size(640, 320)]) {
           tester.view.physicalSize = size;
+          await controller.select(false);
           await tester.pumpWidget(app(controller, locale: locale, scale: 2));
           await tester.pumpAndSettle();
+          final boardRect = tester.getRect(find.byType(cg.Chessboard));
+          final engineRect = tester.getRect(
+            find.byKey(const ValueKey('analysis-engine-lines')),
+          );
+          final moveRect = tester.getRect(
+            find.byKey(const ValueKey('analysis-tab-panel')),
+          );
+          await controller.select(true);
+          await tester.pumpAndSettle();
+          expect(tester.getRect(find.byType(cg.Chessboard)), boardRect);
+          expect(
+            tester.getRect(find.byKey(const ValueKey('analysis-engine-lines'))),
+            engineRect,
+          );
+          expect(
+            tester.getRect(find.byKey(const ValueKey('analysis-tab-panel'))),
+            moveRect,
+          );
           expect(tester.takeException(), isNull);
           await tester.pumpWidget(
             MaiaScoreScope(
@@ -291,6 +365,20 @@ void main() {
           );
           await tester.pumpAndSettle();
           expect(tester.takeException(), isNull);
+          expect(
+            find.text(
+              AppLocalizations.of(
+                tester.element(find.byType(MaiaScoreSetting)),
+              )!.maiaScoreHelp,
+            ),
+            findsNothing,
+          );
+          await tester.tap(find.byKey(const ValueKey('maia-score-help')));
+          await tester.pumpAndSettle();
+          expect(find.byType(AlertDialog), findsOneWidget);
+          expect(tester.takeException(), isNull);
+          await tester.binding.handlePopRoute();
+          await tester.pumpAndSettle();
         }
       },
     );

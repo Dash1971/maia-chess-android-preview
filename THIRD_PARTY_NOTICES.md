@@ -64,6 +64,9 @@ is distributed under AGPL-3.0-only as permitted by section 13 of AGPL-3.0.
 
 ## Maia-3
 
+The optional Maia score follows the upstream expected-score definition. Pinned
+outcome-channel and website references are in [docs/MAIA_SCORE.md](docs/MAIA_SCORE.md).
+
 - Project: <https://github.com/CSSLab/maia3>
 - Model: <https://huggingface.co/UofTCSSLab/Maia3-79M>
 - Copyright: University of Toronto CSSLab contributors

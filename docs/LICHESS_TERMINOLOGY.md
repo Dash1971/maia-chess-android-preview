@@ -409,3 +409,12 @@ including native Hindi fallbacks where the upstream catalog has no value.
 Design names remain Lichess's artwork proper names, including Cburnett and
 Kiwen-suwi, in every language. Selected state is exposed through native semantics
 in addition to its visible checkmark. Persistence errors reuse the board-aid text.
+
+## Optional Maia expected score (#186)
+
+The eight new score/settings/help/error messages describe Maia-specific model
+outcomes and have no direct Lichess equivalent. Existing White/Black, analysis,
+draw and victory labels retain the pinned translations. All ten catalogs follow the requester’s approved English: the 60 points in
+100 games example explains half-point draws; each engine uses its own rating
+for both players; Stockfish advantage can be difficult for a human to convert. These
+translations remain subject to native-speaker review.

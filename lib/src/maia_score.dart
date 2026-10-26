@@ -128,18 +128,27 @@ class MaiaScoreSetting extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SwitchListTile(
+        SettingsInfoSwitch(
           key: const ValueKey('show-maia-score'),
-          title: Text(l10n(context).showMaiaScore),
-          subtitle: Text(l10n(context).maiaScoreHelp),
+          title: l10n(context).showMaiaScore,
           value: controller.enabled,
+          helpKey: const ValueKey('maia-score-help'),
           onChanged: (value) => unawaited(controller.select(value)),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-          child: Text(
-            l10n(context).maiaScoreExpectedHelp,
-            style: Theme.of(context).textTheme.bodySmall,
+          onHelp: () => showDialog<void>(
+            context: context,
+            builder: (context) => AlertDialog(
+              scrollable: true,
+              title: Text(l10n(context).showMaiaScore),
+              content: Text(
+                '${l10n(context).maiaScoreHelp}\n\n${l10n(context).maiaScoreExpectedHelp}\n\n${l10n(context).maiaScoreInputsHelp}\n\n${l10n(context).maiaScoreStockfishHelp}',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(l10n(context).close),
+                ),
+              ],
+            ),
           ),
         ),
         if (controller.persistenceFailed)
