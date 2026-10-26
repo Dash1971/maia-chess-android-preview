@@ -419,3 +419,6 @@ settings, unavailable image import, empty squares and FEN counter descriptions
 are editor-specific labels in all ten languages. No Variant/Challenge labels or
 camera-working-state claims are introduced. Source interaction reference and
 layout adaptations are pinned in `docs/BOARD_EDITOR.md`.
+The Hindi dragged-piece target label corrects upstream grammatical agreement
+and uses मोहरा for a chess piece. The original reference is retained with a
+documented adaptation; the terminology regression rejects restoring the typo.

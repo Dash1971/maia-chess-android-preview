@@ -411,7 +411,7 @@
   "boardLastMove": "पिछली चाल को उभारें",
   "boardAnimation": "मोहरों का एनीमेशन",
   "boardMagnify": "घसीटते वक्त पीस बड़ा दिखाएं",
-  "boardDragTarget": "खींचा गया टुकड़े का लक्ष्य",
+  "boardDragTarget": "खींचे जा रहे मोहरे का लक्ष्य",
   "boardTargetCircle": "घेरा",
   "boardTargetSquare": "वर्ग",
   "boardTargetNone": "कोई नहीं",
