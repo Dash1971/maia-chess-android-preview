@@ -29,71 +29,37 @@ account to join.
 Please keep using the relevant GitHub issue tracker for reproducible bugs
 and feature requests.
 
-## Preview 2.5.0 beta
+## Current Preview status
 
-The latest release in this development cycle is [2.5.0-beta.10](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.10).
+The latest Preview release is [2.5.0-beta.10](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.10). The features developed in the 2.5 Preview cycle are now available in [Stable 2.5.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.0), including board customization, the graphical editor, Maia score display and Chessnut continuation from analysis.
 
-The 2.5 cycle adds optional appearance settings, revised Maia defaults and help, translation corrections, and analysis-board interaction improvements. Existing saved preferences are retained. These changes are delivered in Preview and await separate Stable acceptance and promotion; Stable and Dev remain unchanged.
-
-Beta.8 adds **Board** settings for aids and offline designs, a graphical board editor and optional **Show Maia win (score) %** in the existing analysis title bar. Each Maia uses its own rating; the expected game score counts a draw as half a point. It defaults off. See [beta.8 qualification](docs/releases/preview-2.5.0-beta.8.md).
-
-Beta.9 keeps the Maia score title’s rating and value columns fixed while results load or change, including near the responsive cutoff. [Qualification](docs/releases/preview-2.5.0-beta.9.md) records release and upgrade verification. Score meaning, inference and saved settings are unchanged.
-
-Beta.10 aligns Maia score circles and tightens percentage spacing. **Continue from here** can connect/reuse Chessnut and wait for a custom board position before untimed play, with phone fallback. The [Preview is ready for owner hardware testing](docs/CONTINUATION_ELECTRONIC_BOARD.md); physical Bluetooth/LED acceptance is pending. [Qualification](docs/releases/preview-2.5.0-beta.10.md) records the automated, signed-upgrade and download checks.
-
-Game Review and imported-PGN analysis clear stale piece selection and legal-move dots when navigating. Navigation cancels held drags and pending promotion, while engine-result updates retain selection and played moves retain their tap/drag animation. See [beta.4 qualification](docs/releases/preview-2.5.0-beta.4.md).
-
-Analysis arrows step along the current line. Within an analysis variation, Hold Left returns to the outermost main-line branch point; Hold Right selects one main-line move after that point, clamping at the game end. The destination is independent of variation length, nesting and selected move. Ordinary taps and main-line endpoint holds retain their behavior; live-game navigation is unchanged. See [beta.6 qualification](docs/releases/preview-2.5.0-beta.6.md).
-
-Beta.7 also rebuilds with patched Flutter 3.47.8 / Dart 3.13.7 for the published TLS advisory. The [Stable tooling companion](https://github.com/Dash1971/maia-chess-android/pull/61) was merged separately. Stable and Dev releases remain unchanged.
-
-For release notes and verification from earlier development cycles, see the [release history](https://github.com/Dash1971/maia-chess-android-preview/releases).
+See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
 
 ## Roadmap
 
-These are the areas we would like to work on next.
+**Main next target: import a position from a photo or screenshot**
+
+We plan to add image and camera import to the existing board editor. Recognize a board on the device, review and correct the pieces, confirm the position settings, then open analysis or play from that position. See [Import a position from a photo or screenshot into the board editor](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
 
 **Expand electronic-board support**
-
-Delivered in Preview beta.10: [Chessnut continuation from analysis](docs/CONTINUATION_ELECTRONIC_BOARD.md), including connection reuse and custom-position setup. Physical acceptance is pending owner testing with this Preview; separate Stable acceptance and promotion remain pending. [#182](https://github.com/Dash1971/maia-chess-android-preview/issues/182).
 
 Experimental work on **Square Off Grand Kingdom** and **DGT Pegasus** is available in Dev builds, but neither board is enabled in Preview or Stable yet. Grand Kingdom needs physical testing of piece movement, resets, reconnection, and recovery. Pegasus also needs a FOSS-compatible way to initialize boards with locked firmware before we can offer support.
 
 We’re looking for owners of these boards who are willing to help test and report their results. See the [board testing guide](https://github.com/Dash1971/maia-chess-android-preview/blob/main/docs/ELECTRONIC_BOARD_DEV.md) and [Grand Kingdom issue](https://github.com/Dash1971/maia-chess-android-preview/issues/27).
 
-**Languages and native-speaker review**
+**Expanded language support and native-speaker review**
 
-Mobile Maia currently supports **English, Japanese, Simplified Chinese, Korean, Spanish, German, French, Russian, Hindi, and Brazilian Portuguese**. We have no general expansion beyond these ten languages planned, but we will consider requests when native speakers are willing to help us validate the translations in the app. Choose a language in Settings or follow the device language. See the [localization guide](docs/L10N_REVIEW.md) for coverage and contributor instructions.
+Mobile Maia currently supports **English, Japanese, Simplified Chinese, Korean, Spanish, German, French, Russian, Hindi, and Brazilian Portuguese**. We would like to expand language support with native speakers who can help validate translations in the app. See the [localization guide](docs/L10N_REVIEW.md) for coverage and contributor instructions.
 
-We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) speakers**. We would love to add these languages, but right-to-left layouts—especially alongside chess notation, clocks, and evaluations—need careful testing. See the [right-to-left language issue](https://github.com/Dash1971/maia-chess-android-preview/issues/84).
-
-**Temperature and Top-P research: defaults decision**
-
-[The 79M sampling study](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/opening-variety-2026-10-18/REPORT.md) is complete: 3,000 full games, 5,400 opening rollouts and 180 quality positions. Temperature 1.0 / Top-P 0.95 with **Max variety in opening** scored 60.7% against 1.0 / 1.0 at the 1600 rating input (95% interval: 56.8–64.6%) and preserved the measured broad opening mix. Finer opening variation and human-move fidelity remain uncertain.
-
-The **Preview 2.5 defaults** are **Temperature 1.0 / Top-P 0.95 with Max variety in opening on**. They apply to new settings and Settings resets; existing saved preferences and frozen game profiles are retained. Play and primary analysis start at 1500; the optional second analysis engine starts at 2600 and remains off until enabled. The [visual settings guide](https://github.com/Dash1971/mobile-maia-research/blob/main/guides/choosing-maia-settings/README.md) explains the choice. These changes are available in [Preview 2.5.0-beta.7](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.7), including unified engine help, shorter settings notices and completed translation corrections; Stable is unchanged.
-
-Engine help offers one scrollable Temperature and Top-P explanation in all ten languages, including opening probabilities, cumulative Top-P filtering and the full recommendation. Move-history help is shorter and retains its research link and off recommendation. See [beta.7 qualification](docs/releases/preview-2.5.0-beta.7.md). At Temperature 0, Top-P is disabled and labelled “Not used”; its value is retained for when Temperature is raised again. Contextual notices describe full sampling, narrower opening choices and deterministic play without running extra inference.
-
-**Colors and appearance**
-
-Preview 2.5.0-beta.1 adds **Appearance** below Language: Light, Dark or System, optional Android system colors, and a pure-black background in dark mode. Beta.2 darkens the panels when pure-black mode is enabled; other themes are unchanged. The current green dark theme stays the default. System colors require Android 12 or later and a supported palette. Board, clock and analysis colors retain their chess meaning. See the [theme issue](https://github.com/Dash1971/maia-chess-android-preview/issues/124).
-
-**Board and piece designs**
-
-Delivered in Preview beta.8: independent board and piece selectors with visual previews, 25 fixed boards and 16 audited piece sets available offline. Play, review, the editor and promotion share the selection; existing installs retain Brown/Cburnett. The release APK enforces the approved artwork and licence notices. System-colored boards remain deferred for readability review. [Design details](docs/BOARD_PREFERENCES.md). Separate Stable acceptance/promotion remains pending.
-
-**Configurable board aids**
-
-Delivered in Preview beta.8: coordinates, legal-move destinations, last-move highlighting, animation, magnified dragging and drag targets are configurable in the inline Board card. Choices persist across restarts and participate in confirmed Settings reset; existing behavior remains the default. [Preference details](docs/BOARD_PREFERENCES.md). Separate Stable acceptance/promotion remains pending.
-
-**Graphical board editor**
-
-Delivered in Preview beta.8: palettes and move/place/erase tools, touch/drag editing, flip, a position-settings sheet and FEN copy/share. Valid positions can enter analysis or the existing play flow. [Editor details](docs/BOARD_EDITOR.md). Camera/image import remains unavailable pending [#179](https://github.com/Dash1971/maia-chess-android-preview/issues/179); physical-board editing is not delivered by this feature.
+We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) speakers**. These languages need careful testing of right-to-left layouts alongside chess notation, clocks, and evaluations. See the [right-to-left language issue](https://github.com/Dash1971/maia-chess-android-preview/issues/84).
 
 **Landscape and tablet layouts**
 
-We want to improve the existing side-by-side layout so the board makes better use of the available space on landscape phones and tablets, with clocks and essential controls easy to reach. This includes constrained-width windows and large text, plus physical-device testing of comfortable touch input. The work can share board configuration and visual checks with the design and board-aid settings above. Feedback from phone and tablet users is welcome in the [landscape layout issue](https://github.com/Dash1971/maia-chess-android-preview/issues/29).
+We want to improve the existing side-by-side layout so the board makes better use of the available space on landscape phones and tablets, with clocks and essential controls easy to reach. This includes constrained-width windows, large text and physical-device testing of comfortable touch input. Feedback from phone and tablet users is welcome in the [landscape layout issue](https://github.com/Dash1971/maia-chess-android-preview/issues/29).
+
+**Under consideration: candidate moves and a rating explorer**
+
+We are considering tappable analysis candidates that show Maia’s move probabilities alongside Stockfish evaluations, plus an optional view of how move preferences change across ratings. The [analysis candidates and Moves by rating issue](https://github.com/Dash1971/maia-chess-android-preview/issues/200) contains the proposed scope and interactive mockups for discussion.
 
 **Suggestions from users**
 
