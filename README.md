@@ -31,7 +31,7 @@ and feature requests.
 
 ## Current Preview status
 
-The latest Preview release is [2.5.0-beta.10](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.10). The features developed in the 2.5 Preview cycle are now available in [Stable 2.5.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.0), including board customization, the graphical editor, Maia score display and Chessnut continuation from analysis.
+The latest Preview release is [2.5.0-beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.11), with a fix for a crash when analyzing certain custom positions, also available in [Stable 2.5.1](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1). The features developed in the 2.5 Preview cycle are now available in [Stable 2.5.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.0), including board customization, the graphical editor, Maia score display and Chessnut continuation from analysis.
 
 See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
 
