@@ -37,9 +37,9 @@ See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readm
 
 ## Roadmap
 
-**Main next target: import a position from a photo or screenshot**
+**Main next target: import a position from a screenshot or chess diagram**
 
-We plan to add image and camera import to the existing board editor. Recognize a board on the device, review and correct the pieces, confirm the position settings, then open analysis or play from that position. See [Import a position from a photo or screenshot into the board editor](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
+We plan to add screenshot and diagram import to the existing board editor. Select a screenshot or a clear digital/scanned chess diagram, recognize the board offline, review and correct the pieces, confirm the position settings, then open analysis or play from that position. Physical-board photo recognition and camera capture are outside this scope. See [Import a position from a screenshot or chess diagram into the board editor](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
 
 **Expand electronic-board support**
 
