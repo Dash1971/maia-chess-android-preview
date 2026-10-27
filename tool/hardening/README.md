@@ -341,3 +341,12 @@ It verifies one-tap Home, checkpoint clearing, unfinished-game Back to game,
 and standalone review without an underlying game. The restart test destroys
 the widget tree with host frames enabled: pumping a replacement tree while
 Flutter is paused does not actually simulate process death.
+
+## Invalid positions and crash recovery
+
+`test/unsafe_position_test.dart` covers the reproduced 33-piece editor crash,
+valid promoted material, unsupported FENs/counters, both native-input boundaries,
+and queue recovery. `test/crash_recovery_test.dart` verifies that repeated
+startup recovery preserves actual checkpoint/archive files and preferences.
+Android exit-reason classification runs in `tool/test_board_native.sh`.
+See [the incident and release checks](../../docs/incidents/2026-10-27-invalid-position-crash.md).
