@@ -19,6 +19,16 @@ screenshots, see the
 [Build-channel status and testing scope](docs/BUILD_CHANNELS.md) ·
 [Preview and Dev release instructions](docs/RELEASING.md)
 
+## Community
+
+Join the [Mobile Maia community on Flotilla](https://app.flotilla.social/join?r=mobilemaia.spaces.flotilla.social&c=slusagresp6) to ask questions,
+share games, discuss settings, and help test Preview. We’re starting with a
+small pilot, currently limited to 10 members. You’ll need a Flotilla/Nostr
+account to join.
+
+Please keep using the relevant GitHub issue tracker for reproducible bugs
+and feature requests.
+
 ## Preview 2.5.0 beta
 
 The latest release in this development cycle is [2.5.0-beta.10](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.10).
