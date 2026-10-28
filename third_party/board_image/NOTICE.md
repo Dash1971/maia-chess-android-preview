@@ -40,4 +40,3 @@ share-alike or non-commercial source, no photographs or third-party datasets:
 | [JuliaMono](https://github.com/cormullion/juliamono) | The JuliaMono Project Authors | SIL OFL 1.1 |
 | [Fairfax HD](https://github.com/kreativekorp/open-relay) | Kreative Software | SIL OFL 1.1 |
 | [GNU Unifont](https://unifoundry.com/unifont/) 15.1.05 | Roman Czyborra, Paul Hardy et al. | SIL OFL 1.1 (upstream dual licence; the OFL option is used) |
-

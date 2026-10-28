@@ -16,9 +16,11 @@
     "adapted_path": "lib/board_image/recognition.dart",
     "changes": "Remove Dart ONNX interpreter/adapter; retain grid detection, grayscale/area preprocessing and rule-assisted decode. Add bounded native tensor preparation, validated logits decode, explicit orientation and clockwise rotation."
   },
-  "licence_sha256": "b886adddb7254340ef322a78eb78a6878295f5cf0d5f3332ca93a77acd0c60aa",
   "upstream_notice_sha256": "6908aa1e8205d8173002f20c2fc147fd85502a77ce7da44940c9ab5960e5b54f",
   "training_source": "tool/board_vision/README.md at same revision; scratch-trained synthetic permissive pieces/fonts, no pretrained backbone",
   "scope": "Screenshots and 2D diagrams only; mandatory manual review. No photo-model dependencies.",
-  "benchmark": "https://github.com/Dash1971/mobile-maia-research/tree/main/studies/board-image-import-2026-10-28"
+  "benchmark": "https://github.com/Dash1971/mobile-maia-research/tree/main/studies/board-image-import-2026-10-28",
+  "upstream_licence_sha256": "b886adddb7254340ef322a78eb78a6878295f5cf0d5f3332ca93a77acd0c60aa",
+  "packaged_licence_sha256": "301a7ab6abfde7ae4b276ca3a9301501abebc32757c0bee70ba949c665115212",
+  "licence_text_note": "Canonical upstream MIT text; trailing blank line normalized."
 }
