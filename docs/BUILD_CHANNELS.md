@@ -23,6 +23,15 @@ installations update in place using the established Preview certificate.
   Preview upstream review and README/roadmap pass; lightweight Dev publication
   by default, with no published-download check.
 
+## Assisted image import: 2.6 draft
+
+The proposed 2.6 source adds From image in the Preview/Dev board editor with a
+bundled MIT diagram classifier, adjustable crop/orientation and a separate manual
+review draft. It is unpublished; current channel artifacts above are unchanged.
+[Workflow, provenance and pending acceptance](BOARD_IMAGE_IMPORT.md) distinguish
+this assisted prototype from broad recognition readiness and Stable promotion.
+No camera or new storage/media/network permission is included.
+
 ## Preview acceptance
 
 - Use move history remains off by default, with its own information button.

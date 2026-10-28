@@ -1642,4 +1642,48 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'Mobile Maia ha abierto la pantalla de inicio para evitar reabrir una sesión que podría haber causado un fallo. Tus partidas guardadas y ajustes se han conservado.';
+
+  @override
+  String get imageFromImage => 'Desde una imagen';
+
+  @override
+  String get imageImportHelp =>
+      'Experimental: solo capturas y diagramas en 2D. Encuadra las 64 casillas. Las flechas, los resaltados y las piezas poco habituales pueden interpretarse mal. Revisa cada casilla.';
+
+  @override
+  String get imageCropHorizontal => 'Bordes izquierdo y derecho';
+
+  @override
+  String get imageCropVertical => 'Bordes superior e inferior';
+
+  @override
+  String get imageFindBoard => 'Buscar tablero';
+
+  @override
+  String get imageRotate => 'Girar imagen';
+
+  @override
+  String get imageBlackAtBottom => 'Las negras están abajo en la imagen';
+
+  @override
+  String get imageRecognize => 'Reconocer posición';
+
+  @override
+  String get imageImportFailed =>
+      'No se pudo leer la imagen. Prueba otra captura o ajusta el recorte.';
+
+  @override
+  String get imageBoardNotFound =>
+      'No se encontró un tablero. Encuadra manualmente el tablero deseado.';
+
+  @override
+  String get imageChooseAnother => 'Elegir otra imagen';
+
+  @override
+  String get imageReviewHelp =>
+      'Revisa cada casilla y elige a quién le toca mover. Por defecto no hay derechos de enroque ni captura al paso; los contadores empiezan en 0 y 1. Ajusta la configuración de la posición si es necesario.';
+
+  @override
+  String get imageReviewConfirm =>
+      'He revisado todas las casillas y la configuración de la posición.';
 }

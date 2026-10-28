@@ -1649,4 +1649,48 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'O Mobile Maia abriu a tela inicial para evitar reabrir uma sessão que pode ter causado uma falha. Suas partidas salvas e configurações foram mantidas.';
+
+  @override
+  String get imageFromImage => 'A partir de uma imagem';
+
+  @override
+  String get imageImportHelp =>
+      'Experimental: apenas capturas de tela e diagramas em 2D. Enquadre as 64 casas. Setas, destaques e peças pouco familiares podem ser reconhecidos incorretamente. Confira cada casa.';
+
+  @override
+  String get imageCropHorizontal => 'Bordas esquerda e direita';
+
+  @override
+  String get imageCropVertical => 'Bordas superior e inferior';
+
+  @override
+  String get imageFindBoard => 'Encontrar tabuleiro';
+
+  @override
+  String get imageRotate => 'Girar imagem';
+
+  @override
+  String get imageBlackAtBottom => 'As pretas estão embaixo na imagem';
+
+  @override
+  String get imageRecognize => 'Reconhecer posição';
+
+  @override
+  String get imageImportFailed =>
+      'Não foi possível ler a imagem. Escolha outra captura ou ajuste o recorte.';
+
+  @override
+  String get imageBoardNotFound =>
+      'Nenhum tabuleiro encontrado. Enquadre manualmente o tabuleiro desejado.';
+
+  @override
+  String get imageChooseAnother => 'Escolher outra imagem';
+
+  @override
+  String get imageReviewHelp =>
+      'Confira cada casa e escolha quem joga a seguir. Por padrão, não há direitos de roque nem captura en passant; os contadores começam em 0 e 1. Ajuste as configurações da posição se necessário.';
+
+  @override
+  String get imageReviewConfirm =>
+      'Conferi todas as casas e as configurações da posição.';
 }

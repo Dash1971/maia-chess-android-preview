@@ -454,5 +454,18 @@
   "continuationSetUpBoard": "기물 배치",
   "continuationSetupHelp": "화면에 표시된 포지션을 체스보드에 배치하세요. 기물 배치가 일치하면 대국이 시작됩니다.",
   "continuationBoardUnsupported": "현재 특정 포지션에서 이어서 두는 기능은 Chessnut 체스보드만 지원합니다.",
-  "sessionRecovery": "충돌을 일으켰을 수 있는 세션을 다시 열지 않고 홈 화면을 열었습니다. 저장된 대국과 설정은 유지됩니다."
+  "sessionRecovery": "충돌을 일으켰을 수 있는 세션을 다시 열지 않고 홈 화면을 열었습니다. 저장된 대국과 설정은 유지됩니다.",
+  "imageFromImage": "이미지에서 가져오기",
+  "imageImportHelp": "실험 기능: 스크린샷과 2차원 체스 도표만 지원합니다. 64칸 전체를 지정하세요. 화살표, 강조 표시, 익숙하지 않은 기물 모양을 잘못 인식할 수 있습니다. 모든 칸을 확인하세요.",
+  "imageCropHorizontal": "왼쪽 및 오른쪽 경계",
+  "imageCropVertical": "위쪽 및 아래쪽 경계",
+  "imageFindBoard": "체스판 찾기",
+  "imageRotate": "이미지 회전",
+  "imageBlackAtBottom": "이미지에서 흑이 아래쪽에 있음",
+  "imageRecognize": "포지션 인식",
+  "imageImportFailed": "이미지를 읽지 못했습니다. 다른 스크린샷을 선택하거나 자르기 영역을 조정하세요.",
+  "imageBoardNotFound": "체스판을 찾지 못했습니다. 원하는 체스판 영역을 직접 지정하세요.",
+  "imageChooseAnother": "다른 이미지 선택",
+  "imageReviewHelp": "모든 칸을 확인하고 다음 차례를 선택하세요. 캐슬링 권한과 앙파상은 기본적으로 없으며 수 카운터는 0과 1로 시작합니다. 필요하면 포지션 설정을 변경하세요.",
+  "imageReviewConfirm": "모든 칸과 포지션 설정을 확인했습니다."
 }

@@ -454,5 +454,18 @@
   "continuationSetUpBoard": "Stellung aufbauen",
   "continuationSetupHelp": "Baue die angezeigte Stellung auf deinem Brett auf. Die Partie beginnt, sobald die Figurenpositionen übereinstimmen.",
   "continuationBoardUnsupported": "Das Weiterspielen aus einer Stellung wird derzeit nur mit Chessnut-Brettern unterstützt.",
-  "sessionRecovery": "Mobile Maia hat die Startseite geöffnet, um eine möglicherweise für einen Absturz verantwortliche Sitzung nicht erneut zu öffnen. Deine gespeicherten Partien und Einstellungen bleiben erhalten."
+  "sessionRecovery": "Mobile Maia hat die Startseite geöffnet, um eine möglicherweise für einen Absturz verantwortliche Sitzung nicht erneut zu öffnen. Deine gespeicherten Partien und Einstellungen bleiben erhalten.",
+  "imageFromImage": "Aus einem Bild",
+  "imageImportHelp": "Experimentell: nur Bildschirmaufnahmen und zweidimensionale Schachdiagramme. Rahme alle 64 Felder ein. Pfeile, Markierungen und ungewohnte Figuren können falsch erkannt werden. Prüfe jedes Feld.",
+  "imageCropHorizontal": "Linker und rechter Rand",
+  "imageCropVertical": "Oberer und unterer Rand",
+  "imageFindBoard": "Brett finden",
+  "imageRotate": "Bild drehen",
+  "imageBlackAtBottom": "Schwarz ist im Bild unten",
+  "imageRecognize": "Stellung erkennen",
+  "imageImportFailed": "Das Bild konnte nicht gelesen werden. Wähle eine andere Bildschirmaufnahme oder passe den Ausschnitt an.",
+  "imageBoardNotFound": "Kein Brett gefunden. Rahme das gewünschte Brett manuell ein.",
+  "imageChooseAnother": "Anderes Bild wählen",
+  "imageReviewHelp": "Prüfe jedes Feld und wähle, wer am Zug ist. Rochaderechte und en passant sind anfangs nicht gesetzt; die Zugzähler beginnen bei 0 und 1. Passe die Stellungseinstellungen bei Bedarf an.",
+  "imageReviewConfirm": "Ich habe jedes Feld und die Stellungseinstellungen geprüft."
 }
