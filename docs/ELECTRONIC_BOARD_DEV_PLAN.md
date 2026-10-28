@@ -26,7 +26,10 @@ in stages; one board need not wait for an unrelated board's hardware validation.
    Preview enablement in a draft PR, following the
    [2.6 acceptance checklist](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md). DGT remains
    Dev-only. Never replay motor commands blindly or assume Chessnut sensing/LED
-   features; unsupported recovery uses phone continuation.
+   features; unsupported recovery uses phone continuation. The 29 October draft
+   adds assisted Maia promotion with one-shot movement and explicit physical
+   replacement confirmation. Owner qualification comes next; midgame reconnection
+   and takebacks remain a later protocol/reconciliation investigation.
 
 The boundary should express actual capabilities (piece identity vs occupancy,
 LEDs, sound, battery, physical buttons, motors) without board-specific branches

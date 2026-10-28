@@ -4,7 +4,7 @@ enum BoardProblem { locked, motor, generic }
 
 extension _ElectronicBoardFlow on _GamePageState {
   // The tested connection flow is shared by every channel. BoardChannelPolicy
-  // independently restricts prototype adapters to Dev.
+  // independently enforces the Preview/Dev board-family boundary.
   bool get _genericBoards => _chessnut is DiscoverableBoardTransport;
   bool get _legacyChessnutSelection =>
       _chessnutGameActive &&
@@ -15,6 +15,25 @@ extension _ElectronicBoardFlow on _GamePageState {
       _genericBoards && _chessnut is DiscoverableBoardTransport
       ? _chessnut
       : null;
+
+  String? get _pendingMotorPromotion =>
+      _genericBoards &&
+          _chessnutGameActive &&
+          _boardKind == BoardKind.squareOff &&
+          _pendingPhysicalMaiaMove?.length == 5
+      ? _pendingPhysicalMaiaMove
+      : null;
+
+  String _motorPromotionText(BuildContext context, String uci) {
+    final t = l10n(context);
+    final piece = switch (uci[4]) {
+      'q' => t.pieceQueen,
+      'r' => t.pieceRook,
+      'b' => t.pieceBishop,
+      _ => t.pieceKnight,
+    };
+    return t.boardPromotionMove(uci.substring(2, 4), piece);
+  }
 
   String get _boardDisplayName => electronicBoardDisplayName(
     l10n(context),
@@ -32,6 +51,10 @@ extension _ElectronicBoardFlow on _GamePageState {
       return t.namedBoardDisconnected(_boardDisplayName);
     }
     if (!_genericBoards) return message.text(context);
+    final promotion = _pendingMotorPromotion;
+    if (promotion != null && _chessnutReady) {
+      return _motorPromotionText(context, promotion);
+    }
     if (_chessnutState == ElectronicBoardConnectionState.error &&
         _boardProblem != null) {
       return switch (_boardProblem!) {
@@ -86,6 +109,8 @@ extension _ElectronicBoardFlow on _GamePageState {
     _deferredSquareOffMove = null;
     _boardSetupConfirmed = false;
     _boardProblem = null;
+    _motorMoveDelivered = null;
+    _motorConfirmationAttempt = null;
   }
 
   Future<void> _chooseOtherBoard() async {
@@ -199,6 +224,7 @@ extension _ElectronicBoardFlow on _GamePageState {
     }
     _cancelBoardInteractions();
     _chessnutLeds.invalidate();
+    _motorMoveDelivered = null;
     _chessnutPosition = null;
     _queuedChessnutPosition = null;
     _squareOffDecoder.reset();
@@ -387,6 +413,9 @@ extension _ElectronicBoardFlow on _GamePageState {
     String prefix, {
     bool requireConfirmation = false,
   }) async {
+    // Neither a subsequent legal move nor an uncorrelated OK proves that the
+    // pawn was replaced with Maia's chosen promotion piece.
+    if (_pendingMotorPromotion != null) return;
     if (!_feedbackForeground || !_feedbackRouteVisible) {
       if (_deferredSquareOffMove == null || _deferredSquareOffMove == prefix) {
         _deferredSquareOffMove = prefix;
@@ -515,6 +544,7 @@ extension _ElectronicBoardFlow on _GamePageState {
     final session = _boardConnectionSession;
     final epoch = _boardInteractionEpoch;
     if (session == null || _discovery == null) return;
+    _motorMoveDelivered = null;
     // Checkpoints precede physical side effects. An uncertain command is never
     // resent automatically after reconnect/restart.
     await _saveGameState();
@@ -534,15 +564,25 @@ extension _ElectronicBoardFlow on _GamePageState {
       );
       return;
     }
-    if (uci.length != 4) {
-      _boardFailure(
-        StateError('Motor promotion requires on-screen continuation'),
-        StackTrace.current,
-      );
-      return;
-    }
     try {
-      await _discovery!.movePiece(uci, session);
+      final command = SquareOffMotorMove(uci);
+      await _discovery!.movePiece(command.coordinates, session);
+      if (!mounted ||
+          !identical(sourceGame, _game) ||
+          session != _boardConnectionSession ||
+          _pendingPhysicalMaiaMove != uci ||
+          !_chessnutGameActive) {
+        return;
+      }
+      if (epoch != _boardInteractionEpoch || !_gameCanRun || !_chessnutReady) {
+        _boardFailure(
+          StateError('Motor delivery interrupted; confirm on the phone'),
+          StackTrace.current,
+          session: session,
+        );
+        return;
+      }
+      _updateBoardUi(() => _motorMoveDelivered = uci);
     } catch (e, s) {
       if (mounted && identical(sourceGame, _game) && _chessnutGameActive) {
         _boardFailure(e, s, session: session);
@@ -556,50 +596,119 @@ extension _ElectronicBoardFlow on _GamePageState {
         !_chessnutReady ||
         _boardKind != BoardKind.squareOff ||
         _pendingPhysicalMaiaMove == null ||
+        _motorMoveDelivered != _pendingPhysicalMaiaMove ||
+        _motorConfirmationAttempt != null ||
         _boardDialogContext != null) {
       return;
     }
     final epoch = _boardInteractionEpoch;
     final fen = _game.fen;
-    final confirmed = await showDialog<bool>(
+    final pending = _pendingPhysicalMaiaMove!;
+    final promotion = _pendingMotorPromotion;
+    final session = _boardConnectionSession;
+    bool replaced = false;
+    final confirmed = await showDialog<String>(
       context: context,
       builder: (dialog) {
         _boardDialogContext = dialog;
-        return AlertDialog(
-          scrollable: true,
-          title: Text(l10n(dialog).boardConfirmPosition),
-          content: Text(l10n(dialog).boardConfirmPositionHelp),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialog, false),
-              child: Text(l10n(dialog).cancel),
+        return StatefulBuilder(
+          builder: (context, updateDialog) => AlertDialog(
+            scrollable: true,
+            title: Text(
+              promotion == null
+                  ? l10n(dialog).boardConfirmPosition
+                  : l10n(dialog).boardPromotionTitle,
             ),
-            FilledButton(
-              onPressed: () => Navigator.pop(dialog, true),
-              child: Text(l10n(dialog).continueAction),
-            ),
-          ],
+            content: promotion == null
+                ? Text(l10n(dialog).boardConfirmPositionHelp)
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(_motorPromotionText(dialog, promotion)),
+                      const SizedBox(height: 12),
+                      Text(l10n(dialog).boardPromotionHelp),
+                      CheckboxListTile(
+                        key: const ValueKey('board-promotion-replaced'),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(l10n(dialog).boardPromotionReplaced),
+                        value: replaced,
+                        onChanged: (value) =>
+                            updateDialog(() => replaced = value == true),
+                      ),
+                    ],
+                  ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialog),
+                child: Text(l10n(dialog).cancel),
+              ),
+              FilledButton(
+                key: const ValueKey('board-motor-confirm'),
+                onPressed: promotion == null || replaced
+                    ? () => Navigator.pop(dialog, 'confirm')
+                    : null,
+                child: Text(l10n(dialog).continueAction),
+              ),
+              if (promotion != null)
+                TextButton(
+                  key: const ValueKey('board-promotion-phone'),
+                  onPressed: () => Navigator.pop(dialog, 'app'),
+                  child: Text(l10n(dialog).playInApp),
+                ),
+            ],
+          ),
         );
       },
     );
     if (!mounted || epoch != _boardInteractionEpoch || fen != _game.fen) return;
     _boardDialogContext = null;
-    if (confirmed != true || !_chessnutReady) return;
-    final session = _boardConnectionSession;
+    if (confirmed == 'app') {
+      await _playInApp();
+      return;
+    }
+    if (confirmed != 'confirm' ||
+        !_chessnutReady ||
+        !_gameCanRun ||
+        _pendingPhysicalMaiaMove != pending ||
+        _motorMoveDelivered != pending ||
+        session != _boardConnectionSession) {
+      return;
+    }
     if (session == null || _discovery == null) return;
+    final attempt = Object();
+    _updateBoardUi(() => _motorConfirmationAttempt = attempt);
     try {
       await _discovery!.confirmPosition(session);
     } catch (e, s) {
       _boardFailure(e, s, epoch: epoch, session: session);
       return;
+    } finally {
+      if (mounted && identical(_motorConfirmationAttempt, attempt)) {
+        _updateBoardUi(() => _motorConfirmationAttempt = null);
+      }
     }
     if (!mounted ||
         epoch != _boardInteractionEpoch ||
         session != _boardConnectionSession ||
+        _pendingPhysicalMaiaMove != pending ||
+        !_chessnutReady ||
+        !_gameCanRun ||
         fen != _game.fen) {
       return;
     }
     final position = ChessnutProtocol.pieceMapFromFen(fen);
+    if (promotion != null) {
+      _updateBoardUi(() {
+        _pendingPhysicalMaiaMove = null;
+        _motorMoveDelivered = null;
+        _chessnutPosition = position;
+        _status = _gameFinished ? _resultText() : _PlayMessage.yourMoveChessnut;
+      });
+      await _saveGameState();
+      if (mounted && _gameFinished) _scheduleGameConclusion();
+      return;
+    }
     _updateBoardUi(() => _chessnutPosition = position);
     _queueChessnutPosition(position);
   }

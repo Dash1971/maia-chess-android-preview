@@ -40,8 +40,12 @@ The three-second scan and in-game Chessnut reset below are included in Preview
   support for every Square Off model. Explicitly confirm standard setup. An engine
   move is sent once, without automatic retries. A following legal human move, or
   explicit verification of every piece against the screen, acknowledges completion.
-  Generic OK is insufficient. Interrupted motor sessions, takebacks and engine
-  promotions require phone continuation; arbitrary-position restoration and motor
+  Generic OK is insufficient. The proposed 2.6 source sends promotion pawn
+  movement once, then requires
+  stopped-motor/piece-replacement/full-position confirmation before continuing.
+  `OK` or a following human move cannot confirm a promotion. Hardware validation
+  is pending. Interrupted motor delivery, takebacks and midgame restoration still
+  require phone continuation; arbitrary-position restoration and motor
   cancellation have no established safe protocol here.
 
 ## Development capture and diagnostics

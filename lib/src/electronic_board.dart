@@ -35,6 +35,23 @@ class BoardChannelPolicy {
       (flavor == 'preview' && kind == BoardKind.squareOff);
 }
 
+/// Keep promotion identity in chess/storage; the verified wire command contains
+/// coordinates only. Physical replacement always needs explicit confirmation.
+class SquareOffMotorMove {
+  SquareOffMotorMove(this.uci) {
+    if (!RegExp(r'^[a-h][1-8][a-h][1-8]([qrbn])?$').hasMatch(uci) ||
+        uci.substring(0, 2) == uci.substring(2, 4) ||
+        (uci.length == 5 &&
+            !((uci[1] == '7' && uci[3] == '8') ||
+                (uci[1] == '2' && uci[3] == '1')))) {
+      throw const FormatException('Invalid motor move');
+    }
+  }
+  final String uci;
+  String get coordinates => uci.substring(0, 4);
+  String? get promotion => uci.length == 5 ? uci[4] : null;
+}
+
 class BoardCandidate {
   const BoardCandidate(this.id, this.name, this.kind);
   final String id;

@@ -2847,6 +2847,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Mobile Maia opened Home to avoid reopening a session that may have caused a crash. Your saved games and settings have been kept.'**
   String get sessionRecovery;
+
+  /// Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Maia promotion'**
+  String get boardPromotionTitle;
+
+  /// Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied.
+  ///
+  /// In en, this message translates to:
+  /// **'{square}: {piece}. Replace the pawn.'**
+  String boardPromotionMove(String square, String piece);
+
+  /// Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait until the motors have stopped. Replace the pawn with the indicated piece and check the entire physical position against the screen. If the move is incomplete or uncertain, continue in the app instead.'**
+  String get boardPromotionHelp;
+
+  /// Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied.
+  ///
+  /// In en, this message translates to:
+  /// **'The motors are stopped, I replaced the pawn, and every piece matches.'**
+  String get boardPromotionReplaced;
 }
 
 class _AppLocalizationsDelegate

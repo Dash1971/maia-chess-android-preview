@@ -454,5 +454,9 @@
   "continuationSetUpBoard": "Placer les pièces",
   "continuationSetupHelp": "Reproduisez la position affichée sur votre échiquier. La partie commence lorsque les pièces correspondent.",
   "continuationBoardUnsupported": "Pour le moment, seuls les échiquiers Chessnut permettent de continuer depuis une position.",
-  "sessionRecovery": "Mobile Maia a ouvert l’accueil pour éviter de rouvrir une session qui a pu provoquer un plantage. Vos parties enregistrées et vos réglages ont été conservés."
+  "sessionRecovery": "Mobile Maia a ouvert l’accueil pour éviter de rouvrir une session qui a pu provoquer un plantage. Vos parties enregistrées et vos réglages ont été conservés.",
+  "boardPromotionTitle": "Confirmer la promotion de Maia",
+  "boardPromotionMove": "{square} : {piece}. Remplacez le pion.",
+  "boardPromotionHelp": "Attendez l’arrêt des moteurs. Remplacez le pion par la pièce indiquée et vérifiez que toute la position physique correspond à l’écran. Si le mouvement est incomplet ou incertain, poursuivez la partie dans l’application.",
+  "boardPromotionReplaced": "Les moteurs sont arrêtés, j’ai remplacé le pion et toutes les pièces correspondent."
 }

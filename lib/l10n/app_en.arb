@@ -2113,5 +2113,29 @@
   "sessionRecovery": "Mobile Maia opened Home to avoid reopening a session that may have caused a crash. Your saved games and settings have been kept.",
   "@sessionRecovery": {
     "description": "Home notice after suppressing an unsafe or interrupted automatic session restore. No games or settings are deleted."
+  },
+  "boardPromotionTitle": "Confirm Maia promotion",
+  "@boardPromotionTitle": {
+    "description": "Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied."
+  },
+  "boardPromotionMove": "{square}: {piece}. Replace the pawn.",
+  "@boardPromotionMove": {
+    "description": "Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied.",
+    "placeholders": {
+      "square": {
+        "type": "String"
+      },
+      "piece": {
+        "type": "String"
+      }
+    }
+  },
+  "boardPromotionHelp": "Wait until the motors have stopped. Replace the pawn with the indicated piece and check the entire physical position against the screen. If the move is incomplete or uncertain, continue in the app instead.",
+  "@boardPromotionHelp": {
+    "description": "Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied."
+  },
+  "boardPromotionReplaced": "The motors are stopped, I replaced the pawn, and every piece matches.",
+  "@boardPromotionReplaced": {
+    "description": "Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied."
   }
 }

@@ -1507,4 +1507,19 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get sessionRecovery =>
       '为避免重新打开可能导致崩溃的会话，Mobile Maia 已返回主页。已保存的对局和设置均已保留。';
+
+  @override
+  String get boardPromotionTitle => '确认 Maia 升变';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square：$piece。请替换兵。';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      '请等电机停止后，将兵替换为指定棋子，并检查实体棋盘上的所有棋子是否与屏幕一致。如果移动未完成或无法确认，请在应用中继续对局。';
+
+  @override
+  String get boardPromotionReplaced => '电机已停止，我已替换兵，所有棋子均与屏幕一致。';
 }

@@ -20,3 +20,13 @@ Limits: 15-second connection/configuration deadline, five-second write callback 
 Validation: native helper host checks passed on isolated Linux JDK 21 with official JetBrains Kotlin 2.2.0. Checks cover duplicate advertisements, capacity, opaque tokens and stale selection, motor session binding, command rejection, full setup LED guidance capped to default ATT20, all 37 split points of the 38-byte Chessnut report, coalesced reports, partial frame reset/expiration, corruption recovery, oversized input and fragmented/coalesced NEW GAME/battery confirmations. Source/diff review is also clean. Android bridge compilation remains part of the root-owned Dev build. No hardware was available; native BLE pairing, notification fragmentation, physical input, LEDs, NEW GAME buttons, motor acknowledgements and cancellation are **not certified**. Root-owned Dev integration checks and model/firmware/Android-specific tester acceptance remain required.
 
 2026-10-28 hardware update: a Grand Kingdom owner reports successful basic play, captures, castling, human promotion and synchronization on Dev alpha.2. This does not validate all BLE/lifecycle or recovery paths. See the [2.6 acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md) for the source and outstanding checks.
+
+2026-10-29 assisted-promotion draft: the full five-character UCI move stays in
+logical/PGN/checkpoint state; Dart sends only its four coordinates, matching the
+pinned reference's `make_move()` truncation. Native framing and session gates are
+unchanged. Delivery completion enables a user confirmation flow, not an inferred
+motor-completion event. Promotions block further input until stopped motors,
+manual replacement and the full position are explicitly confirmed. Background,
+stale dialogs, write failure and restart cannot cause replay or implicit
+confirmation. Firmware handling of replacement/underpromotion/subsequent moves
+is unverified; see the owner checklist in `ELECTRONIC_BOARD_GRAND_KINGDOM_26.md`.

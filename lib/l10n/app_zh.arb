@@ -454,5 +454,9 @@
   "continuationSetUpBoard": "摆好棋盘",
   "continuationSetupHelp": "请在棋盘上摆出屏幕所示的局面。棋子位置一致后，对局即开始。",
   "continuationBoardUnsupported": "目前仅支持使用 Chessnut 棋盘从指定局面继续对局。",
-  "sessionRecovery": "为避免重新打开可能导致崩溃的会话，Mobile Maia 已返回主页。已保存的对局和设置均已保留。"
+  "sessionRecovery": "为避免重新打开可能导致崩溃的会话，Mobile Maia 已返回主页。已保存的对局和设置均已保留。",
+  "boardPromotionTitle": "确认 Maia 升变",
+  "boardPromotionMove": "{square}：{piece}。请替换兵。",
+  "boardPromotionHelp": "请等电机停止后，将兵替换为指定棋子，并检查实体棋盘上的所有棋子是否与屏幕一致。如果移动未完成或无法确认，请在应用中继续对局。",
+  "boardPromotionReplaced": "电机已停止，我已替换兵，所有棋子均与屏幕一致。"
 }
