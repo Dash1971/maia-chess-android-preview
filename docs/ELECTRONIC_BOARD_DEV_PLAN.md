@@ -21,9 +21,12 @@ in stages; one board need not wait for an unrelated board's hardware validation.
    ambiguity require explicit handling; do not claim all DGT models. MoveAPiece is a
    protocol reference subject to source/licence review, not proof of Mobile Maia
    compatibility. Physical acceptance required.
-5. **Square Off Grand Kingdom (#27).** Investigate protocol, firmware, licence and
-   available tester. Motors require explicit safe cancellation/reconnect behavior;
-   never blindly replay movement commands or assume Chessnut's sensing/LED features.
+5. **Square Off Grand Kingdom (#27), 2.6 cycle.** The existing Dev prototype has
+   a positive physical basic-play report as of 2026-10-28. Prepare experimental
+   Preview enablement in a draft PR, following the
+   [2.6 acceptance checklist](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md). DGT remains
+   Dev-only. Never replay motor commands blindly or assume Chessnut sensing/LED
+   features; unsupported recovery uses phone continuation.
 
 The boundary should express actual capabilities (piece identity vs occupancy,
 LEDs, sound, battery, physical buttons, motors) without board-specific branches

@@ -667,8 +667,10 @@ class _GamePageState extends State<GamePage>
       final savedBoard = saved['electronicBoard'];
       final isBoardSave =
           savedBoard == 'chessnut-go' ||
-          (appFlavor == 'dev' &&
-              (savedBoard == 'pegasus' || savedBoard == 'squareOff'));
+          (savedBoard == 'pegasus' &&
+              BoardChannelPolicy.supports(appFlavor, BoardKind.pegasus)) ||
+          (savedBoard == 'squareOff' &&
+              BoardChannelPolicy.supports(appFlavor, BoardKind.squareOff));
       final preset = isBoardSave ? TimePreset.unlimited : storedPreset;
       if (savedAt != null &&
           preset != TimePreset.unlimited &&

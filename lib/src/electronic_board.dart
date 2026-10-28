@@ -30,7 +30,9 @@ String electronicBoardDisplayName(
 /// Channel restriction independent of discovered devices or persisted preferences.
 class BoardChannelPolicy {
   static bool supports(String? flavor, BoardKind kind) =>
-      kind == BoardKind.chessnut || flavor == 'dev';
+      kind == BoardKind.chessnut ||
+      flavor == 'dev' ||
+      (flavor == 'preview' && kind == BoardKind.squareOff);
 }
 
 class BoardCandidate {
