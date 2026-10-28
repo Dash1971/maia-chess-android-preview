@@ -65,7 +65,9 @@ is assumed.
 Once the write callback succeeds in the same foreground session, the banner
 names the destination and Maia's selected piece. Its confirmation action opens
 instructions to wait for stopped motors, replace the pawn and inspect the entire
-position. Continue stays disabled until the user checks the explicit replacement
+position. The dialog includes a frozen full-board diagram of the actual promoted
+position, independent of move-history selection; confirmation returns the main
+board to the live position. Continue stays disabled until the user checks the explicit replacement
 confirmation. Cancel leaves the promotion pending; Play in app preserves the
 logical game and exits board control. An `OK`, a subsequent legal human move or
 a synthetic position event cannot confirm a promotion. Human input stays blocked

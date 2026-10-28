@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:chess/chess.dart' as chess;
+import 'package:chessground/chessground.dart' as cg;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/main.dart';
@@ -187,6 +188,14 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       tester
+          .widget<cg.StaticChessboard>(
+            find.byKey(const ValueKey('board-promotion-position')),
+          )
+          .fen,
+      ((await saved())['positions'] as List).last,
+    );
+    expect(
+      tester
           .widget<FilledButton>(
             find.byKey(const ValueKey('board-motor-confirm')),
           )
@@ -256,7 +265,29 @@ void main() {
         expect((await saved())['pendingPhysicalMaiaMove'], pending);
         expect((await saved())['uciMoves'], before['uciMoves']);
         expect(board.acknowledgements.length, acks);
+        if (piece == 'n') {
+          await tester.tap(
+            find.byKey(const ValueKey('game-previous-move-button')),
+          );
+          await tester.pumpAndSettle();
+          expect(
+            tester
+                .widget<MoveHistoryNavigator>(
+                  find.byKey(const ValueKey('live-game-controls')),
+                )
+                .canGoForward,
+            isTrue,
+          );
+        }
         await confirm(tester);
+        expect(
+          tester
+              .widget<MoveHistoryNavigator>(
+                find.byKey(const ValueKey('live-game-controls')),
+              )
+              .canGoForward,
+          isFalse,
+        );
         expect((await saved())['pendingPhysicalMaiaMove'], isNull);
         expect((await saved())['uciMoves'], before['uciMoves']);
         expect(board.motorMoves.length, writes);

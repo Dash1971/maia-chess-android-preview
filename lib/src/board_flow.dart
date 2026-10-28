@@ -628,6 +628,25 @@ extension _ElectronicBoardFlow on _GamePageState {
                       Text(_motorPromotionText(dialog, promotion)),
                       const SizedBox(height: 12),
                       Text(l10n(dialog).boardPromotionHelp),
+                      const SizedBox(height: 12),
+                      Center(
+                        child: Semantics(
+                          image: true,
+                          label: l10n(dialog).boardConfirmPositionHelp,
+                          child: cg.StaticChessboard(
+                            key: const ValueKey('board-promotion-position'),
+                            size: min(
+                              260.0,
+                              max(80.0, MediaQuery.sizeOf(dialog).width - 128),
+                            ),
+                            orientation: _boardOrientation,
+                            fen: fen,
+                            lastMove: dc.NormalMove.fromUci(promotion),
+                            settings: boardPreferencesOf(dialog).editorSettings
+                                .copyWith(enableCoordinates: true),
+                          ),
+                        ),
+                      ),
                       CheckboxListTile(
                         key: const ValueKey('board-promotion-replaced'),
                         contentPadding: EdgeInsets.zero,
@@ -703,8 +722,10 @@ extension _ElectronicBoardFlow on _GamePageState {
         _pendingPhysicalMaiaMove = null;
         _motorMoveDelivered = null;
         _chessnutPosition = position;
+        _viewedPly = null;
         _status = _gameFinished ? _resultText() : _PlayMessage.yourMoveChessnut;
       });
+      _syncGameBoard(animate: false, resetPremove: true);
       await _saveGameState();
       if (mounted && _gameFinished) _scheduleGameConclusion();
       return;
