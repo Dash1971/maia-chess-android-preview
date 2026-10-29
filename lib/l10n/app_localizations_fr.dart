@@ -1647,10 +1647,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get imageFromImage => 'À partir d’une image';
 
   @override
-  String get imageImportHelp =>
-      'Expérimental : captures d’écran et diagrammes en 2D uniquement. Cadrez les 64 cases. Les flèches, surbrillances et pièces inhabituelles peuvent être mal reconnues. Vérifiez chaque case.';
-
-  @override
   String get imageCropHorizontal => 'Bords gauche et droit';
 
   @override
@@ -1677,25 +1673,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Aucun échiquier trouvé. Cadrez manuellement l’échiquier souhaité.';
 
   @override
-  String get imageChooseAnother => 'Choisir une autre image';
-
-  @override
-  String get imageReviewHelp =>
-      'Vérifiez chaque case et choisissez le trait. Par défaut, aucun droit de roque ni prise en passant ; les compteurs commencent à 0 et 1. Ajustez les paramètres de la position si nécessaire.';
-
-  @override
-  String get imageReviewConfirm =>
-      'J’ai vérifié chaque case et les paramètres de la position.';
-
-  @override
   String get imageChoose => 'Choisir une image';
 
   @override
   String get imageTakePhoto => 'Prendre une photo';
-
-  @override
-  String get imageCameraHelp =>
-      'Photographiez le diagramme imprimé à la verticale, juste au-dessus. Les photos de vrais échiquiers ne sont pas prises en charge. Vérifiez chaque case.';
 
   @override
   String get imageCameraUnavailable =>

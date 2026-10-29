@@ -456,7 +456,6 @@
   "continuationBoardUnsupported": "Pour le moment, seuls les échiquiers Chessnut permettent de continuer depuis une position.",
   "sessionRecovery": "Mobile Maia a ouvert l’accueil pour éviter de rouvrir une session qui a pu provoquer un plantage. Vos parties enregistrées et vos réglages ont été conservés.",
   "imageFromImage": "À partir d’une image",
-  "imageImportHelp": "Expérimental : captures d’écran et diagrammes en 2D uniquement. Cadrez les 64 cases. Les flèches, surbrillances et pièces inhabituelles peuvent être mal reconnues. Vérifiez chaque case.",
   "imageCropHorizontal": "Bords gauche et droit",
   "imageCropVertical": "Bords supérieur et inférieur",
   "imageFindBoard": "Trouver l’échiquier",
@@ -465,11 +464,7 @@
   "imageRecognize": "Reconnaître la position",
   "imageImportFailed": "Impossible de lire cette image. Essayez une autre capture ou ajustez le cadrage.",
   "imageBoardNotFound": "Aucun échiquier trouvé. Cadrez manuellement l’échiquier souhaité.",
-  "imageChooseAnother": "Choisir une autre image",
-  "imageReviewHelp": "Vérifiez chaque case et choisissez le trait. Par défaut, aucun droit de roque ni prise en passant ; les compteurs commencent à 0 et 1. Ajustez les paramètres de la position si nécessaire.",
-  "imageReviewConfirm": "J’ai vérifié chaque case et les paramètres de la position.",
   "imageChoose": "Choisir une image",
   "imageTakePhoto": "Prendre une photo",
-  "imageCameraHelp": "Photographiez le diagramme imprimé à la verticale, juste au-dessus. Les photos de vrais échiquiers ne sont pas prises en charge. Vérifiez chaque case.",
   "imageCameraUnavailable": "Impossible d’ouvrir l’appareil photo. Choisissez une image à la place."
 }

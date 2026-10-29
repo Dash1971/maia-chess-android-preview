@@ -41,7 +41,7 @@ Variant and Challenge from position remain absent. For the 2.6 prototype, the
 From image action offers Choose image and Take photo for assisted screenshot/flat
 printed-diagram import in Preview/Dev. The camera delegates to the installed app
 with temporary private output; physical-board photo recognition remains outside
-the scope. Crop/orientation and mandatory full-position review follow either input. See
+the scope. Crop/orientation and an editable position follow either input; Done uses normal position validation. See
 [the image-import workflow and draft acceptance](BOARD_IMAGE_IMPORT.md). The
 review draft uses the existing manual editor and position validation; cancelling
 it leaves the prior editor unchanged. All UI uses the selected board/piece designs

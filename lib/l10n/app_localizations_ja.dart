@@ -1535,10 +1535,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get imageFromImage => '画像から';
 
   @override
-  String get imageImportHelp =>
-      '試験機能：スクリーンショットと平面の棋譜図に対応します。64マス全体を囲んでください。矢印、ハイライト、見慣れない駒を誤認することがあります。全マスを確認してください。';
-
-  @override
   String get imageCropHorizontal => '左端と右端';
 
   @override
@@ -1563,24 +1559,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get imageBoardNotFound => '盤面が見つかりません。対象の盤面を手動で囲んでください。';
 
   @override
-  String get imageChooseAnother => '別の画像を選択';
-
-  @override
-  String get imageReviewHelp =>
-      '全マスを確認し、次の手番を選んでください。キャスリング権とアンパッサンは初期状態ではなし、手数カウンターは0と1です。必要に応じて局面の設定を変更してください。';
-
-  @override
-  String get imageReviewConfirm => '全マスと局面の設定を確認しました。';
-
-  @override
   String get imageChoose => '画像を選択';
 
   @override
   String get imageTakePhoto => '写真を撮影';
-
-  @override
-  String get imageCameraHelp =>
-      '印刷された図面は真上から撮影してください。実物のチェス盤の写真には対応していません。すべてのマスを確認してください。';
 
   @override
   String get imageCameraUnavailable => 'カメラを開けませんでした。代わりに画像を選択してください。';

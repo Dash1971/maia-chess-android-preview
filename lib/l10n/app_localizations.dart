@@ -2848,103 +2848,73 @@ abstract class AppLocalizations {
   /// **'Mobile Maia opened Home to avoid reopening a session that may have caused a crash. Your saved games and settings have been kept.'**
   String get sessionRecovery;
 
-  /// Assisted screenshot/2D-diagram import: imageFromImage. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'From image'**
   String get imageFromImage;
 
-  /// Assisted screenshot/2D-diagram import: imageImportHelp. Experimental recognition always requires full manual review; no camera or physical-board photo support.
-  ///
-  /// In en, this message translates to:
-  /// **'Experimental: screenshots and 2D diagrams only. Frame all 64 squares. Arrows, highlights and unfamiliar pieces can be misread. Review every square.'**
-  String get imageImportHelp;
-
-  /// Assisted screenshot/2D-diagram import: imageCropHorizontal. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'Left and right edges'**
   String get imageCropHorizontal;
 
-  /// Assisted screenshot/2D-diagram import: imageCropVertical. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'Top and bottom edges'**
   String get imageCropVertical;
 
-  /// Assisted screenshot/2D-diagram import: imageFindBoard. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'Find board'**
   String get imageFindBoard;
 
-  /// Assisted screenshot/2D-diagram import: imageRotate. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'Rotate image'**
   String get imageRotate;
 
-  /// Assisted screenshot/2D-diagram import: imageBlackAtBottom. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'Image has Black at the bottom'**
   String get imageBlackAtBottom;
 
-  /// Assisted screenshot/2D-diagram import: imageRecognize. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'Recognize position'**
   String get imageRecognize;
 
-  /// Assisted screenshot/2D-diagram import: imageImportFailed. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'Could not read this image. Try another screenshot or adjust the crop.'**
   String get imageImportFailed;
 
-  /// Assisted screenshot/2D-diagram import: imageBoardNotFound. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'No board found. Frame the intended board manually.'**
   String get imageBoardNotFound;
 
-  /// Assisted screenshot/2D-diagram import: imageChooseAnother. Experimental recognition always requires full manual review; no camera or physical-board photo support.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose another image'**
-  String get imageChooseAnother;
-
-  /// Assisted screenshot/2D-diagram import: imageReviewHelp. Experimental recognition always requires full manual review; no camera or physical-board photo support.
-  ///
-  /// In en, this message translates to:
-  /// **'Check every square and choose who moves next. Castling rights and en passant default to none; move counters start at 0 and 1. Adjust the position settings as needed.'**
-  String get imageReviewHelp;
-
-  /// Assisted screenshot/2D-diagram import: imageReviewConfirm. Experimental recognition always requires full manual review; no camera or physical-board photo support.
-  ///
-  /// In en, this message translates to:
-  /// **'I checked every square and the position settings.'**
-  String get imageReviewConfirm;
-
-  /// Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'Choose image'**
   String get imageChoose;
 
-  /// Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'Take photo'**
   String get imageTakePhoto;
 
-  /// Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied.
-  ///
-  /// In en, this message translates to:
-  /// **'For a printed diagram, hold the camera directly above it. Real chessboard photos are not supported. Review every square.'**
-  String get imageCameraHelp;
-
-  /// Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied.
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
   ///
   /// In en, this message translates to:
   /// **'Could not open the camera. Choose an image instead.'**

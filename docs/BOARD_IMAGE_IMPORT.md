@@ -1,11 +1,9 @@
 # Assisted screenshot/diagram import: 2.6 prototype
 
 Tracks [#179](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
-The image-import feature PR remains draft, separate from Grand Kingdom. Its
-original implementation is in red-icon Dev 2.6.0-alpha.1; the camera addition below
-is new source work and is not in that published APK. No new version, release,
-package/signing identity, e-board policy or Stable source changes in this update.
-Keep the issue open and this PR in draft pending broader acceptance below.
+The feature PR remains draft. [Red-icon Dev 2.6.0-alpha.2](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev)
+contains camera capture. The UI simplification below is a later source update;
+it does not rebuild or replace that APK. Preview/Stable are unchanged.
 
 ## Workflow and safeguards
 
@@ -55,18 +53,18 @@ loaded directly from the APK asset without a second permanent model file.
 Model bytes and SHA-256 are verified before inference. No second runtime or
 first-use download is introduced.
 
-Recognition opens a separate manual editor draft. All squares remain editable,
-including confident false pieces such as the benchmark's arrow-induced queen
-on c6. Nothing is applied merely because confidence is high. Choose the side to
-move explicitly; castling/en-passant start at none and counters at 0/1. Position
-settings allow correction of all FEN metadata. Done/Analysis/export remain
-unavailable until the side and full review are confirmed; edits revoke review.
-Existing legal-position validation is still required. Confirming returns the
-FEN to the original editor; its normal Analysis / Continue from here actions
-retain the existing parent-session replacement rules. Cancelling the picker,
-crop, inference or review leaves that original position unchanged. Late results
-from disposed widgets/activities are ignored. Activity/process recreation discards
-the temporary image/import operation; it does not commit recognized placement.
+Recognition opens an editable board. Pieces and position settings work as in
+the normal editor. White to move is selected initially and can be changed.
+Done accepts the position with the existing chess-position validation. There
+is no acknowledgement checkbox, forced turn selection, or repeated confirmation
+after edits. The import/camera screens have no warning or tutorial paragraphs;
+errors appear only when an operation fails. The editor entry uses the same
+`Icons.photo_camera_outlined` as the [pinned Lichess board editor](https://github.com/lichess-org/mobile/blob/c73864de4c6373637a5442e2a0f7c3a37fbb930e/lib/src/view/board_editor/board_editor_screen.dart#L62).
+
+Done returns the FEN to the original editor. Cancelling the picker, crop,
+inference or edit leaves the original position unchanged. Late results from
+disposed widgets/activities are ignored. Temporary image/import state is not
+restored or committed after process recreation.
 
 ## Provenance and known quality limits
 
@@ -81,7 +79,7 @@ ChessQ weights or CrispChess's physical-photo models.
 The [published baseline](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/board-image-import-2026-10-28/REPORT.md)
 remains authoritative. This implementation adds assisted framing/correction; it
 does **not** claim improved arrow or print/font classification accuracy. The
-high-confidence c6 failure is a mandatory-review/correction regression, not a
+high-confidence c6 failure remains an editable-correction regression, not a
 claim that the detector now recognizes arrows. Fresh holdout quality and
 lower-end Android performance are still required before broad support claims.
 The raw model payload is not a measured APK or installed-size increase.

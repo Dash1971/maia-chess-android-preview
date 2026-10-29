@@ -29,7 +29,7 @@ class PlatformBoardImageSource implements BoardImageSource {
 }
 
 /// Temporary crop/recognition route; the caller's editor is changed only by a
-/// complete, reviewed FEN. Images and unconfirmed placements are never saved.
+/// FEN accepted with Done. Temporary images and cancelled drafts are not saved.
 class BoardImageImportPage extends StatefulWidget {
   const BoardImageImportPage({
     this.source = const PlatformBoardImageSource(),
@@ -261,8 +261,6 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(t.imageImportHelp),
-              const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -271,9 +269,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
                     key: const ValueKey('image-choose'),
                     onPressed: _busy ? null : () => _choose(),
                     icon: const Icon(Icons.photo_library_outlined),
-                    label: Text(
-                      image == null ? t.imageChoose : t.imageChooseAnother,
-                    ),
+                    label: Text(t.imageChoose),
                   ),
                   OutlinedButton.icon(
                     key: const ValueKey('image-camera'),
@@ -283,8 +279,6 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              Text(t.imageCameraHelp),
               if (_busy)
                 const Padding(
                   padding: EdgeInsets.all(12),
@@ -304,7 +298,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
               if (image != null) ...[
                 const SizedBox(height: 12),
                 Semantics(
-                  label: t.imageImportHelp,
+                  label: t.imageFromImage,
                   image: true,
                   child: ConstrainedBox(
                     constraints: BoxConstraints(

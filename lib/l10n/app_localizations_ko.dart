@@ -1539,10 +1539,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get imageFromImage => '이미지에서 가져오기';
 
   @override
-  String get imageImportHelp =>
-      '실험 기능: 스크린샷과 2차원 체스 도표만 지원합니다. 64칸 전체를 지정하세요. 화살표, 강조 표시, 익숙하지 않은 기물 모양을 잘못 인식할 수 있습니다. 모든 칸을 확인하세요.';
-
-  @override
   String get imageCropHorizontal => '왼쪽 및 오른쪽 경계';
 
   @override
@@ -1568,24 +1564,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get imageBoardNotFound => '체스판을 찾지 못했습니다. 원하는 체스판 영역을 직접 지정하세요.';
 
   @override
-  String get imageChooseAnother => '다른 이미지 선택';
-
-  @override
-  String get imageReviewHelp =>
-      '모든 칸을 확인하고 다음 차례를 선택하세요. 캐슬링 권한과 앙파상은 기본적으로 없으며 수 카운터는 0과 1로 시작합니다. 필요하면 포지션 설정을 변경하세요.';
-
-  @override
-  String get imageReviewConfirm => '모든 칸과 포지션 설정을 확인했습니다.';
-
-  @override
   String get imageChoose => '이미지 선택';
 
   @override
   String get imageTakePhoto => '사진 찍기';
-
-  @override
-  String get imageCameraHelp =>
-      '인쇄된 다이어그램은 바로 위에서 촬영하세요. 실제 체스판 사진은 지원하지 않습니다. 모든 칸을 확인하세요.';
 
   @override
   String get imageCameraUnavailable => '카메라를 열 수 없습니다. 대신 이미지를 선택하세요.';

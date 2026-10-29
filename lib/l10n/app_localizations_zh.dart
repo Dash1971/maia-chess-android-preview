@@ -1512,10 +1512,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get imageFromImage => '从图片导入';
 
   @override
-  String get imageImportHelp =>
-      '实验功能：仅支持截图和二维棋谱图。请框选完整的64个格子。箭头、高亮和不常见的棋子样式可能被误识别。请检查每个格子。';
-
-  @override
   String get imageCropHorizontal => '左边界和右边界';
 
   @override
@@ -1540,23 +1536,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get imageBoardNotFound => '未找到棋盘。请手动框选目标棋盘。';
 
   @override
-  String get imageChooseAnother => '选择其他图片';
-
-  @override
-  String get imageReviewHelp =>
-      '请检查每个格子并选择下一步由哪方走。王车易位权和吃过路兵默认均为无；步数计数器初始值为0和1。请按需调整局面设置。';
-
-  @override
-  String get imageReviewConfirm => '我已检查每个格子和局面设置。';
-
-  @override
   String get imageChoose => '选择图片';
 
   @override
   String get imageTakePhoto => '拍照';
-
-  @override
-  String get imageCameraHelp => '拍摄印刷棋谱图时，请将相机置于正上方。不支持实物棋盘照片。请检查每个格子。';
 
   @override
   String get imageCameraUnavailable => '无法打开相机。请改为选择图片。';

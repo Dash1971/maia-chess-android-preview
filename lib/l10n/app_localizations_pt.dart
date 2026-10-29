@@ -1654,10 +1654,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get imageFromImage => 'A partir de uma imagem';
 
   @override
-  String get imageImportHelp =>
-      'Experimental: apenas capturas de tela e diagramas em 2D. Enquadre as 64 casas. Setas, destaques e peças pouco familiares podem ser reconhecidos incorretamente. Confira cada casa.';
-
-  @override
   String get imageCropHorizontal => 'Bordas esquerda e direita';
 
   @override
@@ -1684,25 +1680,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Nenhum tabuleiro encontrado. Enquadre manualmente o tabuleiro desejado.';
 
   @override
-  String get imageChooseAnother => 'Escolher outra imagem';
-
-  @override
-  String get imageReviewHelp =>
-      'Confira cada casa e escolha quem joga a seguir. Por padrão, não há direitos de roque nem captura en passant; os contadores começam em 0 e 1. Ajuste as configurações da posição se necessário.';
-
-  @override
-  String get imageReviewConfirm =>
-      'Conferi todas as casas e as configurações da posição.';
-
-  @override
   String get imageChoose => 'Escolher imagem';
 
   @override
   String get imageTakePhoto => 'Tirar foto';
-
-  @override
-  String get imageCameraHelp =>
-      'Fotografe o diagrama impresso diretamente de cima. Fotos de tabuleiros reais não são compatíveis. Confira todas as casas.';
 
   @override
   String get imageCameraUnavailable =>

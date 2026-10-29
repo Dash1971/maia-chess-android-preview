@@ -8,7 +8,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.5.1](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1), code 83 | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
 | [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.11), code 2511 | `com.dash1971.maia_chess.preview`, 79M | Custom-position crash fix; prior 2.5 features are released in Stable. Grand Kingdom/DGT stay disabled. |
-| [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.1-dev) | Published 2.6.0-alpha.1-dev, code 2601 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Current base plus original #209/#210; assisted promotion and image import are experimental. Capture failures remain unresolved. New camera source is not in this APK. |
+| [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev) | Published 2.6.0-alpha.2-dev, code 2602 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Automatic local Dev diagnostics, assisted Maia promotion and image/camera import. Grand Kingdom capture failures remain unresolved. |
 
 The three packages install side by side. Obtainium users should select the
 intended repository and enable prereleases for Preview/Dev. Installing Preview
@@ -27,9 +27,8 @@ installations update in place using the established Preview certificate.
 
 The proposed 2.6 source adds From image in the Preview/Dev board editor with a
 bundled MIT diagram classifier, adjustable crop/orientation and a separate manual
-review draft. The original image-import flow is in Dev 2.6.0-alpha.1; a new
-source-only Take photo option delegates to the installed camera app and is not
-in that APK. Current published Preview/Stable artifacts remain unchanged.
+review draft. Image import and Take photo are in Dev 2.6.0-alpha.2. The simplified
+editor UI is a later source change and has not been published. Current published Preview/Stable artifacts remain unchanged.
 [Workflow, provenance and pending acceptance](BOARD_IMAGE_IMPORT.md) distinguish
 this assisted prototype from broad recognition readiness and Stable promotion.
 No camera, storage/media/location-metadata or network permission is added.

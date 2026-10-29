@@ -110,16 +110,13 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
   dc.Piece? _placement;
   dc.Square? _selected;
   bool _flipped = false, _continuing = false;
-  bool _imageReviewed = false, _imageSideChosen = false, _importing = false;
-  bool get _imageReady =>
-      !widget.imageReview || (_imageReviewed && _imageSideChosen);
+  bool _importing = false;
   Offset? _pointerDown;
   final _boardKey = GlobalKey();
 
   void _change(VoidCallback change) => setState(() {
     change();
     _selected = null;
-    _imageReviewed = false;
   });
   void _tool(cg.EditorPointerMode mode, [dc.Piece? piece]) => _change(() {
     _mode = mode;
@@ -145,7 +142,6 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
       return;
     }
     setState(() {
-      _imageReviewed = false;
       final from = _selected;
       if (from != null && _draft.pieces[from] != null) {
         _draft.move(from, square, _draft.pieces[from]!);
@@ -157,7 +153,6 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
   }
 
   String? _validated() {
-    if (!_imageReady) return null;
     try {
       return _draft.validatedFen();
     } catch (_) {
@@ -347,7 +342,6 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
                             if (side != null) {
                               update(() {
                                 _draft.turn = side;
-                                _imageSideChosen = true;
                               });
                             }
                           },
@@ -721,7 +715,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
         tooltip: widget.imageReview
             ? l10n(context).done
             : l10n(context).analysisBoard,
-        onPressed: _imageReady ? _finish : null,
+        onPressed: _finish,
         icon: Icon(widget.imageReview ? Icons.check : Icons.analytics_outlined),
       ),
       IconButton(
@@ -742,19 +736,19 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
           IconButton(
             key: const ValueKey('editor-from-image'),
             onPressed: _importing ? null : _fromImage,
-            icon: const Icon(Icons.image_outlined),
+            icon: const Icon(Icons.photo_camera_outlined),
             tooltip: l10n(context).imageFromImage,
           ),
         if (widget.imageReview)
           IconButton(
             key: const ValueKey('image-use-position'),
-            onPressed: _imageReady ? _finish : null,
+            onPressed: _finish,
             icon: const Icon(Icons.check),
             tooltip: l10n(context).done,
           ),
         IconButton(
           key: const ValueKey('editor-share'),
-          onPressed: _imageReady ? _export : null,
+          onPressed: _export,
           tooltip: l10n(context).shareAndExport,
           icon: const Icon(Icons.share_outlined),
         ),
@@ -762,46 +756,26 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
     ),
     body: SafeArea(
       child: widget.imageReview
-          ? SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(l10n(context).imageReviewHelp),
-                  ),
-                  Wrap(
-                    spacing: 12,
-                    children: [
-                      for (final side in dc.Side.values)
-                        ChoiceChip(
-                          key: ValueKey('image-review-turn-${side.name}'),
-                          label: Text(
-                            side == dc.Side.white
-                                ? l10n(context).whiteToMove
-                                : l10n(context).blackToMove,
-                          ),
-                          selected: _imageSideChosen && _draft.turn == side,
-                          onSelected: (_) => _change(() {
-                            _draft.turn = side;
-                            _imageSideChosen = true;
-                          }),
+          ? Column(
+              children: [
+                Wrap(
+                  spacing: 12,
+                  children: [
+                    for (final side in dc.Side.values)
+                      ChoiceChip(
+                        key: ValueKey('image-review-turn-${side.name}'),
+                        label: Text(
+                          side == dc.Side.white
+                              ? l10n(context).whiteToMove
+                              : l10n(context).blackToMove,
                         ),
-                    ],
-                  ),
-                  CheckboxListTile(
-                    key: const ValueKey('image-review-confirm'),
-                    title: Text(l10n(context).imageReviewConfirm),
-                    value: _imageReviewed,
-                    onChanged: _imageSideChosen
-                        ? (v) => setState(() => _imageReviewed = v == true)
-                        : null,
-                  ),
-                  SizedBox(
-                    height: max(500.0, MediaQuery.sizeOf(context).height * .7),
-                    child: _editorLayout(),
-                  ),
-                ],
-              ),
+                        selected: _draft.turn == side,
+                        onSelected: (_) => _change(() => _draft.turn = side),
+                      ),
+                  ],
+                ),
+                Expanded(child: _editorLayout()),
+              ],
             )
           : _editorLayout(),
     ),

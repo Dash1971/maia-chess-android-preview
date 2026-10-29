@@ -1647,10 +1647,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get imageFromImage => 'Desde una imagen';
 
   @override
-  String get imageImportHelp =>
-      'Experimental: solo capturas y diagramas en 2D. Encuadra las 64 casillas. Las flechas, los resaltados y las piezas poco habituales pueden interpretarse mal. Revisa cada casilla.';
-
-  @override
   String get imageCropHorizontal => 'Bordes izquierdo y derecho';
 
   @override
@@ -1677,25 +1673,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'No se encontró un tablero. Encuadra manualmente el tablero deseado.';
 
   @override
-  String get imageChooseAnother => 'Elegir otra imagen';
-
-  @override
-  String get imageReviewHelp =>
-      'Revisa cada casilla y elige a quién le toca mover. Por defecto no hay derechos de enroque ni captura al paso; los contadores empiezan en 0 y 1. Ajusta la configuración de la posición si es necesario.';
-
-  @override
-  String get imageReviewConfirm =>
-      'He revisado todas las casillas y la configuración de la posición.';
-
-  @override
   String get imageChoose => 'Seleccionar imagen';
 
   @override
   String get imageTakePhoto => 'Hacer foto';
-
-  @override
-  String get imageCameraHelp =>
-      'Fotografía el diagrama impreso desde justo encima. No se admiten fotos de tableros reales. Revisa todas las casillas.';
 
   @override
   String get imageCameraUnavailable =>
