@@ -5,6 +5,7 @@ private fun rejects(block: () -> Unit) { check(runCatching(block).isFailure) }
 
 fun main() {
     testDevTraceStore()
+    boardImageCaptureChecks()
     sessionRecoveryPolicyTests()
     samplingShareFilesChecks()
     for (flavor in listOf("", "stable", "production", "unknown")) {

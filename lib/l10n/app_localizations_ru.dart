@@ -1733,4 +1733,18 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get devDiagnosticsExportFailed =>
       'Не удалось сохранить диагностику Dev.';
+
+  @override
+  String get imageChoose => 'Выбрать изображение';
+
+  @override
+  String get imageTakePhoto => 'Сделать фотографию';
+
+  @override
+  String get imageCameraHelp =>
+      'Снимайте печатную диаграмму строго сверху. Фотографии настоящих шахматных досок не поддерживаются. Проверьте каждое поле.';
+
+  @override
+  String get imageCameraUnavailable =>
+      'Не удалось открыть камеру. Выберите изображение.';
 }

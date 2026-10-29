@@ -8,6 +8,7 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:crypto/crypto.dart';
 import 'package:dartchess/dartchess.dart' as dc;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/main.dart';
 import 'package:maia_chess/board_image/recognition.dart' as vision;
@@ -36,10 +37,26 @@ class FakeImageSource implements BoardImageSource {
   Uint8List? bytes = File('test/fixtures/board_image/screen_chessnut.png')
       .readAsBytesSync();
   Object? failure;
+  Object? cameraFailure;
+  Uint8List? cameraBytes;
+  Completer<Uint8List?>? cameraGate;
+  int pickerCalls = 0, cameraCalls = 0;
   Completer<List<double>>? gate;
   Float32List? received;
   @override
-  Future<Uint8List?> pickImage() async => bytes;
+  Future<Uint8List?> pickImage() async {
+    pickerCalls++;
+    return bytes;
+  }
+
+  @override
+  Future<Uint8List?> takePhoto() async {
+    cameraCalls++;
+    if (cameraFailure case final error?) throw error;
+    if (cameraGate case final wait?) return wait.future;
+    return cameraBytes;
+  }
+
   @override
   Future<List<double>> classifySquares(Float32List input) async {
     received = input;
@@ -248,6 +265,8 @@ void main() {
       );
       await tester.tap(find.byKey(const ValueKey('editor-from-image')));
       await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('image-choose')));
+      await tester.pumpAndSettle();
       expect(
         tester
             .widget<cg.ChessboardEditor>(find.byType(cg.ChessboardEditor))
@@ -259,16 +278,22 @@ void main() {
           .readAsBytesSync();
       source.gate = Completer<List<double>>();
       await tester.tap(find.byKey(const ValueKey('editor-from-image')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('image-choose')));
       await tester.pump();
       await work(
         tester,
         () =>
+            find
+                .byKey(const ValueKey('image-recognize'))
+                .evaluate()
+                .isNotEmpty &&
             tester
-                .widget<FilledButton>(
-                  find.byKey(const ValueKey('image-recognize')),
-                )
-                .onPressed !=
-            null,
+                    .widget<FilledButton>(
+                      find.byKey(const ValueKey('image-recognize')),
+                    )
+                    .onPressed !=
+                null,
       );
       await tester.ensureVisible(find.byKey(const ValueKey('image-recognize')));
       await tester.tap(find.byKey(const ValueKey('image-recognize')));
@@ -305,6 +330,8 @@ void main() {
         ),
       );
       await tester.tap(find.byKey(const ValueKey('editor-from-image')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('image-choose')));
       await tester.pump();
       await work(
         tester,
@@ -388,6 +415,8 @@ void main() {
         ),
       );
       await tester.tap(find.byKey(const ValueKey('editor-from-image')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('image-choose')));
       await tester.pump();
       await work(
         tester,
@@ -436,6 +465,180 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets(
+    'camera choice, cancellation and unavailable-camera fallback preserve parent',
+    (tester) async {
+      size(tester, const Size(390, 844));
+      final source = FakeImageSource();
+      await tester.pumpWidget(
+        app(
+          BoardEditorPage(
+            initialFen: dc.Chess.initial.fen,
+            imageSource: source,
+          ),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('editor-from-image')));
+      await tester.pumpAndSettle();
+      expect(source.pickerCalls, 0);
+      expect(source.cameraCalls, 0);
+      await tester.tap(find.byKey(const ValueKey('image-camera')));
+      await tester.pumpAndSettle();
+      expect(source.cameraCalls, 1);
+      expect(
+        tester
+            .widget<cg.ChessboardEditor>(find.byType(cg.ChessboardEditor))
+            .pieces
+            .length,
+        32,
+      );
+      source.cameraFailure = PlatformException(
+        code: 'image_camera_unavailable',
+      );
+      await tester.tap(find.byKey(const ValueKey('editor-from-image')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('image-camera')));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Could not open the camera. Choose an image instead.'),
+        findsOneWidget,
+      );
+      await tester.tap(find.byKey(const ValueKey('image-choose')));
+      await tester.pump();
+      await work(
+        tester,
+        () => find.byKey(const ValueKey('image-crop')).evaluate().isNotEmpty,
+      );
+      expect(source.pickerCalls, 1);
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<cg.ChessboardEditor>(find.byType(cg.ChessboardEditor))
+            .pieces
+            .length,
+        32,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'late camera output after leaving import cannot alter the original board',
+    (tester) async {
+      size(tester, const Size(390, 844));
+      final source = FakeImageSource()..cameraGate = Completer<Uint8List?>();
+      await tester.pumpWidget(
+        app(
+          BoardEditorPage(
+            initialFen: dc.Chess.initial.fen,
+            imageSource: source,
+          ),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('editor-from-image')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('image-camera')));
+      await tester.pump();
+      expect(
+        tester
+            .widget<OutlinedButton>(find.byKey(const ValueKey('image-camera')))
+            .onPressed,
+        isNull,
+      );
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      source.cameraGate!.complete(source.bytes);
+      await work(tester, () => true);
+      expect(
+        tester
+            .widget<cg.ChessboardEditor>(find.byType(cg.ChessboardEditor))
+            .pieces
+            .length,
+        32,
+      );
+      expect(find.byKey(const ValueKey('image-crop')), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'captured image uses crop and mandatory review instead of applying a position',
+    (tester) async {
+      size(tester, const Size(390, 844));
+      final source = FakeImageSource();
+      source.cameraBytes = source.bytes;
+      await tester.pumpWidget(
+        app(
+          BoardEditorPage(
+            initialFen: dc.Chess.initial.fen,
+            imageSource: source,
+          ),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('editor-from-image')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('image-camera')));
+      await tester.pump();
+      await work(
+        tester,
+        () => find.byKey(const ValueKey('image-crop')).evaluate().isNotEmpty,
+      );
+      await tester.ensureVisible(find.byKey(const ValueKey('image-recognize')));
+      await tester.tap(find.byKey(const ValueKey('image-recognize')));
+      await tester.pump();
+      await work(
+        tester,
+        () => find
+            .byKey(const ValueKey('image-use-position'))
+            .evaluate()
+            .isNotEmpty,
+      );
+      expect(
+        tester
+            .widget<IconButton>(
+              find.byKey(const ValueKey('image-use-position')),
+            )
+            .onPressed,
+        isNull,
+      );
+      expect(source.cameraCalls, 1);
+      expect(source.pickerCalls, 0);
+      await tester.pumpAndSettle();
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<cg.ChessboardEditor>(find.byType(cg.ChessboardEditor))
+            .pieces
+            .length,
+        32,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final locale in AppLocalizations.supportedLocales) {
+    testWidgets(
+      'camera/image choices at 320px and 200% text: ${locale.languageCode}',
+      (tester) async {
+        size(tester, const Size(320, 568));
+        final source = FakeImageSource();
+        await tester.pumpWidget(
+          app(BoardImageImportPage(source: source), locale: locale, scale: 2),
+        );
+        await tester.pumpAndSettle();
+        await tester.ensureVisible(find.byKey(const ValueKey('image-choose')));
+        await tester.ensureVisible(find.byKey(const ValueKey('image-camera')));
+        expect(source.cameraCalls, 0);
+        expect(source.pickerCalls, 0);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   for (final locale in AppLocalizations.supportedLocales) {
     testWidgets(

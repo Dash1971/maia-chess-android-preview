@@ -2,9 +2,14 @@ package com.dash1971.maia_chess
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.ClipData
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
+import android.provider.MediaStore
+import androidx.core.content.FileProvider
 import android.net.Uri
 import android.os.Build
 import ai.onnxruntime.OnnxTensor
@@ -13,14 +18,17 @@ import ai.onnxruntime.OrtSession
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import java.io.ByteArrayOutputStream
+import java.io.ByteArrayInputStream
+import java.io.File
 import java.nio.FloatBuffer
 import java.security.MessageDigest
 import java.util.concurrent.Executors
 
-/** Scoped image grants only. No image/model copies, URIs or positions enter logs. */
+/** Scoped image grants, private temporary camera output and entirely local inference. */
 internal class BoardImageBridge(private val activity: Activity, private val channel: MethodChannel) {
     companion object {
         const val REQUEST_IMAGE = 17901
+        const val REQUEST_CAMERA = 17902
         const val MODEL_BYTES = 835_655
         const val MODEL_SHA256 = "2408717e2e0e2ed438e2f9f89f85c2e544326cef34a0c91b95168bd17336df47"
         private const val MAX_ENCODED_BYTES = 16 * 1024 * 1024
@@ -30,19 +38,53 @@ internal class BoardImageBridge(private val activity: Activity, private val chan
     private val executor = Executors.newSingleThreadExecutor()
     private var pending: MethodChannel.Result? = null
     private var waitingForPicker = false
+    private var waitingForCamera = false
+    private data class Capture(val file: File, val uri: Uri)
+    private val captureFiles = BoardImageCaptureFiles(File(activity.cacheDir, "board-image-capture"))
+    @Volatile private var capture: Capture? = null
     @Volatile private var closed = false
 
-    init { channel.setMethodCallHandler(::handle) }
+    init {
+        // A recreated activity/process abandons its old import, including URI grants.
+        captureFiles.owned().forEach { file ->
+            val uri = runCatching { FileProvider.getUriForFile(activity, "${activity.packageName}.files", file) }.getOrNull()
+            if (uri != null) revoke(uri)
+            captureFiles.discard(file)
+        }
+        channel.setMethodCallHandler(::handle)
+    }
 
     private fun handle(call: MethodCall, result: MethodChannel.Result) {
-        if (call.method !in setOf("pickImage", "classifySquares")) {
+        if (call.method !in setOf("pickImage", "takePhoto", "classifySquares")) {
             result.notImplemented(); return
         }
         if (BuildConfig.FLAVOR !in setOf("preview", "dev") || closed || pending != null) {
             result.error("image_busy", "Image import is unavailable.", null); return
         }
         pending = result
-        if (call.method == "pickImage") {
+        if (call.method == "takePhoto") {
+            try {
+                val file = captureFiles.create()
+                try {
+                    val uri = FileProvider.getUriForFile(activity, "${activity.packageName}.files", file)
+                    capture = Capture(file, uri)
+                    waitingForCamera = true
+                    // Delegate to any installed camera, including FOSS cameras. No CAMERA
+                    // permission, Google SDK or broad storage grant is required by this app.
+                    activity.startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+                        putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                        clipData = ClipData.newRawUri("", uri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                    }, REQUEST_CAMERA)
+                } catch (error: Exception) {
+                    captureFiles.discard(file)
+                    throw error
+                }
+            } catch (_: Exception) {
+                discardCapture()
+                fail("image_camera_unavailable")
+            }
+        } else if (call.method == "pickImage") {
             waitingForPicker = true
             try {
                 if (Build.VERSION.SDK_INT >= 33) {
@@ -69,6 +111,18 @@ internal class BoardImageBridge(private val activity: Activity, private val chan
     }
 
     fun onResult(request: Int, result: Int, data: Intent?): Boolean {
+        if (request == REQUEST_CAMERA) {
+            val current = capture
+            if (closed || pending == null || current == null || !waitingForCamera) return true
+            waitingForCamera = false
+            if (result != Activity.RESULT_OK) {
+                discardCapture()
+                finish(null)
+            } else work {
+                try { decode(current.uri) } finally { discardCapture(current) }
+            }
+            return true
+        }
         if (request != REQUEST_IMAGE) return false
         if (closed || pending == null || !waitingForPicker) return true
         waitingForPicker = false
@@ -116,8 +170,23 @@ internal class BoardImageBridge(private val activity: Activity, private val chan
             inSampleSize = sample
             inPreferredConfig = Bitmap.Config.ARGB_8888
         }
-        val bitmap = requireNotNull(BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options))
+        var bitmap = requireNotNull(BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options))
         try {
+            // Normalize rotation/mirroring before sending metadata-free PNG to Flutter.
+            // Android's platform EXIF reader is sufficient for camera JPEGs (minSdk 24).
+            val tag = runCatching {
+                ExifInterface(ByteArrayInputStream(bytes)).getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+            }.getOrDefault(ExifInterface.ORIENTATION_NORMAL)
+            val orientation = BoardImageOrientation.fromExif(tag)
+            if (orientation.degrees != 0f || orientation.mirrorX) {
+                val matrix = Matrix().apply {
+                    setRotate(orientation.degrees)
+                    if (orientation.mirrorX) postScale(-1f, 1f)
+                }
+                val upright = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+                if (upright !== bitmap) { bitmap.recycle(); bitmap = upright }
+            }
             require(bitmap.width <= MAX_SIDE && bitmap.height <= MAX_SIDE)
             return ByteArrayOutputStream().use { out ->
                 check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, out))
@@ -154,8 +223,20 @@ internal class BoardImageBridge(private val activity: Activity, private val chan
         }
     }
 
+    private fun revoke(uri: Uri) {
+        runCatching { activity.revokeUriPermission(uri,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION) }
+    }
+
+    private fun discardCapture(current: Capture? = capture) {
+        if (current == null) return
+        revoke(current.uri)
+        captureFiles.discard(current.file)
+        if (capture === current) capture = null
+    }
+
     private fun finish(value: Any?) { val reply = pending; pending = null; reply?.success(value) }
-    private fun fail(code: String) { waitingForPicker = false; val reply = pending; pending = null; reply?.error(code, "Image import is unavailable.", null) }
+    private fun fail(code: String) { waitingForPicker = false; waitingForCamera = false; val reply = pending; pending = null; reply?.error(code, "Image import is unavailable.", null) }
 
     fun close() {
         if (closed) return
@@ -163,5 +244,6 @@ internal class BoardImageBridge(private val activity: Activity, private val chan
         channel.setMethodCallHandler(null)
         fail("image_cancelled")
         executor.shutdownNow()
+        discardCapture()
     }
 }

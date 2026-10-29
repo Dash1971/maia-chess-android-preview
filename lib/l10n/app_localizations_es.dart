@@ -1713,4 +1713,18 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get devDiagnosticsExportFailed =>
       'No se pudo guardar el diagnóstico de Dev.';
+
+  @override
+  String get imageChoose => 'Seleccionar imagen';
+
+  @override
+  String get imageTakePhoto => 'Hacer foto';
+
+  @override
+  String get imageCameraHelp =>
+      'Fotografía el diagrama impreso desde justo encima. No se admiten fotos de tableros reales. Revisa todas las casillas.';
+
+  @override
+  String get imageCameraUnavailable =>
+      'No se pudo abrir la cámara. Elige una imagen.';
 }

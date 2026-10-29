@@ -415,6 +415,7 @@ class MainActivity : FlutterActivity() {
     override fun onDestroy() {
         devDiagnostics?.record("activity.destroy")
         devDiagnostics?.close()
+        boardImageBridge?.close()
         samplingDocuments.close()
         documents.close()
         super.onDestroy()

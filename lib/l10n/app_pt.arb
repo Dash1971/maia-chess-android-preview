@@ -474,5 +474,9 @@
   "imageReviewConfirm": "Conferi todas as casas e as configurações da posição.",
   "saveDevDiagnostics": "Salvar diagnóstico do Dev…",
   "devDiagnosticsHelp": "O Dev registra neste dispositivo os eventos recentes do aplicativo e os detalhes dos lances e das mensagens do tabuleiro Grand Kingdom. Os dados antigos são excluídos automaticamente. Fotos e endereços Bluetooth não são registrados. Nada é enviado automaticamente. Exporte os dados apenas se quiser compartilhá-los.",
-  "devDiagnosticsExportFailed": "Não foi possível salvar o diagnóstico do Dev."
+  "devDiagnosticsExportFailed": "Não foi possível salvar o diagnóstico do Dev.",
+  "imageChoose": "Escolher imagem",
+  "imageTakePhoto": "Tirar foto",
+  "imageCameraHelp": "Fotografe o diagrama impresso diretamente de cima. Fotos de tabuleiros reais não são compatíveis. Confira todas as casas.",
+  "imageCameraUnavailable": "Não foi possível abrir a câmera. Escolha uma imagem."
 }

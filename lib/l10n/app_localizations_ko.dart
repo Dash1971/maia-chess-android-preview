@@ -1601,4 +1601,17 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get devDiagnosticsExportFailed => 'Dev 진단 정보를 저장하지 못했습니다.';
+
+  @override
+  String get imageChoose => '이미지 선택';
+
+  @override
+  String get imageTakePhoto => '사진 찍기';
+
+  @override
+  String get imageCameraHelp =>
+      '인쇄된 다이어그램은 바로 위에서 촬영하세요. 실제 체스판 사진은 지원하지 않습니다. 모든 칸을 확인하세요.';
+
+  @override
+  String get imageCameraUnavailable => '카메라를 열 수 없습니다. 대신 이미지를 선택하세요.';
 }

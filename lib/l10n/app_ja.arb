@@ -474,5 +474,9 @@
   "imageReviewConfirm": "全マスと局面の設定を確認しました。",
   "saveDevDiagnostics": "Devの診断情報を保存…",
   "devDiagnosticsHelp": "Devは最近のアプリ動作と、Grand Kingdomの指し手・ボード通信の詳細をこの端末に記録します。古いデータは自動で削除されます。写真やBluetoothアドレスは記録しません。自動送信は行いません。共有したい場合のみエクスポートしてください。",
-  "devDiagnosticsExportFailed": "Devの診断情報を保存できませんでした。"
+  "devDiagnosticsExportFailed": "Devの診断情報を保存できませんでした。",
+  "imageChoose": "画像を選択",
+  "imageTakePhoto": "写真を撮影",
+  "imageCameraHelp": "印刷された図面は真上から撮影してください。実物のチェス盤の写真には対応していません。すべてのマスを確認してください。",
+  "imageCameraUnavailable": "カメラを開けませんでした。代わりに画像を選択してください。"
 }

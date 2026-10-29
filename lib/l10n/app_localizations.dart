@@ -2967,6 +2967,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not save Dev diagnostics.'**
   String get devDiagnosticsExportFailed;
+
+  /// Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose image'**
+  String get imageChoose;
+
+  /// Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get imageTakePhoto;
+
+  /// Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied.
+  ///
+  /// In en, this message translates to:
+  /// **'For a printed diagram, hold the camera directly above it. Real chessboard photos are not supported. Review every square.'**
+  String get imageCameraHelp;
+
+  /// Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the camera. Choose an image instead.'**
+  String get imageCameraUnavailable;
 }
 
 class _AppLocalizationsDelegate

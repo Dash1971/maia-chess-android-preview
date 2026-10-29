@@ -1713,4 +1713,18 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get devDiagnosticsExportFailed =>
       'Impossible d’enregistrer les données de diagnostic Dev.';
+
+  @override
+  String get imageChoose => 'Choisir une image';
+
+  @override
+  String get imageTakePhoto => 'Prendre une photo';
+
+  @override
+  String get imageCameraHelp =>
+      'Photographiez le diagramme imprimé à la verticale, juste au-dessus. Les photos de vrais échiquiers ne sont pas prises en charge. Vérifiez chaque case.';
+
+  @override
+  String get imageCameraUnavailable =>
+      'Impossible d’ouvrir l’appareil photo. Choisissez une image à la place.';
 }

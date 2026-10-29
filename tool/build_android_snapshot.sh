@@ -12,6 +12,9 @@ output="$repo_root/build/app/outputs/flutter-apk/Mobile-Maia-Preview-Dev-arm64.a
 cd "$repo_root"
 
 python3 tool/verify_model.py assets/models/maia3-5m.onnx
+# Drop snapshots compiled before package-URI preparation; an incremental kernel
+# can otherwise retain the old absolute registrant path despite the new config.
+"$flutter_bin" clean
 "$flutter_bin" pub get --enforce-lockfile
 "$flutter_bin" build apk --release --config-only --flavor dev
 # Keep the generated plugin registrant's local path out of the published APK,

@@ -1688,4 +1688,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get devDiagnosticsExportFailed => 'Could not save Dev diagnostics.';
+
+  @override
+  String get imageChoose => 'Choose image';
+
+  @override
+  String get imageTakePhoto => 'Take photo';
+
+  @override
+  String get imageCameraHelp =>
+      'For a printed diagram, hold the camera directly above it. Real chessboard photos are not supported. Review every square.';
+
+  @override
+  String get imageCameraUnavailable =>
+      'Could not open the camera. Choose an image instead.';
 }

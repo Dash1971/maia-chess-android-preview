@@ -2201,5 +2201,21 @@
   "devDiagnosticsExportFailed": "Could not save Dev diagnostics.",
   "@devDiagnosticsExportFailed": {
     "description": "Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry."
+  },
+  "imageChoose": "Choose image",
+  "@imageChoose": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
+  },
+  "imageTakePhoto": "Take photo",
+  "@imageTakePhoto": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
+  },
+  "imageCameraHelp": "For a printed diagram, hold the camera directly above it. Real chessboard photos are not supported. Review every square.",
+  "@imageCameraHelp": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
+  },
+  "imageCameraUnavailable": "Could not open the camera. Choose an image instead.",
+  "@imageCameraUnavailable": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
   }
 }

@@ -38,8 +38,10 @@ The toolbar has menu, flip, Analysis and position settings. Sharing uses Android
 plain-text chooser; copying works offline and is also the fallback when a native
 share handler is unavailable. Neither action sends to a recipient automatically.
 Variant and Challenge from position remain absent. For the 2.6 prototype, the
-From image action opens assisted screenshot/diagram import in Preview/Dev. Camera
-capture and physical-board photo recognition remain outside the scope. See
+From image action offers Choose image and Take photo for assisted screenshot/flat
+printed-diagram import in Preview/Dev. The camera delegates to the installed app
+with temporary private output; physical-board photo recognition remains outside
+the scope. Crop/orientation and mandatory full-position review follow either input. See
 [the image-import workflow and draft acceptance](BOARD_IMAGE_IMPORT.md). The
 review draft uses the existing manual editor and position validation; cancelling
 it leaves the prior editor unchanged. All UI uses the selected board/piece designs

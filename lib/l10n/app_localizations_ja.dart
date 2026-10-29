@@ -1596,4 +1596,17 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get devDiagnosticsExportFailed => 'Devの診断情報を保存できませんでした。';
+
+  @override
+  String get imageChoose => '画像を選択';
+
+  @override
+  String get imageTakePhoto => '写真を撮影';
+
+  @override
+  String get imageCameraHelp =>
+      '印刷された図面は真上から撮影してください。実物のチェス盤の写真には対応していません。すべてのマスを確認してください。';
+
+  @override
+  String get imageCameraUnavailable => 'カメラを開けませんでした。代わりに画像を選択してください。';
 }
