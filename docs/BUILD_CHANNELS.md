@@ -23,6 +23,16 @@ installations update in place using the established Preview certificate.
   Preview upstream review and README/roadmap pass; lightweight Dev publication
   by default, with no published-download check.
 
+## Preview 2.6 default proposal
+
+Human move timing defaults on when its saved preference is missing or invalid,
+and after an explicit Reset settings to default. Saved true/false choices remain
+unchanged, including an existing off choice. Initial state, preference fallback
+and reset share one default. This changes Maia's existing optional random pauses,
+not move selection, timing distribution, clock rules, strength or a learned model.
+No version/publication is included; keep this out of the 2.5 maintenance cycle.
+Stable source remains unchanged. System colors remain an independent opt-in.
+
 ## Preview acceptance
 
 - Use move history remains off by default, with its own information button.

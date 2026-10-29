@@ -157,7 +157,7 @@ class _GamePageState extends State<GamePage>
   bool _started = false;
   bool _engineThinking = false;
   String? _forcedResult;
-  bool _humanTiming = false;
+  bool _humanTiming = defaultHumanMoveTiming;
   bool _useMoveHistory = false;
   bool _gameUseMoveHistory = false;
   List<String> _gameHistoryPrefix = const [];
@@ -1097,7 +1097,7 @@ class _GamePageState extends State<GamePage>
     final humanTiming = _readValidatedPreference<bool>(
       preferences,
       'humanTiming',
-      fallback: false,
+      fallback: defaultHumanMoveTiming,
       decode: (value) => value is bool ? value : null,
     );
     final premovesEnabled = _readValidatedPreference<bool>(
@@ -1339,7 +1339,7 @@ class _GamePageState extends State<GamePage>
     _cancelGameFeedback();
     setState(() {
       _resettingSettings = true;
-      _humanTiming = false;
+      _humanTiming = defaultHumanMoveTiming;
       _useMoveHistory = false;
       _premovesEnabled = true;
       _premovePenalty = false;
