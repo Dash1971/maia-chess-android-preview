@@ -1689,4 +1689,18 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get imageReviewConfirm =>
       'Ich habe jedes Feld und die Stellungseinstellungen geprüft.';
+
+  @override
+  String get imageChoose => 'Bild auswählen';
+
+  @override
+  String get imageTakePhoto => 'Foto aufnehmen';
+
+  @override
+  String get imageCameraHelp =>
+      'Fotografiere ein gedrucktes Diagramm senkrecht von oben. Fotos echter Schachbretter werden nicht unterstützt. Prüfe jedes Feld.';
+
+  @override
+  String get imageCameraUnavailable =>
+      'Die Kamera konnte nicht geöffnet werden. Wähle stattdessen ein Bild aus.';
 }

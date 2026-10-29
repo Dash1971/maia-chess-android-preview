@@ -29,6 +29,8 @@ unzip -q "$task_dir/compiler.zip" -d "$task_dir/compiler"
 "$task_dir/compiler/kotlinc/bin/kotlinc" \
   "$repo_root/android/app/src/main/kotlin/com/dash1971/maia_chess/ElectronicBoardProtocol.kt" \
   "$repo_root/android/native_test/ElectronicBoardProtocolTest.kt" \
+  "$repo_root/android/app/src/main/kotlin/com/dash1971/maia_chess/BoardImageCaptureFiles.kt" \
+  "$repo_root/android/native_test/BoardImageCaptureFilesTest.kt" \
   "$repo_root/android/app/src/main/kotlin/com/dash1971/maia_chess/SamplingShareFiles.kt" \
   "$repo_root/android/native_test/SamplingShareFilesTest.kt" \
   "$repo_root/android/app/src/main/kotlin/com/dash1971/maia_chess/SamplingDocumentSnapshot.kt" \

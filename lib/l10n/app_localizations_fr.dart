@@ -1686,4 +1686,18 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get imageReviewConfirm =>
       'J’ai vérifié chaque case et les paramètres de la position.';
+
+  @override
+  String get imageChoose => 'Choisir une image';
+
+  @override
+  String get imageTakePhoto => 'Prendre une photo';
+
+  @override
+  String get imageCameraHelp =>
+      'Photographiez le diagramme imprimé à la verticale, juste au-dessus. Les photos de vrais échiquiers ne sont pas prises en charge. Vérifiez chaque case.';
+
+  @override
+  String get imageCameraUnavailable =>
+      'Impossible d’ouvrir l’appareil photo. Choisissez une image à la place.';
 }

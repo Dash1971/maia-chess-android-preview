@@ -467,5 +467,9 @@
   "imageBoardNotFound": "盤面が見つかりません。対象の盤面を手動で囲んでください。",
   "imageChooseAnother": "別の画像を選択",
   "imageReviewHelp": "全マスを確認し、次の手番を選んでください。キャスリング権とアンパッサンは初期状態ではなし、手数カウンターは0と1です。必要に応じて局面の設定を変更してください。",
-  "imageReviewConfirm": "全マスと局面の設定を確認しました。"
+  "imageReviewConfirm": "全マスと局面の設定を確認しました。",
+  "imageChoose": "画像を選択",
+  "imageTakePhoto": "写真を撮影",
+  "imageCameraHelp": "印刷された図面は真上から撮影してください。実物のチェス盤の写真には対応していません。すべてのマスを確認してください。",
+  "imageCameraUnavailable": "カメラを開けませんでした。代わりに画像を選択してください。"
 }

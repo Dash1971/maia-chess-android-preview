@@ -467,5 +467,9 @@
   "imageBoardNotFound": "Aucun échiquier trouvé. Cadrez manuellement l’échiquier souhaité.",
   "imageChooseAnother": "Choisir une autre image",
   "imageReviewHelp": "Vérifiez chaque case et choisissez le trait. Par défaut, aucun droit de roque ni prise en passant ; les compteurs commencent à 0 et 1. Ajustez les paramètres de la position si nécessaire.",
-  "imageReviewConfirm": "J’ai vérifié chaque case et les paramètres de la position."
+  "imageReviewConfirm": "J’ai vérifié chaque case et les paramètres de la position.",
+  "imageChoose": "Choisir une image",
+  "imageTakePhoto": "Prendre une photo",
+  "imageCameraHelp": "Photographiez le diagramme imprimé à la verticale, juste au-dessus. Les photos de vrais échiquiers ne sont pas prises en charge. Vérifiez chaque case.",
+  "imageCameraUnavailable": "Impossible d’ouvrir l’appareil photo. Choisissez une image à la place."
 }

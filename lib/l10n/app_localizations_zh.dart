@@ -1548,4 +1548,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get imageReviewConfirm => '我已检查每个格子和局面设置。';
+
+  @override
+  String get imageChoose => '选择图片';
+
+  @override
+  String get imageTakePhoto => '拍照';
+
+  @override
+  String get imageCameraHelp => '拍摄印刷棋谱图时，请将相机置于正上方。不支持实物棋盘照片。请检查每个格子。';
+
+  @override
+  String get imageCameraUnavailable => '无法打开相机。请改为选择图片。';
 }

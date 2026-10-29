@@ -1693,4 +1693,18 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get imageReviewConfirm =>
       'Conferi todas as casas e as configurações da posição.';
+
+  @override
+  String get imageChoose => 'Escolher imagem';
+
+  @override
+  String get imageTakePhoto => 'Tirar foto';
+
+  @override
+  String get imageCameraHelp =>
+      'Fotografe o diagrama impresso diretamente de cima. Fotos de tabuleiros reais não são compatíveis. Confira todas as casas.';
+
+  @override
+  String get imageCameraUnavailable =>
+      'Não foi possível abrir a câmera. Escolha uma imagem.';
 }

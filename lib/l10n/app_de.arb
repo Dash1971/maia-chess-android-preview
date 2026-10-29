@@ -467,5 +467,9 @@
   "imageBoardNotFound": "Kein Brett gefunden. Rahme das gewünschte Brett manuell ein.",
   "imageChooseAnother": "Anderes Bild wählen",
   "imageReviewHelp": "Prüfe jedes Feld und wähle, wer am Zug ist. Rochaderechte und en passant sind anfangs nicht gesetzt; die Zugzähler beginnen bei 0 und 1. Passe die Stellungseinstellungen bei Bedarf an.",
-  "imageReviewConfirm": "Ich habe jedes Feld und die Stellungseinstellungen geprüft."
+  "imageReviewConfirm": "Ich habe jedes Feld und die Stellungseinstellungen geprüft.",
+  "imageChoose": "Bild auswählen",
+  "imageTakePhoto": "Foto aufnehmen",
+  "imageCameraHelp": "Fotografiere ein gedrucktes Diagramm senkrecht von oben. Fotos echter Schachbretter werden nicht unterstützt. Prüfe jedes Feld.",
+  "imageCameraUnavailable": "Die Kamera konnte nicht geöffnet werden. Wähle stattdessen ein Bild aus."
 }

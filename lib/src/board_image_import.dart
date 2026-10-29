@@ -2,6 +2,7 @@ part of '../main.dart';
 
 abstract interface class BoardImageSource {
   Future<Uint8List?> pickImage();
+  Future<Uint8List?> takePhoto();
   Future<List<double>> classifySquares(Float32List input);
 }
 
@@ -11,6 +12,9 @@ class PlatformBoardImageSource implements BoardImageSource {
   @override
   Future<Uint8List?> pickImage() =>
       channel.invokeMethod<Uint8List>('pickImage');
+  @override
+  Future<Uint8List?> takePhoto() =>
+      channel.invokeMethod<Uint8List>('takePhoto');
   @override
   Future<List<double>> classifySquares(Float32List input) async {
     final result = await channel.invokeMethod<Object>('classifySquares', {
@@ -43,16 +47,9 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
   bool _busy = false,
       _blackAtBottom = false,
       _notFound = false,
-      _failed = false;
+      _failed = false,
+      _cameraUnavailable = false;
   Offset? _anchor;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _choose();
-    });
-  }
 
   @override
   void dispose() {
@@ -60,14 +57,17 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
     super.dispose();
   }
 
-  Future<void> _choose() async {
+  Future<void> _choose({bool camera = false}) async {
     if (_busy) return;
     setState(() {
       _busy = true;
       _failed = false;
+      _cameraUnavailable = false;
     });
     try {
-      final bytes = await widget.source.pickImage();
+      final bytes = await (camera
+          ? widget.source.takePhoto()
+          : widget.source.pickImage());
       if (!mounted) return;
       if (bytes == null) {
         if (_image == null) Navigator.pop(context);
@@ -117,8 +117,15 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
       _blackAtBottom = false;
       _notFound = true;
       await _detect();
-    } catch (_) {
-      if (mounted) setState(() => _failed = true);
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _failed = true;
+          _cameraUnavailable =
+              error is PlatformException &&
+              error.code == 'image_camera_unavailable';
+        });
+      }
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -255,6 +262,29 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(t.imageImportHelp),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  OutlinedButton.icon(
+                    key: const ValueKey('image-choose'),
+                    onPressed: _busy ? null : () => _choose(),
+                    icon: const Icon(Icons.photo_library_outlined),
+                    label: Text(
+                      image == null ? t.imageChoose : t.imageChooseAnother,
+                    ),
+                  ),
+                  OutlinedButton.icon(
+                    key: const ValueKey('image-camera'),
+                    onPressed: _busy ? null : () => _choose(camera: true),
+                    icon: const Icon(Icons.photo_camera_outlined),
+                    label: Text(t.imageTakePhoto),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(t.imageCameraHelp),
               if (_busy)
                 const Padding(
                   padding: EdgeInsets.all(12),
@@ -264,7 +294,9 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   child: Text(
-                    t.imageImportFailed,
+                    _cameraUnavailable
+                        ? t.imageCameraUnavailable
+                        : t.imageImportFailed,
                     key: const ValueKey('image-import-error'),
                   ),
                 ),
@@ -386,11 +418,6 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
                   child: Text(t.imageRecognize),
                 ),
               ],
-              TextButton(
-                key: const ValueKey('image-choose'),
-                onPressed: _busy ? null : _choose,
-                child: Text(t.imageChooseAnother),
-              ),
             ],
           ),
         ),

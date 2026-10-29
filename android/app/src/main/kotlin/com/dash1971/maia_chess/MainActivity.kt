@@ -399,6 +399,7 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun onDestroy() {
+        boardImageBridge?.close()
         samplingDocuments.close()
         documents.close()
         super.onDestroy()

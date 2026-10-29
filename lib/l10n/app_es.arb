@@ -467,5 +467,9 @@
   "imageBoardNotFound": "No se encontró un tablero. Encuadra manualmente el tablero deseado.",
   "imageChooseAnother": "Elegir otra imagen",
   "imageReviewHelp": "Revisa cada casilla y elige a quién le toca mover. Por defecto no hay derechos de enroque ni captura al paso; los contadores empiezan en 0 y 1. Ajusta la configuración de la posición si es necesario.",
-  "imageReviewConfirm": "He revisado todas las casillas y la configuración de la posición."
+  "imageReviewConfirm": "He revisado todas las casillas y la configuración de la posición.",
+  "imageChoose": "Seleccionar imagen",
+  "imageTakePhoto": "Hacer foto",
+  "imageCameraHelp": "Fotografía el diagrama impreso desde justo encima. No se admiten fotos de tableros reales. Revisa todas las casillas.",
+  "imageCameraUnavailable": "No se pudo abrir la cámara. Elige una imagen."
 }

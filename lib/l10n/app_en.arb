@@ -2165,5 +2165,21 @@
   "imageReviewConfirm": "I checked every square and the position settings.",
   "@imageReviewConfirm": {
     "description": "Assisted screenshot/2D-diagram import: imageReviewConfirm. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageChoose": "Choose image",
+  "@imageChoose": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
+  },
+  "imageTakePhoto": "Take photo",
+  "@imageTakePhoto": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
+  },
+  "imageCameraHelp": "For a printed diagram, hold the camera directly above it. Real chessboard photos are not supported. Review every square.",
+  "@imageCameraHelp": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
+  },
+  "imageCameraUnavailable": "Could not open the camera. Choose an image instead.",
+  "@imageCameraUnavailable": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
   }
 }

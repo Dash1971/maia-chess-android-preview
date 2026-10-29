@@ -1683,4 +1683,18 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get imageReviewConfirm =>
       'मैंने हर खाना और स्थिति की सेटिंग जाँच ली है।';
+
+  @override
+  String get imageChoose => 'चित्र चुनें';
+
+  @override
+  String get imageTakePhoto => 'फ़ोटो लें';
+
+  @override
+  String get imageCameraHelp =>
+      'छपे हुए आरेख की फ़ोटो बिल्कुल ऊपर से लें। असली शतरंज की बिसात की फ़ोटो समर्थित नहीं हैं। हर खाने की जाँच करें।';
+
+  @override
+  String get imageCameraUnavailable =>
+      'कैमरा नहीं खुल सका। इसके बजाय कोई इमेज चुनें।';
 }
