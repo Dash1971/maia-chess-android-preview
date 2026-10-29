@@ -2949,6 +2949,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'I checked every square and the position settings.'**
   String get imageReviewConfirm;
+
+  /// Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Dev diagnostics…'**
+  String get saveDevDiagnostics;
+
+  /// Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Dev records recent app events and detailed Grand Kingdom moves and board messages on this device. Older data is removed automatically. Photos and Bluetooth addresses are not recorded. Nothing is uploaded automatically. Export only if you want to share it.'**
+  String get devDiagnosticsHelp;
+
+  /// Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save Dev diagnostics.'**
+  String get devDiagnosticsExportFailed;
 }
 
 class _AppLocalizationsDelegate

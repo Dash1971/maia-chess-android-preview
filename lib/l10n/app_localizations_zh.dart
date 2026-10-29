@@ -1563,4 +1563,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get imageReviewConfirm => '我已检查每个格子和局面设置。';
+
+  @override
+  String get saveDevDiagnostics => '保存Dev诊断信息…';
+
+  @override
+  String get devDiagnosticsHelp =>
+      'Dev会在此设备上记录最近的应用事件，以及Grand Kingdom走棋和棋盘通信的详细信息。旧数据会自动删除。不记录照片或蓝牙地址，也不会自动上传。仅在愿意分享时导出。';
+
+  @override
+  String get devDiagnosticsExportFailed => '无法保存Dev诊断信息。';
 }

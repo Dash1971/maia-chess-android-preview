@@ -1702,4 +1702,15 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get imageReviewConfirm =>
       'J’ai vérifié chaque case et les paramètres de la position.';
+
+  @override
+  String get saveDevDiagnostics => 'Enregistrer les données de diagnostic Dev…';
+
+  @override
+  String get devDiagnosticsHelp =>
+      'Dev enregistre sur cet appareil les événements récents de l’application ainsi que les détails des coups et des messages du plateau Grand Kingdom. Les anciennes données sont supprimées automatiquement. Les photos et les adresses Bluetooth ne sont pas enregistrées. Aucun envoi automatique n’est effectué. N’exportez les données que si vous souhaitez les partager.';
+
+  @override
+  String get devDiagnosticsExportFailed =>
+      'Impossible d’enregistrer les données de diagnostic Dev.';
 }

@@ -471,5 +471,8 @@
   "imageBoardNotFound": "盤面が見つかりません。対象の盤面を手動で囲んでください。",
   "imageChooseAnother": "別の画像を選択",
   "imageReviewHelp": "全マスを確認し、次の手番を選んでください。キャスリング権とアンパッサンは初期状態ではなし、手数カウンターは0と1です。必要に応じて局面の設定を変更してください。",
-  "imageReviewConfirm": "全マスと局面の設定を確認しました。"
+  "imageReviewConfirm": "全マスと局面の設定を確認しました。",
+  "saveDevDiagnostics": "Devの診断情報を保存…",
+  "devDiagnosticsHelp": "Devは最近のアプリ動作と、Grand Kingdomの指し手・ボード通信の詳細をこの端末に記録します。古いデータは自動で削除されます。写真やBluetoothアドレスは記録しません。自動送信は行いません。共有したい場合のみエクスポートしてください。",
+  "devDiagnosticsExportFailed": "Devの診断情報を保存できませんでした。"
 }

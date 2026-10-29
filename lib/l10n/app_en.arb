@@ -2189,5 +2189,17 @@
   "imageReviewConfirm": "I checked every square and the position settings.",
   "@imageReviewConfirm": {
     "description": "Assisted screenshot/2D-diagram import: imageReviewConfirm. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "saveDevDiagnostics": "Save Dev diagnostics…",
+  "@saveDevDiagnostics": {
+    "description": "Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry."
+  },
+  "devDiagnosticsHelp": "Dev records recent app events and detailed Grand Kingdom moves and board messages on this device. Older data is removed automatically. Photos and Bluetooth addresses are not recorded. Nothing is uploaded automatically. Export only if you want to share it.",
+  "@devDiagnosticsHelp": {
+    "description": "Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry."
+  },
+  "devDiagnosticsExportFailed": "Could not save Dev diagnostics.",
+  "@devDiagnosticsExportFailed": {
+    "description": "Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry."
   }
 }

@@ -419,6 +419,8 @@ class _GamePageState extends State<GamePage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    DevDiagnostics.record('app.lifecycle', {'state': state.name});
+    _traceGrandKingdom('lifecycle-${state.name}');
     _feedbackForeground = state == AppLifecycleState.resumed;
     if (state == AppLifecycleState.paused) {
       unawaited(
@@ -5393,6 +5395,19 @@ class _GamePageState extends State<GamePage>
                   ),
                 ),
               ),
+              if (appFlavor == 'dev') ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(l10n(context).devDiagnosticsHelp),
+                ),
+                OutlinedButton.icon(
+                  key: const ValueKey('save-dev-diagnostics'),
+                  onPressed: () => DevDiagnostics.save(context),
+                  icon: const Icon(Icons.save_alt),
+                  label: Text(l10n(context).saveDevDiagnostics),
+                ),
+                const SizedBox(height: 8),
+              ],
               OutlinedButton.icon(
                 key: const ValueKey('copy-diagnostics'),
                 style: OutlinedButton.styleFrom(

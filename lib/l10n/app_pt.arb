@@ -471,5 +471,8 @@
   "imageBoardNotFound": "Nenhum tabuleiro encontrado. Enquadre manualmente o tabuleiro desejado.",
   "imageChooseAnother": "Escolher outra imagem",
   "imageReviewHelp": "Confira cada casa e escolha quem joga a seguir. Por padrão, não há direitos de roque nem captura en passant; os contadores começam em 0 e 1. Ajuste as configurações da posição se necessário.",
-  "imageReviewConfirm": "Conferi todas as casas e as configurações da posição."
+  "imageReviewConfirm": "Conferi todas as casas e as configurações da posição.",
+  "saveDevDiagnostics": "Salvar diagnóstico do Dev…",
+  "devDiagnosticsHelp": "O Dev registra neste dispositivo os eventos recentes do aplicativo e os detalhes dos lances e das mensagens do tabuleiro Grand Kingdom. Os dados antigos são excluídos automaticamente. Fotos e endereços Bluetooth não são registrados. Nada é enviado automaticamente. Exporte os dados apenas se quiser compartilhá-los.",
+  "devDiagnosticsExportFailed": "Não foi possível salvar o diagnóstico do Dev."
 }

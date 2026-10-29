@@ -471,5 +471,8 @@
   "imageBoardNotFound": "未找到棋盘。请手动框选目标棋盘。",
   "imageChooseAnother": "选择其他图片",
   "imageReviewHelp": "请检查每个格子并选择下一步由哪方走。王车易位权和吃过路兵默认均为无；步数计数器初始值为0和1。请按需调整局面设置。",
-  "imageReviewConfirm": "我已检查每个格子和局面设置。"
+  "imageReviewConfirm": "我已检查每个格子和局面设置。",
+  "saveDevDiagnostics": "保存Dev诊断信息…",
+  "devDiagnosticsHelp": "Dev会在此设备上记录最近的应用事件，以及Grand Kingdom走棋和棋盘通信的详细信息。旧数据会自动删除。不记录照片或蓝牙地址，也不会自动上传。仅在愿意分享时导出。",
+  "devDiagnosticsExportFailed": "无法保存Dev诊断信息。"
 }

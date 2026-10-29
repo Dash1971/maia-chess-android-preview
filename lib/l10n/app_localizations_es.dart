@@ -1702,4 +1702,15 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get imageReviewConfirm =>
       'He revisado todas las casillas y la configuración de la posición.';
+
+  @override
+  String get saveDevDiagnostics => 'Guardar diagnóstico de Dev…';
+
+  @override
+  String get devDiagnosticsHelp =>
+      'Dev registra en este dispositivo los eventos recientes de la aplicación y los detalles de las jugadas y mensajes del tablero Grand Kingdom. Los datos antiguos se eliminan automáticamente. No se registran fotos ni direcciones Bluetooth. No se sube nada automáticamente. Exporta los datos solo si quieres compartirlos.';
+
+  @override
+  String get devDiagnosticsExportFailed =>
+      'No se pudo guardar el diagnóstico de Dev.';
 }

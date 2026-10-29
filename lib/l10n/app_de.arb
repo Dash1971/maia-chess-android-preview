@@ -471,5 +471,8 @@
   "imageBoardNotFound": "Kein Brett gefunden. Rahme das gewünschte Brett manuell ein.",
   "imageChooseAnother": "Anderes Bild wählen",
   "imageReviewHelp": "Prüfe jedes Feld und wähle, wer am Zug ist. Rochaderechte und en passant sind anfangs nicht gesetzt; die Zugzähler beginnen bei 0 und 1. Passe die Stellungseinstellungen bei Bedarf an.",
-  "imageReviewConfirm": "Ich habe jedes Feld und die Stellungseinstellungen geprüft."
+  "imageReviewConfirm": "Ich habe jedes Feld und die Stellungseinstellungen geprüft.",
+  "saveDevDiagnostics": "Dev-Diagnosedaten speichern…",
+  "devDiagnosticsHelp": "Dev zeichnet aktuelle App-Ereignisse sowie Züge und Brettnachrichten von Grand Kingdom detailliert auf diesem Gerät auf. Ältere Daten werden automatisch gelöscht. Fotos und Bluetooth-Adressen werden nicht erfasst. Nichts wird automatisch hochgeladen. Exportiere die Daten nur, wenn du sie teilen möchtest.",
+  "devDiagnosticsExportFailed": "Die Dev-Diagnosedaten konnten nicht gespeichert werden."
 }

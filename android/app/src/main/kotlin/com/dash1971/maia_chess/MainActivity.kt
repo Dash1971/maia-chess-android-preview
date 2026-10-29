@@ -125,6 +125,7 @@ private object MaiaEngine {
 }
 
 class MainActivity : FlutterActivity() {
+    private val devDiagnostics by lazy { if (BuildConfig.FLAVOR == "dev") DevDiagnostics(this) else null }
     private val channelName = "maia_chess/engine"
     private var methodChannel: MethodChannel? = null
     private var chessnutBridge: ChessnutBridge? = null
@@ -138,6 +139,7 @@ class MainActivity : FlutterActivity() {
     private var engineAttached = false
 
     private fun setProcessPhase(phase: String) {
+        devDiagnostics?.record("engine.$phase")
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return
         try {
             val value = phase.take(128).toByteArray(Charsets.UTF_8)
@@ -287,6 +289,10 @@ class MainActivity : FlutterActivity() {
                         val status = previous?.get("status") as? Int
                         result.success(SessionRecoveryPolicy.failed(reason, status))
                     }
+                    "devTraceContext", "devTraceReport", "saveDevDiagnostics" -> {
+                        val trace = devDiagnostics
+                        if (trace == null) result.error("unsupported", "Dev only", null) else trace.handle(call, result)
+                    }
                     "getPendingPgn" -> documents.takePending(result)
                     "openPgnFile" -> documents.open(result)
                     "savePgnFile" -> documents.save(call.argument<String>("pgn") ?: "", result)
@@ -350,7 +356,7 @@ class MainActivity : FlutterActivity() {
                 }
             }
         }
-        chessnutBridge = ChessnutBridge(this, flutterEngine.dartExecutor.binaryMessenger)
+        chessnutBridge = ChessnutBridge(this, flutterEngine.dartExecutor.binaryMessenger, devDiagnostics)
         soundEffectBridge = SoundEffectBridge(applicationContext, flutterEngine.dartExecutor.binaryMessenger)
         setProcessPhase("app-ready")
     }
@@ -373,16 +379,19 @@ class MainActivity : FlutterActivity() {
 
     override fun onStart() {
         super.onStart()
+        devDiagnostics?.record("activity.start")
         soundEffectBridge?.resume()
         documents.consumeIntent(intent)
     }
 
     override fun onStop() {
+        devDiagnostics?.record("activity.stop")
         soundEffectBridge?.pause()
         super.onStop()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (devDiagnostics?.onResult(requestCode, resultCode, data) == true) return
         if (boardImageBridge?.onResult(requestCode, resultCode, data) != true &&
             !samplingDocuments.onResult(requestCode, resultCode, data) && !documents.onResult(requestCode, resultCode, data)) super.onActivityResult(requestCode, resultCode, data)
     }
@@ -398,7 +407,14 @@ class MainActivity : FlutterActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    override fun onTrimMemory(level: Int) {
+        devDiagnostics?.record("activity.trim-memory", mapOf("level" to level))
+        super.onTrimMemory(level)
+    }
+
     override fun onDestroy() {
+        devDiagnostics?.record("activity.destroy")
+        devDiagnostics?.close()
         samplingDocuments.close()
         documents.close()
         super.onDestroy()

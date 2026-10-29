@@ -57,8 +57,11 @@ The three-second scan and in-game Chessnut reset below are included in Preview
 
 ## Development capture and diagnostics
 
-Routine diagnostics retain bounded summaries, not Bluetooth addresses or raw
-position notifications. Explicit developer capture/replay is separate; see
+Stable/Preview routine diagnostics retain bounded summaries, not Bluetooth
+addresses or raw position notifications. Dev additionally records automatic,
+bounded local traces, including Grand Kingdom wire messages and position/move
+context; see [Dev diagnostics](DEV_DIAGNOSTICS.md). Export is manual and no
+Bluetooth addresses or images are recorded. Explicit developer capture/replay is separate; see
 `tool/board_capture/capture.py --help` and `tool/board_capture/README.md`.
 Capture files can reveal moves and positions; review them before sharing.
 

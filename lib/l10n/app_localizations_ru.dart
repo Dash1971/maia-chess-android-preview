@@ -1722,4 +1722,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get imageReviewConfirm => 'Я проверил все поля и настройки позиции.';
+
+  @override
+  String get saveDevDiagnostics => 'Сохранить диагностику Dev…';
+
+  @override
+  String get devDiagnosticsHelp =>
+      'Dev записывает на этом устройстве недавние события приложения, а также подробности ходов и сообщений доски Grand Kingdom. Старые данные удаляются автоматически. Фотографии и адреса Bluetooth не записываются. Автоматической отправки нет. Экспортируйте данные, только если хотите ими поделиться.';
+
+  @override
+  String get devDiagnosticsExportFailed =>
+      'Не удалось сохранить диагностику Dev.';
 }
