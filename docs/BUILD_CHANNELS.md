@@ -15,6 +15,14 @@ intended repository and enable prereleases for Preview/Dev. Installing Preview
 does not upgrade Dev or transfer its saved games/preferences. Existing Preview
 installations update in place using the established Preview certificate.
 
+## Dev alpha.2 candidate
+
+The next red-icon Dev snapshot combines merged Dev-only diagnostics #214 with
+Grand Kingdom #209 and the latest image/camera #210. Automatic diagnostics stay
+local until manually exported; neither Preview nor Stable records this trace.
+Physical capture failures remain unresolved. See [Dev diagnostics](DEV_DIAGNOSTICS.md).
+This candidate does not publish Preview or Stable, or merge their feature drafts.
+
 ## Release instructions
 
 - [Stable release procedure](https://github.com/Dash1971/maia-chess-android/blob/main/docs/RELEASING.md):

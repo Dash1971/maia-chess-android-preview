@@ -430,7 +430,10 @@ extension _ElectronicBoardFlow on _GamePageState {
     _traceGrandKingdom('human-input', uci: prefix);
     // Neither a subsequent legal move nor an uncorrelated OK proves that the
     // pawn was replaced with Maia's chosen promotion piece.
-    if (_pendingMotorPromotion != null) return;
+    if (_pendingMotorPromotion != null) {
+      _traceGrandKingdom('input-blocked-promotion', uci: prefix);
+      return;
+    }
     if (!_feedbackForeground || !_feedbackRouteVisible) {
       if (_deferredSquareOffMove == null || _deferredSquareOffMove == prefix) {
         _deferredSquareOffMove = prefix;

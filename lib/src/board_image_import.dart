@@ -9,17 +9,34 @@ abstract interface class BoardImageSource {
 class PlatformBoardImageSource implements BoardImageSource {
   const PlatformBoardImageSource();
   static const channel = MethodChannel('maia_chess/board_image');
+  Future<T> _trace<T>(String operation, Future<T> Function() run) async {
+    DevDiagnostics.record('image.$operation.start');
+    try {
+      final result = await run();
+      DevDiagnostics.record('image.$operation.complete', {
+        'state': result == null ? 'cancelled' : 'completed',
+      });
+      return result;
+    } catch (error) {
+      DevDiagnostics.record('image.$operation.failed', {
+        'state': error is PlatformException ? error.code : 'error',
+      });
+      rethrow;
+    }
+  }
+
   @override
   Future<Uint8List?> pickImage() =>
-      channel.invokeMethod<Uint8List>('pickImage');
+      _trace('picker', () => channel.invokeMethod<Uint8List>('pickImage'));
   @override
   Future<Uint8List?> takePhoto() =>
-      channel.invokeMethod<Uint8List>('takePhoto');
+      _trace('camera', () => channel.invokeMethod<Uint8List>('takePhoto'));
   @override
   Future<List<double>> classifySquares(Float32List input) async {
-    final result = await channel.invokeMethod<Object>('classifySquares', {
-      'input': input,
-    });
+    final result = await _trace(
+      'recognition',
+      () => channel.invokeMethod<Object>('classifySquares', {'input': input}),
+    );
     if (result is Float32List) return result;
     if (result is List) {
       return result.cast<num>().map((n) => n.toDouble()).toList();
@@ -135,6 +152,9 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
     final pixels = _rgba!;
     final w = _image!.width, h = _image!.height;
     final result = await vision.locateInBackground(pixels, w, h);
+    DevDiagnostics.record('image.locate', {
+      'state': result == null ? 'manual-crop' : 'located',
+    });
     if (!mounted) return;
     setState(() {
       _notFound = result == null;
