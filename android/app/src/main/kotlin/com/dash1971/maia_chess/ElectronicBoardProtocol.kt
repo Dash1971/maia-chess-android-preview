@@ -2,10 +2,18 @@ package com.dash1971.maia_chess
 
 import java.util.UUID
 
-/** All channels permit Chessnut; only Dev may discover or command prototype boards. */
+/** Grand Kingdom is experimental in Preview/Dev; Pegasus remains Dev-only. */
 internal object BoardChannelPolicy {
     fun supports(flavor: String, kind: String): Boolean =
-        kind == "chessnut" || (flavor == "dev" && kind in setOf("pegasus", "squareOff"))
+        kind == "chessnut" ||
+            (flavor == "dev" && kind in setOf("pegasus", "squareOff")) ||
+            (flavor == "preview" && kind == "squareOff")
+
+    fun permitsMotorCommand(flavor: String, kind: String, ready: Boolean,
+                            providedSession: String?, currentSession: String): Boolean =
+        supports(flavor, "squareOff") && kind == "squareOff" && ready &&
+            providedSession == currentSession
+
     fun discover(flavor: String, name: String): String? = when {
         name.contains("Chessnut", true) || name.contains("Smart Chess", true) -> "chessnut"
         supports(flavor, "pegasus") && name.contains("Pegasus", true) -> "pegasus"

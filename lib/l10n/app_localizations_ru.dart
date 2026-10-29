@@ -1663,4 +1663,20 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'Mobile Maia открыл главный экран, чтобы не открывать повторно сеанс, который мог вызвать сбой. Сохранённые партии и настройки не удалены.';
+
+  @override
+  String get boardPromotionTitle => 'Подтвердить превращение пешки Maia';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square: $piece. Замените пешку.';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      'Дождитесь остановки моторов. Замените пешку указанной фигурой и сверьте всю позицию на доске с экраном. Если движение не завершено или вы не уверены, продолжите партию в приложении.';
+
+  @override
+  String get boardPromotionReplaced =>
+      'Моторы остановлены, пешка заменена, все фигуры соответствуют экрану.';
 }

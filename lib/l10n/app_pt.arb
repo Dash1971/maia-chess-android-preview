@@ -454,5 +454,9 @@
   "continuationSetUpBoard": "Preparar tabuleiro",
   "continuationSetupHelp": "Monte no seu tabuleiro a posição mostrada na tela. A partida começa quando a posição das peças coincidir.",
   "continuationBoardUnsupported": "No momento, continuar a partir de uma posição só é compatível com tabuleiros Chessnut.",
-  "sessionRecovery": "O Mobile Maia abriu a tela inicial para evitar reabrir uma sessão que pode ter causado uma falha. Suas partidas salvas e configurações foram mantidas."
+  "sessionRecovery": "O Mobile Maia abriu a tela inicial para evitar reabrir uma sessão que pode ter causado uma falha. Suas partidas salvas e configurações foram mantidas.",
+  "boardPromotionTitle": "Confirmar promoção de Maia",
+  "boardPromotionMove": "{square}: {piece}. Substitua o peão.",
+  "boardPromotionHelp": "Espere os motores pararem. Substitua o peão pela peça indicada e confira se toda a posição física corresponde à tela. Se o movimento estiver incompleto ou houver dúvida, continue a partida no aplicativo.",
+  "boardPromotionReplaced": "Os motores estão parados, substituí o peão e todas as peças correspondem."
 }
