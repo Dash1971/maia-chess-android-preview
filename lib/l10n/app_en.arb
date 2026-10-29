@@ -2113,5 +2113,73 @@
   "sessionRecovery": "Mobile Maia opened Home to avoid reopening a session that may have caused a crash. Your saved games and settings have been kept.",
   "@sessionRecovery": {
     "description": "Home notice after suppressing an unsafe or interrupted automatic session restore. No games or settings are deleted."
+  },
+  "imageFromImage": "From image",
+  "@imageFromImage": {
+    "description": "Assisted screenshot/2D-diagram import: imageFromImage. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageImportHelp": "Experimental: screenshots and 2D diagrams only. Frame all 64 squares. Arrows, highlights and unfamiliar pieces can be misread. Review every square.",
+  "@imageImportHelp": {
+    "description": "Assisted screenshot/2D-diagram import: imageImportHelp. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageCropHorizontal": "Left and right edges",
+  "@imageCropHorizontal": {
+    "description": "Assisted screenshot/2D-diagram import: imageCropHorizontal. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageCropVertical": "Top and bottom edges",
+  "@imageCropVertical": {
+    "description": "Assisted screenshot/2D-diagram import: imageCropVertical. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageFindBoard": "Find board",
+  "@imageFindBoard": {
+    "description": "Assisted screenshot/2D-diagram import: imageFindBoard. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageRotate": "Rotate image",
+  "@imageRotate": {
+    "description": "Assisted screenshot/2D-diagram import: imageRotate. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageBlackAtBottom": "Image has Black at the bottom",
+  "@imageBlackAtBottom": {
+    "description": "Assisted screenshot/2D-diagram import: imageBlackAtBottom. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageRecognize": "Recognize position",
+  "@imageRecognize": {
+    "description": "Assisted screenshot/2D-diagram import: imageRecognize. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageImportFailed": "Could not read this image. Try another screenshot or adjust the crop.",
+  "@imageImportFailed": {
+    "description": "Assisted screenshot/2D-diagram import: imageImportFailed. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageBoardNotFound": "No board found. Frame the intended board manually.",
+  "@imageBoardNotFound": {
+    "description": "Assisted screenshot/2D-diagram import: imageBoardNotFound. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageChooseAnother": "Choose another image",
+  "@imageChooseAnother": {
+    "description": "Assisted screenshot/2D-diagram import: imageChooseAnother. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageReviewHelp": "Check every square and choose who moves next. Castling rights and en passant default to none; move counters start at 0 and 1. Adjust the position settings as needed.",
+  "@imageReviewHelp": {
+    "description": "Assisted screenshot/2D-diagram import: imageReviewHelp. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageReviewConfirm": "I checked every square and the position settings.",
+  "@imageReviewConfirm": {
+    "description": "Assisted screenshot/2D-diagram import: imageReviewConfirm. Experimental recognition always requires full manual review; no camera or physical-board photo support."
+  },
+  "imageChoose": "Choose image",
+  "@imageChoose": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
+  },
+  "imageTakePhoto": "Take photo",
+  "@imageTakePhoto": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
+  },
+  "imageCameraHelp": "For a printed diagram, hold the camera directly above it. Real chessboard photos are not supported. Review every square.",
+  "@imageCameraHelp": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
+  },
+  "imageCameraUnavailable": "Could not open the camera. Choose an image instead.",
+  "@imageCameraUnavailable": {
+    "description": "Board-editor screenshot/flat printed diagram import. Camera delegates to the installed Android camera app, processes locally and always requires manual position review; no physical-board photo recognition is implied."
   }
 }

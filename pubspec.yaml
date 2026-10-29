@@ -81,6 +81,12 @@ flutter:
   assets:
     - LICENSE
     - THIRD_PARTY_NOTICES.md
+    - third_party/board_image/LICENSE
+    - third_party/board_image/NOTICE.md
+    - path: assets/models/board_squares.onnx
+      flavors:
+        - dev
+        - preview
     - third_party/chessground/notices/
     - path: assets/models/maia3-5m.onnx
       flavors:

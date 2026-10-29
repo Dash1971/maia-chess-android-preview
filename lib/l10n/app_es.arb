@@ -454,5 +454,22 @@
   "continuationSetUpBoard": "Preparar el tablero",
   "continuationSetupHelp": "Coloca en tu tablero la posición que aparece en pantalla. La partida empieza cuando las piezas coinciden.",
   "continuationBoardUnsupported": "Por ahora, continuar desde una posición solo es compatible con los tableros Chessnut.",
-  "sessionRecovery": "Mobile Maia ha abierto la pantalla de inicio para evitar reabrir una sesión que podría haber causado un fallo. Tus partidas guardadas y ajustes se han conservado."
+  "sessionRecovery": "Mobile Maia ha abierto la pantalla de inicio para evitar reabrir una sesión que podría haber causado un fallo. Tus partidas guardadas y ajustes se han conservado.",
+  "imageFromImage": "Desde una imagen",
+  "imageImportHelp": "Experimental: solo capturas y diagramas en 2D. Encuadra las 64 casillas. Las flechas, los resaltados y las piezas poco habituales pueden interpretarse mal. Revisa cada casilla.",
+  "imageCropHorizontal": "Bordes izquierdo y derecho",
+  "imageCropVertical": "Bordes superior e inferior",
+  "imageFindBoard": "Buscar tablero",
+  "imageRotate": "Girar imagen",
+  "imageBlackAtBottom": "Las negras están abajo en la imagen",
+  "imageRecognize": "Reconocer posición",
+  "imageImportFailed": "No se pudo leer la imagen. Prueba otra captura o ajusta el recorte.",
+  "imageBoardNotFound": "No se encontró un tablero. Encuadra manualmente el tablero deseado.",
+  "imageChooseAnother": "Elegir otra imagen",
+  "imageReviewHelp": "Revisa cada casilla y elige a quién le toca mover. Por defecto no hay derechos de enroque ni captura al paso; los contadores empiezan en 0 y 1. Ajusta la configuración de la posición si es necesario.",
+  "imageReviewConfirm": "He revisado todas las casillas y la configuración de la posición.",
+  "imageChoose": "Seleccionar imagen",
+  "imageTakePhoto": "Hacer foto",
+  "imageCameraHelp": "Fotografía el diagrama impreso desde justo encima. No se admiten fotos de tableros reales. Revisa todas las casillas.",
+  "imageCameraUnavailable": "No se pudo abrir la cámara. Elige una imagen."
 }

@@ -1645,4 +1645,62 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'Mobile Maia hat die Startseite geöffnet, um eine möglicherweise für einen Absturz verantwortliche Sitzung nicht erneut zu öffnen. Deine gespeicherten Partien und Einstellungen bleiben erhalten.';
+
+  @override
+  String get imageFromImage => 'Aus einem Bild';
+
+  @override
+  String get imageImportHelp =>
+      'Experimentell: nur Bildschirmaufnahmen und zweidimensionale Schachdiagramme. Rahme alle 64 Felder ein. Pfeile, Markierungen und ungewohnte Figuren können falsch erkannt werden. Prüfe jedes Feld.';
+
+  @override
+  String get imageCropHorizontal => 'Linker und rechter Rand';
+
+  @override
+  String get imageCropVertical => 'Oberer und unterer Rand';
+
+  @override
+  String get imageFindBoard => 'Brett finden';
+
+  @override
+  String get imageRotate => 'Bild drehen';
+
+  @override
+  String get imageBlackAtBottom => 'Schwarz ist im Bild unten';
+
+  @override
+  String get imageRecognize => 'Stellung erkennen';
+
+  @override
+  String get imageImportFailed =>
+      'Das Bild konnte nicht gelesen werden. Wähle eine andere Bildschirmaufnahme oder passe den Ausschnitt an.';
+
+  @override
+  String get imageBoardNotFound =>
+      'Kein Brett gefunden. Rahme das gewünschte Brett manuell ein.';
+
+  @override
+  String get imageChooseAnother => 'Anderes Bild wählen';
+
+  @override
+  String get imageReviewHelp =>
+      'Prüfe jedes Feld und wähle, wer am Zug ist. Rochaderechte und en passant sind anfangs nicht gesetzt; die Zugzähler beginnen bei 0 und 1. Passe die Stellungseinstellungen bei Bedarf an.';
+
+  @override
+  String get imageReviewConfirm =>
+      'Ich habe jedes Feld und die Stellungseinstellungen geprüft.';
+
+  @override
+  String get imageChoose => 'Bild auswählen';
+
+  @override
+  String get imageTakePhoto => 'Foto aufnehmen';
+
+  @override
+  String get imageCameraHelp =>
+      'Fotografiere ein gedrucktes Diagramm senkrecht von oben. Fotos echter Schachbretter werden nicht unterstützt. Prüfe jedes Feld.';
+
+  @override
+  String get imageCameraUnavailable =>
+      'Die Kamera konnte nicht geöffnet werden. Wähle stattdessen ein Bild aus.';
 }

@@ -37,10 +37,15 @@ The menu contains Starting position, Load FEN, Continue from here and Clear boar
 The toolbar has menu, flip, Analysis and position settings. Sharing uses Android's
 plain-text chooser; copying works offline and is also the fallback when a native
 share handler is unavailable. Neither action sends to a recipient automatically.
-Variant and Challenge from position are absent. The camera entry is disabled with
-an explicit unavailable label; recognition remains a dependency of #179, not a
-working feature in this PR. All UI uses the selected board/piece designs and
-applicable aid preferences. No renderer, model, version or channel gate changes.
+Variant and Challenge from position remain absent. For the 2.6 prototype, the
+From image action offers Choose image and Take photo for assisted screenshot/flat
+printed-diagram import in Preview/Dev. The camera delegates to the installed app
+with temporary private output; physical-board photo recognition remains outside
+the scope. Crop/orientation and mandatory full-position review follow either input. See
+[the image-import workflow and draft acceptance](BOARD_IMAGE_IMPORT.md). The
+review draft uses the existing manual editor and position validation; cancelling
+it leaves the prior editor unchanged. All UI uses the selected board/piece designs
+and applicable aid preferences.
 
 New tool/share terms reuse the pinned Lichess terminology with explicit editor/FEN
 adaptations. Remaining new labels are translated in all ten languages and still

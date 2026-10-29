@@ -1642,4 +1642,62 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'Mobile Maia a ouvert l’accueil pour éviter de rouvrir une session qui a pu provoquer un plantage. Vos parties enregistrées et vos réglages ont été conservés.';
+
+  @override
+  String get imageFromImage => 'À partir d’une image';
+
+  @override
+  String get imageImportHelp =>
+      'Expérimental : captures d’écran et diagrammes en 2D uniquement. Cadrez les 64 cases. Les flèches, surbrillances et pièces inhabituelles peuvent être mal reconnues. Vérifiez chaque case.';
+
+  @override
+  String get imageCropHorizontal => 'Bords gauche et droit';
+
+  @override
+  String get imageCropVertical => 'Bords supérieur et inférieur';
+
+  @override
+  String get imageFindBoard => 'Trouver l’échiquier';
+
+  @override
+  String get imageRotate => 'Faire pivoter l’image';
+
+  @override
+  String get imageBlackAtBottom => 'Les Noirs sont en bas de l’image';
+
+  @override
+  String get imageRecognize => 'Reconnaître la position';
+
+  @override
+  String get imageImportFailed =>
+      'Impossible de lire cette image. Essayez une autre capture ou ajustez le cadrage.';
+
+  @override
+  String get imageBoardNotFound =>
+      'Aucun échiquier trouvé. Cadrez manuellement l’échiquier souhaité.';
+
+  @override
+  String get imageChooseAnother => 'Choisir une autre image';
+
+  @override
+  String get imageReviewHelp =>
+      'Vérifiez chaque case et choisissez le trait. Par défaut, aucun droit de roque ni prise en passant ; les compteurs commencent à 0 et 1. Ajustez les paramètres de la position si nécessaire.';
+
+  @override
+  String get imageReviewConfirm =>
+      'J’ai vérifié chaque case et les paramètres de la position.';
+
+  @override
+  String get imageChoose => 'Choisir une image';
+
+  @override
+  String get imageTakePhoto => 'Prendre une photo';
+
+  @override
+  String get imageCameraHelp =>
+      'Photographiez le diagramme imprimé à la verticale, juste au-dessus. Les photos de vrais échiquiers ne sont pas prises en charge. Vérifiez chaque case.';
+
+  @override
+  String get imageCameraUnavailable =>
+      'Impossible d’ouvrir l’appareil photo. Choisissez une image à la place.';
 }

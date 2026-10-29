@@ -454,5 +454,22 @@
   "continuationSetUpBoard": "Preparar tabuleiro",
   "continuationSetupHelp": "Monte no seu tabuleiro a posição mostrada na tela. A partida começa quando a posição das peças coincidir.",
   "continuationBoardUnsupported": "No momento, continuar a partir de uma posição só é compatível com tabuleiros Chessnut.",
-  "sessionRecovery": "O Mobile Maia abriu a tela inicial para evitar reabrir uma sessão que pode ter causado uma falha. Suas partidas salvas e configurações foram mantidas."
+  "sessionRecovery": "O Mobile Maia abriu a tela inicial para evitar reabrir uma sessão que pode ter causado uma falha. Suas partidas salvas e configurações foram mantidas.",
+  "imageFromImage": "A partir de uma imagem",
+  "imageImportHelp": "Experimental: apenas capturas de tela e diagramas em 2D. Enquadre as 64 casas. Setas, destaques e peças pouco familiares podem ser reconhecidos incorretamente. Confira cada casa.",
+  "imageCropHorizontal": "Bordas esquerda e direita",
+  "imageCropVertical": "Bordas superior e inferior",
+  "imageFindBoard": "Encontrar tabuleiro",
+  "imageRotate": "Girar imagem",
+  "imageBlackAtBottom": "As pretas estão embaixo na imagem",
+  "imageRecognize": "Reconhecer posição",
+  "imageImportFailed": "Não foi possível ler a imagem. Escolha outra captura ou ajuste o recorte.",
+  "imageBoardNotFound": "Nenhum tabuleiro encontrado. Enquadre manualmente o tabuleiro desejado.",
+  "imageChooseAnother": "Escolher outra imagem",
+  "imageReviewHelp": "Confira cada casa e escolha quem joga a seguir. Por padrão, não há direitos de roque nem captura en passant; os contadores começam em 0 e 1. Ajuste as configurações da posição se necessário.",
+  "imageReviewConfirm": "Conferi todas as casas e as configurações da posição.",
+  "imageChoose": "Escolher imagem",
+  "imageTakePhoto": "Tirar foto",
+  "imageCameraHelp": "Fotografe o diagrama impresso diretamente de cima. Fotos de tabuleiros reais não são compatíveis. Confira todas as casas.",
+  "imageCameraUnavailable": "Não foi possível abrir a câmera. Escolha uma imagem."
 }
