@@ -53,18 +53,19 @@ loaded directly from the APK asset without a second permanent model file.
 Model bytes and SHA-256 are verified before inference. No second runtime or
 first-use download is introduced.
 
-Recognition opens an editable board. Pieces and position settings work as in
-the normal editor. White to move is selected initially and can be changed.
-Done accepts the position with the existing chess-position validation. There
-is no acknowledgement checkbox, forced turn selection, or repeated confirmation
-after edits. The import/camera screens have no warning or tutorial paragraphs;
-errors appear only when an operation fails. The editor entry uses the same
-`Icons.photo_camera_outlined` as the [pinned Lichess board editor](https://github.com/lichess-org/mobile/blob/c73864de4c6373637a5442e2a0f7c3a37fbb930e/lib/src/view/board_editor/board_editor_screen.dart#L62).
+Recognition returns the position directly to the existing Board Editor. No
+second editor, review screen, turn-selection strip or Done/apply step is added.
+The normal piece tools, Position settings, Analysis Board and Continue from here
+remain the way to edit or use it. White to move is the import default; normal
+position settings can change it. Existing chess-position validation still runs
+when opening analysis or continuing from the position.
 
-Done returns the FEN to the original editor. Cancelling the picker, crop,
-inference or edit leaves the original position unchanged. Late results from
-disposed widgets/activities are ignored. Temporary image/import state is not
-restored or committed after process recreation.
+The editor entry uses the same `Icons.photo_camera_outlined` as the
+[pinned Lichess board editor](https://github.com/lichess-org/mobile/blob/c73864de4c6373637a5442e2a0f7c3a37fbb930e/lib/src/view/board_editor/board_editor_screen.dart#L62).
+The import/camera screens have no warning/tutorial paragraphs. Cancelling the
+picker, crop or inference leaves the original editor unchanged; late results
+from disposed widgets/activities are ignored. Recognized incomplete positions
+remain editable instead of being blocked by a separate review gate.
 
 ## Provenance and known quality limits
 

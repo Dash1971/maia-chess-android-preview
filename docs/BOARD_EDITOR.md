@@ -43,7 +43,7 @@ printed-diagram import in Preview/Dev. The camera delegates to the installed app
 with temporary private output; physical-board photo recognition remains outside
 the scope. Crop/orientation and an editable position follow either input; Done uses normal position validation. See
 [the image-import workflow and draft acceptance](BOARD_IMAGE_IMPORT.md). The
-review draft uses the existing manual editor and position validation; cancelling
+recognized position loads into the existing editor with its normal validation; cancelling
 it leaves the prior editor unchanged. All UI uses the selected board/piece designs
 and applicable aid preferences.
 

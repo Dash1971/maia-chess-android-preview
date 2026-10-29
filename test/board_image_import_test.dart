@@ -316,98 +316,86 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
-  testWidgets(
-    'recognized pieces stay editable and Done needs no acknowledgement',
-    (tester) async {
-      size(tester, const Size(390, 844));
-      final source = FakeImageSource();
-      await tester.pumpWidget(
-        app(
-          BoardEditorPage(
-            initialFen: dc.Chess.initial.fen,
-            imageSource: source,
-          ),
-        ),
-      );
-      await tester.tap(find.byKey(const ValueKey('editor-from-image')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const ValueKey('image-choose')));
-      await tester.pump();
-      await work(
-        tester,
-        () =>
-            find
-                .byKey(const ValueKey('image-recognize'))
-                .evaluate()
-                .isNotEmpty &&
-            tester
-                    .widget<FilledButton>(
-                      find.byKey(const ValueKey('image-recognize')),
-                    )
-                    .onPressed !=
-                null,
-      );
-      await tester.ensureVisible(find.byKey(const ValueKey('image-recognize')));
-      await tester.tap(find.byKey(const ValueKey('image-recognize')));
-      await work(
-        tester,
-        () => find
-            .byKey(const ValueKey('image-use-position'))
-            .evaluate()
-            .isNotEmpty,
-      );
-      expect(
-        tester
-            .widget<IconButton>(
-              find.byKey(const ValueKey('image-use-position')),
-            )
-            .onPressed,
-        isNotNull,
-      );
-      expect(find.byType(CheckboxListTile), findsNothing);
-      final editor = find.byType(cg.ChessboardEditor).last;
-      expect(
-        tester.widget<cg.ChessboardEditor>(editor).pieces[dc.Square.c6]?.role,
-        dc.Role.queen,
-      );
-      await tester.ensureVisible(
-        find.byKey(const ValueKey('editor-erase-white')).last,
-      );
-      await tester.tap(find.byKey(const ValueKey('editor-erase-white')).last);
-      await tester.pump();
-      final square = find.byKey(const ValueKey('editor-square-c6')).last;
-      await tester.ensureVisible(square);
-      await tester.tapAt(tester.getCenter(square));
-      await tester.pump();
-      expect(
-        tester.widget<cg.ChessboardEditor>(editor).pieces[dc.Square.c6],
-        isNull,
-      );
-      await tester.ensureVisible(
-        find.byKey(const ValueKey('image-review-turn-black')),
-      );
-      await tester.tap(find.byKey(const ValueKey('image-review-turn-black')));
-      await tester.pump();
-      expect(
-        tester
-            .widget<IconButton>(
-              find.byKey(const ValueKey('image-use-position')),
-            )
-            .onPressed,
-        isNotNull,
-      );
-      await tester.tap(find.byKey(const ValueKey('image-use-position')));
-      await tester.pumpAndSettle();
-      final applied = tester.widget<cg.ChessboardEditor>(
-        find.byType(cg.ChessboardEditor),
-      );
-      expect(applied.pieces.length, 2);
-      expect(applied.pieces[dc.Square.c6], isNull);
-      expect(find.byKey(const ValueKey('image-crop')), findsNothing);
-      expect(source.received!.length, 64 * 32 * 32);
-      expect(tester.takeException(), isNull);
-    },
-  );
+  testWidgets('recognition updates the existing Board Editor directly', (
+    tester,
+  ) async {
+    size(tester, const Size(390, 844));
+    final source = FakeImageSource();
+    await tester.pumpWidget(
+      app(
+        BoardEditorPage(initialFen: dc.Chess.initial.fen, imageSource: source),
+      ),
+    );
+    final originalEditorState = tester.state(find.byType(BoardEditorPage));
+    await tester.tap(find.byKey(const ValueKey('editor-from-image')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('image-choose')));
+    await tester.pump();
+    await work(
+      tester,
+      () =>
+          find.byKey(const ValueKey('image-recognize')).evaluate().isNotEmpty &&
+          tester
+                  .widget<FilledButton>(
+                    find.byKey(const ValueKey('image-recognize')),
+                  )
+                  .onPressed !=
+              null,
+    );
+    await tester.ensureVisible(find.byKey(const ValueKey('image-recognize')));
+    await tester.tap(find.byKey(const ValueKey('image-recognize')));
+    await work(
+      tester,
+      () => find.byKey(const ValueKey('image-crop')).evaluate().isEmpty,
+    );
+    expect(
+      tester.state(find.byType(BoardEditorPage)),
+      same(originalEditorState),
+    );
+    expect(find.byType(BoardEditorPage), findsOneWidget);
+    expect(find.byKey(const ValueKey('image-use-position')), findsNothing);
+    final editor = find.byType(cg.ChessboardEditor);
+    expect(
+      tester.widget<cg.ChessboardEditor>(editor).pieces[dc.Square.c6]?.role,
+      dc.Role.queen,
+    );
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('editor-erase-white')),
+    );
+    await tester.tap(find.byKey(const ValueKey('editor-erase-white')));
+    await tester.pump();
+    final square = find.byKey(const ValueKey('editor-square-c6'));
+    await tester.ensureVisible(square);
+    await tester.tapAt(tester.getCenter(square));
+    await tester.pump();
+    expect(
+      tester.widget<cg.ChessboardEditor>(editor).pieces[dc.Square.c6],
+      isNull,
+    );
+    await tester.ensureVisible(find.byKey(const ValueKey('editor-settings')));
+    await tester.tap(find.byKey(const ValueKey('editor-settings')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('editor-turn-black')));
+    await tester.pump();
+    expect(
+      tester
+          .widget<RadioGroup<dc.Side>>(find.byType(RadioGroup<dc.Side>))
+          .groupValue,
+      dc.Side.black,
+    );
+    await tester.ensureVisible(find.widgetWithText(TextButton, 'Done'));
+    await tester.tap(find.widgetWithText(TextButton, 'Done'));
+    await tester.pumpAndSettle();
+    expect(tester.widget<cg.ChessboardEditor>(editor).pieces.length, 2);
+    expect(
+      tester
+          .widget<IconButton>(find.byKey(const ValueKey('editor-analyze')))
+          .onPressed,
+      isNotNull,
+    );
+    expect(source.received!.length, 64 * 32 * 32);
+    expect(tester.takeException(), isNull);
+  });
   testWidgets(
     'corrupt input and inference failure keep retry and original position',
     (tester) async {
@@ -570,7 +558,7 @@ void main() {
     },
   );
 
-  testWidgets('captured image opens an editable position with Done available', (
+  testWidgets('camera result returns to the same normal Board Editor', (
     tester,
   ) async {
     size(tester, const Size(390, 844));
@@ -581,6 +569,7 @@ void main() {
         BoardEditorPage(initialFen: dc.Chess.initial.fen, imageSource: source),
       ),
     );
+    final editorState = tester.state(find.byType(BoardEditorPage));
     await tester.tap(find.byKey(const ValueKey('editor-from-image')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('image-camera')));
@@ -591,34 +580,23 @@ void main() {
     );
     await tester.ensureVisible(find.byKey(const ValueKey('image-recognize')));
     await tester.tap(find.byKey(const ValueKey('image-recognize')));
-    await tester.pump();
     await work(
       tester,
-      () => find
-          .byKey(const ValueKey('image-use-position'))
-          .evaluate()
-          .isNotEmpty,
+      () => find.byKey(const ValueKey('image-crop')).evaluate().isEmpty,
     );
-    expect(
-      tester
-          .widget<IconButton>(find.byKey(const ValueKey('image-use-position')))
-          .onPressed,
-      isNotNull,
-    );
+    expect(tester.state(find.byType(BoardEditorPage)), same(editorState));
     expect(source.cameraCalls, 1);
     expect(source.pickerCalls, 0);
-    await tester.pumpAndSettle();
-    await tester.pageBack();
-    await tester.pumpAndSettle();
-    await tester.pageBack();
-    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('image-use-position')), findsNothing);
+    expect(find.byKey(const ValueKey('image-review-turn-white')), findsNothing);
     expect(
       tester
           .widget<cg.ChessboardEditor>(find.byType(cg.ChessboardEditor))
           .pieces
           .length,
-      32,
+      3,
     );
+    expect(find.byKey(const ValueKey('editor-settings')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -643,15 +621,12 @@ void main() {
 
   for (final locale in AppLocalizations.supportedLocales) {
     testWidgets(
-      'review controls at 320px and 200% text: ${locale.languageCode}',
+      'normal editor at 320px and 200% text: ${locale.languageCode}',
       (tester) async {
         size(tester, const Size(320, 568));
         await tester.pumpWidget(
           app(
-            BoardEditorPage(
-              initialFen: '4k3/8/8/8/8/8/8/4K3 w - - 0 1',
-              imageReview: true,
-            ),
+            BoardEditorPage(initialFen: '4k3/8/8/8/8/8/8/4K3 w - - 0 1'),
             locale: locale,
             scale: 2,
           ),
@@ -659,13 +634,13 @@ void main() {
         await tester.pumpAndSettle();
         expect(
           find.byKey(const ValueKey('image-review-turn-white')),
-          findsOneWidget,
+          findsNothing,
         );
+        expect(find.byKey(const ValueKey('image-use-position')), findsNothing);
+        expect(find.byKey(const ValueKey('editor-settings')), findsOneWidget);
         expect(
           tester
-              .widget<IconButton>(
-                find.byKey(const ValueKey('image-use-position')),
-              )
+              .widget<IconButton>(find.byKey(const ValueKey('editor-analyze')))
               .onPressed,
           isNotNull,
         );

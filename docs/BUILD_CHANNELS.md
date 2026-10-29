@@ -27,7 +27,7 @@ installations update in place using the established Preview certificate.
 
 The proposed 2.6 source adds From image in the Preview/Dev board editor with a
 bundled MIT diagram classifier, adjustable crop/orientation and a separate manual
-review draft. Image import and Take photo are in Dev 2.6.0-alpha.2. The simplified
+existing editor. Image import and Take photo are in Dev 2.6.0-alpha.2. The simplified
 editor UI is a later source change and has not been published. Current published Preview/Stable artifacts remain unchanged.
 [Workflow, provenance and pending acceptance](BOARD_IMAGE_IMPORT.md) distinguish
 this assisted prototype from broad recognition readiness and Stable promotion.

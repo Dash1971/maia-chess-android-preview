@@ -92,13 +92,11 @@ class BoardEditorPage extends StatefulWidget {
   const BoardEditorPage({
     required this.initialFen,
     this.onContinue,
-    this.imageReview = false,
     this.imageSource = const PlatformBoardImageSource(),
     super.key,
   });
   final String initialFen;
   final Future<void> Function(String fen)? onContinue;
-  final bool imageReview;
   final BoardImageSource imageSource;
   @override
   State<BoardEditorPage> createState() => _BoardEditorPageState();
@@ -712,11 +710,9 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
       ),
       IconButton(
         key: const ValueKey('editor-analyze'),
-        tooltip: widget.imageReview
-            ? l10n(context).done
-            : l10n(context).analysisBoard,
+        tooltip: l10n(context).analysisBoard,
         onPressed: _finish,
-        icon: Icon(widget.imageReview ? Icons.check : Icons.analytics_outlined),
+        icon: const Icon(Icons.analytics_outlined),
       ),
       IconButton(
         key: const ValueKey('editor-settings'),
@@ -731,20 +727,12 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
     appBar: AppBar(
       title: Text(l10n(context).boardEditor),
       actions: [
-        if (!widget.imageReview &&
-            (appFlavor == 'preview' || appFlavor == 'dev'))
+        if (appFlavor == 'preview' || appFlavor == 'dev')
           IconButton(
             key: const ValueKey('editor-from-image'),
             onPressed: _importing ? null : _fromImage,
             icon: const Icon(Icons.photo_camera_outlined),
             tooltip: l10n(context).imageFromImage,
-          ),
-        if (widget.imageReview)
-          IconButton(
-            key: const ValueKey('image-use-position'),
-            onPressed: _finish,
-            icon: const Icon(Icons.check),
-            tooltip: l10n(context).done,
           ),
         IconButton(
           key: const ValueKey('editor-share'),
@@ -754,31 +742,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
         ),
       ],
     ),
-    body: SafeArea(
-      child: widget.imageReview
-          ? Column(
-              children: [
-                Wrap(
-                  spacing: 12,
-                  children: [
-                    for (final side in dc.Side.values)
-                      ChoiceChip(
-                        key: ValueKey('image-review-turn-${side.name}'),
-                        label: Text(
-                          side == dc.Side.white
-                              ? l10n(context).whiteToMove
-                              : l10n(context).blackToMove,
-                        ),
-                        selected: _draft.turn == side,
-                        onSelected: (_) => _change(() => _draft.turn = side),
-                      ),
-                  ],
-                ),
-                Expanded(child: _editorLayout()),
-              ],
-            )
-          : _editorLayout(),
-    ),
+    body: SafeArea(child: _editorLayout()),
   );
 
   Widget _editorLayout() => LayoutBuilder(

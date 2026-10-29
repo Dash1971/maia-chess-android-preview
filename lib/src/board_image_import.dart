@@ -28,8 +28,8 @@ class PlatformBoardImageSource implements BoardImageSource {
   }
 }
 
-/// Temporary crop/recognition route; the caller's editor is changed only by a
-/// FEN accepted with Done. Temporary images and cancelled drafts are not saved.
+/// Temporary crop/recognition route returning a placement to the existing editor.
+/// Cancelled operations leave that editor unchanged; images are not saved.
 class BoardImageImportPage extends StatefulWidget {
   const BoardImageImportPage({
     this.source = const PlatformBoardImageSource(),
@@ -233,15 +233,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
         rect,
         blackAtBottom: blackAtBottom,
       );
-      final confirmed = await Navigator.of(context).push<String>(
-        MaterialPageRoute(
-          builder: (_) => BoardEditorPage(
-            initialFen: '${result.placement} w - - 0 1',
-            imageReview: true,
-          ),
-        ),
-      );
-      if (mounted && confirmed != null) Navigator.pop(context, confirmed);
+      Navigator.pop(context, '${result.placement} w - - 0 1');
     } catch (_) {
       if (mounted) setState(() => _failed = true);
     } finally {
