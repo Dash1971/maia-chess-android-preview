@@ -1645,4 +1645,15 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'Mobile Maia hat die Startseite geöffnet, um eine möglicherweise für einen Absturz verantwortliche Sitzung nicht erneut zu öffnen. Deine gespeicherten Partien und Einstellungen bleiben erhalten.';
+
+  @override
+  String get saveDevDiagnostics => 'Dev-Diagnosedaten speichern…';
+
+  @override
+  String get devDiagnosticsHelp =>
+      'Dev zeichnet aktuelle App-Ereignisse sowie Züge und Brettnachrichten von Grand Kingdom detailliert auf diesem Gerät auf. Ältere Daten werden automatisch gelöscht. Fotos und Bluetooth-Adressen werden nicht erfasst. Nichts wird automatisch hochgeladen. Exportiere die Daten nur, wenn du sie teilen möchtest.';
+
+  @override
+  String get devDiagnosticsExportFailed =>
+      'Die Dev-Diagnosedaten konnten nicht gespeichert werden.';
 }

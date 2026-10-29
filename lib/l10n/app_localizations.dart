@@ -2847,6 +2847,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Mobile Maia opened Home to avoid reopening a session that may have caused a crash. Your saved games and settings have been kept.'**
   String get sessionRecovery;
+
+  /// Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Dev diagnostics…'**
+  String get saveDevDiagnostics;
+
+  /// Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Dev records recent app events and detailed Grand Kingdom moves and board messages on this device. Older data is removed automatically. Photos and Bluetooth addresses are not recorded. Nothing is uploaded automatically. Export only if you want to share it.'**
+  String get devDiagnosticsHelp;
+
+  /// Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save Dev diagnostics.'**
+  String get devDiagnosticsExportFailed;
 }
 
 class _AppLocalizationsDelegate
