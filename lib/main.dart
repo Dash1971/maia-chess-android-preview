@@ -29,6 +29,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'l10n/app_localizations.dart';
+import 'board_image/recognition.dart' as vision;
 
 part 'src/engine_queue.dart';
 part 'src/session_repository.dart';
@@ -62,6 +63,7 @@ part 'src/play.dart';
 part 'src/play_localization.dart';
 part 'src/analysis_board.dart';
 part 'src/board_editor.dart';
+part 'src/board_image_import.dart';
 part 'src/review.dart';
 part 'src/review_widgets.dart';
 part 'src/stockfish.dart';
@@ -100,6 +102,13 @@ Future<void> main() async {
       yield LicenseEntryWithLineBreaks([
         'Mobile Maia board and piece artwork',
       ], await rootBundle.loadString('third_party/chessground/notices/$file'));
+    }
+  });
+  LicenseRegistry.addLicense(() async* {
+    for (final file in ['LICENSE', 'NOTICE.md']) {
+      yield LicenseEntryWithLineBreaks([
+        'CrispChess diagram model and preprocessing',
+      ], await rootBundle.loadString('third_party/board_image/$file'));
     }
   });
   FlutterError.onError = (details) {

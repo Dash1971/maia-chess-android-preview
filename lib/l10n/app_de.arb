@@ -458,5 +458,18 @@
   "boardPromotionTitle": "Maias Umwandlung bestätigen",
   "boardPromotionMove": "{square}: {piece}. Ersetze den Bauern.",
   "boardPromotionHelp": "Warte, bis die Motoren stillstehen. Ersetze den Bauern durch die angegebene Figur und prüfe, ob die gesamte Stellung auf dem Brett mit dem Bildschirm übereinstimmt. Falls der Zug unvollständig oder unklar ist, spiele in der App weiter.",
-  "boardPromotionReplaced": "Die Motoren stehen still, ich habe den Bauern ersetzt und alle Figuren stimmen überein."
+  "boardPromotionReplaced": "Die Motoren stehen still, ich habe den Bauern ersetzt und alle Figuren stimmen überein.",
+  "imageFromImage": "Aus einem Bild",
+  "imageImportHelp": "Experimentell: nur Bildschirmaufnahmen und zweidimensionale Schachdiagramme. Rahme alle 64 Felder ein. Pfeile, Markierungen und ungewohnte Figuren können falsch erkannt werden. Prüfe jedes Feld.",
+  "imageCropHorizontal": "Linker und rechter Rand",
+  "imageCropVertical": "Oberer und unterer Rand",
+  "imageFindBoard": "Brett finden",
+  "imageRotate": "Bild drehen",
+  "imageBlackAtBottom": "Schwarz ist im Bild unten",
+  "imageRecognize": "Stellung erkennen",
+  "imageImportFailed": "Das Bild konnte nicht gelesen werden. Wähle eine andere Bildschirmaufnahme oder passe den Ausschnitt an.",
+  "imageBoardNotFound": "Kein Brett gefunden. Rahme das gewünschte Brett manuell ein.",
+  "imageChooseAnother": "Anderes Bild wählen",
+  "imageReviewHelp": "Prüfe jedes Feld und wähle, wer am Zug ist. Rochaderechte und en passant sind anfangs nicht gesetzt; die Zugzähler beginnen bei 0 und 1. Passe die Stellungseinstellungen bei Bedarf an.",
+  "imageReviewConfirm": "Ich habe jedes Feld und die Stellungseinstellungen geprüft."
 }

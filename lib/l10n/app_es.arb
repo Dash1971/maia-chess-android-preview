@@ -458,5 +458,18 @@
   "boardPromotionTitle": "Confirmar promoción de Maia",
   "boardPromotionMove": "{square}: {piece}. Sustituye el peón.",
   "boardPromotionHelp": "Espera a que los motores se detengan. Sustituye el peón por la pieza indicada y comprueba que toda la posición física coincide con la pantalla. Si el movimiento está incompleto o no estás seguro, continúa la partida en la aplicación.",
-  "boardPromotionReplaced": "Los motores están parados, he sustituido el peón y todas las piezas coinciden."
+  "boardPromotionReplaced": "Los motores están parados, he sustituido el peón y todas las piezas coinciden.",
+  "imageFromImage": "Desde una imagen",
+  "imageImportHelp": "Experimental: solo capturas y diagramas en 2D. Encuadra las 64 casillas. Las flechas, los resaltados y las piezas poco habituales pueden interpretarse mal. Revisa cada casilla.",
+  "imageCropHorizontal": "Bordes izquierdo y derecho",
+  "imageCropVertical": "Bordes superior e inferior",
+  "imageFindBoard": "Buscar tablero",
+  "imageRotate": "Girar imagen",
+  "imageBlackAtBottom": "Las negras están abajo en la imagen",
+  "imageRecognize": "Reconocer posición",
+  "imageImportFailed": "No se pudo leer la imagen. Prueba otra captura o ajusta el recorte.",
+  "imageBoardNotFound": "No se encontró un tablero. Encuadra manualmente el tablero deseado.",
+  "imageChooseAnother": "Elegir otra imagen",
+  "imageReviewHelp": "Revisa cada casilla y elige a quién le toca mover. Por defecto no hay derechos de enroque ni captura al paso; los contadores empiezan en 0 y 1. Ajusta la configuración de la posición si es necesario.",
+  "imageReviewConfirm": "He revisado todas las casillas y la configuración de la posición."
 }

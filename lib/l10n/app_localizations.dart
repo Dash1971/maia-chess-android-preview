@@ -2871,6 +2871,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The motors are stopped, I replaced the pawn, and every piece matches.'**
   String get boardPromotionReplaced;
+
+  /// Assisted screenshot/2D-diagram import: imageFromImage. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'From image'**
+  String get imageFromImage;
+
+  /// Assisted screenshot/2D-diagram import: imageImportHelp. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'Experimental: screenshots and 2D diagrams only. Frame all 64 squares. Arrows, highlights and unfamiliar pieces can be misread. Review every square.'**
+  String get imageImportHelp;
+
+  /// Assisted screenshot/2D-diagram import: imageCropHorizontal. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'Left and right edges'**
+  String get imageCropHorizontal;
+
+  /// Assisted screenshot/2D-diagram import: imageCropVertical. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'Top and bottom edges'**
+  String get imageCropVertical;
+
+  /// Assisted screenshot/2D-diagram import: imageFindBoard. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'Find board'**
+  String get imageFindBoard;
+
+  /// Assisted screenshot/2D-diagram import: imageRotate. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate image'**
+  String get imageRotate;
+
+  /// Assisted screenshot/2D-diagram import: imageBlackAtBottom. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'Image has Black at the bottom'**
+  String get imageBlackAtBottom;
+
+  /// Assisted screenshot/2D-diagram import: imageRecognize. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognize position'**
+  String get imageRecognize;
+
+  /// Assisted screenshot/2D-diagram import: imageImportFailed. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read this image. Try another screenshot or adjust the crop.'**
+  String get imageImportFailed;
+
+  /// Assisted screenshot/2D-diagram import: imageBoardNotFound. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'No board found. Frame the intended board manually.'**
+  String get imageBoardNotFound;
+
+  /// Assisted screenshot/2D-diagram import: imageChooseAnother. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose another image'**
+  String get imageChooseAnother;
+
+  /// Assisted screenshot/2D-diagram import: imageReviewHelp. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'Check every square and choose who moves next. Castling rights and en passant default to none; move counters start at 0 and 1. Adjust the position settings as needed.'**
+  String get imageReviewHelp;
+
+  /// Assisted screenshot/2D-diagram import: imageReviewConfirm. Experimental recognition always requires full manual review; no camera or physical-board photo support.
+  ///
+  /// In en, this message translates to:
+  /// **'I checked every square and the position settings.'**
+  String get imageReviewConfirm;
 }
 
 class _AppLocalizationsDelegate

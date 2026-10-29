@@ -265,3 +265,7 @@ local analysis/continuation and FEN flows. Variant/challenge/image recognition a
 not copied as working features. The adapted component remains subject to GPL v3;
 the combined application is distributed under AGPL-3.0-only as permitted by
 section 13. The existing bundled GPL license text is available in license information.
+
+## Assisted board-image import
+
+The bundled `assets/models/board_squares.onnx` and adapted diagram detection, preprocessing and decoding are from CrispChess, Copyright (c) 2024-2026 CrispStrobe, MIT. The exact model is 835,655 bytes, SHA-256 `2408717e2e0e2ed438e2f9f89f85c2e544326cef34a0c91b95168bd17336df47`, pinned at `0d01798daf9661076675f8505b4cc6995a6529da`. The weight-specific MIT grant, training-source attribution and adaptation record are retained in `third_party/board_image/`. The MIT licence and notices are included in the application licence viewer. No physical-board photo models or additional inference runtime are included.

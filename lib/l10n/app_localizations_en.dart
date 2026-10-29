@@ -1634,4 +1634,48 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'The motors are stopped, I replaced the pawn, and every piece matches.';
+
+  @override
+  String get imageFromImage => 'From image';
+
+  @override
+  String get imageImportHelp =>
+      'Experimental: screenshots and 2D diagrams only. Frame all 64 squares. Arrows, highlights and unfamiliar pieces can be misread. Review every square.';
+
+  @override
+  String get imageCropHorizontal => 'Left and right edges';
+
+  @override
+  String get imageCropVertical => 'Top and bottom edges';
+
+  @override
+  String get imageFindBoard => 'Find board';
+
+  @override
+  String get imageRotate => 'Rotate image';
+
+  @override
+  String get imageBlackAtBottom => 'Image has Black at the bottom';
+
+  @override
+  String get imageRecognize => 'Recognize position';
+
+  @override
+  String get imageImportFailed =>
+      'Could not read this image. Try another screenshot or adjust the crop.';
+
+  @override
+  String get imageBoardNotFound =>
+      'No board found. Frame the intended board manually.';
+
+  @override
+  String get imageChooseAnother => 'Choose another image';
+
+  @override
+  String get imageReviewHelp =>
+      'Check every square and choose who moves next. Castling rights and en passant default to none; move counters start at 0 and 1. Adjust the position settings as needed.';
+
+  @override
+  String get imageReviewConfirm =>
+      'I checked every square and the position settings.';
 }

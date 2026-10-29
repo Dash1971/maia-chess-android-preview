@@ -458,5 +458,18 @@
   "boardPromotionTitle": "Confirmar promoção de Maia",
   "boardPromotionMove": "{square}: {piece}. Substitua o peão.",
   "boardPromotionHelp": "Espere os motores pararem. Substitua o peão pela peça indicada e confira se toda a posição física corresponde à tela. Se o movimento estiver incompleto ou houver dúvida, continue a partida no aplicativo.",
-  "boardPromotionReplaced": "Os motores estão parados, substituí o peão e todas as peças correspondem."
+  "boardPromotionReplaced": "Os motores estão parados, substituí o peão e todas as peças correspondem.",
+  "imageFromImage": "A partir de uma imagem",
+  "imageImportHelp": "Experimental: apenas capturas de tela e diagramas em 2D. Enquadre as 64 casas. Setas, destaques e peças pouco familiares podem ser reconhecidos incorretamente. Confira cada casa.",
+  "imageCropHorizontal": "Bordas esquerda e direita",
+  "imageCropVertical": "Bordas superior e inferior",
+  "imageFindBoard": "Encontrar tabuleiro",
+  "imageRotate": "Girar imagem",
+  "imageBlackAtBottom": "As pretas estão embaixo na imagem",
+  "imageRecognize": "Reconhecer posição",
+  "imageImportFailed": "Não foi possível ler a imagem. Escolha outra captura ou ajuste o recorte.",
+  "imageBoardNotFound": "Nenhum tabuleiro encontrado. Enquadre manualmente o tabuleiro desejado.",
+  "imageChooseAnother": "Escolher outra imagem",
+  "imageReviewHelp": "Confira cada casa e escolha quem joga a seguir. Por padrão, não há direitos de roque nem captura en passant; os contadores começam em 0 e 1. Ajuste as configurações da posição se necessário.",
+  "imageReviewConfirm": "Conferi todas as casas e as configurações da posição."
 }

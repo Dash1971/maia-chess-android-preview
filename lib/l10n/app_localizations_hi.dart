@@ -1655,4 +1655,48 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'मोटर रुक गई है, मैंने प्यादा बदल दिया है और सभी गोटियाँ स्क्रीन से मेल खाती हैं।';
+
+  @override
+  String get imageFromImage => 'चित्र से';
+
+  @override
+  String get imageImportHelp =>
+      'प्रायोगिक सुविधा: केवल स्क्रीनशॉट और द्वि-आयामी शतरंज आरेख। सभी 64 खाने चुनें। तीर, हाइलाइट और अपरिचित मोहरे गलत पहचाने जा सकते हैं। हर खाना जाँचें।';
+
+  @override
+  String get imageCropHorizontal => 'बाएँ और दाएँ किनारे';
+
+  @override
+  String get imageCropVertical => 'ऊपरी और निचले किनारे';
+
+  @override
+  String get imageFindBoard => 'बिसात खोजें';
+
+  @override
+  String get imageRotate => 'चित्र घुमाएँ';
+
+  @override
+  String get imageBlackAtBottom => 'चित्र में काले मोहरे नीचे हैं';
+
+  @override
+  String get imageRecognize => 'स्थिति पहचानें';
+
+  @override
+  String get imageImportFailed =>
+      'चित्र पढ़ा नहीं जा सका। दूसरा स्क्रीनशॉट चुनें या काटने की सीमा बदलें।';
+
+  @override
+  String get imageBoardNotFound =>
+      'बिसात नहीं मिली। इच्छित बिसात की सीमा स्वयं चुनें।';
+
+  @override
+  String get imageChooseAnother => 'दूसरा चित्र चुनें';
+
+  @override
+  String get imageReviewHelp =>
+      'हर खाना जाँचें और चुनें कि अगली चाल किसकी है। शुरुआत में कैसलिंग अधिकार और एन पासां उपलब्ध नहीं होते; चाल के काउंटर 0 और 1 से शुरू होते हैं। ज़रूरत के अनुसार स्थिति की सेटिंग बदलें।';
+
+  @override
+  String get imageReviewConfirm =>
+      'मैंने हर खाना और स्थिति की सेटिंग जाँच ली है।';
 }

@@ -1679,4 +1679,47 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Моторы остановлены, пешка заменена, все фигуры соответствуют экрану.';
+
+  @override
+  String get imageFromImage => 'Из изображения';
+
+  @override
+  String get imageImportHelp =>
+      'Экспериментальная функция: только снимки экрана и плоские шахматные диаграммы. Выделите все 64 поля. Стрелки, подсветка и необычные фигуры могут распознаваться неверно. Проверьте каждое поле.';
+
+  @override
+  String get imageCropHorizontal => 'Левая и правая границы';
+
+  @override
+  String get imageCropVertical => 'Верхняя и нижняя границы';
+
+  @override
+  String get imageFindBoard => 'Найти доску';
+
+  @override
+  String get imageRotate => 'Повернуть изображение';
+
+  @override
+  String get imageBlackAtBottom => 'На изображении чёрные снизу';
+
+  @override
+  String get imageRecognize => 'Распознать позицию';
+
+  @override
+  String get imageImportFailed =>
+      'Не удалось прочитать изображение. Выберите другой снимок экрана или измените область обрезки.';
+
+  @override
+  String get imageBoardNotFound =>
+      'Доска не найдена. Выделите нужную доску вручную.';
+
+  @override
+  String get imageChooseAnother => 'Выбрать другое изображение';
+
+  @override
+  String get imageReviewHelp =>
+      'Проверьте каждое поле и укажите, чей ход. По умолчанию прав на рокировку и взятия на проходе нет; счётчики начинаются с 0 и 1. При необходимости измените настройки позиции.';
+
+  @override
+  String get imageReviewConfirm => 'Я проверил все поля и настройки позиции.';
 }

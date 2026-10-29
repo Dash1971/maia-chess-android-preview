@@ -1545,4 +1545,45 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get boardPromotionReplaced => 'モーターは停止し、ポーンを交換しました。全ての駒が画面と一致しています。';
+
+  @override
+  String get imageFromImage => '画像から';
+
+  @override
+  String get imageImportHelp =>
+      '試験機能：スクリーンショットと平面の棋譜図に対応します。64マス全体を囲んでください。矢印、ハイライト、見慣れない駒を誤認することがあります。全マスを確認してください。';
+
+  @override
+  String get imageCropHorizontal => '左端と右端';
+
+  @override
+  String get imageCropVertical => '上端と下端';
+
+  @override
+  String get imageFindBoard => '盤面を検出';
+
+  @override
+  String get imageRotate => '画像を回転';
+
+  @override
+  String get imageBlackAtBottom => '画像では黒側が下';
+
+  @override
+  String get imageRecognize => '局面を認識';
+
+  @override
+  String get imageImportFailed => '画像を読み取れませんでした。別の画像を選ぶか、切り抜く範囲を調整してください。';
+
+  @override
+  String get imageBoardNotFound => '盤面が見つかりません。対象の盤面を手動で囲んでください。';
+
+  @override
+  String get imageChooseAnother => '別の画像を選択';
+
+  @override
+  String get imageReviewHelp =>
+      '全マスを確認し、次の手番を選んでください。キャスリング権とアンパッサンは初期状態ではなし、手数カウンターは0と1です。必要に応じて局面の設定を変更してください。';
+
+  @override
+  String get imageReviewConfirm => '全マスと局面の設定を確認しました。';
 }

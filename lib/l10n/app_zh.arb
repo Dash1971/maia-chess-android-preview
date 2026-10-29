@@ -458,5 +458,18 @@
   "boardPromotionTitle": "确认 Maia 升变",
   "boardPromotionMove": "{square}：{piece}。请替换兵。",
   "boardPromotionHelp": "请等电机停止后，将兵替换为指定棋子，并检查实体棋盘上的所有棋子是否与屏幕一致。如果移动未完成或无法确认，请在应用中继续对局。",
-  "boardPromotionReplaced": "电机已停止，我已替换兵，所有棋子均与屏幕一致。"
+  "boardPromotionReplaced": "电机已停止，我已替换兵，所有棋子均与屏幕一致。",
+  "imageFromImage": "从图片导入",
+  "imageImportHelp": "实验功能：仅支持截图和二维棋谱图。请框选完整的64个格子。箭头、高亮和不常见的棋子样式可能被误识别。请检查每个格子。",
+  "imageCropHorizontal": "左边界和右边界",
+  "imageCropVertical": "上边界和下边界",
+  "imageFindBoard": "查找棋盘",
+  "imageRotate": "旋转图片",
+  "imageBlackAtBottom": "图片中黑方在下方",
+  "imageRecognize": "识别局面",
+  "imageImportFailed": "无法识别此图片。请换一张截图或调整裁剪范围。",
+  "imageBoardNotFound": "未找到棋盘。请手动框选目标棋盘。",
+  "imageChooseAnother": "选择其他图片",
+  "imageReviewHelp": "请检查每个格子并选择下一步由哪方走。王车易位权和吃过路兵默认均为无；步数计数器初始值为0和1。请按需调整局面设置。",
+  "imageReviewConfirm": "我已检查每个格子和局面设置。"
 }

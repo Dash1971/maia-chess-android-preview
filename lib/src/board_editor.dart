@@ -89,9 +89,17 @@ class BoardEditorDraft {
 }
 
 class BoardEditorPage extends StatefulWidget {
-  const BoardEditorPage({required this.initialFen, this.onContinue, super.key});
+  const BoardEditorPage({
+    required this.initialFen,
+    this.onContinue,
+    this.imageReview = false,
+    this.imageSource = const PlatformBoardImageSource(),
+    super.key,
+  });
   final String initialFen;
   final Future<void> Function(String fen)? onContinue;
+  final bool imageReview;
+  final BoardImageSource imageSource;
   @override
   State<BoardEditorPage> createState() => _BoardEditorPageState();
 }
@@ -102,12 +110,16 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
   dc.Piece? _placement;
   dc.Square? _selected;
   bool _flipped = false, _continuing = false;
+  bool _imageReviewed = false, _imageSideChosen = false, _importing = false;
+  bool get _imageReady =>
+      !widget.imageReview || (_imageReviewed && _imageSideChosen);
   Offset? _pointerDown;
   final _boardKey = GlobalKey();
 
   void _change(VoidCallback change) => setState(() {
     change();
     _selected = null;
+    _imageReviewed = false;
   });
   void _tool(cg.EditorPointerMode mode, [dc.Piece? piece]) => _change(() {
     _mode = mode;
@@ -133,6 +145,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
       return;
     }
     setState(() {
+      _imageReviewed = false;
       final from = _selected;
       if (from != null && _draft.pieces[from] != null) {
         _draft.move(from, square, _draft.pieces[from]!);
@@ -144,6 +157,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
   }
 
   String? _validated() {
+    if (!_imageReady) return null;
     try {
       return _draft.validatedFen();
     } catch (_) {
@@ -187,6 +201,21 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
           context,
         ).showSnackBar(SnackBar(content: Text(l10n(context).invalidPosition)));
       }
+    }
+  }
+
+  Future<void> _fromImage() async {
+    if (_importing) return;
+    setState(() => _importing = true);
+    try {
+      final fen = await Navigator.of(context).push<String>(
+        MaterialPageRoute(
+          builder: (_) => BoardImageImportPage(source: widget.imageSource),
+        ),
+      );
+      if (mounted && fen != null) _change(() => _draft.load(fen));
+    } finally {
+      if (mounted) setState(() => _importing = false);
     }
   }
 
@@ -315,7 +344,12 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
                         RadioGroup<dc.Side>(
                           groupValue: _draft.turn,
                           onChanged: (side) {
-                            if (side != null) update(() => _draft.turn = side);
+                            if (side != null) {
+                              update(() {
+                                _draft.turn = side;
+                                _imageSideChosen = true;
+                              });
+                            }
                           },
                           child: Column(
                             children: [
@@ -684,9 +718,11 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
       ),
       IconButton(
         key: const ValueKey('editor-analyze'),
-        tooltip: l10n(context).analysisBoard,
-        onPressed: _finish,
-        icon: const Icon(Icons.analytics_outlined),
+        tooltip: widget.imageReview
+            ? l10n(context).done
+            : l10n(context).analysisBoard,
+        onPressed: _imageReady ? _finish : null,
+        icon: Icon(widget.imageReview ? Icons.check : Icons.analytics_outlined),
       ),
       IconButton(
         key: const ValueKey('editor-settings'),
@@ -701,76 +737,124 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
     appBar: AppBar(
       title: Text(l10n(context).boardEditor),
       actions: [
-        Tooltip(
-          message: l10n(context).editorImageImportUnavailable,
-          child: IconButton(
-            onPressed: null,
-            icon: const Icon(Icons.photo_camera_outlined),
-            tooltip: l10n(context).editorImageImportUnavailable,
+        if (!widget.imageReview &&
+            (appFlavor == 'preview' || appFlavor == 'dev'))
+          IconButton(
+            key: const ValueKey('editor-from-image'),
+            onPressed: _importing ? null : _fromImage,
+            icon: const Icon(Icons.image_outlined),
+            tooltip: l10n(context).imageFromImage,
           ),
-        ),
+        if (widget.imageReview)
+          IconButton(
+            key: const ValueKey('image-use-position'),
+            onPressed: _imageReady ? _finish : null,
+            icon: const Icon(Icons.check),
+            tooltip: l10n(context).done,
+          ),
         IconButton(
           key: const ValueKey('editor-share'),
-          onPressed: _export,
+          onPressed: _imageReady ? _export : null,
           tooltip: l10n(context).shareAndExport,
           icon: const Icon(Icons.share_outlined),
         ),
       ],
     ),
     body: SafeArea(
-      child: LayoutBuilder(
-        builder: (context, box) {
-          if (box.maxWidth > box.maxHeight && box.maxWidth >= 600) {
-            final board = min(
-              box.maxHeight,
-              box.maxWidth * .56,
-            ).clamp(80.0, 560.0);
-            return Row(
-              children: [
-                _board(board),
-                Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, right) => Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _palette(
-                          _flipped ? dc.Side.white : dc.Side.black,
-                          right.maxWidth,
-                        ),
-                        _palette(
-                          _flipped ? dc.Side.black : dc.Side.white,
-                          right.maxWidth,
-                        ),
-                        _toolbar(),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }
-          final width = min(box.maxWidth, 560.0),
-              paletteHeight = width >= 352 ? 44.0 : 88.0;
-          final board = min(
-            width,
-            max(80.0, box.maxHeight - 2 * paletteHeight - 56),
-          );
-          return Center(
-            child: SizedBox(
-              width: width,
+      child: widget.imageReview
+          ? SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _palette(_flipped ? dc.Side.white : dc.Side.black, width),
-                  _board(board),
-                  _palette(_flipped ? dc.Side.black : dc.Side.white, width),
-                  _toolbar(),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(l10n(context).imageReviewHelp),
+                  ),
+                  Wrap(
+                    spacing: 12,
+                    children: [
+                      for (final side in dc.Side.values)
+                        ChoiceChip(
+                          key: ValueKey('image-review-turn-${side.name}'),
+                          label: Text(
+                            side == dc.Side.white
+                                ? l10n(context).whiteToMove
+                                : l10n(context).blackToMove,
+                          ),
+                          selected: _imageSideChosen && _draft.turn == side,
+                          onSelected: (_) => _change(() {
+                            _draft.turn = side;
+                            _imageSideChosen = true;
+                          }),
+                        ),
+                    ],
+                  ),
+                  CheckboxListTile(
+                    key: const ValueKey('image-review-confirm'),
+                    title: Text(l10n(context).imageReviewConfirm),
+                    value: _imageReviewed,
+                    onChanged: _imageSideChosen
+                        ? (v) => setState(() => _imageReviewed = v == true)
+                        : null,
+                  ),
+                  SizedBox(
+                    height: max(500.0, MediaQuery.sizeOf(context).height * .7),
+                    child: _editorLayout(),
+                  ),
                 ],
               ),
-            ),
-          );
-        },
-      ),
+            )
+          : _editorLayout(),
     ),
+  );
+
+  Widget _editorLayout() => LayoutBuilder(
+    builder: (context, box) {
+      if (box.maxWidth > box.maxHeight && box.maxWidth >= 600) {
+        final board = min(box.maxHeight, box.maxWidth * .56).clamp(80.0, 560.0);
+        return Row(
+          children: [
+            _board(board),
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, right) => Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _palette(
+                      _flipped ? dc.Side.white : dc.Side.black,
+                      right.maxWidth,
+                    ),
+                    _palette(
+                      _flipped ? dc.Side.black : dc.Side.white,
+                      right.maxWidth,
+                    ),
+                    _toolbar(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      }
+      final width = min(box.maxWidth, 560.0),
+          paletteHeight = width >= 352 ? 44.0 : 88.0;
+      final board = min(
+        width,
+        max(80.0, box.maxHeight - 2 * paletteHeight - 56),
+      );
+      return Center(
+        child: SizedBox(
+          width: width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _palette(_flipped ? dc.Side.white : dc.Side.black, width),
+              _board(board),
+              _palette(_flipped ? dc.Side.black : dc.Side.white, width),
+              _toolbar(),
+            ],
+          ),
+        ),
+      );
+    },
   );
 }
