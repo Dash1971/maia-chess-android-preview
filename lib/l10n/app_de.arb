@@ -454,5 +454,9 @@
   "continuationSetUpBoard": "Stellung aufbauen",
   "continuationSetupHelp": "Baue die angezeigte Stellung auf deinem Brett auf. Die Partie beginnt, sobald die Figurenpositionen übereinstimmen.",
   "continuationBoardUnsupported": "Das Weiterspielen aus einer Stellung wird derzeit nur mit Chessnut-Brettern unterstützt.",
-  "sessionRecovery": "Mobile Maia hat die Startseite geöffnet, um eine möglicherweise für einen Absturz verantwortliche Sitzung nicht erneut zu öffnen. Deine gespeicherten Partien und Einstellungen bleiben erhalten."
+  "sessionRecovery": "Mobile Maia hat die Startseite geöffnet, um eine möglicherweise für einen Absturz verantwortliche Sitzung nicht erneut zu öffnen. Deine gespeicherten Partien und Einstellungen bleiben erhalten.",
+  "boardPromotionTitle": "Maias Umwandlung bestätigen",
+  "boardPromotionMove": "{square}: {piece}. Ersetze den Bauern.",
+  "boardPromotionHelp": "Warte, bis die Motoren stillstehen. Ersetze den Bauern durch die angegebene Figur und prüfe, ob die gesamte Stellung auf dem Brett mit dem Bildschirm übereinstimmt. Falls der Zug unvollständig oder unklar ist, spiele in der App weiter.",
+  "boardPromotionReplaced": "Die Motoren stehen still, ich habe den Bauern ersetzt und alle Figuren stimmen überein."
 }

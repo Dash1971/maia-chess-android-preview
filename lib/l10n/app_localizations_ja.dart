@@ -1530,4 +1530,19 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'クラッシュの原因となった可能性があるセッションを再開せず、ホームを開きました。保存済みの対局と設定は保持されています。';
+
+  @override
+  String get boardPromotionTitle => 'Maiaの昇格を確認';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square：$piece。ポーンを交換してください。';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      'モーターが停止するまで待ってください。ポーンを指定された駒に交換し、盤上の全ての駒が画面と一致することを確認してください。移動が未完了か不確かな場合は、アプリ内で対局を続けてください。';
+
+  @override
+  String get boardPromotionReplaced => 'モーターは停止し、ポーンを交換しました。全ての駒が画面と一致しています。';
 }

@@ -1642,4 +1642,20 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'Mobile Maia ha abierto la pantalla de inicio para evitar reabrir una sesión que podría haber causado un fallo. Tus partidas guardadas y ajustes se han conservado.';
+
+  @override
+  String get boardPromotionTitle => 'Confirmar promoción de Maia';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square: $piece. Sustituye el peón.';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      'Espera a que los motores se detengan. Sustituye el peón por la pieza indicada y comprueba que toda la posición física coincide con la pantalla. Si el movimiento está incompleto o no estás seguro, continúa la partida en la aplicación.';
+
+  @override
+  String get boardPromotionReplaced =>
+      'Los motores están parados, he sustituido el peón y todas las piezas coinciden.';
 }

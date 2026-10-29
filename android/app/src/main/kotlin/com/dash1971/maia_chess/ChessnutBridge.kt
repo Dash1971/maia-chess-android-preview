@@ -356,7 +356,7 @@ class ChessnutBridge(
 
     private fun connectGatt(device: BluetoothDevice, name: String) {
         check(BoardChannelPolicy.supports(BuildConfig.FLAVOR, boardKind)) {
-            "This board is available only in the Dev build."
+            "This board is unavailable in this build channel."
         }
         connectionSession = UUID.randomUUID().toString()
         deviceName = name
@@ -517,7 +517,7 @@ class ChessnutBridge(
 
     private fun configureServices(services: List<BluetoothGattService>) {
         if (!BoardChannelPolicy.supports(BuildConfig.FLAVOR, boardKind)) {
-            failConnection("This board is available only in the Dev build."); return
+            failConnection("This board is unavailable in this build channel."); return
         }
         if (boardKind == "chessnut") {
             writeCharacteristic = findCharacteristic(services, WRITE_UUID)
@@ -582,7 +582,7 @@ class ChessnutBridge(
 
     private fun finishConfiguration() {
         if (!BoardChannelPolicy.supports(BuildConfig.FLAVOR, boardKind)) {
-            failConnection("This board is available only in the Dev build."); return
+            failConnection("This board is unavailable in this build channel."); return
         }
         ready = true
         emitStatus("ready", "Chessnut is ready.", deviceName)
@@ -677,7 +677,8 @@ class ChessnutBridge(
     }
 
     private fun squareOffCommand(call: MethodCall, result: MethodChannel.Result) {
-        if (BuildConfig.FLAVOR != "dev" || !ready || boardKind != "squareOff" || call.argument<String>("connectionSession") != connectionSession) {
+        if (!BoardChannelPolicy.permitsMotorCommand(BuildConfig.FLAVOR, boardKind, ready,
+                call.argument<String>("connectionSession"), connectionSession)) {
             result.error("invalid_session", "The selected board session is unavailable.", null); return
         }
         if (call.method == "confirmPosition") {
@@ -722,7 +723,7 @@ class ChessnutBridge(
         completion: MethodChannel.Result? = null,
     ) {
         if (!BoardChannelPolicy.supports(BuildConfig.FLAVOR, boardKind)) {
-            completion?.error("unsupported", "This board is available only in the Dev build.", null)
+            completion?.error("unsupported", "This board is unavailable in this build channel.", null)
             return
         }
         if (isLedCommand(command)) {

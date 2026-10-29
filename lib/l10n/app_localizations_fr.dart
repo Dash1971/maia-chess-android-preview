@@ -1642,4 +1642,20 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'Mobile Maia a ouvert l’accueil pour éviter de rouvrir une session qui a pu provoquer un plantage. Vos parties enregistrées et vos réglages ont été conservés.';
+
+  @override
+  String get boardPromotionTitle => 'Confirmer la promotion de Maia';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square : $piece. Remplacez le pion.';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      'Attendez l’arrêt des moteurs. Remplacez le pion par la pièce indiquée et vérifiez que toute la position physique correspond à l’écran. Si le mouvement est incomplet ou incertain, poursuivez la partie dans l’application.';
+
+  @override
+  String get boardPromotionReplaced =>
+      'Les moteurs sont arrêtés, j’ai remplacé le pion et toutes les pièces correspondent.';
 }

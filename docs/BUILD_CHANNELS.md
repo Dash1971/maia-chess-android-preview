@@ -1,6 +1,6 @@
 # Build channels and promotion status
 
-Updated 2026-10-27. Release pages are authoritative for published artifacts;
+Updated 2026-10-28. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
@@ -23,6 +23,15 @@ installations update in place using the established Preview certificate.
   Preview upstream review and README/roadmap pass; lightweight Dev publication
   by default, with no published-download check.
 
+## Grand Kingdom: proposed 2.6 enablement
+
+The 2.6 draft source allows Grand Kingdom discovery, connection and session-bound
+motor commands in Preview/Dev. DGT remains Dev-only and Stable/unflavored builds
+exclude both. The published versions above are unchanged. See the
+[2.6 acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md) for the positive Dev
+hardware report, unresolved checks and draft/release boundary. Keep this feature
+out of the 2.5 maintenance cycle.
+
 ## Preview acceptance
 
 - Use move history remains off by default, with its own information button.
@@ -34,10 +43,10 @@ installations update in place using the established Preview certificate.
   confirmation by a second deliberate press within 2.5 seconds.
 - Board sounds remain under **Chessnut**, because the buzzer commands are
   Chessnut-specific. Other brands must not imply equivalent sound support.
-- The Grand Kingdom and DGT implementations remain in shared source for Dev,
-  but Preview must neither discover/connect to those boards nor send their
-  commands. Both Dart and native channel policies are tested. A future promotion
-  requires explicit approval; merging shared source does not change this policy.
+- Published Preview 2.5 excludes Grand Kingdom and DGT. The proposed 2.6 source
+  admits only Grand Kingdom experimentally, with matching Dart/native gates and
+  motor-session checks. DGT stays Dev-only. Remaining physical acceptance and
+  full Preview qualification are required before release.
 - Qualify the actual 79M Preview APK, including history on/off, inference,
   upgrade/data retention, help layout and package/signature continuity. Dev's
   5M measurements are not evidence of 79M performance.

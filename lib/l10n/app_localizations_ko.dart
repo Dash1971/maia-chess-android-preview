@@ -1534,4 +1534,19 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get sessionRecovery =>
       '충돌을 일으켰을 수 있는 세션을 다시 열지 않고 홈 화면을 열었습니다. 저장된 대국과 설정은 유지됩니다.';
+
+  @override
+  String get boardPromotionTitle => 'Maia의 승격 확인';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square: $piece. 폰을 교체하세요.';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      '모터가 멈출 때까지 기다리세요. 폰을 지정된 기물로 교체하고 실제 체스판의 모든 기물이 화면과 일치하는지 확인하세요. 이동이 끝나지 않았거나 확실하지 않으면 앱에서 대국을 계속하세요.';
+
+  @override
+  String get boardPromotionReplaced => '모터가 멈췄고 폰을 교체했으며 모든 기물이 화면과 일치합니다.';
 }

@@ -1645,4 +1645,20 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'Mobile Maia hat die Startseite geöffnet, um eine möglicherweise für einen Absturz verantwortliche Sitzung nicht erneut zu öffnen. Deine gespeicherten Partien und Einstellungen bleiben erhalten.';
+
+  @override
+  String get boardPromotionTitle => 'Maias Umwandlung bestätigen';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square: $piece. Ersetze den Bauern.';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      'Warte, bis die Motoren stillstehen. Ersetze den Bauern durch die angegebene Figur und prüfe, ob die gesamte Stellung auf dem Brett mit dem Bildschirm übereinstimmt. Falls der Zug unvollständig oder unklar ist, spiele in der App weiter.';
+
+  @override
+  String get boardPromotionReplaced =>
+      'Die Motoren stehen still, ich habe den Bauern ersetzt und alle Figuren stimmen überein.';
 }

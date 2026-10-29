@@ -257,6 +257,10 @@ class _GamePageState extends State<GamePage>
   bool _chessnutResetPending = false;
   bool _physicalMoveInProgress = false;
   String? _pendingPhysicalMaiaMove;
+  // Runtime evidence of a completed write, not proof of physical completion.
+  // Never restored: reconnect/restart must not re-enable or replay a command.
+  String? _motorMoveDelivered;
+  Object? _motorConfirmationAttempt;
   String? _lastChessnutIllegalPosition;
   bool _processingChessnutPosition = false;
   Map<String, String>? _queuedChessnutPosition;
@@ -667,8 +671,10 @@ class _GamePageState extends State<GamePage>
       final savedBoard = saved['electronicBoard'];
       final isBoardSave =
           savedBoard == 'chessnut-go' ||
-          (appFlavor == 'dev' &&
-              (savedBoard == 'pegasus' || savedBoard == 'squareOff'));
+          (savedBoard == 'pegasus' &&
+              BoardChannelPolicy.supports(appFlavor, BoardKind.pegasus)) ||
+          (savedBoard == 'squareOff' &&
+              BoardChannelPolicy.supports(appFlavor, BoardKind.squareOff));
       final preset = isBoardSave ? TimePreset.unlimited : storedPreset;
       if (savedAt != null &&
           preset != TimePreset.unlimited &&
@@ -789,9 +795,15 @@ class _GamePageState extends State<GamePage>
                     saved['forcedResult'] == null &&
                     !restored.game_over));
         _viewedPly = null;
-        // Board metadata describes how the game was played. Only an unfinished
-        // game needs physical move input when it is reopened.
-        _chessnutGameActive = !_gameFinished && isBoardSave;
+        // Unfinished games need board input. A terminal motor promotion also
+        // retains its physical checkpoint until explicit phone continuation.
+        final unfinishedMotorPromotion =
+            savedBoard == 'squareOff' &&
+            saved['pendingPhysicalMaiaMove'] is String &&
+            RegExp(r'^[a-h][27][a-h][18][qrbn]$')
+                .hasMatch(saved['pendingPhysicalMaiaMove'] as String);
+        _chessnutGameActive =
+            isBoardSave && (!_gameFinished || unfinishedMotorPromotion);
         _boardKind = savedBoard == 'pegasus'
             ? BoardKind.pegasus
             : savedBoard == 'squareOff'
@@ -2142,6 +2154,9 @@ class _GamePageState extends State<GamePage>
 
   Future<void> _handleChessnutPosition(Map<String, String> observed) async {
     if (!_useChessnutGo || !_chessnutReady) return;
+    // Grand Kingdom cannot sense the promoted piece's identity. A synthetic or
+    // late position event cannot substitute for the explicit replacement flow.
+    if (_pendingMotorPromotion != null) return;
     final generation = _gameGeneration;
     final epoch = _boardInteractionEpoch;
     final sourceFen = _game.fen;
@@ -2519,7 +2534,8 @@ class _GamePageState extends State<GamePage>
     if (action == 'sounds-off') await _setChessnutSoundsEnabled(false);
   }
 
-  double get _chessnutStatusHeight => _chessnutResetPending
+  double get _chessnutStatusHeight =>
+      _chessnutResetPending || _pendingMotorPromotion != null
       ? max(60, MediaQuery.textScalerOf(context).scale(12) * 3 + 16)
       : max(32, MediaQuery.textScalerOf(context).scale(12) + 12);
 
@@ -2577,7 +2593,11 @@ class _GamePageState extends State<GamePage>
                   Expanded(
                     child: Text(
                       message,
-                      maxLines: _chessnutResetPending ? 3 : 1,
+                      maxLines:
+                          _chessnutResetPending ||
+                              _pendingMotorPromotion != null
+                          ? 3
+                          : 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 12),
                     ),
@@ -2589,8 +2609,14 @@ class _GamePageState extends State<GamePage>
                     IconButton(
                       key: const ValueKey('board-confirm-motor'),
                       icon: const Icon(Icons.check, size: 18),
-                      tooltip: l10n(context).boardConfirmPosition,
-                      onPressed: _confirmMotorPosition,
+                      tooltip: _pendingMotorPromotion != null
+                          ? l10n(context).boardPromotionTitle
+                          : l10n(context).boardConfirmPosition,
+                      onPressed:
+                          _motorConfirmationAttempt == null &&
+                              _motorMoveDelivered == _pendingPhysicalMaiaMove
+                          ? _confirmMotorPosition
+                          : null,
                     ),
                   if (_chessnutReady && _chessnutBatteryPercent != null)
                     Text(
@@ -4097,6 +4123,7 @@ class _GamePageState extends State<GamePage>
   }
 
   void _scheduleGameConclusion({bool playFeedback = true}) {
+    if (_pendingMotorPromotion != null) return;
     if (_resetDialogOpen) {
       _resetDialogRevision.value++;
       return;

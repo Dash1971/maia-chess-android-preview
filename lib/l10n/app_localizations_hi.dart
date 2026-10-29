@@ -1639,4 +1639,20 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'ऐप क्रैश होने का कारण रहे संभावित सत्र को दोबारा खोलने के बजाय Mobile Maia ने होम स्क्रीन खोली है। आपके सहेजे गए खेल और सेटिंग्स सुरक्षित हैं।';
+
+  @override
+  String get boardPromotionTitle => 'Maia के पदोन्नयन की पुष्टि करें';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square: $piece। प्यादा बदलें।';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      'मोटर रुकने तक प्रतीक्षा करें। प्यादे को बताई गई गोटी से बदलें और बिसात की पूरी स्थिति का स्क्रीन से मिलान करें। चाल अधूरी है या संदेह है तो ऐप में खेल जारी रखें।';
+
+  @override
+  String get boardPromotionReplaced =>
+      'मोटर रुक गई है, मैंने प्यादा बदल दिया है और सभी गोटियाँ स्क्रीन से मेल खाती हैं।';
 }
