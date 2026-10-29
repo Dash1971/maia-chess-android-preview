@@ -22,7 +22,9 @@ in stages; one board need not wait for an unrelated board's hardware validation.
    protocol reference subject to source/licence review, not proof of Mobile Maia
    compatibility. Physical acceptance required.
 5. **Square Off Grand Kingdom (#27), 2.6 cycle.** The existing Dev prototype has
-   a positive physical basic-play report as of 2026-10-28. Prepare experimental
+   an initial positive physical basic-play report as of 2026-10-28, followed by
+   two ordinary capture/synchronization failures. Resolve those failures before
+   promotion qualification or readiness claims. Prepare experimental
    Preview enablement in a draft PR, following the
    [2.6 acceptance checklist](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md). DGT remains
    Dev-only. Never replay motor commands blindly or assume Chessnut sensing/LED

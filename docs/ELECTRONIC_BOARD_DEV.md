@@ -46,7 +46,14 @@ The three-second scan and in-game Chessnut reset below are included in Preview
   `OK` or a following human move cannot confirm a promotion. Hardware validation
   is pending. Interrupted motor delivery, takebacks and midgame restoration still
   require phone continuation; arbitrary-position restoration and motor
-  cancellation have no established safe protocol here.
+  cancellation have no established safe protocol here. The owner's later
+  [capture-failure report](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6477270546)
+  supersedes the initial positive capture/synchronization result: one capture
+  removed the wrong piece and another left the captured pawn. Resolving these
+  ordinary captures is the next readiness blocker; see the
+  [recorded histories and test plan](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md).
+  After a mismatch, wait for stopped motors and continue on the phone; do not
+  retry movement or assume local confirmation repairs firmware bookkeeping.
 
 ## Development capture and diagnostics
 

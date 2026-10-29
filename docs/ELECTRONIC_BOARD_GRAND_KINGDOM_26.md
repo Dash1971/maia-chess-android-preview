@@ -17,9 +17,10 @@ was `ZZZ`; specific phone model and firmware were not supplied.
 | --- | --- |
 | Discovery, connection and standard setup confirmation | OK |
 | Ordinary play as White and Black, Maia opening/motor replies | OK for the grouped instructions |
-| Captures and castling | OK |
+| Captures | Initially OK; later two physical capture failures reported (below) |
+| Castling | Initially OK; no isolated castling failure reported |
 | Human promotion | OK |
-| Screen and physical position agreement | OK |
+| Screen and physical position agreement | Initially OK; later contradicted by capture failures |
 | En passant | Not tested yet |
 | Background/resume, connection loss, phone continuation without repeat movement | Not tested yet |
 | Reset, multiple-board discovery, denied permission, Bluetooth/power interruption | Not established |
@@ -28,6 +29,68 @@ This is evidence for one tester's Grand Kingdom on the older 5M Dev build, not
 other Square Off products, every firmware or the future 79M Preview candidate.
 Protocol provenance remains in
 [ELECTRONIC_BOARD_NATIVE_PROTOCOL.md](ELECTRONIC_BOARD_NATIVE_PROTOCOL.md).
+
+### Additional capture failures: priority blocker
+
+[Follow-up, posted 2026-10-28 at 18:29 UTC](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6477270546):
+after more than ten games, the same owner reported two failures while playing
+White. The first game's final `19...Bxf8` should remove White's knight on f8;
+instead the board removed the pawn on f6. In the second game `7...Nxb4`
+left White's pawn on b4. The owner is trying to reproduce the first failure.
+These reports supersede the blanket positive capture/synchronization summary;
+capture reliability is unresolved and blocks readiness before promotion testing.
+
+Reported game A (`Result "*"`):
+
+```pgn
+1. e4 e5 2. Nf3 d6 3. g3 Bg4 4. Bg2 Bxf3 5. Bxf3 Qe7 6. O-O Qd8 7. Nc3 Nc6 8. b3 Nd4 9. Bb2 Nxf3+ 10. Qxf3 f6 11. Rfe1 Ne7 12. a4 Nc6 13. Nd5 Nd4 14. Bxd4 exd4 15. Qd3 c6 16. Nf4 Be7 17. Qxd4 O-O 18. Ne6 Qe8 19. Nxf8 Bxf8 *
+```
+
+Reported game B (`Result "0-1"`, player resigned):
+
+```pgn
+1. e4 e6 2. d4 c5 3. dxc5 Bxc5 4. Nf3 Qb6 5. Qe2 Nc6 6. c3 d6 7. b4 Nxb4 0-1
+```
+
+Expected final engine coordinates are `e7f8` and `c6b4`, respectively. Neither
+history contains a promotion; game B also contains no castling. Assisted
+promotion therefore does not address these ordinary capture failures. Both PGN
+headers label Black `Maia-3 79M (1300)`. The current PGN exporter in
+`lib/src/play.dart` uses a fixed `Maia-3 79M` label, so this does not establish
+the APK/model identity or contradict use of the smaller Dev model. Record the
+actual version/source and model diagnostics for each reproduction.
+
+Source review: the current adapter follows the pinned reference's standard-start
+`RSTVAR` → `GAMEWHITE/GAMEBLACK`, legal-human-input `OK`, and four-coordinate
+engine move flow. There is no established separate capture command. The PGNs do
+not show actual BLE frames, motor timing or the first physical divergence, so
+they cannot distinguish app ordering/state, firmware bookkeeping and mechanical
+failure. Do not add a guessed capture opcode, delay, reset or command retry.
+Local position confirmation does not resynchronize firmware piece bookkeeping.
+A legal following move is also insufficient to prove the entire physical board
+matches the game after a missed/wrong capture.
+
+For the maintainer's next owner request:
+
+- Replay each complete history from confirmed standard setup; do not jump to a
+  manually arranged midgame position. Game B is the shorter first case. A normal
+  Maia game need not select the same replies; exact replay may require a later
+  controlled Dev scenario using the normal human/engine command path.
+- Compare screen and physical board after every move, especially `7...Nxb4`
+  and `19.Nxf8` / `19...Bxf8`. Record the first divergence, which piece moved,
+  which piece was removed, and whether motors had stopped before the next input.
+- Record firmware, phone/Android, actual APK version/source/model, fresh-start
+  versus successive-game behavior, and any intervening background/disconnection.
+  If practical, provide a short video and reviewed app diagnostics. The existing
+  `tool/board_capture` recorder is Chessnut-only, not a Grand Kingdom trace tool.
+- After a mismatch, wait for stopped motors and continue on the phone. Do not
+  retry the move, send a midgame reset or assume physical rearrangement repairs
+  firmware state. Start any later board test with explicit standard setup.
+
+As of 2026-10-29, source/APK builds, Android Actions and LFS downloads are deferred
+while bandwidth is constrained. This follow-up changes documentation only;
+previous automated results apply to the unchanged app implementation and do not
+certify these physical captures. No new build or workflow is requested here.
 
 ## Proposed channel behavior
 
@@ -94,9 +157,10 @@ The maintainer will contact the owner; this PR sends no outreach. Use a separate
 qualified 2.6 candidate when it is prepared. This PR itself publishes no APK.
 Published Dev alpha.2 does not contain this assisted-promotion flow.
 
-1. Record the exact APK version/source, board model/firmware, phone and Android
-   version. Confirm ordinary games, captures, castling and both playing colors
-   still work; repeat en passant, which is not yet physically established.
+1. Resolve and physically retest the two capture failures above first, recording
+   exact APK version/source/model, board firmware, phone and Android version.
+   Then confirm ordinary games, captures, castling and both playing colors;
+   repeat en passant, which is not yet physically established.
 2. Try a Maia queen promotion first. Verify one pawn movement, the correct
    destination/piece instruction, disabled continuation before the checkbox,
    manual replacement, full-position confirmation and normal subsequent play.
@@ -116,9 +180,13 @@ scripts are not a claim that normal Maia play will quickly produce every case.
 
 ## Remaining development order
 
-1. Qualify assisted promotions and the existing en-passant/lifecycle paths with
-   the owner, fixing observed firmware-specific behavior before readiness claims.
-2. Improve bounded diagnostics/recovery instructions using those results; preserve
+1. Reproduce the reported ordinary capture failures and establish their cause;
+   review initialization, accepted-human-move acknowledgement, engine-command
+   ordering and physical behavior before choosing a fix. Add a regression for
+   any proven app defect, then physically validate both histories.
+2. Qualify assisted promotions and the existing en-passant/lifecycle paths with
+   the owner once ordinary captures are reliable. Improve bounded diagnostics
+   and recovery instructions using those results; preserve
    the distinction between an idle live session and uncertain motor delivery.
 3. Investigate full midgame reconnection and takebacks only after establishing a
    reliable reconciliation/firmware protocol. Never infer motor cancellation or
@@ -126,6 +194,8 @@ scripts are not a claim that normal Maia play will quickly produce every case.
 
 ## Before removing draft status
 
+- [ ] Resolve the wrong-piece removal at `19...Bxf8` and missing removal at
+      `7...Nxb4`, with repeatable physical capture/synchronization acceptance.
 - [ ] Record physical en passant acceptance.
 - [ ] Record background/resume and idle disconnect → Play in the app, preserving
       the game without repeated motor movement.
