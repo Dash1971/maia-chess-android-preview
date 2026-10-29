@@ -1,9 +1,11 @@
 # Assisted screenshot/diagram import: 2.6 prototype
 
 Tracks [#179](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
-This is an unpublished draft implementation, separate from the Grand Kingdom
-PR. No version, release, package/signing identity, e-board policy or Stable source
-is changed. Keep the issue open and this PR in draft pending acceptance below.
+The original feature PR remains draft, separate from the Grand Kingdom PR.
+The combined [Dev 2.6.0-alpha.1 snapshot](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.1-dev) now publishes this experimental
+implementation with its existing red icon, package and signing identity.
+Preview/Stable releases and Stable source remain unchanged. Keep the issue open
+and the feature PR in draft pending broader acceptance below.
 
 ## Workflow and safeguards
 
@@ -75,7 +77,11 @@ review of new prose remains outstanding.
 
 ## Draft / release acceptance still required
 
-- [ ] Compile and exercise the actual Android bridge and model on a device/emulator.
+- [x] Compile and exercise the actual Android bridge and model on an ARM64 API 36
+      emulator for Dev 2.6.0-alpha.1: native picker/cancellation, offline inference,
+      mandatory side/review, edit/reconfirmation and reviewed-position analysis
+      passed on one synthetic screenshot. This is not broad recognition or phone
+      acceptance; see the [release record](releases/dev-2.6.0-alpha.1.md).
 - [ ] Validate real system picker and Google-free SAF fallback, cancellation,
       permission denial/provider revocation, corrupt/oversized input and activity
       recreation; verify prior position/session preservation.
@@ -93,5 +99,5 @@ review of new prose remains outstanding.
 Stable main `0957d87` was inspected. No companion feature PR applies: this is the
 Preview 2.6 prototype and Stable has no image import/model. Existing shared build,
 CI, verification and cleanup helpers are unchanged. Preserve the normal Linux
-build/independent reproduction and full Preview release gates; this PR publishes
-no APK and does not complete F-Droid qualification.
+build/independent reproduction and full Preview release gates; the original feature PR remains
+draft; the later Dev snapshot does not complete Preview/F-Droid qualification.

@@ -8,7 +8,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.5.1](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1), code 83 | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
 | [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.11), code 2511 | `com.dash1971.maia_chess.preview`, 79M | Custom-position crash fix; prior 2.5 features are released in Stable. Grand Kingdom/DGT stay disabled. |
-| [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases) | 2.6.0-alpha.1-dev, code 2601: local qualification in progress | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Latest Preview base (containing Stable 2.5.1 fixes), PR #209 assisted Maia promotion and PR #210 assisted image import. Capture failures remain unresolved. |
+| [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.1-dev) | Published 2.6.0-alpha.1-dev, code 2601 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Latest Preview base (containing Stable 2.5.1 fixes), PR #209 assisted Maia promotion and PR #210 assisted image import. Capture failures remain unresolved. |
 
 The three packages install side by side. Obtainium users should select the
 intended repository and enable prereleases for Preview/Dev. Installing Preview
@@ -23,6 +23,16 @@ installations update in place using the established Preview certificate.
   Preview upstream review and README/roadmap pass; lightweight Dev publication
   by default, with no published-download check.
 
+## Dev 2.6.0-alpha.1 publication
+
+Published 2026-10-29 from current Preview base plus #209/#210, with the original
+Dev signing identity, red icon and 5M model. Local build and qualification used
+existing verified model copies; no Actions or LFS downloads. The signed alpha.2
+upgrade and offline gameplay/analysis/native diagram-import smoke passed. The
+[release record](releases/dev-2.6.0-alpha.1.md) contains exact source, hashes,
+verification and cleanup. Physical capture failures remain unresolved; original
+feature PRs remain draft and Preview/Stable releases are unchanged.
+
 ## Grand Kingdom: proposed 2.6 enablement
 
 The 2.6 draft source allows Grand Kingdom discovery, connection and session-bound
@@ -36,7 +46,7 @@ out of the 2.5 maintenance cycle.
 
 The proposed 2.6 source adds From image in the Preview/Dev board editor with a
 bundled MIT diagram classifier, adjustable crop/orientation and a separate manual
-review draft. It is being qualified for the Dev snapshot above; published Preview/Stable artifacts are unchanged.
+review draft. It is published experimentally in the Dev snapshot above; published Preview/Stable artifacts are unchanged.
 [Workflow, provenance and pending acceptance](BOARD_IMAGE_IMPORT.md) distinguish
 this assisted prototype from broad recognition readiness and Stable promotion.
 No camera or new storage/media/network permission is included.

@@ -2,8 +2,11 @@
 
 Status: experimental draft, updated 2026-10-29. Tracks [Preview #27](https://github.com/Dash1971/maia-chess-android-preview/issues/27).
 The owner requested this draft after the first positive hardware report. This is
-source preparation for 2.6; no version bump, APK publication or Stable promotion
-is included. Published Preview 2.5 artifacts still exclude Grand Kingdom.
+source preparation for 2.6. The later combined
+[Dev 2.6.0-alpha.1 snapshot](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.1-dev)
+publishes the assisted-promotion prototype for testing; the original feature PR
+remains draft. Preview/Stable publication and physical acceptance are not
+included. Published Preview 2.5 artifacts still exclude Grand Kingdom.
 
 ## Physical evidence
 
@@ -87,10 +90,12 @@ For the maintainer's next owner request:
   retry the move, send a midgame reset or assume physical rearrangement repairs
   firmware state. Start any later board test with explicit standard setup.
 
-As of 2026-10-29, source/APK builds, Android Actions and LFS downloads are deferred
-while bandwidth is constrained. This follow-up changes documentation only;
-previous automated results apply to the unchanged app implementation and do not
-certify these physical captures. No new build or workflow is requested here.
+The capture-feedback follow-up changed documentation only. The later Dev
+2.6.0-alpha.1 snapshot was built locally with checksum-verified existing models,
+without Actions or LFS downloads. It does not change or certify the reported
+physical captures. Actions/LFS downloads remain on hold while bandwidth is
+constrained; the [release record](releases/dev-2.6.0-alpha.1.md) separates
+automated/emulator evidence from pending board acceptance.
 
 ## Proposed channel behavior
 
@@ -153,9 +158,10 @@ recorded.
 
 ## Owner testing plan
 
-The maintainer will contact the owner; this PR sends no outreach. Use a separately
-qualified 2.6 candidate when it is prepared. This PR itself publishes no APK.
-Published Dev alpha.2 does not contain this assisted-promotion flow.
+The maintainer will contact the owner; this task sends no outreach. Use the
+published red-icon Dev 2.6.0-alpha.1 snapshot for the current prototype and record
+its exact version/source. Older Dev alpha.2 does not contain assisted promotion.
+The original feature PR remains draft pending physical acceptance.
 
 1. Resolve and physically retest the two capture failures above first, recording
    exact APK version/source/model, board firmware, phone and Android version.
