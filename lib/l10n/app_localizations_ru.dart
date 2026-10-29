@@ -1663,4 +1663,15 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'Mobile Maia открыл главный экран, чтобы не открывать повторно сеанс, который мог вызвать сбой. Сохранённые партии и настройки не удалены.';
+
+  @override
+  String get saveDevDiagnostics => 'Сохранить диагностику Dev…';
+
+  @override
+  String get devDiagnosticsHelp =>
+      'Dev записывает на этом устройстве недавние события приложения, а также подробности ходов и сообщений доски Grand Kingdom. Старые данные удаляются автоматически. Фотографии и адреса Bluetooth не записываются. Автоматической отправки нет. Экспортируйте данные, только если хотите ими поделиться.';
+
+  @override
+  String get devDiagnosticsExportFailed =>
+      'Не удалось сохранить диагностику Dev.';
 }
