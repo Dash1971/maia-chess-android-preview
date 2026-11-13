@@ -1711,4 +1711,22 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Die Motoren stehen still, ich habe den Bauern ersetzt und alle Figuren stimmen überein.';
+
+  @override
+  String get imageScanBoard => 'Brett scannen';
+
+  @override
+  String get imageReading => 'Stellung wird gelesen…';
+
+  @override
+  String get imageAdjustPhoto => 'Foto anpassen';
+
+  @override
+  String get imageUsePhoto => 'Foto verwenden';
+
+  @override
+  String get imageRetake => 'Neu aufnehmen';
+
+  @override
+  String get imageAdjustEdges => 'Ränder anpassen';
 }

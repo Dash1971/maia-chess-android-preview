@@ -1729,4 +1729,22 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Моторы остановлены, пешка заменена, все фигуры соответствуют экрану.';
+
+  @override
+  String get imageScanBoard => 'Сканировать доску';
+
+  @override
+  String get imageReading => 'Распознавание позиции…';
+
+  @override
+  String get imageAdjustPhoto => 'Настроить фото';
+
+  @override
+  String get imageUsePhoto => 'Использовать фото';
+
+  @override
+  String get imageRetake => 'Переснять';
+
+  @override
+  String get imageAdjustEdges => 'Настроить границы';
 }

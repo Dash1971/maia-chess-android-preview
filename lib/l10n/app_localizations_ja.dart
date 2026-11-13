@@ -1591,4 +1591,22 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get boardPromotionReplaced => 'モーターは停止し、ポーンを交換しました。全ての駒が画面と一致しています。';
+
+  @override
+  String get imageScanBoard => '盤面をスキャン';
+
+  @override
+  String get imageReading => '局面を読み取り中…';
+
+  @override
+  String get imageAdjustPhoto => '写真を調整';
+
+  @override
+  String get imageUsePhoto => 'この写真を使う';
+
+  @override
+  String get imageRetake => '撮り直す';
+
+  @override
+  String get imageAdjustEdges => '枠を調整';
 }

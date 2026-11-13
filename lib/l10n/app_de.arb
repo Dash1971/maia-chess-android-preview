@@ -473,5 +473,11 @@
   "boardPromotionTitle": "Maias Umwandlung bestätigen",
   "boardPromotionMove": "{square}: {piece}. Ersetze den Bauern.",
   "boardPromotionHelp": "Warte, bis die Motoren stillstehen. Ersetze den Bauern durch die angegebene Figur und prüfe, ob die gesamte Stellung auf dem Brett mit dem Bildschirm übereinstimmt. Falls der Zug unvollständig oder unklar ist, spiele in der App weiter.",
-  "boardPromotionReplaced": "Die Motoren stehen still, ich habe den Bauern ersetzt und alle Figuren stimmen überein."
+  "boardPromotionReplaced": "Die Motoren stehen still, ich habe den Bauern ersetzt und alle Figuren stimmen überein.",
+  "imageScanBoard": "Brett scannen",
+  "imageReading": "Stellung wird gelesen…",
+  "imageAdjustPhoto": "Foto anpassen",
+  "imageUsePhoto": "Foto verwenden",
+  "imageRetake": "Neu aufnehmen",
+  "imageAdjustEdges": "Ränder anpassen"
 }

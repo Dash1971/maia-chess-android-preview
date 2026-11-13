@@ -7,10 +7,28 @@ remains available with its earlier UI. Stable is unchanged.
 [Qualification and remaining limits](releases/preview-2.6.0-beta.1.md) distinguish
 Preview testing from broad recognition readiness and Stable promotion.
 
+The approved Home shortcut and automatic scan process were only a mockup when
+beta.1 shipped. This unreleased follow-up implements them;
+[the delivery audit and actual widget screenshots](CAMERA_SCAN_UI_26.md) show the gap.
+
 ## Workflow and safeguards
 
-In the Preview/Dev board editor, choose From image, then Choose image or Take
-photo. Neither source launches automatically. Choose image uses Android 13+'s
+In Preview/Dev, **Scan board** beside **Analysis Board** on Home opens the installed
+camera directly. A detected grid is read automatically under **Reading position…**,
+then opens the normal Board Editor. No source chooser, crop confirmation, secondary
+editor or acknowledgement interrupts a successful Home scan. Cancel returns Home
+without replacing the saved session.
+
+If no grid is found or recognition fails, **Adjust photo** shows four draggable
+corner handles, **Retake**, **Rotate image** and **Use photo**. Dragging inside moves
+the frame. **Adjust edges** expands accessible edge sliders, the Black-at-bottom
+switch and Find board. The gallery icon offers Choose image; unavailable-camera
+errors also offer this fallback. Cancelling a replacement retains the current crop.
+The existing editor camera icon keeps an explicit source/framing path to override
+automatic framing or orientation. Turn, pieces, analysis and continuation use the
+normal editor controls.
+
+Choose image uses Android 13+'s
 system photo picker, with `ACTION_OPEN_DOCUMENT` on older systems or when the
 picker is unavailable. Take photo delegates `ACTION_IMAGE_CAPTURE` to the installed
 camera, including FOSS camera apps, without requiring a named app or Google SDK.

@@ -33,9 +33,13 @@ class PlatformBoardImageSource implements BoardImageSource {
 class BoardImageImportPage extends StatefulWidget {
   const BoardImageImportPage({
     this.source = const PlatformBoardImageSource(),
+    this.startWithCamera = false,
     super.key,
   });
   final BoardImageSource source;
+  // Home goes straight to the installed camera and automatically reads a found
+  // grid. The editor entry retains manual framing/orientation for either source.
+  final bool startWithCamera;
   @override
   State<BoardImageImportPage> createState() => _BoardImageImportPageState();
 }
@@ -49,7 +53,15 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
       _notFound = false,
       _failed = false,
       _cameraUnavailable = false;
-  Offset? _anchor;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.startWithCamera) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _isCurrentRoute) unawaited(_choose(camera: true));
+      });
+    }
+  }
 
   // A popped route stays mounted during its exit animation. Its async result
   // must not pop the editor now underneath it or mutate a cancelled import.
@@ -120,7 +132,10 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
       _crop = const Rect.fromLTWH(0, 0, 1, 1);
       _blackAtBottom = false;
       _notFound = true;
-      await _detect();
+      final found = await _detect();
+      if (mounted && _isCurrentRoute && found && widget.startWithCamera) {
+        await _recognize();
+      }
     } catch (error) {
       if (mounted) {
         setState(() {
@@ -135,11 +150,11 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
     }
   }
 
-  Future<void> _detect() async {
+  Future<bool> _detect() async {
     final pixels = _rgba!;
     final w = _image!.width, h = _image!.height;
     final result = await vision.locateInBackground(pixels, w, h);
-    if (!mounted || !_isCurrentRoute) return;
+    if (!mounted || !_isCurrentRoute) return false;
     setState(() {
       _notFound = result == null;
       _crop = result == null
@@ -151,6 +166,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
               (result.bottom / h).clamp(0, 1),
             );
     });
+    return result != null;
   }
 
   Future<void> _find() async {
@@ -245,172 +261,286 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final t = l10n(context);
-    final image = _image;
-    return Scaffold(
-      appBar: AppBar(title: Text(t.imageFromImage)),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+  void _dragCorner(int corner, Offset delta, Size size) {
+    final minWidth = min(64 / _image!.width, _crop.right);
+    final minHeight = min(64 / _image!.height, _crop.bottom);
+    final dx = delta.dx / size.width, dy = delta.dy / size.height;
+    setState(() {
+      var left = _crop.left, top = _crop.top;
+      var right = _crop.right, bottom = _crop.bottom;
+      if (corner == 0 || corner == 3) {
+        left = (left + dx).clamp(0, right - minWidth);
+      } else {
+        right = (right + dx).clamp(min(left + minWidth, 1), 1);
+      }
+      if (corner < 2) {
+        top = (top + dy).clamp(0, bottom - minHeight);
+      } else {
+        bottom = (bottom + dy).clamp(min(top + minHeight, 1), 1);
+      }
+      _crop = Rect.fromLTRB(left, top, right, bottom);
+    });
+  }
+
+  Widget _cropImage(ui.Image image) => LayoutBuilder(
+    builder: (context, box) {
+      final width = min(
+        box.maxWidth,
+        MediaQuery.sizeOf(context).height * .52 * image.width / image.height,
+      );
+      final size = Size(width, width * image.height / image.width);
+      final corners = [
+        _crop.topLeft,
+        _crop.topRight,
+        _crop.bottomRight,
+        _crop.bottomLeft,
+      ];
+      return Center(
+        child: SizedBox(
+          width: size.width,
+          height: size.height,
+          child: Stack(
+            clipBehavior: Clip.none,
             children: [
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  OutlinedButton.icon(
-                    key: const ValueKey('image-choose'),
-                    onPressed: _busy ? null : () => _choose(),
-                    icon: const Icon(Icons.photo_library_outlined),
-                    label: Text(t.imageChoose),
-                  ),
-                  OutlinedButton.icon(
-                    key: const ValueKey('image-camera'),
-                    onPressed: _busy ? null : () => _choose(camera: true),
-                    icon: const Icon(Icons.photo_camera_outlined),
-                    label: Text(t.imageTakePhoto),
-                  ),
-                ],
-              ),
-              if (_busy)
-                const Padding(
-                  padding: EdgeInsets.all(12),
-                  child: LinearProgressIndicator(),
-                ),
-              if (_failed)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Text(
-                    _cameraUnavailable
-                        ? t.imageCameraUnavailable
-                        : t.imageImportFailed,
-                    key: const ValueKey('image-import-error'),
-                  ),
-                ),
-              if (_notFound && image != null) Text(t.imageBoardNotFound),
-              if (image != null) ...[
-                const SizedBox(height: 12),
-                Semantics(
-                  label: t.imageFromImage,
+              Positioned.fill(
+                child: Semantics(
+                  label: l10n(context).imageAdjustPhoto,
                   image: true,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.sizeOf(context).height * .55,
+                  child: GestureDetector(
+                    key: const ValueKey('image-crop'),
+                    onPanUpdate: (e) {
+                      final dx = (e.delta.dx / size.width).clamp(
+                        -_crop.left,
+                        1 - _crop.right,
+                      );
+                      final dy = (e.delta.dy / size.height).clamp(
+                        -_crop.top,
+                        1 - _crop.bottom,
+                      );
+                      setState(() => _crop = _crop.shift(Offset(dx, dy)));
+                    },
+                    child: CustomPaint(
+                      painter: _ImageCropPainter(image, _crop),
                     ),
-                    child: Center(
-                      child: AspectRatio(
-                        aspectRatio: image.width / image.height,
-                        child: LayoutBuilder(
-                          builder: (_, box) {
-                            Offset unit(Offset p) => Offset(
-                              (p.dx / box.maxWidth).clamp(0, 1),
-                              (p.dy / box.maxHeight).clamp(0, 1),
-                            );
-                            return GestureDetector(
-                              key: const ValueKey('image-crop'),
-                              onPanStart: _busy
-                                  ? null
-                                  : (e) => _anchor = unit(e.localPosition),
-                              onPanUpdate: _busy
-                                  ? null
-                                  : (e) {
-                                      final anchor = _anchor;
-                                      if (anchor == null) return;
-                                      setState(
-                                        () => _crop = Rect.fromPoints(
-                                          anchor,
-                                          unit(e.localPosition),
-                                        ),
-                                      );
-                                    },
-                              child: CustomPaint(
-                                painter: _ImageCropPainter(image, _crop),
+                  ),
+                ),
+              ),
+              for (int i = 0; i < corners.length; i++)
+                Positioned(
+                  left: (corners[i].dx * size.width - 24).clamp(
+                    0,
+                    max(0, size.width - 48),
+                  ),
+                  top: (corners[i].dy * size.height - 24).clamp(
+                    0,
+                    max(0, size.height - 48),
+                  ),
+                  child: ExcludeSemantics(
+                    child: GestureDetector(
+                      key: ValueKey('image-crop-corner-$i'),
+                      behavior: HitTestBehavior.opaque,
+                      onPanUpdate: (e) => _dragCorner(i, e.delta, size),
+                      child: const SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: Center(
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.fromBorderSide(
+                                BorderSide(color: Colors.black54),
                               ),
-                            );
-                          },
+                            ),
+                            child: SizedBox(width: 14, height: 14),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-                Text(t.imageCropHorizontal),
-                RangeSlider(
-                  key: const ValueKey('image-horizontal-crop'),
-                  values: RangeValues(_crop.left, _crop.right),
-                  labels: RangeLabels(
-                    '${(_crop.left * 100).round()}%',
-                    '${(_crop.right * 100).round()}%',
-                  ),
-                  onChanged: _busy
-                      ? null
-                      : (v) => setState(
-                          () => _crop = Rect.fromLTRB(
-                            v.start,
-                            _crop.top,
-                            v.end,
-                            _crop.bottom,
-                          ),
-                        ),
-                ),
-                Text(t.imageCropVertical),
-                RangeSlider(
-                  key: const ValueKey('image-vertical-crop'),
-                  values: RangeValues(_crop.top, _crop.bottom),
-                  labels: RangeLabels(
-                    '${(_crop.top * 100).round()}%',
-                    '${(_crop.bottom * 100).round()}%',
-                  ),
-                  onChanged: _busy
-                      ? null
-                      : (v) => setState(
-                          () => _crop = Rect.fromLTRB(
-                            _crop.left,
-                            v.start,
-                            _crop.right,
-                            v.end,
-                          ),
-                        ),
-                ),
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    TextButton.icon(
-                      onPressed: _busy ? null : _find,
-                      icon: const Icon(Icons.grid_on),
-                      label: Text(t.imageFindBoard),
-                    ),
-                    TextButton.icon(
-                      key: const ValueKey('image-rotate'),
-                      onPressed: _busy ? null : _rotate,
-                      icon: const Icon(Icons.rotate_right),
-                      label: Text(t.imageRotate),
-                    ),
-                  ],
-                ),
-                SwitchListTile(
-                  title: Text(t.imageBlackAtBottom),
-                  value: _blackAtBottom,
-                  onChanged: _busy
-                      ? null
-                      : (v) => setState(() => _blackAtBottom = v),
-                ),
-                FilledButton(
-                  key: const ValueKey('image-recognize'),
-                  onPressed:
-                      _busy ||
-                          _crop.width * image.width < 64 ||
-                          _crop.height * image.height < 64
-                      ? null
-                      : _recognize,
-                  child: Text(t.imageRecognize),
-                ),
-              ],
             ],
           ),
         ),
+      );
+    },
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final t = l10n(context);
+    final image = _image;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          _busy
+              ? t.imageScanBoard
+              : image == null
+              ? t.imageScanBoard
+              : t.imageAdjustPhoto,
+        ),
+        actions: [
+          if (image != null && !_busy)
+            IconButton(
+              key: const ValueKey('image-choose'),
+              tooltip: t.imageChoose,
+              onPressed: () => _choose(),
+              icon: const Icon(Icons.photo_library_outlined),
+            ),
+        ],
+      ),
+      body: SafeArea(
+        child: _busy
+            ? Center(
+                child: Semantics(
+                  liveRegion: true,
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CircularProgressIndicator(),
+                        const SizedBox(height: 24),
+                        Text(
+                          t.imageReading,
+                          key: const ValueKey('image-reading'),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (_failed)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Text(
+                          _cameraUnavailable
+                              ? t.imageCameraUnavailable
+                              : t.imageImportFailed,
+                          key: const ValueKey('image-import-error'),
+                        ),
+                      ),
+                    if (image == null)
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          OutlinedButton.icon(
+                            key: const ValueKey('image-choose'),
+                            onPressed: () => _choose(),
+                            icon: const Icon(Icons.photo_library_outlined),
+                            label: Text(t.imageChoose),
+                          ),
+                          FilledButton.icon(
+                            key: const ValueKey('image-camera'),
+                            onPressed: () => _choose(camera: true),
+                            icon: const Icon(Icons.photo_camera_outlined),
+                            label: Text(t.imageTakePhoto),
+                          ),
+                        ],
+                      )
+                    else ...[
+                      if (_notFound)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: Text(t.imageBoardNotFound),
+                        ),
+                      _cropImage(image),
+                      const SizedBox(height: 16),
+                      Wrap(
+                        alignment: WrapAlignment.spaceEvenly,
+                        spacing: 12,
+                        runSpacing: 8,
+                        children: [
+                          TextButton.icon(
+                            key: const ValueKey('image-camera'),
+                            onPressed: () => _choose(camera: true),
+                            icon: const Icon(Icons.photo_camera_outlined),
+                            label: Text(t.imageRetake),
+                          ),
+                          TextButton.icon(
+                            key: const ValueKey('image-rotate'),
+                            onPressed: _rotate,
+                            icon: const Icon(Icons.rotate_right),
+                            label: Text(t.imageRotate),
+                          ),
+                        ],
+                      ),
+                      FilledButton(
+                        key: const ValueKey('image-recognize'),
+                        style: FilledButton.styleFrom(
+                          minimumSize: const Size.fromHeight(52),
+                        ),
+                        onPressed:
+                            _crop.width * image.width < 64 ||
+                                _crop.height * image.height < 64
+                            ? null
+                            : _recognize,
+                        child: Text(t.imageUsePhoto),
+                      ),
+                      ExpansionTile(
+                        key: const ValueKey('image-adjust-edges'),
+                        title: Text(t.imageAdjustEdges),
+                        tilePadding: EdgeInsets.zero,
+                        children: [
+                          Text(t.imageCropHorizontal),
+                          RangeSlider(
+                            key: const ValueKey('image-horizontal-crop'),
+                            values: RangeValues(_crop.left, _crop.right),
+                            labels: RangeLabels(
+                              '${(_crop.left * 100).round()}%',
+                              '${(_crop.right * 100).round()}%',
+                            ),
+                            onChanged: (v) => setState(
+                              () => _crop = Rect.fromLTRB(
+                                v.start,
+                                _crop.top,
+                                v.end,
+                                _crop.bottom,
+                              ),
+                            ),
+                          ),
+                          Text(t.imageCropVertical),
+                          RangeSlider(
+                            key: const ValueKey('image-vertical-crop'),
+                            values: RangeValues(_crop.top, _crop.bottom),
+                            labels: RangeLabels(
+                              '${(_crop.top * 100).round()}%',
+                              '${(_crop.bottom * 100).round()}%',
+                            ),
+                            onChanged: (v) => setState(
+                              () => _crop = Rect.fromLTRB(
+                                _crop.left,
+                                v.start,
+                                _crop.right,
+                                v.end,
+                              ),
+                            ),
+                          ),
+                          SwitchListTile(
+                            title: Text(t.imageBlackAtBottom),
+                            value: _blackAtBottom,
+                            onChanged: (v) =>
+                                setState(() => _blackAtBottom = v),
+                          ),
+                          TextButton.icon(
+                            onPressed: _find,
+                            icon: const Icon(Icons.grid_on),
+                            label: Text(t.imageFindBoard),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
       ),
     );
   }

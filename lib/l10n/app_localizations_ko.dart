@@ -1596,4 +1596,22 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get boardPromotionReplaced => '모터가 멈췄고 폰을 교체했으며 모든 기물이 화면과 일치합니다.';
+
+  @override
+  String get imageScanBoard => '체스판 스캔';
+
+  @override
+  String get imageReading => '포지션 읽는 중…';
+
+  @override
+  String get imageAdjustPhoto => '사진 조정';
+
+  @override
+  String get imageUsePhoto => '사진 사용';
+
+  @override
+  String get imageRetake => '다시 촬영';
+
+  @override
+  String get imageAdjustEdges => '테두리 조정';
 }

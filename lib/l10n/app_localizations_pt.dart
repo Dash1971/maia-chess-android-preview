@@ -1715,4 +1715,22 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Os motores estão parados, substituí o peão e todas as peças correspondem.';
+
+  @override
+  String get imageScanBoard => 'Escanear tabuleiro';
+
+  @override
+  String get imageReading => 'Lendo posição…';
+
+  @override
+  String get imageAdjustPhoto => 'Ajustar foto';
+
+  @override
+  String get imageUsePhoto => 'Usar foto';
+
+  @override
+  String get imageRetake => 'Tirar outra';
+
+  @override
+  String get imageAdjustEdges => 'Ajustar bordas';
 }
