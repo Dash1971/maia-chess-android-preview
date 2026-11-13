@@ -11,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/main.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'fixtures/immediate_maia_preferences.dart';
 
 void main() {
   setUpAll(OpeningNames.load);
@@ -105,7 +106,7 @@ void main() {
   });
 
   test('analysis tree survives persistent JSON round trip', () async {
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     const variation = RecordedVariation(
       basePly: 0,
       baseFen: chess.Chess.DEFAULT_POSITION,
@@ -139,7 +140,7 @@ void main() {
   });
 
   test('malformed active session is discarded after one failed load', () async {
-    SharedPreferences.setMockInitialValues({
+    setImmediateMaiaPreferences({
       'activeSessionV1': '{not valid json',
     });
 
@@ -153,7 +154,7 @@ void main() {
     'unsupported active session schema is preserved for a newer reader',
     () async {
       const future = '{"schema":99,"type":"game"}';
-      SharedPreferences.setMockInitialValues({'activeSessionV1': future});
+      setImmediateMaiaPreferences({'activeSessionV1': future});
 
       await expectLater(
         ActiveSessionStore.load(),
@@ -235,7 +236,7 @@ void main() {
   testWidgets('Clear moves replaces restored Analysis Board state', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     const afterE4 =
         'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
     await tester.pumpWidget(
@@ -448,7 +449,7 @@ void main() {
   });
 
   test('diagnostics persist exception evidence and version metadata', () async {
-    SharedPreferences.setMockInitialValues({
+    setImmediateMaiaPreferences({
       gameAnalysisQualityPreferenceKey: 'balanced',
     });
     PackageInfo.setMockInitialValues(
@@ -481,7 +482,7 @@ void main() {
         .toUtc()
         .subtract(const Duration(days: 15))
         .toIso8601String();
-    SharedPreferences.setMockInitialValues({
+    setImmediateMaiaPreferences({
       'diagnosticEntriesV1': <String>['$old [expired-entry]'],
     });
     for (var index = 0; index < 45; index++) {
@@ -504,7 +505,7 @@ void main() {
   test('diagnostics enforce the total character ceiling', () async {
     final timestamp = DateTime.now().toUtc().toIso8601String();
     final payload = List.filled(5000, 'x').join();
-    SharedPreferences.setMockInitialValues({
+    setImmediateMaiaPreferences({
       'diagnosticEntriesV1': List.generate(
         40,
         (index) => '$timestamp [large-entry-$index] $payload',
@@ -526,7 +527,7 @@ void main() {
   testWidgets('About shows the package version instead of a hard-coded value', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     PackageInfo.setMockInitialValues(
       appName: 'Mobile Maia',
       packageName: 'com.dash1971.maia_chess',
@@ -551,7 +552,7 @@ void main() {
   });
 
   testWidgets('Copy diagnostics is at the bottom of Settings', (tester) async {
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     await tester.pumpWidget(const MaiaChessApp());
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('home-settings-button')));
@@ -561,7 +562,7 @@ void main() {
   });
 
   testWidgets('sampling help explains Temperature and Top-P', (tester) async {
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     final calls = <MethodCall>[];
     final messenger = tester.binding.defaultBinaryMessenger;
     messenger.setMockMethodCallHandler(maiaEngineChannel, (call) async {
@@ -611,7 +612,7 @@ void main() {
   testWidgets('new settings default to Temperature 1.00 and Top-P 0.95', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     await tester.pumpWidget(const MaiaChessApp());
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('home-settings-button')));
@@ -632,7 +633,7 @@ void main() {
     testWidgets('neutral sampling guidance follows ${setting.$1} alone', (
       tester,
     ) async {
-      SharedPreferences.setMockInitialValues({
+      setImmediateMaiaPreferences({
         'temperatureV2': 1.0,
         'topPV2': 1.0,
         'maxOpeningVarietyV1': false,
@@ -682,7 +683,7 @@ void main() {
   testWidgets('existing sampling choices persist until engine reset', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues({
+    setImmediateMaiaPreferences({
       'temperatureV2': 0.5,
       'topPV2': 0.9,
       'maxOpeningVarietyV1': false,
@@ -727,7 +728,7 @@ void main() {
   });
 
   testWidgets('Maia play rating persists across app restarts', (tester) async {
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     await tester.pumpWidget(const MaiaChessApp());
     await tester.pumpAndSettle();
 
@@ -748,7 +749,7 @@ void main() {
   testWidgets(
     'Continue from here uses home play defaults, not analysis rating',
     (tester) async {
-      SharedPreferences.setMockInitialValues({
+      setImmediateMaiaPreferences({
         maiaPlayEloPreferenceKey: 2200,
         maiaPlaySidePreferenceKey: PlayerSide.black.name,
         maiaTimePresetPreferenceKey: TimePreset.custom.name,
@@ -813,7 +814,7 @@ void main() {
   testWidgets('Continue from here can override the clock for one game', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues({
+    setImmediateMaiaPreferences({
       maiaPlaySidePreferenceKey: PlayerSide.black.name,
       maiaTimePresetPreferenceKey: TimePreset.unlimited.name,
     });
@@ -861,7 +862,7 @@ void main() {
   testWidgets('second Maia engine settings persist across app restarts', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     await tester.pumpWidget(const MaiaChessApp());
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('home-settings-button')));
@@ -920,7 +921,7 @@ void main() {
     testWidgets('invalid ${entry.key} defaults without blocking startup', (
       tester,
     ) async {
-      SharedPreferences.setMockInitialValues({
+      setImmediateMaiaPreferences({
         entry.key: entry.value,
         'unrelatedPreference': 'keep',
       });
@@ -948,7 +949,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     await tester.pumpWidget(const MaiaChessApp());
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('game-home-button')), findsNothing);
@@ -990,7 +991,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     await tester.pumpWidget(const MaiaChessApp());
     await tester.pumpAndSettle();
     expect(find.byTooltip('About'), findsOneWidget);
@@ -1052,7 +1053,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     final maia = Completer<Float32List>();
     final feedback = <GameFeedbackEvent>[];
     await tester.pumpWidget(
@@ -1136,7 +1137,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     await tester.pumpWidget(const MaiaChessApp());
     await tester.pumpAndSettle();
     await tester.tap(find.text('Start game'));
@@ -1163,7 +1164,7 @@ void main() {
   testWidgets('custom FEN starts Maia only when it is Maia turn', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     var predictions = 0;
     const blackToMove =
         'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1';
@@ -1222,7 +1223,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    SharedPreferences.setMockInitialValues({});
+    setImmediateMaiaPreferences({});
     const mateInOne = '7k/8/5KQ1/8/8/8/8/8 w - - 0 1';
     final expected = chess.Chess.fromFEN(mateInOne)
       ..move({'from': 'g6', 'to': 'g7'});
