@@ -1574,10 +1574,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get editorPositionSettings => 'Configurações da posição';
 
   @override
-  String get editorImageImportUnavailable =>
-      'Importar posição de imagem (ainda indisponível)';
-
-  @override
   String get editorShareFen => 'Compartilhar FEN';
 
   @override
@@ -1651,45 +1647,6 @@ class AppLocalizationsPt extends AppLocalizations {
       'O Mobile Maia abriu a tela inicial para evitar reabrir uma sessão que pode ter causado uma falha. Suas partidas salvas e configurações foram mantidas.';
 
   @override
-  String get imageFromImage => 'A partir de uma imagem';
-
-  @override
-  String get imageCropHorizontal => 'Bordas esquerda e direita';
-
-  @override
-  String get imageCropVertical => 'Bordas superior e inferior';
-
-  @override
-  String get imageFindBoard => 'Encontrar tabuleiro';
-
-  @override
-  String get imageRotate => 'Girar imagem';
-
-  @override
-  String get imageBlackAtBottom => 'As pretas estão embaixo na imagem';
-
-  @override
-  String get imageRecognize => 'Reconhecer posição';
-
-  @override
-  String get imageImportFailed =>
-      'Não foi possível ler a imagem. Escolha outra captura ou ajuste o recorte.';
-
-  @override
-  String get imageBoardNotFound =>
-      'Nenhum tabuleiro encontrado. Enquadre manualmente o tabuleiro desejado.';
-
-  @override
-  String get imageChoose => 'Escolher imagem';
-
-  @override
-  String get imageTakePhoto => 'Tirar foto';
-
-  @override
-  String get imageCameraUnavailable =>
-      'Não foi possível abrir a câmera. Escolha uma imagem.';
-
-  @override
   String get saveDevDiagnostics => 'Salvar diagnóstico do Dev…';
 
   @override
@@ -1715,22 +1672,4 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Os motores estão parados, substituí o peão e todas as peças correspondem.';
-
-  @override
-  String get imageScanBoard => 'Escanear tabuleiro';
-
-  @override
-  String get imageReading => 'Lendo posição…';
-
-  @override
-  String get imageAdjustPhoto => 'Ajustar foto';
-
-  @override
-  String get imageUsePhoto => 'Usar foto';
-
-  @override
-  String get imageRetake => 'Tirar outra';
-
-  @override
-  String get imageAdjustEdges => 'Ajustar bordas';
 }

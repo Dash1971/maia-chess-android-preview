@@ -1544,10 +1544,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editorPositionSettings => 'Position settings';
 
   @override
-  String get editorImageImportUnavailable =>
-      'Import position from image (not yet available)';
-
-  @override
   String get editorShareFen => 'Share FEN';
 
   @override
@@ -1620,45 +1616,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Mobile Maia opened Home to avoid reopening a session that may have caused a crash. Your saved games and settings have been kept.';
 
   @override
-  String get imageFromImage => 'From image';
-
-  @override
-  String get imageCropHorizontal => 'Left and right edges';
-
-  @override
-  String get imageCropVertical => 'Top and bottom edges';
-
-  @override
-  String get imageFindBoard => 'Find board';
-
-  @override
-  String get imageRotate => 'Rotate image';
-
-  @override
-  String get imageBlackAtBottom => 'Image has Black at the bottom';
-
-  @override
-  String get imageRecognize => 'Recognize position';
-
-  @override
-  String get imageImportFailed =>
-      'Could not read this image. Try another screenshot or adjust the crop.';
-
-  @override
-  String get imageBoardNotFound =>
-      'No board found. Frame the intended board manually.';
-
-  @override
-  String get imageChoose => 'Choose image';
-
-  @override
-  String get imageTakePhoto => 'Take photo';
-
-  @override
-  String get imageCameraUnavailable =>
-      'Could not open the camera. Choose an image instead.';
-
-  @override
   String get saveDevDiagnostics => 'Save Dev diagnostics…';
 
   @override
@@ -1683,22 +1640,4 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'The motors are stopped, I replaced the pawn, and every piece matches.';
-
-  @override
-  String get imageScanBoard => 'Scan board';
-
-  @override
-  String get imageReading => 'Reading position…';
-
-  @override
-  String get imageAdjustPhoto => 'Adjust photo';
-
-  @override
-  String get imageUsePhoto => 'Use photo';
-
-  @override
-  String get imageRetake => 'Retake';
-
-  @override
-  String get imageAdjustEdges => 'Adjust edges';
 }

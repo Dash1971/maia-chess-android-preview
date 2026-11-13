@@ -32,5 +32,6 @@ are not. Native runtime diagnostic text is deliberately canonical English.
 The test-script addition runs the new Dev-only store tests. Stable has no such
 feature, so no companion feature or runner port applies. The four shared build
 workspace helpers remain unchanged and identical; canonical Linux and independent
-reproduction release gates remain unchanged. PR #210 is included in the Dev
-snapshot separately; its camera/import breadcrumbs contain phases only.
+reproduction release gates remain unchanged. The previously published Dev
+alpha.2 snapshot included PR #210. Camera/image recognition has since been
+shelved; its source paths are removed by the current withdrawal PR.

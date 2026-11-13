@@ -2018,10 +2018,6 @@
   "@editorPositionSettings": {
     "description": "Standard-chess board editor: Position settings. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
   },
-  "editorImageImportUnavailable": "Import position from image (not yet available)",
-  "@editorImageImportUnavailable": {
-    "description": "Standard-chess board editor: Import position from image (not yet available). Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
-  },
   "editorShareFen": "Share FEN",
   "@editorShareFen": {
     "description": "Standard-chess board editor: Share FEN. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
@@ -2114,54 +2110,6 @@
   "@sessionRecovery": {
     "description": "Home notice after suppressing an unsafe or interrupted automatic session restore. No games or settings are deleted."
   },
-  "imageFromImage": "From image",
-  "@imageFromImage": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
-  "imageCropHorizontal": "Left and right edges",
-  "@imageCropHorizontal": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
-  "imageCropVertical": "Top and bottom edges",
-  "@imageCropVertical": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
-  "imageFindBoard": "Find board",
-  "@imageFindBoard": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
-  "imageRotate": "Rotate image",
-  "@imageRotate": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
-  "imageBlackAtBottom": "Image has Black at the bottom",
-  "@imageBlackAtBottom": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
-  "imageRecognize": "Recognize position",
-  "@imageRecognize": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
-  "imageImportFailed": "Could not read this image. Try another screenshot or adjust the crop.",
-  "@imageImportFailed": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
-  "imageBoardNotFound": "No board found. Frame the intended board manually.",
-  "@imageBoardNotFound": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
-  "imageChoose": "Choose image",
-  "@imageChoose": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
-  "imageTakePhoto": "Take photo",
-  "@imageTakePhoto": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
-  "imageCameraUnavailable": "Could not open the camera. Choose an image instead.",
-  "@imageCameraUnavailable": {
-    "description": "Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation."
-  },
   "saveDevDiagnostics": "Save Dev diagnostics…",
   "@saveDevDiagnostics": {
     "description": "Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry."
@@ -2197,29 +2145,5 @@
   "boardPromotionReplaced": "The motors are stopped, I replaced the pawn, and every piece matches.",
   "@boardPromotionReplaced": {
     "description": "Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied."
-  },
-  "imageScanBoard": "Scan board",
-  "@imageScanBoard": {
-    "description": "Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term."
-  },
-  "imageReading": "Reading position…",
-  "@imageReading": {
-    "description": "Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term."
-  },
-  "imageAdjustPhoto": "Adjust photo",
-  "@imageAdjustPhoto": {
-    "description": "Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term."
-  },
-  "imageUsePhoto": "Use photo",
-  "@imageUsePhoto": {
-    "description": "Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term."
-  },
-  "imageRetake": "Retake",
-  "@imageRetake": {
-    "description": "Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term."
-  },
-  "imageAdjustEdges": "Adjust edges",
-  "@imageAdjustEdges": {
-    "description": "Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term."
   }
 }
