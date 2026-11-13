@@ -2322,7 +2322,9 @@ class _ReviewPageState extends State<ReviewPage>
   /// Reuses the existing toolbar; score visibility never changes body geometry.
   Widget _analysisTitle() {
     final title = widget.title ?? l10n(context).gameReview;
-    if (MaiaScoreScope.maybeOf(context)?.enabled != true) return Text(title);
+    if (!_engineEnabled || MaiaScoreScope.maybeOf(context)?.enabled != true) {
+      return Text(title);
+    }
     final game = chess.Chess.fromFEN(_currentFen);
     final strings = l10n(context);
     ({String label, String value, bool? white}) score(
