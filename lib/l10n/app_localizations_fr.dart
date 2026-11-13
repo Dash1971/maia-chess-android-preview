@@ -1642,4 +1642,15 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get sessionRecovery =>
       'Mobile Maia a ouvert l’accueil pour éviter de rouvrir une session qui a pu provoquer un plantage. Vos parties enregistrées et vos réglages ont été conservés.';
+
+  @override
+  String get saveDevDiagnostics => 'Enregistrer les données de diagnostic Dev…';
+
+  @override
+  String get devDiagnosticsHelp =>
+      'Dev enregistre sur cet appareil les événements récents de l’application ainsi que les détails des coups et des messages du plateau Grand Kingdom. Les anciennes données sont supprimées automatiquement. Les photos et les adresses Bluetooth ne sont pas enregistrées. Aucun envoi automatique n’est effectué. N’exportez les données que si vous souhaitez les partager.';
+
+  @override
+  String get devDiagnosticsExportFailed =>
+      'Impossible d’enregistrer les données de diagnostic Dev.';
 }
