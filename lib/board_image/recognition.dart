@@ -274,10 +274,11 @@ List<int> decodeSquares(Float64List probs, {double missingKing = 0.1}) {
     (i) => i < 8 || i >= 56 ? {...pawns} : <int>{},
   );
   final out = [for (int i = 0; i < 64; i++) best(i, banned[i])];
-  for (final king in [
+  final kings = {
     boardSquareClasses.indexOf('K'),
     boardSquareClasses.indexOf('k'),
-  ]) {
+  };
+  for (final king in kings) {
     final holders = [
       for (int i = 0; i < 64; i++)
         if (out[i] == king) i,
@@ -287,7 +288,9 @@ List<int> decodeSquares(Float64List probs, {double missingKing = 0.1}) {
         (a, b) => probs[b * k + king].compareTo(probs[a * k + king]),
       );
       for (final i in holders.skip(1)) {
-        banned[i].add(king);
+        // Replacing a duplicate must not introduce the other colour's king,
+        // whose uniqueness pass may already have finished.
+        banned[i].addAll(kings);
         out[i] = best(i, banned[i]);
       }
     } else if (holders.isEmpty) {

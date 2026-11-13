@@ -98,6 +98,37 @@ void main() {
     );
     expect(gray.pixels, [0, 127, 255]);
   });
+  for (final duplicate in ['K', 'k']) {
+    test('deduplicating $duplicate preserves both kings exactly once', () {
+      final logits = List<double>.filled(64 * 13, -20);
+      for (int i = 0; i < 64; i++) {
+        logits[i * 13] = 10;
+      }
+      void scores(int square, Map<String, double> values) {
+        for (final entry in values.entries) {
+          logits[square * 13 + vision.boardSquareClasses.indexOf(entry.key)] =
+              entry.value;
+        }
+      }
+
+      scores(60, {'.': -20, 'K': 12});
+      scores(4, {'.': -20, 'k': 12});
+      scores(12, {
+        '.': -20,
+        duplicate: 11,
+        duplicate == 'K' ? 'k' : 'K': 10,
+        'q': 9,
+      });
+      final result = vision.recognitionFromLogits(
+        logits,
+        const vision.BoardRect(0, 0, 256, 256),
+      );
+      expect(result.squares.where((p) => p == 'K'), hasLength(1));
+      expect(result.squares.where((p) => p == 'k'), hasLength(1));
+      expect(result.squares[12], 'q');
+      expect(result.problems, isEmpty);
+    });
+  }
   for (final fixture in ['screen_chessnut', 'two_diagrams']) {
     testWidgets('grid detector and bounded tensors: $fixture', (tester) async {
       await tester.runAsync(() async {
@@ -316,6 +347,95 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+  for (final recognition in [true, false]) {
+    testWidgets(
+      '${recognition ? 'recognition' : 'camera cancellation'} during Back animation leaves the editor open',
+      (tester) async {
+        size(tester, const Size(390, 844));
+        final source = FakeImageSource()
+          ..gate = Completer<List<double>>()
+          ..cameraGate = Completer<Uint8List?>();
+        final logits = await FakeImageSource().classifySquares(
+          Float32List(64 * 32 * 32),
+        );
+        await tester.pumpWidget(
+          app(
+            Builder(
+              builder: (context) => Scaffold(
+                body: TextButton(
+                  onPressed: () => Navigator.of(context).push<void>(
+                    MaterialPageRoute(
+                      builder: (_) => BoardEditorPage(
+                        initialFen: dc.Chess.initial.fen,
+                        imageSource: source,
+                      ),
+                    ),
+                  ),
+                  child: const Text('Open editor'),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.tap(find.text('Open editor'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const ValueKey('editor-from-image')));
+        await tester.pumpAndSettle();
+        if (recognition) {
+          await tester.tap(find.byKey(const ValueKey('image-choose')));
+          await work(
+            tester,
+            () =>
+                find
+                    .byKey(const ValueKey('image-recognize'))
+                    .evaluate()
+                    .isNotEmpty &&
+                tester
+                        .widget<FilledButton>(
+                          find.byKey(const ValueKey('image-recognize')),
+                        )
+                        .onPressed !=
+                    null,
+          );
+          await tester.ensureVisible(
+            find.byKey(const ValueKey('image-recognize')),
+          );
+          await tester.tap(find.byKey(const ValueKey('image-recognize')));
+          await work(tester, () => source.received != null);
+        } else {
+          await tester.tap(find.byKey(const ValueKey('image-camera')));
+          await tester.pump();
+        }
+        await tester.pageBack();
+        await tester
+            .pump(); // Start, but do not finish, the reverse transition.
+        expect(
+          tester
+              .state(find.byType(BoardImageImportPage, skipOffstage: false))
+              .mounted,
+          isTrue,
+        );
+        if (recognition) {
+          source.gate!.complete(logits);
+        } else {
+          source.cameraGate!.complete(null);
+        }
+        await tester.pump();
+        await tester.pumpAndSettle();
+        expect(find.byType(BoardEditorPage), findsOneWidget);
+        expect(find.text('Open editor'), findsNothing);
+        expect(
+          tester
+              .widget<cg.ChessboardEditor>(find.byType(cg.ChessboardEditor))
+              .pieces
+              .length,
+          32,
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   testWidgets('recognition updates the existing Board Editor directly', (
     tester,
   ) async {

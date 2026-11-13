@@ -43,6 +43,7 @@ part 'src/settings_widgets.dart';
 part 'src/sampling_report.dart';
 part 'src/sampling_report_format.dart';
 part 'src/diagnostics.dart';
+part 'src/dev_diagnostics.dart';
 part 'src/session_types.dart';
 part 'src/variation_tree.dart';
 part 'src/game_clocks.dart';

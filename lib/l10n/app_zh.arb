@@ -466,5 +466,8 @@
   "imageBoardNotFound": "未找到棋盘。请手动框选目标棋盘。",
   "imageChoose": "选择图片",
   "imageTakePhoto": "拍照",
-  "imageCameraUnavailable": "无法打开相机。请改为选择图片。"
+  "imageCameraUnavailable": "无法打开相机。请改为选择图片。",
+  "saveDevDiagnostics": "保存Dev诊断信息…",
+  "devDiagnosticsHelp": "Dev会在此设备上记录最近的应用事件，以及Grand Kingdom走棋和棋盘通信的详细信息。旧数据会自动删除。不记录照片或蓝牙地址，也不会自动上传。仅在愿意分享时导出。",
+  "devDiagnosticsExportFailed": "无法保存Dev诊断信息。"
 }

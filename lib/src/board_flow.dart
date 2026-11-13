@@ -3,6 +3,19 @@ part of '../main.dart';
 enum BoardProblem { locked, motor, generic }
 
 extension _ElectronicBoardFlow on _GamePageState {
+  void _traceGrandKingdom(String event, {String? uci}) {
+    if (appFlavor != 'dev' || _boardKind != BoardKind.squareOff) return;
+    DevDiagnostics.record('grand-kingdom.$event', {
+      'fen': _game.fen,
+      'uci': ?uci,
+      'pending': ?_pendingPhysicalMaiaMove,
+      if (_positionHistory.length > 1)
+        'beforeFen': _positionHistory[_positionHistory.length - 2],
+      'pgn': _game.pgn(),
+      'state': _chessnutState.name,
+    });
+  }
+
   // The tested connection flow is shared by every channel. BoardChannelPolicy
   // independently restricts prototype adapters to Dev.
   bool get _genericBoards => _chessnut is DiscoverableBoardTransport;
@@ -197,6 +210,7 @@ extension _ElectronicBoardFlow on _GamePageState {
         (session != null && session != _boardConnectionSession)) {
       return;
     }
+    _traceGrandKingdom('failure');
     _cancelBoardInteractions();
     _chessnutLeds.invalidate();
     _chessnutPosition = null;
@@ -387,6 +401,7 @@ extension _ElectronicBoardFlow on _GamePageState {
     String prefix, {
     bool requireConfirmation = false,
   }) async {
+    _traceGrandKingdom('human-input', uci: prefix);
     if (!_feedbackForeground || !_feedbackRouteVisible) {
       if (_deferredSquareOffMove == null || _deferredSquareOffMove == prefix) {
         _deferredSquareOffMove = prefix;
@@ -420,6 +435,7 @@ extension _ElectronicBoardFlow on _GamePageState {
         .toList();
     final epoch = _boardInteractionEpoch;
     if (choices.isEmpty) {
+      _traceGrandKingdom('human-rejected', uci: prefix);
       try {
         await transport.acknowledgeMove(false, session);
       } catch (e, s) {
@@ -459,6 +475,7 @@ extension _ElectronicBoardFlow on _GamePageState {
       }
       _pendingPhysicalMaiaMove = null;
       await _commitHumanMove(selected, fromChessnut: true);
+      _traceGrandKingdom('human-committed', uci: selected);
       _chessnutPosition = ChessnutProtocol.pieceMapFromFen(_game.fen);
     } catch (e, s) {
       if (mounted &&
@@ -483,6 +500,7 @@ extension _ElectronicBoardFlow on _GamePageState {
     final generation = _gameGeneration;
     final epoch = _boardInteractionEpoch;
     try {
+      _traceGrandKingdom('game-start');
       await _discovery!.startBoardGame(
         _playerIsWhite ? 'white' : 'black',
         session,
@@ -511,6 +529,7 @@ extension _ElectronicBoardFlow on _GamePageState {
   }
 
   Future<void> _sendMotorMove(String uci) async {
+    _traceGrandKingdom('maia-intended', uci: uci);
     final sourceGame = _game;
     final session = _boardConnectionSession;
     final epoch = _boardInteractionEpoch;
@@ -542,7 +561,9 @@ extension _ElectronicBoardFlow on _GamePageState {
       return;
     }
     try {
+      _traceGrandKingdom('maia-dispatch', uci: uci);
       await _discovery!.movePiece(uci, session);
+      _traceGrandKingdom('maia-write-complete', uci: uci);
     } catch (e, s) {
       if (mounted && identical(sourceGame, _game) && _chessnutGameActive) {
         _boardFailure(e, s, session: session);
@@ -588,6 +609,7 @@ extension _ElectronicBoardFlow on _GamePageState {
     final session = _boardConnectionSession;
     if (session == null || _discovery == null) return;
     try {
+      _traceGrandKingdom('position-confirmed');
       await _discovery!.confirmPosition(session);
     } catch (e, s) {
       _boardFailure(e, s, epoch: epoch, session: session);

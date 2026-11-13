@@ -1566,4 +1566,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get imageCameraUnavailable => 'カメラを開けませんでした。代わりに画像を選択してください。';
+
+  @override
+  String get saveDevDiagnostics => 'Devの診断情報を保存…';
+
+  @override
+  String get devDiagnosticsHelp =>
+      'Devは最近のアプリ動作と、Grand Kingdomの指し手・ボード通信の詳細をこの端末に記録します。古いデータは自動で削除されます。写真やBluetoothアドレスは記録しません。自動送信は行いません。共有したい場合のみエクスポートしてください。';
+
+  @override
+  String get devDiagnosticsExportFailed => 'Devの診断情報を保存できませんでした。';
 }

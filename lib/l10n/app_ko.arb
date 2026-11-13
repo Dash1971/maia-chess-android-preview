@@ -466,5 +466,8 @@
   "imageBoardNotFound": "체스판을 찾지 못했습니다. 원하는 체스판 영역을 직접 지정하세요.",
   "imageChoose": "이미지 선택",
   "imageTakePhoto": "사진 찍기",
-  "imageCameraUnavailable": "카메라를 열 수 없습니다. 대신 이미지를 선택하세요."
+  "imageCameraUnavailable": "카메라를 열 수 없습니다. 대신 이미지를 선택하세요.",
+  "saveDevDiagnostics": "Dev 진단 정보 저장…",
+  "devDiagnosticsHelp": "Dev는 최근 앱 동작과 Grand Kingdom의 수 및 보드 통신 세부 정보를 이 기기에 기록합니다. 오래된 데이터는 자동으로 삭제됩니다. 사진과 블루투스 주소는 기록하지 않으며 자동으로 업로드하지 않습니다. 공유하려는 경우에만 내보내세요.",
+  "devDiagnosticsExportFailed": "Dev 진단 정보를 저장하지 못했습니다."
 }

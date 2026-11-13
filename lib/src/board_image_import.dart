@@ -51,6 +51,10 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
       _cameraUnavailable = false;
   Offset? _anchor;
 
+  // A popped route stays mounted during its exit animation. Its async result
+  // must not pop the editor now underneath it or mutate a cancelled import.
+  bool get _canComplete => mounted && ModalRoute.of(context)?.isCurrent == true;
+
   @override
   void dispose() {
     _image?.dispose();
@@ -68,7 +72,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
       final bytes = await (camera
           ? widget.source.takePhoto()
           : widget.source.pickImage());
-      if (!mounted) return;
+      if (!_canComplete) return;
       if (bytes == null) {
         if (_image == null) Navigator.pop(context);
         return;
@@ -106,7 +110,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
         image.dispose();
         rethrow;
       }
-      if (!mounted || pixels == null) {
+      if (!_canComplete || pixels == null) {
         image.dispose();
         return;
       }
@@ -135,7 +139,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
     final pixels = _rgba!;
     final w = _image!.width, h = _image!.height;
     final result = await vision.locateInBackground(pixels, w, h);
-    if (!mounted) return;
+    if (!_canComplete) return;
     setState(() {
       _notFound = result == null;
       _crop = result == null
@@ -194,7 +198,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
       } finally {
         buffer.dispose();
       }
-      if (!mounted) {
+      if (!_canComplete) {
         image.dispose();
         return;
       }
@@ -225,9 +229,9 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
     });
     try {
       final input = await vision.prepareInBackground(pixels, w, h, rect);
-      if (!mounted) return;
+      if (!_canComplete) return;
       final logits = await widget.source.classifySquares(input);
-      if (!mounted) return;
+      if (!_canComplete) return;
       final result = vision.recognitionFromLogits(
         logits,
         rect,

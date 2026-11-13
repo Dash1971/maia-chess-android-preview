@@ -1,6 +1,6 @@
 # Build channels and promotion status
 
-Updated 2026-10-27. Release pages are authoritative for published artifacts;
+Updated 2026-10-29. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
@@ -22,6 +22,19 @@ installations update in place using the established Preview certificate.
 - [Preview and Dev release procedure](https://github.com/Dash1971/maia-chess-android-preview/blob/main/docs/RELEASING.md):
   Preview upstream review and README/roadmap pass; lightweight Dev publication
   by default, with no published-download check.
+
+## Dev 2.6.0-alpha.2 publication
+
+Published from `dd4e041db6f4d2a84e9b8af91d6e8563ff2b1026`, preserved by
+`dev-v2.6.0-alpha.2-dev`. Merged diagnostics #214 is automatically active only in
+Dev, with manual local text export. The Dev integration includes Grand Kingdom
+#209 and the latest image/camera #210; both remain draft and unmerged into main.
+[Verification and completed cleanup](releases/dev-2.6.0-alpha.2.md) record local
+checks, signature/upgrade continuity and actual-APK camera/export smoke tests.
+No Actions or Git LFS downloads. Preview and Stable are unchanged; their full
+Linux/reproduction/physical qualification gates still apply. Capture failures
+remain unresolved; [the owner’s testing instructions](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6489649516)
+request an export after the first mismatch and further Maia-promotion testing.
 
 ## Assisted image import: 2.6 draft
 
