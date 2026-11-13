@@ -1,9 +1,10 @@
 # Grand Kingdom: experimental Preview 2.6 enablement
 
-Status: experimental draft, updated 2026-10-29. Tracks [Preview #27](https://github.com/Dash1971/maia-chess-android-preview/issues/27).
-The owner requested this draft after the first positive hardware report. This is
-source preparation for 2.6; no version bump, APK publication or Stable promotion
-is included. Published Preview 2.5 artifacts still exclude Grand Kingdom.
+Status: experimental in [Preview 2.6.0-beta.1](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.1), updated 2026-11-13.
+Tracks [Preview #27](https://github.com/Dash1971/maia-chess-android-preview/issues/27).
+The known capture failures and hardware checklist remain unresolved. Publication
+provides the Preview build requested for further testing; it does not establish
+physical acceptance or Stable readiness. Preview 2.5 artifacts still exclude it.
 
 ## Preview 2.6 testing decision — 13 November 2026
 

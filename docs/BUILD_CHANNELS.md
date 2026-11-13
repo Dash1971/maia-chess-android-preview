@@ -1,13 +1,13 @@
 # Build channels and promotion status
 
-Updated 2026-10-29. Release pages are authoritative for published artifacts;
+Updated 2026-11-13. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.5.1](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1), code 83 | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.5.0-beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.5.0-beta.11), code 2511 | `com.dash1971.maia_chess.preview`, 79M | Custom-position crash fix; prior 2.5 features are released in Stable. Grand Kingdom/DGT stay disabled. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.1](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.1), code 2601 | `com.dash1971.maia_chess.preview`, 79M | Offline image/camera import, Human move timing default on, engine-off score hiding; experimental Grand Kingdom with known capture failures. DGT stays Dev-only. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev) | Published 2.6.0-alpha.2-dev, code 2602 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Automatic local Dev diagnostics, assisted Maia promotion and image/camera import. Grand Kingdom capture failures remain unresolved. |
 
 The three packages install side by side. Obtainium users should select the
@@ -28,42 +28,37 @@ installations update in place using the established Preview certificate.
 Published from `dd4e041db6f4d2a84e9b8af91d6e8563ff2b1026`, preserved by
 `dev-v2.6.0-alpha.2-dev`. Merged diagnostics #214 is automatically active only in
 Dev, with manual local text export. The Dev integration includes Grand Kingdom
-#209 and the latest image/camera #210; both remain draft and unmerged into main.
+#209 and the latest image/camera #210; both were draft at that Dev publication and are now merged for Preview 2.6.0-beta.1.
 [Verification and completed cleanup](releases/dev-2.6.0-alpha.2.md) record local
 checks, signature/upgrade continuity and actual-APK camera/export smoke tests.
-No Actions or Git LFS downloads. Preview and Stable are unchanged; their full
+No Actions or Git LFS downloads were required for that Dev publication. Stable remains unchanged; full
 Linux/reproduction/physical qualification gates still apply. Capture failures
 remain unresolved; [the owner’s testing instructions](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6489649516)
 request an export after the first mismatch and further Maia-promotion testing.
 
-## Assisted image import: 2.6 draft
+## Preview 2.6.0-beta.1 publication
 
-The proposed 2.6 source adds From image in the Preview/Dev board editor with a
-bundled MIT diagram classifier, adjustable crop/orientation and a separate manual
-existing editor. Image import and Take photo are in Dev 2.6.0-alpha.2. The simplified
-editor UI is a later source change and has not been published. Current published Preview/Stable artifacts remain unchanged.
-[Workflow, provenance and pending acceptance](BOARD_IMAGE_IMPORT.md) distinguish
-this assisted prototype from broad recognition readiness and Stable promotion.
-No camera, storage/media/location-metadata or network permission is added.
+[Release and qualification](releases/preview-2.6.0-beta.1.md) record the four
+reviewed PRs, exact source, independent Linux equality, signing/reconstruction,
+ARM64/79M native tests, signed upgrade, offline image/camera checks, actual public
+download and completed all-host cleanup. Stable and Dev releases are unchanged.
 
-## Preview 2.6 default proposal
+Assisted image/camera import now returns directly to the existing Board Editor.
+The bundled classifier runs offline; broad accuracy, OEM/real-phone acceptance
+and Stable promotion remain pending. No camera/media/network permission is added.
+See [workflow and limits](BOARD_IMAGE_IMPORT.md).
 
-Human move timing defaults on when its saved preference is missing or invalid,
-and after an explicit Reset settings to default. Saved true/false choices remain
-unchanged, including an existing off choice. Initial state, preference fallback
-and reset share one default. This changes Maia's existing optional random pauses,
-not move selection, timing distribution, clock rules, strength or a learned model.
-No version/publication is included; keep this out of the 2.5 maintenance cycle.
-Stable source remains unchanged. System colors remain an independent opt-in.
+Human move timing defaults on for missing/invalid preferences and explicit
+Settings reset. Saved on/off choices remain unchanged, including upgrades. This
+changes the default for existing random pauses, not move selection or strength.
+System colors remain a separate opt-in. Maia scores hide while engines are off
+and respect the score-display preference when engines return.
 
-## Grand Kingdom: proposed 2.6 enablement
-
-The 2.6 draft source allows Grand Kingdom discovery, connection and session-bound
-motor commands in Preview/Dev. DGT remains Dev-only and Stable/unflavored builds
-exclude both. The published versions above are unchanged. See the
-[2.6 acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md) for the positive Dev
-hardware report, unresolved checks and draft/release boundary. Keep this feature
-out of the 2.5 maintenance cycle.
+Grand Kingdom is experimental in Preview 2.6 and Dev, with the requester's
+explicit acceptance of the known capture problems. Assisted Maia promotion does
+not fix wrong-piece removal or missed captures. Physical acceptance remains
+pending in the [2.6 acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md).
+DGT remains Dev-only; Stable/unflavored builds exclude both adapters.
 
 ## Preview acceptance
 
