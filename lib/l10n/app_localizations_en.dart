@@ -1683,4 +1683,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'The motors are stopped, I replaced the pawn, and every piece matches.';
+
+  @override
+  String get imageScanBoard => 'Scan board';
+
+  @override
+  String get imageReading => 'Reading position…';
+
+  @override
+  String get imageAdjustPhoto => 'Adjust photo';
+
+  @override
+  String get imageUsePhoto => 'Use photo';
+
+  @override
+  String get imageRetake => 'Retake';
+
+  @override
+  String get imageAdjustEdges => 'Adjust edges';
 }

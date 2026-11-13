@@ -1568,4 +1568,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get boardPromotionReplaced => '电机已停止，我已替换兵，所有棋子均与屏幕一致。';
+
+  @override
+  String get imageScanBoard => '扫描棋盘';
+
+  @override
+  String get imageReading => '正在识别局面…';
+
+  @override
+  String get imageAdjustPhoto => '调整照片';
+
+  @override
+  String get imageUsePhoto => '使用照片';
+
+  @override
+  String get imageRetake => '重拍';
+
+  @override
+  String get imageAdjustEdges => '调整边框';
 }

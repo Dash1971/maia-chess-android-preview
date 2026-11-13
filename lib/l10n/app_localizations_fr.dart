@@ -1708,4 +1708,22 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Les moteurs sont arrêtés, j’ai remplacé le pion et toutes les pièces correspondent.';
+
+  @override
+  String get imageScanBoard => 'Scanner un échiquier';
+
+  @override
+  String get imageReading => 'Lecture de la position…';
+
+  @override
+  String get imageAdjustPhoto => 'Ajuster la photo';
+
+  @override
+  String get imageUsePhoto => 'Utiliser la photo';
+
+  @override
+  String get imageRetake => 'Reprendre';
+
+  @override
+  String get imageAdjustEdges => 'Ajuster les bords';
 }

@@ -60,6 +60,15 @@ not fix wrong-piece removal or missed captures. Physical acceptance remains
 pending in the [2.6 acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md).
 DGT remains Dev-only; Stable/unflavored builds exclude both adapters.
 
+## Unreleased camera UI follow-up
+
+The Home Scan board shortcut and automatic camera → reading → existing Board
+Editor flow were approved as mockups but were not implemented in #210 and are
+absent from published beta.1. The source follow-up implements that flow and the
+simplified framing fallback. [Delivery audit and actual Flutter screenshots](CAMERA_SCAN_UI_26.md)
+distinguish it from the already shipped camera-icon/editor cleanup. No version,
+package, APK or release has been changed by this follow-up.
+
 ## Preview acceptance
 
 - Use move history remains off by default, with its own information button.

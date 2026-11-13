@@ -1708,4 +1708,22 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Los motores están parados, he sustituido el peón y todas las piezas coinciden.';
+
+  @override
+  String get imageScanBoard => 'Escanear tablero';
+
+  @override
+  String get imageReading => 'Leyendo posición…';
+
+  @override
+  String get imageAdjustPhoto => 'Ajustar foto';
+
+  @override
+  String get imageUsePhoto => 'Usar foto';
+
+  @override
+  String get imageRetake => 'Volver a tomar';
+
+  @override
+  String get imageAdjustEdges => 'Ajustar bordes';
 }

@@ -39,6 +39,12 @@ See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readm
 
 **Assisted screenshot and diagram import: Preview prototype; quality testing next**
 
+Unreleased camera UI follow-up: Home now has Scan board beside Analysis Board.
+It opens the camera, reads a detected grid automatically, then opens the existing
+Board Editor. Framing, rotate, retake and image selection remain available when
+needed. This is source work after beta.1, not a new published APK.
+[Delivery audit and actual Flutter screens](docs/CAMERA_SCAN_UI_26.md).
+
 Preview 2.6.0-beta.1 delivers assisted import in the existing board editor. Image import and camera capture are also available in red-icon Dev 2.6.0-alpha.2. Select a screenshot or a clear digital/scanned chess diagram, crop to the intended board and adjust its orientation, then recognize the pieces offline. Edit the position, then open analysis or play from there. Choose image opens the picker; Take photo uses the installed camera for flat printed diagrams, followed by cropping and the existing Board Editor. Real three-dimensional board photos remain outside this scope. See [Import a position from a screenshot or chess diagram into the board editor (#179)](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
 
 The [initial recognition test report](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/board-image-import-2026-10-28/REPORT.md) shows uneven accuracy, including errors caused by move arrows and printed diagram styles. The first Preview version is an assisted-import prototype with cropping and editing; arrow handling and diagram recognition need improvement before broad support is considered ready.

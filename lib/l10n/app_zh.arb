@@ -473,5 +473,11 @@
   "boardPromotionTitle": "确认 Maia 升变",
   "boardPromotionMove": "{square}：{piece}。请替换兵。",
   "boardPromotionHelp": "请等电机停止后，将兵替换为指定棋子，并检查实体棋盘上的所有棋子是否与屏幕一致。如果移动未完成或无法确认，请在应用中继续对局。",
-  "boardPromotionReplaced": "电机已停止，我已替换兵，所有棋子均与屏幕一致。"
+  "boardPromotionReplaced": "电机已停止，我已替换兵，所有棋子均与屏幕一致。",
+  "imageScanBoard": "扫描棋盘",
+  "imageReading": "正在识别局面…",
+  "imageAdjustPhoto": "调整照片",
+  "imageUsePhoto": "使用照片",
+  "imageRetake": "重拍",
+  "imageAdjustEdges": "调整边框"
 }

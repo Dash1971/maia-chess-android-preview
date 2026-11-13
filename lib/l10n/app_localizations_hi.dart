@@ -1705,4 +1705,22 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'मोटर रुक गई है, मैंने प्यादा बदल दिया है और सभी गोटियाँ स्क्रीन से मेल खाती हैं।';
+
+  @override
+  String get imageScanBoard => 'बोर्ड स्कैन करें';
+
+  @override
+  String get imageReading => 'स्थिति पढ़ी जा रही है…';
+
+  @override
+  String get imageAdjustPhoto => 'फ़ोटो समायोजित करें';
+
+  @override
+  String get imageUsePhoto => 'फ़ोटो इस्तेमाल करें';
+
+  @override
+  String get imageRetake => 'फिर से लें';
+
+  @override
+  String get imageAdjustEdges => 'किनारे समायोजित करें';
 }

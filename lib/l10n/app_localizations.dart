@@ -2961,6 +2961,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The motors are stopped, I replaced the pawn, and every piece matches.'**
   String get boardPromotionReplaced;
+
+  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan board'**
+  String get imageScanBoard;
+
+  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading position…'**
+  String get imageReading;
+
+  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust photo'**
+  String get imageAdjustPhoto;
+
+  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
+  ///
+  /// In en, this message translates to:
+  /// **'Use photo'**
+  String get imageUsePhoto;
+
+  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
+  String get imageRetake;
+
+  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust edges'**
+  String get imageAdjustEdges;
 }
 
 class _AppLocalizationsDelegate

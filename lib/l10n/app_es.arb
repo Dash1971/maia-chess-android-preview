@@ -473,5 +473,11 @@
   "boardPromotionTitle": "Confirmar promoción de Maia",
   "boardPromotionMove": "{square}: {piece}. Sustituye el peón.",
   "boardPromotionHelp": "Espera a que los motores se detengan. Sustituye el peón por la pieza indicada y comprueba que toda la posición física coincide con la pantalla. Si el movimiento está incompleto o no estás seguro, continúa la partida en la aplicación.",
-  "boardPromotionReplaced": "Los motores están parados, he sustituido el peón y todas las piezas coinciden."
+  "boardPromotionReplaced": "Los motores están parados, he sustituido el peón y todas las piezas coinciden.",
+  "imageScanBoard": "Escanear tablero",
+  "imageReading": "Leyendo posición…",
+  "imageAdjustPhoto": "Ajustar foto",
+  "imageUsePhoto": "Usar foto",
+  "imageRetake": "Volver a tomar",
+  "imageAdjustEdges": "Ajustar bordes"
 }

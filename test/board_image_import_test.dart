@@ -656,12 +656,8 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('image-camera')));
       await tester.pump();
-      expect(
-        tester
-            .widget<OutlinedButton>(find.byKey(const ValueKey('image-camera')))
-            .onPressed,
-        isNull,
-      );
+      expect(find.byKey(const ValueKey('image-reading')), findsOneWidget);
+      expect(source.cameraCalls, 1);
       await tester.pageBack();
       await tester.pumpAndSettle();
       source.cameraGate!.complete(source.bytes);
