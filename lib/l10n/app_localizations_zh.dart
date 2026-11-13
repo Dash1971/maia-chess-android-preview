@@ -1553,4 +1553,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get devDiagnosticsExportFailed => '无法保存Dev诊断信息。';
+
+  @override
+  String get boardPromotionTitle => '确认 Maia 升变';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square：$piece。请替换兵。';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      '请等电机停止后，将兵替换为指定棋子，并检查实体棋盘上的所有棋子是否与屏幕一致。如果移动未完成或无法确认，请在应用中继续对局。';
+
+  @override
+  String get boardPromotionReplaced => '电机已停止，我已替换兵，所有棋子均与屏幕一致。';
 }

@@ -2173,5 +2173,29 @@
   "devDiagnosticsExportFailed": "Could not save Dev diagnostics.",
   "@devDiagnosticsExportFailed": {
     "description": "Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry."
+  },
+  "boardPromotionTitle": "Confirm Maia promotion",
+  "@boardPromotionTitle": {
+    "description": "Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied."
+  },
+  "boardPromotionMove": "{square}: {piece}. Replace the pawn.",
+  "@boardPromotionMove": {
+    "description": "Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied.",
+    "placeholders": {
+      "square": {
+        "type": "String"
+      },
+      "piece": {
+        "type": "String"
+      }
+    }
+  },
+  "boardPromotionHelp": "Wait until the motors have stopped. Replace the pawn with the indicated piece and check the entire physical position against the screen. If the move is incomplete or uncertain, continue in the app instead.",
+  "@boardPromotionHelp": {
+    "description": "Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied."
+  },
+  "boardPromotionReplaced": "The motors are stopped, I replaced the pawn, and every piece matches.",
+  "@boardPromotionReplaced": {
+    "description": "Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied."
   }
 }

@@ -469,5 +469,9 @@
   "imageCameraUnavailable": "Impossible d’ouvrir l’appareil photo. Choisissez une image à la place.",
   "saveDevDiagnostics": "Enregistrer les données de diagnostic Dev…",
   "devDiagnosticsHelp": "Dev enregistre sur cet appareil les événements récents de l’application ainsi que les détails des coups et des messages du plateau Grand Kingdom. Les anciennes données sont supprimées automatiquement. Les photos et les adresses Bluetooth ne sont pas enregistrées. Aucun envoi automatique n’est effectué. N’exportez les données que si vous souhaitez les partager.",
-  "devDiagnosticsExportFailed": "Impossible d’enregistrer les données de diagnostic Dev."
+  "devDiagnosticsExportFailed": "Impossible d’enregistrer les données de diagnostic Dev.",
+  "boardPromotionTitle": "Confirmer la promotion de Maia",
+  "boardPromotionMove": "{square} : {piece}. Remplacez le pion.",
+  "boardPromotionHelp": "Attendez l’arrêt des moteurs. Remplacez le pion par la pièce indiquée et vérifiez que toute la position physique correspond à l’écran. Si le mouvement est incomplet ou incertain, poursuivez la partie dans l’application.",
+  "boardPromotionReplaced": "Les moteurs sont arrêtés, j’ai remplacé le pion et toutes les pièces correspondent."
 }

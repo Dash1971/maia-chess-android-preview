@@ -34,9 +34,13 @@ research bundles or datasets to application source or release distributions.
 ## Distribution channels
 
 Read `docs/RELEASING.md` and `docs/BUILD_CHANNELS.md` before promoting or
-publishing a build. Update the channel status and the release PR's evidence when publishing. Grand Kingdom
-and DGT adapters remain Dev-only: preserve both Dart and native flavor gates
-and the Preview restriction tests. Stable releases use the Stable repository's
+publishing a build. Update the channel status and the release PR's evidence when publishing. For the 2.6 cycle, Grand Kingdom is experimental in Preview and Dev; DGT
+remains Dev-only. Preserve both Dart and native channel gates, motor-session
+checks and channel restriction tests. Stable/unflavored builds exclude both.
+The requester authorized experimental Preview 2.6 publication with the known
+capture failures and hardware acceptance still pending in
+`docs/ELECTRONIC_BOARD_GRAND_KINGDOM_26.md`. Published Preview 2.5 artifacts
+still exclude it. Stable releases use the Stable repository's
 authoritative release procedure, including its Zapstore and F-Droid follow-up.
 Preview/Dev publication does not authorize a Stable or app-store release.
 

@@ -56,6 +56,15 @@ not move selection, timing distribution, clock rules, strength or a learned mode
 No version/publication is included; keep this out of the 2.5 maintenance cycle.
 Stable source remains unchanged. System colors remain an independent opt-in.
 
+## Grand Kingdom: proposed 2.6 enablement
+
+The 2.6 draft source allows Grand Kingdom discovery, connection and session-bound
+motor commands in Preview/Dev. DGT remains Dev-only and Stable/unflavored builds
+exclude both. The published versions above are unchanged. See the
+[2.6 acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md) for the positive Dev
+hardware report, unresolved checks and draft/release boundary. Keep this feature
+out of the 2.5 maintenance cycle.
+
 ## Preview acceptance
 
 - Use move history remains off by default, with its own information button.
@@ -67,10 +76,11 @@ Stable source remains unchanged. System colors remain an independent opt-in.
   confirmation by a second deliberate press within 2.5 seconds.
 - Board sounds remain under **Chessnut**, because the buzzer commands are
   Chessnut-specific. Other brands must not imply equivalent sound support.
-- The Grand Kingdom and DGT implementations remain in shared source for Dev,
-  but Preview must neither discover/connect to those boards nor send their
-  commands. Both Dart and native channel policies are tested. A future promotion
-  requires explicit approval; merging shared source does not change this policy.
+- Published Preview 2.5 excludes Grand Kingdom and DGT. The proposed 2.6 source
+  admits only Grand Kingdom experimentally, with matching Dart/native gates and
+  motor-session checks. DGT stays Dev-only. The requester authorized experimental
+  Preview 2.6 publication with the reported capture failures documented and
+  physical acceptance pending. Full automated Preview qualification is required.
 - Qualify the actual 79M Preview APK, including history on/off, inference,
   upgrade/data retention, help layout and package/signature continuity. Dev's
   5M measurements are not evidence of 79M performance.

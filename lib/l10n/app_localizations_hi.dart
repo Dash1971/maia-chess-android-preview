@@ -1689,4 +1689,20 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get devDiagnosticsExportFailed =>
       'Dev की निदान जानकारी सहेजी नहीं जा सकी।';
+
+  @override
+  String get boardPromotionTitle => 'Maia के पदोन्नयन की पुष्टि करें';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square: $piece। प्यादा बदलें।';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      'मोटर रुकने तक प्रतीक्षा करें। प्यादे को बताई गई गोटी से बदलें और बिसात की पूरी स्थिति का स्क्रीन से मिलान करें। चाल अधूरी है या संदेह है तो ऐप में खेल जारी रखें।';
+
+  @override
+  String get boardPromotionReplaced =>
+      'मोटर रुक गई है, मैंने प्यादा बदल दिया है और सभी गोटियाँ स्क्रीन से मेल खाती हैं।';
 }
