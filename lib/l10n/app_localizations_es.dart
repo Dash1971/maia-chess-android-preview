@@ -1658,4 +1658,15 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Los motores están parados, he sustituido el peón y todas las piezas coinciden.';
+
+  @override
+  String get saveDevDiagnostics => 'Guardar diagnóstico de Dev…';
+
+  @override
+  String get devDiagnosticsHelp =>
+      'Dev registra en este dispositivo los eventos recientes de la aplicación y los detalles de las jugadas y mensajes del tablero Grand Kingdom. Los datos antiguos se eliminan automáticamente. No se registran fotos ni direcciones Bluetooth. No se sube nada automáticamente. Exporta los datos solo si quieres compartirlos.';
+
+  @override
+  String get devDiagnosticsExportFailed =>
+      'No se pudo guardar el diagnóstico de Dev.';
 }

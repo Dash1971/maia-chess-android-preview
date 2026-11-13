@@ -458,5 +458,8 @@
   "boardPromotionTitle": "Maia의 승격 확인",
   "boardPromotionMove": "{square}: {piece}. 폰을 교체하세요.",
   "boardPromotionHelp": "모터가 멈출 때까지 기다리세요. 폰을 지정된 기물로 교체하고 실제 체스판의 모든 기물이 화면과 일치하는지 확인하세요. 이동이 끝나지 않았거나 확실하지 않으면 앱에서 대국을 계속하세요.",
-  "boardPromotionReplaced": "모터가 멈췄고 폰을 교체했으며 모든 기물이 화면과 일치합니다."
+  "boardPromotionReplaced": "모터가 멈췄고 폰을 교체했으며 모든 기물이 화면과 일치합니다.",
+  "saveDevDiagnostics": "Dev 진단 정보 저장…",
+  "devDiagnosticsHelp": "Dev는 최근 앱 동작과 Grand Kingdom의 수 및 보드 통신 세부 정보를 이 기기에 기록합니다. 오래된 데이터는 자동으로 삭제됩니다. 사진과 블루투스 주소는 기록하지 않으며 자동으로 업로드하지 않습니다. 공유하려는 경우에만 내보내세요.",
+  "devDiagnosticsExportFailed": "Dev 진단 정보를 저장하지 못했습니다."
 }

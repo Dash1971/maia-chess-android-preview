@@ -2137,5 +2137,17 @@
   "boardPromotionReplaced": "The motors are stopped, I replaced the pawn, and every piece matches.",
   "@boardPromotionReplaced": {
     "description": "Experimental Grand Kingdom assisted Maia promotion. The user, not a BLE write/OK, confirms stopped motors and physical piece replacement. Reuse existing localized piece names; no automatic replacement is implied."
+  },
+  "saveDevDiagnostics": "Save Dev diagnostics…",
+  "@saveDevDiagnostics": {
+    "description": "Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry."
+  },
+  "devDiagnosticsHelp": "Dev records recent app events and detailed Grand Kingdom moves and board messages on this device. Older data is removed automatically. Photos and Bluetooth addresses are not recorded. Nothing is uploaded automatically. Export only if you want to share it.",
+  "@devDiagnosticsHelp": {
+    "description": "Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry."
+  },
+  "devDiagnosticsExportFailed": "Could not save Dev diagnostics.",
+  "@devDiagnosticsExportFailed": {
+    "description": "Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry."
   }
 }

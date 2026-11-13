@@ -1655,4 +1655,15 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'मोटर रुक गई है, मैंने प्यादा बदल दिया है और सभी गोटियाँ स्क्रीन से मेल खाती हैं।';
+
+  @override
+  String get saveDevDiagnostics => 'Dev की निदान जानकारी सहेजें…';
+
+  @override
+  String get devDiagnosticsHelp =>
+      'Dev हाल की ऐप गतिविधियों और Grand Kingdom की चालों व बोर्ड संदेशों का विस्तृत रिकॉर्ड इसी डिवाइस पर रखता है। पुराना डेटा अपने आप हटा दिया जाता है। फ़ोटो और ब्लूटूथ पते रिकॉर्ड नहीं किए जाते। कुछ भी अपने आप अपलोड नहीं होता। साझा करना चाहें तभी डेटा एक्सपोर्ट करें।';
+
+  @override
+  String get devDiagnosticsExportFailed =>
+      'Dev की निदान जानकारी सहेजी नहीं जा सकी।';
 }

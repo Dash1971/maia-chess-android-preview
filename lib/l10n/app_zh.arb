@@ -458,5 +458,8 @@
   "boardPromotionTitle": "确认 Maia 升变",
   "boardPromotionMove": "{square}：{piece}。请替换兵。",
   "boardPromotionHelp": "请等电机停止后，将兵替换为指定棋子，并检查实体棋盘上的所有棋子是否与屏幕一致。如果移动未完成或无法确认，请在应用中继续对局。",
-  "boardPromotionReplaced": "电机已停止，我已替换兵，所有棋子均与屏幕一致。"
+  "boardPromotionReplaced": "电机已停止，我已替换兵，所有棋子均与屏幕一致。",
+  "saveDevDiagnostics": "保存Dev诊断信息…",
+  "devDiagnosticsHelp": "Dev会在此设备上记录最近的应用事件，以及Grand Kingdom走棋和棋盘通信的详细信息。旧数据会自动删除。不记录照片或蓝牙地址，也不会自动上传。仅在愿意分享时导出。",
+  "devDiagnosticsExportFailed": "无法保存Dev诊断信息。"
 }
