@@ -130,6 +130,7 @@ class MainActivity : FlutterActivity() {
     private var methodChannel: MethodChannel? = null
     private var chessnutBridge: ChessnutBridge? = null
     private var soundEffectBridge: SoundEffectBridge? = null
+    private var boardImageBridge: BoardImageBridge? = null
     private var restoredSamplingDocument: String? = null
     private val samplingDocuments by lazy { SamplingDocuments(this, restoredSamplingDocument) }
     private val documents by lazy { PgnDocuments(this) { methodChannel?.invokeMethod("pgnReceived", null) } }
@@ -258,6 +259,9 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         engineAttached = true
+        boardImageBridge?.close()
+        boardImageBridge = BoardImageBridge(this, MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger, "maia_chess/board_image"))
         methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).also {
             it.setMethodCallHandler { call, result ->
                 when (call.method) {
@@ -388,7 +392,8 @@ class MainActivity : FlutterActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (devDiagnostics?.onResult(requestCode, resultCode, data) == true) return
-        if (!samplingDocuments.onResult(requestCode, resultCode, data) && !documents.onResult(requestCode, resultCode, data)) super.onActivityResult(requestCode, resultCode, data)
+        if (boardImageBridge?.onResult(requestCode, resultCode, data) != true &&
+            !samplingDocuments.onResult(requestCode, resultCode, data) && !documents.onResult(requestCode, resultCode, data)) super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onRequestPermissionsResult(
@@ -410,6 +415,7 @@ class MainActivity : FlutterActivity() {
     override fun onDestroy() {
         devDiagnostics?.record("activity.destroy")
         devDiagnostics?.close()
+        boardImageBridge?.close()
         samplingDocuments.close()
         documents.close()
         super.onDestroy()
@@ -488,6 +494,8 @@ class MainActivity : FlutterActivity() {
 
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
         engineAttached = false
+        boardImageBridge?.close()
+        boardImageBridge = null
         chessnutBridge?.close()
         chessnutBridge = null
         soundEffectBridge?.close()

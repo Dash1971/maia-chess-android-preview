@@ -1644,6 +1644,45 @@ class AppLocalizationsEs extends AppLocalizations {
       'Mobile Maia ha abierto la pantalla de inicio para evitar reabrir una sesión que podría haber causado un fallo. Tus partidas guardadas y ajustes se han conservado.';
 
   @override
+  String get imageFromImage => 'Desde una imagen';
+
+  @override
+  String get imageCropHorizontal => 'Bordes izquierdo y derecho';
+
+  @override
+  String get imageCropVertical => 'Bordes superior e inferior';
+
+  @override
+  String get imageFindBoard => 'Buscar tablero';
+
+  @override
+  String get imageRotate => 'Girar imagen';
+
+  @override
+  String get imageBlackAtBottom => 'Las negras están abajo en la imagen';
+
+  @override
+  String get imageRecognize => 'Reconocer posición';
+
+  @override
+  String get imageImportFailed =>
+      'No se pudo leer la imagen. Prueba otra captura o ajusta el recorte.';
+
+  @override
+  String get imageBoardNotFound =>
+      'No se encontró un tablero. Encuadra manualmente el tablero deseado.';
+
+  @override
+  String get imageChoose => 'Seleccionar imagen';
+
+  @override
+  String get imageTakePhoto => 'Hacer foto';
+
+  @override
+  String get imageCameraUnavailable =>
+      'No se pudo abrir la cámara. Elige una imagen.';
+
+  @override
   String get saveDevDiagnostics => 'Guardar diagnóstico de Dev…';
 
   @override

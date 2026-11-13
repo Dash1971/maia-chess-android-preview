@@ -36,6 +36,16 @@ Linux/reproduction/physical qualification gates still apply. Capture failures
 remain unresolved; [the owner’s testing instructions](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6489649516)
 request an export after the first mismatch and further Maia-promotion testing.
 
+## Assisted image import: 2.6 draft
+
+The proposed 2.6 source adds From image in the Preview/Dev board editor with a
+bundled MIT diagram classifier, adjustable crop/orientation and a separate manual
+existing editor. Image import and Take photo are in Dev 2.6.0-alpha.2. The simplified
+editor UI is a later source change and has not been published. Current published Preview/Stable artifacts remain unchanged.
+[Workflow, provenance and pending acceptance](BOARD_IMAGE_IMPORT.md) distinguish
+this assisted prototype from broad recognition readiness and Stable promotion.
+No camera, storage/media/location-metadata or network permission is added.
+
 ## Preview acceptance
 
 - Use move history remains off by default, with its own information button.
