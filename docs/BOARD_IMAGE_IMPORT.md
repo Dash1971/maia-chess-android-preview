@@ -1,15 +1,13 @@
 # Assisted screenshot/diagram import: 2.6 prototype
 
 Tracks [#179](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
-The assisted prototype is published in [Preview 2.6.0-beta.1](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.1), including
-camera capture and direct return to the existing Board Editor. Dev 2.6.0-alpha.2
-remains available with its earlier UI. Stable is unchanged.
-[Qualification and remaining limits](releases/preview-2.6.0-beta.1.md) distinguish
-Preview testing from broad recognition readiness and Stable promotion.
-
-The approved Home shortcut and automatic scan process were only a mockup when
-beta.1 shipped. This unreleased follow-up implements them;
-[the delivery audit and actual widget screenshots](CAMERA_SCAN_UI_26.md) show the gap.
+The assisted prototype is published in [Preview 2.6.0-beta.2](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.2).
+Home Scan board opens the installed camera and automatically reads a detected
+grid into the existing editable Board Editor. Manual framing remains available
+when needed and through the editor's From image action. Dev 2.6.0-alpha.2-dev
+retains its earlier UI; Stable is unchanged. [Qualification and remaining limits](releases/preview-2.6.0-beta.2.md)
+distinguish this Preview build from broad recognition readiness and Stable promotion.
+[Delivery audit](CAMERA_SCAN_UI_26.md) records the Home UI gap in beta.1.
 
 ## Workflow and safeguards
 

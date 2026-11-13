@@ -31,7 +31,7 @@ and feature requests.
 
 ## Current Preview status
 
-The latest Preview release is [2.6.0-beta.1](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.1), the first prerelease in the 2.6 cycle. It adds offline screenshot/flat-diagram import and camera capture in the existing Board Editor, defaults Human move timing on while preserving a saved off choice, and hides Maia scores when analysis engines are off. Grand Kingdom is included experimentally with known capture failures and hardware acceptance pending. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.1.md) record the tested source, signing and verification. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
+The latest Preview release is [2.6.0-beta.2](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.2). Home now has Scan board beside Analysis Board: it opens the installed camera, reads a detected grid automatically and opens the existing Board Editor. Framing and manual correction remain available. Human move timing defaults on while preserving a saved off choice, and Maia scores hide when analysis engines are off. Grand Kingdom remains experimental with known capture failures and hardware acceptance pending. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.2.md) record the tested source and verified release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
 
 See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
 
@@ -39,19 +39,19 @@ See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readm
 
 **Assisted screenshot and diagram import: Preview prototype; quality testing next**
 
-Unreleased camera UI follow-up: Home now has Scan board beside Analysis Board.
+Published in Preview 2.6.0-beta.2: Home has Scan board beside Analysis Board.
 It opens the camera, reads a detected grid automatically, then opens the existing
 Board Editor. Framing, rotate, retake and image selection remain available when
-needed. This is source work after beta.1, not a new published APK.
+needed. This completes the Home scan UI missing from beta.1.
 [Delivery audit and actual Flutter screens](docs/CAMERA_SCAN_UI_26.md).
 
-Preview 2.6.0-beta.1 delivers assisted import in the existing board editor. Image import and camera capture are also available in red-icon Dev 2.6.0-alpha.2. Select a screenshot or a clear digital/scanned chess diagram, crop to the intended board and adjust its orientation, then recognize the pieces offline. Edit the position, then open analysis or play from there. Choose image opens the picker; Take photo uses the installed camera for flat printed diagrams, followed by cropping and the existing Board Editor. Real three-dimensional board photos remain outside this scope. See [Import a position from a screenshot or chess diagram into the board editor (#179)](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
+Preview 2.6 delivers assisted import in the existing board editor. Image import and camera capture are also available in red-icon Dev 2.6.0-alpha.2. Select a screenshot or a clear digital/scanned chess diagram, crop to the intended board and adjust its orientation, then recognize the pieces offline. Edit the position, then open analysis or play from there. Choose image opens the picker; Take photo uses the installed camera for flat printed diagrams, followed by cropping and the existing Board Editor. Real three-dimensional board photos remain outside this scope. See [Import a position from a screenshot or chess diagram into the board editor (#179)](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
 
 The [initial recognition test report](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/board-image-import-2026-10-28/REPORT.md) shows uneven accuracy, including errors caused by move arrows and printed diagram styles. The first Preview version is an assisted-import prototype with cropping and editing; arrow handling and diagram recognition need improvement before broad support is considered ready.
 
 **Expand electronic-board support**
 
-Experimental **Square Off Grand Kingdom** support is included in Preview 2.6.0-beta.1 and Dev. **DGT Pegasus** remains Dev-only. Stable excludes both. Grand Kingdom’s reported capture failures remain unresolved. Preview includes assisted Maia promotion. Automatic local diagnostics remain a red-icon Dev feature; physical capture, promotion, en passant and interruption/recovery acceptance are still pending. Diagnostics are never uploaded automatically; Settings → Save Dev diagnostics… exports locally for voluntary sharing. Pegasus also needs a FOSS-compatible way to initialize boards with locked firmware before we can offer support. The [2.6 acceptance record](docs/ELECTRONIC_BOARD_GRAND_KINGDOM_26.md) records the reported failures and remaining hardware acceptance.
+Experimental **Square Off Grand Kingdom** support is included in Preview 2.6 and Dev. **DGT Pegasus** remains Dev-only. Stable excludes both. Grand Kingdom’s reported capture failures remain unresolved. Preview includes assisted Maia promotion. Automatic local diagnostics remain a red-icon Dev feature; physical capture, promotion, en passant and interruption/recovery acceptance are still pending. Diagnostics are never uploaded automatically; Settings → Save Dev diagnostics… exports locally for voluntary sharing. Pegasus also needs a FOSS-compatible way to initialize boards with locked firmware before we can offer support. The [2.6 acceptance record](docs/ELECTRONIC_BOARD_GRAND_KINGDOM_26.md) records the reported failures and remaining hardware acceptance.
 
 We’re looking for owners of these boards who are willing to help test and report their results. See the [board testing guide](https://github.com/Dash1971/maia-chess-android-preview/blob/main/docs/ELECTRONIC_BOARD_DEV.md) and [Grand Kingdom issue](https://github.com/Dash1971/maia-chess-android-preview/issues/27).
 
