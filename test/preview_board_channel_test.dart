@@ -8,6 +8,7 @@ import 'package:maia_chess/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'board_connection_widget_test.dart' show DiscoveryBoard;
+import 'fixtures/immediate_maia_preferences.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -205,7 +206,7 @@ void main() {
   testWidgets(
     'Preview Grand Kingdom requires setup and never replays a pending motor move',
     (tester) async {
-      SharedPreferences.setMockInitialValues({});
+      setImmediateMaiaPreferences({});
       final board = DiscoveryBoard();
       final messenger =
           TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
