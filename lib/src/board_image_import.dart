@@ -53,7 +53,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
 
   // A popped route stays mounted during its exit animation. Its async result
   // must not pop the editor now underneath it or mutate a cancelled import.
-  bool get _canComplete => mounted && ModalRoute.of(context)?.isCurrent == true;
+  bool get _isCurrentRoute => ModalRoute.of(context)?.isCurrent == true;
 
   @override
   void dispose() {
@@ -72,7 +72,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
       final bytes = await (camera
           ? widget.source.takePhoto()
           : widget.source.pickImage());
-      if (!_canComplete) return;
+      if (!mounted || !_isCurrentRoute) return;
       if (bytes == null) {
         if (_image == null) Navigator.pop(context);
         return;
@@ -110,7 +110,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
         image.dispose();
         rethrow;
       }
-      if (!_canComplete || pixels == null) {
+      if (!mounted || !_isCurrentRoute || pixels == null) {
         image.dispose();
         return;
       }
@@ -139,7 +139,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
     final pixels = _rgba!;
     final w = _image!.width, h = _image!.height;
     final result = await vision.locateInBackground(pixels, w, h);
-    if (!_canComplete) return;
+    if (!mounted || !_isCurrentRoute) return;
     setState(() {
       _notFound = result == null;
       _crop = result == null
@@ -198,7 +198,7 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
       } finally {
         buffer.dispose();
       }
-      if (!_canComplete) {
+      if (!mounted || !_isCurrentRoute) {
         image.dispose();
         return;
       }
@@ -229,9 +229,9 @@ class _BoardImageImportPageState extends State<BoardImageImportPage> {
     });
     try {
       final input = await vision.prepareInBackground(pixels, w, h, rect);
-      if (!_canComplete) return;
+      if (!mounted || !_isCurrentRoute) return;
       final logits = await widget.source.classifySquares(input);
-      if (!_canComplete) return;
+      if (!mounted || !_isCurrentRoute) return;
       final result = vision.recognitionFromLogits(
         logits,
         rect,
