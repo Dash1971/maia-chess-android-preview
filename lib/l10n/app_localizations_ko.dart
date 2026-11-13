@@ -1534,4 +1534,14 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get sessionRecovery =>
       '충돌을 일으켰을 수 있는 세션을 다시 열지 않고 홈 화면을 열었습니다. 저장된 대국과 설정은 유지됩니다.';
+
+  @override
+  String get saveDevDiagnostics => 'Dev 진단 정보 저장…';
+
+  @override
+  String get devDiagnosticsHelp =>
+      'Dev는 최근 앱 동작과 Grand Kingdom의 수 및 보드 통신 세부 정보를 이 기기에 기록합니다. 오래된 데이터는 자동으로 삭제됩니다. 사진과 블루투스 주소는 기록하지 않으며 자동으로 업로드하지 않습니다. 공유하려는 경우에만 내보내세요.';
+
+  @override
+  String get devDiagnosticsExportFailed => 'Dev 진단 정보를 저장하지 못했습니다.';
 }
