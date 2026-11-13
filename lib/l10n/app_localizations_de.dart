@@ -1570,10 +1570,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get editorPositionSettings => 'Stellungseinstellungen';
 
   @override
-  String get editorImageImportUnavailable =>
-      'Stellung aus Bild importieren (noch nicht verfügbar)';
-
-  @override
   String get editorShareFen => 'FEN teilen';
 
   @override
@@ -1647,45 +1643,6 @@ class AppLocalizationsDe extends AppLocalizations {
       'Mobile Maia hat die Startseite geöffnet, um eine möglicherweise für einen Absturz verantwortliche Sitzung nicht erneut zu öffnen. Deine gespeicherten Partien und Einstellungen bleiben erhalten.';
 
   @override
-  String get imageFromImage => 'Aus einem Bild';
-
-  @override
-  String get imageCropHorizontal => 'Linker und rechter Rand';
-
-  @override
-  String get imageCropVertical => 'Oberer und unterer Rand';
-
-  @override
-  String get imageFindBoard => 'Brett finden';
-
-  @override
-  String get imageRotate => 'Bild drehen';
-
-  @override
-  String get imageBlackAtBottom => 'Schwarz ist im Bild unten';
-
-  @override
-  String get imageRecognize => 'Stellung erkennen';
-
-  @override
-  String get imageImportFailed =>
-      'Das Bild konnte nicht gelesen werden. Wähle eine andere Bildschirmaufnahme oder passe den Ausschnitt an.';
-
-  @override
-  String get imageBoardNotFound =>
-      'Kein Brett gefunden. Rahme das gewünschte Brett manuell ein.';
-
-  @override
-  String get imageChoose => 'Bild auswählen';
-
-  @override
-  String get imageTakePhoto => 'Foto aufnehmen';
-
-  @override
-  String get imageCameraUnavailable =>
-      'Die Kamera konnte nicht geöffnet werden. Wähle stattdessen ein Bild aus.';
-
-  @override
   String get saveDevDiagnostics => 'Dev-Diagnosedaten speichern…';
 
   @override
@@ -1711,22 +1668,4 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Die Motoren stehen still, ich habe den Bauern ersetzt und alle Figuren stimmen überein.';
-
-  @override
-  String get imageScanBoard => 'Brett scannen';
-
-  @override
-  String get imageReading => 'Stellung wird gelesen…';
-
-  @override
-  String get imageAdjustPhoto => 'Foto anpassen';
-
-  @override
-  String get imageUsePhoto => 'Foto verwenden';
-
-  @override
-  String get imageRetake => 'Neu aufnehmen';
-
-  @override
-  String get imageAdjustEdges => 'Ränder anpassen';
 }

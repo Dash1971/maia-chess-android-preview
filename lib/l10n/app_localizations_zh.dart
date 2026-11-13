@@ -1436,9 +1436,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get editorPositionSettings => '局面设置';
 
   @override
-  String get editorImageImportUnavailable => '从图片导入局面（尚不可用）';
-
-  @override
   String get editorShareFen => '分享 FEN';
 
   @override
@@ -1509,42 +1506,6 @@ class AppLocalizationsZh extends AppLocalizations {
       '为避免重新打开可能导致崩溃的会话，Mobile Maia 已返回主页。已保存的对局和设置均已保留。';
 
   @override
-  String get imageFromImage => '从图片导入';
-
-  @override
-  String get imageCropHorizontal => '左边界和右边界';
-
-  @override
-  String get imageCropVertical => '上边界和下边界';
-
-  @override
-  String get imageFindBoard => '查找棋盘';
-
-  @override
-  String get imageRotate => '旋转图片';
-
-  @override
-  String get imageBlackAtBottom => '图片中黑方在下方';
-
-  @override
-  String get imageRecognize => '识别局面';
-
-  @override
-  String get imageImportFailed => '无法识别此图片。请换一张截图或调整裁剪范围。';
-
-  @override
-  String get imageBoardNotFound => '未找到棋盘。请手动框选目标棋盘。';
-
-  @override
-  String get imageChoose => '选择图片';
-
-  @override
-  String get imageTakePhoto => '拍照';
-
-  @override
-  String get imageCameraUnavailable => '无法打开相机。请改为选择图片。';
-
-  @override
   String get saveDevDiagnostics => '保存Dev诊断信息…';
 
   @override
@@ -1568,22 +1529,4 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get boardPromotionReplaced => '电机已停止，我已替换兵，所有棋子均与屏幕一致。';
-
-  @override
-  String get imageScanBoard => '扫描棋盘';
-
-  @override
-  String get imageReading => '正在识别局面…';
-
-  @override
-  String get imageAdjustPhoto => '调整照片';
-
-  @override
-  String get imageUsePhoto => '使用照片';
-
-  @override
-  String get imageRetake => '重拍';
-
-  @override
-  String get imageAdjustEdges => '调整边框';
 }

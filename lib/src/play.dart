@@ -107,11 +107,9 @@ class GamePage extends StatefulWidget {
     this.humanTimingRandom,
     this.gameFeedbackPlayer,
     this.gameFeedbackService,
-    this.boardImageSource = const PlatformBoardImageSource(),
     super.key,
   });
 
-  final BoardImageSource boardImageSource;
   final GameFeedbackService? gameFeedbackService;
   final Stopwatch Function()? clockFactory;
   // Independent of move sampling; injectable for deterministic timing tests.
@@ -1748,51 +1746,6 @@ class _GamePageState extends State<GamePage>
       MaterialPageRoute(builder: (_) => const RecentGamesPage()),
     );
     if (selected != null && mounted) await _restoreActiveSession(selected);
-  }
-
-  bool _scanningBoard = false;
-
-  Future<void> _scanBoard() async {
-    if (_scanningBoard || _storageBlocked || _startingGame) return;
-    setState(() => _scanningBoard = true);
-    try {
-      final fen = await Navigator.of(context).push<String>(
-        MaterialPageRoute(
-          builder: (_) => BoardImageImportPage(
-            source: widget.boardImageSource,
-            startWithCamera: true,
-          ),
-        ),
-      );
-      if (!mounted ||
-          fen == null ||
-          ModalRoute.of(context)?.isCurrent != true) {
-        return;
-      }
-      final edited = await Navigator.of(context).push<String>(
-        MaterialPageRoute(
-          builder: (editorContext) => BoardEditorPage(
-            initialFen: fen,
-            imageSource: widget.boardImageSource,
-            onContinue: (position) => _continueFromPosition(
-              editorContext,
-              position,
-              [position],
-              useMoveHistory: _useMoveHistory,
-              transport: _boardLease.rawTransport,
-            ),
-          ),
-        ),
-      );
-      if (!mounted ||
-          edited == null ||
-          ModalRoute.of(context)?.isCurrent != true) {
-        return;
-      }
-      await _openAnalysisBoard(initialFen: edited);
-    } finally {
-      if (mounted) setState(() => _scanningBoard = false);
-    }
   }
 
   Future<void> _openAnalysisBoard({String? initialFen}) async {
@@ -4941,68 +4894,16 @@ class _GamePageState extends State<GamePage>
               label: Text(l10n(context).startGame),
             ),
             const SizedBox(height: 12),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final analysis = OutlinedButton.icon(
-                  key: const ValueKey('home-analysis-board'),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(52),
-                  ),
-                  onPressed:
-                      _initialized &&
-                          !_storageBlocked &&
-                          !_startingGame &&
-                          !_scanningBoard
-                      ? _openAnalysisBoard
-                      : null,
-                  icon: const Icon(Icons.analytics_outlined),
-                  label: Text(
-                    l10n(context).analysisBoard,
-                    textAlign: TextAlign.center,
-                  ),
-                );
-                if (appFlavor != 'preview' && appFlavor != 'dev') {
-                  return analysis;
-                }
-                final scan = OutlinedButton.icon(
-                  key: const ValueKey('home-scan-board'),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(52),
-                  ),
-                  onPressed:
-                      _initialized &&
-                          !_storageBlocked &&
-                          !_startingGame &&
-                          !_scanningBoard
-                      ? _scanBoard
-                      : null,
-                  icon: const Icon(Icons.photo_camera_outlined),
-                  label: Text(
-                    l10n(context).imageScanBoard,
-                    textAlign: TextAlign.center,
-                  ),
-                );
-                // Keep the approved side-by-side placement at ordinary sizes;
-                // give long translations/large text full-width tap targets.
-                final stacked =
-                    constraints.maxWidth < 280 ||
-                    MediaQuery.textScalerOf(context).scale(14) > 18;
-                return stacked
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [analysis, const SizedBox(height: 12), scan],
-                      )
-                    : IntrinsicHeight(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Expanded(child: analysis),
-                            const SizedBox(width: 12),
-                            Expanded(child: scan),
-                          ],
-                        ),
-                      );
-              },
+            OutlinedButton.icon(
+              key: const ValueKey('home-analysis-board'),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(52),
+              ),
+              onPressed: _initialized && !_storageBlocked && !_startingGame
+                  ? _openAnalysisBoard
+                  : null,
+              icon: const Icon(Icons.analytics_outlined),
+              label: Text(l10n(context).analysisBoard),
             ),
             const SizedBox(height: 12),
             OutlinedButton.icon(

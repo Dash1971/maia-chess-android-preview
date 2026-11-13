@@ -1564,10 +1564,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get editorPositionSettings => 'स्थिति की सेटिंग';
 
   @override
-  String get editorImageImportUnavailable =>
-      'चित्र से स्थिति आयात करें (अभी उपलब्ध नहीं)';
-
-  @override
   String get editorShareFen => 'FEN साझा करें';
 
   @override
@@ -1641,45 +1637,6 @@ class AppLocalizationsHi extends AppLocalizations {
       'ऐप क्रैश होने का कारण रहे संभावित सत्र को दोबारा खोलने के बजाय Mobile Maia ने होम स्क्रीन खोली है। आपके सहेजे गए खेल और सेटिंग्स सुरक्षित हैं।';
 
   @override
-  String get imageFromImage => 'चित्र से';
-
-  @override
-  String get imageCropHorizontal => 'बाएँ और दाएँ किनारे';
-
-  @override
-  String get imageCropVertical => 'ऊपरी और निचले किनारे';
-
-  @override
-  String get imageFindBoard => 'बिसात खोजें';
-
-  @override
-  String get imageRotate => 'चित्र घुमाएँ';
-
-  @override
-  String get imageBlackAtBottom => 'चित्र में काले मोहरे नीचे हैं';
-
-  @override
-  String get imageRecognize => 'स्थिति पहचानें';
-
-  @override
-  String get imageImportFailed =>
-      'चित्र पढ़ा नहीं जा सका। दूसरा स्क्रीनशॉट चुनें या काटने की सीमा बदलें।';
-
-  @override
-  String get imageBoardNotFound =>
-      'बिसात नहीं मिली। इच्छित बिसात की सीमा स्वयं चुनें।';
-
-  @override
-  String get imageChoose => 'चित्र चुनें';
-
-  @override
-  String get imageTakePhoto => 'फ़ोटो लें';
-
-  @override
-  String get imageCameraUnavailable =>
-      'कैमरा नहीं खुल सका। इसके बजाय कोई इमेज चुनें।';
-
-  @override
   String get saveDevDiagnostics => 'Dev की निदान जानकारी सहेजें…';
 
   @override
@@ -1705,22 +1662,4 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'मोटर रुक गई है, मैंने प्यादा बदल दिया है और सभी गोटियाँ स्क्रीन से मेल खाती हैं।';
-
-  @override
-  String get imageScanBoard => 'बोर्ड स्कैन करें';
-
-  @override
-  String get imageReading => 'स्थिति पढ़ी जा रही है…';
-
-  @override
-  String get imageAdjustPhoto => 'फ़ोटो समायोजित करें';
-
-  @override
-  String get imageUsePhoto => 'फ़ोटो इस्तेमाल करें';
-
-  @override
-  String get imageRetake => 'फिर से लें';
-
-  @override
-  String get imageAdjustEdges => 'किनारे समायोजित करें';
 }
