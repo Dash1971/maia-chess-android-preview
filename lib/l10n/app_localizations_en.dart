@@ -1620,6 +1620,45 @@ class AppLocalizationsEn extends AppLocalizations {
       'Mobile Maia opened Home to avoid reopening a session that may have caused a crash. Your saved games and settings have been kept.';
 
   @override
+  String get imageFromImage => 'From image';
+
+  @override
+  String get imageCropHorizontal => 'Left and right edges';
+
+  @override
+  String get imageCropVertical => 'Top and bottom edges';
+
+  @override
+  String get imageFindBoard => 'Find board';
+
+  @override
+  String get imageRotate => 'Rotate image';
+
+  @override
+  String get imageBlackAtBottom => 'Image has Black at the bottom';
+
+  @override
+  String get imageRecognize => 'Recognize position';
+
+  @override
+  String get imageImportFailed =>
+      'Could not read this image. Try another screenshot or adjust the crop.';
+
+  @override
+  String get imageBoardNotFound =>
+      'No board found. Frame the intended board manually.';
+
+  @override
+  String get imageChoose => 'Choose image';
+
+  @override
+  String get imageTakePhoto => 'Take photo';
+
+  @override
+  String get imageCameraUnavailable =>
+      'Could not open the camera. Choose an image instead.';
+
+  @override
   String get saveDevDiagnostics => 'Save Dev diagnostics…';
 
   @override

@@ -1532,6 +1532,42 @@ class AppLocalizationsJa extends AppLocalizations {
       'クラッシュの原因となった可能性があるセッションを再開せず、ホームを開きました。保存済みの対局と設定は保持されています。';
 
   @override
+  String get imageFromImage => '画像から';
+
+  @override
+  String get imageCropHorizontal => '左端と右端';
+
+  @override
+  String get imageCropVertical => '上端と下端';
+
+  @override
+  String get imageFindBoard => '盤面を検出';
+
+  @override
+  String get imageRotate => '画像を回転';
+
+  @override
+  String get imageBlackAtBottom => '画像では黒側が下';
+
+  @override
+  String get imageRecognize => '局面を認識';
+
+  @override
+  String get imageImportFailed => '画像を読み取れませんでした。別の画像を選ぶか、切り抜く範囲を調整してください。';
+
+  @override
+  String get imageBoardNotFound => '盤面が見つかりません。対象の盤面を手動で囲んでください。';
+
+  @override
+  String get imageChoose => '画像を選択';
+
+  @override
+  String get imageTakePhoto => '写真を撮影';
+
+  @override
+  String get imageCameraUnavailable => 'カメラを開けませんでした。代わりに画像を選択してください。';
+
+  @override
   String get saveDevDiagnostics => 'Devの診断情報を保存…';
 
   @override

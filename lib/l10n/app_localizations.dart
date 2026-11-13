@@ -2848,6 +2848,78 @@ abstract class AppLocalizations {
   /// **'Mobile Maia opened Home to avoid reopening a session that may have caused a crash. Your saved games and settings have been kept.'**
   String get sessionRecovery;
 
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'From image'**
+  String get imageFromImage;
+
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Left and right edges'**
+  String get imageCropHorizontal;
+
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Top and bottom edges'**
+  String get imageCropVertical;
+
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Find board'**
+  String get imageFindBoard;
+
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate image'**
+  String get imageRotate;
+
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Image has Black at the bottom'**
+  String get imageBlackAtBottom;
+
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognize position'**
+  String get imageRecognize;
+
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read this image. Try another screenshot or adjust the crop.'**
+  String get imageImportFailed;
+
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'No board found. Frame the intended board manually.'**
+  String get imageBoardNotFound;
+
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose image'**
+  String get imageChoose;
+
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get imageTakePhoto;
+
+  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the camera. Choose an image instead.'**
+  String get imageCameraUnavailable;
+
   /// Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry.
   ///
   /// In en, this message translates to:

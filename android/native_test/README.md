@@ -14,3 +14,9 @@ java -jar /tmp/maia-native-protocol-checks.jar
 ```
 
 Verified with official JetBrains Kotlin 2.2.0 and OpenJDK 21. Actual Android bridge compilation belongs to the Dev build. Hardware acceptance remains separate; these checks cannot certify BLE or physical behavior.
+
+The Preview/Dev image-import prototype also runs private capture-file isolation,
+cancellation/process-recreation cleanup and all eight EXIF-orientation checks.
+These pure checks do not exercise Android intents, FileProvider grants, actual
+camera output or bitmap decoding; retain the local Android camera smoke test
+and real-phone/OEM acceptance in `docs/BOARD_IMAGE_IMPORT.md`.

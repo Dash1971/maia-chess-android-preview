@@ -89,9 +89,15 @@ class BoardEditorDraft {
 }
 
 class BoardEditorPage extends StatefulWidget {
-  const BoardEditorPage({required this.initialFen, this.onContinue, super.key});
+  const BoardEditorPage({
+    required this.initialFen,
+    this.onContinue,
+    this.imageSource = const PlatformBoardImageSource(),
+    super.key,
+  });
   final String initialFen;
   final Future<void> Function(String fen)? onContinue;
+  final BoardImageSource imageSource;
   @override
   State<BoardEditorPage> createState() => _BoardEditorPageState();
 }
@@ -102,6 +108,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
   dc.Piece? _placement;
   dc.Square? _selected;
   bool _flipped = false, _continuing = false;
+  bool _importing = false;
   Offset? _pointerDown;
   final _boardKey = GlobalKey();
 
@@ -187,6 +194,21 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
           context,
         ).showSnackBar(SnackBar(content: Text(l10n(context).invalidPosition)));
       }
+    }
+  }
+
+  Future<void> _fromImage() async {
+    if (_importing) return;
+    setState(() => _importing = true);
+    try {
+      final fen = await Navigator.of(context).push<String>(
+        MaterialPageRoute(
+          builder: (_) => BoardImageImportPage(source: widget.imageSource),
+        ),
+      );
+      if (mounted && fen != null) _change(() => _draft.load(fen));
+    } finally {
+      if (mounted) setState(() => _importing = false);
     }
   }
 
@@ -315,7 +337,11 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
                         RadioGroup<dc.Side>(
                           groupValue: _draft.turn,
                           onChanged: (side) {
-                            if (side != null) update(() => _draft.turn = side);
+                            if (side != null) {
+                              update(() {
+                                _draft.turn = side;
+                              });
+                            }
                           },
                           child: Column(
                             children: [
@@ -701,14 +727,13 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
     appBar: AppBar(
       title: Text(l10n(context).boardEditor),
       actions: [
-        Tooltip(
-          message: l10n(context).editorImageImportUnavailable,
-          child: IconButton(
-            onPressed: null,
+        if (appFlavor == 'preview' || appFlavor == 'dev')
+          IconButton(
+            key: const ValueKey('editor-from-image'),
+            onPressed: _importing ? null : _fromImage,
             icon: const Icon(Icons.photo_camera_outlined),
-            tooltip: l10n(context).editorImageImportUnavailable,
+            tooltip: l10n(context).imageFromImage,
           ),
-        ),
         IconButton(
           key: const ValueKey('editor-share'),
           onPressed: _export,
@@ -717,60 +742,57 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
         ),
       ],
     ),
-    body: SafeArea(
-      child: LayoutBuilder(
-        builder: (context, box) {
-          if (box.maxWidth > box.maxHeight && box.maxWidth >= 600) {
-            final board = min(
-              box.maxHeight,
-              box.maxWidth * .56,
-            ).clamp(80.0, 560.0);
-            return Row(
-              children: [
-                _board(board),
-                Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, right) => Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _palette(
-                          _flipped ? dc.Side.white : dc.Side.black,
-                          right.maxWidth,
-                        ),
-                        _palette(
-                          _flipped ? dc.Side.black : dc.Side.white,
-                          right.maxWidth,
-                        ),
-                        _toolbar(),
-                      ],
+    body: SafeArea(child: _editorLayout()),
+  );
+
+  Widget _editorLayout() => LayoutBuilder(
+    builder: (context, box) {
+      if (box.maxWidth > box.maxHeight && box.maxWidth >= 600) {
+        final board = min(box.maxHeight, box.maxWidth * .56).clamp(80.0, 560.0);
+        return Row(
+          children: [
+            _board(board),
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, right) => Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _palette(
+                      _flipped ? dc.Side.white : dc.Side.black,
+                      right.maxWidth,
                     ),
-                  ),
+                    _palette(
+                      _flipped ? dc.Side.black : dc.Side.white,
+                      right.maxWidth,
+                    ),
+                    _toolbar(),
+                  ],
                 ),
-              ],
-            );
-          }
-          final width = min(box.maxWidth, 560.0),
-              paletteHeight = width >= 352 ? 44.0 : 88.0;
-          final board = min(
-            width,
-            max(80.0, box.maxHeight - 2 * paletteHeight - 56),
-          );
-          return Center(
-            child: SizedBox(
-              width: width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _palette(_flipped ? dc.Side.white : dc.Side.black, width),
-                  _board(board),
-                  _palette(_flipped ? dc.Side.black : dc.Side.white, width),
-                  _toolbar(),
-                ],
               ),
             ),
-          );
-        },
-      ),
-    ),
+          ],
+        );
+      }
+      final width = min(box.maxWidth, 560.0),
+          paletteHeight = width >= 352 ? 44.0 : 88.0;
+      final board = min(
+        width,
+        max(80.0, box.maxHeight - 2 * paletteHeight - 56),
+      );
+      return Center(
+        child: SizedBox(
+          width: width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _palette(_flipped ? dc.Side.white : dc.Side.black, width),
+              _board(board),
+              _palette(_flipped ? dc.Side.black : dc.Side.white, width),
+              _toolbar(),
+            ],
+          ),
+        ),
+      );
+    },
   );
 }

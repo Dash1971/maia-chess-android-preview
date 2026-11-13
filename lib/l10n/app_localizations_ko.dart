@@ -1536,6 +1536,43 @@ class AppLocalizationsKo extends AppLocalizations {
       '충돌을 일으켰을 수 있는 세션을 다시 열지 않고 홈 화면을 열었습니다. 저장된 대국과 설정은 유지됩니다.';
 
   @override
+  String get imageFromImage => '이미지에서 가져오기';
+
+  @override
+  String get imageCropHorizontal => '왼쪽 및 오른쪽 경계';
+
+  @override
+  String get imageCropVertical => '위쪽 및 아래쪽 경계';
+
+  @override
+  String get imageFindBoard => '체스판 찾기';
+
+  @override
+  String get imageRotate => '이미지 회전';
+
+  @override
+  String get imageBlackAtBottom => '이미지에서 흑이 아래쪽에 있음';
+
+  @override
+  String get imageRecognize => '포지션 인식';
+
+  @override
+  String get imageImportFailed =>
+      '이미지를 읽지 못했습니다. 다른 스크린샷을 선택하거나 자르기 영역을 조정하세요.';
+
+  @override
+  String get imageBoardNotFound => '체스판을 찾지 못했습니다. 원하는 체스판 영역을 직접 지정하세요.';
+
+  @override
+  String get imageChoose => '이미지 선택';
+
+  @override
+  String get imageTakePhoto => '사진 찍기';
+
+  @override
+  String get imageCameraUnavailable => '카메라를 열 수 없습니다. 대신 이미지를 선택하세요.';
+
+  @override
   String get saveDevDiagnostics => 'Dev 진단 정보 저장…';
 
   @override
