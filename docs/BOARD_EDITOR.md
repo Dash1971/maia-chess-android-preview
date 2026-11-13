@@ -41,7 +41,7 @@ Variant and Challenge from position remain absent. For the 2.6 prototype, the
 From image action offers Choose image and Take photo for assisted screenshot/flat
 printed-diagram import in Preview/Dev. The camera delegates to the installed app
 with temporary private output; physical-board photo recognition remains outside
-the scope. The unreleased Home Scan board shortcut opens the camera and reads a
+the scope. The Home Scan board shortcut, published in Preview 2.6.0-beta.2, opens the camera and reads a
 found grid automatically before opening this same normal editor. Manual framing
 remains available through the editor import action and as a scan fallback.
 Analysis and Continue use normal position validation. See

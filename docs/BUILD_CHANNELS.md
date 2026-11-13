@@ -7,7 +7,7 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.5.1](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1), code 83 | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.1](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.1), code 2601 | `com.dash1971.maia_chess.preview`, 79M | Offline image/camera import, Human move timing default on, engine-off score hiding; experimental Grand Kingdom with known capture failures. DGT stays Dev-only. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.2](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.2), code 2602 | `com.dash1971.maia_chess.preview`, 79M | Home camera scan, automatic grid reading and existing-editor correction; timing default on and engine-off score hiding; experimental Grand Kingdom with known capture failures. DGT stays Dev-only. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev) | Published 2.6.0-alpha.2-dev, code 2602 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Automatic local Dev diagnostics, assisted Maia promotion and image/camera import. Grand Kingdom capture failures remain unresolved. |
 
 The three packages install side by side. Obtainium users should select the
@@ -36,6 +36,19 @@ Linux/reproduction/physical qualification gates still apply. Capture failures
 remain unresolved; [the owner’s testing instructions](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6489649516)
 request an export after the first mismatch and further Maia-promotion testing.
 
+## Preview 2.6.0-beta.2 publication
+
+[Published beta.2](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.2) completes #220's Home Scan board UI missing from
+beta.1. It opens the installed camera, reads a detected grid automatically and
+opens the normal Board Editor. Framing fallback offers corner/frame dragging,
+retake, rotation, Use photo, gallery and accessible edge controls. The editor
+reuses normal analysis and continuation. Recognition accuracy, model, native
+camera handling and permissions are unchanged; broader accuracy/OEM acceptance
+is still pending. [Qualification and cleanup](releases/preview-2.6.0-beta.2.md)
+record both Linux builds, signing, ARM64/79M native, signed upgrade and changed
+features, public download and cleanup on every host. Stable and Dev releases
+are unchanged. Grand Kingdom retains the accepted experimental limits below.
+
 ## Preview 2.6.0-beta.1 publication
 
 [Release and qualification](releases/preview-2.6.0-beta.1.md) record the four
@@ -60,15 +73,6 @@ not fix wrong-piece removal or missed captures. Physical acceptance remains
 pending in the [2.6 acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md).
 DGT remains Dev-only; Stable/unflavored builds exclude both adapters.
 
-## Unreleased camera UI follow-up
-
-The Home Scan board shortcut and automatic camera → reading → existing Board
-Editor flow were approved as mockups but were not implemented in #210 and are
-absent from published beta.1. The source follow-up implements that flow and the
-simplified framing fallback. [Delivery audit and actual Flutter screenshots](CAMERA_SCAN_UI_26.md)
-distinguish it from the already shipped camera-icon/editor cleanup. No version,
-package, APK or release has been changed by this follow-up.
-
 ## Preview acceptance
 
 - Use move history remains off by default, with its own information button.
@@ -80,7 +84,7 @@ package, APK or release has been changed by this follow-up.
   confirmation by a second deliberate press within 2.5 seconds.
 - Board sounds remain under **Chessnut**, because the buzzer commands are
   Chessnut-specific. Other brands must not imply equivalent sound support.
-- Published Preview 2.5 excludes Grand Kingdom and DGT. The proposed 2.6 source
+- Published Preview 2.5 excludes Grand Kingdom and DGT. Preview 2.6
   admits only Grand Kingdom experimentally, with matching Dart/native gates and
   motor-session checks. DGT stays Dev-only. The requester authorized experimental
   Preview 2.6 publication with the reported capture failures documented and
