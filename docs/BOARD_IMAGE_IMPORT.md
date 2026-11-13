@@ -1,9 +1,11 @@
 # Assisted screenshot/diagram import: 2.6 prototype
 
 Tracks [#179](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
-The feature PR remains draft. [Red-icon Dev 2.6.0-alpha.2](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev)
-contains camera capture. The UI simplification below is a later source update;
-it does not rebuild or replace that APK. Preview/Stable are unchanged.
+The assisted prototype is published in [Preview 2.6.0-beta.1](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.1), including
+camera capture and direct return to the existing Board Editor. Dev 2.6.0-alpha.2
+remains available with its earlier UI. Stable is unchanged.
+[Qualification and remaining limits](releases/preview-2.6.0-beta.1.md) distinguish
+Preview testing from broad recognition readiness and Stable promotion.
 
 ## Workflow and safeguards
 
