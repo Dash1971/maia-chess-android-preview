@@ -1667,4 +1667,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get devDiagnosticsExportFailed => 'Could not save Dev diagnostics.';
+
+  @override
+  String get boardPromotionTitle => 'Confirm Maia promotion';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square: $piece. Replace the pawn.';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      'Wait until the motors have stopped. Replace the pawn with the indicated piece and check the entire physical position against the screen. If the move is incomplete or uncertain, continue in the app instead.';
+
+  @override
+  String get boardPromotionReplaced =>
+      'The motors are stopped, I replaced the pawn, and every piece matches.';
 }

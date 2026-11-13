@@ -1692,4 +1692,20 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get devDiagnosticsExportFailed =>
       'No se pudo guardar el diagnóstico de Dev.';
+
+  @override
+  String get boardPromotionTitle => 'Confirmar promoción de Maia';
+
+  @override
+  String boardPromotionMove(String square, String piece) {
+    return '$square: $piece. Sustituye el peón.';
+  }
+
+  @override
+  String get boardPromotionHelp =>
+      'Espera a que los motores se detengan. Sustituye el peón por la pieza indicada y comprueba que toda la posición física coincide con la pantalla. Si el movimiento está incompleto o no estás seguro, continúa la partida en la aplicación.';
+
+  @override
+  String get boardPromotionReplaced =>
+      'Los motores están parados, he sustituido el peón y todas las piezas coinciden.';
 }
