@@ -479,5 +479,8 @@
   "imageAdjustPhoto": "写真を調整",
   "imageUsePhoto": "この写真を使う",
   "imageRetake": "撮り直す",
-  "imageAdjustEdges": "枠を調整"
+  "imageAdjustEdges": "枠を調整",
+  "recentExportGames": "対局をエクスポートする",
+  "recentExportFailed": "選択した対局をエクスポートできませんでした。保存済みの対局は変更されていません。",
+  "recentExportTooLarge": "選択した対局はPGNの2 MBの上限を超えています。対局数を減らして選択してください。"
 }

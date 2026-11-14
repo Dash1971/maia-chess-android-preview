@@ -479,5 +479,8 @@
   "imageAdjustPhoto": "Ajustar foto",
   "imageUsePhoto": "Usar foto",
   "imageRetake": "Tirar outra",
-  "imageAdjustEdges": "Ajustar bordas"
+  "imageAdjustEdges": "Ajustar bordas",
+  "recentExportGames": "Exportar partidas",
+  "recentExportFailed": "Não foi possível exportar as partidas selecionadas. As partidas salvas não foram alteradas.",
+  "recentExportTooLarge": "Esta seleção ultrapassa o limite de 2 MB do PGN. Selecione menos partidas."
 }

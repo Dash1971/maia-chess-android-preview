@@ -1609,4 +1609,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get imageAdjustEdges => '枠を調整';
+
+  @override
+  String get recentExportGames => '対局をエクスポートする';
+
+  @override
+  String get recentExportFailed => '選択した対局をエクスポートできませんでした。保存済みの対局は変更されていません。';
+
+  @override
+  String get recentExportTooLarge =>
+      '選択した対局はPGNの2 MBの上限を超えています。対局数を減らして選択してください。';
 }

@@ -1723,4 +1723,15 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get imageAdjustEdges => 'किनारे समायोजित करें';
+
+  @override
+  String get recentExportGames => 'खेल को निर्यात (एक्सपोर्ट) करें';
+
+  @override
+  String get recentExportFailed =>
+      'चुने गए खेल निर्यात नहीं किए जा सके। सहेजे गए खेलों में कोई बदलाव नहीं हुआ।';
+
+  @override
+  String get recentExportTooLarge =>
+      'चुने गए खेल PGN की 2 MB सीमा से अधिक हैं। कम खेल चुनें।';
 }

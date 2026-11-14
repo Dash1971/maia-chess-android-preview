@@ -2997,6 +2997,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Adjust edges'**
   String get imageAdjustEdges;
+
+  /// Recent Games selection toolbar: export the selected games into one PGN file using Save or Share. Reuses pinned Lichess exportGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Export games'**
+  String get recentExportGames;
+
+  /// Recent Games multi-game export error: one selected record could not be read/validated, or Android save/share failed. No selected game is silently omitted and stored games are not modified.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not export the selected games. Saved games were not changed.'**
+  String get recentExportFailed;
+
+  /// Recent Games export exceeds the existing Android 2 MiB UTF-8 PGN limit. The UI uses the familiar 2 MB label; select fewer games to retry.
+  ///
+  /// In en, this message translates to:
+  /// **'This selection exceeds the 2 MB PGN limit. Export fewer games.'**
+  String get recentExportTooLarge;
 }
 
 class _AppLocalizationsDelegate

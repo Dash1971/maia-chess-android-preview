@@ -1701,4 +1701,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get imageAdjustEdges => 'Adjust edges';
+
+  @override
+  String get recentExportGames => 'Export games';
+
+  @override
+  String get recentExportFailed =>
+      'Could not export the selected games. Saved games were not changed.';
+
+  @override
+  String get recentExportTooLarge =>
+      'This selection exceeds the 2 MB PGN limit. Export fewer games.';
 }
