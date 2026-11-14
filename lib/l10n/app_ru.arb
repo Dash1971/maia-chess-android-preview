@@ -479,5 +479,8 @@
   "imageAdjustPhoto": "Настроить фото",
   "imageUsePhoto": "Использовать фото",
   "imageRetake": "Переснять",
-  "imageAdjustEdges": "Настроить границы"
+  "imageAdjustEdges": "Настроить границы",
+  "recentExportGames": "Скачать игры",
+  "recentExportFailed": "Не удалось экспортировать выбранные партии. Сохранённые партии не изменены.",
+  "recentExportTooLarge": "Выбранные партии превышают ограничение PGN в 2 МБ. Выберите меньше партий."
 }

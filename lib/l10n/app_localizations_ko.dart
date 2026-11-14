@@ -1614,4 +1614,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get imageAdjustEdges => '테두리 조정';
+
+  @override
+  String get recentExportGames => '대국 저장하기';
+
+  @override
+  String get recentExportFailed => '선택한 대국을 내보낼 수 없습니다. 저장된 대국은 변경되지 않았습니다.';
+
+  @override
+  String get recentExportTooLarge =>
+      '선택한 대국이 PGN의 2 MB 제한을 초과합니다. 대국을 더 적게 선택하세요.';
 }

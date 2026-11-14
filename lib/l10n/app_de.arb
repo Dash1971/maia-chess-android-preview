@@ -479,5 +479,8 @@
   "imageAdjustPhoto": "Foto anpassen",
   "imageUsePhoto": "Foto verwenden",
   "imageRetake": "Neu aufnehmen",
-  "imageAdjustEdges": "Ränder anpassen"
+  "imageAdjustEdges": "Ränder anpassen",
+  "recentExportGames": "Partien exportieren",
+  "recentExportFailed": "Die ausgewählten Partien konnten nicht exportiert werden. Gespeicherte Partien wurden nicht verändert.",
+  "recentExportTooLarge": "Diese Auswahl überschreitet die PGN-Grenze von 2 MB. Wähle weniger Partien."
 }

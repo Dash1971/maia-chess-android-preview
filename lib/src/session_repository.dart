@@ -448,6 +448,21 @@ class SessionRepository {
     return Map<String, dynamic>.from(_detach(data) as Map);
   });
 
+  /// Export must never call open(), which archives/replaces the active session.
+  Future<String?> readPgnForExport(String id) => _serial(() async {
+    final archive = _archiveFile(id);
+    final active = await _read(_active);
+    final entry =
+        active?['id'] == id && _recentGameData(active?['data']) != null
+        ? active
+        : await _read(archive);
+    if (entry == null || entry['id'] != id) return null;
+    final data = _recentGameData(entry['data']);
+    final session = data?['session'];
+    final pgn = data?['pgn'] ?? (session is Map ? session['pgn'] : null);
+    return pgn is String ? pgn : null;
+  });
+
   Future<void> delete(String id) => _serial(() async {
     await _read(_archiveFile(id));
     // Tombstone the active checkpoint before touching its archive. A process
@@ -503,12 +518,14 @@ class RecentGamesPage extends StatefulWidget {
     this.loadGames,
     this.openGame,
     this.deleteGames,
+    this.readPgnForExport,
     super.key,
   });
 
   final Future<List<RecentSession>> Function()? loadGames;
   final Future<Map<String, dynamic>?> Function(String id)? openGame;
   final Future<void> Function(Iterable<String> ids)? deleteGames;
+  final Future<String?> Function(String id)? readPgnForExport;
 
   @override
   State<RecentGamesPage> createState() => _RecentGamesPageState();
@@ -520,6 +537,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
   bool _selecting = false;
   bool _busy = false;
   bool _updatingFiles = false;
+  bool _exporting = false;
   final Set<String> _selected = {};
 
   @override
@@ -552,6 +570,52 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
       _selecting = true;
       if (!_selected.add(id)) _selected.remove(id);
     });
+  }
+
+  Future<void> _exportSelected({required bool share}) async {
+    if (_busy || _selected.isEmpty) return;
+    // Selection order is irrelevant: use the exact displayed Recent Games order.
+    final ids = [
+      for (final game in _games ?? <RecentSession>[])
+        if (_selected.contains(game.id)) game.id,
+    ];
+    if (ids.isEmpty) return;
+    setState(() {
+      _busy = true;
+      _exporting = true;
+    });
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    try {
+      final pgn = await RecentGamesPgn.export(
+        ids,
+        widget.readPgnForExport ?? ActiveSessionStore.readPgnForExport,
+      );
+      if (!mounted) return;
+      await PgnFiles.export(
+        context,
+        pgn,
+        share: share,
+        failureMessage: l10n(context).recentExportFailed,
+      );
+    } catch (error, stackTrace) {
+      unawaited(
+        AppDiagnostics.record('recent-games-export', error, stackTrace),
+      );
+      if (mounted) {
+        _showOperationError(
+          error is PgnExportTooLarge
+              ? l10n(context).recentExportTooLarge
+              : l10n(context).recentExportFailed,
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _busy = false;
+          _exporting = false;
+        });
+      }
+    }
   }
 
   Future<void> _deleteGames(List<RecentSession> games) async {
@@ -661,22 +725,27 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
     final games = _games;
     final page = Scaffold(
       appBar: AppBar(
-        bottom: _updatingFiles
+        bottom: _updatingFiles || _exporting
             ? PreferredSize(
                 preferredSize: const Size.fromHeight(2),
                 child: LinearProgressIndicator(
                   minHeight: 2,
-                  semanticsLabel: l10n(context).recentUpdating,
+                  semanticsLabel: _exporting
+                      ? l10n(context).recentExportGames
+                      : l10n(context).recentUpdating,
                 ),
               )
             : null,
         leading: _selecting
             ? IconButton(
                 tooltip: l10n(context).recentCancelSelection,
-                onPressed: () => setState(() {
-                  _selecting = false;
-                  _selected.clear();
-                }),
+                onPressed: () {
+                  if (_busy) return;
+                  setState(() {
+                    _selecting = false;
+                    _selected.clear();
+                  });
+                },
                 icon: const Icon(Icons.close),
               )
             : null,
@@ -684,21 +753,40 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
           _selecting
               ? l10n(context).recentSelectedCount(_selected.length)
               : l10n(context).recentGames,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         actions: [
           if (_selecting && games != null) ...[
+            PopupMenuButton<bool>(
+              key: const ValueKey('export-selected-games'),
+              tooltip: l10n(context).recentExportGames,
+              enabled: _selected.isNotEmpty && !_busy,
+              icon: const Icon(Icons.ios_share_outlined),
+              onSelected: (share) => unawaited(_exportSelected(share: share)),
+              itemBuilder: (_) => [
+                PopupMenuItem(
+                  value: false,
+                  child: Text(l10n(context).savePgnFile),
+                ),
+                PopupMenuItem(value: true, child: Text(l10n(context).sharePgn)),
+              ],
+            ),
             IconButton(
               key: const ValueKey('select-all-games'),
               tooltip: _selected.length == games.length
                   ? l10n(context).recentClearSelection
                   : l10n(context).recentSelectAll,
-              onPressed: () => setState(() {
-                if (_selected.length == games.length) {
-                  _selected.clear();
-                } else {
-                  _selected.addAll(games.map((game) => game.id));
-                }
-              }),
+              onPressed: () {
+                if (_busy) return;
+                setState(() {
+                  if (_selected.length == games.length) {
+                    _selected.clear();
+                  } else {
+                    _selected.addAll(games.map((game) => game.id));
+                  }
+                });
+              },
               icon: const Icon(Icons.select_all),
             ),
             IconButton(

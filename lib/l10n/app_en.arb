@@ -2221,5 +2221,17 @@
   "imageAdjustEdges": "Adjust edges",
   "@imageAdjustEdges": {
     "description": "Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term."
+  },
+  "recentExportGames": "Export games",
+  "recentExportFailed": "Could not export the selected games. Saved games were not changed.",
+  "recentExportTooLarge": "This selection exceeds the 2 MB PGN limit. Export fewer games.",
+  "@recentExportGames": {
+    "description": "Recent Games selection toolbar: export the selected games into one PGN file using Save or Share. Reuses pinned Lichess exportGames."
+  },
+  "@recentExportFailed": {
+    "description": "Recent Games multi-game export error: one selected record could not be read/validated, or Android save/share failed. No selected game is silently omitted and stored games are not modified."
+  },
+  "@recentExportTooLarge": {
+    "description": "Recent Games export exceeds the existing Android 2 MiB UTF-8 PGN limit. The UI uses the familiar 2 MB label; select fewer games to retry."
   }
 }

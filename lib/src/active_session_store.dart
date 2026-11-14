@@ -125,6 +125,9 @@ class ActiveSessionStore {
   static Future<void> deleteMany(Iterable<String> ids) async =>
       (await repository).deleteMany(ids);
 
+  static Future<String?> readPgnForExport(String id) async =>
+      (await repository).readPgnForExport(id);
+
   static Future<Map<String, dynamic>?> load() async {
     if (_usingRepository) {
       return restoreOrMigrate(

@@ -1586,4 +1586,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get imageAdjustEdges => '调整边框';
+
+  @override
+  String get recentExportGames => '导出对局';
+
+  @override
+  String get recentExportFailed => '无法导出所选对局。已保存的对局未被更改。';
+
+  @override
+  String get recentExportTooLarge => '所选对局超出 PGN 文件的 2 MB 上限。请选择更少的对局。';
 }

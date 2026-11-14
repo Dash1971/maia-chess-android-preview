@@ -39,6 +39,8 @@ See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readm
 
 **Next release target: export selected games as one PGN**
 
+[Selection, ordering, size limit and verification](docs/RECENT_GAMES_PGN_EXPORT.md).
+
 We are looking to include bulk PGN export in the next release. Select individual
 games or use Select all in Recent Games, then save or share one PGN file
 containing the selected games for use in external analysis tools. Thanks to

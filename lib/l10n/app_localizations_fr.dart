@@ -1726,4 +1726,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get imageAdjustEdges => 'Ajuster les bords';
+
+  @override
+  String get recentExportGames => 'Exporter les parties';
+
+  @override
+  String get recentExportFailed =>
+      'Impossible d’exporter les parties sélectionnées. Les parties enregistrées n’ont pas été modifiées.';
+
+  @override
+  String get recentExportTooLarge =>
+      'Cette sélection dépasse la limite de 2 Mo du fichier PGN. Sélectionnez moins de parties.';
 }

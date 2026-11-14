@@ -1747,4 +1747,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get imageAdjustEdges => 'Настроить границы';
+
+  @override
+  String get recentExportGames => 'Скачать игры';
+
+  @override
+  String get recentExportFailed =>
+      'Не удалось экспортировать выбранные партии. Сохранённые партии не изменены.';
+
+  @override
+  String get recentExportTooLarge =>
+      'Выбранные партии превышают ограничение PGN в 2 МБ. Выберите меньше партий.';
 }
