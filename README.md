@@ -37,6 +37,15 @@ See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readm
 
 ## Roadmap
 
+**Next release target: export selected games as one PGN**
+
+We are looking to include bulk PGN export in the next release. Select individual
+games or use Select all in Recent Games, then save or share one PGN file
+containing the selected games for use in external analysis tools. Thanks to
+@Earthless85 for the [suggestion](https://github.com/Dash1971/maia-chess-android/issues/74).
+Implementation and verification are tracked in
+[Preview #225](https://github.com/Dash1971/maia-chess-android-preview/issues/225).
+
 **Offline board scanning: shelved**
 
 We have shelved camera, screenshot and printed-diagram recognition for now.
