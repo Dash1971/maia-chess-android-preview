@@ -137,7 +137,12 @@ class PgnDocuments(private val activity: Activity, private val received: () -> U
                     clipData = android.content.ClipData.newRawUri("PGN", uri)
                 }
                 activity.runOnUiThread {
-                    try { activity.startActivity(Intent.createChooser(intent, chooserTitle)); reply.success(null) }
+                    // Sharing must not re-import into this app when it is the
+                    // only receiver: Android may auto-launch a sole target.
+                    val chooser = Intent.createChooser(intent, chooserTitle).apply {
+                        putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, arrayOf(activity.componentName))
+                    }
+                    try { activity.startActivity(chooser); reply.success(null) }
                     catch (error: Exception) { reply.error("share_failed", error.message, null) }
                 }
             } catch (error: Exception) {

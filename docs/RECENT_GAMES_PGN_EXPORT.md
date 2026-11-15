@@ -57,6 +57,11 @@ unfinished `*` games and supported custom starting positions use the same path.
 - Success, picker cancellation and failure preserve the selection. Cancellation
   shows no success message. A failed export leaves the screen usable for retry.
 
+The outgoing share chooser excludes Maia’s own receiving activity, so Android
+cannot automatically re-import a selected game and replace the active session
+when Maia is the only installed PGN receiver. Users can still import files
+explicitly through the existing import actions.
+
 Android continues to use the existing document picker and FileProvider chooser,
 temporary URI grants and MIME type. Native size guards distinguish 5 MiB
 exports from 2 MiB imports. There is no new permission, network dependency,
