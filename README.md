@@ -31,7 +31,7 @@ and feature requests.
 
 ## Current Preview status
 
-The latest Preview release is [2.6.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3). Recent games can save or share selected games as one PGN file. Camera/image recognition is withdrawn; manual Board Editor, FEN import/share, Analysis and Continue from here remain available. Preview uses the 79M model. Grand Kingdom remains experimental; [the owner attributes the earlier capture symptoms to hardware drift/calibration](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) and reports good overall operation. Some physical acceptance scenarios remain untested. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.3.md) record the tested source and verified release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
+The latest Preview release is [2.6.0-beta.4](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.4). Landscape gameplay and Analysis give the board more space, wide Home/Settings use columns, and Recent games has a compact Date / Game / Result table. Selected games can be exported as one PGN. Preview uses the 79M model. Grand Kingdom remains experimental; [the owner attributes the earlier capture symptoms to hardware drift/calibration](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) and reports good overall operation. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.4.md) record the tested source and verified release. Physical touch/tablet feedback remains tracked under #29. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
 
 See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
 
@@ -104,14 +104,15 @@ Mobile Maia currently supports **English, Japanese, Simplified Chinese, Korean, 
 
 We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) speakers**. These languages need careful testing of right-to-left layouts alongside chess notation, clocks, and evaluations. See the [right-to-left language issue](https://github.com/Dash1971/maia-chess-android-preview/issues/84).
 
-**Landscape and tablet layouts**
+**Adaptive layouts: available in Preview 2.6.0-beta.4**
 
-**Targeting 2.6; draft implementation, not yet published.** The approved layouts
-expand gameplay and Analysis boards in wide windows, move Home actions beside
-setup, add Settings categories, and use compact Recent games tables in portrait
-and landscape. [Design references, source screenshots, and remaining acceptance](docs/ADAPTIVE_LAYOUTS_26.md)
-are retained with the implementation. Physical touch testing and Android
-qualification remain pending. Feedback is welcome in [#29](https://github.com/Dash1971/maia-chess-android-preview/issues/29).
+Landscape gameplay and Analysis use more board height with controls beside the
+board. Wide Home/Settings use columns, and Recent games uses a compact table
+with a two-line fallback for narrow windows or large text. [Implementation and
+Android qualification](docs/ADAPTIVE_LAYOUTS_26.md) record phone/tablet/constrained
+profiles and rotation/input checks. [#29](https://github.com/Dash1971/maia-chess-android-preview/issues/29)
+remains open for comfortable physical finger input and tablet-owner feedback;
+Stable promotion is separate.
 
 **Under consideration: candidate moves and a rating explorer**
 

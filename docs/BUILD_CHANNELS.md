@@ -9,13 +9,24 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.5.1](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1), code 83 | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3), code 2603 | `com.dash1971.maia_chess.preview`, 79M | Selected Recent Games PGN export; camera/image recognition withdrawn; manual editor/FEN/analysis/continuation preserved. Grand Kingdom experimental; owner attributes earlier capture symptoms to hardware drift/calibration. DGT Dev-only. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.4](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.4), code 2604 | `com.dash1971.maia_chess.preview`, 79M | Adaptive gameplay/Analysis/Home/Settings and compact Recent Games; selected PGN export. Grand Kingdom experimental with the owner’s hardware-drift/calibration explanation; DGT Dev-only. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev) | Published 2.6.0-alpha.2-dev, code 2602 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Automatic local Dev diagnostics, assisted Maia promotion and image/camera import. Grand Kingdom experimental; the owner’s later feedback attributes earlier capture symptoms to hardware drift/calibration. |
 
 The three packages install side by side. Obtainium users should select the
 intended repository and enable prereleases for Preview/Dev. Installing Preview
 does not upgrade Dev or transfer its saved games/preferences. Existing Preview
 installations update in place using the established Preview certificate.
+
+## Preview 2.6.0-beta.4 publication
+
+[Published beta.4](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.4) delivers #231's adaptive layouts: full-height landscape
+boards, adjacent game/Analysis controls, column Home/Settings and compact
+Recent Games. Engine algorithms, storage formats, PGN limits and channel gates
+remain unchanged. [Qualification and cleanup](releases/preview-2.6.0-beta.4.md)
+record both Linux builds, signing/reconstruction, full ARM64/79M native, signed
+beta.3 upgrade and actual phone/tablet/constrained/rotation/input tests. Physical
+finger comfort and tablet-owner feedback remain under #29. Stable and Dev
+releases are unchanged. Grand Kingdom's corrected owner feedback below applies.
 
 ## Grand Kingdom owner feedback — 14 November 2026
 
