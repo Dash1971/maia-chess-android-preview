@@ -68,7 +68,11 @@ void main() {
         .setMockMethodCallHandler(maiaEngineChannel, null);
   });
 
-  Widget app(Widget home, {double scale = 1}) {
+  Widget app(
+    Widget home, {
+    double scale = 1,
+    EdgeInsets padding = EdgeInsets.zero,
+  }) {
     final appearance = AppAppearanceController(readColors: () async => null);
     addTearDown(appearance.dispose);
     return RepaintBoundary(
@@ -80,8 +84,11 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           builder: (context, child) => MediaQuery(
-            data: MediaQuery.of(context)
-                .copyWith(textScaler: TextScaler.linear(scale)),
+            data: MediaQuery.of(context).copyWith(
+              textScaler: TextScaler.linear(scale),
+              padding: padding,
+              viewPadding: padding,
+            ),
             child: child!,
           ),
           home: AppLanguageSettings(
@@ -274,6 +281,31 @@ void main() {
     expect(find.text('1 selected'), findsOneWidget);
     expect(find.byKey(const ValueKey('export-selected-games')), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('short landscape budgets board padding after Android insets', (
+    tester,
+  ) async {
+    size(tester, const Size(480, 240));
+    await ActiveSessionStore.save(
+      gameRecord(pgn: '1. e4 *', white: 282000, black: 258000),
+    );
+    await tester.pumpWidget(
+      app(
+        GamePage(
+          maiaEvaluator: ControlledMaia().call,
+          clockFactory: () => TestClock(0),
+        ),
+        padding: const EdgeInsets.only(top: 28, bottom: 48),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(
+      tester.getSize(find.byKey(const ValueKey('game-board'))).width,
+      greaterThanOrEqualTo(160),
+    );
+    expect(tester.takeException(), isNull);
+    await disposeGame(tester);
   });
 
   for (final (dimensions, scale) in [

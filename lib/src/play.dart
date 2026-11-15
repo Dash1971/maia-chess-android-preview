@@ -4281,7 +4281,16 @@ class _GamePageState extends State<GamePage>
   @override
   Widget build(BuildContext context) {
     final showingSettings = !_started && _settingsOpen;
-    final sidebar = _started && _useBoardSidebar(context);
+    // The sidebar adds 8 dp above and below the board. Android system bars
+    // must leave room for that padding as well as the minimum 160 dp grid;
+    // otherwise use the full-size scrolling layout below.
+    final sidebar =
+        _started &&
+        _useBoardSidebar(context) &&
+        MediaQuery.sizeOf(context).height -
+                MediaQuery.paddingOf(context).vertical -
+                16 >=
+            160;
     final wideHome = _useAdaptiveColumns(MediaQuery.sizeOf(context));
     final gameAppBar = AppBar(
       automaticallyImplyLeading: false,
