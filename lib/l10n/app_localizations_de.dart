@@ -1668,4 +1668,15 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Die Motoren stehen still, ich habe den Bauern ersetzt und alle Figuren stimmen überein.';
+
+  @override
+  String get recentExportGames => 'Partien exportieren';
+
+  @override
+  String get recentExportTooLarge =>
+      'Die ausgewählten Partien überschreiten die Exportgrenze von 5 MB. Wähle weniger Partien und versuche es erneut.';
+
+  @override
+  String get recentExportFailed =>
+      'Die ausgewählten Partien konnten nicht exportiert werden. Gespeicherte Partien wurden nicht verändert.';
 }

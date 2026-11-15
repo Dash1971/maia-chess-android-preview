@@ -1552,4 +1552,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get boardPromotionReplaced => 'モーターは停止し、ポーンを交換しました。全ての駒が画面と一致しています。';
+
+  @override
+  String get recentExportGames => '対局をエクスポートする';
+
+  @override
+  String get recentExportTooLarge =>
+      '選択した対局は5 MBのエクスポート上限を超えています。対局数を減らして、もう一度お試しください。';
+
+  @override
+  String get recentExportFailed => '選択した対局をエクスポートできませんでした。保存済みの対局は変更されていません。';
 }

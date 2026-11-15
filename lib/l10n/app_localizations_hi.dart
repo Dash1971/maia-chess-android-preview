@@ -1662,4 +1662,15 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'मोटर रुक गई है, मैंने प्यादा बदल दिया है और सभी गोटियाँ स्क्रीन से मेल खाती हैं।';
+
+  @override
+  String get recentExportGames => 'खेल को निर्यात (एक्सपोर्ट) करें';
+
+  @override
+  String get recentExportTooLarge =>
+      'चुने गए खेल 5 MB की निर्यात सीमा से अधिक हैं। कम खेल चुनें और फिर से प्रयास करें।';
+
+  @override
+  String get recentExportFailed =>
+      'चुने गए खेल निर्यात नहीं किए जा सके। सहेजे गए खेलों में कोई बदलाव नहीं हुआ।';
 }

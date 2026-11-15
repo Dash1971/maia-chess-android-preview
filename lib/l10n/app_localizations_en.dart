@@ -1640,4 +1640,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'The motors are stopped, I replaced the pawn, and every piece matches.';
+
+  @override
+  String get recentExportGames => 'Export games';
+
+  @override
+  String get recentExportTooLarge =>
+      'Selected games exceed the 5 MB export limit. Select fewer games and try again.';
+
+  @override
+  String get recentExportFailed =>
+      'Could not export the selected games. Saved games were not changed.';
 }

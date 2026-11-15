@@ -1672,4 +1672,15 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Os motores estão parados, substituí o peão e todas as peças correspondem.';
+
+  @override
+  String get recentExportGames => 'Exportar partidas';
+
+  @override
+  String get recentExportTooLarge =>
+      'As partidas selecionadas ultrapassam o limite de exportação de 5 MB. Selecione menos partidas e tente novamente.';
+
+  @override
+  String get recentExportFailed =>
+      'Não foi possível exportar as partidas selecionadas. As partidas salvas não foram alteradas.';
 }

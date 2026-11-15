@@ -1686,4 +1686,15 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Моторы остановлены, пешка заменена, все фигуры соответствуют экрану.';
+
+  @override
+  String get recentExportGames => 'Скачать игры';
+
+  @override
+  String get recentExportTooLarge =>
+      'Выбранные партии превышают ограничение экспорта в 5 МБ. Выберите меньше партий и повторите попытку.';
+
+  @override
+  String get recentExportFailed =>
+      'Не удалось экспортировать выбранные партии. Сохранённые партии не изменены.';
 }

@@ -1529,4 +1529,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get boardPromotionReplaced => '电机已停止，我已替换兵，所有棋子均与屏幕一致。';
+
+  @override
+  String get recentExportGames => '导出对局';
+
+  @override
+  String get recentExportTooLarge => '所选对局超出 5 MB 的导出上限。请选择更少的对局后重试。';
+
+  @override
+  String get recentExportFailed => '无法导出所选对局。已保存的对局未被更改。';
 }

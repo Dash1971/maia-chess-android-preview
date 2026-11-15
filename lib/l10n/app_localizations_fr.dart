@@ -1665,4 +1665,15 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Les moteurs sont arrêtés, j’ai remplacé le pion et toutes les pièces correspondent.';
+
+  @override
+  String get recentExportGames => 'Exporter les parties';
+
+  @override
+  String get recentExportTooLarge =>
+      'Les parties sélectionnées dépassent la limite d’exportation de 5 Mo. Sélectionnez moins de parties et réessayez.';
+
+  @override
+  String get recentExportFailed =>
+      'Impossible d’exporter les parties sélectionnées. Les parties enregistrées n’ont pas été modifiées.';
 }

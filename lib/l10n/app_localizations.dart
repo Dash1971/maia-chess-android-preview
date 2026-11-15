@@ -2883,6 +2883,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The motors are stopped, I replaced the pawn, and every piece matches.'**
   String get boardPromotionReplaced;
+
+  /// Recent Games selection toolbar: export the selected games into one PGN file using Save or Share. Reuses pinned Lichess exportGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Export games'**
+  String get recentExportGames;
+
+  /// Recent Games export exceeds the 5 MiB UTF-8 limit, shown as 5 MB. Nothing is saved/shared; keep selection and ask the user to select fewer games and retry. Import remains limited to 2 MiB.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected games exceed the 5 MB export limit. Select fewer games and try again.'**
+  String get recentExportTooLarge;
+
+  /// Recent Games multi-game export error: one selected record could not be read/validated, or Android save/share failed. No selected game is silently omitted and stored games are not modified.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not export the selected games. Saved games were not changed.'**
+  String get recentExportFailed;
 }
 
 class _AppLocalizationsDelegate

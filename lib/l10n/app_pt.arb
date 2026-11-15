@@ -460,5 +460,8 @@
   "boardPromotionTitle": "Confirmar promoção de Maia",
   "boardPromotionMove": "{square}: {piece}. Substitua o peão.",
   "boardPromotionHelp": "Espere os motores pararem. Substitua o peão pela peça indicada e confira se toda a posição física corresponde à tela. Se o movimento estiver incompleto ou houver dúvida, continue a partida no aplicativo.",
-  "boardPromotionReplaced": "Os motores estão parados, substituí o peão e todas as peças correspondem."
+  "boardPromotionReplaced": "Os motores estão parados, substituí o peão e todas as peças correspondem.",
+  "recentExportGames": "Exportar partidas",
+  "recentExportFailed": "Não foi possível exportar as partidas selecionadas. As partidas salvas não foram alteradas.",
+  "recentExportTooLarge": "As partidas selecionadas ultrapassam o limite de exportação de 5 MB. Selecione menos partidas e tente novamente."
 }

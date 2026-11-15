@@ -1556,4 +1556,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get boardPromotionReplaced => '모터가 멈췄고 폰을 교체했으며 모든 기물이 화면과 일치합니다.';
+
+  @override
+  String get recentExportGames => '대국 저장하기';
+
+  @override
+  String get recentExportTooLarge =>
+      '선택한 대국이 5 MB 내보내기 제한을 초과합니다. 대국을 더 적게 선택한 후 다시 시도하세요.';
+
+  @override
+  String get recentExportFailed => '선택한 대국을 내보낼 수 없습니다. 저장된 대국은 변경되지 않았습니다.';
 }

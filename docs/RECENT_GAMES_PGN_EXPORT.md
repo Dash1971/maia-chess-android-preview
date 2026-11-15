@@ -1,0 +1,81 @@
+# Selected Recent Games → one PGN
+
+Implementation for [#225](https://github.com/Dash1971/maia-chess-android-preview/issues/225),
+targeting the next release. This source change does not publish an APK.
+
+Long-press a game, or choose Select games from the Recent Games menu. Select one
+or more games, or use Select all. **Export games** opens the existing **Save PGN
+file** and **Share PGN** choices. Each produces a single multi-game `.pgn` file.
+
+## Ordering and content
+
+Export follows the current Recent Games display order, regardless of selection
+tap order. The repository orders by original played day, newest first; known
+start times and then record IDs resolve ties. Unknown historical dates remain
+unknown. Export does not sort by save/update time or fabricate PGN metadata.
+
+Each selected record is read again through a read-only repository method.
+Export never calls `open()`, which would archive/replace the active game. It
+does not write snapshots, update history, delete games or change restoration
+preferences. The current PGN snapshot already contains the individual game's
+supported export data. The existing single-game parser/serializer validates
+each game's tokens, starting FEN and all variations and preserves its available
+headers, result, comments, NAGs and clock annotations. A record containing more
+than one game is rejected rather than silently dropping the later game.
+
+Games are separated by a blank line, including a final blank line. No default
+historical player names, dates or time controls are invented. Completed games,
+unfinished `*` games and supported custom starting positions use the same path.
+
+## Limits and failures
+
+- The complete file is validated before opening Android's save/share UI. A
+  missing, unreadable, unsupported or invalid selected record fails the entire
+  operation; no selected game is silently omitted.
+- Assembly reads/validates one game at a time, with parsing in a background
+  isolate. Only the combined bounded PGN is retained by the export builder.
+  Recent Games' existing list-loading behavior is unchanged.
+- Save/share exports allow **5 MiB (5,242,880 UTF-8 bytes)**, including inter-game
+  separators. This is a byte limit, not a game-count limit. The UI calls it
+  **5 MB**. Imports, including Open with/shared attachments, and the individual
+  game parser retain their separate **2 MiB** limits; a 5 MB multi-game export
+  is intended for external tools, not whole-collection reimport into Mobile Maia.
+- Preparation stops as soon as adding a game would exceed the export limit,
+  before opening Android's save/share UI. No partial file is saved/shared and
+  there is no silent omission or automatic splitting. The message is:
+  **Selected games exceed the 5 MB export limit. Select fewer games and try again.**
+  Selection is retained so the user can deselect games and retry. A 10,000-game
+  selection follows this same byte-based check; there is no fixed promise of
+  how many games fit. Games with clocks, comments and variations take more space.
+- The 5 MiB export cap replaces the inherited 2 MiB export cap as a bounded,
+  small change. Export still assembles a string in memory and creates temporary
+  encoding/channel copies, so peak memory exceeds the file size. Streaming and
+  automatic multi-file batches are outside this change.
+- An empty selection disables the action. Repeated/stale callbacks cannot start
+  a second export or alter the selection while it is running. Other actions and
+  navigation are blocked while preparing the file or awaiting the picker.
+- Success, picker cancellation and failure preserve the selection. Cancellation
+  shows no success message. A failed export leaves the screen usable for retry.
+
+Android continues to use the existing document picker and FileProvider chooser,
+temporary URI grants and MIME type. Native size guards distinguish 5 MiB
+exports from 2 MiB imports. There is no new permission, network dependency,
+model or automatic upload.
+
+## Verification
+
+`test/recent_games_pgn_export_test.dart` covers one/multiple/all selection,
+display ordering, round-trip metadata/annotations/variations, custom FEN,
+unfinished games, missing/invalid/multiple-game records, UTF-8 and aggregate byte
+limits (including exactly 5 MiB and one byte over), a 200-game collection,
+an oversized 10,000-game selection, unchanged 2 MiB import rejection,
+read-only repository files, save/share method
+dispatch, cancellation, native failure/retry and stale callbacks. All ten
+languages exercise the selection/export menu and size-error message at 320 px
+with 200% text.
+
+Existing Recent Games failure/recovery, repository and PGN import tests remain
+in place. Host method-channel tests cover the Dart save/share/cancel contract;
+they do not certify an OEM document provider or third-party PGN application.
+Android device smoke testing remains a release check. No Android build or CI is
+required to review this draft PR.
