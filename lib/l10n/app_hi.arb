@@ -463,5 +463,9 @@
   "boardPromotionReplaced": "मोटर रुक गई है, मैंने प्यादा बदल दिया है और सभी गोटियाँ स्क्रीन से मेल खाती हैं।",
   "recentExportGames": "खेल को निर्यात (एक्सपोर्ट) करें",
   "recentExportFailed": "चुने गए खेल निर्यात नहीं किए जा सके। सहेजे गए खेलों में कोई बदलाव नहीं हुआ।",
-  "recentExportTooLarge": "चुने गए खेल 5 MB की निर्यात सीमा से अधिक हैं। कम खेल चुनें और फिर से प्रयास करें।"
+  "recentExportTooLarge": "चुने गए खेल 5 MB की निर्यात सीमा से अधिक हैं। कम खेल चुनें और फिर से प्रयास करें।",
+  "recentDateColumn": "तारीख",
+  "recentGameColumn": "बाज़ी",
+  "recentResultColumn": "परिणाम",
+  "settingsDiagnostics": "निदान"
 }

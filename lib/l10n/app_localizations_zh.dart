@@ -1538,4 +1538,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get recentExportFailed => '无法导出所选对局。已保存的对局未被更改。';
+
+  @override
+  String get recentDateColumn => '日期';
+
+  @override
+  String get recentGameColumn => '对局';
+
+  @override
+  String get recentResultColumn => '结果';
+
+  @override
+  String get settingsDiagnostics => '诊断';
 }

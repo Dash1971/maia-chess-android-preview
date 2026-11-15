@@ -2157,5 +2157,21 @@
   "@recentExportFailed": {
     "description": "Recent Games multi-game export error: one selected record could not be read/validated, or Android save/share failed. No selected game is silently omitted and stored games are not modified."
   },
-  "recentExportFailed": "Could not export the selected games. Saved games were not changed."
+  "recentExportFailed": "Could not export the selected games. Saved games were not changed.",
+  "recentDateColumn": "Date",
+  "@recentDateColumn": {
+    "description": "Adaptive layout: Recent games table column"
+  },
+  "recentGameColumn": "Game",
+  "@recentGameColumn": {
+    "description": "Adaptive layout: Recent games table column"
+  },
+  "recentResultColumn": "Result",
+  "@recentResultColumn": {
+    "description": "Adaptive layout: Recent games table column"
+  },
+  "settingsDiagnostics": "Diagnostics",
+  "@settingsDiagnostics": {
+    "description": "Adaptive layout: settings category for existing reset and diagnostic actions"
+  }
 }

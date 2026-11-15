@@ -1,0 +1,88 @@
+<style>
+#maia-recent-portrait{font-family:Roboto,Arial,sans-serif;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+#maia-recent-portrait .preview-label{font-size:14px;font-weight:500;color:light-dark(#4b4354,#d0c6da);margin:0 0 10px}
+#maia-recent-portrait .stage{padding:8px;border-radius:12px}
+#maia-recent-portrait .phone{--r-bg:light-dark(#fafafa,#090a0b);--r-text:light-dark(#211c28,#e8e2ed);--r-muted:light-dark(#635a6d,#ada2b8);--r-line:light-dark(#ded8e4,#332d3c);--r-panel:light-dark(#eeedf3,#211d28);--r-accent:light-dark(#66518a,#cdbbe8);--r-win:light-dark(#2d7044,#8bb79a);--r-loss:light-dark(#a6323e,#df9ba4);--r-row:52px;color:var(--r-text);background:var(--r-bg);width:100%;max-width:360px;height:652px;margin:auto;border:3px solid light-dark(#c6c3ca,#302d34);border-radius:23px;overflow:hidden;display:flex;flex-direction:column;position:relative;font-size:14px;line-height:1.25}
+#maia-recent-portrait .phone *{box-sizing:border-box}
+#maia-recent-portrait .bar{height:56px;display:flex;align-items:center;gap:4px;padding:0 5px;flex-shrink:0}
+#maia-recent-portrait .bar h4{font-size:18px;font-weight:400;margin:0;flex:1;white-space:nowrap}
+#maia-recent-portrait .icon{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0}
+#maia-recent-portrait .icon svg{width:20px;height:20px}
+#maia-recent-portrait .bar button{font:inherit;color:inherit;background:transparent;border:0;border-radius:50%;padding:0}
+#maia-recent-portrait button:focus-visible{outline:2px solid var(--r-accent);outline-offset:-3px}
+#maia-recent-portrait .list{flex:1;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--r-line) transparent}
+#maia-recent-portrait .old-row{height:72px;display:flex;align-items:center;gap:4px;padding:0 5px 0 16px}
+#maia-recent-portrait .old-text{flex:1;min-width:0}
+#maia-recent-portrait .old-title{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#maia-recent-portrait .old-sub{display:flex;align-items:center;gap:6px;margin-top:4px;color:var(--r-muted);font-size:14px;white-space:nowrap}
+#maia-recent-portrait .win{color:var(--r-win)}
+#maia-recent-portrait .loss{color:var(--r-loss)}
+#maia-recent-portrait .table-head,#maia-recent-portrait .new-row{display:grid;grid-template-columns:60px minmax(0,1fr) 44px 36px;gap:6px;align-items:center;padding:0 8px}
+#maia-recent-portrait .table-head{height:34px;flex-shrink:0;color:var(--r-muted);font-size:12px;border-bottom:1px solid var(--r-line)}
+#maia-recent-portrait .new-row{min-height:var(--r-row);height:var(--r-row);border-bottom:1px solid var(--r-line)}
+#maia-recent-portrait .date{font-size:12px;color:var(--r-muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+#maia-recent-portrait .game{min-width:0}
+#maia-recent-portrait .game-name{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#maia-recent-portrait .unfinished{font-size:11px;color:var(--r-muted);margin-top:3px}
+#maia-recent-portrait .result{font-size:14px;font-variant-numeric:tabular-nums;text-align:center;white-space:nowrap}
+#maia-recent-portrait .new-row .icon{width:36px;height:44px}
+#maia-recent-portrait .new-row .icon svg{width:18px;height:18px}
+#maia-recent-portrait .gesture{height:15px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--r-bg)}
+#maia-recent-portrait .gesture::after{content:"";width:90px;height:4px;border-radius:3px;background:var(--r-muted);opacity:.6}
+#maia-recent-portrait .menu{position:absolute;top:48px;right:10px;z-index:3;background:var(--r-panel);border:1px solid var(--r-line);border-radius:9px;padding:5px;box-shadow:0 4px 14px #0003}
+#maia-recent-portrait .menu[hidden]{display:none}
+#maia-recent-portrait .menu button{font:inherit;color:inherit;background:transparent;border:0;padding:12px;min-height:44px;display:block;width:100%;text-align:left;border-radius:5px}
+#maia-recent-portrait .menu button:hover{background:var(--r-line)}
+#maia-recent-portrait .row-check{accent-color:var(--r-accent);width:18px;height:18px;flex-shrink:0;margin:0 8px 0 0}
+#maia-recent-portrait .new-row.selecting{grid-template-columns:22px 60px minmax(0,1fr) 44px;gap:5px}
+#maia-recent-portrait .new-row.selecting .row-check{margin:0}
+#maia-recent-portrait .selected{background:var(--r-panel)}
+@media(max-width:650px){#maia-recent-portrait{grid-template-columns:1fr;gap:24px}}
+@media(pointer:coarse){#maia-recent-portrait .new-row .icon{width:36px}#maia-recent-portrait .row-check{width:20px;height:20px}}
+</style>
+<div id="maia-recent-portrait" aria-label="Portrait Recent games comparison">
+  <section><h3 class="preview-label">Existing · two-line list</h3><div class="stage viz-dotted-background"><div class="phone existing" aria-label="Existing Recent games reconstruction"></div></div></section>
+  <section><h3 class="preview-label">Proposed · compact table</h3><div class="stage viz-dotted-background"><div class="phone proposed" aria-label="Proposed compact Recent games table"></div></div></section>
+</div>
+<script>
+(() => {
+  const root=document.getElementById('maia-recent-portrait');
+  const state={rowHeight:52,appearance:'System',selecting:false};
+  const selected=new Set();
+  const saved=window.openai?.widgetState?.modelContent?.portraitRecentReview;
+  if(saved){if([48,52,56,60].includes(saved.rowHeight))state.rowHeight=saved.rowHeight;if(['System','Light','Dark'].includes(saved.appearance))state.appearance=saved.appearance;}
+  const games=[
+    ['11/15/26','Player — Maia 1600','1–0','win'],['11/15/26','Maia 1800 — Player','0–1','win'],
+    ['11/14/26','Player — Maia 1600','½–½',''],['11/14/26','Player — Maia 2000','0–1','loss'],
+    ['11/13/26','Maia 1600 — Player','Incomplete',''],['11/13/26','Player — Maia 1800','1–0','win'],
+    ['11/12/26','Player — Maia 1600','½–½',''],['11/12/26','Maia 1800 — Player','1–0','loss'],
+    ['11/11/26','Player — Maia 2000','0–1','loss'],['11/11/26','Player — Maia 1600','1–0','win'],
+    ['11/10/26','Maia 1800 — Player','0–1','win'],['11/10/26','Player — Maia 1600','½–½','']
+  ];
+  const icon=(name,label)=>`<span class="icon" role="img" aria-label="${label}"><i data-lucide="${name}" aria-hidden="true"></i></span>`;
+  const save=()=>window.openai?.setWidgetState?.({modelContent:{portraitRecentReview:{rowHeight:state.rowHeight,appearance:state.appearance}},privateContent:null})?.catch(()=>{});
+  function header(){return `<div class="bar">${state.selecting?`<button type="button" data-cancel aria-label="Cancel selection">${icon('x','Cancel selection')}</button>`:icon('arrow-left','Back')}<h4>${state.selecting?`${selected.size} selected`:'Recent games'}</h4>${state.selecting?icon('share-2','Export selected games')+icon('trash-2','Delete selected games'):`<button type="button" class="cursor-interaction" data-more aria-label="More options">${icon('ellipsis-vertical','More options')}</button>`}</div>`;}
+  function render(){
+    root.querySelectorAll('.phone').forEach(phone=>{
+      const proposed=phone.classList.contains('proposed');
+      phone.style.colorScheme=state.appearance==='System'?'light dark':state.appearance.toLowerCase();
+      phone.style.setProperty('--r-row',state.rowHeight+'px');
+      const rows=games.map((g,i)=>{
+        const check=state.selecting?`<input type="checkbox" class="row-check" data-game="${i}" aria-label="Select ${g[1]}, ${g[0]}" ${selected.has(i)?'checked':''}>`:'';
+        if(!proposed)return `<div class="old-row ${selected.has(i)?'selected':''}">${check}<div class="old-text"><div class="old-title" data-tooltip="${g[1]}">${g[1]}</div><div class="old-sub"><span class="${g[3]}">${g[2]}</span><span>· ${g[0]}</span></div></div>${state.selecting?'':icon('trash-2','Delete game')}</div>`;
+        return `<div class="new-row ${state.selecting?'selecting':''} ${selected.has(i)?'selected':''}">${check}<span class="date">${g[0]}</span><div class="game"><div class="game-name" data-tooltip="${g[1]}">${g[1]}</div>${g[2]==='Incomplete'?'<div class="unfinished">Incomplete</div>':''}</div><span class="result ${g[3]}" aria-label="${g[2]}">${g[2]==='Incomplete'?'*':g[2]}</span>${state.selecting?'':icon('trash-2','Delete game')}</div>`;
+      }).join('');
+      phone.innerHTML=header()+(proposed?`<div class="table-head">${state.selecting?'<span></span>':''}<span>Date</span><span>Game</span><span style="text-align:center">Result</span>${state.selecting?'':'<span></span>'}</div>`:'')+`<div class="list">${rows}</div><div class="gesture" aria-hidden="true"></div><div class="menu" hidden><button type="button" class="cursor-interaction" data-select>Select games</button></div>`;
+      if(proposed&&state.selecting)phone.querySelector('.table-head').style.gridTemplateColumns='22px 60px minmax(0,1fr) 44px';
+      phone.querySelector('[data-more]')?.addEventListener('click',()=>{const menu=phone.querySelector('.menu');menu.hidden=!menu.hidden;});
+      phone.querySelector('[data-select]')?.addEventListener('click',()=>{state.selecting=true;render();});
+      phone.querySelector('[data-cancel]')?.addEventListener('click',()=>{state.selecting=false;selected.clear();render();});
+      phone.querySelectorAll('[data-game]').forEach(input=>input.addEventListener('change',()=>{const id=Number(input.dataset.game);if(input.checked)selected.add(id);else selected.delete(id);render();}));
+    });
+    globalThis.lucide?.createIcons({attrs:{width:20,height:20}});
+  }
+  render();
+  if(globalThis.Tweak){const t=new Tweak({container:root,onChange:()=>{render();save();}});t.addSlider(state,'rowHeight',{label:'Table row height',min:48,max:60,step:4,unit:'dp'});t.addSelect(state,'appearance',{label:'Appearance',options:['System','Dark','Light']});}
+  window.addEventListener('openai:set_globals',event=>{const s=event.detail?.globals?.widgetState?.modelContent?.portraitRecentReview;if(!s)return;if([48,52,56,60].includes(s.rowHeight))state.rowHeight=s.rowHeight;if(['System','Dark','Light'].includes(s.appearance))state.appearance=s.appearance;render();});
+})();
+</script>

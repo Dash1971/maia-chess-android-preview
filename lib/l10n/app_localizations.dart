@@ -2901,6 +2901,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not export the selected games. Saved games were not changed.'**
   String get recentExportFailed;
+
+  /// Adaptive layout: Recent games table column
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get recentDateColumn;
+
+  /// Adaptive layout: Recent games table column
+  ///
+  /// In en, this message translates to:
+  /// **'Game'**
+  String get recentGameColumn;
+
+  /// Adaptive layout: Recent games table column
+  ///
+  /// In en, this message translates to:
+  /// **'Result'**
+  String get recentResultColumn;
+
+  /// Adaptive layout: settings category for existing reset and diagnostic actions
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostics'**
+  String get settingsDiagnostics;
 }
 
 class _AppLocalizationsDelegate

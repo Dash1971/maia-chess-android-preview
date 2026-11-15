@@ -1566,4 +1566,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get recentExportFailed => '선택한 대국을 내보낼 수 없습니다. 저장된 대국은 변경되지 않았습니다.';
+
+  @override
+  String get recentDateColumn => '날짜';
+
+  @override
+  String get recentGameColumn => '대국';
+
+  @override
+  String get recentResultColumn => '결과';
+
+  @override
+  String get settingsDiagnostics => '진단';
 }

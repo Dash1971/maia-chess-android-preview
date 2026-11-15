@@ -39,6 +39,7 @@ part 'src/maia_queue.dart';
 part 'src/sampling_capture.dart';
 part 'src/sampling_capture_settings.dart';
 part 'src/settings_widgets.dart';
+part 'src/adaptive_layout.dart';
 part 'src/sampling_report.dart';
 part 'src/sampling_report_format.dart';
 part 'src/diagnostics.dart';

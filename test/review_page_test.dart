@@ -11,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:maia_chess/main.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'fixtures/immediate_maia_preferences.dart';
 
 void main() {
@@ -140,9 +141,7 @@ void main() {
   });
 
   test('malformed active session is discarded after one failed load', () async {
-    setImmediateMaiaPreferences({
-      'activeSessionV1': '{not valid json',
-    });
+    setImmediateMaiaPreferences({'activeSessionV1': '{not valid json'});
 
     expect(await ActiveSessionStore.load(), isNull);
     final preferences = await SharedPreferences.getInstance();
@@ -449,9 +448,7 @@ void main() {
   });
 
   test('diagnostics persist exception evidence and version metadata', () async {
-    setImmediateMaiaPreferences({
-      gameAnalysisQualityPreferenceKey: 'balanced',
-    });
+    setImmediateMaiaPreferences({gameAnalysisQualityPreferenceKey: 'balanced'});
     PackageInfo.setMockInitialValues(
       appName: 'Mobile Maia',
       packageName: 'com.dash1971.maia_chess',
@@ -3545,8 +3542,23 @@ void main() {
     final whiteMaterial = tester.getRect(
       find.byKey(const ValueKey('white-material')),
     );
-    expect(blackMaterial.bottom, lessThanOrEqualTo(board.top));
-    expect(whiteMaterial.top, greaterThanOrEqualTo(board.bottom));
+    expect(blackMaterial.left, greaterThanOrEqualTo(board.right));
+    expect(whiteMaterial.left, greaterThanOrEqualTo(board.right));
+    expect(blackMaterial.bottom, lessThanOrEqualTo(whiteMaterial.top));
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpAndSettle();
+    final portraitBoard = tester.getRect(find.byType(cg.Chessboard));
+    expect(
+      tester.getRect(find.byKey(const ValueKey('black-material'))).bottom,
+      lessThanOrEqualTo(portraitBoard.top),
+    );
+    expect(
+      tester.getRect(find.byKey(const ValueKey('white-material'))).top,
+      greaterThanOrEqualTo(portraitBoard.bottom),
+    );
     expect(find.text('+3'), findsOneWidget);
   });
 }

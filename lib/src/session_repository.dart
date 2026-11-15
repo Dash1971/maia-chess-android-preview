@@ -837,45 +837,219 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
               ),
             );
           }
-          return ListView.builder(
-            itemCount: games.length,
-            itemBuilder: (context, index) {
-              final game = games[index];
-              final date = game.history.playedDate;
-              return ListTile(
-                key: ValueKey('recent-game-${game.id}'),
-                selected: _selected.contains(game.id),
-                leading: _selecting
-                    ? Checkbox(
-                        value: _selected.contains(game.id),
-                        onChanged: (_) => _toggleSelection(game.id),
-                      )
-                    : null,
-                title: Text(game.localizedTitle(context)),
-                subtitle: _recentResultSubtitle(
-                  context,
-                  game,
-                  date == null
-                      ? l10n(context).dateUnknown
-                      : MaterialLocalizations.of(context)
-                            .formatCompactDate(date),
-                ),
-                onTap: () {
-                  if (_busy) return;
-                  if (_selecting) {
-                    _toggleSelection(game.id);
-                    return;
-                  }
-                  unawaited(_openGame(game));
-                },
-                onLongPress: () => _toggleSelection(game.id),
-                trailing: _selecting
-                    ? null
-                    : IconButton(
-                        icon: const Icon(Icons.delete_outline),
-                        tooltip: l10n(context).recentDeleteOne,
-                        onPressed: () => _deleteGames([game]),
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
+              if (constraints.maxWidth / scale < 300) {
+                return ListView.builder(
+                  itemCount: games.length,
+                  itemBuilder: (context, index) {
+                    final game = games[index];
+                    final date = game.history.playedDate;
+                    return ListTile(
+                      key: ValueKey('recent-game-${game.id}'),
+                      selected: _selected.contains(game.id),
+                      leading: _selecting
+                          ? Checkbox(
+                              value: _selected.contains(game.id),
+                              onChanged: (_) => _toggleSelection(game.id),
+                            )
+                          : null,
+                      title: Text(game.localizedTitle(context)),
+                      subtitle: _recentResultSubtitle(
+                        context,
+                        game,
+                        date == null
+                            ? l10n(context).dateUnknown
+                            : MaterialLocalizations.of(context)
+                                  .formatCompactDate(date),
                       ),
+                      onTap: () {
+                        if (_busy) return;
+                        if (_selecting) {
+                          _toggleSelection(game.id);
+                          return;
+                        }
+                        unawaited(_openGame(game));
+                      },
+                      onLongPress: () => _toggleSelection(game.id),
+                      trailing: _selecting
+                          ? null
+                          : IconButton(
+                              icon: const Icon(Icons.delete_outline),
+                              tooltip: l10n(context).recentDeleteOne,
+                              onPressed: () => _deleteGames([game]),
+                            ),
+                    );
+                  },
+                );
+              }
+              final dateWidth = 72.0 * scale;
+              final resultWidth = 72.0 * scale;
+              final strings = l10n(context);
+              return Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1100),
+                  child: Column(
+                    children: [
+                      Padding(
+                        key: const ValueKey('recent-table-header'),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          8,
+                          8,
+                          0,
+                          8,
+                        ),
+                        child: DefaultTextStyle(
+                          style: Theme.of(context).textTheme.labelMedium!,
+                          child: Row(
+                            children: [
+                              if (_selecting) const SizedBox(width: 48),
+                              SizedBox(
+                                width: dateWidth,
+                                child: Semantics(
+                                  header: true,
+                                  child: Text(strings.recentDateColumn),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Semantics(
+                                  header: true,
+                                  child: Text(strings.recentGameColumn),
+                                ),
+                              ),
+                              SizedBox(
+                                width: resultWidth,
+                                child: Semantics(
+                                  header: true,
+                                  child: Text(strings.recentResultColumn),
+                                ),
+                              ),
+                              if (!_selecting) const SizedBox(width: 56),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const Divider(height: 1),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: games.length,
+                          itemBuilder: (context, index) {
+                            final game = games[index];
+                            final played = game.history.playedDate;
+                            final date = played == null
+                                ? strings.dateUnknown
+                                : MaterialLocalizations.of(context)
+                                      .formatCompactDate(played);
+                            final result = game.localizedResult(context);
+                            final description = switch (game.outcome) {
+                              RecentGameOutcome.win => strings.recentWinResult(
+                                result,
+                              ),
+                              RecentGameOutcome.loss =>
+                                strings.recentLossResult(result),
+                              RecentGameOutcome.draw =>
+                                strings.recentDrawResult(result),
+                              _ => result,
+                            };
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ListTile(
+                                  key: ValueKey('recent-game-${game.id}'),
+                                  minTileHeight: 52,
+                                  minVerticalPadding: 4,
+                                  horizontalTitleGap: 8,
+                                  contentPadding:
+                                      const EdgeInsetsDirectional.only(
+                                        start: 8,
+                                      ),
+                                  selected: _selected.contains(game.id),
+                                  leading: SizedBox(
+                                    width: dateWidth + (_selecting ? 48 : 0),
+                                    child: Row(
+                                      children: [
+                                        if (_selecting)
+                                          SizedBox(
+                                            width: 48,
+                                            child: Checkbox(
+                                              value: _selected.contains(
+                                                game.id,
+                                              ),
+                                              onChanged: (_) =>
+                                                  _toggleSelection(game.id),
+                                            ),
+                                          ),
+                                        Expanded(
+                                          child: Text(
+                                            date,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  title: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          game.localizedTitle(context),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      SizedBox(
+                                        width: resultWidth,
+                                        child: Text(
+                                          result,
+                                          semanticsLabel: description,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: game.outcome.colorFor(
+                                                  Theme.of(context).brightness,
+                                                ),
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    if (_busy) return;
+                                    if (_selecting) {
+                                      _toggleSelection(game.id);
+                                    } else {
+                                      unawaited(_openGame(game));
+                                    }
+                                  },
+                                  onLongPress: () => _toggleSelection(game.id),
+                                  trailing: _selecting
+                                      ? null
+                                      : IconButton(
+                                          icon: const Icon(
+                                            Icons.delete_outline,
+                                          ),
+                                          tooltip: strings.recentDeleteOne,
+                                          onPressed: () => _deleteGames([game]),
+                                        ),
+                                ),
+                                const Divider(height: 1),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
             },
           );

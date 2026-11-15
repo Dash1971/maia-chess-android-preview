@@ -463,5 +463,9 @@
   "boardPromotionReplaced": "モーターは停止し、ポーンを交換しました。全ての駒が画面と一致しています。",
   "recentExportGames": "対局をエクスポートする",
   "recentExportFailed": "選択した対局をエクスポートできませんでした。保存済みの対局は変更されていません。",
-  "recentExportTooLarge": "選択した対局は5 MBのエクスポート上限を超えています。対局数を減らして、もう一度お試しください。"
+  "recentExportTooLarge": "選択した対局は5 MBのエクスポート上限を超えています。対局数を減らして、もう一度お試しください。",
+  "recentDateColumn": "日付",
+  "recentGameColumn": "対局",
+  "recentResultColumn": "結果",
+  "settingsDiagnostics": "診断"
 }

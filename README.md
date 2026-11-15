@@ -106,7 +106,12 @@ We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) sp
 
 **Landscape and tablet layouts**
 
-We want to improve the existing side-by-side layout so the board makes better use of the available space on landscape phones and tablets, with clocks and essential controls easy to reach. This includes constrained-width windows, large text and physical-device testing of comfortable touch input. Feedback from phone and tablet users is welcome in the [landscape layout issue](https://github.com/Dash1971/maia-chess-android-preview/issues/29).
+**Targeting 2.6; draft implementation, not yet published.** The approved layouts
+expand gameplay and Analysis boards in wide windows, move Home actions beside
+setup, add Settings categories, and use compact Recent games tables in portrait
+and landscape. [Design references, source screenshots, and remaining acceptance](docs/ADAPTIVE_LAYOUTS_26.md)
+are retained with the implementation. Physical touch testing and Android
+qualification remain pending. Feedback is welcome in [#29](https://github.com/Dash1971/maia-chess-android-preview/issues/29).
 
 **Under consideration: candidate moves and a rating explorer**
 
