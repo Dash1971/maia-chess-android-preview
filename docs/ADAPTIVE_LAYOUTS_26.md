@@ -1,9 +1,9 @@
 # Adaptive layouts for 2.6
 
-Draft implementation of the layouts reviewed on November 15, 2026, tracked in
+Published in Preview 2.6.0-beta.4, based on the layouts reviewed on November 15, 2026, tracked in
 [Preview #29](https://github.com/Dash1971/maia-chess-android-preview/issues/29).
-This is source work for the 2.6 cycle, not a published build or completed
-physical-device acceptance.
+[Release qualification](releases/preview-2.6.0-beta.4.md) records the actual signed
+APK checks. Physical-device touch/tablet acceptance remains separate.
 
 Wide gameplay windows put the board on the left and move the existing toolbar,
 player information, clocks, history, and controls to the right. The board uses
@@ -89,14 +89,19 @@ catalog. Their native-language fallbacks and context are recorded in
 [the terminology notes](LICHESS_TERMINOLOGY.md); the translation review remains
 provisional where native review has not occurred.
 
-Before declaring #29 delivered, test an Android build on representative phone,
-tablet, and constrained/split-screen emulator configurations; confirm rotation
-with active drags and promotion, system insets, gesture navigation, restoration,
-and electronic-board states. Confirm comfortable finger input on a physical
-phone and seek tablet-tester feedback. This draft does not waive existing
-Preview release qualification or hardware acceptance.
+The signed APK checks covered phone/tablet and constrained window sizes,
+three-button Android system insets, rotation during drags/promotion/premoves,
+restoration and disconnected-board phone handoff. Before declaring #29 fully
+delivered, confirm gesture navigation and actual Android split-screen behavior,
+comfortable finger input on a physical phone, and tablet-owner feedback.
+Preview qualification does not establish those remaining acceptance outcomes.
 
-No Android builds, Actions, Git LFS/model downloads, version changes, or release
-publication are part of this PR. No Stable companion applies: this is a Preview
+The original feature PR did not build or publish an APK. Release #232 qualifies
+and publishes the frozen beta.4 source, including Android emulator and signed
+upgrade checks; its evidence records actual results and cleanup. No Stable companion applies: this is a Preview
 2.6 product feature, and shared build, CI, verification-tool, and cleanup helpers
 are unchanged.
+
+## Published Android verification
+
+The production-signed beta.4 APK was tested on phone, tablet, constrained and large-text emulator profiles, including system insets, rotation, tap/drag/promotion/premoves, Analysis controls/graph, Settings persistence and compact-history opening/selection/PGN export. See the release evidence for screenshots, geometry, source/APK hashes, initial System UI ANR diagnostics and the successful unchanged-source native rerun. These are emulator results; comfortable finger input and tablet feedback remain open under #29.
