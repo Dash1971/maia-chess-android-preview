@@ -1567,10 +1567,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get editorPositionSettings => 'Ajustes de la posición';
 
   @override
-  String get editorImageImportUnavailable =>
-      'Importar posición desde una imagen (aún no disponible)';
-
-  @override
   String get editorShareFen => 'Compartir FEN';
 
   @override
@@ -1644,45 +1640,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'Mobile Maia ha abierto la pantalla de inicio para evitar reabrir una sesión que podría haber causado un fallo. Tus partidas guardadas y ajustes se han conservado.';
 
   @override
-  String get imageFromImage => 'Desde una imagen';
-
-  @override
-  String get imageCropHorizontal => 'Bordes izquierdo y derecho';
-
-  @override
-  String get imageCropVertical => 'Bordes superior e inferior';
-
-  @override
-  String get imageFindBoard => 'Buscar tablero';
-
-  @override
-  String get imageRotate => 'Girar imagen';
-
-  @override
-  String get imageBlackAtBottom => 'Las negras están abajo en la imagen';
-
-  @override
-  String get imageRecognize => 'Reconocer posición';
-
-  @override
-  String get imageImportFailed =>
-      'No se pudo leer la imagen. Prueba otra captura o ajusta el recorte.';
-
-  @override
-  String get imageBoardNotFound =>
-      'No se encontró un tablero. Encuadra manualmente el tablero deseado.';
-
-  @override
-  String get imageChoose => 'Seleccionar imagen';
-
-  @override
-  String get imageTakePhoto => 'Hacer foto';
-
-  @override
-  String get imageCameraUnavailable =>
-      'No se pudo abrir la cámara. Elige una imagen.';
-
-  @override
   String get saveDevDiagnostics => 'Guardar diagnóstico de Dev…';
 
   @override
@@ -1710,20 +1667,13 @@ class AppLocalizationsEs extends AppLocalizations {
       'Los motores están parados, he sustituido el peón y todas las piezas coinciden.';
 
   @override
-  String get imageScanBoard => 'Escanear tablero';
+  String get recentExportGames => 'Exportar partidas';
 
   @override
-  String get imageReading => 'Leyendo posición…';
+  String get recentExportTooLarge =>
+      'Las partidas seleccionadas superan el límite de exportación de 5 MB. Selecciona menos partidas e inténtalo de nuevo.';
 
   @override
-  String get imageAdjustPhoto => 'Ajustar foto';
-
-  @override
-  String get imageUsePhoto => 'Usar foto';
-
-  @override
-  String get imageRetake => 'Volver a tomar';
-
-  @override
-  String get imageAdjustEdges => 'Ajustar bordes';
+  String get recentExportFailed =>
+      'No se pudieron exportar las partidas seleccionadas. Las partidas guardadas no han cambiado.';
 }

@@ -2704,12 +2704,6 @@ abstract class AppLocalizations {
   /// **'Position settings'**
   String get editorPositionSettings;
 
-  /// Standard-chess board editor: Import position from image (not yet available). Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Import position from image (not yet available)'**
-  String get editorImageImportUnavailable;
-
   /// Standard-chess board editor: Share FEN. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
   ///
   /// In en, this message translates to:
@@ -2848,78 +2842,6 @@ abstract class AppLocalizations {
   /// **'Mobile Maia opened Home to avoid reopening a session that may have caused a crash. Your saved games and settings have been kept.'**
   String get sessionRecovery;
 
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'From image'**
-  String get imageFromImage;
-
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'Left and right edges'**
-  String get imageCropHorizontal;
-
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'Top and bottom edges'**
-  String get imageCropVertical;
-
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'Find board'**
-  String get imageFindBoard;
-
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'Rotate image'**
-  String get imageRotate;
-
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'Image has Black at the bottom'**
-  String get imageBlackAtBottom;
-
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'Recognize position'**
-  String get imageRecognize;
-
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not read this image. Try another screenshot or adjust the crop.'**
-  String get imageImportFailed;
-
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'No board found. Frame the intended board manually.'**
-  String get imageBoardNotFound;
-
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose image'**
-  String get imageChoose;
-
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'Take photo'**
-  String get imageTakePhoto;
-
-  /// Board-editor screenshot or printed-diagram import. Camera capture and offline recognition lead to an editable position with normal chess validation.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not open the camera. Choose an image instead.'**
-  String get imageCameraUnavailable;
-
   /// Dev-only local diagnostic export. App-specific testing feature; automatic bounded recording, manual export, never telemetry.
   ///
   /// In en, this message translates to:
@@ -2962,41 +2884,23 @@ abstract class AppLocalizations {
   /// **'The motors are stopped, I replaced the pawn, and every piece matches.'**
   String get boardPromotionReplaced;
 
-  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
+  /// Recent Games selection toolbar: export the selected games into one PGN file using Save or Share. Reuses pinned Lichess exportGames.
   ///
   /// In en, this message translates to:
-  /// **'Scan board'**
-  String get imageScanBoard;
+  /// **'Export games'**
+  String get recentExportGames;
 
-  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
+  /// Recent Games export exceeds the 5 MiB UTF-8 limit, shown as 5 MB. Nothing is saved/shared; keep selection and ask the user to select fewer games and retry. Import remains limited to 2 MiB.
   ///
   /// In en, this message translates to:
-  /// **'Reading position…'**
-  String get imageReading;
+  /// **'Selected games exceed the 5 MB export limit. Select fewer games and try again.'**
+  String get recentExportTooLarge;
 
-  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
+  /// Recent Games multi-game export error: one selected record could not be read/validated, or Android save/share failed. No selected game is silently omitted and stored games are not modified.
   ///
   /// In en, this message translates to:
-  /// **'Adjust photo'**
-  String get imageAdjustPhoto;
-
-  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
-  ///
-  /// In en, this message translates to:
-  /// **'Use photo'**
-  String get imageUsePhoto;
-
-  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
-  ///
-  /// In en, this message translates to:
-  /// **'Retake'**
-  String get imageRetake;
-
-  /// Offline camera/diagram scan workflow. App-specific action or status, not an upstream chess term.
-  ///
-  /// In en, this message translates to:
-  /// **'Adjust edges'**
-  String get imageAdjustEdges;
+  /// **'Could not export the selected games. Saved games were not changed.'**
+  String get recentExportFailed;
 }
 
 class _AppLocalizationsDelegate

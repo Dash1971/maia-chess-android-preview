@@ -89,15 +89,9 @@ class BoardEditorDraft {
 }
 
 class BoardEditorPage extends StatefulWidget {
-  const BoardEditorPage({
-    required this.initialFen,
-    this.onContinue,
-    this.imageSource = const PlatformBoardImageSource(),
-    super.key,
-  });
+  const BoardEditorPage({required this.initialFen, this.onContinue, super.key});
   final String initialFen;
   final Future<void> Function(String fen)? onContinue;
-  final BoardImageSource imageSource;
   @override
   State<BoardEditorPage> createState() => _BoardEditorPageState();
 }
@@ -108,7 +102,6 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
   dc.Piece? _placement;
   dc.Square? _selected;
   bool _flipped = false, _continuing = false;
-  bool _importing = false;
   Offset? _pointerDown;
   final _boardKey = GlobalKey();
 
@@ -194,21 +187,6 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
           context,
         ).showSnackBar(SnackBar(content: Text(l10n(context).invalidPosition)));
       }
-    }
-  }
-
-  Future<void> _fromImage() async {
-    if (_importing) return;
-    setState(() => _importing = true);
-    try {
-      final fen = await Navigator.of(context).push<String>(
-        MaterialPageRoute(
-          builder: (_) => BoardImageImportPage(source: widget.imageSource),
-        ),
-      );
-      if (mounted && fen != null) _change(() => _draft.load(fen));
-    } finally {
-      if (mounted) setState(() => _importing = false);
     }
   }
 
@@ -727,13 +705,6 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
     appBar: AppBar(
       title: Text(l10n(context).boardEditor),
       actions: [
-        if (appFlavor == 'preview' || appFlavor == 'dev')
-          IconButton(
-            key: const ValueKey('editor-from-image'),
-            onPressed: _importing ? null : _fromImage,
-            icon: const Icon(Icons.photo_camera_outlined),
-            tooltip: l10n(context).imageFromImage,
-          ),
         IconButton(
           key: const ValueKey('editor-share'),
           onPressed: _export,

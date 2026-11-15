@@ -1,5 +1,7 @@
 # Build channels and promotion status
 
+> **Source plan, 13 November 2026:** Camera/image recognition is shelved after the [offline-model investigation](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md). A draft removal PR withdraws it from future Preview/Dev source. The published APK versions and historical qualification records below are unchanged.
+
 Updated 2026-11-13. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.

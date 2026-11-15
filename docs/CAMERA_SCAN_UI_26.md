@@ -1,5 +1,7 @@
 # Camera scan UI: beta.1 gap and follow-up
 
+> **Shelved, 13 November 2026.** This is a historical prototype record. Camera/image recognition is being removed after the [offline model investigation](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md) found no suitable lightweight replacement. Published beta.2/Dev APKs are unchanged by this source PR.
+
 The approved Home placement and scan-process mockups were not implemented in
 #210. PR #220 implemented them and Preview 2.6.0-beta.2 now publishes that UI. The earlier icon
 and editor simplification were implemented and did reach beta.1.
