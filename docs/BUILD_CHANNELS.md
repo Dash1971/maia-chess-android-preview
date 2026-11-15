@@ -1,15 +1,15 @@
 # Build channels and promotion status
 
-> **Source plan, 13 November 2026:** Camera/image recognition is shelved after the [offline-model investigation](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md). A draft removal PR withdraws it from future Preview/Dev source. The published APK versions and historical qualification records below are unchanged.
+> **Published 15 November 2026:** Preview beta.3 withdraws camera/image recognition and adds selected Recent Games PGN export. Dev alpha.2 still contains the earlier prototype; historical releases and qualification records remain unchanged.
 
-Updated 2026-11-13. Release pages are authoritative for published artifacts;
+Updated 2026-11-15. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.5.1](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1), code 83 | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.2](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.2), code 2602 | `com.dash1971.maia_chess.preview`, 79M | Home camera scan, automatic grid reading and existing-editor correction; timing default on and engine-off score hiding; experimental Grand Kingdom with known capture failures. DGT stays Dev-only. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3), code 2603 | `com.dash1971.maia_chess.preview`, 79M | Selected Recent Games PGN export; camera/image recognition withdrawn; manual editor/FEN/analysis/continuation preserved. Grand Kingdom experimental with known capture failures; DGT Dev-only. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev) | Published 2.6.0-alpha.2-dev, code 2602 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Automatic local Dev diagnostics, assisted Maia promotion and image/camera import. Grand Kingdom capture failures remain unresolved. |
 
 The three packages install side by side. Obtainium users should select the
@@ -24,6 +24,19 @@ installations update in place using the established Preview certificate.
 - [Preview and Dev release procedure](https://github.com/Dash1971/maia-chess-android-preview/blob/main/docs/RELEASING.md):
   Preview upstream review and README/roadmap pass; lightweight Dev publication
   by default, with no published-download check.
+
+## Preview 2.6.0-beta.3 publication
+
+[Published beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3) delivers #224's recognition withdrawal and #226/#225's
+selected Recent Games PGN export. Exports allow 5 MiB including UTF-8 separators;
+imports and individual games retain 2 MiB. Save/share follows displayed order,
+preserves supported metadata/comments/clocks/variations and leaves saved games
+unchanged. Overflow retains selection for correction and retry. The outgoing
+chooser excludes Maia itself to prevent automatic self-import replacing the
+active session. Manual Board Editor/FEN/Analysis/Continue remain available.
+[Qualification and cleanup](releases/preview-2.6.0-beta.3.md) record exact-source
+CI, both Linux builds, signing, ARM64/79M tests, signed upgrade, actual feature
+checks, public downloads and immediate cleanup. Stable and Dev releases are unchanged.
 
 ## Dev 2.6.0-alpha.2 publication
 

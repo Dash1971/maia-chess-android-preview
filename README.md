@@ -31,16 +31,15 @@ and feature requests.
 
 ## Current Preview status
 
-The latest Preview release is [2.6.0-beta.2](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.2). Home now has Scan board beside Analysis Board: it opens the installed camera, reads a detected grid automatically and opens the existing Board Editor. Framing and manual correction remain available. Human move timing defaults on while preserving a saved off choice, and Maia scores hide when analysis engines are off. Grand Kingdom remains experimental with known capture failures and hardware acceptance pending. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.2.md) record the tested source and verified release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
+The latest Preview release is [2.6.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3). Recent games can save or share selected games as one PGN file. Camera/image recognition is withdrawn; manual Board Editor, FEN import/share, Analysis and Continue from here remain available. Preview uses the 79M model. Grand Kingdom remains experimental with known capture failures and hardware acceptance pending. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.3.md) record the tested source and verified release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
 
 See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
 
 ## Feature guide
 
-### Recent games and PGN files — next release
+### Recent games and PGN files
 
-Bulk export is implemented in [draft PR #226](https://github.com/Dash1971/maia-chess-android-preview/pull/226)
-and is not in the published beta.2 APK. Long-press a Recent games entry or choose
+Bulk export is published in Preview 2.6.0-beta.3 ([#226](https://github.com/Dash1971/maia-chess-android-preview/pull/226)). Long-press a Recent games entry or choose
 **Select games**, select the games to export (or use **Select all**), then choose
 **Export games → Save PGN file** or **Share PGN**. The result is one `.pgn` file,
 in the displayed newest-first order, containing each selected game's supported
@@ -62,11 +61,11 @@ offline, with no automatic upload. See [ordering, limits and verification](docs/
 
 ## Roadmap
 
-**Next release target: export selected games as one PGN**
+**Delivered in Preview: export selected games as one PGN**
 
 [Selection, ordering, size limit and verification](docs/RECENT_GAMES_PGN_EXPORT.md).
 
-We are looking to include bulk PGN export in the next release. Select individual
+Preview 2.6.0-beta.3 includes bulk PGN export; Stable promotion remains separate. Select individual
 games or use Select all in Recent Games, then save or share one PGN file
 containing the selected games for use in external analysis tools. Thanks to
 @Earthless85 for the [suggestion](https://github.com/Dash1971/maia-chess-android/issues/74).
@@ -83,8 +82,8 @@ small unrestricted candidates were unreliable on our photos, while the larger
 candidates still made mistakes and would add substantial weight alongside the
 existing Maia 79M model.
 
-The already published Preview 2.6.0-beta.2 and Dev alpha.2 APKs still contain the
-prototype. Removal is being prepared for a future Preview build. Manual Board
+Preview 2.6.0-beta.3 removes the prototype, including its bundled diagram model.
+Historical Preview beta.2 and the unchanged Dev alpha.2 APKs still contain it. Manual Board
 Editor, FEN import, Analysis and Continue from here remain available. See
 [the original proposal (#179)](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
 
