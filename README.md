@@ -72,15 +72,20 @@ containing the selected games for use in external analysis tools. Thanks to
 Implementation and verification are tracked in
 [Preview #225](https://github.com/Dash1971/maia-chess-android-preview/issues/225).
 
-**Offline board scanning: shelved**
+**Offline board scanning: acceptable candidate; shipping decision pending**
 
-We have shelved camera, screenshot and printed-diagram recognition for now.
-Our [model investigation and visual comparison](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md)
-did not find an open, lightweight model with sufficient recognition quality for
-Mobile Maia. ChessQ Lite, used by Lichess, has a noncommercial licence; the
-small unrestricted candidates were unreliable on our photos, while the larger
-candidates still made mistakes and would add substantial weight alongside the
-existing Maia 79M model.
+The November 15 follow-up to our
+[model investigation and visual comparison](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md)
+finds **ChessQ Lite V4 INT8 accuracy acceptable on our twelve-photo test set**.
+Its 41.4 MB ONNX model matched the 63.1 MB V4 model on all full-photo placements
+(10/12 exact positions); the smaller V5 model performed worse. These are desktop
+results on a small set, with broader accuracy and Android performance unverified.
+
+**We have not decided to restore scanning.** We need to weigh APK size, device
+support and the published noncommercial license, including distribution and
+F-Droid implications, before deciding. ARM64 packaging could offset the added
+model size but would change device coverage; no packaging change is approved.
+The plan does not depend on obtaining a more permissive license.
 
 Preview 2.6.0-beta.3 removes the prototype, including its bundled diagram model.
 Historical Preview beta.2 and the unchanged Dev alpha.2 APKs still contain it. Manual Board
