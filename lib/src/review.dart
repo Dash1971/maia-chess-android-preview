@@ -194,6 +194,7 @@ class _ReviewPageState extends State<ReviewPage>
   final Map<int, Future<void>> _pendingAnalyses = {};
   _ReviewAnalysisStatus? _analysisError;
   bool _flipped = false;
+  final _adaptiveReviewBoardKey = GlobalKey();
   bool _fullAnalysisRunning = false;
   bool _fullAnalysisClassifying = false;
   int _fullAnalysisCompleted = 0;
@@ -2435,8 +2436,7 @@ class _ReviewPageState extends State<ReviewPage>
         // otherwise the rating itself can appear/disappear near the breakpoint.
         final ratingWidth = rows
             .map(
-              (row) =>
-                  width('M${displayNumber(context, row.elo)}', scoreStyle),
+              (row) => width('M${displayNumber(context, row.elo)}', scoreStyle),
             )
             .reduce(max)
             .ceilToDouble();
@@ -2507,7 +2507,8 @@ class _ReviewPageState extends State<ReviewPage>
                                         ),
                                       ),
                                     ),
-                                  if (ratingsFit) const SizedBox(width: ratingGap),
+                                  if (ratingsFit)
+                                    const SizedBox(width: ratingGap),
                                   SizedBox(
                                     key: ValueKey('${rows[i].key}-marker-slot'),
                                     width: markerWidth,
@@ -2518,7 +2519,9 @@ class _ReviewPageState extends State<ReviewPage>
                                       child: rows[i].score.white == null
                                           ? null
                                           : Container(
-                                              key: ValueKey('${rows[i].key}-disc'),
+                                              key: ValueKey(
+                                                '${rows[i].key}-disc',
+                                              ),
                                               width: 9,
                                               height: 9,
                                               decoration: BoxDecoration(
@@ -3391,90 +3394,86 @@ class _ReviewPageState extends State<ReviewPage>
         ? _agreementArrows
         : const <ReviewAgreementArrow>[];
     final boardAnnotation = _engineEnabled ? _currentBoardAnnotation : null;
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () async {
-            if (widget.returnToGame) {
-              Navigator.of(context).pop();
-              return;
+    final sidebar = _useBoardSidebar(context);
+    final analysisAppBar = AppBar(
+      automaticallyImplyLeading: false,
+      leading: IconButton(
+        onPressed: () async {
+          if (widget.returnToGame) {
+            Navigator.of(context).pop();
+            return;
+          }
+          await widget.onHome();
+          if (context.mounted) {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          }
+        },
+        icon: Icon(
+          widget.returnToGame ? Icons.arrow_back : Icons.home_outlined,
+        ),
+        tooltip: (widget.returnToGame
+            ? l10n(context).backToGame
+            : l10n(context).home),
+      ),
+      title: _analysisTitle(),
+      actions: [
+        PopupMenuButton<String>(
+          key: const ValueKey('analysis-share-menu'),
+          tooltip: l10n(context).shareAndExport,
+          icon: const Icon(Icons.more_vert),
+          onSelected: (value) async {
+            if (value == 'pgn') await _copyPgn();
+            if (value == 'fen') await _copyFen();
+            if (value == 'save') {
+              if (context.mounted) {
+                await PgnFiles.export(context, _exportReviewPgn());
+              }
             }
-            await widget.onHome();
-            if (context.mounted) {
-              Navigator.of(context).popUntil((route) => route.isFirst);
+            if (value == 'share') {
+              if (context.mounted) {
+                await PgnFiles.export(context, _exportReviewPgn(), share: true);
+              }
             }
           },
-          icon: Icon(
-            widget.returnToGame ? Icons.arrow_back : Icons.home_outlined,
-          ),
-          tooltip: (widget.returnToGame
-              ? l10n(context).backToGame
-              : l10n(context).home),
+          itemBuilder: (_) => [
+            PopupMenuItem(
+              value: 'save',
+              child: ListTile(
+                leading: Icon(Icons.save_alt),
+                title: Text(l10n(context).savePgnFile),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'share',
+              child: ListTile(
+                leading: Icon(Icons.share_outlined),
+                title: Text(l10n(context).sharePgn),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'pgn',
+              child: ListTile(
+                leading: Icon(Icons.description_outlined),
+                title: Text(l10n(context).copyPgn),
+              ),
+            ),
+            PopupMenuItem(
+              value: 'fen',
+              child: ListTile(
+                leading: Icon(Icons.content_copy),
+                title: Text(l10n(context).copyFen),
+              ),
+            ),
+          ],
         ),
-        title: _analysisTitle(),
-        actions: [
-          PopupMenuButton<String>(
-            key: const ValueKey('analysis-share-menu'),
-            tooltip: l10n(context).shareAndExport,
-            icon: const Icon(Icons.more_vert),
-            onSelected: (value) async {
-              if (value == 'pgn') await _copyPgn();
-              if (value == 'fen') await _copyFen();
-              if (value == 'save') {
-                if (context.mounted) {
-                  await PgnFiles.export(context, _exportReviewPgn());
-                }
-              }
-              if (value == 'share') {
-                if (context.mounted) {
-                  await PgnFiles.export(
-                    context,
-                    _exportReviewPgn(),
-                    share: true,
-                  );
-                }
-              }
-            },
-            itemBuilder: (_) => [
-              PopupMenuItem(
-                value: 'save',
-                child: ListTile(
-                  leading: Icon(Icons.save_alt),
-                  title: Text(l10n(context).savePgnFile),
-                ),
-              ),
-              PopupMenuItem(
-                value: 'share',
-                child: ListTile(
-                  leading: Icon(Icons.share_outlined),
-                  title: Text(l10n(context).sharePgn),
-                ),
-              ),
-              PopupMenuItem(
-                value: 'pgn',
-                child: ListTile(
-                  leading: Icon(Icons.description_outlined),
-                  title: Text(l10n(context).copyPgn),
-                ),
-              ),
-              PopupMenuItem(
-                value: 'fen',
-                child: ListTile(
-                  leading: Icon(Icons.content_copy),
-                  title: Text(l10n(context).copyFen),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      ],
+    );
+    return Scaffold(
+      appBar: sidebar ? null : analysisAppBar,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final landscape =
-                constraints.maxWidth > constraints.maxHeight &&
-                constraints.maxWidth >= 600;
+            final landscape = sidebar;
             final textScale = MediaQuery.textScalerOf(context).scale(16) / 16;
             final boardGutter =
                 max(24.0, MediaQuery.textScalerOf(context).scale(24)) + 8;
@@ -3485,6 +3484,7 @@ class _ReviewPageState extends State<ReviewPage>
                       20
                 : 0.0;
             Widget board(double size) => SizedBox(
+              key: _adaptiveReviewBoardKey,
               width: size + boardGutter,
               height: size,
               child: Row(
@@ -3544,13 +3544,51 @@ class _ReviewPageState extends State<ReviewPage>
                       padding: const EdgeInsets.fromLTRB(12, 2, 12, 4),
                       child: _engineLinesPanel(),
                     ),
-                  _analysisTabBar(),
+                  if (!landscape) _analysisTabBar(),
                 ];
                 final panel = SizedBox(
                   key: const ValueKey('analysis-tab-panel'),
                   width: double.infinity,
                   child: _showGraph ? _graphTab() : _movesTab(),
                 );
+                if (landscape) {
+                  final actionWidth =
+                      MediaQuery.textScalerOf(context).scale(1) > 1.3
+                      ? 84.0
+                      : 56.0;
+                  final controlsHeight =
+                      available.maxWidth >= actionWidth * 3 + 152
+                      ? 56.0
+                      : 108.0;
+                  if (available.maxHeight < controlsHeight + 48 + 56 + 32) {
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ...header,
+                          _analysisTabBar(),
+                          SizedBox(height: 220, child: panel),
+                          _analysisControls(),
+                        ],
+                      ),
+                    );
+                  }
+                  return Column(
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight:
+                              available.maxHeight - controlsHeight - 48 - 56,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(children: header),
+                        ),
+                      ),
+                      _analysisTabBar(),
+                      Expanded(child: panel),
+                      _analysisControls(),
+                    ],
+                  );
+                }
                 if (available.maxHeight < engineHeight + 188) {
                   return Column(
                     children: [
@@ -3591,15 +3629,25 @@ class _ReviewPageState extends State<ReviewPage>
             if (landscape) {
               final size = min(
                 constraints.maxHeight - 16,
-                constraints.maxWidth * 0.48 - boardGutter,
-              ).clamp(80.0, 560.0);
+                constraints.maxWidth -
+                    _sidebarMinimum(context) -
+                    boardGutter -
+                    24,
+              ).clamp(80.0, double.infinity);
               return Padding(
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
                     board(size),
                     const SizedBox(width: 8),
-                    Expanded(child: details()),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 56, child: analysisAppBar),
+                          Expanded(child: details()),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               );

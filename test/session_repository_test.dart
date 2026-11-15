@@ -304,8 +304,10 @@ void main() {
 
       expect(find.text('Player — Maia 500'), findsOneWidget);
       expect(find.text('Player — Maia 1500'), findsOneWidget);
-      expect(find.textContaining('Incomplete · 09/05/2026'), findsOneWidget);
-      expect(find.textContaining('1-0 · 09/04/2026'), findsOneWidget);
+      expect(find.text('Incomplete'), findsOneWidget);
+      expect(find.text('09/05/2026'), findsOneWidget);
+      expect(find.text('1-0'), findsOneWidget);
+      expect(find.text('09/04/2026'), findsOneWidget);
       await tester.tap(find.byKey(const ValueKey('recent-games-menu')));
       await tester.pumpAndSettle();
       expect(find.text('Delete all games'), findsOneWidget);

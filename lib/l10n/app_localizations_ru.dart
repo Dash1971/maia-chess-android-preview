@@ -1697,4 +1697,16 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get recentExportFailed =>
       'Не удалось экспортировать выбранные партии. Сохранённые партии не изменены.';
+
+  @override
+  String get recentDateColumn => 'Дата';
+
+  @override
+  String get recentGameColumn => 'Партия';
+
+  @override
+  String get recentResultColumn => 'Результат';
+
+  @override
+  String get settingsDiagnostics => 'Диагностика';
 }

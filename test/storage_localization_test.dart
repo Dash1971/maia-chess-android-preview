@@ -62,14 +62,12 @@ void main() {
           tester.element(find.byType(RecentGamesPage)),
         )!;
         expect(find.text(strings.recentMaiaPlayer('500')), findsNWidgets(2));
+        expect(find.text(strings.recentIncomplete), findsNWidgets(2));
         expect(
           find.text(
-            strings.recentGameSummary(
-              strings.recentIncomplete,
-              MaterialLocalizations.of(
-                tester.element(find.byType(RecentGamesPage)),
-              ).formatCompactDate(date),
-            ),
+            MaterialLocalizations.of(
+              tester.element(find.byType(RecentGamesPage)),
+            ).formatCompactDate(date),
           ),
           findsNWidgets(2),
         );

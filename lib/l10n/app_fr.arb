@@ -463,5 +463,9 @@
   "boardPromotionReplaced": "Les moteurs sont arrêtés, j’ai remplacé le pion et toutes les pièces correspondent.",
   "recentExportGames": "Exporter les parties",
   "recentExportFailed": "Impossible d’exporter les parties sélectionnées. Les parties enregistrées n’ont pas été modifiées.",
-  "recentExportTooLarge": "Les parties sélectionnées dépassent la limite d’exportation de 5 Mo. Sélectionnez moins de parties et réessayez."
+  "recentExportTooLarge": "Les parties sélectionnées dépassent la limite d’exportation de 5 Mo. Sélectionnez moins de parties et réessayez.",
+  "recentDateColumn": "Date de jeu",
+  "recentGameColumn": "Partie",
+  "recentResultColumn": "Résultat",
+  "settingsDiagnostics": "Diagnostic"
 }
