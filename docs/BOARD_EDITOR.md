@@ -37,18 +37,11 @@ The menu contains Starting position, Load FEN, Continue from here and Clear boar
 The toolbar has menu, flip, Analysis and position settings. Sharing uses Android's
 plain-text chooser; copying works offline and is also the fallback when a native
 share handler is unavailable. Neither action sends to a recipient automatically.
-Variant and Challenge from position remain absent. For the 2.6 prototype, the
-From image action offers Choose image and Take photo for assisted screenshot/flat
-printed-diagram import in Preview/Dev. The camera delegates to the installed app
-with temporary private output; physical-board photo recognition remains outside
-the scope. The Home Scan board shortcut, published in Preview 2.6.0-beta.2, opens the camera and reads a
-found grid automatically before opening this same normal editor. Manual framing
-remains available through the editor import action and as a scan fallback.
-Analysis and Continue use normal position validation. See
-[the image-import workflow and acceptance](BOARD_IMAGE_IMPORT.md). The
-recognized position loads into the existing editor with its normal validation; cancelling
-it leaves the prior editor unchanged. All UI uses the selected board/piece designs
-and applicable aid preferences.
+Variant, Challenge from position and camera/image recognition are absent.
+Camera and screenshot import have been shelved after the
+[offline model investigation](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md).
+Manual editing, FEN loading, Analysis and Continue from here retain their normal
+position validation and selected board/piece designs and aid preferences.
 
 New tool/share terms reuse the pinned Lichess terminology with explicit editor/FEN
 adaptations. Remaining new labels are translated in all ten languages and still

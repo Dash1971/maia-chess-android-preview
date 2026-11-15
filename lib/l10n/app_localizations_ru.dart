@@ -1588,10 +1588,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get editorPositionSettings => 'Настройки позиции';
 
   @override
-  String get editorImageImportUnavailable =>
-      'Импорт позиции из изображения (пока недоступен)';
-
-  @override
   String get editorShareFen => 'Поделиться FEN';
 
   @override
@@ -1665,45 +1661,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Mobile Maia открыл главный экран, чтобы не открывать повторно сеанс, который мог вызвать сбой. Сохранённые партии и настройки не удалены.';
 
   @override
-  String get imageFromImage => 'Из изображения';
-
-  @override
-  String get imageCropHorizontal => 'Левая и правая границы';
-
-  @override
-  String get imageCropVertical => 'Верхняя и нижняя границы';
-
-  @override
-  String get imageFindBoard => 'Найти доску';
-
-  @override
-  String get imageRotate => 'Повернуть изображение';
-
-  @override
-  String get imageBlackAtBottom => 'На изображении чёрные снизу';
-
-  @override
-  String get imageRecognize => 'Распознать позицию';
-
-  @override
-  String get imageImportFailed =>
-      'Не удалось прочитать изображение. Выберите другой снимок экрана или измените область обрезки.';
-
-  @override
-  String get imageBoardNotFound =>
-      'Доска не найдена. Выделите нужную доску вручную.';
-
-  @override
-  String get imageChoose => 'Выбрать изображение';
-
-  @override
-  String get imageTakePhoto => 'Сделать фотографию';
-
-  @override
-  String get imageCameraUnavailable =>
-      'Не удалось открыть камеру. Выберите изображение.';
-
-  @override
   String get saveDevDiagnostics => 'Сохранить диагностику Dev…';
 
   @override
@@ -1729,22 +1686,4 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get boardPromotionReplaced =>
       'Моторы остановлены, пешка заменена, все фигуры соответствуют экрану.';
-
-  @override
-  String get imageScanBoard => 'Сканировать доску';
-
-  @override
-  String get imageReading => 'Распознавание позиции…';
-
-  @override
-  String get imageAdjustPhoto => 'Настроить фото';
-
-  @override
-  String get imageUsePhoto => 'Использовать фото';
-
-  @override
-  String get imageRetake => 'Переснять';
-
-  @override
-  String get imageAdjustEdges => 'Настроить границы';
 }

@@ -1,5 +1,7 @@
 # Assisted screenshot/diagram import: 2.6 prototype
 
+> **Shelved, 13 November 2026.** This is a historical prototype record. Camera/image recognition is being removed after the [offline model investigation](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md) found no suitable lightweight replacement. Published beta.2/Dev APKs are unchanged by this source PR.
+
 Tracks [#179](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
 The assisted prototype is published in [Preview 2.6.0-beta.2](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.2).
 Home Scan board opens the installed camera and automatically reads a detected
