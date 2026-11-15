@@ -463,5 +463,9 @@
   "boardPromotionReplaced": "Os motores estão parados, substituí o peão e todas as peças correspondem.",
   "recentExportGames": "Exportar partidas",
   "recentExportFailed": "Não foi possível exportar as partidas selecionadas. As partidas salvas não foram alteradas.",
-  "recentExportTooLarge": "As partidas selecionadas ultrapassam o limite de exportação de 5 MB. Selecione menos partidas e tente novamente."
+  "recentExportTooLarge": "As partidas selecionadas ultrapassam o limite de exportação de 5 MB. Selecione menos partidas e tente novamente.",
+  "recentDateColumn": "Data",
+  "recentGameColumn": "Partida",
+  "recentResultColumn": "Resultado",
+  "settingsDiagnostics": "Diagnóstico"
 }

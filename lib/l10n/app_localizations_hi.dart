@@ -1673,4 +1673,16 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get recentExportFailed =>
       'चुने गए खेल निर्यात नहीं किए जा सके। सहेजे गए खेलों में कोई बदलाव नहीं हुआ।';
+
+  @override
+  String get recentDateColumn => 'तारीख';
+
+  @override
+  String get recentGameColumn => 'बाज़ी';
+
+  @override
+  String get recentResultColumn => 'परिणाम';
+
+  @override
+  String get settingsDiagnostics => 'निदान';
 }

@@ -1679,4 +1679,16 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get recentExportFailed =>
       'Die ausgewählten Partien konnten nicht exportiert werden. Gespeicherte Partien wurden nicht verändert.';
+
+  @override
+  String get recentDateColumn => 'Datum';
+
+  @override
+  String get recentGameColumn => 'Partie';
+
+  @override
+  String get recentResultColumn => 'Ergebnis';
+
+  @override
+  String get settingsDiagnostics => 'Diagnose';
 }

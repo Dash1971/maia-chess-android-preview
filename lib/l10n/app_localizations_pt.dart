@@ -1683,4 +1683,16 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get recentExportFailed =>
       'Não foi possível exportar as partidas selecionadas. As partidas salvas não foram alteradas.';
+
+  @override
+  String get recentDateColumn => 'Data';
+
+  @override
+  String get recentGameColumn => 'Partida';
+
+  @override
+  String get recentResultColumn => 'Resultado';
+
+  @override
+  String get settingsDiagnostics => 'Diagnóstico';
 }

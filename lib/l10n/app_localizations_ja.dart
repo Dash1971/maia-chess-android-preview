@@ -1562,4 +1562,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get recentExportFailed => '選択した対局をエクスポートできませんでした。保存済みの対局は変更されていません。';
+
+  @override
+  String get recentDateColumn => '日付';
+
+  @override
+  String get recentGameColumn => '対局';
+
+  @override
+  String get recentResultColumn => '結果';
+
+  @override
+  String get settingsDiagnostics => '診断';
 }

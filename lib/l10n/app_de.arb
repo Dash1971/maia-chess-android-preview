@@ -463,5 +463,9 @@
   "boardPromotionReplaced": "Die Motoren stehen still, ich habe den Bauern ersetzt und alle Figuren stimmen überein.",
   "recentExportGames": "Partien exportieren",
   "recentExportFailed": "Die ausgewählten Partien konnten nicht exportiert werden. Gespeicherte Partien wurden nicht verändert.",
-  "recentExportTooLarge": "Die ausgewählten Partien überschreiten die Exportgrenze von 5 MB. Wähle weniger Partien und versuche es erneut."
+  "recentExportTooLarge": "Die ausgewählten Partien überschreiten die Exportgrenze von 5 MB. Wähle weniger Partien und versuche es erneut.",
+  "recentDateColumn": "Datum",
+  "recentGameColumn": "Partie",
+  "recentResultColumn": "Ergebnis",
+  "settingsDiagnostics": "Diagnose"
 }
