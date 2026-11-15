@@ -82,7 +82,7 @@ with 200% text.
 Existing Recent Games failure/recovery, repository and PGN import tests remain
 in place. Host method-channel tests cover the Dart save/share/cancel contract;
 they do not certify an OEM document provider or third-party PGN application.
-Android device smoke testing remains a release check. No Android build or CI is
-required to review this draft PR.
+Android device smoke testing remains a release check. The feature PR is merged;
+exact-source release checks and Android smoke results are recorded below.
 
 Actual signed-APK qualification covered small Select all, cancel/retry, 5 MiB overflow, a 3.66 MB UTF-8 save and separate-UID share, unchanged source hashes, the native 2 MiB import guard and sole-target self-share regression. [Release evidence](releases/preview-2.6.0-beta.3.md).
