@@ -19,7 +19,16 @@ Limits: 15-second connection/configuration deadline, five-second write callback 
 
 Validation: native helper host checks passed on isolated Linux JDK 21 with official JetBrains Kotlin 2.2.0. Checks cover duplicate advertisements, capacity, opaque tokens and stale selection, motor session binding, command rejection, full setup LED guidance capped to default ATT20, all 37 split points of the 38-byte Chessnut report, coalesced reports, partial frame reset/expiration, corruption recovery, oversized input and fragmented/coalesced NEW GAME/battery confirmations. Source/diff review is also clean. Android bridge compilation remains part of the root-owned Dev build. No hardware was available; native BLE pairing, notification fragmentation, physical input, LEDs, NEW GAME buttons, motor acknowledgements and cancellation are **not certified**. Root-owned Dev integration checks and model/firmware/Android-specific tester acceptance remain required.
 
-2026-10-28 hardware updates: a Grand Kingdom owner initially reported successful basic play, captures, castling, human promotion and synchronization on Dev alpha.2. A [later report](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6477270546) after more than ten games identifies wrong-piece removal at `19...Bxf8` and missing removal at `7...Nxb4`. Capture/synchronization reliability is now a readiness blocker. PGNs establish expected logical moves, not transmitted frames, motor completion or the cause of the physical divergence. The reference supplies no separate capture opcode; do not invent one or retry movement. Local `confirmPosition` does not repair firmware state. See the [2.6 acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md) for both histories and the prioritized investigation.
+Hardware feedback, updated 15 November 2026: the October wrong-piece removal at
+`19...Bxf8` and missed removal at `7...Nxb4` were unexplained at the time. The
+[owner’s later follow-up](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) attributes them to hardware drift after many
+moves without game-start calibration or an uneven surface, confirms firmware
+**36v5**, and reports good overall operation. These are historical regression
+cases, not current known app capture defects. PGNs still do not establish BLE
+frames or motor completion; the reference supplies no separate capture opcode,
+and no guessed opcode or movement retry is justified. Local `confirmPosition`
+does not repair firmware state. See the [current acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md)
+for the source feedback and separately untested en-passant/promotion/recovery scenarios.
 
 2026-10-29 assisted-promotion draft: the full five-character UCI move stays in
 logical/PGN/checkpoint state; Dart sends only its four coordinates, matching the

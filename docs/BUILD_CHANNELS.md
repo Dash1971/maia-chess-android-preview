@@ -9,13 +9,25 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.5.1](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1), code 83 | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3), code 2603 | `com.dash1971.maia_chess.preview`, 79M | Selected Recent Games PGN export; camera/image recognition withdrawn; manual editor/FEN/analysis/continuation preserved. Grand Kingdom experimental with known capture failures; DGT Dev-only. |
-| [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev) | Published 2.6.0-alpha.2-dev, code 2602 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Automatic local Dev diagnostics, assisted Maia promotion and image/camera import. Grand Kingdom capture failures remain unresolved. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3), code 2603 | `com.dash1971.maia_chess.preview`, 79M | Selected Recent Games PGN export; camera/image recognition withdrawn; manual editor/FEN/analysis/continuation preserved. Grand Kingdom experimental; owner attributes earlier capture symptoms to hardware drift/calibration. DGT Dev-only. |
+| [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev) | Published 2.6.0-alpha.2-dev, code 2602 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Automatic local Dev diagnostics, assisted Maia promotion and image/camera import. Grand Kingdom experimental; the owner’s later feedback attributes earlier capture symptoms to hardware drift/calibration. |
 
 The three packages install side by side. Obtainium users should select the
 intended repository and enable prereleases for Preview/Dev. Installing Preview
 does not upgrade Dev or transfer its saved games/preferences. Existing Preview
 installations update in place using the established Preview certificate.
+
+## Grand Kingdom owner feedback — 14 November 2026
+
+[The owner’s follow-up](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) attributes the earlier wrong/missed capture
+removals to hardware drift after many moves without game-start calibration or
+an uneven surface, with firmware **36v5**. They report good overall operation
+and [subsequently a successful game on the 79M Preview build](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6875973632).
+The old reports are historical regression/reference cases, not current known
+app capture defects. Assisted Maia promotion, en passant and lifecycle/recovery
+still need scenario-specific physical acceptance; support remains experimental.
+This updates earlier capture-status statements in the dated release history below.
+[Current acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md).
 
 ## Release instructions
 
@@ -47,9 +59,10 @@ Dev, with manual local text export. The Dev integration includes Grand Kingdom
 [Verification and completed cleanup](releases/dev-2.6.0-alpha.2.md) record local
 checks, signature/upgrade continuity and actual-APK camera/export smoke tests.
 No Actions or Git LFS downloads were required for that Dev publication. Stable remains unchanged; full
-Linux/reproduction/physical qualification gates still apply. Capture failures
-remain unresolved; [the owner’s testing instructions](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6489649516)
-request an export after the first mismatch and further Maia-promotion testing.
+Linux/reproduction/physical qualification gates still apply. At publication,
+the capture symptoms were unexplained; the later owner feedback above attributes
+them to hardware drift/calibration. The remaining scenario-specific physical
+acceptance is recorded separately from that historical investigation.
 
 ## Preview 2.6.0-beta.2 publication
 
@@ -83,9 +96,10 @@ System colors remain a separate opt-in. Maia scores hide while engines are off
 and respect the score-display preference when engines return.
 
 Grand Kingdom is experimental in Preview 2.6 and Dev, with the requester's
-explicit acceptance of the known capture problems. Assisted Maia promotion does
-not fix wrong-piece removal or missed captures. Physical acceptance remains
-pending in the [2.6 acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md).
+explicit acceptance of the then-unexplained capture reports. The owner’s later
+hardware attribution above supersedes that problem status; no software capture
+fix is being claimed. Remaining scenario-specific physical acceptance is listed
+in the [2.6 acceptance record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md).
 DGT remains Dev-only; Stable/unflavored builds exclude both adapters.
 
 ## Preview acceptance
@@ -102,8 +116,9 @@ DGT remains Dev-only; Stable/unflavored builds exclude both adapters.
 - Published Preview 2.5 excludes Grand Kingdom and DGT. Preview 2.6
   admits only Grand Kingdom experimentally, with matching Dart/native gates and
   motor-session checks. DGT stays Dev-only. The requester authorized experimental
-  Preview 2.6 publication with the reported capture failures documented and
-  physical acceptance pending. Full automated Preview qualification is required.
+  Preview 2.6 publication. The owner’s later report attributes earlier capture
+  symptoms to hardware drift/calibration; remaining physical scenarios stay
+  separate. Full automated Preview qualification is required.
 - Qualify the actual 79M Preview APK, including history on/off, inference,
   upgrade/data retention, help layout and package/signature continuity. Dev's
   5M measurements are not evidence of 79M performance.

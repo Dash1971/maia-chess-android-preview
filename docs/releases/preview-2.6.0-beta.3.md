@@ -35,9 +35,20 @@ remains a separate feature promotion. Broader recognition #179 remains shelved.
 
 ## Limits and cleanup
 
-Grand Kingdom remains experimental with previously accepted unresolved capture
-failures and pending physical acceptance; DGT stays Dev-only. Lower-memory and
-real-phone export acceptance remain separate from emulator qualification.
+Grand Kingdom remains experimental. [The owner’s 14 November feedback](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393)
+attributes the earlier capture symptoms to hardware drift/calibration and an
+uneven surface, confirms firmware 36v5, and reports good overall operation.
+The owner subsequently reported a successful 79M Preview game. En passant,
+assisted Maia promotion and lifecycle/recovery remain scenario-specific physical
+acceptance items; DGT stays Dev-only. Lower-memory and real-phone export
+acceptance remain separate from emulator qualification.
+
+Status correction, 15 November: the initial beta.3 release notes and frozen
+verification bundle repeated an obsolete unresolved-capture status. The issue
+tracker already held the newer hardware feedback; the release documentation
+pass failed to reconcile it. Current notes and this report correct that error.
+The as-built APK, hashes, qualification results and original verification bundle
+remain unchanged; the release includes a separate dated status-correction record.
 
 Immediately after public-download verification, checked cleanup stopped the
 owned emulator/idle Gradle daemon/container and removed task intermediates,

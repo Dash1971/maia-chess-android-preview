@@ -1,36 +1,54 @@
 # Grand Kingdom: experimental Preview 2.6 enablement
 
-Status: experimental in [Preview 2.6.0-beta.1](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.1), updated 2026-11-13.
+Status: experimental in [Preview 2.6.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3), updated 15 November 2026.
 Tracks [Preview #27](https://github.com/Dash1971/maia-chess-android-preview/issues/27).
-The known capture failures and hardware checklist remain unresolved. Publication
-provides the Preview build requested for further testing; it does not establish
-physical acceptance or Stable readiness. Preview 2.5 artifacts still exclude it.
 
-## Preview 2.6 testing decision — 13 November 2026
+## Current owner feedback — 14 November 2026
 
-The requester explicitly authorized including experimental Grand Kingdom in
-Preview 2.6.0-beta.1 with the known capture problems documented. The reported
-wrong-piece removal and missed capture remain unresolved; this is not a capture
-fix or physical acceptance. Full automated Preview release gates still apply.
-The checklist below remains open for owner hardware testing and broader readiness.
-Stable and Dev app releases remain unchanged. DGT remains Dev-only.
+[The owner’s follow-up](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) reports many games with Mobile Maia and the
+referenced Python implementation. They checked the vendor app and confirmed
+firmware **36v5**. They attribute the earlier wrong/missed capture removals to
+**hardware drift/calibration and an uneven surface**: after many moves without
+calibration at game start, pieces gradually leave their square centers. They
+report that it works well overall. This supersedes the earlier unexplained
+capture-failure status; those symptoms are not current known app capture defects.
 
-## Physical evidence
+The owner then [switched to the yellow-icon 79M Preview and reported a successful
+game](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6875973632).
+
+The two October PGNs remain regression/reference material. No software capture
+fix is being claimed, and the owner’s report does not establish every board or
+firmware. En passant, assisted Maia promotion and lifecycle/recovery scenarios
+still need explicit results, as listed below. Firmware is now known; the exact
+app build for the hardware-drift follow-up and a specific phone model were not
+supplied and must not be inferred from the earlier Dev report.
+
+## Preview 2.6 testing decision — historical, 13 November 2026
+
+The requester authorized experimental Preview publication while the capture
+reports were still unexplained. The 14 November hardware attribution above
+supersedes that problem status. Full automated Preview release gates still
+apply. Stable/Dev APKs are unchanged; DGT remains Dev-only. Preview 2.5 artifacts
+exclude Grand Kingdom. Current support remains experimental while the separate
+physical acceptance scenarios are completed.
+
+## Historical physical evidence — 28 October 2026
 
 [Tester report, 2026-10-28](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6468925765):
 Square Off Grand Kingdom, Android 17 / SDK 37, app `2.4.0-alpha.2-dev`.
 The supplied diagnostic says `build=240` (published alpha.2 records 2402); retain
 this discrepancy rather than inferring the installed APK identity. Device field
-was `ZZZ`; specific phone model and firmware were not supplied.
+was `ZZZ`; specific phone model and firmware were not supplied in that initial report.
+The later firmware confirmation is 36v5, as recorded above.
 
 | Scenario | Reported result |
 | --- | --- |
 | Discovery, connection and standard setup confirmation | OK |
 | Ordinary play as White and Black, Maia opening/motor replies | OK for the grouped instructions |
-| Captures | Initially OK; later two physical capture failures reported (below) |
+| Captures | Initially OK, then two failures reported; owner later attributed them to hardware drift/calibration (current feedback above) |
 | Castling | Initially OK; no isolated castling failure reported |
 | Human promotion | OK |
-| Screen and physical position agreement | Initially OK; later contradicted by capture failures |
+| Screen and physical position agreement | Initial positive report, then capture symptoms; owner later explained hardware drift and reported good overall operation |
 | En passant | Not tested yet |
 | Background/resume, connection loss, phone continuation without repeat movement | Not tested yet |
 | Reset, multiple-board discovery, denied permission, Bluetooth/power interruption | Not established |
@@ -40,15 +58,17 @@ other Square Off products, every firmware or the future 79M Preview candidate.
 Protocol provenance remains in
 [ELECTRONIC_BOARD_NATIVE_PROTOCOL.md](ELECTRONIC_BOARD_NATIVE_PROTOCOL.md).
 
-### Additional capture failures: priority blocker
+### Historical capture reports — hardware explanation supersedes earlier blocker
 
 [Follow-up, posted 2026-10-28 at 18:29 UTC](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6477270546):
 after more than ten games, the same owner reported two failures while playing
 White. The first game's final `19...Bxf8` should remove White's knight on f8;
 instead the board removed the pawn on f6. In the second game `7...Nxb4`
 left White's pawn on b4. The owner is trying to reproduce the first failure.
-These reports supersede the blanket positive capture/synchronization summary;
-capture reliability is unresolved and prevents a claim of reliable physical captures.
+At the time, these reports superseded the initial blanket positive summary.
+The owner’s 14 November follow-up above now attributes the symptoms to hardware
+drift/calibration. Keep the histories for regression/reference; do not treat
+them as an unresolved software-capture blocker.
 
 Reported game A (`Result "*"`):
 
@@ -80,7 +100,7 @@ Local position confirmation does not resynchronize firmware piece bookkeeping.
 A legal following move is also insufficient to prove the entire physical board
 matches the game after a missed/wrong capture.
 
-For the maintainer's next owner request:
+If a mismatch recurs on a level, calibrated board:
 
 - Replay each complete history from confirmed standard setup; do not jump to a
   manually arranged midgame position. Game B is the shorter first case. A normal
@@ -97,14 +117,9 @@ For the maintainer's next owner request:
   retry the move, send a midgame reset or assume physical rearrangement repairs
   firmware state. Start any later board test with explicit standard setup.
 
-As of 2026-10-29, source/APK builds, Android Actions and LFS downloads are deferred
-while bandwidth is constrained. This follow-up changes documentation only;
-previous automated results apply to the unchanged app implementation and do not
-certify these physical captures. No new build or workflow is requested here.
+## Current channel behavior
 
-## Proposed channel behavior
-
-| Board | Preview 2.6 source | Dev | Stable / unflavored / unknown |
+| Board | Preview 2.6 | Dev | Stable / unflavored / unknown |
 | --- | --- | --- | --- |
 | Chessnut | Allowed | Allowed | Allowed |
 | Grand Kingdom | Experimental | Experimental | Blocked |
@@ -163,14 +178,14 @@ the Preview publication.
 
 ## Owner testing plan
 
-The maintainer will contact the owner; this PR sends no outreach. Use a separately
-qualified 2.6 candidate when it is prepared. This PR itself publishes no APK.
-Published Dev alpha.2 does not contain this assisted-promotion flow.
+The owner is testing the published Preview build. The older Dev-only advice is
+historical. Use a level surface and fresh game-start calibration, then report
+the exact app build, firmware, phone/Android and scenario actually exercised.
 
-1. Resolve and physically retest the two capture failures above first, recording
-   exact APK version/source/model, board firmware, phone and Android version.
-   Then confirm ordinary games, captures, castling and both playing colors;
-   repeat en passant, which is not yet physically established.
+1. Retain ordinary play/captures as regression checks on a level, calibrated
+   board. The earlier symptoms have an owner-reported hardware explanation;
+   reproducing and fixing an assumed app defect is not a prerequisite. Record
+   en passant separately, since it has not yet been physically established.
 2. Try a Maia queen promotion first. Verify one pawn movement, the correct
    destination/piece instruction, disabled continuation before the checkbox,
    manual replacement, full-position confirmation and normal subsequent play.
@@ -190,13 +205,13 @@ scripts are not a claim that normal Maia play will quickly produce every case.
 
 ## Remaining development order
 
-1. Reproduce the reported ordinary capture failures and establish their cause;
-   review initialization, accepted-human-move acknowledgement, engine-command
-   ordering and physical behavior before choosing a fix. Add a regression for
-   any proven app defect, then physically validate both histories.
+1. Use the owner’s hardware-drift/calibration explanation as the current status.
+   Retain the two historical PGNs; investigate only a new mismatch on a level,
+   calibrated board, recording the first physical divergence before assigning
+   an app cause or changing the protocol.
 2. Qualify assisted promotions and the existing en-passant/lifecycle paths with
-   the owner once ordinary captures are reliable. Improve bounded diagnostics
-   and recovery instructions using those results; preserve
+   the owner, recording each scenario independently of the overall positive report.
+   Improve bounded diagnostics and recovery instructions using those results; preserve
    the distinction between an idle live session and uncertain motor delivery.
 3. Investigate full midgame reconnection and takebacks only after establishing a
    reliable reconciliation/firmware protocol. Never infer motor cancellation or
@@ -204,8 +219,9 @@ scripts are not a claim that normal Maia play will quickly produce every case.
 
 ## Remaining physical acceptance
 
-- [ ] Resolve the wrong-piece removal at `19...Bxf8` and missing removal at
-      `7...Nxb4`, with repeatable physical capture/synchronization acceptance.
+- [x] Record the owner’s explanation of the earlier `19...Bxf8` / `7...Nxb4`
+      symptoms: hardware drift/calibration or an uneven surface, firmware 36v5.
+      This closes the unexplained-status item, not every physical scenario.
 - [ ] Record physical en passant acceptance.
 - [ ] Record background/resume and idle disconnect → Play in the app, preserving
       the game without repeated motor movement.
@@ -213,7 +229,9 @@ scripts are not a claim that normal Maia play will quickly produce every case.
       underpromotions and subsequent play.
 - [ ] Verify interrupted/restarted sessions and unsupported takeback/reconnection
       paths retain the logical game and offer phone continuation without replay.
-- [ ] Obtain firmware/phone details and clarify the reported build code if available.
+- [x] Record later firmware confirmation: 36v5.
+- [ ] Obtain the specific phone model/latest exact app build if available; keep
+      the old Dev build-code discrepancy historical rather than substituting it.
 - [ ] Recheck channel-policy, promotion/motor, saved-session and Chessnut
       regressions on the eventual candidate source.
 

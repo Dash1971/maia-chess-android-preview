@@ -1,5 +1,7 @@
 # Preview 2.6.0-beta.1 qualification and cleanup
 
+> **Grand Kingdom status update, 15 November 2026:** [The owner’s later feedback](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) attributes the earlier capture symptoms to hardware drift/calibration or an uneven surface, firmware 36v5, and reports good overall operation. Any unresolved-capture statements below describe the historical publication state. [Current acceptance record](../ELECTRONIC_BOARD_GRAND_KINGDOM_26.md).
+
 Published 2026-11-13: [release](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.1), version code 2601.
 Reviewed and merged #209, #210, #213 and #217 through release #218.
 Qualified source: `52378bbc0d038def0678895e4e9e2b3a2d83a08a`. The release tag preserves that exact source;
