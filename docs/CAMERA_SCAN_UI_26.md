@@ -13,7 +13,7 @@ and editor simplification were implemented and did reach beta.1.
 | [#210](https://github.com/Dash1971/maia-chess-android-preview/pull/210) | Image/camera import, Lichess camera icon, no review checkbox or repeated warning paragraphs, same existing Board Editor. Merged head `4837302`, including UI commits `dabc5c9` and `1624983`. |
 | [#213](https://github.com/Dash1971/maia-chess-android-preview/pull/213) | Human move timing default on, saved off choice preserved. |
 | [#217](https://github.com/Dash1971/maia-chess-android-preview/pull/217) | Hide Maia score percentages when engines are off. |
-| [#209](https://github.com/Dash1971/maia-chess-android-preview/pull/209) | Experimental Grand Kingdom and assisted promotion. Known capture failures remain. |
+| [#209](https://github.com/Dash1971/maia-chess-android-preview/pull/209) | Experimental Grand Kingdom and assisted promotion. Capture reports were unexplained at publication; the owner’s later hardware attribution supersedes that status (see [current record](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md)). |
 | [#218](https://github.com/Dash1971/maia-chess-android-preview/pull/218) / [#219](https://github.com/Dash1971/maia-chess-android-preview/pull/219) | Preview 2.6.0-beta.1 release and publication record. Qualified source `52378bbc0d038def0678895e4e9e2b3a2d83a08a`. |
 | [#220](https://github.com/Dash1971/maia-chess-android-preview/pull/220) / [#221](https://github.com/Dash1971/maia-chess-android-preview/pull/221) | Home scan flow published in Preview 2.6.0-beta.2; exact source `5ef1a92d92d0dcd76e2f5f70c3648982f0790124`. |
 
