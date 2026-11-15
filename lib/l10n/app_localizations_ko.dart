@@ -1623,5 +1623,5 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get recentExportTooLarge =>
-      '선택한 대국이 PGN의 2 MB 제한을 초과합니다. 대국을 더 적게 선택하세요.';
+      '선택한 대국이 5 MB 내보내기 제한을 초과합니다. 대국을 더 적게 선택한 후 다시 시도하세요.';
 }

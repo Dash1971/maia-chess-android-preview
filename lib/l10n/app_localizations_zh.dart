@@ -1594,5 +1594,5 @@ class AppLocalizationsZh extends AppLocalizations {
   String get recentExportFailed => '无法导出所选对局。已保存的对局未被更改。';
 
   @override
-  String get recentExportTooLarge => '所选对局超出 PGN 文件的 2 MB 上限。请选择更少的对局。';
+  String get recentExportTooLarge => '所选对局超出 5 MB 的导出上限。请选择更少的对局后重试。';
 }

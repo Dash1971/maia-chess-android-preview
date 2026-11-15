@@ -1757,5 +1757,5 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get recentExportTooLarge =>
-      'Выбранные партии превышают ограничение PGN в 2 МБ. Выберите меньше партий.';
+      'Выбранные партии превышают ограничение экспорта в 5 МБ. Выберите меньше партий и повторите попытку.';
 }

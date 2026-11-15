@@ -38,10 +38,11 @@ class PgnExportTooLarge implements Exception {
   const PgnExportTooLarge();
 }
 
-/// Match the existing Android PGN save/share limit, including UTF-8 and separators.
+/// Match Android's 5 MiB PGN export limit, including UTF-8 and separators.
+/// Imports and the individual-game parser retain their separate 2 MiB limit.
 /// Read and validate one game at a time; only the bounded combined PGN is retained.
 class RecentGamesPgn {
-  static const maxBytes = 2 * 1024 * 1024;
+  static const maxBytes = 5 * 1024 * 1024;
 
   static Future<String> export(
     List<String> orderedIds,

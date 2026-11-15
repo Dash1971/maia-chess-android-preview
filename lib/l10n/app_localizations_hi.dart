@@ -1733,5 +1733,5 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get recentExportTooLarge =>
-      'चुने गए खेल PGN की 2 MB सीमा से अधिक हैं। कम खेल चुनें।';
+      'चुने गए खेल 5 MB की निर्यात सीमा से अधिक हैं। कम खेल चुनें और फिर से प्रयास करें।';
 }

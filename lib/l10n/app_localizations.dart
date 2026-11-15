@@ -3010,10 +3010,10 @@ abstract class AppLocalizations {
   /// **'Could not export the selected games. Saved games were not changed.'**
   String get recentExportFailed;
 
-  /// Recent Games export exceeds the existing Android 2 MiB UTF-8 PGN limit. The UI uses the familiar 2 MB label; select fewer games to retry.
+  /// Recent Games export exceeds the 5 MiB UTF-8 limit, shown as 5 MB. Nothing is saved/shared; keep selection and ask the user to select fewer games and retry. Import remains limited to 2 MiB.
   ///
   /// In en, this message translates to:
-  /// **'This selection exceeds the 2 MB PGN limit. Export fewer games.'**
+  /// **'Selected games exceed the 5 MB export limit. Select fewer games and try again.'**
   String get recentExportTooLarge;
 }
 

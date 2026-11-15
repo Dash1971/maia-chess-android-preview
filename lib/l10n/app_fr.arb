@@ -482,5 +482,5 @@
   "imageAdjustEdges": "Ajuster les bords",
   "recentExportGames": "Exporter les parties",
   "recentExportFailed": "Impossible d’exporter les parties sélectionnées. Les parties enregistrées n’ont pas été modifiées.",
-  "recentExportTooLarge": "Cette sélection dépasse la limite de 2 Mo du fichier PGN. Sélectionnez moins de parties."
+  "recentExportTooLarge": "Les parties sélectionnées dépassent la limite d’exportation de 5 Mo. Sélectionnez moins de parties et réessayez."
 }

@@ -482,5 +482,5 @@
   "imageAdjustEdges": "Ajustar bordas",
   "recentExportGames": "Exportar partidas",
   "recentExportFailed": "Não foi possível exportar as partidas selecionadas. As partidas salvas não foram alteradas.",
-  "recentExportTooLarge": "Esta seleção ultrapassa o limite de 2 MB do PGN. Selecione menos partidas."
+  "recentExportTooLarge": "As partidas selecionadas ultrapassam o limite de exportação de 5 MB. Selecione menos partidas e tente novamente."
 }

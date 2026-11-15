@@ -35,10 +35,22 @@ unfinished `*` games and supported custom starting positions use the same path.
 - Assembly reads/validates one game at a time, with parsing in a background
   isolate. Only the combined bounded PGN is retained by the export builder.
   Recent Games' existing list-loading behavior is unchanged.
-- The existing Android document/share limit remains **2 MiB (2,097,152 UTF-8
-  bytes)**, including inter-game separators. The user-facing message calls this
-  2 MB and suggests selecting fewer games. There is no unlimited-size promise or
-  truncation. Per-game parser limits remain unchanged.
+- Save/share exports allow **5 MiB (5,242,880 UTF-8 bytes)**, including inter-game
+  separators. This is a byte limit, not a game-count limit. The UI calls it
+  **5 MB**. Imports, including Open with/shared attachments, and the individual
+  game parser retain their separate **2 MiB** limits; a 5 MB multi-game export
+  is intended for external tools, not whole-collection reimport into Mobile Maia.
+- Preparation stops as soon as adding a game would exceed the export limit,
+  before opening Android's save/share UI. No partial file is saved/shared and
+  there is no silent omission or automatic splitting. The message is:
+  **Selected games exceed the 5 MB export limit. Select fewer games and try again.**
+  Selection is retained so the user can deselect games and retry. A 10,000-game
+  selection follows this same byte-based check; there is no fixed promise of
+  how many games fit. Games with clocks, comments and variations take more space.
+- The 5 MiB export cap replaces the inherited 2 MiB export cap as a bounded,
+  small change. Export still assembles a string in memory and creates temporary
+  encoding/channel copies, so peak memory exceeds the file size. Streaming and
+  automatic multi-file batches are outside this change.
 - An empty selection disables the action. Repeated/stale callbacks cannot start
   a second export or alter the selection while it is running. Other actions and
   navigation are blocked while preparing the file or awaiting the picker.
@@ -46,17 +58,21 @@ unfinished `*` games and supported custom starting positions use the same path.
   shows no success message. A failed export leaves the screen usable for retry.
 
 Android continues to use the existing document picker and FileProvider chooser,
-temporary URI grants and MIME type. There is no new native code, permission,
-network dependency, model or automatic upload.
+temporary URI grants and MIME type. Native size guards distinguish 5 MiB
+exports from 2 MiB imports. There is no new permission, network dependency,
+model or automatic upload.
 
 ## Verification
 
 `test/recent_games_pgn_export_test.dart` covers one/multiple/all selection,
 display ordering, round-trip metadata/annotations/variations, custom FEN,
 unfinished games, missing/invalid/multiple-game records, UTF-8 and aggregate byte
-limits, a 200-game collection, read-only repository files, save/share method
+limits (including exactly 5 MiB and one byte over), a 200-game collection,
+an oversized 10,000-game selection, unchanged 2 MiB import rejection,
+read-only repository files, save/share method
 dispatch, cancellation, native failure/retry and stale callbacks. All ten
-languages exercise the selection/export menu at 320 px with 200% text.
+languages exercise the selection/export menu and size-error message at 320 px
+with 200% text.
 
 Existing Recent Games failure/recovery, repository and PGN import tests remain
 in place. Host method-channel tests cover the Dart save/share/cancel contract;

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dartchess/dartchess.dart' as dc;
@@ -57,6 +58,7 @@ Future<void> waitForExport(WidgetTester tester) async {
 
 Widget page({
   Future<String?> Function(String)? read,
+  List<RecentSession>? records,
   String locale = 'en',
   double scale = 1,
 }) => MaterialApp(
@@ -68,7 +70,7 @@ Widget page({
     child: child!,
   ),
   home: RecentGamesPage(
-    loadGames: () async => games,
+    loadGames: () async => records ?? games,
     readPgnForExport: read ?? (id) async => sources[id],
   ),
 );
@@ -87,6 +89,19 @@ Future<void> export(WidgetTester tester, {bool share = false}) async {
   await tester.pumpAndSettle();
   await tester.tap(find.text(share ? 'Share PGN' : 'Save PGN file'));
   await waitForExport(tester);
+}
+
+// Size the serialized record, including headers/comments and the separator,
+// rather than assuming source length equals the final UTF-8 export size.
+Future<String> gameWithExportSize(int bytes) async {
+  const template = '[Event "Sized"]\n\n{x} *';
+  final baseline = await RecentGamesPgn.export([
+    'sample',
+  ], (_) async => template);
+  return template.replaceFirst(
+    '{x}',
+    '{${'x' * (bytes - utf8.encode(baseline).length + 1)}}',
+  );
 }
 
 void main() {
@@ -174,16 +189,46 @@ void main() {
       throwsA(isA<PgnExportTooLarge>()),
     );
     final reads = <String>[];
+    // Each game remains below the unchanged 2 MiB individual parser limit.
     final large =
-        '[Event "Large"]\n\n{${'x' * (RecentGamesPgn.maxBytes ~/ 2 + 100)}} *';
+        '[Event "Large"]\n\n{${'x' * (RecentGamesPgn.maxBytes ~/ 3 + 100)}} *';
     await expectLater(
-      RecentGamesPgn.export(['a', 'b', 'c'], (id) async {
+      RecentGamesPgn.export(['a', 'b', 'c', 'd'], (id) async {
         reads.add(id);
         return large;
       }),
       throwsA(isA<PgnExportTooLarge>()),
     );
-    expect(reads, ['a', 'b']);
+    expect(reads, ['a', 'b', 'c']);
+  });
+
+  test(
+    'combined export accepts exactly 5 MiB and rejects one byte over',
+    () async {
+      const oneMiB = 1024 * 1024;
+      final game = await gameWithExportSize(oneMiB);
+      final ids = List.generate(5, (i) => '$i');
+      for (final delta in [-1, 0, 1]) {
+        final last = await gameWithExportSize(oneMiB + delta);
+        final result = RecentGamesPgn.export(
+          ids,
+          (id) async => id == '4' ? last : game,
+        );
+        if (delta > 0) {
+          await expectLater(result, throwsA(isA<PgnExportTooLarge>()));
+        } else {
+          expect(utf8.encode(await result).length, 5 * oneMiB + delta);
+        }
+      }
+    },
+  );
+
+  test('single-game imports still reject more than 2 MiB of UTF-8', () {
+    final oversized = '{${'x' * (2 * 1024 * 1024)}} *';
+    expect(() => AnalysisSession.fromPgn(oversized), throwsFormatException);
+    final multibyte = '{${'😀' * (2 * 1024 * 1024 ~/ 4)}} *';
+    expect(multibyte.length, lessThan(2 * 1024 * 1024));
+    expect(() => AnalysisSession.fromPgn(multibyte), throwsFormatException);
   });
 
   test(
@@ -260,6 +305,70 @@ void main() {
     expect(find.text('2 selected'), findsOneWidget);
     expect(find.text('PGN saved'), findsOneWidget);
   });
+
+  testWidgets(
+    'oversized 10000-game selection saves nothing, retains selection and permits retry',
+    (tester) async {
+      const message =
+          'Selected games exceed the 5 MB export limit. Select fewer games and try again.';
+      final large = (await tester.runAsync(
+        () => gameWithExportSize(1024 * 1024),
+      ))!;
+      final records = [
+        for (var i = 0; i < 10000; i++)
+          RecentSession('game-$i', DateTime.utc(2026, 11, 13), {
+            'type': 'game',
+            'pgn': incomplete,
+          }),
+      ];
+      final calls = <MethodCall>[];
+      final reads = <String>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(maiaEngineChannel, (call) async {
+            calls.add(call);
+            return true;
+          });
+      await tester.pumpWidget(
+        page(
+          records: records,
+          read: (id) async {
+            reads.add(id);
+            return large;
+          },
+        ),
+      );
+      await tester.pumpAndSettle();
+      await select(tester, ['game-0']);
+      await tester.tap(find.byKey(const ValueKey('select-all-games')));
+      await tester.pumpAndSettle();
+      final strings = AppLocalizations.of(
+        tester.element(find.byType(RecentGamesPage)),
+      )!;
+      expect(find.text(strings.recentSelectedCount(10000)), findsOneWidget);
+      for (final share in [false, true]) {
+        reads.clear();
+        await export(tester, share: share);
+        expect(reads, List.generate(6, (i) => 'game-$i'));
+        expect(
+          calls.where(
+            (c) => c.method == 'sharePgn' || c.method == 'savePgnFile',
+          ),
+          isEmpty,
+        );
+        expect(find.text(message), findsOneWidget);
+        expect(find.text(strings.recentSelectedCount(10000)), findsOneWidget);
+      }
+      await tester.tap(find.byKey(const ValueKey('select-all-games')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('recent-game-game-0')));
+      await tester.pumpAndSettle();
+      await export(tester);
+      expect(calls.where((c) => c.method == 'savePgnFile').length, 1);
+      expect(find.text('1 selected'), findsOneWidget);
+      expect(records.every((r) => r.data['pgn'] == incomplete), isTrue);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets(
     'Select all shares all games through the existing native chooser',
@@ -411,26 +520,37 @@ void main() {
     'hi',
     'pt',
   ]) {
-    testWidgets('$locale selection and export menu fit 320px at 200% text', (
-      tester,
-    ) async {
-      tester.view.physicalSize = const Size(320, 640);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      await tester.pumpWidget(page(locale: locale, scale: 2));
-      await tester.pumpAndSettle();
-      await select(tester, ['one']);
-      final target = find.byKey(const ValueKey('export-selected-games'));
-      expect(target.hitTestable(), findsOneWidget);
-      await tester.tap(target);
-      await tester.pumpAndSettle();
-      final strings = AppLocalizations.of(
-        tester.element(find.byType(RecentGamesPage)),
-      )!;
-      expect(find.text(strings.savePgnFile).hitTestable(), findsOneWidget);
-      expect(find.text(strings.sharePgn).hitTestable(), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
+    testWidgets(
+      '$locale selection, export menu and size error fit 320px at 200% text',
+      (tester) async {
+        tester.view.physicalSize = const Size(320, 640);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        await tester.pumpWidget(
+          page(
+            locale: locale,
+            scale: 2,
+            read: (_) async => throw const PgnExportTooLarge(),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await select(tester, ['one']);
+        final target = find.byKey(const ValueKey('export-selected-games'));
+        expect(target.hitTestable(), findsOneWidget);
+        await tester.tap(target);
+        await tester.pumpAndSettle();
+        final strings = AppLocalizations.of(
+          tester.element(find.byType(RecentGamesPage)),
+        )!;
+        expect(find.text(strings.savePgnFile).hitTestable(), findsOneWidget);
+        expect(find.text(strings.sharePgn).hitTestable(), findsOneWidget);
+        await tester.tap(find.text(strings.savePgnFile));
+        await waitForExport(tester);
+        expect(find.text(strings.recentExportTooLarge), findsOneWidget);
+        expect(find.text(strings.recentSelectedCount(1)), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
   }
 }

@@ -35,6 +35,31 @@ The latest Preview release is [2.6.0-beta.2](https://github.com/Dash1971/maia-ch
 
 See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
 
+## Feature guide
+
+### Recent games and PGN files — next release
+
+Bulk export is implemented in [draft PR #226](https://github.com/Dash1971/maia-chess-android-preview/pull/226)
+and is not in the published beta.2 APK. Long-press a Recent games entry or choose
+**Select games**, select the games to export (or use **Select all**), then choose
+**Export games → Save PGN file** or **Share PGN**. The result is one `.pgn` file,
+in the displayed newest-first order, containing each selected game's supported
+headers, result, moves, comments, clocks and variations.
+
+Exports allow up to **5 MB** (5 MiB / 5,242,880 UTF-8 bytes, including separators).
+The number of games that fit depends on their length and annotations. If the
+selection exceeds the limit, export stops before opening the save/share chooser
+and asks you to select fewer games. It does not save a partial collection,
+silently omit games, or split the export automatically. Your selection and saved
+games stay unchanged; deselect some games and try again. Missing or unreadable
+selected games also stop the whole export.
+
+PGN **imports remain limited to 2 MB** (2 MiB). Import opens one game with its
+supported annotations and variations; when a document contains multiple games,
+the existing importer uses the first game. Bulk export is for saving or sharing
+games with external tools, not a new bulk-import feature. Everything works
+offline, with no automatic upload. See [ordering, limits and verification](docs/RECENT_GAMES_PGN_EXPORT.md).
+
 ## Roadmap
 
 **Next release target: export selected games as one PGN**

@@ -1743,5 +1743,5 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get recentExportTooLarge =>
-      'Esta seleção ultrapassa o limite de 2 MB do PGN. Selecione menos partidas.';
+      'As partidas selecionadas ultrapassam o limite de exportação de 5 MB. Selecione menos partidas e tente novamente.';
 }

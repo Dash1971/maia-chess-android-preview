@@ -1618,5 +1618,5 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get recentExportTooLarge =>
-      '選択した対局はPGNの2 MBの上限を超えています。対局数を減らして選択してください。';
+      '選択した対局は5 MBのエクスポート上限を超えています。対局数を減らして、もう一度お試しください。';
 }
