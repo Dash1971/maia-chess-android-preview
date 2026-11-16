@@ -122,3 +122,12 @@ are unchanged.
 ## Published Android verification
 
 The production-signed beta.4 APK was tested on phone, tablet, constrained and large-text emulator profiles, including system insets, rotation, tap/drag/promotion/premoves, Analysis controls/graph, Settings persistence and compact-history opening/selection/PGN export. See the release evidence for screenshots, geometry, source/APK hashes, initial System UI ANR diagnostics and the successful unchanged-source native rerun. These are emulator results; comfortable finger input and tablet feedback remain open under #29.
+
+## Preview beta.7 Android qualification
+
+[Published beta.7](releases/preview-2.6.0-beta.7.md) delivers #242/#243 and
+records actual production-signed ARM64 APK checks for continuous Analysis
+scrolling, graph/navigation, tablet/resized/large-text/short-window layouts
+and Recent games columns/selection/delete/export flows. Earlier renders remain
+host-test illustrations. Physical touch/tablet and actual OS split-screen
+acceptance under #29 remain separate; Stable promotion is separate.
