@@ -79,7 +79,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('result dash is centered, muted and accessible with equal gaps', (
+  testWidgets('Incomplete fits one line, centered and muted with equal gaps', (
     tester,
   ) async {
     await show(tester);
@@ -89,7 +89,7 @@ void main() {
       of: row,
       matching: find.text('Maia 1600 — Player'),
     );
-    final result = find.descendant(of: row, matching: find.text('—'));
+    final result = find.descendant(of: row, matching: find.text('Incomplete'));
     final text = tester.widget<Text>(result);
     expect(text.textAlign, TextAlign.center);
     expect(text.semanticsLabel, 'Incomplete');
@@ -102,7 +102,7 @@ void main() {
     );
     expect(paragraph.didExceedMaxLines, isFalse);
     final boxes = paragraph.getBoxesForSelection(
-      const TextSelection(baseOffset: 0, extentOffset: 1),
+      const TextSelection(baseOffset: 0, extentOffset: 10),
     );
     expect(boxes, hasLength(1));
     expect(boxes.single.right, lessThanOrEqualTo(tester.getSize(result).width));
@@ -177,12 +177,15 @@ void main() {
       await show(tester, width: 393);
       expect(find.byKey(const ValueKey('recent-table-header')), findsOneWidget);
       final row = find.byKey(const ValueKey('recent-game-row-4'));
-      final result = find.descendant(of: row, matching: find.text('—'));
+      final result = find.descendant(
+        of: row,
+        matching: find.text('Incomplete'),
+      );
       final paragraph = tester.renderObject<RenderParagraph>(
         find.descendant(of: result, matching: find.byType(RichText)),
       );
       final boxes = paragraph.getBoxesForSelection(
-        const TextSelection(baseOffset: 0, extentOffset: 1),
+        const TextSelection(baseOffset: 0, extentOffset: 10),
       );
       expect(boxes, hasLength(1));
       expect(

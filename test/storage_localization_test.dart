@@ -62,8 +62,10 @@ void main() {
           tester.element(find.byType(RecentGamesPage)),
         )!;
         expect(find.text(strings.recentMaiaPlayer('500')), findsNWidgets(2));
-        expect(find.text('—'), findsNWidgets(2));
-        for (final label in tester.widgetList<Text>(find.text('—'))) {
+        expect(find.text(strings.recentIncomplete), findsNWidgets(2));
+        for (final label in tester.widgetList<Text>(
+          find.text(strings.recentIncomplete),
+        )) {
           expect(label.semanticsLabel, strings.recentIncomplete);
           expect(label.textAlign, TextAlign.center);
         }

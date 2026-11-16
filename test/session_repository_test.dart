@@ -304,7 +304,7 @@ void main() {
 
       expect(find.text('Player — Maia 500'), findsOneWidget);
       expect(find.text('Player — Maia 1500'), findsOneWidget);
-      expect(find.text('—'), findsOneWidget);
+      expect(find.text('Incomplete'), findsOneWidget);
       expect(find.text('2026/09/05'), findsOneWidget);
       expect(find.text('1-0'), findsOneWidget);
       expect(find.text('2026/09/04'), findsOneWidget);

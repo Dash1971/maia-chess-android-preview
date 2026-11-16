@@ -226,7 +226,7 @@ void main() {
           final resultWidget = tester.widget<Text>(
             find.descendant(
               of: find.byKey(ValueKey('recent-game-${game.id}')),
-              matching: find.text(game.isIncomplete ? '—' : result),
+              matching: find.text(result),
             ),
           );
           expect(
