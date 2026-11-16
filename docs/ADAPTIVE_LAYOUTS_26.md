@@ -41,12 +41,23 @@ the Dev-only diagnostics gate is unchanged. Narrow windows retain the existing
 scrolling settings page.
 
 Recent games uses Date, Game, and Result columns with a 52-logical-pixel minimum
-row height. Rows can grow for their content. Large text or constrained widths
-fall back to the original two-line list. A tap opens the game directly;
-long-press selection, checkboxes, individual/bulk deletion, and selected PGN
-export retain their existing behavior. Dates still describe the original played
-day, and result colors still describe the saved player's outcome. Import and
-export limits are unchanged.
+row height. Date and result widths are measured with the current font, text
+scale, and localized labels so results fit on one line. Result values and their
+header are centered. Unfinished games display the full localized Incomplete
+label in a muted color, with its width reserved to avoid wrapping in the table.
+Player names are centered between those columns, with matching minimum gaps.
+Large text or constrained widths use the two-line list instead of squeezing
+columns. Dates display the original played day as `yyyy/MM/dd`; an unknown date
+keeps its localized label. Date formatting does not change the stored date or
+game order, and result colors still describe the saved player's outcome.
+
+A tap opens the game directly. Long-press or the Select games menu enables
+checkbox selection; deletion and PGN export use the selection toolbar. There
+are no per-row delete buttons. Android Back, including a committed predictive
+gesture, cancels selection first; the next Back returns Home. Back remains
+blocked during an open/delete/export operation. Returning from a saved game
+retains the Recent games scroll position. Import and export limits are
+unchanged.
 
 ## Reviewed designs
 

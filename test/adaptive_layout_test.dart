@@ -248,7 +248,12 @@ void main() {
   testWidgets('portrait table keeps compact rows and direct tap / long press', (
     tester,
   ) async {
-    size(tester, const Size(360, 720));
+    // Ahem's wide test glyphs need extra room for measured columns. The
+    // real-font phone-width regression lives in recent_games_layout_test.
+    size(
+      tester,
+      Size(Platform.environment['MAIA_FONT_DIR'] == null ? 480 : 360, 800),
+    );
     final records = List.generate(
       12,
       (i) => RecentSession('row-$i', DateTime.utc(2026, 11, 15), {
