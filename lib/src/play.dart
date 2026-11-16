@@ -204,6 +204,9 @@ class _GamePageState extends State<GamePage>
   bool _reviewOpen = false;
   List<RecordedVariation>? _reviewVariationSnapshot;
   bool _settingsOpen = false;
+  // Only retain the browsing position until this game returns Home.
+  PageStorageBucket? _recentGamesPosition;
+  bool _leavingGame = false;
   final _adaptiveBoardKey = GlobalKey();
   bool _playEloChangedSinceLoad = false;
   bool _screenWakeLockEnabled = false;
@@ -1718,6 +1721,7 @@ class _GamePageState extends State<GamePage>
     if (!mounted) return;
     _reviewOpen = false;
     _clockTimer?.cancel();
+    _recentGamesPosition = null;
     setState(() {
       _started = false;
       _settingsOpen = false;
@@ -1741,12 +1745,19 @@ class _GamePageState extends State<GamePage>
     );
   }
 
-  Future<void> _showRecentGames() async {
+  Future<void> _showRecentGames({PageStorageBucket? position}) async {
     if (_startingGame) return;
+    final bucket = position ?? PageStorageBucket();
     final selected = await Navigator.of(context).push<Map<String, dynamic>>(
-      MaterialPageRoute(builder: (_) => const RecentGamesPage()),
+      MaterialPageRoute(
+        builder: (_) =>
+            PageStorage(bucket: bucket, child: const RecentGamesPage()),
+      ),
     );
-    if (selected != null && mounted) await _restoreActiveSession(selected);
+    if (selected != null && mounted) {
+      await _restoreActiveSession(selected);
+      if (mounted && _started) _recentGamesPosition = bucket;
+    }
   }
 
   Future<void> _openAnalysisBoard({String? initialFen}) async {
@@ -3654,6 +3665,7 @@ class _GamePageState extends State<GamePage>
       _customIncrement = _preferredCustomIncrement;
       _status = _PlayMessage.chooseSettings;
     });
+    _recentGamesPosition = null;
     _syncGameBoard(animate: false, resetPremove: true);
   }
 
@@ -3677,15 +3689,27 @@ class _GamePageState extends State<GamePage>
       ) ??
       false;
 
-  Future<void> _requestHome() async {
-    if (_startingGame) return;
-    if (!_gameFinished) {
-      final confirmed = await _confirmEraseCurrentGame();
-      if (!confirmed || !mounted) return;
+  Future<void> _requestHome({bool returnToRecentGames = false}) async {
+    if (_startingGame || _leavingGame) return;
+    _leavingGame = true;
+    try {
+      if (!_gameFinished) {
+        final confirmed = await _confirmEraseCurrentGame();
+        if (!confirmed || !mounted) return;
+      }
+      if (!mounted) return;
+      final recentPosition = returnToRecentGames ? _recentGamesPosition : null;
+      await _goHome();
+      if (!mounted) return;
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      if (recentPosition != null) {
+        unawaited(_showRecentGames(position: recentPosition));
+      }
+    } catch (error, stackTrace) {
+      _handleStorageFailure(error, stackTrace);
+    } finally {
+      _leavingGame = false;
     }
-    if (!mounted) return;
-    await _goHome();
-    if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   final _boardReset = BoardResetConfirmation();
@@ -3888,6 +3912,7 @@ class _GamePageState extends State<GamePage>
         _resultDialogShown = false;
         _viewedPly = null;
         _started = false;
+        _recentGamesPosition = null;
         _engineThinking = false;
         _drawOfferEvaluating = false;
         _lastDrawOfferFen = null;
@@ -4751,7 +4776,7 @@ class _GamePageState extends State<GamePage>
         if (showingSettings) {
           setState(() => _settingsOpen = false);
         } else if (_started) {
-          await _requestHome();
+          await _requestHome(returnToRecentGames: true);
         }
       },
       child: page,

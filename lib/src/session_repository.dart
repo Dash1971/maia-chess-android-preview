@@ -842,6 +842,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
               final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
               if (constraints.maxWidth / scale < 300) {
                 return ListView.builder(
+                  key: const PageStorageKey('recent-games-list'),
                   itemCount: games.length,
                   itemBuilder: (context, index) {
                     final game = games[index];
@@ -934,6 +935,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                       const Divider(height: 1),
                       Expanded(
                         child: ListView.builder(
+                          key: const PageStorageKey('recent-games-list'),
                           itemCount: games.length,
                           itemBuilder: (context, index) {
                             final game = games[index];
