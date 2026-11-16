@@ -1,21 +1,32 @@
 # Build channels and promotion status
 
-> **Published 15 November 2026:** Preview beta.3 withdraws camera/image recognition and adds selected Recent Games PGN export. Dev alpha.2 still contains the earlier prototype; historical releases and qualification records remain unchanged.
+> **Published 16 November 2026:** Preview beta.5 fixes Android Back from game screens. Preview remains the 79M app with adaptive layouts and PGN export; camera/image recognition is withdrawn. Stable and Dev releases are unchanged.
 
-Updated 2026-11-15. Release pages are authoritative for published artifacts;
+Updated 2026-11-16. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.5.1](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1), code 83 | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.4](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.4), code 2604 | `com.dash1971.maia_chess.preview`, 79M | Adaptive gameplay/Analysis/Home/Settings and compact Recent Games; selected PGN export. Grand Kingdom experimental with the owner’s hardware-drift/calibration explanation; DGT Dev-only. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.5](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.5), code 2605 | `com.dash1971.maia_chess.preview`, 79M | Android Back-to-Home fix; adaptive layouts and selected PGN export. Camera/image recognition withdrawn. Grand Kingdom experimental with owner hardware explanation; DGT Dev-only. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev) | Published 2.6.0-alpha.2-dev, code 2602 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Automatic local Dev diagnostics, assisted Maia promotion and image/camera import. Grand Kingdom experimental; the owner’s later feedback attributes earlier capture symptoms to hardware drift/calibration. |
 
 The three packages install side by side. Obtainium users should select the
 intended repository and enable prereleases for Preview/Dev. Installing Preview
 does not upgrade Dev or transfer its saved games/preferences. Existing Preview
 installations update in place using the established Preview certificate.
+
+## Preview 2.6.0-beta.5 publication
+
+[Published beta.5](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.5) delivers #235 through release #236. Android Back from
+unfinished games uses the existing confirmation/save path; completed games
+return Home after the result dialog is dismissed. Settings/Recent-list Back and
+Home exit retain their behavior. [Qualification and cleanup](releases/preview-2.6.0-beta.5.md)
+record exact-source CI, matching Linux builds, production signing/reconstruction,
+full ARM64/79M native, signed beta.4 upgrade and actual system-button/Android
+edge-gesture checks. Stable issue77 stays open for reporter/device confirmation;
+Stable companion78 remains draft/unmerged. Stable and Dev are unchanged.
 
 ## Preview 2.6.0-beta.4 publication
 

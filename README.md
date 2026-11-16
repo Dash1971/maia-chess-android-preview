@@ -30,7 +30,7 @@ and feature requests.
 
 ## Current Preview status
 
-The latest Preview release is [2.6.0-beta.4](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.4). Landscape gameplay and Analysis give the board more space, wide Home/Settings use columns, and Recent games has a compact Date / Game / Result table. Selected games can be exported as one PGN. Preview uses the 79M model. Grand Kingdom remains experimental; [the owner attributes the earlier capture symptoms to hardware drift/calibration](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) and reports good overall operation. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.4.md) record the tested source and verified release. Physical touch/tablet feedback remains tracked under #29. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
+The latest Preview release is [2.6.0-beta.5](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.5). Android Back from an unfinished game opens the existing leave confirmation and saves to Recent games when you continue Home; after a completed game, Back dismisses the result dialog first, then returns Home. Landscape gameplay/Analysis, column Home/Settings, compact Recent games and selected PGN export remain available. Camera/image recognition remains withdrawn. Preview uses the 79M model. Grand Kingdom remains experimental; [the owner attributes earlier capture symptoms to hardware drift/calibration](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) and reports good overall operation. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.5.md) record the verified release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
 
 See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
 
@@ -59,6 +59,14 @@ games with external tools, not a new bulk-import feature. Everything works
 offline, with no automatic upload. See [ordering, limits and verification](docs/RECENT_GAMES_PGN_EXPORT.md).
 
 ## Roadmap
+
+**Android Back fix: available in Preview beta.5**
+
+System Back and Android edge gestures now follow the existing game-to-Home
+confirmation/save path. Settings and the Recent games list retain their normal
+Back behavior; Home still exits. [Stable #77](https://github.com/Dash1971/maia-chess-android/issues/77)
+remains open for reporter/device feedback on the game fix and unconfirmed
+Settings/list paths. [Stable companion #78](https://github.com/Dash1971/maia-chess-android/pull/78) remains draft and unmerged.
 
 **Delivered in Preview: export selected games as one PGN**
 
