@@ -16,9 +16,15 @@ to the former 81-pixel fallback.
 Analysis uses the same available-height principle, including the bottom safe
 inset, and removes the 560-pixel board cap in wide windows. Its existing engine
 lines, Maia probabilities, opening name, moves/graph tabs, evaluation bar, and
-navigation remain available. The toolbar moves beside the board; the engine
-header can scroll while the moves/graph tabs and move navigation stay visible. Analysis, move
-classification, engine inference, and saved-data formats are unchanged.
+navigation remain available. The toolbar moves beside the board. The current
+2.6 source uses one continuous right-hand scroll surface for the opening,
+engine output, tabs, and active moves/graph content, with move navigation fixed
+below it when space permits. Squarer tablets and resized windows reserve a
+readable analysis-pane width rather than maximizing the board at its expense.
+[Phone and tablet renders and scroll verification](ANALYSIS_SCROLL_26.md)
+describe this follow-up; the beta.4 release evidence above covers the original
+adaptive layout. Analysis, classification, inference, and saved-data formats
+are unchanged.
 
 Home uses a setup column and a second column for Analysis Board, Recent games,
 and the content-sized Settings button. Short landscape setup cards reduce
