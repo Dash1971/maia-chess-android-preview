@@ -164,6 +164,12 @@ Widget _recentResultSubtitle(
   );
 }
 
+String _recentGameDate(BuildContext context, DateTime? date) => date == null
+    ? l10n(context).dateUnknown
+    : '${date.year.toString().padLeft(4, '0')}/'
+          '${date.month.toString().padLeft(2, '0')}/'
+          '${date.day.toString().padLeft(2, '0')}';
+
 /// App-private, transactional files. Each successful write retains the previous
 /// readable checkpoint. Archived games are separate files, not rewritten per move.
 class SessionRepository {
@@ -572,6 +578,14 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
     });
   }
 
+  void _cancelSelection() {
+    if (_busy) return;
+    setState(() {
+      _selecting = false;
+      _selected.clear();
+    });
+  }
+
   Future<void> _exportSelected({required bool share}) async {
     if (_busy || _selected.isEmpty) return;
     // Selection order is irrelevant: use the exact displayed Recent Games order.
@@ -739,13 +753,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
         leading: _selecting
             ? IconButton(
                 tooltip: l10n(context).recentCancelSelection,
-                onPressed: () {
-                  if (_busy) return;
-                  setState(() {
-                    _selecting = false;
-                    _selected.clear();
-                  });
-                },
+                onPressed: _cancelSelection,
                 icon: const Icon(Icons.close),
               )
             : null,
@@ -839,8 +847,47 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
           }
           return LayoutBuilder(
             builder: (context, constraints) {
-              final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
-              if (constraints.maxWidth / scale < 300) {
+              final strings = l10n(context);
+              final theme = Theme.of(context).textTheme;
+              final dateStyle = theme.bodySmall!.copyWith(
+                fontFeatures: const [ui.FontFeature.tabularFigures()],
+              );
+              final resultStyle = theme.bodyMedium!;
+              double textWidth(String text, TextStyle style) {
+                final painter = TextPainter(
+                  text: TextSpan(text: text, style: style),
+                  textDirection: Directionality.of(context),
+                  textScaler: MediaQuery.textScalerOf(context),
+                  maxLines: 1,
+                )..layout();
+                final width = painter.width.ceilToDouble() + 2;
+                painter.dispose();
+                return width;
+              }
+
+              final dateWidth = [
+                textWidth(strings.recentDateColumn, theme.labelMedium!),
+                textWidth('8888/88/88', dateStyle),
+                if (games.any((game) => game.history.playedDate == null))
+                  textWidth(strings.dateUnknown, dateStyle),
+              ].reduce(max);
+              final resultWidth = [
+                textWidth(strings.recentResultColumn, theme.labelMedium!),
+                for (final label in {
+                  strings.recentIncomplete,
+                  strings.recentCompleted,
+                  '1/2-1/2',
+                })
+                  textWidth(label, resultStyle),
+              ].reduce(max);
+              final minimumGameWidth = MediaQuery.textScalerOf(context)
+                  .scale(96);
+              if (min(constraints.maxWidth, 1100) <
+                  dateWidth +
+                      resultWidth +
+                      minimumGameWidth +
+                      56 +
+                      (_selecting ? 48 : 0)) {
                 return ListView.builder(
                   key: const PageStorageKey('recent-games-list'),
                   itemCount: games.length,
@@ -860,10 +907,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                       subtitle: _recentResultSubtitle(
                         context,
                         game,
-                        date == null
-                            ? l10n(context).dateUnknown
-                            : MaterialLocalizations.of(context)
-                                  .formatCompactDate(date),
+                        _recentGameDate(context, date),
                       ),
                       onTap: () {
                         if (_busy) return;
@@ -874,20 +918,10 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                         unawaited(_openGame(game));
                       },
                       onLongPress: () => _toggleSelection(game.id),
-                      trailing: _selecting
-                          ? null
-                          : IconButton(
-                              icon: const Icon(Icons.delete_outline),
-                              tooltip: l10n(context).recentDeleteOne,
-                              onPressed: () => _deleteGames([game]),
-                            ),
                     );
                   },
                 );
               }
-              final dateWidth = 72.0 * scale;
-              final resultWidth = 72.0 * scale;
-              final strings = l10n(context);
               return Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 1100),
@@ -896,9 +930,9 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                       Padding(
                         key: const ValueKey('recent-table-header'),
                         padding: const EdgeInsetsDirectional.fromSTEB(
+                          12,
                           8,
-                          8,
-                          0,
+                          12,
                           8,
                         ),
                         child: DefaultTextStyle(
@@ -913,13 +947,17 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                                   child: Text(strings.recentDateColumn),
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 16),
                               Expanded(
                                 child: Semantics(
                                   header: true,
-                                  child: Text(strings.recentGameColumn),
+                                  child: Text(
+                                    strings.recentGameColumn,
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
+                              const SizedBox(width: 16),
                               SizedBox(
                                 width: resultWidth,
                                 child: Semantics(
@@ -927,7 +965,6 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                                   child: Text(strings.recentResultColumn),
                                 ),
                               ),
-                              if (!_selecting) const SizedBox(width: 56),
                             ],
                           ),
                         ),
@@ -940,10 +977,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                           itemBuilder: (context, index) {
                             final game = games[index];
                             final played = game.history.playedDate;
-                            final date = played == null
-                                ? strings.dateUnknown
-                                : MaterialLocalizations.of(context)
-                                      .formatCompactDate(played);
+                            final date = _recentGameDate(context, played);
                             final result = game.localizedResult(context);
                             final description = switch (game.outcome) {
                               RecentGameOutcome.win => strings.recentWinResult(
@@ -962,10 +996,10 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                                   key: ValueKey('recent-game-${game.id}'),
                                   minTileHeight: 52,
                                   minVerticalPadding: 4,
-                                  horizontalTitleGap: 8,
+                                  horizontalTitleGap: 16,
                                   contentPadding:
-                                      const EdgeInsetsDirectional.only(
-                                        start: 8,
+                                      const EdgeInsetsDirectional.symmetric(
+                                        horizontal: 12,
                                       ),
                                   selected: _selected.contains(game.id),
                                   leading: SizedBox(
@@ -986,9 +1020,9 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                                         Expanded(
                                           child: Text(
                                             date,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall,
+                                            maxLines: 1,
+                                            softWrap: false,
+                                            style: dateStyle,
                                           ),
                                         ),
                                       ],
@@ -999,6 +1033,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                                       Expanded(
                                         child: Text(
                                           game.localizedTitle(context),
+                                          textAlign: TextAlign.center,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: Theme.of(context)
@@ -1006,11 +1041,13 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                                               .bodyMedium,
                                         ),
                                       ),
-                                      const SizedBox(width: 8),
+                                      const SizedBox(width: 16),
                                       SizedBox(
                                         width: resultWidth,
                                         child: Text(
                                           result,
+                                          maxLines: 1,
+                                          softWrap: false,
                                           semanticsLabel: description,
                                           style: Theme.of(context)
                                               .textTheme
@@ -1033,15 +1070,6 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                                     }
                                   },
                                   onLongPress: () => _toggleSelection(game.id),
-                                  trailing: _selecting
-                                      ? null
-                                      : IconButton(
-                                          icon: const Icon(
-                                            Icons.delete_outline,
-                                          ),
-                                          tooltip: strings.recentDeleteOne,
-                                          onPressed: () => _deleteGames([game]),
-                                        ),
                                 ),
                                 const Divider(height: 1),
                               ],
@@ -1059,7 +1087,10 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
       ),
     );
     return PopScope(
-      canPop: !_busy,
+      canPop: !_busy && !_selecting,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && _selecting) _cancelSelection();
+      },
       child: AbsorbPointer(absorbing: _busy, child: page),
     );
   }

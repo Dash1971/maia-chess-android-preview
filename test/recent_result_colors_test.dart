@@ -217,8 +217,7 @@ void main() {
         await showGames(tester, games, locale: locale, brightness: brightness);
         final context = tester.element(find.byType(RecentGamesPage));
         final strings = AppLocalizations.of(context)!;
-        final date = MaterialLocalizations.of(context)
-            .formatCompactDate(DateTime.utc(2020, 2, 29));
+        const date = '2020/02/29';
         for (final game in games) {
           final tile = tester.widget<ListTile>(
             find.byKey(ValueKey('recent-game-${game.id}')),
