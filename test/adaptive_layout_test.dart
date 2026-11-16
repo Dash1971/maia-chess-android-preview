@@ -229,6 +229,8 @@ void main() {
         find.byKey(const ValueKey('analysis-controls')).hitTestable(),
         findsOneWidget,
       );
+      await tester.ensureVisible(find.byKey(const ValueKey('graph-tab')));
+      await tester.pumpAndSettle();
       expect(
         find.byKey(const ValueKey('graph-tab')).hitTestable(),
         findsOneWidget,

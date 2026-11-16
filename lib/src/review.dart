@@ -236,6 +236,12 @@ class _ReviewPageState extends State<ReviewPage>
   bool _sessionNotificationScheduled = false;
   final Set<String> _collapsedVariationKeys = {};
   final ScrollController _moveListScrollController = ScrollController();
+  final ScrollController _landscapeMovesController = ScrollController();
+  final ScrollController _landscapeGraphController = ScrollController();
+  final GlobalKey _landscapeMovesViewportKey = GlobalKey(
+    debugLabel: 'analysis-landscape-move-viewport',
+  );
+  bool _landscapeMovesBuilt = false;
   final GlobalKey _moveListViewportKey = GlobalKey(
     debugLabel: 'analysis-move-viewport',
   );
@@ -495,7 +501,12 @@ class _ReviewPageState extends State<ReviewPage>
     final initialFen = widget.initialCurrentFen;
     if (initialFen != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) _restoreCurrentFen(initialFen);
+        if (!mounted) return;
+        _restoreCurrentFen(initialFen);
+        if (_useBoardSidebar(context)) {
+          // Restoring a saved position should leave the engine output visible.
+          _lastRevealedMoveToken = _selectedMoveToken;
+        }
       });
     }
     unawaited(_analyzePosition(0));
@@ -561,6 +572,8 @@ class _ReviewPageState extends State<ReviewPage>
     _secondMaiaInferenceScope.invalidate();
     _boardController.dispose();
     _moveListScrollController.dispose();
+    _landscapeMovesController.dispose();
+    _landscapeGraphController.dispose();
     super.dispose();
   }
 
@@ -2635,10 +2648,16 @@ class _ReviewPageState extends State<ReviewPage>
       _moveRevealScheduled = false;
       if (!mounted || _showGraph || _selectedMoveToken != token) return;
       final selectedContext = _selectedMoveContextKey.currentContext;
-      final viewportContext = _moveListViewportKey.currentContext;
+      final landscape = _useBoardSidebar(context);
+      final controller = landscape
+          ? _landscapeMovesController
+          : _moveListScrollController;
+      final viewportContext =
+          (landscape ? _landscapeMovesViewportKey : _moveListViewportKey)
+              .currentContext;
       if (selectedContext == null ||
           viewportContext == null ||
-          !_moveListScrollController.hasClients) {
+          !controller.hasClients) {
         return;
       }
       final selectedBox = selectedContext.findRenderObject();
@@ -2649,7 +2668,7 @@ class _ReviewPageState extends State<ReviewPage>
           .localToGlobal(Offset.zero, ancestor: viewportBox)
           .dy;
       final selectedBottom = selectedTop + selectedBox.size.height;
-      final position = _moveListScrollController.position;
+      final position = controller.position;
       final current = position.pixels;
       const margin = 4.0;
       var target = current;
@@ -2662,7 +2681,7 @@ class _ReviewPageState extends State<ReviewPage>
       _lastRevealedMoveToken = token;
       if ((target - current).abs() < 0.5) return;
       unawaited(
-        _moveListScrollController.animateTo(
+        controller.animateTo(
           target,
           duration: const Duration(milliseconds: 180),
           curve: Curves.easeOutCubic,
@@ -2744,7 +2763,7 @@ class _ReviewPageState extends State<ReviewPage>
     ),
   );
 
-  Widget _movesNotation() {
+  Widget _movesNotation({bool scrollable = true}) {
     final rootMainline = _rootMainline;
     final mainlineMoves = rootMainline?.sanMoves ?? widget.sanMoves;
     final variationsByBase = <int, List<RecordedVariation>>{};
@@ -2819,10 +2838,23 @@ class _ReviewPageState extends State<ReviewPage>
       }
     }
     final selectedMoveToken = _selectedMoveToken;
-    if (selectedMoveToken != null &&
-        selectedMoveToken != _lastRevealedMoveToken) {
+    if (!scrollable && !_landscapeMovesBuilt) {
+      // Open with the engine output visible. Later move navigation reveals
+      // the selection, but rebuilding engine lines must not undo manual scroll.
+      _landscapeMovesBuilt = true;
+      _lastRevealedMoveToken = selectedMoveToken;
+    } else if (selectedMoveToken != null &&
+        (selectedMoveToken != _lastRevealedMoveToken ||
+            (scrollable && !_moveListScrollController.hasClients))) {
       _scheduleSelectedMoveReveal(selectedMoveToken);
     }
+    final content = Semantics(
+      key: const ValueKey('analysis-move-scroll'),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Column(children: rows),
+      ),
+    );
     return Container(
       key: const ValueKey('analysis-move-list'),
       decoration: BoxDecoration(
@@ -2831,17 +2863,13 @@ class _ReviewPageState extends State<ReviewPage>
         borderRadius: BorderRadius.circular(6),
       ),
       clipBehavior: Clip.antiAlias,
-      child: SingleChildScrollView(
-        key: _moveListViewportKey,
-        controller: _moveListScrollController,
-        child: Semantics(
-          key: const ValueKey('analysis-move-scroll'),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Column(children: rows),
-          ),
-        ),
-      ),
+      child: scrollable
+          ? SingleChildScrollView(
+              key: _moveListViewportKey,
+              controller: _moveListScrollController,
+              child: content,
+            )
+          : content,
     );
   }
 
@@ -3258,12 +3286,18 @@ class _ReviewPageState extends State<ReviewPage>
     );
   }
 
-  Widget _movesTab() => _movesNotation();
+  Widget _movesTab({bool scrollable = true}) =>
+      _movesNotation(scrollable: scrollable);
 
-  Widget _graphTab() {
+  Widget _graphTab({bool scrollable = true}) {
+    final content = _graphContent();
+    return scrollable ? SingleChildScrollView(child: content) : content;
+  }
+
+  Widget _graphContent() {
     final scores = _graphScores;
     if (scores != null) {
-      return SingleChildScrollView(
+      return Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
           children: [
@@ -3320,59 +3354,57 @@ class _ReviewPageState extends State<ReviewPage>
       );
     }
     final total = _computerAnalysisLine.positions.length;
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (_fullAnalysisRunning) ...[
-              LinearProgressIndicator(
-                value: _fullAnalysisClassifying
-                    ? null
-                    : total == 0
-                    ? null
-                    : _fullAnalysisCompleted / total,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                _fullAnalysisClassifying
-                    ? l10n(context).classifyingMoves
-                    : l10n(context)
-                          .analysisProgress(_fullAnalysisCompleted, total),
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (_fullAnalysisRunning) ...[
+            LinearProgressIndicator(
+              value: _fullAnalysisClassifying
+                  ? null
+                  : total == 0
+                  ? null
+                  : _fullAnalysisCompleted / total,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              _fullAnalysisClassifying
+                  ? l10n(context).classifyingMoves
+                  : l10n(context)
+                        .analysisProgress(_fullAnalysisCompleted, total),
+            ),
+            const SizedBox(height: 8),
+            TextButton.icon(
+              key: const ValueKey('cancel-computer-analysis'),
+              onPressed: _cancelFullAnalysis,
+              icon: const Icon(Icons.stop_circle_outlined),
+              label: Text(l10n(context).stopAnalysis),
+            ),
+          ] else ...[
+            Text(
+              l10n(context).analysisExplanation,
+              textAlign: TextAlign.center,
+            ),
+            if (_analysisError != null) ...[
               const SizedBox(height: 8),
-              TextButton.icon(
-                key: const ValueKey('cancel-computer-analysis'),
-                onPressed: _cancelFullAnalysis,
-                icon: const Icon(Icons.stop_circle_outlined),
-                label: Text(l10n(context).stopAnalysis),
-              ),
-            ] else ...[
               Text(
-                l10n(context).analysisExplanation,
+                _analysisError == _ReviewAnalysisStatus.stopped
+                    ? l10n(context).analysisStopped
+                    : l10n(context).analysisFailed,
                 textAlign: TextAlign.center,
-              ),
-              if (_analysisError != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  _analysisError == _ReviewAnalysisStatus.stopped
-                      ? l10n(context).analysisStopped
-                      : l10n(context).analysisFailed,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-              ],
-              const SizedBox(height: 12),
-              FilledButton.icon(
-                key: const ValueKey('run-computer-analysis'),
-                onPressed: _analyzeFullGame,
-                icon: const Icon(Icons.analytics_outlined),
-                label: Text(l10n(context).runAnalysis),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ],
+            const SizedBox(height: 12),
+            FilledButton.icon(
+              key: const ValueKey('run-computer-analysis'),
+              onPressed: _analyzeFullGame,
+              icon: const Icon(Icons.analytics_outlined),
+              label: Text(l10n(context).runAnalysis),
+            ),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -3549,7 +3581,9 @@ class _ReviewPageState extends State<ReviewPage>
                 final panel = SizedBox(
                   key: const ValueKey('analysis-tab-panel'),
                   width: double.infinity,
-                  child: _showGraph ? _graphTab() : _movesTab(),
+                  child: _showGraph
+                      ? _graphTab(scrollable: !landscape)
+                      : _movesTab(scrollable: !landscape),
                 );
                 if (landscape) {
                   final actionWidth =
@@ -3560,34 +3594,39 @@ class _ReviewPageState extends State<ReviewPage>
                       available.maxWidth >= actionWidth * 3 + 152
                       ? 56.0
                       : 108.0;
-                  if (available.maxHeight < controlsHeight + 48 + 56 + 32) {
-                    return SingleChildScrollView(
+                  final pinControls =
+                      available.maxHeight >= controlsHeight + 48;
+                  final pane = KeyedSubtree(
+                    key: PageStorageKey(
+                      _showGraph
+                          ? 'analysis-details-graph'
+                          : 'analysis-details-moves',
+                    ),
+                    child: SingleChildScrollView(
+                      key: _showGraph
+                          ? const ValueKey('analysis-graph-viewport')
+                          : _landscapeMovesViewportKey,
+                      controller: _showGraph
+                          ? _landscapeGraphController
+                          : _landscapeMovesController,
                       child: Column(
                         children: [
                           ...header,
                           _analysisTabBar(),
-                          SizedBox(height: 220, child: panel),
-                          _analysisControls(),
+                          panel,
+                          if (!pinControls) _analysisControls(),
                         ],
                       ),
-                    );
-                  }
-                  return Column(
-                    children: [
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight:
-                              available.maxHeight - controlsHeight - 48 - 56,
-                        ),
-                        child: SingleChildScrollView(
-                          child: Column(children: header),
-                        ),
-                      ),
-                      _analysisTabBar(),
-                      Expanded(child: panel),
-                      _analysisControls(),
-                    ],
+                    ),
                   );
+                  return pinControls
+                      ? Column(
+                          children: [
+                            Expanded(child: pane),
+                            _analysisControls(),
+                          ],
+                        )
+                      : pane;
                 }
                 if (available.maxHeight < engineHeight + 188) {
                   return Column(
@@ -3627,12 +3666,15 @@ class _ReviewPageState extends State<ReviewPage>
               },
             );
             if (landscape) {
+              // A 4:3 tablet or resized window needs room for the analysis
+              // content as well as the board. Phones remain height-limited.
+              final paneMinimum = max(
+                _sidebarMinimum(context),
+                min(360.0, constraints.maxWidth * .45),
+              );
               final size = min(
                 constraints.maxHeight - 16,
-                constraints.maxWidth -
-                    _sidebarMinimum(context) -
-                    boardGutter -
-                    24,
+                constraints.maxWidth - paneMinimum - boardGutter - 24,
               ).clamp(80.0, double.infinity);
               return Padding(
                 padding: const EdgeInsets.all(8),
