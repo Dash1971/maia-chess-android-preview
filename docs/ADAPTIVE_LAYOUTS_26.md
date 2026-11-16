@@ -36,7 +36,9 @@ scrolling settings page.
 
 Recent games uses Date, Game, and Result columns with a 52-logical-pixel minimum
 row height. Date and result widths are measured with the current font, text
-scale, and localized labels so results such as Incomplete fit on one line.
+scale, and localized labels so results fit on one line. Result values and their
+header are centered. Unfinished games display a muted em dash (`—`), retaining
+the localized Incomplete status for screen readers.
 Player names are centered between those columns, with matching minimum gaps.
 Large text or constrained widths use the two-line list instead of squeezing
 columns. Dates display the original played day as `yyyy/MM/dd`; an unknown date

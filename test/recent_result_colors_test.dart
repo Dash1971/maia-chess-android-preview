@@ -226,13 +226,15 @@ void main() {
           final resultWidget = tester.widget<Text>(
             find.descendant(
               of: find.byKey(ValueKey('recent-game-${game.id}')),
-              matching: find.text(result),
+              matching: find.text(game.isIncomplete ? '—' : result),
             ),
           );
           expect(
             resultWidget.style?.color,
-            game.outcome.colorFor(brightness) ??
-                Theme.of(context).textTheme.bodyMedium?.color,
+            game.isIncomplete
+                ? Theme.of(context).colorScheme.onSurfaceVariant
+                : game.outcome.colorFor(brightness) ??
+                      Theme.of(context).textTheme.bodyMedium?.color,
           );
           final dateWidget = tester.widget<Text>(
             find.descendant(

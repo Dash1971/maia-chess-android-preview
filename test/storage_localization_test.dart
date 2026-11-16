@@ -62,7 +62,11 @@ void main() {
           tester.element(find.byType(RecentGamesPage)),
         )!;
         expect(find.text(strings.recentMaiaPlayer('500')), findsNWidgets(2));
-        expect(find.text(strings.recentIncomplete), findsNWidgets(2));
+        expect(find.text('—'), findsNWidgets(2));
+        for (final label in tester.widgetList<Text>(find.text('—'))) {
+          expect(label.semanticsLabel, strings.recentIncomplete);
+          expect(label.textAlign, TextAlign.center);
+        }
         expect(find.text('2026/09/05'), findsNWidgets(2));
         await tester.tap(find.byKey(const ValueKey('recent-games-menu')));
         await tester.pumpAndSettle();

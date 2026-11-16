@@ -136,6 +136,7 @@ Widget _recentResultSubtitle(
 ) {
   final strings = l10n(context);
   final result = game.localizedResult(context);
+  final displayResult = game.isIncomplete ? '—' : result;
   final outcome = game.outcome;
   final description = switch (outcome) {
     RecentGameOutcome.win => strings.recentWinResult(result),
@@ -151,10 +152,8 @@ Widget _recentResultSubtitle(
         for (var index = 0; index < parts.length; index++) ...[
           if (index > 0)
             TextSpan(
-              text: result,
-              style: TextStyle(
-                color: outcome.colorFor(Theme.of(context).brightness),
-              ),
+              text: displayResult,
+              style: TextStyle(color: _recentResultColor(context, game)),
             ),
           TextSpan(text: parts[index]),
         ],
@@ -163,6 +162,11 @@ Widget _recentResultSubtitle(
     semanticsLabel: strings.recentGameSummary(description, date),
   );
 }
+
+Color? _recentResultColor(BuildContext context, RecentSession game) =>
+    game.isIncomplete
+    ? Theme.of(context).colorScheme.onSurfaceVariant
+    : game.outcome.colorFor(Theme.of(context).brightness);
 
 String _recentGameDate(BuildContext context, DateTime? date) => date == null
     ? l10n(context).dateUnknown
@@ -873,11 +877,7 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
               ].reduce(max);
               final resultWidth = [
                 textWidth(strings.recentResultColumn, theme.labelMedium!),
-                for (final label in {
-                  strings.recentIncomplete,
-                  strings.recentCompleted,
-                  '1/2-1/2',
-                })
+                for (final label in {strings.recentCompleted, '1/2-1/2', '—'})
                   textWidth(label, resultStyle),
               ].reduce(max);
               final minimumGameWidth = MediaQuery.textScalerOf(context)
@@ -962,7 +962,10 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                                 width: resultWidth,
                                 child: Semantics(
                                   header: true,
-                                  child: Text(strings.recentResultColumn),
+                                  child: Text(
+                                    strings.recentResultColumn,
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
                             ],
@@ -1045,7 +1048,8 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                                       SizedBox(
                                         width: resultWidth,
                                         child: Text(
-                                          result,
+                                          game.isIncomplete ? '—' : result,
+                                          textAlign: TextAlign.center,
                                           maxLines: 1,
                                           softWrap: false,
                                           semanticsLabel: description,
@@ -1053,8 +1057,9 @@ class _RecentGamesPageState extends State<RecentGamesPage> {
                                               .textTheme
                                               .bodyMedium
                                               ?.copyWith(
-                                                color: game.outcome.colorFor(
-                                                  Theme.of(context).brightness,
+                                                color: _recentResultColor(
+                                                  context,
+                                                  game,
                                                 ),
                                               ),
                                         ),
