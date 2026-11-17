@@ -238,6 +238,8 @@ class _ReviewPageState extends State<ReviewPage>
   final ScrollController _moveListScrollController = ScrollController();
   final ScrollController _landscapeMovesController = ScrollController();
   final ScrollController _landscapeGraphController = ScrollController();
+  final GlobalKey<NestedScrollViewState> _landscapeScrollKey =
+      GlobalKey<NestedScrollViewState>();
   final GlobalKey _landscapeMovesViewportKey = GlobalKey(
     debugLabel: 'analysis-landscape-move-viewport',
   );
@@ -2649,8 +2651,9 @@ class _ReviewPageState extends State<ReviewPage>
       if (!mounted || _showGraph || _selectedMoveToken != token) return;
       final selectedContext = _selectedMoveContextKey.currentContext;
       final landscape = _useBoardSidebar(context);
+      final nested = landscape ? _landscapeScrollKey.currentState : null;
       final controller = landscape
-          ? _landscapeMovesController
+          ? (nested?.innerController ?? _landscapeMovesController)
           : _moveListScrollController;
       final viewportContext =
           (landscape ? _landscapeMovesViewportKey : _moveListViewportKey)
@@ -2664,6 +2667,15 @@ class _ReviewPageState extends State<ReviewPage>
       final viewportBox = viewportContext.findRenderObject();
       if (selectedBox is! RenderBox || viewportBox is! RenderBox) return;
 
+      final paneBox = _landscapeScrollKey.currentContext?.findRenderObject();
+      final visibleHeight = landscape && paneBox is RenderBox
+          ? min(
+              viewportBox.size.height,
+              paneBox.localToGlobal(Offset.zero).dy +
+                  paneBox.size.height -
+                  viewportBox.localToGlobal(Offset.zero).dy,
+            )
+          : viewportBox.size.height;
       final selectedTop = selectedBox
           .localToGlobal(Offset.zero, ancestor: viewportBox)
           .dy;
@@ -2671,15 +2683,25 @@ class _ReviewPageState extends State<ReviewPage>
       final position = controller.position;
       final current = position.pixels;
       const margin = 4.0;
+      // The nested body extends behind the pinned 48px tab strip.
+      final topMargin = nested == null ? margin : 48 + margin;
+      final remainingHeader = nested == null
+          ? 0.0
+          : nested.outerController.position.maxScrollExtent -
+                nested.outerController.offset;
       var target = current;
-      if (selectedTop < margin) {
-        target += selectedTop - margin;
-      } else if (selectedBottom > viewportBox.size.height - margin) {
-        target += selectedBottom - (viewportBox.size.height - margin);
+      if (selectedTop < topMargin) {
+        target += selectedTop - topMargin;
+      } else if (selectedBottom > visibleHeight - margin) {
+        target += selectedBottom - (visibleHeight - margin);
+        // The coordinator reveals room by collapsing the header first.
+        target -= remainingHeader;
       }
       target = target.clamp(position.minScrollExtent, position.maxScrollExtent);
       _lastRevealedMoveToken = token;
-      if ((target - current).abs() < 0.5) return;
+      final headerNeedsCollapse =
+          selectedBottom > visibleHeight - margin && remainingHeader > 0.5;
+      if ((target - current).abs() < 0.5 && !headerNeedsCollapse) return;
       unawaited(
         controller.animateTo(
           target,
@@ -3596,13 +3618,59 @@ class _ReviewPageState extends State<ReviewPage>
                       : 108.0;
                   final pinControls =
                       available.maxHeight >= controlsHeight + 48;
-                  final pane = KeyedSubtree(
-                    key: PageStorageKey(
-                      _showGraph
-                          ? 'analysis-details-graph'
-                          : 'analysis-details-moves',
+                  final pane = NestedScrollView(
+                    key: _landscapeScrollKey,
+                    controller: _showGraph
+                        ? _landscapeGraphController
+                        : _landscapeMovesController,
+                    // Return toward the engine output immediately, even if a
+                    // downward drag starts deep inside the move list.
+                    floatHeaderSlivers: true,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                      SliverToBoxAdapter(child: Column(children: header)),
+                      SliverOverlapAbsorber(
+                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context,
+                        ),
+                        sliver: SliverPersistentHeader(
+                          pinned: true,
+                          delegate: _AnalysisTabsHeader(_analysisTabBar()),
+                        ),
+                      ),
+                    ],
+                    body: SizedBox(
+                      key: _showGraph
+                          ? const ValueKey('analysis-graph-viewport')
+                          : _landscapeMovesViewportKey,
+                      width: double.infinity,
+                      child: Builder(
+                        builder: (context) => CustomScrollView(
+                          // Inherit NestedScrollView's inner controller. Giving
+                          // this view its own controller traps boundary drags.
+                          key: PageStorageKey(
+                            _showGraph
+                                ? 'analysis-details-graph'
+                                : 'analysis-details-moves',
+                          ),
+                          primary: true,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          slivers: [
+                            SliverOverlapInjector(
+                              handle:
+                                  NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                    context,
+                                  ),
+                            ),
+                            SliverToBoxAdapter(child: panel),
+                          ],
+                        ),
+                      ),
                     ),
-                    child: SingleChildScrollView(
+                  );
+                  if (!pinControls) {
+                    // With less than one usable move row, let the tabs and
+                    // controls scroll too instead of pinning away the viewport.
+                    return SingleChildScrollView(
                       key: _showGraph
                           ? const ValueKey('analysis-graph-viewport')
                           : _landscapeMovesViewportKey,
@@ -3614,19 +3682,17 @@ class _ReviewPageState extends State<ReviewPage>
                           ...header,
                           _analysisTabBar(),
                           panel,
-                          if (!pinControls) _analysisControls(),
+                          _analysisControls(),
                         ],
                       ),
-                    ),
+                    );
+                  }
+                  return Column(
+                    children: [
+                      Expanded(child: pane),
+                      _analysisControls(),
+                    ],
                   );
-                  return pinControls
-                      ? Column(
-                          children: [
-                            Expanded(child: pane),
-                            _analysisControls(),
-                          ],
-                        )
-                      : pane;
                 }
                 if (available.maxHeight < engineHeight + 188) {
                   return Column(
@@ -3716,4 +3782,24 @@ class _ReviewPageState extends State<ReviewPage>
       ),
     );
   }
+}
+
+/// Keeps the tab controls reachable as the engine header scrolls away.
+class _AnalysisTabsHeader extends SliverPersistentHeaderDelegate {
+  const _AnalysisTabsHeader(this.child);
+
+  final Widget child;
+
+  @override
+  double get minExtent => 48;
+  @override
+  double get maxExtent => 48;
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) => ColoredBox(color: Theme.of(context).colorScheme.surface, child: child);
+  @override
+  bool shouldRebuild(_AnalysisTabsHeader oldDelegate) => true;
 }
