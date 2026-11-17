@@ -116,3 +116,13 @@ continuous analysis pane and recorded Android qualification for that source.
 The coordinated nested scrolling and renders above are a subsequent source
 change; beta.7's APK evidence does not qualify it. Physical tablet and actual
 OS split-screen acceptance under #29 remain separate, as does Stable promotion.
+
+## Preview beta.8 Android qualification
+
+[Published beta.8](releases/preview-2.6.0-beta.8.md) delivers #246 and records
+actual production-signed ARM64 APK checks for coordinated deep reverse-drag
+header restoration and first/last/repeated endpoint holds in portrait/landscape,
+normal/large text, graph-tab requests, rotation and short-window access. The
+header can collapse while navigating. Earlier illustrations remain host renders;
+beta.7 evidence applies to its earlier source. Physical touch/tablet acceptance
+under #29 and Stable promotion remain separate.

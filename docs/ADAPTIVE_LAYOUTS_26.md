@@ -133,3 +133,13 @@ scrolling, graph/navigation, tablet/resized/large-text/short-window layouts
 and Recent games columns/selection/delete/export flows. Earlier renders remain
 host-test illustrations. Physical touch/tablet and actual OS split-screen
 acceptance under #29 remain separate; Stable promotion is separate.
+
+## Preview beta.8 Android qualification
+
+[Published beta.8](releases/preview-2.6.0-beta.8.md) delivers #246 and records
+actual production-signed ARM64 APK checks for coordinated deep reverse-drag
+header restoration and first/last/repeated endpoint holds in portrait/landscape,
+normal/large text, graph-tab requests, rotation and short-window access. The
+header can collapse while navigating. Earlier illustrations remain host renders;
+beta.7 evidence applies to its earlier source. Physical touch/tablet acceptance
+under #29 and Stable promotion remain separate.
