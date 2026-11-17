@@ -17,12 +17,11 @@ Analysis uses the same available-height principle, including the bottom safe
 inset, and removes the 560-pixel board cap in wide windows. Its existing engine
 lines, Maia probabilities, opening name, moves/graph tabs, evaluation bar, and
 navigation remain available. The toolbar moves beside the board. The current
-2.6 source coordinates a scrollable opening/engine header with an independent
-moves/graph window. Swiping back inside the moves restores the engine output
-without trapping the gesture. Tabs remain reachable and move navigation stays
-fixed below the pane when space permits. Squarer tablets and resized windows
-reserve a readable analysis-pane width rather than maximizing the board at its
-expense.
+2.6 source keeps the analysis header fixed while the move list or graph scrolls
+independently. Move navigation never collapses the engine header. Landscape tabs
+share the bottom control strip to leave room for a usable move window. Squarer
+tablets and resized windows reserve readable analysis width rather than
+maximizing the board at its expense.
 [Phone and tablet renders and scroll verification](ANALYSIS_SCROLL_26.md)
 describe this follow-up; the beta.4 release evidence above covers the original
 adaptive layout. Analysis, classification, inference, and saved-data formats

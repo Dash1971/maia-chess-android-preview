@@ -120,13 +120,12 @@ with a two-line fallback for narrow windows or large text. [Implementation and
 Android qualification](docs/ADAPTIVE_LAYOUTS_26.md) record phone/tablet/constrained
 profiles and rotation/input checks. [#29](https://github.com/Dash1971/maia-chess-android-preview/issues/29)
 remains open for comfortable physical finger input and tablet-owner feedback;
-Stable promotion is separate. Preview beta.8 delivers the coordinated Analysis
-move window and long-press start/end navigation in portrait and landscape.
-Swiping down within deep moves restores engine output immediately; the header
-can collapse to give moves more room. Repeated endpoint holds reveal the first
-or last row without restarting analysis or requiring rotation.
-[Behavior and verification](docs/ANALYSIS_SCROLL_26.md) distinguish host renders
-from actual signed-APK checks. Physical touch/tablet acceptance remains open.
+Stable promotion is separate. Published beta.8 uses coordinated nested scrolling.
+A follow-up draft keeps engine analysis visible while moves scroll independently,
+including long-press start/end navigation in portrait and landscape. Landscape
+tabs share the bottom control strip to leave more space for the move window.
+[Behavior frames and host verification](docs/ANALYSIS_SCROLL_26.md) cover the
+follow-up source. Physical touch/tablet acceptance remains open.
 
 **Under consideration: candidate moves and a rating explorer**
 
