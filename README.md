@@ -120,7 +120,10 @@ with a two-line fallback for narrow windows or large text. [Implementation and
 Android qualification](docs/ADAPTIVE_LAYOUTS_26.md) record phone/tablet/constrained
 profiles and rotation/input checks. [#29](https://github.com/Dash1971/maia-chess-android-preview/issues/29)
 remains open for comfortable physical finger input and tablet-owner feedback;
-Stable promotion is separate.
+Stable promotion is separate. A follow-up draft restores an independent move
+window with coordinated scrolling: swiping back inside the moves brings the
+engine header into view. [Phone/tablet renders and host verification](docs/ANALYSIS_SCROLL_26.md)
+cover that source change; the published beta.7 still uses one continuous pane.
 
 **Under consideration: candidate moves and a rating explorer**
 

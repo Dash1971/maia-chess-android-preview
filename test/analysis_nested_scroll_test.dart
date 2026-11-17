@@ -136,12 +136,14 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Finder scrollView() => find.descendant(
-    of: find.byKey(_pane),
-    matching: find.byType(SingleChildScrollView),
-  );
+  Finder scrollView() => find.byKey(_pane, skipOffstage: false);
+  NestedScrollViewState nested(WidgetTester tester) =>
+      tester.state<NestedScrollViewState>(find.byType(NestedScrollView));
   ScrollController controller(WidgetTester tester) =>
-      tester.widget<SingleChildScrollView>(scrollView()).controller!;
+      nested(tester).innerController;
+  ScrollController outer(WidgetTester tester) => nested(tester).outerController;
+  double totalOffset(WidgetTester tester) =>
+      controller(tester).offset + outer(tester).offset;
 
   Future<void> capture(WidgetTester tester, String name) async {
     final output = Platform.environment['MAIA_ANALYSIS_CAPTURES'];
@@ -172,7 +174,7 @@ void main() {
   ]) {
     for (final scale in [1.0, 2.0]) {
       testWidgets(
-        '$name at $scale has one pane and returns from moves to engines',
+        '$name at $scale coordinates moves and header without trapping reverse drags',
         (tester) async {
           await mount(tester, size, scale: scale);
           final scroll = scrollView();
@@ -207,10 +209,10 @@ void main() {
           );
           if (scale == 1) await capture(tester, '$name-initial');
 
-          final pane = tester.getRect(scroll);
+          final pane = tester.getRect(find.byType(NestedScrollView));
           await tester.dragFrom(pane.center, Offset(0, -pane.height * 0.8));
           await tester.pumpAndSettle();
-          expect(scroller.offset, greaterThan(0));
+          expect(totalOffset(tester), greaterThan(0));
           if (name == 'phone' && scale == 1) {
             await tester.dragFrom(pane.center, const Offset(0, -80));
             await tester.pumpAndSettle();
@@ -223,11 +225,11 @@ void main() {
             controls,
           );
           // The drag starts in the move rows, not in a separate header strip.
-          for (var i = 0; i < 10 && scroller.offset > 0.1; i++) {
+          for (var i = 0; i < 10 && totalOffset(tester) > 0.1; i++) {
             await tester.dragFrom(pane.center, Offset(0, pane.height * 0.8));
             await tester.pumpAndSettle();
           }
-          expect(scroller.offset, closeTo(0, 0.1));
+          expect(totalOffset(tester), closeTo(0, 0.1));
           expect(
             find.byKey(const ValueKey('review-opening-name')).hitTestable(),
             findsOneWidget,
@@ -237,6 +239,108 @@ void main() {
       );
     }
   }
+
+  testWidgets('a reverse drag inside deep moves reveals the header first', (
+    tester,
+  ) async {
+    await mount(tester, const Size(873, 393));
+    final pane = tester.getRect(find.byType(NestedScrollView));
+    await tester.dragFrom(pane.center, const Offset(0, -650));
+    await tester.pumpAndSettle();
+    expect(controller(tester).offset, greaterThan(200));
+    final before = controller(tester).offset;
+    expect(outer(tester).offset, outer(tester).position.maxScrollExtent);
+    // Start in the moves, and hold the pointer to check the drag itself,
+    // independently of any ballistic fling that follows release.
+    final gesture = await tester.startGesture(
+      Offset(pane.center.dx, pane.bottom - 20),
+    );
+    await gesture.moveBy(const Offset(0, 20));
+    await tester.pump();
+    await gesture.moveBy(const Offset(0, 110));
+    await tester.pump();
+    expect(
+      outer(tester).offset,
+      lessThan(outer(tester).position.maxScrollExtent - 50),
+    );
+    expect(controller(tester).offset, closeTo(before, .1));
+    await gesture.up();
+    await tester.pumpAndSettle();
+    await capture(tester, 'phone-return-to-engines');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'short games can expand moves and return from the inner boundary',
+    (tester) async {
+      await mount(
+        tester,
+        const Size(873, 393),
+        replay: AnalysisSession.fromPgn('1. e4 e5 *'),
+      );
+      final pane = tester.getRect(find.byType(NestedScrollView));
+      await tester.dragFrom(pane.center, const Offset(0, -300));
+      await tester.pumpAndSettle();
+      expect(outer(tester).offset, greaterThan(0));
+      expect(controller(tester).offset, closeTo(0, .1));
+      await tester.dragFrom(
+        Offset(pane.center.dx, pane.bottom - 20),
+        const Offset(0, 300),
+      );
+      await tester.pumpAndSettle();
+      expect(totalOffset(tester), closeTo(0, .1));
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('stepping one move reveals a row below the expanded header', (
+    tester,
+  ) async {
+    await mount(tester, const Size(873, 393));
+    await tester.tap(find.byTooltip('Next move'));
+    await tester.pumpAndSettle();
+    final selected = tester.getRect(
+      find.byKey(const ValueKey('analysis-selected-move')),
+    );
+    final pane = tester.getRect(find.byType(NestedScrollView));
+    expect(selected.top, greaterThanOrEqualTo(pane.top + 48 - 1));
+    expect(selected.bottom, lessThanOrEqualTo(pane.bottom + 1));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'previous moves stay below pinned tabs after returning to engines',
+    (tester) async {
+      await mount(tester, const Size(873, 393));
+      await tester.longPress(find.byTooltip('Next move'));
+      await tester.pumpAndSettle();
+      final pane = tester.getRect(find.byType(NestedScrollView));
+      await tester.dragFrom(
+        Offset(pane.center.dx, pane.bottom - 20),
+        const Offset(0, 130),
+      );
+      await tester.pumpAndSettle();
+      for (var i = 0; i < 14; i++) {
+        await tester.tap(find.byTooltip('Previous move'));
+        await tester.pumpAndSettle();
+        final selected = tester.getRect(
+          find.byKey(const ValueKey('analysis-selected-move')),
+        );
+        final tabs = tester.getRect(find.byKey(const ValueKey('moves-tab')));
+        expect(
+          selected.top,
+          greaterThanOrEqualTo(tabs.bottom - 1),
+          reason: 'Previous step $i',
+        );
+        expect(
+          selected.bottom,
+          lessThanOrEqualTo(pane.bottom + 1),
+          reason: 'Previous step $i',
+        );
+      }
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets(
     'manual scroll stays put; stepping reveals selection and rotation keeps the board',
@@ -248,14 +352,14 @@ void main() {
       final scroller = controller(tester);
       await tester.longPress(find.byTooltip('Next move'));
       await tester.pumpAndSettle();
-      expect(scroller.offset, greaterThan(0));
+      expect(totalOffset(tester), greaterThan(0));
       final viewport = tester.getRect(scrollView());
       final selected = tester.getRect(
         find.byKey(const ValueKey('analysis-selected-move')),
       );
       expect(selected.top, greaterThanOrEqualTo(viewport.top - 1));
       expect(selected.bottom, lessThanOrEqualTo(viewport.bottom + 1));
-      scroller.jumpTo(0);
+      outer(tester).jumpTo(0);
       await tester.pumpAndSettle();
       final scores = MaiaScoreScope.maybeOf(
         tester.element(find.byType(ReviewPage)),
@@ -307,21 +411,20 @@ void main() {
   );
 
   testWidgets(
-    'computer-analysis tab has one scroll surface and restores moves position',
+    'tabs restore the independent move position with a coordinated header',
     (tester) async {
       await mount(tester, const Size(873, 393));
-      final movesController = controller(tester);
-      await tester.ensureVisible(find.byKey(const ValueKey('graph-tab')));
+      final paneRect = tester.getRect(find.byType(NestedScrollView));
+      await tester.dragFrom(paneRect.center, const Offset(0, -450));
       await tester.pumpAndSettle();
-      final before = movesController.offset;
+      final before = controller(tester).offset;
+      expect(before, greaterThan(0));
       await tester.tap(find.byKey(const ValueKey('graph-tab')));
       await tester.pumpAndSettle();
-      final graphPane = find.byKey(
-        const PageStorageKey('analysis-details-graph'),
-      );
+      final graphPane = find.byType(NestedScrollView);
       expect(
         find.descendant(of: graphPane, matching: find.byType(Scrollable)),
-        findsOneWidget,
+        findsNWidgets(2),
       );
       await tester.ensureVisible(find.byKey(const ValueKey('moves-tab')));
       await tester.tap(find.byKey(const ValueKey('moves-tab')));
@@ -350,25 +453,23 @@ void main() {
       await tester.tap(find.byKey(const ValueKey('run-computer-analysis')));
       await tester.pumpAndSettle();
       expect(find.byType(AnalysisGraph), findsOneWidget);
-      final pane = find.byKey(const PageStorageKey('analysis-details-graph'));
+      final pane = find.byType(NestedScrollView);
       expect(
         find.descendant(of: pane, matching: find.byType(Scrollable)),
-        findsOneWidget,
+        findsNWidgets(2),
       );
-      final scroll = find.descendant(
-        of: pane,
-        matching: find.byType(SingleChildScrollView),
-      );
-      final control = tester.widget<SingleChildScrollView>(scroll).controller!;
+      final scroll = find
+          .descendant(of: pane, matching: find.byType(CustomScrollView))
+          .last;
       final viewport = tester.getRect(scroll);
       await tester.dragFrom(viewport.center, const Offset(0, -250));
       await tester.pumpAndSettle();
-      expect(control.offset, greaterThan(0));
-      for (var i = 0; i < 10 && control.offset > 0; i++) {
+      expect(totalOffset(tester), greaterThan(0));
+      for (var i = 0; i < 10 && totalOffset(tester) > 0; i++) {
         await tester.dragFrom(viewport.center, const Offset(0, 250));
         await tester.pumpAndSettle();
       }
-      expect(control.offset, closeTo(0, .1));
+      expect(totalOffset(tester), closeTo(0, .1));
       expect(tester.takeException(), isNull);
     },
   );
@@ -377,8 +478,10 @@ void main() {
     tester,
   ) async {
     await mount(tester, const Size(480, 200));
-    expect(scrollView(), findsOneWidget);
-    await tester.ensureVisible(find.byTooltip('Next move'));
+    expect(find.byType(NestedScrollView), findsNothing);
+    await tester.ensureVisible(
+      find.byTooltip('Next move', skipOffstage: false),
+    );
     await tester.pumpAndSettle();
     expect(find.byTooltip('Next move').hitTestable(), findsOneWidget);
     expect(find.byTooltip('Previous move').hitTestable(), findsOneWidget);
@@ -401,13 +504,13 @@ void main() {
       expect(board.bottom, closeTo(393 - 24 - 8, 1));
       expect(controls.right, lessThanOrEqualTo(873 - 24));
       expect(controls.bottom, lessThanOrEqualTo(393 - 24));
-      final pane = tester.getRect(scrollView());
+      final pane = tester.getRect(find.byType(NestedScrollView));
       await tester.dragFrom(pane.center, const Offset(0, -300));
       await tester.pumpAndSettle();
-      expect(controller(tester).offset, greaterThan(0));
+      expect(totalOffset(tester), greaterThan(0));
       await tester.dragFrom(pane.center, const Offset(0, 500));
       await tester.pumpAndSettle();
-      expect(controller(tester).offset, closeTo(0, .1));
+      expect(totalOffset(tester), closeTo(0, .1));
       expect(tester.takeException(), isNull);
     },
   );

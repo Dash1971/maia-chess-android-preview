@@ -582,9 +582,13 @@ void main() {
           final engineRect = tester.getRect(
             find.byKey(const ValueKey('analysis-engine-lines')),
           );
-          final moveRect = tester.getRect(
-            find.byKey(const ValueKey('analysis-tab-panel')),
+          // A tall landscape header may initially cover the move body.
+          // Score visibility must leave its layout unchanged either way.
+          final panel = find.byKey(
+            const ValueKey('analysis-tab-panel'),
+            skipOffstage: false,
           );
+          final moveRect = tester.getRect(panel);
           await controller.select(true);
           await tester.pumpAndSettle();
           expect(tester.getRect(find.byType(cg.Chessboard)), boardRect);
@@ -593,7 +597,7 @@ void main() {
             engineRect,
           );
           expect(
-            tester.getRect(find.byKey(const ValueKey('analysis-tab-panel'))),
+            tester.getRect(panel),
             moveRect,
           );
           expect(tester.takeException(), isNull);
