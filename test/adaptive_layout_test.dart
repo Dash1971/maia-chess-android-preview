@@ -226,7 +226,7 @@ void main() {
       expect(tester.getRect(finder).bottom, closeTo(dimensions.height - 8, 1));
       expect(tester.getSize(finder).height, closeTo(dimensions.height - 16, 1));
       expect(
-        find.byKey(const ValueKey('analysis-controls')).hitTestable(),
+        find.byKey(const ValueKey('next-move-button')).hitTestable(),
         findsOneWidget,
       );
       await tester.ensureVisible(find.byKey(const ValueKey('graph-tab')));

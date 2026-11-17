@@ -238,12 +238,10 @@ class _ReviewPageState extends State<ReviewPage>
   final ScrollController _moveListScrollController = ScrollController();
   final ScrollController _landscapeMovesController = ScrollController();
   final ScrollController _landscapeGraphController = ScrollController();
-  final GlobalKey<NestedScrollViewState> _landscapeScrollKey =
-      GlobalKey<NestedScrollViewState>();
   final GlobalKey _landscapeMovesViewportKey = GlobalKey(
     debugLabel: 'analysis-landscape-move-viewport',
   );
-  bool _landscapeMovesBuilt = false;
+  bool? _notationLandscape;
   final GlobalKey _moveListViewportKey = GlobalKey(
     debugLabel: 'analysis-move-viewport',
   );
@@ -509,10 +507,6 @@ class _ReviewPageState extends State<ReviewPage>
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         _restoreCurrentFen(initialFen);
-        if (_useBoardSidebar(context)) {
-          // Restoring a saved position should leave the engine output visible.
-          _lastRevealedMoveToken = _selectedMoveToken;
-        }
       });
     }
     unawaited(_analyzePosition(0));
@@ -2659,9 +2653,8 @@ class _ReviewPageState extends State<ReviewPage>
           (token == null ? _firstMoveContextKey : _selectedMoveContextKey)
               .currentContext;
       final landscape = _useBoardSidebar(context);
-      final nested = landscape ? _landscapeScrollKey.currentState : null;
       final controller = landscape
-          ? (nested?.innerController ?? _landscapeMovesController)
+          ? _landscapeMovesController
           : _moveListScrollController;
       final viewportContext =
           (landscape ? _landscapeMovesViewportKey : _moveListViewportKey)
@@ -2675,15 +2668,7 @@ class _ReviewPageState extends State<ReviewPage>
       final viewportBox = viewportContext.findRenderObject();
       if (selectedBox is! RenderBox || viewportBox is! RenderBox) return;
 
-      final paneBox = _landscapeScrollKey.currentContext?.findRenderObject();
-      final visibleHeight = landscape && paneBox is RenderBox
-          ? min(
-              viewportBox.size.height,
-              paneBox.localToGlobal(Offset.zero).dy +
-                  paneBox.size.height -
-                  viewportBox.localToGlobal(Offset.zero).dy,
-            )
-          : viewportBox.size.height;
+      final visibleHeight = viewportBox.size.height;
       final selectedTop = selectedBox
           .localToGlobal(Offset.zero, ancestor: viewportBox)
           .dy;
@@ -2691,26 +2676,16 @@ class _ReviewPageState extends State<ReviewPage>
       final position = controller.position;
       final current = position.pixels;
       const margin = 4.0;
-      // The nested body extends behind the pinned 48px tab strip.
-      final topMargin = nested == null ? margin : 48 + margin;
-      final remainingHeader = nested == null
-          ? 0.0
-          : nested.outerController.position.maxScrollExtent -
-                nested.outerController.offset;
       var target = current;
-      if (selectedTop < topMargin) {
-        target += selectedTop - topMargin;
+      if (selectedTop < margin) {
+        target += selectedTop - margin;
       } else if (selectedBottom > visibleHeight - margin) {
         target += selectedBottom - (visibleHeight - margin);
-        // The coordinator reveals room by collapsing the header first.
-        target -= remainingHeader;
       }
       target = target.clamp(position.minScrollExtent, position.maxScrollExtent);
       _lastRevealedMoveToken = token;
       _endpointRevealRequested = false;
-      final headerNeedsCollapse =
-          selectedBottom > visibleHeight - margin && remainingHeader > 0.5;
-      if ((target - current).abs() < 0.5 && !headerNeedsCollapse) return;
+      if ((target - current).abs() < 0.5) return;
       unawaited(
         controller.animateTo(
           target,
@@ -2868,19 +2843,18 @@ class _ReviewPageState extends State<ReviewPage>
         rows.add(_variationLine(variation));
       }
     }
+    final landscape = _useBoardSidebar(context);
     final selectedMoveToken = _selectedMoveToken;
-    if (_endpointRevealRequested) {
-      // Start has no selected move; repeated endpoint holds still reveal the
-      // list even though the board position and selection have not changed.
-      _scheduleSelectedMoveReveal();
-    } else if (!scrollable && !_landscapeMovesBuilt) {
-      // Open with the engine output visible. Later move navigation reveals
-      // the selection, but rebuilding engine lines must not undo manual scroll.
-      _landscapeMovesBuilt = true;
-      _lastRevealedMoveToken = selectedMoveToken;
-    } else if (selectedMoveToken != null &&
-        (selectedMoveToken != _lastRevealedMoveToken ||
-            (scrollable && !_moveListScrollController.hasClients))) {
+    final changedLayout = _notationLandscape != landscape;
+    _notationLandscape = landscape;
+    final moveController = landscape
+        ? _landscapeMovesController
+        : _moveListScrollController;
+    if (_endpointRevealRequested ||
+        (selectedMoveToken != null &&
+            (changedLayout ||
+                selectedMoveToken != _lastRevealedMoveToken ||
+                !moveController.hasClients))) {
       _scheduleSelectedMoveReveal();
     }
     final content = Semantics(
@@ -2900,8 +2874,12 @@ class _ReviewPageState extends State<ReviewPage>
       clipBehavior: Clip.antiAlias,
       child: scrollable
           ? SingleChildScrollView(
-              key: _moveListViewportKey,
-              controller: _moveListScrollController,
+              key: landscape
+                  ? _landscapeMovesViewportKey
+                  : _moveListViewportKey,
+              controller: landscape
+                  ? _landscapeMovesController
+                  : _moveListScrollController,
               child: content,
             )
           : content,
@@ -3196,7 +3174,7 @@ class _ReviewPageState extends State<ReviewPage>
     }
   }
 
-  Widget _analysisControls() {
+  Widget _analysisControls({bool withTabs = false}) {
     final canRevealMainline =
         _maximumPly > 0 || (_rootMainline?.sanMoves.isNotEmpty ?? false);
     return MoveHistoryNavigator(
@@ -3221,6 +3199,18 @@ class _ReviewPageState extends State<ReviewPage>
           ? 84
           : 56,
       headerActions: [
+        if (withTabs) ...[
+          _analysisTab(
+            graph: false,
+            icon: Icons.account_tree_outlined,
+            tooltip: l10n(context).moves,
+          ),
+          _analysisTab(
+            graph: true,
+            icon: Icons.area_chart_outlined,
+            tooltip: l10n(context).computerAnalysis,
+          ),
+        ],
         IconButton(
           key: const ValueKey('analysis-actions-menu'),
           onPressed: _hasAnalysisMenu ? _showAnalysisMenu : null,
@@ -3255,15 +3245,17 @@ class _ReviewPageState extends State<ReviewPage>
                       : Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
                 const SizedBox(width: 2),
-                Text(
-                  'SF',
-                  maxLines: 1,
-                  softWrap: false,
-                  style: TextStyle(
-                    color: _engineEnabled
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
+                Flexible(
+                  child: Text(
+                    'SF',
+                    maxLines: 1,
+                    softWrap: false,
+                    style: TextStyle(
+                      color: _engineEnabled
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],
@@ -3274,77 +3266,83 @@ class _ReviewPageState extends State<ReviewPage>
     );
   }
 
-  Widget _analysisTabBar() {
+  Widget _analysisTab({
+    required bool graph,
+    required IconData icon,
+    required String tooltip,
+  }) {
     final colors = Theme.of(context).colorScheme;
-    Widget tab({
-      required bool graph,
-      required IconData icon,
-      required String tooltip,
-    }) {
-      final selected = _showGraph == graph;
-      return Expanded(
-        child: Tooltip(
-          message: tooltip,
-          child: Semantics(
-            button: true,
-            selected: selected,
-            label: tooltip,
-            child: InkWell(
-              key: ValueKey(graph ? 'graph-tab' : 'moves-tab'),
-              onTap: graph && !_engineEnabled
-                  ? null
-                  : () => setState(() => _showGraph = graph),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: selected ? colors.primary : Colors.transparent,
-                      width: 2,
-                    ),
-                  ),
-                ),
-                child: Icon(
-                  icon,
-                  size: 21,
-                  color: graph && !_engineEnabled
-                      ? colors.onSurface.withValues(alpha: 0.28)
-                      : selected
-                      ? colors.primary
-                      : colors.onSurfaceVariant,
+    final selected = _showGraph == graph;
+    return Tooltip(
+      message: tooltip,
+      child: Semantics(
+        button: true,
+        selected: selected,
+        label: tooltip,
+        child: InkWell(
+          key: ValueKey(graph ? 'graph-tab' : 'moves-tab'),
+          onTap: graph && !_engineEnabled
+              ? null
+              : () => setState(() => _showGraph = graph),
+          child: Container(
+            height: 48,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: selected ? colors.primary : Colors.transparent,
+                  width: 2,
                 ),
               ),
             ),
+            child: Icon(
+              icon,
+              size: 21,
+              color: graph && !_engineEnabled
+                  ? colors.onSurface.withValues(alpha: .28)
+                  : selected
+                  ? colors.primary
+                  : colors.onSurfaceVariant,
+            ),
           ),
         ),
-      );
-    }
+      ),
+    );
+  }
 
-    return Material(
-      color: colors.surface,
-      child: Row(
-        children: [
-          tab(
+  Widget _analysisTabBar() => Material(
+    color: Theme.of(context).colorScheme.surface,
+    child: Row(
+      children: [
+        Expanded(
+          child: _analysisTab(
             graph: false,
             icon: Icons.account_tree_outlined,
             tooltip: l10n(context).moves,
           ),
-          tab(
+        ),
+        Expanded(
+          child: _analysisTab(
             graph: true,
             icon: Icons.area_chart_outlined,
             tooltip: l10n(context).computerAnalysis,
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 
   Widget _movesTab({bool scrollable = true}) =>
       _movesNotation(scrollable: scrollable);
 
   Widget _graphTab({bool scrollable = true}) {
     final content = _graphContent();
-    return scrollable ? SingleChildScrollView(child: content) : content;
+    return scrollable
+        ? SingleChildScrollView(
+            key: const ValueKey('analysis-graph-viewport'),
+            controller: _landscapeGraphController,
+            child: content,
+          )
+        : content;
   }
 
   Widget _graphContent() {
@@ -3622,127 +3620,7 @@ class _ReviewPageState extends State<ReviewPage>
             );
             Widget details() => LayoutBuilder(
               builder: (context, available) {
-                final header = <Widget>[
-                  ReviewOpeningName(name: openingName),
-                  if (_engineEnabled)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 2, 12, 4),
-                      child: _engineLinesPanel(),
-                    ),
-                  if (!landscape) _analysisTabBar(),
-                ];
-                final panel = SizedBox(
-                  key: const ValueKey('analysis-tab-panel'),
-                  width: double.infinity,
-                  child: _showGraph
-                      ? _graphTab(scrollable: !landscape)
-                      : _movesTab(scrollable: !landscape),
-                );
-                if (landscape) {
-                  final actionWidth =
-                      MediaQuery.textScalerOf(context).scale(1) > 1.3
-                      ? 84.0
-                      : 56.0;
-                  final controlsHeight =
-                      available.maxWidth >= actionWidth * 3 + 152
-                      ? 56.0
-                      : 108.0;
-                  final pinControls =
-                      available.maxHeight >= controlsHeight + 48;
-                  final pane = NestedScrollView(
-                    key: _landscapeScrollKey,
-                    controller: _showGraph
-                        ? _landscapeGraphController
-                        : _landscapeMovesController,
-                    // Return toward the engine output immediately, even if a
-                    // downward drag starts deep inside the move list.
-                    floatHeaderSlivers: true,
-                    headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                      SliverToBoxAdapter(child: Column(children: header)),
-                      SliverOverlapAbsorber(
-                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context,
-                        ),
-                        sliver: SliverPersistentHeader(
-                          pinned: true,
-                          delegate: _AnalysisTabsHeader(_analysisTabBar()),
-                        ),
-                      ),
-                    ],
-                    body: SizedBox(
-                      key: _showGraph
-                          ? const ValueKey('analysis-graph-viewport')
-                          : _landscapeMovesViewportKey,
-                      width: double.infinity,
-                      child: Builder(
-                        builder: (context) => CustomScrollView(
-                          // Inherit NestedScrollView's inner controller. Giving
-                          // this view its own controller traps boundary drags.
-                          key: PageStorageKey(
-                            _showGraph
-                                ? 'analysis-details-graph'
-                                : 'analysis-details-moves',
-                          ),
-                          primary: true,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          slivers: [
-                            SliverOverlapInjector(
-                              handle:
-                                  NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                    context,
-                                  ),
-                            ),
-                            SliverToBoxAdapter(child: panel),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                  if (!pinControls) {
-                    // With less than one usable move row, let the tabs and
-                    // controls scroll too instead of pinning away the viewport.
-                    return SingleChildScrollView(
-                      key: _showGraph
-                          ? const ValueKey('analysis-graph-viewport')
-                          : _landscapeMovesViewportKey,
-                      controller: _showGraph
-                          ? _landscapeGraphController
-                          : _landscapeMovesController,
-                      child: Column(
-                        children: [
-                          ...header,
-                          _analysisTabBar(),
-                          panel,
-                          _analysisControls(),
-                        ],
-                      ),
-                    );
-                  }
-                  return Column(
-                    children: [
-                      Expanded(child: pane),
-                      _analysisControls(),
-                    ],
-                  );
-                }
-                if (available.maxHeight < engineHeight + 188) {
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              ...header,
-                              SizedBox(height: 220, child: panel),
-                            ],
-                          ),
-                        ),
-                      ),
-                      _analysisControls(),
-                    ],
-                  );
-                }
-                final moveRowMetrics = TextPainter(
+                final rowMetrics = TextPainter(
                   text: TextSpan(
                     text: 'Mg',
                     style: DefaultTextStyle.of(context).style.merge(
@@ -3756,29 +3634,68 @@ class _ReviewPageState extends State<ReviewPage>
                   textScaler: MediaQuery.textScalerOf(context),
                   locale: Localizations.maybeLocaleOf(context),
                 )..layout();
-                // Include move padding, list padding, and the outline so a
-                // scaled row can be fully revealed rather than clipped.
-                final moveMinimum = max(56.0, moveRowMetrics.height + 24);
-                moveRowMetrics.dispose();
-                return Column(
-                  children: [
-                    // Wrapped probabilities can exceed the minimum estimate.
-                    // Reserve a usable move row even when large text makes
-                    // the controls wrap to two rows (108px plus a scaled row).
-                    // The header scrolls instead of squeezing the move list.
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: max(
-                          0.0,
-                          available.maxHeight - 108 - moveMinimum,
+                final moveMinimum = max(56.0, rowMetrics.height + 24);
+                rowMetrics.dispose();
+                final actionWidth =
+                    MediaQuery.textScalerOf(context).scale(1) > 1.3
+                    ? 84.0
+                    : 56.0;
+                final actionCount = landscape ? 5 : 3;
+                final controlsHeight =
+                    available.maxWidth >= actionWidth * actionCount + 152
+                    ? 56.0
+                    : 108.0;
+                final tabsHeight = landscape ? 0.0 : 48.0;
+                final headerMaximum = max(
+                  0.0,
+                  available.maxHeight -
+                      controlsHeight -
+                      tabsHeight -
+                      min(moveMinimum, available.maxHeight * .4),
+                );
+                final header = ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: headerMaximum),
+                  child: SingleChildScrollView(
+                    key: const ValueKey('analysis-header-viewport'),
+                    primary: false,
+                    child: Column(
+                      children: [
+                        ReviewOpeningName(name: openingName),
+                        if (_engineEnabled)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(12, 2, 12, 4),
+                            child: _engineLinesPanel(),
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+                final panel = SizedBox(
+                  key: const ValueKey('analysis-tab-panel'),
+                  width: double.infinity,
+                  child: _showGraph ? _graphTab() : _movesTab(),
+                );
+                // Engine output and notation have separate, bounded viewports.
+                // Move gestures and reveal animations cannot scroll the header.
+                if (available.maxHeight < controlsHeight + 32) {
+                  return Column(
+                    children: [
+                      Expanded(child: panel),
+                      SizedBox(
+                        height: min(controlsHeight, available.maxHeight * .65),
+                        child: SingleChildScrollView(
+                          child: _analysisControls(withTabs: landscape),
                         ),
                       ),
-                      child: SingleChildScrollView(
-                        child: Column(children: header),
-                      ),
-                    ),
+                    ],
+                  );
+                }
+                return Column(
+                  children: [
+                    header,
+                    if (!landscape) _analysisTabBar(),
                     Expanded(child: panel),
-                    _analysisControls(),
+                    _analysisControls(withTabs: landscape),
                   ],
                 );
               },
@@ -3834,24 +3751,4 @@ class _ReviewPageState extends State<ReviewPage>
       ),
     );
   }
-}
-
-/// Keeps the tab controls reachable as the engine header scrolls away.
-class _AnalysisTabsHeader extends SliverPersistentHeaderDelegate {
-  const _AnalysisTabsHeader(this.child);
-
-  final Widget child;
-
-  @override
-  double get minExtent => 48;
-  @override
-  double get maxExtent => 48;
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) => ColoredBox(color: Theme.of(context).colorScheme.surface, child: child);
-  @override
-  bool shouldRebuild(_AnalysisTabsHeader oldDelegate) => true;
 }
