@@ -60,7 +60,7 @@ Portrait after holding Forward:
 
 ## Verification and limits
 
-1,445 full host tests passed, four skipped. All 129 focused layout/opening/navigation checks passed with local Roboto; Flutter analysis reported no issues.
+Original feature-PR validation: 1,445 full host tests passed, four skipped. All 129 focused layout/opening/navigation checks passed with local Roboto; Flutter analysis reported no issues.
 
 `test/analysis_nested_scroll_test.dart` now checks the fixed-pane requirement.
 It asserts header geometry and scroll offset remain unchanged during move
@@ -72,7 +72,7 @@ empty-position, repeated-hold, engine-stability and rotation regressions.
 Viewports include portrait phones/tablets and landscape 873 × 393, 1024 × 600,
 1280 × 800, 1024 × 768, and 800 × 600 at normal and 200% text. Host tests establish
 Flutter layout and gesture routing; physical tablet touch acceptance remains
-outstanding under #29. No Android builds, Actions or LFS downloads were used.
+outstanding under #29. The original feature PR used no Android builds, Actions or LFS downloads; the published beta.9 qualification below is separate.
 No shared build/CI/verification/cleanup helpers changed; Stable receives this
 app layout through the normal 2.6 promotion.
 
@@ -89,4 +89,8 @@ flutter test --no-pub test/analysis_nested_scroll_test.dart
 Beta.7 used a single continuous pane; beta.8 delivered #246's coordinated nested
 scrolling. Their release evidence qualifies those earlier sources. This follow-up
 removes the behavior that lets move scrolling or reveal animations hide engine
-analysis, and requires separate release qualification before publication.
+analysis, and is published with separate beta.9 release qualification recorded below.
+
+## Preview beta.9 Android qualification
+
+[Published beta.9](releases/preview-2.6.0-beta.9.md) delivers #249. Actual production-signed ARM64 APK checks verify independent engine/move panes during scrolling, stepping and endpoint holds, normal/large text, graph requests, rotation and short-window control access. Normal-font profiles show all four engine rows; constrained large text retains independent header scrolling. Earlier illustrations are host renders. Physical touch/tablet acceptance under #29 and Stable promotion remain separate.

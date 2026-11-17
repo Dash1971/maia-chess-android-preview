@@ -1,6 +1,6 @@
 # Build channels and promotion status
 
-> **Published 17 November 2026:** Preview beta.8 delivers coordinated Analysis header/move scrolling and long-press endpoint navigation in portrait/landscape. Preview retains 79M and PGN export; Stable and Dev releases are unchanged.
+> **Published 17 November 2026:** Preview beta.9 keeps engine analysis visible while moves scroll and jump. Preview retains 79M and PGN export; Stable and Dev releases are unchanged.
 
 Updated 2026-11-17. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
@@ -9,13 +9,17 @@ its exact source SHA, tests, hashes, signing identity and remaining limitations.
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.5.1](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1), code 83 | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.8](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.8), code 2608 | `com.dash1971.maia_chess.preview`, 79M | Coordinated header/move scrolling; reverse drags restore engines; long holds reveal start/end in portrait/landscape. Recent games/PGN export retained. Camera withdrawn. Grand Kingdom experimental with owner hardware explanation; DGT Dev-only. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.9](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.9), code 2609 | `com.dash1971.maia_chess.preview`, 79M | Independent engine/move panes; engine output stays visible during move scrolling/navigation. Landscape tabs in bottom strip. Recent games/PGN export retained. Camera withdrawn. Grand Kingdom experimental; DGT Dev-only. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev) | Published 2.6.0-alpha.2-dev, code 2602 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Automatic local Dev diagnostics, assisted Maia promotion and image/camera import. Grand Kingdom experimental; the owner’s later feedback attributes earlier capture symptoms to hardware drift/calibration. |
 
 The three packages install side by side. Obtainium users should select the
 intended repository and enable prereleases for Preview/Dev. Installing Preview
 does not upgrade Dev or transfer its saved games/preferences. Existing Preview
 installations update in place using the established Preview certificate.
+
+## Preview 2.6.0-beta.9 publication
+
+[Published beta.9](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.9) delivers already-merged #249 through release #250. Analysis keeps engine output visible while moves scroll, step or jump to the beginning/end. Engine and move panes scroll independently; landscape tabs share the bottom control strip. Normal-font phone/tablet layouts show both Stockfish and both Maia text lines. Large text uses a separately scrollable header whose offset is unaffected by move interactions. [Qualification and immediate all-host cleanup](releases/preview-2.6.0-beta.9.md) record matching Linux builds, established signing/reconstruction, full native/upgrade and actual signed APK checks. Physical acceptance under #29 remains separate. Stable and Dev releases are unchanged.
 
 ## Preview 2.6.0-beta.8 publication
 
