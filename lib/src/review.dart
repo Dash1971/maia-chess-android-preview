@@ -238,6 +238,8 @@ class _ReviewPageState extends State<ReviewPage>
   final ScrollController _moveListScrollController = ScrollController();
   final ScrollController _landscapeMovesController = ScrollController();
   final ScrollController _landscapeGraphController = ScrollController();
+  final GlobalKey<NestedScrollViewState> _landscapeScrollKey =
+      GlobalKey<NestedScrollViewState>();
   final GlobalKey _landscapeMovesViewportKey = GlobalKey(
     debugLabel: 'analysis-landscape-move-viewport',
   );
@@ -248,6 +250,10 @@ class _ReviewPageState extends State<ReviewPage>
   final GlobalKey _selectedMoveContextKey = GlobalKey(
     debugLabel: 'analysis-selected-move',
   );
+  final GlobalKey _firstMoveContextKey = GlobalKey(
+    debugLabel: 'analysis-first-move',
+  );
+  bool _endpointRevealRequested = false;
   String? _lastRevealedMoveToken;
   bool _moveRevealScheduled = false;
   final MaiaInferenceScope _maiaInferenceScope = MaiaInferenceScope();
@@ -2641,16 +2647,21 @@ class _ReviewPageState extends State<ReviewPage>
     return _ply == 0 ? null : 'main:$_ply';
   }
 
-  void _scheduleSelectedMoveReveal(String token) {
+  void _scheduleSelectedMoveReveal() {
     if (_moveRevealScheduled) return;
     _moveRevealScheduled = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _moveRevealScheduled = false;
-      if (!mounted || _showGraph || _selectedMoveToken != token) return;
-      final selectedContext = _selectedMoveContextKey.currentContext;
+      if (!mounted || _showGraph) return;
+      // Coalesce rapid navigation requests to the position actually rendered.
+      final token = _selectedMoveToken;
+      final selectedContext =
+          (token == null ? _firstMoveContextKey : _selectedMoveContextKey)
+              .currentContext;
       final landscape = _useBoardSidebar(context);
+      final nested = landscape ? _landscapeScrollKey.currentState : null;
       final controller = landscape
-          ? _landscapeMovesController
+          ? (nested?.innerController ?? _landscapeMovesController)
           : _moveListScrollController;
       final viewportContext =
           (landscape ? _landscapeMovesViewportKey : _moveListViewportKey)
@@ -2664,6 +2675,15 @@ class _ReviewPageState extends State<ReviewPage>
       final viewportBox = viewportContext.findRenderObject();
       if (selectedBox is! RenderBox || viewportBox is! RenderBox) return;
 
+      final paneBox = _landscapeScrollKey.currentContext?.findRenderObject();
+      final visibleHeight = landscape && paneBox is RenderBox
+          ? min(
+              viewportBox.size.height,
+              paneBox.localToGlobal(Offset.zero).dy +
+                  paneBox.size.height -
+                  viewportBox.localToGlobal(Offset.zero).dy,
+            )
+          : viewportBox.size.height;
       final selectedTop = selectedBox
           .localToGlobal(Offset.zero, ancestor: viewportBox)
           .dy;
@@ -2671,15 +2691,26 @@ class _ReviewPageState extends State<ReviewPage>
       final position = controller.position;
       final current = position.pixels;
       const margin = 4.0;
+      // The nested body extends behind the pinned 48px tab strip.
+      final topMargin = nested == null ? margin : 48 + margin;
+      final remainingHeader = nested == null
+          ? 0.0
+          : nested.outerController.position.maxScrollExtent -
+                nested.outerController.offset;
       var target = current;
-      if (selectedTop < margin) {
-        target += selectedTop - margin;
-      } else if (selectedBottom > viewportBox.size.height - margin) {
-        target += selectedBottom - (viewportBox.size.height - margin);
+      if (selectedTop < topMargin) {
+        target += selectedTop - topMargin;
+      } else if (selectedBottom > visibleHeight - margin) {
+        target += selectedBottom - (visibleHeight - margin);
+        // The coordinator reveals room by collapsing the header first.
+        target -= remainingHeader;
       }
       target = target.clamp(position.minScrollExtent, position.maxScrollExtent);
       _lastRevealedMoveToken = token;
-      if ((target - current).abs() < 0.5) return;
+      _endpointRevealRequested = false;
+      final headerNeedsCollapse =
+          selectedBottom > visibleHeight - margin && remainingHeader > 0.5;
+      if ((target - current).abs() < 0.5 && !headerNeedsCollapse) return;
       unawaited(
         controller.animateTo(
           target,
@@ -2838,7 +2869,11 @@ class _ReviewPageState extends State<ReviewPage>
       }
     }
     final selectedMoveToken = _selectedMoveToken;
-    if (!scrollable && !_landscapeMovesBuilt) {
+    if (_endpointRevealRequested) {
+      // Start has no selected move; repeated endpoint holds still reveal the
+      // list even though the board position and selection have not changed.
+      _scheduleSelectedMoveReveal();
+    } else if (!scrollable && !_landscapeMovesBuilt) {
       // Open with the engine output visible. Later move navigation reveals
       // the selection, but rebuilding engine lines must not undo manual scroll.
       _landscapeMovesBuilt = true;
@@ -2846,7 +2881,7 @@ class _ReviewPageState extends State<ReviewPage>
     } else if (selectedMoveToken != null &&
         (selectedMoveToken != _lastRevealedMoveToken ||
             (scrollable && !_moveListScrollController.hasClients))) {
-      _scheduleSelectedMoveReveal(selectedMoveToken);
+      _scheduleSelectedMoveReveal();
     }
     final content = Semantics(
       key: const ValueKey('analysis-move-scroll'),
@@ -2877,21 +2912,26 @@ class _ReviewPageState extends State<ReviewPage>
     required RecordedVariation? rootMainline,
     required List<String> moves,
     required int index,
-  }) => _notationMove(
-    key: ValueKey('mainline-move-$index'),
-    san: moves[index],
-    classification: _classificationAt(index + 1),
-    selected: rootMainline != null
-        ? identical(_openedVariation, rootMainline) &&
-              _variationIndex == index + 1
-        : !_inVariation && _ply == index + 1,
-    onTap: rootMainline != null
-        ? () => _openVariation(rootMainline, index + 1)
-        : () => setState(() => _showMainPly(index + 1)),
-    onLongPress: rootMainline != null
-        ? () => _showMoveActions(rootMainline, index + 1, variation: false)
-        : null,
-  );
+  }) {
+    final move = _notationMove(
+      key: ValueKey('mainline-move-$index'),
+      san: moves[index],
+      classification: _classificationAt(index + 1),
+      selected: rootMainline != null
+          ? identical(_openedVariation, rootMainline) &&
+                _variationIndex == index + 1
+          : !_inVariation && _ply == index + 1,
+      onTap: rootMainline != null
+          ? () => _openVariation(rootMainline, index + 1)
+          : () => setState(() => _showMainPly(index + 1)),
+      onLongPress: rootMainline != null
+          ? () => _showMoveActions(rootMainline, index + 1, variation: false)
+          : null,
+    );
+    return index == 0
+        ? KeyedSubtree(key: _firstMoveContextKey, child: move)
+        : move;
+  }
 
   bool get _inSideVariation =>
       _inVariation &&
@@ -2961,6 +3001,12 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   void _jumpToStart() {
+    _endpointRevealRequested = true;
+    if (_atAnalysisStart) {
+      // A repeated hold only reveals the list; do not restart analysis.
+      setState(() {});
+      return;
+    }
     final root = _rootMainline;
     if (root != null) {
       _openVariation(root, 0);
@@ -2970,6 +3016,11 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   void _jumpToEnd() {
+    _endpointRevealRequested = true;
+    if (_atAnalysisEnd) {
+      setState(() {});
+      return;
+    }
     final root = _rootMainline;
     if (root != null) {
       _openVariation(root, root.sanMoves.length);
@@ -3146,14 +3197,16 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   Widget _analysisControls() {
+    final canRevealMainline =
+        _maximumPly > 0 || (_rootMainline?.sanMoves.isNotEmpty ?? false);
     return MoveHistoryNavigator(
       key: const ValueKey('analysis-controls'),
       previousKey: const ValueKey('previous-move-button'),
       nextKey: const ValueKey('next-move-button'),
       canGoBack: !_atAnalysisStart,
       canGoForward: !_atAnalysisEnd,
-      canHoldPrevious: _inSideVariation || !_atAnalysisStart,
-      canHoldNext: _inSideVariation || !_atAnalysisEnd,
+      canHoldPrevious: _inSideVariation || canRevealMainline,
+      canHoldNext: _inSideVariation || canRevealMainline,
       onFirst: _inSideVariation ? _returnToMainline : _jumpToStart,
       onPrevious: () => _step(-1),
       onNext: () => _step(1),
@@ -3596,13 +3649,59 @@ class _ReviewPageState extends State<ReviewPage>
                       : 108.0;
                   final pinControls =
                       available.maxHeight >= controlsHeight + 48;
-                  final pane = KeyedSubtree(
-                    key: PageStorageKey(
-                      _showGraph
-                          ? 'analysis-details-graph'
-                          : 'analysis-details-moves',
+                  final pane = NestedScrollView(
+                    key: _landscapeScrollKey,
+                    controller: _showGraph
+                        ? _landscapeGraphController
+                        : _landscapeMovesController,
+                    // Return toward the engine output immediately, even if a
+                    // downward drag starts deep inside the move list.
+                    floatHeaderSlivers: true,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                      SliverToBoxAdapter(child: Column(children: header)),
+                      SliverOverlapAbsorber(
+                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context,
+                        ),
+                        sliver: SliverPersistentHeader(
+                          pinned: true,
+                          delegate: _AnalysisTabsHeader(_analysisTabBar()),
+                        ),
+                      ),
+                    ],
+                    body: SizedBox(
+                      key: _showGraph
+                          ? const ValueKey('analysis-graph-viewport')
+                          : _landscapeMovesViewportKey,
+                      width: double.infinity,
+                      child: Builder(
+                        builder: (context) => CustomScrollView(
+                          // Inherit NestedScrollView's inner controller. Giving
+                          // this view its own controller traps boundary drags.
+                          key: PageStorageKey(
+                            _showGraph
+                                ? 'analysis-details-graph'
+                                : 'analysis-details-moves',
+                          ),
+                          primary: true,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          slivers: [
+                            SliverOverlapInjector(
+                              handle:
+                                  NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                    context,
+                                  ),
+                            ),
+                            SliverToBoxAdapter(child: panel),
+                          ],
+                        ),
+                      ),
                     ),
-                    child: SingleChildScrollView(
+                  );
+                  if (!pinControls) {
+                    // With less than one usable move row, let the tabs and
+                    // controls scroll too instead of pinning away the viewport.
+                    return SingleChildScrollView(
                       key: _showGraph
                           ? const ValueKey('analysis-graph-viewport')
                           : _landscapeMovesViewportKey,
@@ -3614,19 +3713,17 @@ class _ReviewPageState extends State<ReviewPage>
                           ...header,
                           _analysisTabBar(),
                           panel,
-                          if (!pinControls) _analysisControls(),
+                          _analysisControls(),
                         ],
                       ),
-                    ),
+                    );
+                  }
+                  return Column(
+                    children: [
+                      Expanded(child: pane),
+                      _analysisControls(),
+                    ],
                   );
-                  return pinControls
-                      ? Column(
-                          children: [
-                            Expanded(child: pane),
-                            _analysisControls(),
-                          ],
-                        )
-                      : pane;
                 }
                 if (available.maxHeight < engineHeight + 188) {
                   return Column(
@@ -3645,15 +3742,36 @@ class _ReviewPageState extends State<ReviewPage>
                     ],
                   );
                 }
+                final moveRowMetrics = TextPainter(
+                  text: TextSpan(
+                    text: 'Mg',
+                    style: DefaultTextStyle.of(context).style.merge(
+                      const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  textDirection: Directionality.of(context),
+                  textScaler: MediaQuery.textScalerOf(context),
+                  locale: Localizations.maybeLocaleOf(context),
+                )..layout();
+                // Include move padding, list padding, and the outline so a
+                // scaled row can be fully revealed rather than clipped.
+                final moveMinimum = max(56.0, moveRowMetrics.height + 24);
+                moveRowMetrics.dispose();
                 return Column(
                   children: [
                     // Wrapped probabilities can exceed the minimum estimate.
                     // Reserve a usable move row even when large text makes
-                    // the controls wrap to two rows (108px + 56px for moves).
+                    // the controls wrap to two rows (108px plus a scaled row).
                     // The header scrolls instead of squeezing the move list.
                     ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxHeight: available.maxHeight - 164,
+                        maxHeight: max(
+                          0.0,
+                          available.maxHeight - 108 - moveMinimum,
+                        ),
                       ),
                       child: SingleChildScrollView(
                         child: Column(children: header),
@@ -3716,4 +3834,24 @@ class _ReviewPageState extends State<ReviewPage>
       ),
     );
   }
+}
+
+/// Keeps the tab controls reachable as the engine header scrolls away.
+class _AnalysisTabsHeader extends SliverPersistentHeaderDelegate {
+  const _AnalysisTabsHeader(this.child);
+
+  final Widget child;
+
+  @override
+  double get minExtent => 48;
+  @override
+  double get maxExtent => 48;
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) => ColoredBox(color: Theme.of(context).colorScheme.surface, child: child);
+  @override
+  bool shouldRebuild(_AnalysisTabsHeader oldDelegate) => true;
 }

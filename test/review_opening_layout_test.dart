@@ -192,18 +192,26 @@ void main() {
                   findsOneWidget,
                 );
                 expect(
-                  find.byTooltip('Next move').hitTestable(),
+                  find.byKey(const ValueKey('next-move-button')).hitTestable(),
                   findsOneWidget,
                 );
                 await tester.ensureVisible(
                   find.byKey(const ValueKey('analysis-engine-lines')),
                 );
                 await tester.ensureVisible(
-                  find.byKey(const ValueKey('analysis-tab-panel')),
+                  find.byKey(
+                    const ValueKey('analysis-tab-panel'),
+                    skipOffstage: false,
+                  ),
                 );
                 expect(
                   tester
-                      .getSize(find.byKey(const ValueKey('analysis-tab-panel')))
+                      .getSize(
+                        find.byKey(
+                          const ValueKey('analysis-tab-panel'),
+                          skipOffstage: false,
+                        ),
+                      )
                       .height,
                   greaterThanOrEqualTo(56),
                 );
@@ -246,6 +254,19 @@ void main() {
       expect(openingFinder, findsNothing);
       await tester.longPress(find.byTooltip('Next move'));
       await tester.pumpAndSettle();
+      // Navigation reveals the selected move; return through the move pane
+      // to inspect the opening header without depending on it staying onscreen.
+      final nested = tester.state<NestedScrollViewState>(
+        find.byType(NestedScrollView),
+      );
+      for (var i = 0; i < 6 && nested.outerController.offset > .1; i++) {
+        final rect = tester.getRect(find.byType(NestedScrollView));
+        await tester.dragFrom(
+          Offset(rect.center.dx, rect.bottom - 20),
+          const Offset(0, 300),
+        );
+        await tester.pumpAndSettle();
+      }
       expect(find.text(opening), findsOneWidget);
       expect(tester.getSemantics(openingFinder).label, opening);
       expect(tester.takeException(), isNull);
