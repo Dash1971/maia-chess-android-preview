@@ -250,6 +250,10 @@ class _ReviewPageState extends State<ReviewPage>
   final GlobalKey _selectedMoveContextKey = GlobalKey(
     debugLabel: 'analysis-selected-move',
   );
+  final GlobalKey _firstMoveContextKey = GlobalKey(
+    debugLabel: 'analysis-first-move',
+  );
+  bool _endpointRevealRequested = false;
   String? _lastRevealedMoveToken;
   bool _moveRevealScheduled = false;
   final MaiaInferenceScope _maiaInferenceScope = MaiaInferenceScope();
@@ -2643,13 +2647,17 @@ class _ReviewPageState extends State<ReviewPage>
     return _ply == 0 ? null : 'main:$_ply';
   }
 
-  void _scheduleSelectedMoveReveal(String token) {
+  void _scheduleSelectedMoveReveal() {
     if (_moveRevealScheduled) return;
     _moveRevealScheduled = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _moveRevealScheduled = false;
-      if (!mounted || _showGraph || _selectedMoveToken != token) return;
-      final selectedContext = _selectedMoveContextKey.currentContext;
+      if (!mounted || _showGraph) return;
+      // Coalesce rapid navigation requests to the position actually rendered.
+      final token = _selectedMoveToken;
+      final selectedContext =
+          (token == null ? _firstMoveContextKey : _selectedMoveContextKey)
+              .currentContext;
       final landscape = _useBoardSidebar(context);
       final nested = landscape ? _landscapeScrollKey.currentState : null;
       final controller = landscape
@@ -2699,6 +2707,7 @@ class _ReviewPageState extends State<ReviewPage>
       }
       target = target.clamp(position.minScrollExtent, position.maxScrollExtent);
       _lastRevealedMoveToken = token;
+      _endpointRevealRequested = false;
       final headerNeedsCollapse =
           selectedBottom > visibleHeight - margin && remainingHeader > 0.5;
       if ((target - current).abs() < 0.5 && !headerNeedsCollapse) return;
@@ -2860,7 +2869,11 @@ class _ReviewPageState extends State<ReviewPage>
       }
     }
     final selectedMoveToken = _selectedMoveToken;
-    if (!scrollable && !_landscapeMovesBuilt) {
+    if (_endpointRevealRequested) {
+      // Start has no selected move; repeated endpoint holds still reveal the
+      // list even though the board position and selection have not changed.
+      _scheduleSelectedMoveReveal();
+    } else if (!scrollable && !_landscapeMovesBuilt) {
       // Open with the engine output visible. Later move navigation reveals
       // the selection, but rebuilding engine lines must not undo manual scroll.
       _landscapeMovesBuilt = true;
@@ -2868,7 +2881,7 @@ class _ReviewPageState extends State<ReviewPage>
     } else if (selectedMoveToken != null &&
         (selectedMoveToken != _lastRevealedMoveToken ||
             (scrollable && !_moveListScrollController.hasClients))) {
-      _scheduleSelectedMoveReveal(selectedMoveToken);
+      _scheduleSelectedMoveReveal();
     }
     final content = Semantics(
       key: const ValueKey('analysis-move-scroll'),
@@ -2899,21 +2912,26 @@ class _ReviewPageState extends State<ReviewPage>
     required RecordedVariation? rootMainline,
     required List<String> moves,
     required int index,
-  }) => _notationMove(
-    key: ValueKey('mainline-move-$index'),
-    san: moves[index],
-    classification: _classificationAt(index + 1),
-    selected: rootMainline != null
-        ? identical(_openedVariation, rootMainline) &&
-              _variationIndex == index + 1
-        : !_inVariation && _ply == index + 1,
-    onTap: rootMainline != null
-        ? () => _openVariation(rootMainline, index + 1)
-        : () => setState(() => _showMainPly(index + 1)),
-    onLongPress: rootMainline != null
-        ? () => _showMoveActions(rootMainline, index + 1, variation: false)
-        : null,
-  );
+  }) {
+    final move = _notationMove(
+      key: ValueKey('mainline-move-$index'),
+      san: moves[index],
+      classification: _classificationAt(index + 1),
+      selected: rootMainline != null
+          ? identical(_openedVariation, rootMainline) &&
+                _variationIndex == index + 1
+          : !_inVariation && _ply == index + 1,
+      onTap: rootMainline != null
+          ? () => _openVariation(rootMainline, index + 1)
+          : () => setState(() => _showMainPly(index + 1)),
+      onLongPress: rootMainline != null
+          ? () => _showMoveActions(rootMainline, index + 1, variation: false)
+          : null,
+    );
+    return index == 0
+        ? KeyedSubtree(key: _firstMoveContextKey, child: move)
+        : move;
+  }
 
   bool get _inSideVariation =>
       _inVariation &&
@@ -2983,6 +3001,12 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   void _jumpToStart() {
+    _endpointRevealRequested = true;
+    if (_atAnalysisStart) {
+      // A repeated hold only reveals the list; do not restart analysis.
+      setState(() {});
+      return;
+    }
     final root = _rootMainline;
     if (root != null) {
       _openVariation(root, 0);
@@ -2992,6 +3016,11 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   void _jumpToEnd() {
+    _endpointRevealRequested = true;
+    if (_atAnalysisEnd) {
+      setState(() {});
+      return;
+    }
     final root = _rootMainline;
     if (root != null) {
       _openVariation(root, root.sanMoves.length);
@@ -3168,14 +3197,16 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   Widget _analysisControls() {
+    final canRevealMainline =
+        _maximumPly > 0 || (_rootMainline?.sanMoves.isNotEmpty ?? false);
     return MoveHistoryNavigator(
       key: const ValueKey('analysis-controls'),
       previousKey: const ValueKey('previous-move-button'),
       nextKey: const ValueKey('next-move-button'),
       canGoBack: !_atAnalysisStart,
       canGoForward: !_atAnalysisEnd,
-      canHoldPrevious: _inSideVariation || !_atAnalysisStart,
-      canHoldNext: _inSideVariation || !_atAnalysisEnd,
+      canHoldPrevious: _inSideVariation || canRevealMainline,
+      canHoldNext: _inSideVariation || canRevealMainline,
       onFirst: _inSideVariation ? _returnToMainline : _jumpToStart,
       onPrevious: () => _step(-1),
       onNext: () => _step(1),
@@ -3711,15 +3742,36 @@ class _ReviewPageState extends State<ReviewPage>
                     ],
                   );
                 }
+                final moveRowMetrics = TextPainter(
+                  text: TextSpan(
+                    text: 'Mg',
+                    style: DefaultTextStyle.of(context).style.merge(
+                      const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  textDirection: Directionality.of(context),
+                  textScaler: MediaQuery.textScalerOf(context),
+                  locale: Localizations.maybeLocaleOf(context),
+                )..layout();
+                // Include move padding, list padding, and the outline so a
+                // scaled row can be fully revealed rather than clipped.
+                final moveMinimum = max(56.0, moveRowMetrics.height + 24);
+                moveRowMetrics.dispose();
                 return Column(
                   children: [
                     // Wrapped probabilities can exceed the minimum estimate.
                     // Reserve a usable move row even when large text makes
-                    // the controls wrap to two rows (108px + 56px for moves).
+                    // the controls wrap to two rows (108px plus a scaled row).
                     // The header scrolls instead of squeezing the move list.
                     ConstrainedBox(
                       constraints: BoxConstraints(
-                        maxHeight: available.maxHeight - 164,
+                        maxHeight: max(
+                          0.0,
+                          available.maxHeight - 108 - moveMinimum,
+                        ),
                       ),
                       child: SingleChildScrollView(
                         child: Column(children: header),

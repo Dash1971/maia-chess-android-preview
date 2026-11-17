@@ -51,6 +51,9 @@ void main() {
     Size size, {
     double scale = 1,
     AnalysisSession? replay,
+    int initialPly = 2,
+    bool editable = false,
+    VoidCallback? onEvaluate,
     EdgeInsets padding = const EdgeInsets.only(top: 24, bottom: 16),
   }) async {
     final game = replay ?? session;
@@ -87,7 +90,8 @@ void main() {
               uciMoves: game.uciMoves,
               sanMoves: game.sanMoves,
               pgn: game.pgn,
-              initialCurrentFen: game.positions[2],
+              initialCurrentFen: game.positions[initialPly],
+              onSessionChanged: editable ? (_, _, _) async {} : null,
               playerIsWhite: true,
               maiaElo: 1600,
               secondMaiaElo: 2600,
@@ -98,21 +102,25 @@ void main() {
                 required uciMoves,
               }) async => const <ClassifiedMove>[],
               // Display fixtures only; these tests do not run native engines/models.
-              evaluator: (_) async => const StockfishReview(
-                30,
-                'g1f3',
-                lines: [
-                  StockfishLine(
-                    evaluation: 30,
-                    moves: ['g1f3', 'b8c6', 'f1b5', 'g8f6'],
-                  ),
-                  StockfishLine(
-                    evaluation: 10,
-                    moves: ['b1c3', 'g8f6', 'f1c4', 'b8c6'],
-                  ),
-                ],
-              ),
+              evaluator: (_) async {
+                onEvaluate?.call();
+                return const StockfishReview(
+                  30,
+                  'g1f3',
+                  lines: [
+                    StockfishLine(
+                      evaluation: 30,
+                      moves: ['g1f3', 'b8c6', 'f1b5', 'g8f6'],
+                    ),
+                    StockfishLine(
+                      evaluation: 10,
+                      moves: ['b1c3', 'g8f6', 'f1c4', 'b8c6'],
+                    ),
+                  ],
+                );
+              },
               maiaInferenceEvaluator: (_, elo) async {
+                onEvaluate?.call();
                 final policy = List<double>.filled(4352, -20);
                 policy[MaiaEncoding.moveIndex('g1f3', false)] = elo == 2600
                     ? 3
@@ -164,6 +172,183 @@ void main() {
       image.dispose();
     });
   }
+
+  ScrollController moveController(WidgetTester tester) =>
+      find.byType(NestedScrollView).evaluate().isNotEmpty
+      ? nested(tester).innerController
+      : tester
+            .widget<SingleChildScrollView>(
+              find.descendant(
+                of: find.byKey(const ValueKey('analysis-move-list')),
+                matching: find.byType(SingleChildScrollView),
+              ),
+            )
+            .controller!;
+
+  Rect visibleMoveWindow(WidgetTester tester) {
+    if (find.byType(NestedScrollView).evaluate().isNotEmpty) {
+      final pane = tester.getRect(find.byType(NestedScrollView));
+      return Rect.fromLTRB(pane.left, pane.top + 48, pane.right, pane.bottom);
+    }
+    return tester.getRect(
+      find.descendant(
+        of: find.byKey(const ValueKey('analysis-move-list')),
+        matching: find.byType(SingleChildScrollView),
+      ),
+    );
+  }
+
+  void expectEndpoint(WidgetTester tester, {required bool end}) {
+    final expectedFen = end ? session.positions.last : session.positions.first;
+    final board = tester
+        .widget<cg.Chessboard>(find.byType(cg.Chessboard))
+        .controller;
+    // Ignore only canonical en-passant serialization differences.
+    expect(board.fen.split(' ').take(2), expectedFen.split(' ').take(2));
+    final selected = find.byKey(const ValueKey('analysis-selected-move'));
+    expect(selected, end ? findsOneWidget : findsNothing);
+    if (end) {
+      expect(
+        find.descendant(
+          of: selected,
+          matching: find.text(session.sanMoves.last),
+        ),
+        findsOneWidget,
+      );
+    }
+    final row = tester.getRect(
+      find.byKey(
+        ValueKey('mainline-move-${end ? session.sanMoves.length - 1 : 0}'),
+      ),
+    );
+    final window = visibleMoveWindow(tester);
+    expect(
+      row.top,
+      greaterThanOrEqualTo(window.top - 1),
+      reason: 'Row $row in window $window',
+    );
+    expect(
+      row.bottom,
+      lessThanOrEqualTo(window.bottom + 1),
+      reason: 'Row $row in window $window',
+    );
+  }
+
+  for (final (name, size) in [
+    ('portrait phone', const Size(393, 873)),
+    ('landscape phone', const Size(873, 393)),
+    ('portrait tablet', const Size(800, 1280)),
+    ('landscape tablet', const Size(1280, 800)),
+  ]) {
+    for (final scale in [1.0, 2.0]) {
+      testWidgets(
+        '$name at $scale long-press endpoints reveal and re-reveal the list without rotation',
+        (tester) async {
+          var evaluations = 0;
+          await mount(
+            tester,
+            size,
+            scale: scale,
+            onEvaluate: () => evaluations++,
+          );
+          final next = find.byKey(const ValueKey('next-move-button'));
+          final previous = find.byKey(const ValueKey('previous-move-button'));
+          await tester.longPress(next);
+          await tester.pumpAndSettle();
+          expectEndpoint(tester, end: true);
+          final endBoard = tester.element(find.byType(cg.Chessboard));
+          final endEvaluations = evaluations;
+          // Browse away without selecting a different move.
+          moveController(tester).jumpTo(0);
+          if (find.byType(NestedScrollView).evaluate().isNotEmpty) {
+            outer(tester).jumpTo(0);
+          }
+          await tester.pumpAndSettle();
+          expect(tester.widget<InkWell>(next).onTap, isNull);
+          await tester.longPress(next);
+          await tester.pumpAndSettle();
+          expectEndpoint(tester, end: true);
+          expect(tester.element(find.byType(cg.Chessboard)), same(endBoard));
+          expect(
+            evaluations,
+            endEvaluations,
+            reason: 'Repeated hold must not restart engines',
+          );
+          await tester.longPress(previous);
+          await tester.pumpAndSettle();
+          expectEndpoint(tester, end: false);
+          final startBoard = tester.element(find.byType(cg.Chessboard));
+          final startEvaluations = evaluations;
+          moveController(tester)
+              .jumpTo(moveController(tester).position.maxScrollExtent);
+          await tester.pumpAndSettle();
+          expect(tester.widget<InkWell>(previous).onTap, isNull);
+          await tester.longPress(previous);
+          await tester.pumpAndSettle();
+          expectEndpoint(tester, end: false);
+          expect(tester.element(find.byType(cg.Chessboard)), same(startBoard));
+          expect(evaluations, startEvaluations);
+          // A late score/header rebuild must not undo the explicit reveal.
+          final scores = MaiaScoreScope.maybeOf(
+            tester.element(find.byType(ReviewPage)),
+          )!;
+          await scores.select(false);
+          await tester.pumpAndSettle();
+          expectEndpoint(tester, end: false);
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+  }
+
+  for (final (name, size) in [
+    ('portrait', const Size(393, 873)),
+    ('landscape', const Size(873, 393)),
+  ]) {
+    testWidgets(
+      '$name saved game opened at end and graph-tab holds reveal endpoints',
+      (tester) async {
+        await mount(
+          tester,
+          size,
+          initialPly: session.sanMoves.length,
+          editable: true,
+        );
+        final next = find.byKey(const ValueKey('next-move-button'));
+        final previous = find.byKey(const ValueKey('previous-move-button'));
+        await tester.longPress(next);
+        await tester.pumpAndSettle();
+        expectEndpoint(tester, end: true);
+        await tester.ensureVisible(find.byKey(const ValueKey('graph-tab')));
+        await tester.tap(find.byKey(const ValueKey('graph-tab')));
+        await tester.pumpAndSettle();
+        await tester.longPress(previous);
+        await tester.pumpAndSettle();
+        await tester.ensureVisible(find.byKey(const ValueKey('moves-tab')));
+        await tester.tap(find.byKey(const ValueKey('moves-tab')));
+        await tester.pumpAndSettle();
+        expectEndpoint(tester, end: false);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
+  testWidgets('an empty analysis position keeps endpoint controls disabled', (
+    tester,
+  ) async {
+    await mount(
+      tester,
+      const Size(393, 873),
+      initialPly: 0,
+      replay: AnalysisSession.fromFen(session.positions.first),
+    );
+    for (final key in ['previous-move-button', 'next-move-button']) {
+      final control = tester.widget<InkWell>(find.byKey(ValueKey(key)));
+      expect(control.onTap, isNull);
+      expect(control.onLongPress, isNull);
+    }
+    expect(tester.takeException(), isNull);
+  });
 
   for (final (name, size) in [
     ('phone', const Size(873, 393)),
