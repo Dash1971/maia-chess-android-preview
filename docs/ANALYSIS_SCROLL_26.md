@@ -19,7 +19,8 @@ a tablet can show the engine output and several move rows together. Selecting
 another move reveals that row without hiding it under the tabs. Engine-output
 rebuilds do not repeatedly undo manual scrolling. Moves and computer analysis
 retain separate positions. Rotation retains the board/controller and selected
-position, including portrait move visibility. Portrait keeps its existing layout.
+position, including portrait move visibility. Portrait keeps its layout while
+reserving enough height for a complete move row at the current text size.
 
 The square board and Home/share toolbar stay fixed. The board uses available
 height when enough width remains for readable analysis. Wide tablets can exceed
@@ -27,6 +28,22 @@ the old Stable 560-pixel cap; 4:3 tablets and resized windows reserve more analy
 width rather than maximizing the board at its expense. Bottom navigation stays
 fixed in normal windows. Exceptionally short windows scroll the tabs and controls
 into reach together instead of pinning away the remaining viewport.
+
+## Long-press endpoint navigation
+
+In both portrait and landscape, holding Back returns the board to its starting
+position and reveals the first move row. The starting position is before move 1,
+so no move is highlighted there. Holding Forward selects and reveals the last
+move. Both holds remain available after reaching their destination: scrolling
+away and holding again brings the list back without resetting the board or
+restarting analysis. Single-step taps remain disabled at their respective ends.
+An empty position has no endpoint holds.
+
+Endpoint reveal is requested explicitly rather than depending only on a changed
+selection token. Requests made on the computer-analysis tab are retained until
+returning to Moves. Side-variation holds keep their existing return-to-main-line
+behavior. Portrait reserves a measured, text-scaled move-row height so a selected
+row can fit completely at 200% text size.
 
 ## Implemented-widget renders
 
@@ -58,9 +75,10 @@ Wide tablet, 1280 × 800:
 
 ## Verification and limits
 
-The full host suite passed 1,440 tests with four skips. Ninety focused
-layout/opening tests passed with the local Roboto font, and Flutter analysis
-reported no issues.
+The endpoint follow-up adds eleven regression cases. The full host suite passed
+1,451 tests with four skips. All 135 focused navigation/layout/opening checks
+passed with local Roboto, all 30 analysis-scroll cases also passed with Flutter's
+default test font, and Flutter analysis reported no issues.
 
 `test/analysis_nested_scroll_test.dart` exercises 873 × 393, 1024 × 600,
 1280 × 800, 1024 × 768, and 800 × 600 viewports at normal and 200% text size.
@@ -68,7 +86,11 @@ It checks coordinated header/list scrolling, reverse drags from deep moves,
 short-game boundary drags, fixed board/controls, selected-row reveal in both
 directions, manual scrolling across rebuilds, rotation, tab position restoration,
 completed computer analysis, very short windows, and side cutouts/gesture insets.
-Existing opening checks cover long names, the full-name dialog, and navigation.
+The additional endpoint cases exercise phone and tablet portrait/landscape at
+normal and 200% text size without rotation, repeated holds after browsing away,
+unchanged board/engine activity at an endpoint, saved games opened at the final
+position, editable main lines, graph-tab requests, and empty positions. Existing
+opening checks cover long names, the full-name dialog, and navigation.
 Score-layout checks retain their geometry assertions even when the move body is
 initially offscreen at 200% text size.
 

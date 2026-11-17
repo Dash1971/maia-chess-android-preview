@@ -192,7 +192,7 @@ void main() {
                   findsOneWidget,
                 );
                 expect(
-                  find.byTooltip('Next move').hitTestable(),
+                  find.byKey(const ValueKey('next-move-button')).hitTestable(),
                   findsOneWidget,
                 );
                 await tester.ensureVisible(
