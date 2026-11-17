@@ -142,3 +142,7 @@ normal/large text, graph-tab requests, rotation and short-window access. The
 header can collapse while navigating. Earlier illustrations remain host renders;
 beta.7 evidence applies to its earlier source. Physical touch/tablet acceptance
 under #29 and Stable promotion remain separate.
+
+## Preview beta.9 Android qualification
+
+[Published beta.9](releases/preview-2.6.0-beta.9.md) delivers #249. Actual production-signed ARM64 APK checks verify independent engine/move panes during scrolling, stepping and endpoint holds, normal/large text, graph requests, rotation and short-window control access. Normal-font profiles show all four engine rows; constrained large text retains independent header scrolling. Earlier illustrations are host renders. Physical touch/tablet acceptance under #29 and Stable promotion remain separate.

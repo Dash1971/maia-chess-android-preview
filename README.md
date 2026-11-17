@@ -30,7 +30,7 @@ and feature requests.
 
 ## Current Preview status
 
-The latest Preview release is [2.6.0-beta.8](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.8). Landscape Analysis coordinates an independently scrolling move window with the opening/engine header: upward swipes expand moves, and downward swipes inside deep moves immediately restore engine output. The header can collapse during navigation. Holding Back/Forward reveals the first/final row in portrait and landscape, including repeated holds after browsing away, without rotation or restarting analysis. Recent games polish, saved-game list return and PGN export remain available. Camera/image recognition remains withdrawn. Preview uses 79M. Grand Kingdom remains experimental; [the owner attributes historical capture symptoms to hardware drift/calibration](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) and reports good operation. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.8.md) record this release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
+The latest Preview release is [2.6.0-beta.9](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.9). Analysis keeps engine output visible while moves scroll, step or jump to the beginning/end. Engine and move panes scroll independently; landscape tabs share the bottom control strip. Normal-font phone/tablet layouts show both Stockfish and both Maia text lines. Large text uses a separately scrollable header whose offset is unaffected by move interactions. First/last and repeated holds reveal their destination in portrait and landscape without rotation or restarting analysis. Recent games polish, saved-game list return and PGN export remain available. Camera/image recognition remains withdrawn. Preview uses 79M. Grand Kingdom remains experimental; [the owner attributes historical capture symptoms to hardware drift/calibration](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) and reports good operation. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.9.md) record this release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
 
 See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
 
@@ -120,12 +120,7 @@ with a two-line fallback for narrow windows or large text. [Implementation and
 Android qualification](docs/ADAPTIVE_LAYOUTS_26.md) record phone/tablet/constrained
 profiles and rotation/input checks. [#29](https://github.com/Dash1971/maia-chess-android-preview/issues/29)
 remains open for comfortable physical finger input and tablet-owner feedback;
-Stable promotion is separate. Published beta.8 uses coordinated nested scrolling.
-A follow-up draft keeps engine analysis visible while moves scroll independently,
-including long-press start/end navigation in portrait and landscape. Landscape
-tabs share the bottom control strip to leave more space for the move window.
-[Behavior frames and host verification](docs/ANALYSIS_SCROLL_26.md) cover the
-follow-up source. Physical touch/tablet acceptance remains open.
+Stable promotion is separate. Published beta.9 keeps engine analysis visible while moves scroll independently, including endpoint jumps. Landscape tabs share the bottom control strip. Large text permits independent header scrolling. [Behavior and verification](docs/ANALYSIS_SCROLL_26.md) separate host renders from production APK checks; physical touch/tablet acceptance remains open.
 
 **Under consideration: candidate moves and a rating explorer**
 
