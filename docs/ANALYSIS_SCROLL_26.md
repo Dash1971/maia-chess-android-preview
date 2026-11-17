@@ -70,3 +70,12 @@ Host tests establish layout and Flutter gesture routing at these sizes. Real
 tablet touch feel, device-specific system behavior, GPU rendering, and physical
 engine/board integration still need device or emulator acceptance. This work
 does not build or publish Android packages and does not replace release gates.
+
+## Preview beta.7 Android qualification
+
+[Published beta.7](releases/preview-2.6.0-beta.7.md) delivers #242/#243 and
+records actual production-signed ARM64 APK checks for continuous Analysis
+scrolling, graph/navigation, tablet/resized/large-text/short-window layouts
+and Recent games columns/selection/delete/export flows. Earlier renders remain
+host-test illustrations. Physical touch/tablet and actual OS split-screen
+acceptance under #29 remain separate; Stable promotion is separate.
