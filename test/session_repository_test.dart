@@ -47,6 +47,20 @@ void main() {
     },
   );
 
+  test('truncated UTF-8 in pending does not hide or block a saved game', () async {
+    const game = {'type': 'game', 'pgn': '1. e4 *'};
+    await store.save(game);
+    final pending = File('${directory.path}/active.json.pending');
+    await pending.writeAsBytes([...utf8.encode('{"name":"'), 0xe3, 0x81]);
+    final restarted = SessionRepository(directory);
+    expect(await restarted.load(), game);
+    expect((await restarted.recent()).single.data, game);
+    const updated = {'type': 'game', 'pgn': '1. e4 e5 *'};
+    await restarted.save(updated);
+    expect(await SessionRepository(directory).load(), updated);
+    expect(await pending.exists(), isFalse);
+  });
+
   test(
     'analysis sessions are excluded while games remain reopenable',
     () async {
