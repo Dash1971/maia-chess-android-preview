@@ -1,21 +1,31 @@
 # Build channels and promotion status
 
-> **Published 17 November 2026:** Preview beta.9 keeps engine analysis visible while moves scroll and jump. Preview retains 79M and PGN export; Stable and Dev releases are unchanged.
+> **Published 20 November 2026:** Preview beta.10 improves damaged-save recovery, interrupted-game retention and full-analysis resume. Preview retains 79M; Stable and Dev app releases are unchanged.
 
-Updated 2026-11-17. Release pages are authoritative for published artifacts;
+Updated 2026-11-20. Release pages are authoritative for published artifacts;
 source on a branch alone is not an installed release. Each release PR records
 its exact source SHA, tests, hashes, signing identity and remaining limitations.
 
 | Channel | Version / status | Package and model | Scope |
 | --- | --- | --- | --- |
 | [Stable](https://github.com/Dash1971/maia-chess-android/releases) | Published [2.5.1](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1), code 83 | `com.dash1971.maia_chess`, 79M | Production app; use Stable's release guide for GitHub, Zapstore and F-Droid. |
-| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.9](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.9), code 2609 | `com.dash1971.maia_chess.preview`, 79M | Independent engine/move panes; engine output stays visible during move scrolling/navigation. Landscape tabs in bottom strip. Recent games/PGN export retained. Camera withdrawn. Grand Kingdom experimental; DGT Dev-only. |
+| [Preview](https://github.com/Dash1971/maia-chess-android-preview/releases) | Published [2.6.0-beta.10](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.10), code 2610 | `com.dash1971.maia_chess.preview`, 79M | Damaged pending-save recovery; interrupted games retained in Recent games; same-page full-analysis pause/resume. Independent engine/move panes and PGN export retained. Camera withdrawn. Grand Kingdom experimental; DGT Dev-only. |
 | [Dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases/tag/v2.6.0-alpha.2-dev) | Published 2.6.0-alpha.2-dev, code 2602 | `com.dash1971.maia_chess.preview.dev`, 5M, red icon | Automatic local Dev diagnostics, assisted Maia promotion and image/camera import. Grand Kingdom experimental; the owner’s later feedback attributes earlier capture symptoms to hardware drift/calibration. |
 
 The three packages install side by side. Obtainium users should select the
 intended repository and enable prereleases for Preview/Dev. Installing Preview
 does not upgrade Dev or transfer its saved games/preferences. Existing Preview
 installations update in place using the established Preview certificate.
+
+## Preview 2.6.0-beta.10 publication
+
+[Published beta.10](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.10) delivers #256/#257/#258 through release #259.
+Damaged temporary saves recover the committed game. Opening an imported PGN or another game keeps the interrupted game in Recent games with its original moves, clock and identity. After a crash, choose the Incomplete entry manually; automatic restore stays blocked until an explicit choice. Full-game computer analysis pauses while the app is backgrounded or another page covers Review, and resumes unfinished work when the same Review page is visible again. Stop, engine-off and line/quality changes discard the pending run.
+Completed-report persistence after app restarts remains #61.
+[Qualification and immediate all-host cleanup](releases/preview-2.6.0-beta.10.md)
+record exact-source CI, matching Linux builds, established signing/reconstruction,
+full native/upgrade and actual production APK recovery/lifecycle checks.
+The Gradle 9.9.2 security patch has a [separate Stable companion #81](https://github.com/Dash1971/maia-chess-android/pull/81), with green CI and an open/unmerged state at publication. Stable/Dev app releases are unchanged.
 
 ## Preview 2.6.0-beta.9 publication
 

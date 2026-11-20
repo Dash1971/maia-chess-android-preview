@@ -30,7 +30,7 @@ and feature requests.
 
 ## Current Preview status
 
-The latest Preview release is [2.6.0-beta.9](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.9). Analysis keeps engine output visible while moves scroll, step or jump to the beginning/end. Engine and move panes scroll independently; landscape tabs share the bottom control strip. Normal-font phone/tablet layouts show both Stockfish and both Maia text lines. Large text uses a separately scrollable header whose offset is unaffected by move interactions. First/last and repeated holds reveal their destination in portrait and landscape without rotation or restarting analysis. Recent games polish, saved-game list return and PGN export remain available. Camera/image recognition remains withdrawn. Preview uses 79M. Grand Kingdom remains experimental; [the owner attributes historical capture symptoms to hardware drift/calibration](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) and reports good operation. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.9.md) record this release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
+The latest Preview release is [2.6.0-beta.10](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.10). Damaged temporary saves recover the committed game. Opening an imported PGN or another game keeps the interrupted game in Recent games with its original moves, clock and identity. After a crash, choose the Incomplete entry manually; automatic restore stays blocked until an explicit choice. Full-game computer analysis pauses while the app is backgrounded or another page covers Review, and resumes unfinished work when the same Review page is visible again. Stop, engine-off and line/quality changes discard the pending run. Completed-report persistence across app restarts remains separate. Independent engine/move panes, saved-game Back and PGN export remain available. Camera/image recognition remains withdrawn. Preview uses 79M. Grand Kingdom remains experimental; [the owner attributes historical capture symptoms to hardware drift/calibration](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) and reports good operation. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.10.md) record this release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
 
 See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
 
@@ -59,6 +59,16 @@ games with external tools, not a new bulk-import feature. Everything works
 offline, with no automatic upload. See [ordering, limits and verification](docs/RECENT_GAMES_PGN_EXPORT.md).
 
 ## Roadmap
+
+**Game recovery and analysis resume: Preview beta.10**
+
+Issues [#253](https://github.com/Dash1971/maia-chess-android-preview/issues/253),
+[#254](https://github.com/Dash1971/maia-chess-android-preview/issues/254) and
+[#255](https://github.com/Dash1971/maia-chess-android-preview/issues/255) are delivered.
+Interrupted games remain manually recoverable from Recent games, damaged
+temporary saves no longer hide the committed game, and the same open Review
+resumes its unfinished full analysis after a brief interruption.
+[Completed-report persistence after app restarts (#61)](https://github.com/Dash1971/maia-chess-android-preview/issues/61) remains separate; Stable promotion is separate.
 
 **Saved-game Back returns to Recent games: Preview beta.6**
 
