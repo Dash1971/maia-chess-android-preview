@@ -82,7 +82,11 @@ void main() {
         });
     await tester.pumpWidget(const MaterialApp(home: GamePage()));
     await _waitForImport(tester);
-    final saved = (await tester.runAsync(store.recent))!.single;
+    // Read as a fresh launch would. The imported board can already be
+    // queueing its own autosave on the widget test clock.
+    final saved = (await tester.runAsync(
+      () => SessionRepository(store.directory).recent(),
+    ))!.single;
     expect(saved.isIncomplete, isTrue);
     expect(saved.data['uciMoves'], ['d2d4', 'd7d5']);
     await tester.pumpWidget(const SizedBox.shrink());
