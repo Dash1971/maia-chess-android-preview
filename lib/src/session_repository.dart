@@ -229,7 +229,11 @@ class SessionRepository {
 
   Future<Map<String, dynamic>?> _readFile(File file) async {
     try {
-      final source = await file.readAsString();
+      // A pending write can end halfway through a UTF-8 character. Decode
+      // its bytes explicitly so it follows the malformed-JSON recovery path.
+      final source = file.path.endsWith('.pending')
+          ? utf8.decode(await file.readAsBytes())
+          : await file.readAsString();
       final decoded = await Isolate.run(() => jsonDecode(source));
       if (decoded is Map &&
           decoded.containsKey('version') &&
