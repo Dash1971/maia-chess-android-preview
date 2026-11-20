@@ -76,7 +76,7 @@ void main() {
     },
   );
 
-  test('live checkpoints restore but do not appear in Recent games', () async {
+  test('replacing a live checkpoint keeps it as an incomplete game', () async {
     await store.save({
       'type': 'game',
       'recentState': 'active',
@@ -86,7 +86,11 @@ void main() {
     expect((await store.load())!['pgn'], contains('e4'));
     expect(await store.recent(), isEmpty);
     await store.startNew();
-    expect(await store.recent(), isEmpty);
+    await store.save({'type': 'analysis', 'pgn': '1. d4 *'});
+    final restarted = SessionRepository(directory);
+    final game = (await restarted.recent()).single;
+    expect(game.isIncomplete, isTrue);
+    expect((await restarted.open(game.id))!['pgn'], contains('e4'));
   });
 
   test('incomplete games convert to completed without duplication', () async {
