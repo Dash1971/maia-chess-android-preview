@@ -229,7 +229,11 @@ class SessionRepository {
 
   Future<Map<String, dynamic>?> _readFile(File file) async {
     try {
-      final source = await file.readAsString();
+      // A pending write can end halfway through a UTF-8 character. Decode
+      // its bytes explicitly so it follows the malformed-JSON recovery path.
+      final source = file.path.endsWith('.pending')
+          ? utf8.decode(await file.readAsBytes())
+          : await file.readAsString();
       final decoded = await Isolate.run(() => jsonDecode(source));
       if (decoded is Map &&
           decoded.containsKey('version') &&
@@ -335,16 +339,23 @@ class SessionRepository {
     });
   }
 
-  static Map<String, dynamic>? _recentGameData(Object? value) {
+  static Map<String, dynamic>? _recentGameData(
+    Object? value, {
+    bool includeLive = true,
+  }) {
     if (value is! Map) return null;
     final data = Map<String, dynamic>.from(value);
     if (data['type'] == 'review') {
-      return _recentGameData(data['activeGame']);
+      return _recentGameData(data['activeGame'], includeLive: includeLive);
     }
     if (data['type'] != 'game') return null;
     final state = data['recentState'];
-    // Sessions written before recentState existed remain visible and are
-    // labelled from their PGN result. New live checkpoints stay recovery-only.
+    // Freeze the last saved clock when a live game becomes a manual recovery.
+    if (state == 'active') {
+      if (!includeLive) return null;
+      return {...data, 'recentState': 'incomplete', 'clockPaused': true};
+    }
+    // Older saves have no recentState and derive their label from the PGN.
     if (state == null || state == 'incomplete' || state == 'completed') {
       return data;
     }
@@ -393,11 +404,11 @@ class SessionRepository {
     await _deleteArchiveFiles(id);
   });
 
-  Future<List<RecentSession>> recent() => _serial(() async {
+  Future<List<RecentSession>> recent({bool restoreBlocked = false}) => _serial(() async {
     final entries = <String, RecentSession>{};
-    void add(Map<String, dynamic>? envelope) {
+    void add(Map<String, dynamic>? envelope, {bool includeLive = false}) {
       if (envelope == null) return;
-      final data = _recentGameData(envelope['data']);
+      final data = _recentGameData(envelope['data'], includeLive: includeLive);
       if (data == null) return;
       final id = envelope['id'] as String;
       entries[id] = RecentSession(
@@ -425,7 +436,7 @@ class SessionRepository {
         add(await _read(File(name)));
       }
     }
-    add(await _read(_active));
+    add(await _read(_active), includeLive: restoreBlocked);
     return entries.values.toList()..sort((a, b) {
       final day = (b.history.playedOn ?? '').compareTo(
         a.history.playedOn ?? '',

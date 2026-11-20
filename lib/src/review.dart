@@ -195,9 +195,10 @@ class _ReviewPageState extends State<ReviewPage>
   _ReviewAnalysisStatus? _analysisError;
   bool _flipped = false;
   final _adaptiveReviewBoardKey = GlobalKey();
-  bool _fullAnalysisRunning = false;
+  List<StockfishReview>? _pendingFullScores;
+  bool get _fullAnalysisRunning => _pendingFullScores != null;
   bool _fullAnalysisClassifying = false;
-  int _fullAnalysisCompleted = 0;
+  int get _fullAnalysisCompleted => _pendingFullScores?.length ?? 0;
   int _fullAnalysisGeneration = 0;
   MoveClassificationJob? _classificationJob;
   List<StockfishReview>? _graphScores;
@@ -308,17 +309,23 @@ class _ReviewPageState extends State<ReviewPage>
   }
 
   void _updateAnalysisActivity() {
-    _foreground = _appForeground && _routeVisible;
+    final visible = _appForeground && _routeVisible;
+    if (_foreground == visible) return;
+    _foreground = visible;
     if (!_foreground) {
       _cancelSelectedWork();
       _stockfish.cancel(_batchScope);
       _cancelClassificationJob();
+      // Discard the in-flight result but retain finished positions until the
+      // same review becomes visible again.
       _fullAnalysisGeneration++;
-      _fullAnalysisRunning = false;
-      _fullAnalysisClassifying = false;
     } else if (_engineEnabled) {
+      final generation = _fullAnalysisGeneration;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
+        if (!mounted || !_foreground || !_engineEnabled) return;
+        if (_fullAnalysisRunning && generation == _fullAnalysisGeneration) {
+          unawaited(_continueFullAnalysis());
+        }
         if (_inVariation) {
           unawaited(_analyzeVariation());
         } else {
@@ -516,6 +523,11 @@ class _ReviewPageState extends State<ReviewPage>
   @override
   void didUpdateWidget(covariant ReviewPage oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.gameAnalysisQuality != widget.gameAnalysisQuality ||
+        !listEquals(oldWidget.positions, widget.positions) ||
+        !listEquals(oldWidget.uciMoves, widget.uciMoves)) {
+      _invalidateGraphAnalysisState();
+    }
     if (oldWidget.maiaInferenceEvaluator != widget.maiaInferenceEvaluator ||
         oldWidget.useMoveHistory != widget.useMoveHistory ||
         oldWidget.maiaElo != widget.maiaElo ||
@@ -1641,9 +1653,8 @@ class _ReviewPageState extends State<ReviewPage>
   void _invalidateGraphAnalysisState() {
     _cancelClassificationJob();
     _fullAnalysisGeneration++;
-    _fullAnalysisRunning = false;
+    _pendingFullScores = null;
     _fullAnalysisClassifying = false;
-    _fullAnalysisCompleted = 0;
     _graphScores = null;
     _graphPositions = const [];
     _graphMoves = const [];
@@ -1668,29 +1679,33 @@ class _ReviewPageState extends State<ReviewPage>
 
   Future<void> _analyzeFullGame() async {
     if (!_engineEnabled || !_foreground || _fullAnalysisRunning) return;
-    final line = _computerAnalysisLine;
-    final positions = line.positions;
-    final quality = widget.gameAnalysisQuality;
-    final generation = ++_fullAnalysisGeneration;
     _cancelClassificationJob();
     setState(() {
-      _fullAnalysisRunning = true;
+      _pendingFullScores = [];
       _fullAnalysisClassifying = false;
-      _fullAnalysisCompleted = 0;
       _graphScores = null;
       _graphPositions = const [];
       _graphMoves = const [];
       _graphClassifications = const [];
       _analysisError = null;
     });
+    final quality = widget.gameAnalysisQuality;
     unawaited(
       AppDiagnostics.recordEvent(
         'stockfish-full-analysis-start quality=${quality.name} '
         'depth=${quality.depth} moveTimeMs=${quality.moveTimeMs} '
-        'positions=${positions.length}',
+        'positions=${_computerAnalysisLine.positions.length}',
       ),
     );
-    final scores = <StockfishReview>[];
+    await _continueFullAnalysis();
+  }
+
+  Future<void> _continueFullAnalysis() async {
+    final scores = _pendingFullScores!;
+    final generation = ++_fullAnalysisGeneration;
+    final line = _computerAnalysisLine;
+    final positions = line.positions;
+    final quality = widget.gameAnalysisQuality;
     final analysisSession = Object();
     final evaluate =
         widget.evaluator ??
@@ -1701,7 +1716,7 @@ class _ReviewPageState extends State<ReviewPage>
           gameAnalysisQuality: quality,
           analysisSession: analysisSession,
         );
-    for (var i = 0; i < positions.length; i++) {
+    for (var i = scores.length; i < positions.length; i++) {
       if (!mounted || generation != _fullAnalysisGeneration) return;
       try {
         final matchesFixedMainline =
@@ -1714,7 +1729,7 @@ class _ReviewPageState extends State<ReviewPage>
             ? (_reviews[i] ?? await evaluate(positions[i]))
             : await evaluate(positions[i]);
         if (!mounted || generation != _fullAnalysisGeneration) return;
-        scores.add(review);
+        setState(() => scores.add(review));
         if (i < widget.positions.length &&
             positions[i] == widget.positions[i]) {
           _reviews[i] = review;
@@ -1727,13 +1742,12 @@ class _ReviewPageState extends State<ReviewPage>
         _analysisError = _ReviewAnalysisStatus.failed;
         break;
       }
-      if (mounted) setState(() => _fullAnalysisCompleted = i + 1);
     }
     if (!mounted || generation != _fullAnalysisGeneration) return;
     if (scores.length != positions.length) {
       setState(() {
         _analysisError ??= _ReviewAnalysisStatus.failed;
-        _fullAnalysisRunning = false;
+        _pendingFullScores = null;
       });
       return;
     }
@@ -1826,7 +1840,7 @@ class _ReviewPageState extends State<ReviewPage>
     }
     if (!mounted || generation != _fullAnalysisGeneration) return;
     setState(() {
-      _fullAnalysisRunning = false;
+      _pendingFullScores = null;
       _fullAnalysisClassifying = false;
     });
   }
@@ -1837,7 +1851,7 @@ class _ReviewPageState extends State<ReviewPage>
     _cancelClassificationJob();
     setState(() {
       _fullAnalysisGeneration++;
-      _fullAnalysisRunning = false;
+      _pendingFullScores = null;
       _fullAnalysisClassifying = false;
       _analysisError = _ReviewAnalysisStatus.stopped;
     });
@@ -3062,7 +3076,7 @@ class _ReviewPageState extends State<ReviewPage>
         _showGraph = false;
         _cancelClassificationJob();
         _fullAnalysisGeneration++;
-        _fullAnalysisRunning = false;
+        _pendingFullScores = null;
         _fullAnalysisClassifying = false;
       }
     });

@@ -8,8 +8,8 @@ it is not a general vulnerability scanner.
 from pathlib import Path
 import sys
 
-VERSION = '9.9.1'
-SHA256 = 'f20c816177c0ff192881874852260771b462903aef3e794b0dac4759d1fda284'
+VERSION = '9.9.2'
+SHA256 = '1ac85e9cbc2b091ad04e6c6d0f486f0a2a2fabd78f9f8719a0d5bcc0ce1b345b'
 URL = f'https://services.gradle.org/distributions/gradle-{VERSION}-all.zip'
 
 

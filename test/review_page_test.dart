@@ -1677,8 +1677,12 @@ void main() {
     expect(find.text('Computer analysis stopped.'), findsWidgets);
     expect(find.byKey(const ValueKey('run-computer-analysis')), findsOneWidget);
 
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
     stalled.complete(const StockfishReview(0, 'e7e5'));
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     await tester.pumpAndSettle();
+    expect(evaluations, 2);
+    expect(find.text('Computer analysis stopped.'), findsWidgets);
     expect(find.byType(AnalysisGraph), findsNothing);
   });
 
