@@ -36,7 +36,7 @@ class _Archive extends SessionRepository {
   Future<Map<String, dynamic>?> load() async => active;
 
   @override
-  Future<List<RecentSession>> recent() async => [
+  Future<List<RecentSession>> recent({bool restoreBlocked = false}) async => [
     for (final entry in records.entries)
       RecentSession(entry.key, DateTime.utc(2026), entry.value),
   ];
