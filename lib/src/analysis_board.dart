@@ -1,6 +1,6 @@
 part of '../main.dart';
 
-// Shared by the normal analysis editor and Home's scanned-position editor.
+// Shared by the analysis editor and position-continuation entry points.
 // Both enter the existing continuation dialog and board-lease workflow.
 Future<void> _continueFromPosition(
   BuildContext context,
