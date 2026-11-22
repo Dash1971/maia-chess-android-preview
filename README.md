@@ -30,7 +30,7 @@ and feature requests.
 
 ## Current Preview status
 
-The latest Preview release is [2.6.0-beta.10](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.10). Damaged temporary saves recover the committed game. Opening an imported PGN or another game keeps the interrupted game in Recent games with its original moves, clock and identity. After a crash, choose the Incomplete entry manually; automatic restore stays blocked until an explicit choice. Full-game computer analysis pauses while the app is backgrounded or another page covers Review, and resumes unfinished work when the same Review page is visible again. Stop, engine-off and line/quality changes discard the pending run. Completed-report persistence across app restarts remains separate. Independent engine/move panes, saved-game Back and PGN export remain available. Camera/image recognition remains withdrawn. Preview uses 79M. Grand Kingdom is supported; [the owner attributes historical capture symptoms to hardware drift/calibration](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) and reports good operation. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.10.md) record this release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev.
+The latest Preview release is [2.6.0-beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11). PGN collections transfer into Recent games with matching 5 MiB import/export limits, duplicate detection across export/re-import, transactional saving and delayed progress feedback. Single-game PGNs still open for analysis. Android PGN content URIs use the native document bridge with Flutter generic deep-link routing disabled. Board messages are device-neutral; Grand Kingdom is supported with passed user acceptance, and Pegasus is withdrawn. Damaged-save recovery, interrupted-game retention, same-page full-analysis resume and independent engine/move panes remain available. Preview uses 79M. Camera/image recognition remains withdrawn. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.11.md) record this release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev; Stable 2.6 approval and qualification remain separate.
 
 See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
 
@@ -38,17 +38,7 @@ See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readm
 
 ### Recent games and PGN files
 
-The [beta.11 preparation notes](docs/preview-2.6.0-beta.11-preparation.md) cover
-matching 5 MiB import/export limits, complete collection import, the pending
-individual-game export error and board-neutral connection messages.
-Beta.10 remains the current download; Stable 2.6 approval awaits beta.11 testing.
-The pending change removes Pegasus from every build flavor. Collection import
-adds new games to Recent games without replacing the current game. It skips
-matching PGNs already saved or repeated within the file, including formatting
-changes made by our exporter, keeps copies with
-different annotations or metadata, and reports imported/skipped counts. Longer imports show progress during validation, duplicate checking and saving; quick imports finish without a dialog. Abandoned staging is
-cleaned on the next startup. Single-game opening stays unchanged. The
-[import/export guide](docs/RECENT_GAMES_PGN_EXPORT.md) documents the exact rules.
+[Preview beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) transfers PGN collections between installations. Import adds new games to Recent games without replacing the current game, skips matching saved games and repeats within the file (including export formatting changes), and keeps different annotations or metadata. Both directions allow 5 MiB of UTF-8. Longer imports show progress after 300 ms; quick imports finish without a dialog. Invalid collections and storage failures expose no partial import; abandoned staging is cleaned on first repository access after restart. Single-game opening is unchanged. The [import/export guide](docs/RECENT_GAMES_PGN_EXPORT.md) gives transfer steps and exact duplicate/limit rules. Stable 2.6 approval awaits Preview testing and its own qualification.
 
 Bulk export is published in Preview 2.6.0-beta.3 ([#226](https://github.com/Dash1971/maia-chess-android-preview/pull/226)). Long-press a Recent games entry or choose
 **Select games**, select the games to export (or use **Select all**), then choose
@@ -64,13 +54,13 @@ silently omit games, or split the export automatically. Your selection and saved
 games stay unchanged; deselect some games and try again. Missing or unreadable
 selected games also stop the whole export.
 
-Published beta.10 PGN imports are limited to 2 MB (2 MiB), opening the first
-game with its supported annotations and variations; when a document contains multiple games,
-the existing importer uses the first game. Bulk export is for saving or sharing
-games with external tools, not a new bulk-import feature. Everything works
-offline, with no automatic upload. See [ordering, limits and verification](docs/RECENT_GAMES_PGN_EXPORT.md).
+Imports accept every validated game in a collection up to the shared 5 MiB limit. PGN transfers games and supported annotations, not app settings or live clock/motor checkpoints. Everything works offline, with no automatic upload. An oversized individual export shows its own error and retains selection for retry.
 
 ## Roadmap
+
+**PGN collection transfer and supported-board policy: Preview beta.11**
+
+[PR #261](https://github.com/Dash1971/maia-chess-android-preview/pull/261) is delivered. Collection import, duplicate skipping, progress, shared size limits and export retry are published. Grand Kingdom is supported; Pegasus is withdrawn from current source and this Preview. [Stable promotion #82](https://github.com/Dash1971/maia-chess-android/pull/82) remains a separate unmerged draft.
 
 **Game recovery and analysis resume: Preview beta.10**
 
