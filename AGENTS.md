@@ -46,7 +46,8 @@ The owner’s 14 November follow-up attributes the earlier capture symptoms to h
 drift/calibration and an uneven surface (firmware 36v5), and reports good overall
 operation. Do not repeat those historical symptoms as unresolved app defects.
 `docs/ELECTRONIC_BOARD_GRAND_KINGDOM_26.md` records the source feedback and
-separately identifies scenarios still awaiting physical acceptance. Published
+records passed user acceptance testing. Do not revive superseded physical-acceptance
+checklists as release blockers or describe Grand Kingdom as untested. Published
 Preview 2.5 artifacts still exclude it. Stable releases use the Stable repository's
 authoritative release procedure, including its Zapstore and F-Droid follow-up.
 Preview/Dev publication does not authorize a Stable or app-store release.
