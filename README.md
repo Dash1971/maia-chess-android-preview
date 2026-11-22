@@ -38,6 +38,13 @@ See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readm
 
 ### Recent games and PGN files
 
+The [beta.11 preparation notes](docs/preview-2.6.0-beta.11-preparation.md) cover
+matching 5 MiB import/export limits, complete collection import, the pending
+individual-game export error and board-neutral connection messages.
+Beta.10 remains the current download; Stable 2.6 approval awaits beta.11 testing.
+The pending change imports every game from a collection into Recent games,
+without replacing the current game. Single-game opening stays unchanged.
+
 Bulk export is published in Preview 2.6.0-beta.3 ([#226](https://github.com/Dash1971/maia-chess-android-preview/pull/226)). Long-press a Recent games entry or choose
 **Select games**, select the games to export (or use **Select all**), then choose
 **Export games → Save PGN file** or **Share PGN**. The result is one `.pgn` file,
@@ -52,8 +59,8 @@ silently omit games, or split the export automatically. Your selection and saved
 games stay unchanged; deselect some games and try again. Missing or unreadable
 selected games also stop the whole export.
 
-PGN **imports remain limited to 2 MB** (2 MiB). Import opens one game with its
-supported annotations and variations; when a document contains multiple games,
+Published beta.10 PGN imports are limited to 2 MB (2 MiB), opening the first
+game with its supported annotations and variations; when a document contains multiple games,
 the existing importer uses the first game. Bulk export is for saving or sharing
 games with external tools, not a new bulk-import feature. Everything works
 offline, with no automatic upload. See [ordering, limits and verification](docs/RECENT_GAMES_PGN_EXPORT.md).
@@ -299,6 +306,13 @@ cross-checked against Roberto Marabini's GPL-3.0
 implementation. Mobile Maia's Bluetooth transport uses Android's native BLE
 APIs. Protocol sources, copyright notices, licence terms, and adaptation
 details are recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
+Grand Kingdom protocol support references
+[square-off-remote](https://github.com/greghope667/square-off-remote), the
+GPL-3.0-or-later Grand Kingdom implementation by
+[greghope667](https://github.com/greghope667). See our
+[protocol notes](docs/ELECTRONIC_BOARD_NATIVE_PROTOCOL.md) for the pinned source
+and implementation details.
 
 Game Review's move-classification and sacrifice-detection heuristics are
 adapted and translated to Dart from
