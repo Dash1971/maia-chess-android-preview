@@ -34,9 +34,11 @@ research bundles or datasets to application source or release distributions.
 ## Distribution channels
 
 Read `docs/RELEASING.md` and `docs/BUILD_CHANNELS.md` before promoting or
-publishing a build. Update the channel status and the release PR's evidence when publishing. For the 2.6 cycle, Grand Kingdom is experimental in Preview and Dev; DGT
-remains Dev-only. Preserve both Dart and native channel gates, motor-session
-checks and channel restriction tests. Stable/unflavored builds exclude both.
+publishing a build. Update the channel status and the release PR's evidence when publishing. For the 2.6 cycle, Grand Kingdom is experimental in Preview and Dev. DGT
+Pegasus has been withdrawn from every channel because initialization licensing
+is unresolved; do not restore its prototype or a Dev-only enablement path. Preserve both Dart and native channel gates, motor-session
+checks and channel restriction tests. Preview source does not enable Grand
+Kingdom in Stable/unflavored builds; the Stable promotion owns that policy.
 The requester authorized experimental Preview 2.6 publication. The owner’s
 14 November follow-up attributes the earlier capture symptoms to hardware
 drift/calibration and an uneven surface (firmware 36v5), and reports good overall

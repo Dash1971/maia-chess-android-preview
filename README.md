@@ -42,7 +42,7 @@ The [beta.11 preparation notes](docs/preview-2.6.0-beta.11-preparation.md) cover
 matching 5 MiB import/export limits, complete collection import, the pending
 individual-game export error and board-neutral connection messages.
 Beta.10 remains the current download; Stable 2.6 approval awaits beta.11 testing.
-The pending change imports every game from a collection into Recent games,
+The pending change removes Pegasus from every build flavor and imports every game from a collection into Recent games,
 without replacing the current game. Single-game opening stays unchanged.
 
 Bulk export is published in Preview 2.6.0-beta.3 ([#226](https://github.com/Dash1971/maia-chess-android-preview/pull/226)). Long-press a Recent games entry or choose
@@ -119,7 +119,7 @@ Editor, FEN import, Analysis and Continue from here remain available. See
 
 **Expand electronic-board support**
 
-Experimental **Square Off Grand Kingdom** support is included in Preview 2.6 and Dev. **DGT Pegasus** remains Dev-only. Stable excludes both. The [owner’s follow-up](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) attributes the earlier wrong/missed captures to hardware drift after many moves without calibration or an uneven surface, on firmware **36v5**, and reports good overall operation. The owner subsequently reported a successful game on the 79M Preview build. Preview includes assisted Maia promotion. Automatic local diagnostics remain a red-icon Dev feature; assisted Maia promotion, en passant and lifecycle/recovery scenarios still need specific physical test results. Diagnostics are never uploaded automatically; Settings → Save Dev diagnostics… exports locally for voluntary sharing. Pegasus also needs a FOSS-compatible way to initialize boards with locked firmware before we can offer support. The [2.6 acceptance record](docs/ELECTRONIC_BOARD_GRAND_KINGDOM_26.md) records the updated owner feedback, historical regression cases and remaining hardware acceptance.
+Experimental **Square Off Grand Kingdom** support is included in Preview 2.6 and Dev. **DGT Pegasus** is withdrawn from all channels because initialization licensing is unresolved. The Stable 2.6 promotion remains a separate draft. The [owner’s follow-up](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) attributes the earlier wrong/missed captures to hardware drift after many moves without calibration or an uneven surface, on firmware **36v5**, and reports good overall operation. The owner subsequently reported a successful game on the 79M Preview build. Preview includes assisted Maia promotion. Automatic local diagnostics remain a red-icon Dev feature; assisted Maia promotion, en passant and lifecycle/recovery scenarios still need specific physical test results. Diagnostics are never uploaded automatically; Settings → Save Dev diagnostics… exports locally for voluntary sharing. The Pegasus prototype is removed from the updated source; see the support decision below. The [2.6 acceptance record](docs/ELECTRONIC_BOARD_GRAND_KINGDOM_26.md) records the updated owner feedback, historical regression cases and remaining hardware acceptance.
 
 We’re looking for owners of these boards who are willing to help test and report their results. See the [board testing guide](https://github.com/Dash1971/maia-chess-android-preview/blob/main/docs/ELECTRONIC_BOARD_DEV.md) and [Grand Kingdom issue](https://github.com/Dash1971/maia-chess-android-preview/issues/27).
 
@@ -282,6 +282,30 @@ python -m pip install /path/to/maia3 onnx onnxruntime
 python tool/export_maia3_onnx.py --model maia3-5m --output assets/models/maia3-5m.onnx
 python tool/export_maia3_onnx.py --model maia3-79m --output assets/models/maia3-79m.onnx
 ```
+
+## Electronic-board support
+
+Support planned for Stable 2.6 and the updated Preview/Dev sources:
+
+| Board | Support | Hardware testing | Notes |
+| --- | --- | --- | --- |
+| Chessnut Air | Supported | Fully tested | Piece recognition and LED guidance. |
+| Chessnut Go | Supported | Fully tested | Piece recognition and LED guidance. |
+| Chessnut Pro | Supported | Not fully tested | Uses the shared Chessnut protocol; further device testing is welcome. |
+| Square Off Grand Kingdom | Supported (experimental) | Partially tested | Untimed games from the standard position; assisted Maia promotion. |
+| DGT Pegasus | Not supported | — | Prototype withdrawn because initialization licensing and downstream redistribution permission remain unresolved. |
+
+The [support decision](docs/decisions/2026-11-22-electronic-board-support.md)
+records the Pegasus withdrawal. The uncertainty concerns initialization
+permission, not the GPL-licensed MoveAPiece protocol code. Older Dev APKs may
+contain the retired prototype; no published APK is changed by this source PR.
+
+Board owners and manufacturers are welcome to
+[contact us through an issue](https://github.com/Dash1971/maia-chess-android/issues/new)
+to help test devices, document protocols, and expand supported models. The
+[board testing guide](docs/ELECTRONIC_BOARD_DEV.md) describes the supported
+workflows and the [Grand Kingdom acceptance record](docs/ELECTRONIC_BOARD_GRAND_KINGDOM_26.md)
+records its remaining hardware scenarios.
 
 ## Credits and attributions
 

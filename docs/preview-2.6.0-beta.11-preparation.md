@@ -5,6 +5,11 @@ not bump the version, build an APK, run Actions or publish a release.
 
 ## Proposed changes
 
+- Remove the Pegasus prototype from all flavors, including Dev, due to unresolved
+  initialization licensing. The [decision](decisions/2026-11-22-electronic-board-support.md)
+  and README table record supported models and hardware testing status. Old Dev
+  saves recover on the phone without reconnecting to the retired board.
+
 - A selected game over the 5 MiB individual-game limit now gets a specific error
   instead of a generic export failure. Save/Share stop before opening Android
   UI, retain the selection and allow retry. Import, export and individual-game validation all use the same 5 MiB limit.
@@ -42,3 +47,9 @@ After beta.11 is qualified and built, check these messages and export/retry path
 in the installed app, then revisit the affected gameplay and analysis flows.
 Stable 2.6 remains a draft pending that testing and its own release qualification.
 Host regressions do not replace Android document-provider or physical-board tests.
+
+## Host verification — 22 November 2026
+
+The full host suite passed 1,507 tests, with one skipped. The explicit Preview-flavor focused suite passed 130 tests, and default Dev channel-policy checks passed five with one skipped. Flutter analyze reports no issues. Localization/terminology, source/metadata checks and unchanged workflow structure pass. Native tests are updated but uncompiled because the current Mac host has no JDK. Android and physical-board verification remain pending.
+
+The matching [Stable 2.6 draft #82](https://github.com/Dash1971/maia-chess-android/pull/82) carries these changes without altering its release identity or qualification gates. Shared helpers remain identical. Dev uses Preview source; its separate repository contains only the release feed, so no third source companion applies.
