@@ -1,7 +1,6 @@
-# Preview beta.11 preparation
+# Preview beta.11 preparation history
 
-Draft notes only. Beta.10 remains the published Preview release. This PR does
-not bump the version, build an APK, run Actions or publish a release.
+Beta.11 is now [published](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11); [qualification and cleanup](releases/preview-2.6.0-beta.11.md) record the release. The entries below describe pre-release work and its earlier no-build/no-Actions scope. Those dated limits are historical; Stable approval remains separate.
 
 ## Proposed changes
 

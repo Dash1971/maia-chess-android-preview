@@ -1,12 +1,11 @@
 # Build channels and promotion status
 
-Updated 22 November 2026. Published artifacts and the pending source changes are
-separate; this PR does not build or publish a release.
+Updated 22 November 2026. Preview beta.11 is published and qualified. Stable promotion remains a separate draft.
 
-| Channel | Published release | Package / model | Pending source scope |
+| Channel | Published release | Package / model | Current scope |
 | --- | --- | --- | --- |
 | Stable | [2.5.1 / code 83](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1) | `com.dash1971.maia_chess`, blue icon, 79M | Draft 2.6.0 / code 84 promotion, including Grand Kingdom, PGN transfer and Pegasus withdrawal. |
-| Preview | [2.6.0-beta.10 / code 2610](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.10) | `com.dash1971.maia_chess.preview`, gold icon, 79M | Beta.11 follow-up for testing before Stable approval. |
+| Preview | [2.6.0-beta.11 / code 2611](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) | `com.dash1971.maia_chess.preview`, gold icon, 79M | Published collection transfer, shared limits/progress, supported Grand Kingdom policy and Pegasus withdrawal. Testing precedes Stable approval. |
 | Dev | [2.6.0-alpha.2-dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases) | `com.dash1971.maia_chess.preview.dev`, red icon, 5M | Uses canonical Preview source; Pegasus is withdrawn from future builds. Automatic diagnostics remain Dev-only. |
 
 ## Current source policy
@@ -35,9 +34,12 @@ clock/motor session checkpoints. Single-game opening remains unchanged.
 - [Stable release procedure](https://github.com/Dash1971/maia-chess-android/blob/main/docs/RELEASING.md): exact-source qualification, canonical F-Droid reproduction, signed upgrade checks and separate GitHub/F-Droid/Zapstore delivery status.
 - [Preview/Dev release procedure](https://github.com/Dash1971/maia-chess-android-preview/blob/main/docs/RELEASING.md): preserve each channel's model, identity, native/upgrade checks and release gates.
 
-Stable release approval remains pending Preview beta.11 testing and Stable's
-own qualification. No Android build, Actions run or LFS download is part of
-this follow-up. Older published APKs/tags remain unchanged.
+Stable release approval remains pending Preview beta.11 testing and Stable's own qualification. Beta.11 completed exact-source Preview qualification; [release evidence](releases/preview-2.6.0-beta.11.md) records checks and immediate cleanup. Stable and Dev published APKs/tags remain unchanged.
+
+## Preview 2.6.0-beta.11 publication
+
+[Published beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) delivers #261 through release #262. PGN collections transfer into Recent games with matching 5 MiB import/export limits, duplicate detection across export/re-import, transactional saving and delayed progress feedback. Single-game PGNs still open for analysis. Android PGN content URIs use the native document bridge with Flutter generic deep-link routing disabled. Board messages are device-neutral; Grand Kingdom is supported with passed user acceptance, and Pegasus is withdrawn.
+[Exact-source qualification and immediate all-host cleanup](releases/preview-2.6.0-beta.11.md) cover matching Linux builds, established signing/reconstruction, full native checks, signed beta.10 upgrade and actual Android file/paste/share/collection recovery checks. Stable companions #82 and #83 are open/unmerged; prior security #81 is merged. Stable and Dev releases are unchanged.
 
 ## Historical channel records
 
