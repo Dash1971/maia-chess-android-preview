@@ -46,8 +46,7 @@ The pending change removes Pegasus from every build flavor. Collection import
 adds new games to Recent games without replacing the current game. It skips
 matching PGNs already saved or repeated within the file, including formatting
 changes made by our exporter, keeps copies with
-different annotations or metadata, and reports imported/skipped counts. A progress
-bar accompanies validation, duplicate checking and saving. Abandoned staging is
+different annotations or metadata, and reports imported/skipped counts. Longer imports show progress during validation, duplicate checking and saving; quick imports finish without a dialog. Abandoned staging is
 cleaned on the next startup. Single-game opening stays unchanged. The
 [import/export guide](docs/RECENT_GAMES_PGN_EXPORT.md) documents the exact rules.
 
