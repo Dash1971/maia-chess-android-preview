@@ -56,7 +56,8 @@ jobs:
       - name: Test release verification tools
         run: |
           python3 -m venv "$RUNNER_TEMP/release-checks-venv"
-          "$RUNNER_TEMP/release-checks-venv/bin/pip" install -r tool/hardening/requirements.txt
+          "$RUNNER_TEMP/release-checks-venv/bin/pip" install -r tool/requirements-release-test.txt
+          "$RUNNER_TEMP/release-checks-venv/bin/python" tool/release_test_preflight.py --check-dependencies
           "$RUNNER_TEMP/release-checks-venv/bin/python" -m unittest discover -s tool -p '*_test.py'
   android:
     if: github.event_name == 'workflow_dispatch' && inputs.build_android

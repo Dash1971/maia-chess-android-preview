@@ -89,3 +89,9 @@ required for Dev. No separate post-publication download gate should be added to
 cleanup. Routine tests still apply to source changes; a lightweight publication
 is not evidence of Preview or Stable readiness. Preserve Dev-only experimental
 board restrictions in the other channels.
+
+## Operator test environment
+
+Before expensive qualification, follow [Release test setup](RELEASE_TEST_SETUP.md)
+for complete dependencies, host/device/focus diagnostics and safe scheduling.
+It supplements this channel procedure and does not waive or replace its gates.
