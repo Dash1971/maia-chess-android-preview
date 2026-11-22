@@ -1,0 +1,18 @@
+# Preview beta.11 upstream review — 22 November 2026
+
+Fresh release/advisory requests and 63 exact hosted-Pub and direct ONNX/AGP/Kotlin Maven OSV queries found no applicable new finding. The 23 available Pub update archives were downloaded and SHA-256 checked again; their versions/hashes match the preceding review. Per-package decisions and primary response hashes are in the compact release evidence.
+
+## Retained pins and reasons
+
+- Retain official Gradle 9.9.2 and its verified distribution checksum. It includes the four 19 November fixes documented in [the security review](gradle-security-2026-11-20.md). [Stable companion #81](https://github.com/Dash1971/maia-chess-android/pull/81) merged on 22 November. No new common build safeguard is introduced here.
+- Retain reproducible Flutter 3.47.8/Dart 3.13.7 with its TLS security fix and guarded asset-order backport. Reviewed Flutter 3.50.1 fixes target 3.50 Android configuration/assets and platform regressions; Dart 3.14.1 addresses a pattern-switch AOT compiler crash. A framework/compiler migration needs separate compatibility and reproducibility qualification.
+- Retain AGP 9.1.0 and Kotlin 2.4.20. AGP 9.5.1 and Kotlin 2.4.21/2.5 RC were reviewed; no applicable advisory requires a migration. Exact Maven queries are clear. Keep stable Platform-Tools 37.0.1 over Canary tooling.
+- Retain multistockfish 0.6.1 and locked native flavors, including light 0.1.0, with reviewed NNUE hashes. The 0.7/native-thread FFI/API migration needs separate cancellation and numerical/reproduction testing. Stockfish's 22 November development build is explicitly a prerelease; stable SF19 and pinned wrapper/model references remain the baseline.
+- Retain dartchess 0.13.1 while qualifying collection transfer. Its newer PGN embedded-command/storage APIs need a separate migration; changing parser semantics alongside transactional import would broaden this release. Shared-preferences Android 2.5's Pigeon JNI backend and the remaining package updates are also deferred with individual reasons in the evidence.
+- Maia release/advisory records and pinned chess/UI dependencies were reviewed. Preserve the 79M/5M Git LFS references and numerical checks; no new model is introduced. The vendored renderer and approved artwork allowlist stay unchanged.
+
+## ONNX coverage limit
+
+The ONNX GitHub release/advisory APIs and public advisory page returned 404 again. This does not establish an empty current advisory list. [Official servicing documentation](https://onnxruntime.ai/docs/reference/releases-servicing.html) and [Maven Central metadata](https://repo.maven.apache.org/maven2/com/microsoft/onnxruntime/onnxruntime-android/maven-metadata.xml) remain accessible. Retain Android CPU 1.24.3 and trusted pinned graphs pending separate ABI/numerical qualification; exact-version OSV reports no finding. External model import and GPU plugins are unused. The unavailable-feed limitation and primary-source fallback are retained explicitly.
+
+Sources: [Flutter hotfixes](https://github.com/flutter/flutter/blob/stable/CHANGELOG.md), [Dart changelog](https://github.com/dart-lang/sdk/blob/stable/CHANGELOG.md), [Gradle 9.9.2](https://docs.gradle.org/9.9.2/release-notes.html), [AGP releases](https://developer.android.com/build/releases/gradle-plugin), [Kotlin releases](https://github.com/JetBrains/kotlin/releases), [Android tools](https://developer.android.com/tools/releases/platform-tools), [Stockfish](https://github.com/official-stockfish/Stockfish/releases), [Maia](https://github.com/CSSLab/maia3). Ordinary localization and terminology regressions remain required; the completed editorial translation review is not repeated.
