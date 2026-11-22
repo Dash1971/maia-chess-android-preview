@@ -1,6 +1,6 @@
 # PGN import and export
 
-Preview beta.11 draft: matching import/export limits, complete collection import, duplicate checking and progress feedback are pending release. Beta.10 remains the published download; its historical import behavior is described in the README.
+[Preview beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) publishes matching import/export limits, complete collection import, duplicate checking and progress feedback. [Qualification and cleanup](releases/preview-2.6.0-beta.11.md) include the production APK checks. Stable promotion remains separate.
 
 Implementation for [#225](https://github.com/Dash1971/maia-chess-android-preview/issues/225),
 published in [Preview 2.6.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3). Stable promotion remains separate.
@@ -144,7 +144,7 @@ collection behavior are historical, superseded by this follow-up.
 Host regression coverage includes a collection over 2 MiB, the 5 MiB boundary,
 UTF-8, fake boundaries inside comments/variations, invalid later games, atomic
 failure, active-game preservation and imported-record open/delete after restart.
-Android document-provider checks remain pending the beta.11 build phase.
+Beta.11 production-signed APK checks passed for Android document save/open and content-URI import, paste/share, cancellation, export/re-import duplicate detection, invalid/oversized input and retained export selection. Interrupted-import recovery and a 10,000-game near-5-MiB import with progress and Recent games after restart also passed. These ARM64 emulator results do not certify every OEM provider or third-party app.
 
 ## Interrupted imports and large collections
 
