@@ -44,7 +44,8 @@ individual-game export error and board-neutral connection messages.
 Beta.10 remains the current download; Stable 2.6 approval awaits beta.11 testing.
 The pending change removes Pegasus from every build flavor. Collection import
 adds new games to Recent games without replacing the current game. It skips
-identical PGNs already saved or repeated within the file, keeps copies with
+matching PGNs already saved or repeated within the file, including formatting
+changes made by our exporter, keeps copies with
 different annotations or metadata, and reports imported/skipped counts. A progress
 bar accompanies validation, duplicate checking and saving. Abandoned staging is
 cleaned on the next startup. Single-game opening stays unchanged. The
