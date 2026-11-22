@@ -42,8 +42,13 @@ The [beta.11 preparation notes](docs/preview-2.6.0-beta.11-preparation.md) cover
 matching 5 MiB import/export limits, complete collection import, the pending
 individual-game export error and board-neutral connection messages.
 Beta.10 remains the current download; Stable 2.6 approval awaits beta.11 testing.
-The pending change removes Pegasus from every build flavor and imports every game from a collection into Recent games,
-without replacing the current game. Single-game opening stays unchanged.
+The pending change removes Pegasus from every build flavor. Collection import
+adds new games to Recent games without replacing the current game. It skips
+identical PGNs already saved or repeated within the file, keeps copies with
+different annotations or metadata, and reports imported/skipped counts. A progress
+bar accompanies validation, duplicate checking and saving. Abandoned staging is
+cleaned on the next startup. Single-game opening stays unchanged. The
+[import/export guide](docs/RECENT_GAMES_PGN_EXPORT.md) documents the exact rules.
 
 Bulk export is published in Preview 2.6.0-beta.3 ([#226](https://github.com/Dash1971/maia-chess-android-preview/pull/226)). Long-press a Recent games entry or choose
 **Select games**, select the games to export (or use **Select all**), then choose
