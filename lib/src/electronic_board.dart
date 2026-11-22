@@ -30,7 +30,7 @@ String electronicBoardDisplayName(
 class BoardChannelPolicy {
   static bool supports(String? flavor, BoardKind kind) =>
       kind == BoardKind.chessnut ||
-      (const {'preview', 'dev'}.contains(flavor ?? '') &&
+      (const {'', 'stable', 'preview', 'dev'}.contains(flavor ?? '') &&
           kind == BoardKind.squareOff);
 }
 

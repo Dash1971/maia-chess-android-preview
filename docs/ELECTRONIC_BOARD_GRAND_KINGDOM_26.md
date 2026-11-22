@@ -1,11 +1,27 @@
-# Grand Kingdom: experimental Preview 2.6 enablement
+# Grand Kingdom support and testing
 
-Current policy: Pegasus has been withdrawn from all channels; see the
+Current policy: Grand Kingdom is supported in Stable 2.6, Preview and Dev,
+with identical Dart/native support policy in both source repositories. Hardware
+coverage is recorded separately; it does not make support experimental. Pegasus has been withdrawn from all channels; see the
 [support decision](decisions/2026-11-22-electronic-board-support.md). Dated
 historical channel descriptions below do not override that decision.
 
-Status: experimental in [Preview 2.6.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3), updated 15 November 2026.
+Preview testing started in [Preview 2.6.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3), updated 15 November 2026.
 Tracks [Preview #27](https://github.com/Dash1971/maia-chess-android-preview/issues/27).
+
+## Stable 2.6 promotion — 22 November 2026
+
+Grand Kingdom support is included in the Stable 2.6 promotion draft, following
+successful Preview testing. Both Dart and native policies permit Stable and
+unflavored Stable builds, alongside Preview/Dev. DGT Pegasus is withdrawn from every channel;
+automatic diagnostics and their local export remain Dev-only.
+
+This changes the shipping scope, not the motor protocol or recovery rules.
+The full legal promotion move, explicit replacement confirmation, current-session
+motor guards, standard-position setup and phone-continuation fallback are
+preserved. Stable release qualification has not run for this draft; no APK or
+store update has been published. Historical Preview decisions and scenario
+records below remain evidence, not a reason to omit the authorized promotion.
 
 ## Current owner feedback — 14 November 2026
 
@@ -33,8 +49,8 @@ The requester authorized experimental Preview publication while the capture
 reports were still unexplained. The 14 November hardware attribution above
 supersedes that problem status. Full automated Preview release gates still
 apply. Stable/Dev APKs are unchanged; DGT remains Dev-only. Preview 2.5 artifacts
-exclude Grand Kingdom. Current support remains experimental while the separate
-physical acceptance scenarios are completed.
+exclude Grand Kingdom. That historical designation is superseded by the supported-device decision
+above. Additional physical scenarios track coverage, not a channel restriction.
 
 ## Historical physical evidence — 28 October 2026
 
@@ -126,7 +142,7 @@ If a mismatch recurs on a level, calibrated board:
 | Board | Preview 2.6 | Dev | Stable / unflavored / unknown |
 | --- | --- | --- | --- |
 | Chessnut | Allowed | Allowed | Allowed |
-| Grand Kingdom | Experimental | Experimental | Blocked |
+| Grand Kingdom | Supported | Supported | Supported in Stable 2.6; unknown packaging channels blocked |
 | DGT Pegasus | Blocked | Prototype, locked firmware unsupported | Blocked |
 
 Dart event/candidate handling and native discovery, remembered-device connection,
@@ -245,7 +261,7 @@ including exact-source Linux reproduction, real 79M native checks and signed
 upgrade/data retention. Automated/emulator checks do not certify physical BLE
 or motors. Dev publication, if requested later, uses its separate procedure.
 
-## Stable counterpart
+## Earlier Stable counterpart review (historical)
 
 Stable main was inspected at `0957d87` on 2026-10-28. Its Dart policy excludes
 Grand Kingdom/DGT outside Dev and its native bridge retains the Dev-only motor

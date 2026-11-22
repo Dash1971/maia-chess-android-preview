@@ -6,7 +6,7 @@ import java.util.UUID
 internal object BoardChannelPolicy {
     fun supports(flavor: String, kind: String): Boolean =
         kind == "chessnut" ||
-            (flavor in setOf("preview", "dev") && kind == "squareOff")
+            (flavor in setOf("", "stable", "preview", "dev") && kind == "squareOff")
 
     fun permitsMotorCommand(flavor: String, kind: String, ready: Boolean,
                             providedSession: String?, currentSession: String): Boolean =

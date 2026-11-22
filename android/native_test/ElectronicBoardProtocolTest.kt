@@ -7,7 +7,7 @@ fun main() {
     testDevTraceStore()
     sessionRecoveryPolicyTests()
     samplingShareFilesChecks()
-    for (flavor in listOf("", "stable", "production", "unknown")) {
+    for (flavor in listOf("production", "unknown")) {
         check(BoardChannelPolicy.supports(flavor, "chessnut"))
         check(!BoardChannelPolicy.supports(flavor, "pegasus"))
         check(!BoardChannelPolicy.supports(flavor, "squareOff"))
@@ -16,13 +16,21 @@ fun main() {
         check(BoardChannelPolicy.discover(flavor, "Chessnut Go") == "chessnut")
         check(BoardChannelPolicy.discover(flavor, "Smart Chess") == "chessnut")
     }
+    for (flavor in listOf("", "stable", "preview", "dev")) {
+        check(BoardChannelPolicy.supports(flavor, "chessnut"))
+        check(BoardChannelPolicy.supports(flavor, "squareOff"))
+        check(!BoardChannelPolicy.supports(flavor, "pegasus"))
+        check(BoardChannelPolicy.discover(flavor, "Square Off") == "squareOff")
+        check(BoardChannelPolicy.discover(flavor, "DGT Pegasus") == null)
+        check(BoardChannelPolicy.discover(flavor, "Square Off Pro") == null)
+    }
     check(BoardChannelPolicy.supports("preview", "chessnut"))
     check(BoardChannelPolicy.discover("preview", "Square Off") == "squareOff")
     check(BoardChannelPolicy.discover("preview", "DGT Pegasus") == null)
     check(!BoardChannelPolicy.supports("preview", "pegasus"))
     check(BoardChannelPolicy.discover("preview", "Square Off Pro") == null)
     for (flavor in listOf("preview", "dev", "", "stable", "production", "unknown")) {
-        val allowed = flavor in setOf("preview", "dev")
+        val allowed = flavor in setOf("", "stable", "preview", "dev")
         check(BoardChannelPolicy.permitsMotorCommand(flavor, "squareOff", true, "live", "live") == allowed)
         check(!BoardChannelPolicy.permitsMotorCommand(flavor, "squareOff", false, "live", "live"))
         check(!BoardChannelPolicy.permitsMotorCommand(flavor, "squareOff", true, "old", "live"))
