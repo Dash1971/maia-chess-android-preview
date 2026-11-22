@@ -25,7 +25,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get cancelPremoves => '미리두기 취소';
 
   @override
-  String get chessnutExperimental => 'Chessnut(실험 기능)';
+  String get chessnutBoard => 'Chessnut';
 
   @override
   String get connectChessnut => 'Chessnut 연결';
@@ -230,7 +230,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get start => '시작';
 
   @override
-  String get chessnutStatus => 'Chessnut 상태';
+  String get chessnutStatus => '체스보드 상태';
 
   @override
   String get leaveCurrentGame => '현재 대국을 나가시겠습니까?';
@@ -753,7 +753,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get couldNotConnectChessnut => 'Chessnut에 연결할 수 없습니다.';
 
   @override
-  String get chessnutAndroidOnly => 'Chessnut은 Android에서 사용할 수 있습니다.';
+  String get chessnutAndroidOnly => '전자 체스보드는 Android에서 사용할 수 있습니다.';
 
   @override
   String get chessnutIsDisconnected => 'Chessnut이 연결되지 않았습니다.';
@@ -990,11 +990,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chessnutBluetoothUnavailable => '이 기기에서 Bluetooth를 사용할 수 없습니다.';
 
   @override
-  String get chessnutPermissionPending =>
-      'Bluetooth 권한을 허용한 다음 Chessnut에 다시 연결하세요.';
+  String get chessnutPermissionPending => 'Bluetooth 권한을 허용한 다음 보드에 다시 연결하세요.';
 
   @override
-  String get chessnutBluetoothDisabled => 'Bluetooth를 켠 다음 Chessnut에 다시 연결하세요.';
+  String get chessnutBluetoothDisabled => 'Bluetooth를 켠 다음 보드에 다시 연결하세요.';
 
   @override
   String get whiteShort => '백';
@@ -1028,7 +1027,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get electronicBoardExperimental => '전자 체스보드(실험 기능)';
+  String get electronicBoard => '전자 체스보드';
 
   @override
   String get connectBoard => '체스보드 연결';
@@ -1056,10 +1055,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get boardReady => '체스보드가 준비되었습니다';
-
-  @override
-  String get boardExperimentalNotice =>
-      '새 체스보드 지원은 실험 단계입니다. 두 화면에서 수를 확인하고 연결 문제를 알려 주세요.';
 
   @override
   String get boardGameRestriction => '전자 체스보드 대국에는 시간 제한이 없습니다.';
@@ -1104,12 +1099,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get boardReconnect => '체스보드 다시 연결';
 
   @override
-  String get boardLockedPegasus =>
-      'Pegasus가 잠겨 있습니다. 이 Dev 빌드에는 제조사의 초기화 키가 포함되어 있지 않습니다.';
-
-  @override
   String get boardMotorRecovery =>
-      '휴대전화에서 계속하세요. 이 실험용 연결 기능은 체스보드의 모터 상태를 안전하게 복원할 수 없습니다.';
+      '휴대전화에서 계속하세요. 체스보드의 모터 상태를 안전하게 복원할 수 없습니다.';
 
   @override
   String get boardConfirmPosition => '실제 체스보드 포지션 확인';
@@ -1565,6 +1556,14 @@ class AppLocalizationsKo extends AppLocalizations {
       '선택한 대국이 5 MB 내보내기 제한을 초과합니다. 대국을 더 적게 선택한 후 다시 시도하세요.';
 
   @override
+  String pgnCollectionImported(int count) {
+    return '최근 대국에 $count개 대국을 추가했습니다.';
+  }
+
+  @override
+  String get recentExportGameTooLarge => '선택한 대국이 대국당 5 MB 제한을 초과합니다.';
+
+  @override
   String get recentExportFailed => '선택한 대국을 내보낼 수 없습니다. 저장된 대국은 변경되지 않았습니다.';
 
   @override
@@ -1578,4 +1577,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsDiagnostics => '진단';
+
+  @override
+  String get pgnImportProgress => '기보를 가져오는 중…';
+
+  @override
+  String pgnCollectionImportSummary(int imported, int duplicates) {
+    return '기보 $imported개 가져옴 · 중복 $duplicates개 건너뜀';
+  }
 }

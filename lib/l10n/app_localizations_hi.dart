@@ -25,7 +25,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get cancelPremoves => 'पहले से चुनी गयी चालें रद्द करें';
 
   @override
-  String get chessnutExperimental => 'Chessnut (प्रायोगिक)';
+  String get chessnutBoard => 'Chessnut';
 
   @override
   String get connectChessnut => 'Chessnut जोड़ें';
@@ -233,7 +233,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get start => 'शुरुआत';
 
   @override
-  String get chessnutStatus => 'Chessnut की स्थिति';
+  String get chessnutStatus => 'बोर्ड की स्थिति';
 
   @override
   String get leaveCurrentGame => 'मौजूदा खेल से बाहर जाएँ?';
@@ -821,7 +821,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get couldNotConnectChessnut => 'Chessnut से कनेक्शन नहीं हो सका।';
 
   @override
-  String get chessnutAndroidOnly => 'Chessnut का समर्थन Android पर उपलब्ध है।';
+  String get chessnutAndroidOnly =>
+      'इलेक्ट्रॉनिक बोर्ड Android पर इस्तेमाल किए जा सकते हैं।';
 
   @override
   String get chessnutIsDisconnected => 'Chessnut का कनेक्शन हट गया है।';
@@ -1071,11 +1072,11 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get chessnutPermissionPending =>
-      'Bluetooth की अनुमति दें, फिर Chessnut दोबारा जोड़ें।';
+      'Bluetooth की अनुमति दें, फिर बोर्ड दोबारा जोड़ें।';
 
   @override
   String get chessnutBluetoothDisabled =>
-      'Bluetooth चालू करें, फिर Chessnut दोबारा जोड़ें।';
+      'Bluetooth चालू करें, फिर बोर्ड दोबारा जोड़ें।';
 
   @override
   String get whiteShort => 'स';
@@ -1110,8 +1111,7 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get electronicBoardExperimental =>
-      'इलेक्ट्रॉनिक शतरंज बोर्ड (प्रायोगिक)';
+  String get electronicBoard => 'इलेक्ट्रॉनिक शतरंज बोर्ड';
 
   @override
   String get connectBoard => 'बोर्ड कनेक्ट करें';
@@ -1141,10 +1141,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get boardReady => 'बोर्ड तैयार है';
-
-  @override
-  String get boardExperimentalNotice =>
-      'नए बोर्ड का समर्थन प्रायोगिक है। दोनों स्क्रीन पर चालों की जाँच करें और कनेक्शन की समस्याएँ बताएँ।';
 
   @override
   String get boardGameRestriction =>
@@ -1194,12 +1190,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get boardReconnect => 'बोर्ड फिर से कनेक्ट करें';
 
   @override
-  String get boardLockedPegasus =>
-      'Pegasus लॉक है। इस Dev संस्करण में निर्माता की शुरुआती सेटअप कुंजी शामिल नहीं है।';
-
-  @override
   String get boardMotorRecovery =>
-      'फ़ोन पर खेल जारी रखें। यह प्रायोगिक अडैप्टर बोर्ड की मोटर की स्थिति सुरक्षित रूप से बहाल नहीं कर सकता।';
+      'फ़ोन पर खेल जारी रखें। बोर्ड की मोटर की स्थिति सुरक्षित रूप से बहाल नहीं की जा सकती।';
 
   @override
   String get boardConfirmPosition => 'वास्तविक बोर्ड की स्थिति की पुष्टि करें';
@@ -1671,6 +1663,15 @@ class AppLocalizationsHi extends AppLocalizations {
       'चुने गए खेल 5 MB की निर्यात सीमा से अधिक हैं। कम खेल चुनें और फिर से प्रयास करें।';
 
   @override
+  String pgnCollectionImported(int count) {
+    return 'हाल के खेलों में $count खेल जोड़े गए।';
+  }
+
+  @override
+  String get recentExportGameTooLarge =>
+      'चुना गया खेल, प्रति खेल 5 MB की सीमा से बड़ा है।';
+
+  @override
   String get recentExportFailed =>
       'चुने गए खेल निर्यात नहीं किए जा सके। सहेजे गए खेलों में कोई बदलाव नहीं हुआ।';
 
@@ -1685,4 +1686,24 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get settingsDiagnostics => 'निदान';
+
+  @override
+  String get pgnImportProgress => 'बाज़ियाँ आयात हो रही हैं…';
+
+  @override
+  String pgnCollectionImportSummary(int imported, int duplicates) {
+    String _temp0 = intl.Intl.pluralLogic(
+      imported,
+      locale: localeName,
+      other: '$imported बाज़ियाँ आयात हुईं',
+      one: '$imported बाज़ी आयात हुई',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      duplicates,
+      locale: localeName,
+      other: '$duplicates डुप्लिकेट छोड़े गए',
+      one: '$duplicates डुप्लिकेट छोड़ा गया',
+    );
+    return '$_temp0 · $_temp1';
+  }
 }

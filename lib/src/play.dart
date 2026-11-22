@@ -222,6 +222,7 @@ class _GamePageState extends State<GamePage>
   Object? _drawOfferRequest;
   String? _lastDrawOfferFen;
   bool _savedAsIncomplete = false;
+  bool _importedPgn = false;
   int? _viewedPly;
   final ScrollController _liveMovesController = ScrollController();
   final Map<int, GlobalKey> _liveMoveKeys = {};
@@ -237,12 +238,8 @@ class _GamePageState extends State<GamePage>
   String? _selectedBoardId;
   String? _boardConnectionSession;
   final Set<String> _retiredBoardSessions = {};
-  final PegasusDecoder _pegasusDecoder = PegasusDecoder();
-  final OccupancyMoveResolver _occupancyResolver = OccupancyMoveResolver();
-  Set<String>? _physicalOccupancy;
   final SquareOffDecoder _squareOffDecoder = SquareOffDecoder();
   String? _deferredSquareOffMove;
-  Timer? _boardSettleTimer;
   BuildContext? _boardDialogContext;
   int _boardInteractionEpoch = 0;
   bool _boardSetupConfirmed = false;
@@ -677,11 +674,12 @@ class _GamePageState extends State<GamePage>
       final savedBoard = saved['electronicBoard'];
       final isBoardSave =
           savedBoard == 'chessnut-go' ||
-          (savedBoard == 'pegasus' &&
-              BoardChannelPolicy.supports(appFlavor, BoardKind.pegasus)) ||
           (savedBoard == 'squareOff' &&
               BoardChannelPolicy.supports(appFlavor, BoardKind.squareOff));
-      final preset = isBoardSave ? TimePreset.unlimited : storedPreset;
+      // Removed Dev adapters still restore their saved game on the phone,
+      // without reviving a physical connection or a stale board clock.
+      final wasPhysicalBoardSave = isBoardSave || savedBoard == 'pegasus';
+      final preset = wasPhysicalBoardSave ? TimePreset.unlimited : storedPreset;
       if (savedAt != null &&
           preset != TimePreset.unlimited &&
           saved['clockPaused'] != true &&
@@ -794,6 +792,7 @@ class _GamePageState extends State<GamePage>
             ? _resultText()
             : _PlayMessage.restore(saved['statusCode'] ?? saved['status']);
         _boardFlipped = saved['flipped'] as bool? ?? false;
+        _importedPgn = saved['importedPgn'] == true;
         _savedAsIncomplete =
             !_gameFinished &&
             (saved['recentState'] == 'incomplete' ||
@@ -810,9 +809,7 @@ class _GamePageState extends State<GamePage>
                 .hasMatch(saved['pendingPhysicalMaiaMove'] as String);
         _chessnutGameActive =
             isBoardSave && (!_gameFinished || unfinishedMotorPromotion);
-        _boardKind = savedBoard == 'pegasus'
-            ? BoardKind.pegasus
-            : savedBoard == 'squareOff'
+        _boardKind = savedBoard == 'squareOff'
             ? BoardKind.squareOff
             : BoardKind.chessnut;
         _selectedBoardId = saved['electronicBoardId'] is String
@@ -947,6 +944,11 @@ class _GamePageState extends State<GamePage>
             ? 'incomplete'
             : 'active'),
     'pgn': _exportPgn(),
+    if (_importedPgn) ...{
+      'importedPgn': true,
+      'importedWhite': _game.header['White'],
+      'importedBlack': _game.header['Black'],
+    },
     'positions': List<String>.of(_positionHistory),
     'uciMoves': List<String>.of(_uciMoves),
     'variations': _takebackVariations.map((item) => item.toJson()).toList(),
@@ -1674,10 +1676,10 @@ class _GamePageState extends State<GamePage>
       final text = await maiaEngineChannel.invokeMethod<String>(
         'getPendingPgn',
       );
-      if (text != null) {
+      if (text != null && mounted) {
         consumed = true;
-        final session = await AnalysisSession.fromPgnAsync(text);
-        if (mounted) await _openImportedSession(session);
+        final session = await PgnFiles.importText(context, text);
+        if (mounted && session != null) await _openImportedSession(session);
       }
     } on MissingPluginException {
       /* No Android document bridge in host tests. */
@@ -2494,7 +2496,7 @@ class _GamePageState extends State<GamePage>
                 title: Text(
                   _chessnutDeviceName ??
                       (_genericBoards
-                          ? l10n(context).electronicBoardExperimental
+                          ? l10n(context).electronicBoard
                           : 'Chessnut'),
                 ),
                 subtitle: Text(_boardText(_chessnutMessage)),
@@ -2930,6 +2932,7 @@ class _GamePageState extends State<GamePage>
         _drawOfferEvaluating = false;
         _lastDrawOfferFen = null;
         _savedAsIncomplete = false;
+        _importedPgn = false;
         _viewedPly = null;
         _chessnutGameActive = _useChessnutGo;
         _pendingPhysicalMaiaMove = null;
@@ -3892,7 +3895,6 @@ class _GamePageState extends State<GamePage>
     if (_chessnutGameActive) {
       _boardSetupConfirmed = false;
       _cancelBoardInteractions();
-      _occupancyResolver.reset();
       _physicalMoveInProgress = false;
       _queuedChessnutPosition = null;
       _stopChessnutLedRefresh();
@@ -3909,6 +3911,7 @@ class _GamePageState extends State<GamePage>
         _forcedResult = null;
         _naturalGameOver = false;
         _savedAsIncomplete = false;
+        _importedPgn = false;
         _resultDialogShown = false;
         _viewedPly = null;
         _started = false;
@@ -4938,8 +4941,8 @@ class _GamePageState extends State<GamePage>
               value: _useChessnutGo,
               title: Text(
                 _genericBoards
-                    ? l10n(context).electronicBoardExperimental
-                    : l10n(context).chessnutExperimental,
+                    ? l10n(context).electronicBoard
+                    : l10n(context).chessnutBoard,
               ),
               onChanged: (value) => unawaited(_setUseChessnutGo(value)),
             ),
@@ -5018,11 +5021,6 @@ class _GamePageState extends State<GamePage>
                         );
                       }
                     }),
-                  ),
-                if (_boardKind != BoardKind.chessnut)
-                  Text(
-                    l10n(context).boardExperimentalNotice,
-                    style: Theme.of(context).textTheme.bodySmall,
                   ),
               ],
               Padding(
@@ -5893,7 +5891,6 @@ class _GamePageState extends State<GamePage>
 
   @override
   void dispose() {
-    _boardSettleTimer?.cancel();
     _resetExpiryTimer?.cancel();
     _resetDialogRevision.dispose();
     WidgetsBinding.instance.removeObserver(this);

@@ -1,4 +1,6 @@
-# Selected Recent Games → one PGN
+# PGN import and export
+
+Preview beta.11 draft: matching import/export limits, complete collection import, duplicate checking and progress feedback are pending release. Beta.10 remains the published download; its historical import behavior is described in the README.
 
 Implementation for [#225](https://github.com/Dash1971/maia-chess-android-preview/issues/225),
 published in [Preview 2.6.0-beta.3](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.3). Stable promotion remains separate.
@@ -6,6 +8,29 @@ published in [Preview 2.6.0-beta.3](https://github.com/Dash1971/maia-chess-andro
 Long-press a game, or choose Select games from the Recent Games menu. Select one
 or more games, or use Select all. **Export games** opens the existing **Save PGN
 file** and **Share PGN** choices. Each produces a single multi-game `.pgn` file.
+
+## Import or transfer games
+
+In the Analysis Board menu, use **Open PGN file** to choose a `.pgn` document,
+or **Load PGN** to paste its text. Android **Open with** and sharing a PGN
+attachment to Mobile Maia use the same importer. To transfer a collection to
+another installation, export selected games from Recent games, move/share the
+file yourself, and open it in the receiving installation.
+
+- A single-game document opens in Analysis Board, as before.
+- A collection adds new games to Recent games. The current game and recovery
+  settings remain intact; imported unfinished games open paused.
+- Identical saved PGNs and repeats within the incoming file are skipped. Formatting changes made by the exporter are normalized for comparison. Different metadata,
+  comments, clocks or variations produce separate records.
+- Imports lasting more than 300 ms show a progress bar from validation through saving; quick imports finish without a dialog or dimming flash. Completion reports new games and
+  duplicates skipped; an entirely duplicate collection adds zero records.
+- The complete collection must validate and save successfully. An invalid game,
+  oversized file or storage failure does not expose a partial import.
+
+Both import and export allow **5 MiB / 5,242,880 UTF-8 bytes**. The app labels
+this as **5 MB**. The count that fits depends on game length and annotations.
+PGN transfers games and annotations, not app settings or live clock/motor
+checkpoints. Everything stays offline, with no automatic upload.
 
 ## Ordering and content
 
@@ -34,12 +59,16 @@ unfinished `*` games and supported custom starting positions use the same path.
   operation; no selected game is silently omitted.
 - Assembly reads/validates one game at a time, with parsing in a background
   isolate. Only the combined bounded PGN is retained by the export builder.
-  Recent Games' existing list-loading behavior is unchanged.
+  Recent games retains its file format and sorting; reading/decoding now runs in a background worker.
 - Save/share exports allow **5 MiB (5,242,880 UTF-8 bytes)**, including inter-game
   separators. This is a byte limit, not a game-count limit. The UI calls it
   **5 MB**. Imports, including Open with/shared attachments, and the individual
-  game parser retain their separate **2 MiB** limits; a 5 MB multi-game export
-  is intended for external tools, not whole-collection reimport into Mobile Maia.
+  game parser now use the same **5 MiB** limit. Importing a collection adds each new
+  game to Recent games and skips identical PGNs, so exports can transfer games between installations.
+  Importing a single game keeps the existing open-in-analysis behavior.
+- A selected game over the individual 5 MiB parser limit fails with its own
+  localized message, distinct from the combined 5 MiB collection error. Save and
+  Share both stop before opening Android UI, retain selection and allow retry.
 - Preparation stops as soon as adding a game would exceed the export limit,
   before opening Android's save/share UI. No partial file is saved/shared and
   there is no silent omission or automatic splitting. The message is:
@@ -63,8 +92,8 @@ when Maia is the only installed PGN receiver. Users can still import files
 explicitly through the existing import actions.
 
 Android continues to use the existing document picker and FileProvider chooser,
-temporary URI grants and MIME type. Native size guards distinguish 5 MiB
-exports from 2 MiB imports. There is no new permission, network dependency,
+temporary URI grants and MIME type. Native import/export guards share one
+5 MiB byte limit. There is no new permission, network dependency,
 model or automatic upload.
 
 ## Verification
@@ -73,7 +102,7 @@ model or automatic upload.
 display ordering, round-trip metadata/annotations/variations, custom FEN,
 unfinished games, missing/invalid/multiple-game records, UTF-8 and aggregate byte
 limits (including exactly 5 MiB and one byte over), a 200-game collection,
-an oversized 10,000-game selection, unchanged 2 MiB import rejection,
+an oversized 10,000-game selection, matching 5 MiB import rejection,
 read-only repository files, save/share method
 dispatch, cancellation, native failure/retry and stale callbacks. All ten
 languages exercise the selection/export menu and size-error message at 320 px
@@ -85,4 +114,54 @@ they do not certify an OEM document provider or third-party PGN application.
 Android device smoke testing remains a release check. The feature PR is merged;
 exact-source release checks and Android smoke results are recorded below.
 
-Actual signed-APK qualification covered small Select all, cancel/retry, 5 MiB overflow, a 3.66 MB UTF-8 save and separate-UID share, unchanged source hashes, the native 2 MiB import guard and sole-target self-share regression. [Release evidence](releases/preview-2.6.0-beta.3.md).
+Historical beta.3 signed-APK qualification covered small Select all, cancel/retry, 5 MiB overflow, a 3.66 MB UTF-8 save and separate-UID share, unchanged source hashes, the native 2 MiB import guard and sole-target self-share regression. [Release evidence](https://github.com/Dash1971/maia-chess-android-preview/blob/e162a61e995452b748e5f85d710c6f7dab2ab24a/docs/releases/preview-2.6.0-beta.3.md).
+
+## Collection import follow-up — 22 November 2026
+
+File picker, pasted PGN, Android Open with and shared attachments use the same
+validated collection parser. It recognizes game boundaries outside comments,
+headers and variations, validates every game off the UI thread, and rejects
+invalid later games instead of silently importing only the first one.
+
+New records are staged privately, then published by one directory rename into
+Recent games. A failed write does not expose a partial collection. Existing
+records, the active checkpoint and crash-recovery preferences stay unchanged.
+Imported records retain PGN names, dates, results, comments, clocks, variations
+and starting positions. Equal-date imported records retain their source order.
+A delayed progress bar covers validation, duplicate scanning and staged writes without resetting between phases. The completion message reports imported and skipped counts. Work runs off the UI isolate. Back cannot dismiss an in-progress import; success or failure closes the progress dialog.
+
+Import skips identical PGN content already present in saved games or earlier in the same collection. The same PGN serializer used by export normalizes formatting before comparison. Headers, comments, variations and clocks remain part of the comparison: differently annotated or identified copies are kept. Re-importing the same collection adds no extra copies. Completion reports imported and skipped counts. Single-game opening is unchanged.
+PGN transfers games and annotations, not app settings or live clock/motor session
+checkpoints. This is not a complete app-data backup. Imported unfinished games
+open paused; no physical board connection or movement is restored from PGN.
+
+The 5 MiB limit is measured on actual UTF-8 file bytes. Export includes serialized
+headers and separators; source text just under the cap can grow during export
+normalization and must still pass the final combined-byte check. There is no
+additional game-count cap. The former 2 MiB import cap and first-game-only
+collection behavior are historical, superseded by this follow-up.
+
+Host regression coverage includes a collection over 2 MiB, the 5 MiB boundary,
+UTF-8, fake boundaries inside comments/variations, invalid later games, atomic
+failure, active-game preservation and imported-record open/delete after restart.
+Android document-provider checks remain pending the beta.11 build phase.
+
+## Interrupted imports and large collections
+
+On first repository access after startup, abandoned `.import-<timestamp>-<random>.pending` directories are removed. Cleanup ignores links, unrelated directories and normal save checkpoints. The coordinating UI isolate tracks live imports, protecting them from cleanup by another repository instance there. Committed imports remain untouched.
+
+Import file work and Recent games reading/decoding run in background workers. Recent games still uses the existing files and sort order; this change adds no database, persistent index or cache. The collection scale regression exercises 10,000 distinct games near 5 MiB, a repeat import, progress updates, Recent games and event-loop responsiveness. Host measurements are recorded separately from required installed Android checks.
+
+See the [10,000-game host measurements and device-test limits](verification/pgn-collection-import-2026-11-22.md).
+
+## Export/re-import duplicate comparison
+
+Duplicate detection compares supported PGN content in the same format used by export. An exported collection can be re-imported on the same installation without adding another copy because of spacing, move-number formatting or comment padding. Original saved PGNs and checkpoints are not rewritten for comparison.
+
+Different header values, comments, clock annotations and variation trees remain separate. The check conservatively compares original text when serialization would discard information, such as semicolon comments, escape lines, repeated headers or conflicting declared results. An exported copy that lost such information is considered different; importing an identical original still skips it. Malformed legacy records cannot hide valid incoming games. Single-game opening and the shared 5 MiB limits are unchanged.
+
+## Parsing progress and quick imports
+
+A longer import displays progress after **300 ms**. Quick single-game and collection imports finish without showing or dimming a dialog. The existing input and Back guard applies from the start; successful completion or failure removes it. The progress display remains safe if the source screen is disposed.
+
+Validation runs in its worker and reports the input position after each complete game, including variations, has validated. Reports are throttled to avoid flooding the UI. One continuous bar reserves its first half for validation and its second half for duplicate checking and staged writes; it does not jump back to zero at the handoff. The percentage describes work phases, not remaining time. A failed later game never reports successful validation or publishes a partial collection. The worker progress stream is drained and closed before the next phase. Existing limits, duplicate matching and single-game opening are unchanged.

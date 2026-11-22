@@ -25,7 +25,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get cancelPremoves => 'Отменить предварительные ходы';
 
   @override
-  String get chessnutExperimental => 'Chessnut (экспериментально)';
+  String get chessnutBoard => 'Chessnut';
 
   @override
   String get connectChessnut => 'Подключить Chessnut';
@@ -233,7 +233,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get start => 'НАЧАЛО';
 
   @override
-  String get chessnutStatus => 'Состояние Chessnut';
+  String get chessnutStatus => 'Состояние доски';
 
   @override
   String get leaveCurrentGame => 'Выйти из текущей партии?';
@@ -845,7 +845,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get couldNotConnectChessnut => 'Не удалось подключить Chessnut.';
 
   @override
-  String get chessnutAndroidOnly => 'Поддержка Chessnut доступна на Android.';
+  String get chessnutAndroidOnly =>
+      'Электронные доски поддерживаются на Android.';
 
   @override
   String get chessnutIsDisconnected => 'Chessnut отключён.';
@@ -1093,11 +1094,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get chessnutPermissionPending =>
-      'Разрешите доступ к Bluetooth, затем подключите Chessnut заново.';
+      'Разрешите доступ к Bluetooth, затем подключите доску заново.';
 
   @override
   String get chessnutBluetoothDisabled =>
-      'Включите Bluetooth, затем подключите Chessnut заново.';
+      'Включите Bluetooth, затем подключите доску заново.';
 
   @override
   String get whiteShort => 'Б';
@@ -1132,8 +1133,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get electronicBoardExperimental =>
-      'Электронная доска (экспериментально)';
+  String get electronicBoard => 'Электронная доска';
 
   @override
   String get connectBoard => 'Подключить доску';
@@ -1163,10 +1163,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get boardReady => 'Доска готова';
-
-  @override
-  String get boardExperimentalNotice =>
-      'Поддержка новых досок экспериментальная. Проверяйте ходы на обоих экранах и сообщайте о проблемах с подключением.';
 
   @override
   String get boardGameRestriction =>
@@ -1216,12 +1212,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get boardReconnect => 'Подключить доску заново';
 
   @override
-  String get boardLockedPegasus =>
-      'Pegasus заблокирован. Эта Dev-сборка не содержит ключ инициализации производителя.';
-
-  @override
   String get boardMotorRecovery =>
-      'Продолжите на телефоне. Этот экспериментальный адаптер не может безопасно восстановить состояние мотора доски.';
+      'Продолжите на телефоне. Состояние мотора доски нельзя безопасно восстановить.';
 
   @override
   String get boardConfirmPosition => 'Подтвердить позицию на физической доске';
@@ -1695,6 +1687,23 @@ class AppLocalizationsRu extends AppLocalizations {
       'Выбранные партии превышают ограничение экспорта в 5 МБ. Выберите меньше партий и повторите попытку.';
 
   @override
+  String pgnCollectionImported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count партии добавлено в недавние игры.',
+      many: '$count партий добавлено в недавние игры.',
+      few: '$count партии добавлены в недавние игры.',
+      one: '$count партия добавлена в недавние игры.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get recentExportGameTooLarge =>
+      'Выбранная партия превышает лимит 5 МБ на партию.';
+
+  @override
   String get recentExportFailed =>
       'Не удалось экспортировать выбранные партии. Сохранённые партии не изменены.';
 
@@ -1709,4 +1718,28 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get settingsDiagnostics => 'Диагностика';
+
+  @override
+  String get pgnImportProgress => 'Импорт партий…';
+
+  @override
+  String pgnCollectionImportSummary(int imported, int duplicates) {
+    String _temp0 = intl.Intl.pluralLogic(
+      imported,
+      locale: localeName,
+      other: 'Импортировано $imported партии',
+      many: 'Импортировано $imported партий',
+      few: 'Импортированы $imported партии',
+      one: 'Импортирована $imported партия',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      duplicates,
+      locale: localeName,
+      other: 'пропущено $duplicates дубликата',
+      many: 'пропущено $duplicates дубликатов',
+      few: 'пропущено $duplicates дубликата',
+      one: 'пропущен $duplicates дубликат',
+    );
+    return '$_temp0 · $_temp1';
+  }
 }

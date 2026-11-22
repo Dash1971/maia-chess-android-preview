@@ -25,7 +25,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cancelPremoves => 'Cancelar movimientos anticipados';
 
   @override
-  String get chessnutExperimental => 'Chessnut (experimental)';
+  String get chessnutBoard => 'Chessnut';
 
   @override
   String get connectChessnut => 'Conectar Chessnut';
@@ -233,7 +233,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get start => 'INICIO';
 
   @override
-  String get chessnutStatus => 'Estado de Chessnut';
+  String get chessnutStatus => 'Estado del tablero';
 
   @override
   String get leaveCurrentGame => '¿Salir de la partida actual?';
@@ -825,7 +825,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get chessnutAndroidOnly =>
-      'La conexión con Chessnut está disponible en Android.';
+      'Los tableros electrónicos se pueden usar en Android.';
 
   @override
   String get chessnutIsDisconnected => 'Chessnut está desconectado.';
@@ -1074,11 +1074,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get chessnutPermissionPending =>
-      'Permite el acceso a Bluetooth y vuelve a conectar Chessnut.';
+      'Permite el acceso a Bluetooth y vuelve a conectar el tablero.';
 
   @override
   String get chessnutBluetoothDisabled =>
-      'Activa Bluetooth y vuelve a conectar Chessnut.';
+      'Activa Bluetooth y vuelve a conectar el tablero.';
 
   @override
   String get whiteShort => 'B';
@@ -1113,8 +1113,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get electronicBoardExperimental =>
-      'Tablero electrónico (experimental)';
+  String get electronicBoard => 'Tablero electrónico';
 
   @override
   String get connectBoard => 'Conectar tablero';
@@ -1144,10 +1143,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get boardReady => 'Tablero listo';
-
-  @override
-  String get boardExperimentalNotice =>
-      'La compatibilidad con nuevos tableros es experimental. Verifica las jugadas en ambas pantallas e informa de los problemas de conexión.';
 
   @override
   String get boardGameRestriction =>
@@ -1197,12 +1192,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get boardReconnect => 'Reconectar tablero';
 
   @override
-  String get boardLockedPegasus =>
-      'Pegasus está bloqueado. Esta versión Dev no incluye la clave de inicialización del fabricante.';
-
-  @override
   String get boardMotorRecovery =>
-      'Continúa en tu teléfono. Este adaptador experimental no puede restablecer con seguridad el estado del motor del tablero.';
+      'Continúa en tu teléfono. No se puede restablecer con seguridad el estado del motor del tablero.';
 
   @override
   String get boardConfirmPosition => 'Confirmar la posición del tablero físico';
@@ -1674,6 +1665,21 @@ class AppLocalizationsEs extends AppLocalizations {
       'Las partidas seleccionadas superan el límite de exportación de 5 MB. Selecciona menos partidas e inténtalo de nuevo.';
 
   @override
+  String pgnCollectionImported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Se añadieron $count partidas a Partidas recientes.',
+      one: 'Se añadió $count partida a Partidas recientes.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get recentExportGameTooLarge =>
+      'Una partida seleccionada supera el límite de 5 MB por partida.';
+
+  @override
   String get recentExportFailed =>
       'No se pudieron exportar las partidas seleccionadas. Las partidas guardadas no han cambiado.';
 
@@ -1688,4 +1694,24 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsDiagnostics => 'Diagnóstico';
+
+  @override
+  String get pgnImportProgress => 'Importando partidas…';
+
+  @override
+  String pgnCollectionImportSummary(int imported, int duplicates) {
+    String _temp0 = intl.Intl.pluralLogic(
+      imported,
+      locale: localeName,
+      other: '$imported partidas importadas',
+      one: '$imported partida importada',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      duplicates,
+      locale: localeName,
+      other: '$duplicates duplicados omitidos',
+      one: '$duplicates duplicado omitido',
+    );
+    return '$_temp0 · $_temp1';
+  }
 }
