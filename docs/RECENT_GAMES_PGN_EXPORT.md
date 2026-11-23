@@ -1,5 +1,7 @@
 # PGN import and export
 
+[Preview beta.13](releases/preview-2.6.0-beta.13.md) adds optional saved evaluation/quality annotations to exported copies. The beta.12 import behavior below is retained.
+
 [Preview beta.12](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.12) publishes the explicit Recent games import action, first-game-only Analysis opening and Home-transition autosave fix. [Exact-source qualification and cleanup](releases/preview-2.6.0-beta.12.md) include installed Android document-provider, lifecycle, interruption and large-collection checks. The beta.11 qualification below describes the preceding release.
 
 [Preview beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) publishes matching import/export limits, complete collection import, duplicate checking and progress feedback. [Qualification and cleanup](releases/preview-2.6.0-beta.11.md) include the production APK checks. Stable promotion remains separate.
@@ -198,12 +200,11 @@ identity; otherwise identical games with different dates are kept.
 
 See the [host verification record](verification/pgn-import-entry-points-2026-11-23.md).
 
-## Optional analysis annotations — draft Preview work
+## Optional analysis annotations — Preview beta.13
 
-The draft [saved-analysis feature](PGN_ANALYSIS.md) adds **Include analysis** above
+The published [saved-analysis feature](PGN_ANALYSIS.md) adds **Include analysis** above
 Save/Share in the selected-games export menu. Checked by default, it includes
 saved evaluation comments and move-quality symbols. Unchecking it removes those
 from each exported game before the combined 5 MiB check, while preserving prose,
 clocks, variations and other positional annotations. Stored games are unchanged.
-The single-game Save/Share/Copy menu uses the same option. This draft is separate
-from published beta.12 and the current Stable promotion.
+The single-game Save/Share/Copy menu uses the same option. This is published in Preview beta.13; Stable promotion remains separate.
