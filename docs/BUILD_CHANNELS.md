@@ -1,11 +1,11 @@
 # Build channels and promotion status
 
-Updated 22 November 2026. Preview beta.11 is published and qualified. Stable promotion remains a separate draft.
+Updated 23 November 2026. Preview beta.12 is published and qualified. Stable promotion remains a separate draft.
 
 | Channel | Published release | Package / model | Current scope |
 | --- | --- | --- | --- |
 | Stable | [2.5.1 / code 83](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.5.1) | `com.dash1971.maia_chess`, blue icon, 79M | Draft 2.6.0 / code 84 promotion, including Grand Kingdom, PGN transfer and Pegasus withdrawal. |
-| Preview | [2.6.0-beta.11 / code 2611](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) | `com.dash1971.maia_chess.preview`, gold icon, 79M | Published collection transfer, shared limits/progress, supported Grand Kingdom policy and Pegasus withdrawal. Testing precedes Stable approval. |
+| Preview | [2.6.0-beta.12 / code 2612](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.12) | `com.dash1971.maia_chess.preview`, gold icon, 79M | Explicit Recent games PGN import, first-only Analysis and Home-save fix; supported Grand Kingdom and Pegasus withdrawal. Testing precedes Stable approval. |
 | Dev | [2.6.0-alpha.2-dev](https://github.com/Dash1971/maia-chess-android-preview-dev/releases) | `com.dash1971.maia_chess.preview.dev`, red icon, 5M | Uses canonical Preview source; Pegasus is withdrawn from future builds. Automatic diagnostics remain Dev-only. |
 
 ## Current source policy
@@ -25,21 +25,20 @@ channel restriction tests remain in place. Only Dev records automatic local
 traces; Stable/Preview routine diagnostics remain bounded summaries.
 
 The packages install side by side with separate app data. PGN collection
-transfer now uses matching 5 MiB import/export limits and imports every game
-into Recent games. It transfers games/annotations, not app settings or live
-clock/motor session checkpoints. Single-game opening remains unchanged.
+transfer uses matching 5 MiB import/export limits. Explicit Recent games import saves every game, including single-game files; Analysis opens only the first game. It transfers games/annotations, not app settings or live
+clock/motor session checkpoints. Android single-game Open with remains Analysis.
 
 ## Release instructions
 
 - [Stable release procedure](https://github.com/Dash1971/maia-chess-android/blob/main/docs/RELEASING.md): exact-source qualification, canonical F-Droid reproduction, signed upgrade checks and separate GitHub/F-Droid/Zapstore delivery status.
 - [Preview/Dev release procedure](https://github.com/Dash1971/maia-chess-android-preview/blob/main/docs/RELEASING.md): preserve each channel's model, identity, native/upgrade checks and release gates.
 
-Stable release approval remains pending Preview beta.11 testing and Stable's own qualification. Beta.11 completed exact-source Preview qualification; [release evidence](releases/preview-2.6.0-beta.11.md) records checks and immediate cleanup. Stable and Dev published APKs/tags remain unchanged.
+Stable release approval remains pending Preview beta.12 testing and Stable's own qualification. Beta.12 completed exact-source Preview qualification; [release evidence](releases/preview-2.6.0-beta.12.md) records checks and immediate cleanup. Stable and Dev published APKs/tags remain unchanged.
 
-## Preview 2.6.0-beta.11 publication
+## Preview 2.6.0-beta.12 publication
 
-[Published beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) delivers #261 through release #262. PGN collections transfer into Recent games with matching 5 MiB import/export limits, duplicate detection across export/re-import, transactional saving and delayed progress feedback. Single-game PGNs still open for analysis. Android PGN content URIs use the native document bridge with Flutter generic deep-link routing disabled. Board messages are device-neutral; Grand Kingdom is supported with passed user acceptance, and Pegasus is withdrawn.
-[Exact-source qualification and immediate all-host cleanup](releases/preview-2.6.0-beta.11.md) cover matching Linux builds, established signing/reconstruction, full native checks, signed beta.10 upgrade and actual Android file/paste/share/collection recovery checks. Stable companions #82 and #83 are open/unmerged; prior security #81 is merged. Stable and Dev releases are unchanged.
+[Published beta.12](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.12) delivers #265 through release #266. Recent games explicitly imports every game, including a single game; Analysis opens only the first game with collection guidance. The Home-transition guard prevents lifecycle autosaves from creating a duplicate identity. Existing duplicates are not removed. Android automatic routing is retained.
+[Exact-source qualification and immediate all-host cleanup](releases/preview-2.6.0-beta.12.md) record matching Linux builds, established signer/reconstruction, full ARM64/79M native checks, actual signed beta.11 upgrade and production APK feature checks. Stable #83 is merged into draft promotion #82, which remains unmerged into Stable main; no Stable app promotion is authorized by this release. Stable/Dev published releases are unchanged.
 
 ## Historical channel records
 
@@ -48,6 +47,11 @@ experimental/Dev-only board policies are historical. Grand Kingdom is supported
 in all current channels and has passed user acceptance testing. Earlier pending
 hardware-acceptance statements below are superseded by the current acceptance
 record. Pegasus is withdrawn as stated above.
+
+### Preview 2.6.0-beta.11 publication
+
+[Published beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) delivers #261 through release #262. PGN collections transfer into Recent games with matching 5 MiB import/export limits, duplicate detection across export/re-import, transactional saving and delayed progress feedback. Single-game PGNs still open for analysis. Android PGN content URIs use the native document bridge with Flutter generic deep-link routing disabled. Board messages are device-neutral; Grand Kingdom is supported with passed user acceptance, and Pegasus is withdrawn.
+[Exact-source qualification and immediate all-host cleanup](releases/preview-2.6.0-beta.11.md) cover matching Linux builds, established signing/reconstruction, full native checks, signed beta.10 upgrade and actual Android file/paste/share/collection recovery checks. Stable companions #82 and #83 are open/unmerged; prior security #81 is merged. Stable and Dev releases are unchanged.
 
 ### Preview 2.6.0-beta.10 publication
 
