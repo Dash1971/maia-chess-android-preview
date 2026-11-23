@@ -2938,6 +2938,18 @@ abstract class AppLocalizations {
   /// **'{imported, plural, one{{imported} game imported} other{{imported} games imported}} · {duplicates, plural, one{{duplicates} duplicate skipped} other{{duplicates} duplicates skipped}}'**
   String pgnCollectionImportSummary(int imported, int duplicates);
 
+  /// Recent games menu: import every game from a PGN file. Uses pinned Lichess importPgn wording.
+  ///
+  /// In en, this message translates to:
+  /// **'Import PGN'**
+  String get recentImportGames;
+
+  /// Analysis Board opened only the first game of a multi-game PGN. Direct the user to the localized Recent games screen and Import PGN menu entry to import the whole collection.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the first game was opened. To import all games, use Recent games → Import PGN.'**
+  String get pgnFirstGameOnly;
+
   /// Checkbox inside existing PGN Save/Share/Copy menus. Include saved evaluation comments and the six !/? move-quality symbols. Ordinary comments, clocks and variations remain in either export.
   ///
   /// In en, this message translates to:

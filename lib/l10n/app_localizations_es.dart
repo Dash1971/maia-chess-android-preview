@@ -1716,6 +1716,13 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get recentImportGames => 'Importar PGN';
+
+  @override
+  String get pgnFirstGameOnly =>
+      'Solo se abrió la primera partida. Para importar todas las partidas, ve a Partidas recientes → Importar PGN.';
+
+  @override
   String get includeAnalysisAnnotations => 'Incluir análisis';
 
   @override

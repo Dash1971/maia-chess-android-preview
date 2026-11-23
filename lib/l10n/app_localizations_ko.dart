@@ -1587,6 +1587,13 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get recentImportGames => 'PGN 가져오기';
+
+  @override
+  String get pgnFirstGameOnly =>
+      '첫 번째 대국만 열었습니다. 모든 대국을 가져오려면 최근 대국 → PGN 가져오기를 이용하세요.';
+
+  @override
   String get includeAnalysisAnnotations => '분석 포함';
 
   @override

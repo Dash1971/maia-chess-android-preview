@@ -1581,6 +1581,13 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get recentImportGames => 'PGN をインポート';
+
+  @override
+  String get pgnFirstGameOnly =>
+      '最初の対局のみを開きました。すべての対局をインポートするには、最近の対局 → PGN をインポートを選んでください。';
+
+  @override
   String get includeAnalysisAnnotations => '解析を含める';
 
   @override

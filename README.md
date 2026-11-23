@@ -30,7 +30,7 @@ and feature requests.
 
 ## Current Preview status
 
-The latest Preview release is [2.6.0-beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11). PGN collections transfer into Recent games with matching 5 MiB import/export limits, duplicate detection across export/re-import, transactional saving and delayed progress feedback. Single-game PGNs still open for analysis. Board messages are device-neutral; Grand Kingdom is supported with passed user acceptance, and Pegasus is withdrawn. Damaged-save recovery, interrupted-game retention, same-page full-analysis resume and independent engine/move panes remain available. Preview uses 79M. Camera/image recognition remains withdrawn. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.11.md) record this release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev; Stable 2.6 approval and qualification remain separate.
+The latest Preview release is [2.6.0-beta.12](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.12). **Recent games → ⋮ → Import PGN** saves every game from a file, including single-game files. Analysis opens only the first game and explains how to import a collection. Returning Home no longer allows a lifecycle autosave to create another saved copy. Matching 5 MiB import/export limits, duplicate detection, transactional saving and progress remain. Grand Kingdom is supported with passed user acceptance; Pegasus and camera/image recognition remain withdrawn. Preview uses 79M. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.12.md) record this release. Stable remains 2.5.1; Dev remains 2.6.0-alpha.2-dev; Stable 2.6 approval and qualification remain separate.
 
 See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
 
@@ -45,11 +45,11 @@ on that line. **Include analysis** in the existing Save/Share/Copy menus control
 only the exported copy; Recent games offers the same choice for collections.
 Comments, clocks and variations are preserved. See the [saved-analysis guide](docs/PGN_ANALYSIS.md)
 for PGN compatibility and limits. This is draft work, separate from published
-beta.11 and the current Stable 2.6 promotion.
+beta.12 and the current Stable 2.6 promotion.
 
 ### Recent games and PGN files
 
-[Preview beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) transfers PGN collections between installations. Import adds new games to Recent games without replacing the current game, skips matching saved games and repeats within the file (including export formatting changes), and keeps different annotations or metadata. Both directions allow 5 MiB of UTF-8. Longer imports show progress after 300 ms; quick imports finish without a dialog. Invalid collections and storage failures expose no partial import; abandoned staging is cleaned on first repository access after restart. Single-game opening is unchanged. The [import/export guide](docs/RECENT_GAMES_PGN_EXPORT.md) gives transfer steps and exact duplicate/limit rules. Stable 2.6 approval awaits Preview testing and its own qualification.
+[Preview beta.12](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.12) provides **Recent games → ⋮ → Import PGN**, including in an empty list. It adds every validated game from a file, including a single game, without replacing the current game. Matching PGNs and repeats within a file are skipped; different annotations or metadata remain distinct. **Analysis Board → Open PGN file / Load PGN** opens only the first game and points to Recent games for a collection. Android Open with/shared attachments retain their previous routing: one game opens for analysis; a collection imports into Recent games. Both directions allow 5 MiB of UTF-8. Longer imports show progress after 300 ms. Invalid collections and storage failures expose no partial import; abandoned staging is cleaned on repository access after restart. The Home-transition autosave fix prevents newly created duplicate records; existing duplicates are not automatically merged or deleted. See the [import/export guide](docs/RECENT_GAMES_PGN_EXPORT.md).
 
 Bulk export is published in Preview 2.6.0-beta.3 ([#226](https://github.com/Dash1971/maia-chess-android-preview/pull/226)). Long-press a Recent games entry or choose
 **Select games**, select the games to export (or use **Select all**), then choose
@@ -65,9 +65,13 @@ silently omit games, or split the export automatically. Your selection and saved
 games stay unchanged; deselect some games and try again. Missing or unreadable
 selected games also stop the whole export.
 
-Imports accept every validated game in a collection up to the shared 5 MiB limit. PGN transfers games and supported annotations, not app settings or live clock/motor checkpoints. Everything works offline, with no automatic upload. An oversized individual export shows its own error and retains selection for retry.
+Recent games import accepts every validated game in a file up to the shared 5 MiB limit. Analysis opens only the first game within that same whole-file size limit. PGN transfers games and supported annotations, not app settings or live clock/motor checkpoints. Everything works offline, with no automatic upload. An oversized individual export shows its own error and retains selection for retry.
 
 ## Roadmap
+
+**Explicit PGN import and Home-save fix: Preview beta.12**
+
+[PR #265](https://github.com/Dash1971/maia-chess-android-preview/pull/265) is delivered. Recent games has an explicit all-games import action; Analysis opens the first game; Home/background autosaves retain one original saved-game identity. Existing duplicate records are left intact. These changes await the separate Stable 2.6 promotion.
 
 **PGN collection transfer and supported-board policy: Preview beta.11**
 
@@ -142,8 +146,9 @@ board. Wide Home/Settings use columns, and Recent games uses a compact table
 with a two-line fallback for narrow windows or large text. [Implementation and
 Android qualification](docs/ADAPTIVE_LAYOUTS_26.md) record phone/tablet/constrained
 profiles and rotation/input checks. [#29](https://github.com/Dash1971/maia-chess-android-preview/issues/29)
-remains open for comfortable physical finger input and tablet-owner feedback;
-Stable promotion is separate. Published beta.9 keeps engine analysis visible while moves scroll independently, including endpoint jumps. Landscape tabs share the bottom control strip. Large text permits independent header scrolling. [Behavior and verification](docs/ANALYSIS_SCROLL_26.md) separate host renders from production APK checks; physical touch/tablet acceptance remains open.
+is closed for Preview delivery. Comfortable physical finger input, tablet-owner
+feedback, gesture-navigation and actual split-screen checks remain recorded
+verification limits; Stable promotion is separate. Published beta.9 keeps engine analysis visible while moves scroll independently, including endpoint jumps. Landscape tabs share the bottom control strip. Large text permits independent header scrolling. [Behavior and verification](docs/ANALYSIS_SCROLL_26.md) separate host renders from production APK checks; physical touch/tablet acceptance remains open.
 
 **Under consideration: candidate moves and a rating explorer**
 

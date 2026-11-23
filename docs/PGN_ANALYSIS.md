@@ -1,7 +1,7 @@
 # Saved analysis in PGN
 
 Draft Preview work for [#61](https://github.com/Dash1971/maia-chess-android-preview/issues/61).
-This is not included in the published Preview beta.11 or the current Stable 2.6
+This is not included in the published Preview beta.12 or the current Stable 2.6
 promotion.
 
 Run Computer analysis as usual. Once every position has been evaluated, Mobile

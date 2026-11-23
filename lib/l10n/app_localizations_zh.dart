@@ -1562,6 +1562,12 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get recentImportGames => '导入 PGN';
+
+  @override
+  String get pgnFirstGameOnly => '仅打开了第一盘对局。要导入所有对局，请前往最近对局 → 导入 PGN。';
+
+  @override
   String get includeAnalysisAnnotations => '包含分析';
 
   @override

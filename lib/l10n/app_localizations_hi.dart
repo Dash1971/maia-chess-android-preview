@@ -1708,6 +1708,13 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String get recentImportGames => 'PGN आयात करें';
+
+  @override
+  String get pgnFirstGameOnly =>
+      'केवल पहली बाज़ी खोली गई है। सभी बाज़ियाँ आयात करने के लिए हाल के खेल → PGN आयात करें चुनें।';
+
+  @override
   String get includeAnalysisAnnotations => 'विश्लेषण शामिल करें';
 
   @override
