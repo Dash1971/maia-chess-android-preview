@@ -94,6 +94,8 @@ comment, and require both native PGN VIEW MIME types to remain. Channel branding
 and fully qualified activity names are accepted. The existing `*_test.py`
 verification suite discovers this file automatically; workflow files are unchanged.
 
-These are local Python/XML checks. No Android builds, Actions or LFS downloads
-were run for this follow-up. Installed cold/warm PGN opening remains part of
-exact-source release qualification. Stable #82 and Preview #265 remain drafts.
+At draft preparation, only local Python/XML checks had run; no Android build, Actions or LFS downloads were performed in that preparation phase. Publication qualification is recorded below. Preview #265 is now merged; Stable #82 remains a separate draft.
+
+## Published Android qualification
+
+[Preview beta.12 qualification](../releases/preview-2.6.0-beta.12.md) records actual signed-APK Recent import, first-only Analysis, Android file/share routing, export/re-import, interruption recovery, 10,000-game atomic saving and Home/background tests. The private supplied 119-entry analysis above remains a separate host-only observation; the installed tests use synthetic fixtures. Existing private duplicate copies are not attributed conclusively to the reproduced race.

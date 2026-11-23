@@ -1,9 +1,6 @@
 # PGN import and export
 
-Next update (draft): the explicit Recent games import action, first-game-only
-Analysis Board behavior and Home-transition duplicate-save fix below have host
-regressions but are not in published beta.11. Historical APK qualification below
-applies to beta.11, not this follow-up.
+[Preview beta.12](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.12) publishes the explicit Recent games import action, first-game-only Analysis opening and Home-transition autosave fix. [Exact-source qualification and cleanup](releases/preview-2.6.0-beta.12.md) include installed Android document-provider, lifecycle, interruption and large-collection checks. The beta.11 qualification below describes the preceding release.
 
 [Preview beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) publishes matching import/export limits, complete collection import, duplicate checking and progress feedback. [Qualification and cleanup](releases/preview-2.6.0-beta.11.md) include the production APK checks. Stable promotion remains separate.
 
@@ -135,10 +132,7 @@ Historical beta.3 signed-APK qualification covered small Select all, cancel/retr
 ## Collection import follow-up — 22 November 2026
 
 Recent games file import, Android Open with and shared collection attachments
-use the validated collection parser. Analysis Board uses its first-game-only
-parser instead. It recognizes game boundaries outside comments,
-headers and variations, validates every game off the UI thread, and rejects
-invalid later games instead of silently importing only the first one.
+use the validated collection parser. The collection parser recognizes boundaries outside comments, headers and variations, validates every game off the UI thread and rejects an invalid later game. Analysis Board uses its first-game-only parser, so a later invalid game does not block the first valid one.
 
 New records are staged privately, then published by one directory rename into
 Recent games. A failed write does not expose a partial collection. Existing
