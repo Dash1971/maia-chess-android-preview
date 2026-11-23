@@ -110,25 +110,24 @@ containing the selected games for use in external analysis tools. Thanks to
 Implementation and verification are tracked in
 [Preview #225](https://github.com/Dash1971/maia-chess-android-preview/issues/225).
 
-**Offline board scanning: acceptable candidate; shipping decision pending**
+**Offline board scanning: Open Board Scanner candidate for 2.7**
 
-The November 15 follow-up to our
-[model investigation and visual comparison](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md)
-finds **ChessQ Lite V4 INT8 accuracy acceptable on our twelve-photo test set**.
-Its 41.4 MB ONNX model matched the 63.1 MB V4 model on all full-photo placements
-(10/12 exact positions); the smaller V5 model performed worse. These are desktop
-results on a small set, with broader accuracy and Android performance unverified.
+We are considering [Open Board Scanner](https://github.com/Dash1971/open-board-scanner)
+for Mobile Maia 2.7. Its board-finder and piece-reader models total **3.5 MB**
+and run entirely offline, reading screenshots and photos of printed chess diagrams.
+In our desktop test, it read all 64 squares correctly in **87 of 88 photos**.
+See the [results and visual comparison](https://github.com/Dash1971/open-board-scanner/blob/main/REPORT.md).
 
-**We have not decided to restore scanning.** We need to weigh APK size, device
-support and the published noncommercial license, including distribution and
-F-Droid implications, before deciding. ARM64 packaging could offset the added
-model size but would change device coverage; no packaging change is approved.
-The plan does not depend on obtaining a more permissive license.
+**The code and model weights are published under AGPL-3.0-only**, the same
+licence as Mobile Maia. Training included noncommercial piece artwork and
+copyrighted diagram photos. Our understanding is that the trained weights are
+not derivative works of those images; before including the scanner, we want
+F-Droid to confirm that it accepts this licensing basis. The
+[model licence and provenance](https://github.com/Dash1971/open-board-scanner/blob/main/MODEL-LICENSE.md)
+sets out the details.
 
-Preview 2.6.0-beta.3 removes the prototype, including its bundled diagram model.
-Historical Preview beta.2 and the unchanged Dev alpha.2 APKs still contain it. Manual Board
-Editor, FEN import, Analysis and Continue from here remain available. See
-[the original proposal (#179)](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
+Manual Board Editor, FEN import, Analysis and Continue from here remain
+available. See [the original proposal (#179)](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
 
 **Expand electronic-board support**
 
