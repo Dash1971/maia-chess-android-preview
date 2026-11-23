@@ -206,6 +206,7 @@ class _ReviewPageState extends State<ReviewPage>
   int _fullAnalysisGeneration = 0;
   MoveClassificationJob? _classificationJob;
   List<StockfishReview>? _graphScores;
+  bool _pgnNeedsInitialScore = false;
   List<String> _graphPositions = const [];
   List<String> _graphMoves = const [];
   List<ClassifiedMove> _graphClassifications = const [];
@@ -329,6 +330,9 @@ class _ReviewPageState extends State<ReviewPage>
         if (!mounted || !_foreground || !_engineEnabled) return;
         if (_fullAnalysisRunning && generation == _fullAnalysisGeneration) {
           unawaited(_continueFullAnalysis());
+        }
+        if (_pgnNeedsInitialScore && !_fullAnalysisRunning) {
+          _restorePgnAnalysis();
         }
         if (_inVariation) {
           unawaited(_analyzeVariation());
@@ -1669,6 +1673,7 @@ class _ReviewPageState extends State<ReviewPage>
     _pendingFullScores = null;
     _fullAnalysisClassifying = false;
     _graphScores = null;
+    _pgnNeedsInitialScore = false;
     _graphPositions = const [];
     _graphMoves = const [];
     _graphClassifications = const [];
@@ -1709,10 +1714,64 @@ class _ReviewPageState extends State<ReviewPage>
       _graphClassifications = saved.classifications;
       _graphPositions = line.positions;
       _graphMoves = line.uciMoves;
+      _pgnNeedsInitialScore = saved.moveScores != null;
+      if (_pgnNeedsInitialScore && _engineEnabled && _foreground) {
+        unawaited(
+          _restorePgnInitialScore(
+            saved.moveScores!,
+            line,
+            _fullAnalysisGeneration,
+          ),
+        );
+      }
     } on FormatException {
       // A malformed annotation must never prevent opening the underlying game.
     } on ArgumentError {
       // Legacy/imported note data is optional.
+    }
+  }
+
+  Future<void> _restorePgnInitialScore(
+    List<StockfishReview> moveScores,
+    ComputerAnalysisLine line,
+    int generation,
+  ) async {
+    bool current() =>
+        mounted &&
+        _foreground &&
+        _engineEnabled &&
+        _pgnNeedsInitialScore &&
+        !_fullAnalysisRunning &&
+        generation == _fullAnalysisGeneration;
+    try {
+      // Let init/resume start its normal selected-position request first.
+      await Future<void>.value();
+      if (!current()) return;
+      final sameStart = line.positions.first == widget.positions.first;
+      if (sameStart) await _pendingAnalyses[0];
+      if (!current()) return;
+      final initial =
+          (sameStart ? _reviews[0] : null) ??
+          await (widget.evaluator?.call(line.positions.first) ??
+              _stockfish.evaluate(
+                line.positions.first,
+                scope: _batchScope,
+                background: true,
+                gameAnalysisQuality: widget.gameAnalysisQuality,
+              ));
+      if (!current()) return;
+      setState(() {
+        _graphScores = [initial, ...moveScores];
+        _pgnNeedsInitialScore = false;
+        _analysisError = null;
+      });
+    } on AnalysisCancelled {
+      // Lifecycle/engine changes retry on resume; line edits or explicit
+      // reanalysis invalidate this result using the existing generation.
+    } catch (error, stack) {
+      if (!current()) return;
+      unawaited(AppDiagnostics.record('pgn-initial-evaluation', error, stack));
+      setState(() => _analysisError = _ReviewAnalysisStatus.failed);
     }
   }
 
@@ -1779,6 +1838,7 @@ class _ReviewPageState extends State<ReviewPage>
       _pendingFullScores = [];
       _fullAnalysisClassifying = false;
       _graphScores = null;
+      _pgnNeedsInitialScore = false;
       _graphPositions = const [];
       _graphMoves = const [];
       _graphClassifications = const [];
@@ -3144,7 +3204,7 @@ class _ReviewPageState extends State<ReviewPage>
       ClipboardData(
         text: _includePgnAnalysis
             ? _exportReviewPgn()
-            : PgnAnalysisAnnotations.withoutAnalysis(_exportReviewPgn()),
+            : await PgnFiles._withoutAnalysis(_exportReviewPgn()),
       ),
     );
     if (mounted) {
@@ -3201,6 +3261,7 @@ class _ReviewPageState extends State<ReviewPage>
       }
       return;
     }
+    if (_pgnNeedsInitialScore) _restorePgnAnalysis();
     if (_inVariation) {
       unawaited(_analyzeVariation());
     } else {

@@ -24,6 +24,7 @@ The existing export menu has an **Include analysis** checkbox, checked by defaul
 It applies to **Save PGN file**, **Share PGN** and **Copy PGN**, with no additional
 dialog. Recent games offers the same checkbox above Save/Share for selected-game
 collections. The choice lasts while that screen is open; it is not an app setting.
+Analysis stripping for Save, Share and Copy PGN runs in a background worker.
 
 Uncheck it to remove evaluation tags and the six move-quality symbols from the
 exported copy. Prose comments, clocks, variations and other positional annotations
@@ -35,9 +36,16 @@ each selected game's analysis before checking the combined 5 MiB limit.
 Scores use the common PGN comment extension `[%eval 0.35]`, from White's point of
 view, with `[%eval #3]` for mate and `[%eval #0]` at actual checkmate. The initial
 position's score is a comment before the first move; later scores follow their
-moves. A complete graph requires a readable score for the initial position and
-every move on the analyzed line. Missing or malformed scores do not prevent the
-underlying game or its readable move symbols from opening.
+moves. A complete graph uses a score for the initial position and every move on
+the analyzed line. Some imports, including Lichess game exports, omit only the
+initial evaluation. When every move has a readable score and the initial tag is
+absent, Mobile Maia reuses its initial-position evaluation or evaluates just that
+position in the background, then restores the graph. Imported move scores and
+markings stay unchanged; this does not rerun the game or classification, or
+rewrite the imported annotations. Lifecycle/engine changes can retry this work;
+line edits, disposal and explicit reanalysis prevent stale results from appearing.
+Missing scores elsewhere, or explicitly malformed evaluations, are not filled.
+They do not prevent the underlying game or readable move symbols from opening.
 
 Move-quality symbols use standard numeric annotation glyphs:
 
@@ -68,5 +76,11 @@ on reanalysis, mates and custom starting positions, incomplete/malformed tags,
 played prefixes, size limits, reopen without a full rerun, cancellation,
 existing-record persistence, Save/Share and collection export with and without
 analysis, storage failure and all ten locales at 320 pixels with 200% text.
+`test/pgn_analysis_review_regressions_test.dart` covers imports missing only the
+initial score, custom Black-to-move positions, incomplete/malformed tags,
+selected-position cancellation, background/resume, engine toggling, late results
+after reanalysis/disposal and responsive Copy PGN on both screens with a PGN over
+2 MiB. The Copy tests detect the original synchronous stripping behavior.
+
 Host checks do not replace installed Android save/share and upgrade testing before
 publication. No Android build or GitHub Actions run is part of this draft.

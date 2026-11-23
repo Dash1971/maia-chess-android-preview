@@ -4079,7 +4079,7 @@ class _GamePageState extends State<GamePage>
       ClipboardData(
         text: _includePgnAnalysis
             ? _exportPgn()
-            : PgnAnalysisAnnotations.withoutAnalysis(_exportPgn()),
+            : await PgnFiles._withoutAnalysis(_exportPgn()),
       ),
     );
     if (mounted) {

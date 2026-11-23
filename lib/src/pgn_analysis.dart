@@ -166,6 +166,16 @@ class PgnAnalysisAnnotations {
           ? scores.cast<StockfishReview>()
           : null,
       marks,
+      // Game exports may omit the initial evaluation while annotating every
+      // move. Preserve those scores so only the initial position needs work.
+      // An explicit malformed initial annotation is not a missing annotation.
+      moveScores:
+          scores.length > 1 &&
+              scores.first == null &&
+              !(parsed.comments.join(' ').contains('[%eval')) &&
+              scores.skip(1).every((score) => score != null)
+          ? scores.skip(1).cast<StockfishReview>().toList(growable: false)
+          : null,
     );
   }
 
@@ -200,9 +210,12 @@ class PgnAnalysisAnnotations {
 }
 
 class SavedPgnAnalysis {
-  const SavedPgnAnalysis(this.scores, this.classifications);
+  const SavedPgnAnalysis(this.scores, this.classifications, {this.moveScores});
   final List<StockfishReview>? scores;
   final List<ClassifiedMove> classifications;
+
+  /// All post-move scores, only when the initial evaluation alone is absent.
+  final List<StockfishReview>? moveScores;
 }
 
 /// A working checkbox inside the existing Save/Share menu; toggling keeps the
