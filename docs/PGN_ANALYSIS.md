@@ -1,8 +1,6 @@
 # Saved analysis in PGN
 
-Draft Preview work for [#61](https://github.com/Dash1971/maia-chess-android-preview/issues/61).
-This is not included in the published Preview beta.12 or the current Stable 2.6
-promotion.
+Published in [Preview beta.13](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.13) for [#61](https://github.com/Dash1971/maia-chess-android-preview/issues/61). [Qualification and immediate cleanup](releases/preview-2.6.0-beta.13.md) include actual signed-APK persistence, restoration and export checks. Stable 2.6 promotion remains separate.
 
 Run Computer analysis as usual. Once every position has been evaluated, Mobile
 Maia saves those evaluations in the existing game's PGN. When move classification
@@ -67,7 +65,9 @@ Annotations add a small amount of text; the existing 5 MiB limits still apply.
 Storage uses the existing game/session record and identity. There is no new
 analysis database, file attachment, dependency, permission or network service.
 If an annotated PGN exceeds the limit or saving fails, a localized error is shown.
-The existing stored game is retained; the visible analysis can still be exported.
+The existing stored game is retained. After a storage failure, visible analysis can
+be retried through the existing export actions, subject to the same size limit.
+For an oversized export, uncheck Include analysis or select fewer games.
 
 ## Verification
 
@@ -82,5 +82,4 @@ selected-position cancellation, background/resume, engine toggling, late results
 after reanalysis/disposal and responsive Copy PGN on both screens with a PGN over
 2 MiB. The Copy tests detect the original synchronous stripping behavior.
 
-Host checks do not replace installed Android save/share and upgrade testing before
-publication. No Android build or GitHub Actions run is part of this draft.
+Installed production-APK save/share/copy, graph restoration, near-limit collection export, independent PGN reading and signed-upgrade checks passed for beta.13. Host tests retain cancellation/failure and large-text coverage. The release evidence distinguishes emulator observations from physical-device/OEM coverage.
