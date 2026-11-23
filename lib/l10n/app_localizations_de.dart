@@ -1718,4 +1718,11 @@ class AppLocalizationsDe extends AppLocalizations {
     );
     return '$_temp0 · $_temp1';
   }
+
+  @override
+  String get includeAnalysisAnnotations => 'Analyse einschließen';
+
+  @override
+  String get analysisSaveFailed =>
+      'Die Analyse konnte nicht gespeichert werden. Die Partie ist unverändert.';
 }

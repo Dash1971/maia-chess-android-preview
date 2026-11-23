@@ -469,5 +469,7 @@
   "recentResultColumn": "Resultado",
   "settingsDiagnostics": "Diagnóstico",
   "pgnImportProgress": "Importando partidas…",
-  "pgnCollectionImportSummary": "{imported, plural, one{{imported} partida importada} other{{imported} partidas importadas}} · {duplicates, plural, one{{duplicates} duplicata ignorada} other{{duplicates} duplicatas ignoradas}}"
+  "pgnCollectionImportSummary": "{imported, plural, one{{imported} partida importada} other{{imported} partidas importadas}} · {duplicates, plural, one{{duplicates} duplicata ignorada} other{{duplicates} duplicatas ignoradas}}",
+  "includeAnalysisAnnotations": "Incluir análise",
+  "analysisSaveFailed": "Não foi possível salvar a análise. A partida não foi alterada."
 }

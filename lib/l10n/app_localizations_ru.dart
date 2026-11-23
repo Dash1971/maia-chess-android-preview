@@ -1742,4 +1742,11 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return '$_temp0 · $_temp1';
   }
+
+  @override
+  String get includeAnalysisAnnotations => 'Включить анализ';
+
+  @override
+  String get analysisSaveFailed =>
+      'Не удалось сохранить анализ. Партия не изменена.';
 }

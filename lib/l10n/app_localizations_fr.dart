@@ -1714,4 +1714,11 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0 · $_temp1';
   }
+
+  @override
+  String get includeAnalysisAnnotations => 'Inclure l’analyse';
+
+  @override
+  String get analysisSaveFailed =>
+      'Impossible d’enregistrer l’analyse. La partie est inchangée.';
 }

@@ -1706,4 +1706,11 @@ class AppLocalizationsHi extends AppLocalizations {
     );
     return '$_temp0 · $_temp1';
   }
+
+  @override
+  String get includeAnalysisAnnotations => 'विश्लेषण शामिल करें';
+
+  @override
+  String get analysisSaveFailed =>
+      'विश्लेषण सहेजा नहीं जा सका। बाज़ी में कोई बदलाव नहीं हुआ।';
 }

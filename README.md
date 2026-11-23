@@ -36,6 +36,17 @@ See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readm
 
 ## Feature guide
 
+### Saved analysis in PGN — draft Preview work
+
+[Issue #61](https://github.com/Dash1971/maia-chess-android-preview/issues/61) saves
+completed evaluations and move-quality annotations in the game's PGN, restoring
+the graph and markings when reopened. Reanalysis replaces the previous analysis
+on that line. **Include analysis** in the existing Save/Share/Copy menus controls
+only the exported copy; Recent games offers the same choice for collections.
+Comments, clocks and variations are preserved. See the [saved-analysis guide](docs/PGN_ANALYSIS.md)
+for PGN compatibility and limits. This is draft work, separate from published
+beta.11 and the current Stable 2.6 promotion.
+
 ### Recent games and PGN files
 
 [Preview beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) transfers PGN collections between installations. Import adds new games to Recent games without replacing the current game, skips matching saved games and repeats within the file (including export formatting changes), and keeps different annotations or metadata. Both directions allow 5 MiB of UTF-8. Longer imports show progress after 300 ms; quick imports finish without a dialog. Invalid collections and storage failures expose no partial import; abandoned staging is cleaned on first repository access after restart. Single-game opening is unchanged. The [import/export guide](docs/RECENT_GAMES_PGN_EXPORT.md) gives transfer steps and exact duplicate/limit rules. Stable 2.6 approval awaits Preview testing and its own qualification.

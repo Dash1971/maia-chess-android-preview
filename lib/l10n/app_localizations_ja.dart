@@ -1579,4 +1579,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String pgnCollectionImportSummary(int imported, int duplicates) {
     return '$imported件の棋譜をインポート · 重複$duplicates件をスキップ';
   }
+
+  @override
+  String get includeAnalysisAnnotations => '解析を含める';
+
+  @override
+  String get analysisSaveFailed => '解析を保存できませんでした。対局は変更されていません。';
 }

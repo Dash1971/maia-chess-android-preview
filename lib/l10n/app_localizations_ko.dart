@@ -1585,4 +1585,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String pgnCollectionImportSummary(int imported, int duplicates) {
     return '기보 $imported개 가져옴 · 중복 $duplicates개 건너뜀';
   }
+
+  @override
+  String get includeAnalysisAnnotations => '분석 포함';
+
+  @override
+  String get analysisSaveFailed => '분석을 저장하지 못했습니다. 대국은 변경되지 않았습니다.';
 }

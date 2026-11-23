@@ -2937,6 +2937,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{imported, plural, one{{imported} game imported} other{{imported} games imported}} · {duplicates, plural, one{{duplicates} duplicate skipped} other{{duplicates} duplicates skipped}}'**
   String pgnCollectionImportSummary(int imported, int duplicates);
+
+  /// Checkbox inside existing PGN Save/Share/Copy menus. Include saved evaluation comments and the six !/? move-quality symbols. Ordinary comments, clocks and variations remain in either export.
+  ///
+  /// In en, this message translates to:
+  /// **'Include analysis'**
+  String get includeAnalysisAnnotations;
+
+  /// Completed computer analysis could not be saved into the PGN; the existing saved game is preserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save analysis. The game is unchanged.'**
+  String get analysisSaveFailed;
 }
 
 class _AppLocalizationsDelegate

@@ -2187,5 +2187,13 @@
         "type": "int"
       }
     }
+  },
+  "includeAnalysisAnnotations": "Include analysis",
+  "analysisSaveFailed": "Could not save analysis. The game is unchanged.",
+  "@includeAnalysisAnnotations": {
+    "description": "Checkbox inside existing PGN Save/Share/Copy menus. Include saved evaluation comments and the six !/? move-quality symbols. Ordinary comments, clocks and variations remain in either export."
+  },
+  "@analysisSaveFailed": {
+    "description": "Completed computer analysis could not be saved into the PGN; the existing saved game is preserved."
   }
 }

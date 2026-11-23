@@ -1560,4 +1560,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String pgnCollectionImportSummary(int imported, int duplicates) {
     return '已导入 $imported 局 · 跳过 $duplicates 个重复项';
   }
+
+  @override
+  String get includeAnalysisAnnotations => '包含分析';
+
+  @override
+  String get analysisSaveFailed => '无法保存分析。对局未更改。';
 }

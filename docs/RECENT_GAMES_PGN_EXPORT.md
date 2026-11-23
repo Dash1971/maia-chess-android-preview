@@ -165,3 +165,13 @@ Different header values, comments, clock annotations and variation trees remain 
 A longer import displays progress after **300 ms**. Quick single-game and collection imports finish without showing or dimming a dialog. The existing input and Back guard applies from the start; successful completion or failure removes it. The progress display remains safe if the source screen is disposed.
 
 Validation runs in its worker and reports the input position after each complete game, including variations, has validated. Reports are throttled to avoid flooding the UI. One continuous bar reserves its first half for validation and its second half for duplicate checking and staged writes; it does not jump back to zero at the handoff. The percentage describes work phases, not remaining time. A failed later game never reports successful validation or publishes a partial collection. The worker progress stream is drained and closed before the next phase. Existing limits, duplicate matching and single-game opening are unchanged.
+
+## Optional analysis annotations — draft Preview work
+
+The draft [saved-analysis feature](PGN_ANALYSIS.md) adds **Include analysis** above
+Save/Share in the selected-games export menu. Checked by default, it includes
+saved evaluation comments and move-quality symbols. Unchecking it removes those
+from each exported game before the combined 5 MiB check, while preserving prose,
+clocks, variations and other positional annotations. Stored games are unchanged.
+The single-game Save/Share/Copy menu uses the same option. This draft is separate
+from published beta.11 and the current Stable promotion.

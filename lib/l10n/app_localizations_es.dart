@@ -1714,4 +1714,11 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0 · $_temp1';
   }
+
+  @override
+  String get includeAnalysisAnnotations => 'Incluir análisis';
+
+  @override
+  String get analysisSaveFailed =>
+      'No se pudo guardar el análisis. La partida no ha cambiado.';
 }

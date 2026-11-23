@@ -469,5 +469,7 @@
   "recentResultColumn": "结果",
   "settingsDiagnostics": "诊断",
   "pgnImportProgress": "正在导入棋谱…",
-  "pgnCollectionImportSummary": "已导入 {imported} 局 · 跳过 {duplicates} 个重复项"
+  "pgnCollectionImportSummary": "已导入 {imported} 局 · 跳过 {duplicates} 个重复项",
+  "includeAnalysisAnnotations": "包含分析",
+  "analysisSaveFailed": "无法保存分析。对局未更改。"
 }

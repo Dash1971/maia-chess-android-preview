@@ -469,5 +469,7 @@
   "recentResultColumn": "結果",
   "settingsDiagnostics": "診断",
   "pgnImportProgress": "棋譜をインポート中…",
-  "pgnCollectionImportSummary": "{imported}件の棋譜をインポート · 重複{duplicates}件をスキップ"
+  "pgnCollectionImportSummary": "{imported}件の棋譜をインポート · 重複{duplicates}件をスキップ",
+  "includeAnalysisAnnotations": "解析を含める",
+  "analysisSaveFailed": "解析を保存できませんでした。対局は変更されていません。"
 }

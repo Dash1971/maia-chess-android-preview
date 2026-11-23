@@ -1691,4 +1691,11 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0 · $_temp1';
   }
+
+  @override
+  String get includeAnalysisAnnotations => 'Include analysis';
+
+  @override
+  String get analysisSaveFailed =>
+      'Could not save analysis. The game is unchanged.';
 }
