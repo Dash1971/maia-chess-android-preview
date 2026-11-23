@@ -197,3 +197,13 @@ origin of those five records. Dates and annotations remain part of import
 identity; otherwise identical games with different dates are kept.
 
 See the [host verification record](verification/pgn-import-entry-points-2026-11-23.md).
+
+## Optional analysis annotations — draft Preview work
+
+The draft [saved-analysis feature](PGN_ANALYSIS.md) adds **Include analysis** above
+Save/Share in the selected-games export menu. Checked by default, it includes
+saved evaluation comments and move-quality symbols. Unchecking it removes those
+from each exported game before the combined 5 MiB check, while preserving prose,
+clocks, variations and other positional annotations. Stored games are unchanged.
+The single-game Save/Share/Copy menu uses the same option. This draft is separate
+from published beta.12 and the current Stable promotion.

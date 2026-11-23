@@ -490,3 +490,13 @@ Analysis Board's collection notice is app-specific prose: only the first game
 opens for analysis; the whole file can be imported through Recent games → Import
 PGN. Each translation uses the actual localized screen and action labels.
 The translations remain provisional pending native review.
+
+## PGN analysis export — 23 November 2026
+
+`includeAnalysisAnnotations` (Include analysis) and `analysisSaveFailed` describe
+Mobile Maia's PGN evaluation/NAG export choice and existing-record persistence.
+The pinned Lichess reference has no direct equivalent for this combined checkbox
+or this failure message. All ten catalogs therefore use contextual translations
+rather than borrowing an unrelated study or engine action. Existing Save PGN,
+Share PGN, Copy PGN and move-classification labels retain the reviewed baseline.
+Compact/large-text widget coverage includes the new checkbox in every locale.
