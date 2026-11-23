@@ -40,6 +40,13 @@ See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readm
 
 [Preview beta.11](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11) transfers PGN collections between installations. Import adds new games to Recent games without replacing the current game, skips matching saved games and repeats within the file (including export formatting changes), and keeps different annotations or metadata. Both directions allow 5 MiB of UTF-8. Longer imports show progress after 300 ms; quick imports finish without a dialog. Invalid collections and storage failures expose no partial import; abandoned staging is cleaned on first repository access after restart. Single-game opening is unchanged. The [import/export guide](docs/RECENT_GAMES_PGN_EXPORT.md) gives transfer steps and exact duplicate/limit rules. Stable 2.6 approval awaits Preview testing and its own qualification.
 
+**Next update (draft):** **Recent games → ⋮ → Import PGN** explicitly adds every
+game from a file, including single-game files. **Analysis Board → Open PGN file**
+and pasted PGN open only the first game and explain where to import the full
+collection. The draft also fixes a Home-transition background autosave that could
+create duplicate saved games. These follow-up changes are not in beta.11.
+
+
 Bulk export is published in Preview 2.6.0-beta.3 ([#226](https://github.com/Dash1971/maia-chess-android-preview/pull/226)). Long-press a Recent games entry or choose
 **Select games**, select the games to export (or use **Select all**), then choose
 **Export games → Save PGN file** or **Share PGN**. The result is one `.pgn` file,
