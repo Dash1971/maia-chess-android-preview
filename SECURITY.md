@@ -9,6 +9,6 @@ Include the affected version/channel, reproduction steps, impact and a minimal
 example. The maintainer will coordinate a fix and disclosure with the reporter.
 Ordinary bugs belong in the issue tracker.
 
-The current Preview is the supported prerelease line. The latest Stable has its own [security policy](https://github.com/Dash1971/maia-chess-android/blob/main/SECURITY.md). A Dev snapshot is a development build, not Stable qualification.
+The current Preview is the supported prerelease line. Reports affecting the latest Stable can also use [Stable private reporting](https://github.com/Dash1971/maia-chess-android/security/advisories/new). A Dev snapshot is a development build, not Stable qualification.
 
 For the official APK signer and file checks, see [Verify your download](docs/VERIFY_DOWNLOAD.md).
