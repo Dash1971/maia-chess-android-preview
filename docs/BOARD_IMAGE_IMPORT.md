@@ -1,6 +1,6 @@
 # Assisted screenshot/diagram import: 2.6 prototype
 
-> **Shelved, 13 November 2026.** This is a historical prototype record. Camera/image recognition was removed in Preview 2.6.0-beta.3 after the [offline model investigation](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md) found no suitable lightweight replacement. Historical beta.2 and the unchanged Dev alpha.2 APKs retain the prototype. The workflow below is historical.
+> **Shelved, 13 November 2026.** This is a historical prototype record. Camera/image recognition was removed in Preview 2.6.0-beta.3 after the [offline model investigation](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md) found no suitable lightweight replacement. Historical beta.2 and the unchanged Dev alpha.2 APKs retain the prototype. The workflow below is historical. The [current roadmap](../README.md#roadmap) considers Open Board Scanner for 2.7, pending F-Droid licensing clarification; [#179](https://github.com/Dash1971/maia-chess-android-preview/issues/179) tracks the feature.
 
 Tracks [#179](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
 The assisted prototype is published in [Preview 2.6.0-beta.2](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.2).
@@ -89,9 +89,9 @@ remain editable instead of being blocked by a separate review gate.
 
 ## Provenance and known quality limits
 
-[Model/code pins](../third_party/board_image/provenance.json),
-[MIT licence](../third_party/board_image/LICENSE),
-[weight-specific grant and training-source attribution](../third_party/board_image/NOTICE.md).
+[Model/code pins](https://github.com/Dash1971/maia-chess-android-preview/blob/v2.6.0-beta.2/third_party/board_image/provenance.json),
+[MIT licence](https://github.com/Dash1971/maia-chess-android-preview/blob/v2.6.0-beta.2/third_party/board_image/LICENSE),
+[weight-specific grant and training-source attribution](https://github.com/Dash1971/maia-chess-android-preview/blob/v2.6.0-beta.2/third_party/board_image/NOTICE.md).
 CrispChess revision `0d01798daf9661076675f8505b4cc6995a6529da`;
 model SHA-256 `2408717e2e0e2ed438e2f9f89f85c2e544326cef34a0c91b95168bd17336df47`.
 The runtime performs the same square classifier, not the incompatible Lichess
@@ -140,6 +140,8 @@ licence, build/scan and reproducibility gates.
 - [x] Compile the native camera/import bridge locally and exercise AOSP camera
       capture, cancellation, missing handler and interrupted-import cold-start
       cleanup on an API 36 ARM64 emulator. This is not OEM/real-phone acceptance.
+> **Retired checklist:** these unchecked items were not completed before withdrawal. They are historical limits, not current release instructions or passed acceptance for a future scanner.
+
 - [ ] Validate OEM/FOSS cameras, missing camera, cancellation, full-size output,
       EXIF orientations, temporary URI scope, activity/process recreation and
       output cleanup on real phones.

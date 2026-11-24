@@ -25,90 +25,45 @@ Join the [Mobile Maia forum on Mute Chess](https://mutechess.org/forum/mobile-ma
 questions, share games, discuss settings, and help test Preview. Discussions
 are publicly readable; posting uses a Nostr identity on Mute Chess.
 
-Please keep using the relevant GitHub issue tracker for reproducible bugs
-and feature requests.
+Report reproducible bugs in the tracker for the channel you use; see
+[Testing Preview](docs/TESTING_PREVIEW.md). Feature discussion usually starts in Preview.
 
 ## Current Preview status
 
-The latest Preview release is [2.6.0-beta.13](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.13). Computer analysis saves evaluations and move-quality symbols in PGN and restores the graph and markings on reopen. **Include analysis**, checked by default in the existing Save/Share/Copy and collection-export menus, controls the exported copy. [PGN analysis behavior and limits](docs/PGN_ANALYSIS.md) explain reanalysis and compatibility. The beta.12 explicit Recent import and Home-save fixes remain. Preview uses 79M; Grand Kingdom has passed user acceptance, while Pegasus and camera/image recognition remain withdrawn. [Qualification and cleanup](docs/releases/preview-2.6.0-beta.13.md) record this release. Stable remains 2.5.1 and Dev remains 2.6.0-alpha.2-dev; Stable 2.6 approval and qualification are separate.
+[Preview 2.6.0-beta.13](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.13)
+is published. It uses the **79M Maia-3 model**. Grand Kingdom has passed user
+acceptance; Pegasus and the former camera/image prototype are withdrawn.
+See [qualification and cleanup](docs/releases/preview-2.6.0-beta.13.md).
 
-See the [Stable user guide](https://github.com/Dash1971/maia-chess-android#readme) for released features and the [Preview release history](https://github.com/Dash1971/maia-chess-android-preview/releases) for release notes and verification. The roadmap below covers future work.
+Stable remains 2.5.1; [Stable 2.6 promotion #82](https://github.com/Dash1971/maia-chess-android/pull/82)
+is a draft. Dev remains 2.6.0-alpha.2-dev with the 5M model and its historical
+prototype payload. See [Testing Preview](docs/TESTING_PREVIEW.md) for channel
+installation, reports and the path to Stable.
 
 ## Feature guide
 
-### Saved analysis in PGN — Preview beta.13
+### New in 2.6, awaiting Stable
 
-[Issue #61](https://github.com/Dash1971/maia-chess-android-preview/issues/61) saves
-completed evaluations and move-quality annotations in the game's PGN, restoring
-the graph and markings when reopened. Reanalysis replaces the previous analysis
-on that line. **Include analysis** in the existing Save/Share/Copy menus controls
-only the exported copy; Recent games offers the same choice for collections.
-Comments, clocks and variations are preserved. See the [saved-analysis guide](docs/PGN_ANALYSIS.md)
-for PGN compatibility and limits. This is published in Preview beta.13; Stable 2.6 promotion remains separate.
+| Feature | Available in Preview | Guide |
+| --- | --- | --- |
+| Saved PGN evaluations, move-quality symbols and restored graphs; optional analysis in exported copies | beta.13 | [Saved analysis](docs/PGN_ANALYSIS.md) |
+| Explicit all-games import, duplicate skipping, progress and selected-game collection export; shared 5 MiB limit | beta.12, building on beta.3/beta.11 | [PGN import and export](docs/RECENT_GAMES_PGN_EXPORT.md) |
+| Manual interrupted-game recovery, stable Home-save identity and analysis pause/resume | beta.10–beta.12 | [Storage and recovery](docs/session-storage.md#preview-26-recovery-and-interrupted-analysis) |
+| Fixed analysis controls with independent move scrolling | beta.9 | [Analysis layout](docs/ANALYSIS_SCROLL_26.md) |
+| Back from a saved game returns to Recent games at the previous scroll position | beta.6 | [Release notes](docs/releases/preview-2.6.0-beta.6.md) |
+| Landscape layouts and wider Home, Settings and Recent games views | beta.4 | [Adaptive layouts](docs/ADAPTIVE_LAYOUTS_26.md) |
+| Grand Kingdom: standard-position untimed play and assisted Maia promotion | beta.1 onward | [Board support and acceptance](docs/ELECTRONIC_BOARD_GRAND_KINGDOM_26.md) |
 
-### Recent games and PGN files
+PGN transfers games and supported annotations, not app preferences or live
+clock/motor checkpoints. Physical touch/tablet feedback remains welcome; host
+renders and emulator checks do not establish every device's usability.
+The [Stable user guide](https://github.com/Dash1971/maia-chess-android#feature-guide)
+covers features already released in Stable.
 
-[Preview beta.12](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.12) provides **Recent games → ⋮ → Import PGN**, including in an empty list. It adds every validated game from a file, including a single game, without replacing the current game. Matching PGNs and repeats within a file are skipped; different annotations or metadata remain distinct. **Analysis Board → Open PGN file / Load PGN** opens only the first game and points to Recent games for a collection. Android Open with/shared attachments retain their previous routing: one game opens for analysis; a collection imports into Recent games. Both directions allow 5 MiB of UTF-8. Longer imports show progress after 300 ms. Invalid collections and storage failures expose no partial import; abandoned staging is cleaned on repository access after restart. The Home-transition autosave fix prevents newly created duplicate records; existing duplicates are not automatically merged or deleted. See the [import/export guide](docs/RECENT_GAMES_PGN_EXPORT.md).
-
-Bulk export is published in Preview 2.6.0-beta.3 ([#226](https://github.com/Dash1971/maia-chess-android-preview/pull/226)). Long-press a Recent games entry or choose
-**Select games**, select the games to export (or use **Select all**), then choose
-**Export games → Save PGN file** or **Share PGN**. The result is one `.pgn` file,
-in the displayed newest-first order, containing each selected game's supported
-headers, result, moves, comments, clocks and variations.
-
-Exports allow up to **5 MB** (5 MiB / 5,242,880 UTF-8 bytes, including separators).
-The number of games that fit depends on their length and annotations. If the
-selection exceeds the limit, export stops before opening the save/share chooser
-and asks you to select fewer games. It does not save a partial collection,
-silently omit games, or split the export automatically. Your selection and saved
-games stay unchanged; deselect some games and try again. Missing or unreadable
-selected games also stop the whole export.
-
-Recent games import accepts every validated game in a file up to the shared 5 MiB limit. Analysis opens only the first game within that same whole-file size limit. PGN transfers games and supported annotations, not app settings or live clock/motor checkpoints. Everything works offline, with no automatic upload. An oversized individual export shows its own error and retains selection for retry.
+<a id="saved-analysis-in-pgn--preview-beta13"></a>
+<a id="recent-games-and-pgn-files"></a>
 
 ## Roadmap
-
-**Saved PGN analysis: Preview beta.13**
-
-[PR #267](https://github.com/Dash1971/maia-chess-android-preview/pull/267) delivers [#61](https://github.com/Dash1971/maia-chess-android-preview/issues/61): saved evaluation graphs and quality glyphs, restored on reopen, with analysis optional in exported copies. Reanalysis replaces prior scores/glyphs on that line; comments, clocks, variations and other annotations remain. This portable PGN feature awaits the separate Stable promotion.
-
-**Explicit PGN import and Home-save fix: Preview beta.12**
-
-[PR #265](https://github.com/Dash1971/maia-chess-android-preview/pull/265) is delivered. Recent games has an explicit all-games import action; Analysis opens the first game; Home/background autosaves retain one original saved-game identity. Existing duplicate records are left intact. These changes await the separate Stable 2.6 promotion.
-
-**PGN collection transfer and supported-board policy: Preview beta.11**
-
-[PR #261](https://github.com/Dash1971/maia-chess-android-preview/pull/261) is delivered. Collection import, duplicate skipping, progress, shared size limits and export retry are published. Grand Kingdom is supported; Pegasus is withdrawn from current source and this Preview. [Stable promotion #82](https://github.com/Dash1971/maia-chess-android/pull/82) remains a separate unmerged draft.
-
-**Game recovery and analysis resume: Preview beta.10**
-
-Issues [#253](https://github.com/Dash1971/maia-chess-android-preview/issues/253),
-[#254](https://github.com/Dash1971/maia-chess-android-preview/issues/254) and
-[#255](https://github.com/Dash1971/maia-chess-android-preview/issues/255) are delivered.
-Interrupted games remain manually recoverable from Recent games, damaged
-temporary saves no longer hide the committed game, and the same open Review
-resumes its unfinished full analysis after a brief interruption.
-[Evaluation and move-symbol persistence (#61)](https://github.com/Dash1971/maia-chess-android-preview/issues/61) is delivered in beta.13 through portable PGN annotations; Stable promotion remains separate.
-
-**Saved-game Back returns to Recent games: Preview beta.6**
-
-Back retraces the current browsing flow: opening a saved game from Recent games
-then pressing Back returns to the list at the same scroll position. Home always
-goes Home and clears that temporary position. Unfinished-game confirmation,
-result-dialog dismissal and analysis navigation are preserved. No setting or
-persistent navigation history is added. [Stable #77](https://github.com/Dash1971/maia-chess-android/issues/77)
-tracks reporter confirmation; Stable promotion remains separate.
-
-**Delivered in Preview: export selected games as one PGN**
-
-[Selection, ordering, size limit and verification](docs/RECENT_GAMES_PGN_EXPORT.md).
-
-Preview 2.6.0-beta.3 includes bulk PGN export; Stable promotion remains separate. Select individual
-games or use Select all in Recent Games, then save or share one PGN file
-containing the selected games for use in external analysis tools. Thanks to
-@Earthless85 for the [suggestion](https://github.com/Dash1971/maia-chess-android/issues/74).
-Implementation and verification are tracked in
-[Preview #225](https://github.com/Dash1971/maia-chess-android-preview/issues/225).
 
 **Offline board scanning: Open Board Scanner candidate for 2.7**
 
@@ -129,36 +84,38 @@ sets out the details.
 Manual Board Editor, FEN import, Analysis and Continue from here remain
 available. See [the original proposal (#179)](https://github.com/Dash1971/maia-chess-android-preview/issues/179).
 
-**Expand electronic-board support**
-
-**Square Off Grand Kingdom** support is included in Preview 2.6 and Dev. **DGT Pegasus** is withdrawn from all channels because initialization licensing is unresolved. The Stable 2.6 promotion remains a separate draft. The [owner’s follow-up](https://github.com/Dash1971/maia-chess-android/issues/15#issuecomment-6863134393) attributes the earlier wrong/missed captures to hardware drift after many moves without calibration or an uneven surface, on firmware **36v5**, and reports good overall operation. The owner subsequently reported a successful game on the 79M Preview build. Preview includes assisted Maia promotion. Grand Kingdom has passed user acceptance testing. Automatic local diagnostics remain a red-icon Dev feature. Diagnostics are never uploaded automatically; Settings → Save Dev diagnostics… exports locally for voluntary sharing. The Pegasus prototype is removed from the updated source; see the support decision below. The [2.6 acceptance record](docs/ELECTRONIC_BOARD_GRAND_KINGDOM_26.md) records passed user acceptance testing, the source feedback, historical regression cases and operating limits.
-
-We’re looking for owners of these boards who are willing to help test and report their results. See the [board testing guide](https://github.com/Dash1971/maia-chess-android-preview/blob/main/docs/ELECTRONIC_BOARD_DEV.md) and [Grand Kingdom issue](https://github.com/Dash1971/maia-chess-android-preview/issues/27).
-
 **Expanded language support and native-speaker review**
 
 Mobile Maia currently supports **English, Japanese, Simplified Chinese, Korean, Spanish, German, French, Russian, Hindi, and Brazilian Portuguese**. We would like to expand language support with native speakers who can help validate translations in the app. See the [localization guide](docs/L10N_REVIEW.md) for coverage and contributor instructions.
 
 We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) speakers**. These languages need careful testing of right-to-left layouts alongside chess notation, clocks, and evaluations. See the [right-to-left language issue](https://github.com/Dash1971/maia-chess-android-preview/issues/84).
 
-**Adaptive layouts: available in Preview 2.6.0-beta.4**
-
-Landscape gameplay and Analysis use more board height with controls beside the
-board. Wide Home/Settings use columns, and Recent games uses a compact table
-with a two-line fallback for narrow windows or large text. [Implementation and
-Android qualification](docs/ADAPTIVE_LAYOUTS_26.md) record phone/tablet/constrained
-profiles and rotation/input checks. [#29](https://github.com/Dash1971/maia-chess-android-preview/issues/29)
-is closed for Preview delivery. Comfortable physical finger input, tablet-owner
-feedback, gesture-navigation and actual split-screen checks remain recorded
-verification limits; Stable promotion is separate. Published beta.9 keeps engine analysis visible while moves scroll independently, including endpoint jumps. Landscape tabs share the bottom control strip. Large text permits independent header scrolling. [Behavior and verification](docs/ANALYSIS_SCROLL_26.md) separate host renders from production APK checks; physical touch/tablet feedback remains unconfirmed as a verification limit. Preview delivery issue #29 is closed; Stable promotion remains separate.
-
 **Under consideration: candidate moves and a rating explorer**
 
 We are considering tappable analysis candidates that show Maia’s move probabilities alongside Stockfish evaluations, plus an optional view of how move preferences change across ratings. The [analysis candidates and Moves by rating issue](https://github.com/Dash1971/maia-chess-android-preview/issues/200) contains the proposed scope and interactive mockups for discussion.
 
+**Open Brilly Finder**
+
+Evaluate [Open Brilly Finder](https://github.com/Dash1971/open-brilly-finder)
+for offline Brilliant-move classification, comparing it with the existing
+classifier using Mobile Maia's engine output. [#273](https://github.com/Dash1971/maia-chess-android-preview/issues/273)
+tracks investigation and the proposed integration checks; it is not yet an
+implemented feature.
+
+**More device and board feedback**
+
+Chessnut Pro owners and Grand Kingdom owners are welcome to help test the
+[supported-board flows](docs/ELECTRONIC_BOARD_DEV.md). Grand Kingdom feedback
+continues in [Stable #15](https://github.com/Dash1971/maia-chess-android/issues/15).
+Further physical-tablet, landscape, large-text and split-screen feedback will
+help refine the [adaptive layouts](docs/ADAPTIVE_LAYOUTS_26.md).
+
 **Suggestions from users**
 
-Suggestions are always welcome. Please open an issue in the [Preview repository](https://github.com/Dash1971/maia-chess-android-preview/issues) or the [Stable repository](https://github.com/Dash1971/maia-chess-android/issues) so we can discuss and consider it.
+Feature suggestions are welcome in [Preview issues](https://github.com/Dash1971/maia-chess-android-preview/issues).
+Report bugs in the repository for the channel you use: [Preview](https://github.com/Dash1971/maia-chess-android-preview/issues)
+or [Stable](https://github.com/Dash1971/maia-chess-android/issues). Link existing
+shared hardware discussions so their testing history stays together.
 
 ## Install and update with Obtainium
 
@@ -183,9 +140,17 @@ from their official release pages and can notify you when updates are available.
 After setup, use Obtainium's update check to download and install future Mobile
 Maia Preview releases. Android may ask you to confirm each update.
 
+## Testing and contributing
+
+Use [Testing Preview](docs/TESTING_PREVIEW.md) for installation, reports and
+promotion status. See [Contributing](CONTRIBUTING.md), [Security](SECURITY.md),
+[Privacy](PRIVACY.md) and the [documentation index](docs/README.md).
+
 ## Build
 
-Requirements: **Flutter 3.47.8** (pinned in `.fvmrc`), JDK 17, Android SDK 36,
+See [Reproducible builds](REPRODUCIBLE_BUILDS.md) for source pins and APK comparison.
+
+Requirements: **the Flutter version and revision pinned in the checked-out `.fvmrc` and CI**, JDK 17, Android SDK 36,
 Python 3, and Git LFS. Use the locked dependencies. A GitHub source ZIP contains
 an LFS pointer rather than the 316 MB Maia model, so clone with Git LFS:
 
@@ -219,6 +184,25 @@ unsigned APKs using `sha256sum`. Retain both hashes with the release notes; the
 procedure is not itself evidence that a particular release reproduced. The
 manual Checks workflow can build an unsigned APK; pull requests run the Dart
 analyzer and regression tests.
+
+The [release verification guide](tool/hardening/RELEASE_CHECKS.md) includes
+portable APK checks, sanitized saved-game upgrade fixtures, emulator commands,
+and CI artifact retention. See the
+[hardening guide](tool/hardening/README.md) for the full regression suites and
+independent chess/variation corpora.
+
+Before changing saved-game formats, dates, or migration behavior, follow the
+[saved-game history and compatibility contract](docs/session-storage.md).
+It documents the required regression tests and the rules for preserving older
+users' games.
+
+Official releases are signed with the dedicated Mobile Maia app-signing key.
+The build reads `MOBILE_MAIA_KEYSTORE`, `MOBILE_MAIA_STORE_PASSWORD`, and
+`MOBILE_MAIA_KEY_PASSWORD` from the environment; no signing secrets belong in
+this repository. When those variables are absent, Gradle produces an unsigned
+release suitable for independent verification.
+
+See [Verify your download](docs/VERIFY_DOWNLOAD.md) for checksum/signature commands, the official certificate digest and installation troubleshooting.
 
 ## Fast phone iteration
 
@@ -261,40 +245,11 @@ Keep local snapshots out of this official Preview release feed. Dev results do
 not qualify Stable or Preview; use `tool/build_android_release.sh` and the full
 Preview qualification process once a feature is substantially settled.
 
-The [release verification guide](tool/hardening/RELEASE_CHECKS.md) includes
-portable APK checks, sanitized saved-game upgrade fixtures, emulator commands,
-and CI artifact retention. See the
-[hardening guide](tool/hardening/README.md) for the full regression suites and
-independent chess/variation corpora.
-
-Before changing saved-game formats, dates, or migration behavior, follow the
-[saved-game history and compatibility contract](docs/session-storage.md).
-It documents the required regression tests and the rules for preserving older
-users' games.
-
-Official releases are signed with the dedicated Mobile Maia app-signing key.
-The build reads `MOBILE_MAIA_KEYSTORE`, `MOBILE_MAIA_STORE_PASSWORD`, and
-`MOBILE_MAIA_KEY_PASSWORD` from the environment; no signing secrets belong in
-this repository. When those variables are absent, Gradle produces an unsigned
-release suitable for independent verification.
-
-The official signing certificate SHA-256 digest is:
-
-```text
-cd6c07c4efacf52bcccb83009b522c1dcad4a171197505a486f0a58edb6f172e
-```
-
 ## Re-export Maia-3
 
-The checked-in ONNX models were exported from the official Maia-3 5M and 79M
-checkpoints. The exporter verifies ONNX Runtime outputs against PyTorch before
-succeeding.
-
-```sh
-python -m pip install /path/to/maia3 onnx onnxruntime
-python tool/export_maia3_onnx.py --model maia3-5m --output assets/models/maia3-5m.onnx
-python tool/export_maia3_onnx.py --model maia3-79m --output assets/models/maia3-79m.onnx
-```
+Use the pinned checkpoints, source revision, dependencies and verification steps
+in [Model provenance](MODEL_PROVENANCE.md). Model re-export is separate from an
+ordinary app build; it is not needed to use the checked-in LFS assets.
 
 ## Electronic-board support
 

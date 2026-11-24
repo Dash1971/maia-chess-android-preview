@@ -107,10 +107,26 @@ downgrades or preservation of metadata by old app versions.
 | Direct preference migration, repeated migration, backups/tombstones and unsupported future generations | `test/recent_game_history_test.dart`, `test/session_repository_test.dart` |
 | Detached payloads, failed writes/opens, recovery and a 1,000-game archive | `test/recent_game_history_test.dart`, `test/storage_failure_test.dart` |
 | New game, resume and Continue from here; storage transition/error handling | `test/game_start_history_test.dart` |
-| Date rendering and unknown dates in all five languages | `test/recent_game_history_ui_test.dart`, `test/storage_localization_test.dart` |
+| Date rendering and unknown dates in all supported languages | `test/recent_game_history_ui_test.dart`, `test/storage_localization_test.dart` |
 | Existing reset, takeback, game/clock and navigation behavior | Full `flutter test` suite |
 
 All tests above run in normal PR CI. When changing this contract, update its
 fixtures and documentation together. Verify device lifecycle behavior separately
 before release; host storage tests do not simulate Android process termination
 or physical flash failures.
+
+## Preview 2.6 recovery and interrupted analysis
+
+Since beta.10, an unclean exit opens Home rather than silently restoring the
+active checkpoint. The interrupted game remains available through its manually
+selected **Incomplete** entry in Recent games. A damaged temporary save must not
+hide or overwrite the last committed game. Opening another game preserves the
+interrupted record; repeated Home/background saves retain the same identity.
+These changes do not automatically remove duplicates created by older releases.
+
+An unfinished computer-analysis run pauses while the app is backgrounded or its
+Review is covered, and resumes unfinished work when that same Review returns.
+Stop, engine-off and settings/line changes discard the pending run. This is
+separate from saving completed evaluation/quality annotations in PGN, delivered
+in beta.13; see [PGN analysis](PGN_ANALYSIS.md). PGN import transfers games and
+supported annotations, not live clocks, motor sessions or all app preferences.

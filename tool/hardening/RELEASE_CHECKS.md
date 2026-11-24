@@ -19,6 +19,11 @@ app dependency or change its offline behavior.
 
 ## Prepare the environment
 
+Prepare the complete pinned Python environment with
+[Release test setup](../../docs/RELEASE_TEST_SETUP.md), inside the task-owned
+bulk directory from [Build workspace](../../docs/BUILD_WORKSPACE.md). Reuse that
+environment for the commands below; do not create another `/tmp` release venv.
+
 Use the Flutter commit pinned in `.github/workflows/checks.yml`, JDK 17,
 Android build-tools 36.0.0 and platform-tools. Set `ANDROID_HOME` and `JAVA_HOME`
 for the machine running the checks. `--sdk-root` and `--build-tools-version`
@@ -29,9 +34,7 @@ backport documented in `REPRODUCIBLE_BUILDS.md`. A different Flutter revision or
 unexpected upstream source must fail before the build begins.
 
 ```sh
-python3 -m venv /tmp/maia-release-venv
-/tmp/maia-release-venv/bin/pip install -r tool/hardening/requirements.txt
-/tmp/maia-release-venv/bin/python -m unittest discover -s tool -p '*_test.py'
+/absolute/task/bulk/release-test-venv/bin/python -m unittest discover -s tool -p '*_test.py'
 ```
 
 The default target is `com.dash1971.maia_chess.preview`. Use
@@ -121,7 +124,7 @@ can be signed or unsigned. The candidate's Android version code must be at
 least the baseline's. Verify both APKs above before this check.
 
 ```sh
-/tmp/maia-release-venv/bin/python tool/verify_release_upgrade.py \
+/absolute/task/bulk/release-test-venv/bin/python tool/verify_release_upgrade.py \
   --baseline-apk /path/to/previous.apk \
   --candidate-apk /path/to/candidate.apk \
   --serial emulator-5554 \
@@ -213,7 +216,8 @@ That job builds the unsigned APK, runs packaging verification, and uploads the
 build log/JSON diagnostics even after failure. Successful runs also retain the
 APK SHA-256 and sanitized source/runner/Flutter/Java/NDK/Clang provenance. The
 unsigned APK is uploaded after success. Both artifact types include the source
-SHA in their names and expire after **90 days**. The ARM64 emulator upgrade and
+SHA in their names; their separate lifetimes are documented in
+[CI artifact retention](../../docs/CI_ARTIFACTS.md). The ARM64 emulator upgrade and
 native-engine checks remain explicit commands on a suitable host; the ordinary
 Ubuntu CI job does not claim to run them.
 

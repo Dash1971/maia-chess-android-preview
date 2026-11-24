@@ -138,3 +138,5 @@ Cleanup reports (bytes and paths as recorded by the checked command):
   }
 }
 ```
+
+Audit reference: [the 13 November dependency review](../dependency-audit-2026-11-13-preview26.md) covers this release.

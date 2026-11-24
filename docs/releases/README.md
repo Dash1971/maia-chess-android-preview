@@ -1,0 +1,31 @@
+# Release records
+
+Dated records describe their original source and checks. They do not authorize
+a new release. Use [channel status](../BUILD_CHANNELS.md) for current publication.
+
+- [HISTORY](HISTORY.md)
+- [dev-2.6.0-alpha.2](dev-2.6.0-alpha.2.md)
+- [preview-2.5.0-beta.1](preview-2.5.0-beta.1.md)
+- [preview-2.5.0-beta.10](preview-2.5.0-beta.10.md)
+- [preview-2.5.0-beta.11](preview-2.5.0-beta.11.md)
+- [preview-2.5.0-beta.2](preview-2.5.0-beta.2.md)
+- [preview-2.5.0-beta.3](preview-2.5.0-beta.3.md)
+- [preview-2.5.0-beta.4](preview-2.5.0-beta.4.md)
+- [preview-2.5.0-beta.5](preview-2.5.0-beta.5.md)
+- [preview-2.5.0-beta.6](preview-2.5.0-beta.6.md)
+- [preview-2.5.0-beta.7](preview-2.5.0-beta.7.md)
+- [preview-2.5.0-beta.8](preview-2.5.0-beta.8.md)
+- [preview-2.5.0-beta.9](preview-2.5.0-beta.9.md)
+- [preview-2.6.0-beta.1](preview-2.6.0-beta.1.md)
+- [preview-2.6.0-beta.10](preview-2.6.0-beta.10.md)
+- [preview-2.6.0-beta.11](preview-2.6.0-beta.11.md)
+- [preview-2.6.0-beta.12](preview-2.6.0-beta.12.md)
+- [preview-2.6.0-beta.13](preview-2.6.0-beta.13.md)
+- [preview-2.6.0-beta.2](preview-2.6.0-beta.2.md)
+- [preview-2.6.0-beta.3](preview-2.6.0-beta.3.md)
+- [preview-2.6.0-beta.4](preview-2.6.0-beta.4.md)
+- [preview-2.6.0-beta.5](preview-2.6.0-beta.5.md)
+- [preview-2.6.0-beta.6](preview-2.6.0-beta.6.md)
+- [preview-2.6.0-beta.7](preview-2.6.0-beta.7.md)
+- [preview-2.6.0-beta.8](preview-2.6.0-beta.8.md)
+- [preview-2.6.0-beta.9](preview-2.6.0-beta.9.md)

@@ -128,3 +128,15 @@ verification evidence and checking the published download for Preview; Dev needs
 only successful publication as described above. Stop task-owned
 emulators. Preserve shared SDK/Gradle caches, signing keys and other people's
 work. Record cleanup in the release PR, including anything intentionally retained.
+
+## Documentation maintenance
+
+After changing a feature or publishing a release, reconcile the affected living
+docs with the actual state: planned, implemented in source, published in Preview,
+or published in Stable. A merged PR is not a release. Keep genuine pending
+approvals and proposals explicit. Keep dated evidence as history, with an outcome
+banner or a link from current guidance; never turn an unperformed check into a pass.
+Use [the documentation index](docs/README.md) and the ownership rules in
+[SHARED_BUILD_PROCESS.md](docs/SHARED_BUILD_PROCESS.md). Preserve existing public
+anchors when moving guidance. Mandatory release and cleanup gates above remain
+in force; deduplication must not weaken them.

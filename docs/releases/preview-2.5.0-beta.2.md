@@ -45,3 +45,5 @@ contains the APK, verification bundle, checksums and public-download receipt.
 The PR records cleanup completion. Only task-owned build/signing workspaces,
 containers, APKs, emulator data and temporary caches are removed; shared tools,
 signing keys and unrelated work are retained.
+
+Audit-record clarification, 24 November 2026: no separate dated dependency-audit report is recorded for this beta. The original qualification and its limits above are unchanged.
