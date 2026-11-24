@@ -1,5 +1,7 @@
 # Sampling defaults and help — 2.5 proposal
 
+> **Outcome:** shipped in Preview 2.5.0-beta.1 and Stable 2.5.0. Later Preview removed the from-move-6 notice in beta.2 and the Simple/Technical selector in beta.7. The original draft below is a historical design record, not current build or publication instructions.
+
 Draft only: no merge, Android APK build or publication. The existing green dark
 appearance is shown in the screenshots; Appearance PR #156 is a separate change.
 

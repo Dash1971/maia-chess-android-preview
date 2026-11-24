@@ -46,3 +46,5 @@ machine-readable outcomes. No signing secrets or research datasets are bundled.
 Task-owned build containers/checkouts, downloaded APKs, emulator data and temporary
 caches are removed after public verification; the release PR records completion.
 Shared SDK/Gradle caches and active work are preserved.
+
+Audit-record clarification, 24 November 2026: no separate dated dependency-audit report is recorded for this beta. The original qualification and its limits above are unchanged.

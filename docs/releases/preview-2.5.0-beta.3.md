@@ -21,3 +21,5 @@ Stable 2.4.0 and Dev 2.4.0-alpha.2-dev are unchanged. Grand Kingdom and DGT rema
 ## Evidence and cleanup
 
 The release contains the APK, verification bundle, checksums and public-download receipt. Task-owned build/signing directories, container, APK copies, emulator data and temporary Python environment were removed after retaining compact evidence and verifying downloads. Shared SDK/Gradle caches, signing keys and unrelated work were preserved. Merged task branches were removed after the source was preserved by the release tag; automatic merged-branch deletion remains enabled. Cleanup details are recorded in PR #164.
+
+Audit-record clarification, 24 November 2026: no separate dated dependency-audit report is recorded for this beta. The original qualification and its limits above are unchanged.

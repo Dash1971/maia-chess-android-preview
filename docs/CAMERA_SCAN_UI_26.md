@@ -1,6 +1,6 @@
 # Camera scan UI: beta.1 gap and follow-up
 
-> **Shelved, 13 November 2026.** This is a historical prototype record. Camera/image recognition was removed in Preview 2.6.0-beta.3 after the [offline model investigation](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md) found no suitable lightweight replacement. Historical beta.2 and the unchanged Dev alpha.2 APKs retain the prototype. The workflow below is historical.
+> **Shelved, 13 November 2026.** This is a historical prototype record. Camera/image recognition was removed in Preview 2.6.0-beta.3 after the [offline model investigation](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md) found no suitable lightweight replacement. Historical beta.2 and the unchanged Dev alpha.2 APKs retain the prototype. The workflow below is historical. The [current roadmap](../README.md#roadmap) considers Open Board Scanner for 2.7, pending F-Droid licensing clarification; [#179](https://github.com/Dash1971/maia-chess-android-preview/issues/179) tracks the feature.
 
 The approved Home placement and scan-process mockups were not implemented in
 #210. PR #220 implemented them and Preview 2.6.0-beta.2 now publishes that UI. The earlier icon
@@ -44,7 +44,7 @@ bridge have not changed.
 
 ## Verification and delivery boundary
 
-`test/home_board_scan_test.dart` exercises Home camera launch, automatic recognition,
+[`test/home_board_scan_test.dart`](https://github.com/Dash1971/maia-chess-android-preview/blob/v2.6.0-beta.2/test/home_board_scan_test.dart) exercises Home camera launch, automatic recognition,
 normal editor/analysis, Continue from here with the scanned FEN, session preservation,
 late-result cancellation, missing-camera library fallback, framing controls,
 inference retry and all ten languages at 320px/200% text. Existing image/editor,

@@ -1,10 +1,11 @@
 # Dev local diagnostics
 
+**Current scope:** automatic tracing is Dev-only. Grand Kingdom is supported in Preview 2.6; Pegasus and the former image importer are withdrawn from current source. Open Board Scanner remains a [2.7 candidate](../README.md#roadmap), not a restored scanner.
+
 The red-icon Dev app automatically records recent app lifecycle/error categories,
 engine loading/inference phases and detailed Grand Kingdom events. There is no
 switch. Preview, Stable and unflavored builds neither record this trace nor expose
-its export; Dart and native flavor guards are independent. This source merge does
-not promote Grand Kingdom or image import into a published Preview release.
+its export; Dart and native flavor guards are independent. Grand Kingdom is included in published Preview; automatic tracing remains Dev-only.
 
 Grand Kingdom records timestamped intended full UCI (including promotion suffix),
 current/prior FEN and PGN context, input acceptance/rejection, exact outgoing wire
@@ -29,9 +30,7 @@ uploading. Nothing is sent automatically. Positions, moves, board messages and
 phone/app versions are included; photos, model inputs and Bluetooth addresses
 are not. Native runtime diagnostic text is deliberately canonical English.
 
-The test-script addition runs the new Dev-only store tests. Stable has no such
-feature, so no companion feature or runner port applies. The four shared build
-workspace helpers remain unchanged and identical; canonical Linux and independent
-reproduction release gates remain unchanged. The previously published Dev
-alpha.2 snapshot included PR #210. Camera/image recognition has since been
-shelved; its source paths are removed by the current withdrawal PR.
+Dev-store tests run through the existing test scripts. The published Dev
+alpha.2 snapshot included [PR #210](https://github.com/Dash1971/maia-chess-android-preview/pull/210) and retains the former camera/image prototype.
+That prototype was removed from source in Preview beta.3; the current scanner
+direction is recorded in the [roadmap](../README.md#roadmap).

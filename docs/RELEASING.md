@@ -52,7 +52,8 @@ tests. It does not run the full Android native suite or signed-upgrade checks.
 Emulator tests exercise real Maia/Stockfish, gameplay/analysis, Android storage,
 sharing, restart recovery and upgrade preservation. Real Bluetooth, LEDs, board
 buttons and motors still need physical hardware acceptance. Preview publication
-does not publish Stable, F-Droid or Zapstore, or enable Dev-only board adapters.
+does not publish Stable, F-Droid or Zapstore. Board support follows the current
+support policy; automatic diagnostics remain Dev-only.
 
 Commands and detailed acceptance criteria remain in
 [RELEASE_CHECKS.md](../tool/hardening/RELEASE_CHECKS.md) and the
@@ -87,8 +88,8 @@ No second matching build, full 79M suite, production signing, F-Droid/Zapstore
 qualification, screenshot pass, or published-APK re-download/verification is
 required for Dev. No separate post-publication download gate should be added to
 cleanup. Routine tests still apply to source changes; a lightweight publication
-is not evidence of Preview or Stable readiness. Preserve Dev-only experimental
-board restrictions in the other channels.
+is not evidence of Preview or Stable readiness. Preserve channel identities, the current board-support policy and Dev-only
+automatic diagnostics.
 
 ## Operator test environment
 
