@@ -98,6 +98,42 @@ They cannot make already released older apps safe downgrade targets. Support
 upgrades and restoration of supported old formats; do not promise arbitrary
 downgrades or preservation of metadata by old app versions.
 
+<a id="saved-analysis-in-the-stable-26-candidate"></a>
+
+## Saved analysis
+
+Completed full-game evaluations and quality NAGs are stored in the same PGN and
+game/session identity. Root comments and main-line move annotations survive the
+Review callback and existing save/export paths; no analysis database or sidecar
+is introduced. Reopening reconstructs the graph from annotations. An import
+missing only the initial score can obtain that score without rewriting its
+existing annotations or running full analysis. Partial analysis work is not a
+persistent per-position cache.
+
+Analysis-free Save/Share/Copy changes only the outgoing copy, not the record.
+Evaluation and move-symbol changes remain part of PGN duplicate identity. See
+[PGN analysis behavior](PGN_ANALYSIS.md). Regressions cover existing-record
+persistence/restoration, classification cancellation, storage failure and
+unchanged source during large background-copy exports.
+
+<a id="preview-26-recovery-and-interrupted-analysis"></a>
+
+## Game recovery and interrupted analysis
+
+In Stable 2.6.0 and Preview 2.6 (since beta.10), an unclean exit opens Home
+rather than silently restoring the active checkpoint. The interrupted game remains available through its manually
+selected **Incomplete** entry in Recent games. A damaged temporary save must not
+hide or overwrite the last committed game. Opening another game preserves the
+interrupted record; repeated Home/background saves retain the same identity.
+These changes do not automatically remove duplicates created by older releases.
+
+An unfinished computer-analysis run pauses while the app is backgrounded or its
+Review is covered, and resumes unfinished work when that same Review returns.
+Stop, engine-off and settings/line changes discard the pending run. This is
+separate from saving completed evaluation/quality annotations in PGN, delivered
+in beta.13; see [PGN analysis](PGN_ANALYSIS.md). PGN import transfers games and
+supported annotations, not live clocks, motor sessions or all app preferences.
+
 ## Required regression coverage
 
 | Contract | Checked-in tests |
@@ -114,19 +150,3 @@ All tests above run in normal PR CI. When changing this contract, update its
 fixtures and documentation together. Verify device lifecycle behavior separately
 before release; host storage tests do not simulate Android process termination
 or physical flash failures.
-
-## Preview 2.6 recovery and interrupted analysis
-
-Since beta.10, an unclean exit opens Home rather than silently restoring the
-active checkpoint. The interrupted game remains available through its manually
-selected **Incomplete** entry in Recent games. A damaged temporary save must not
-hide or overwrite the last committed game. Opening another game preserves the
-interrupted record; repeated Home/background saves retain the same identity.
-These changes do not automatically remove duplicates created by older releases.
-
-An unfinished computer-analysis run pauses while the app is backgrounded or its
-Review is covered, and resumes unfinished work when that same Review returns.
-Stop, engine-off and settings/line changes discard the pending run. This is
-separate from saving completed evaluation/quality annotations in PGN, delivered
-in beta.13; see [PGN analysis](PGN_ANALYSIS.md). PGN import transfers games and
-supported annotations, not live clocks, motor sessions or all app preferences.

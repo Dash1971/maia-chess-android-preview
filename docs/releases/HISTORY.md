@@ -1,5 +1,9 @@
 # Channel publication history
 
+Editorial note, 26 November 2026: the retained beta.1 qualification and publication
+sections describe the same 2.5.0-beta.1 release; [its consolidated release record](preview-2.5.0-beta.1.md)
+is the entry point. Original outcomes below remain unchanged.
+
 These dated records retain their original source, version, checks and limits.
 They are not current support or release instructions. See [current channel status](../BUILD_CHANNELS.md).
 
@@ -114,7 +118,7 @@ still need scenario-specific physical acceptance; support remains experimental.
 This updates earlier capture-status statements in the dated release history below.
 [Current acceptance record](../ELECTRONIC_BOARD_GRAND_KINGDOM_26.md).
 
-#<a id="release-instructions-1"></a>
+<a id="release-instructions-1"></a>
 
 ## Release instructions
 

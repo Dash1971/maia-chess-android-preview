@@ -15,7 +15,9 @@ own [authoritative procedure](https://github.com/Dash1971/maia-chess-android/blo
    packages. Record the check date, versions, advisory/release sources and what
    was upgraded or deferred, with reasons, in the release evidence. Investigate
    known security findings before release; do not update every dependency blindly.
-3. Prepare the version and release notes, then freeze the full source commit.
+3. Prepare the version and release notes. Review all living docs and synchronize
+   affected feature pages using [shared ownership](SHARED_BUILD_PROCESS.md#documentation-paths-and-promotion-sync),
+   then freeze the full source commit.
 4. Run GitHub Checks on that exact commit, including the manual unsigned Android
    build (`build_android=true`, `expected_source_sha=<full SHA>`). Require the
    test and Android jobs to pass and verify the run's source SHA.
@@ -29,8 +31,9 @@ own [authoritative procedure](https://github.com/Dash1971/maia-chess-android/blo
    from the preceding Preview release and preservation of games/settings, plus
    changed features. Use an Apple Silicon Mac or another suitable host; a Mac
    integration-test build does not replace the qualified Linux release APK.
-8. Publish the signed APK, release notes, checksum and compact verification
-   evidence as a GitHub prerelease in this Preview repository.
+8. Publish the signed APK, release notes, `SHA256SUMS.txt` and compact verification
+   evidence as a GitHub prerelease in this Preview repository. See
+   [download verification](VERIFY_DOWNLOAD.md) for the public checksum format.
 9. Download the public APK and verify its hash, established signer and payloads
    against the qualified artifact. Record the channel status and evidence.
 10. Stop task-owned processes and clean bulk output on every participating host.
@@ -96,3 +99,22 @@ automatic diagnostics.
 Before expensive qualification, follow [Release test setup](RELEASE_TEST_SETUP.md)
 for complete dependencies, host/device/focus diagnostics and safe scheduling.
 It supplements this channel procedure and does not waive or replace its gates.
+
+## Living documentation review
+
+Review every repository-maintained living Markdown page before source freeze,
+including feature guides and shared operator docs. Use the search below as a
+review list, not an automatic word ban:
+
+```sh
+git grep -n -i -E 'candidate|draft|unmerged|pending|not published|this (source )?PR' -- '*.md' ':!third_party/**'
+```
+
+For the version being released, replace stale proposal/PR narration with current
+behavior and synchronize affected counterparts using [shared documentation
+ownership](SHARED_BUILD_PROCESS.md#documentation-paths-and-promotion-sync).
+Dated records retain their original outcomes; add a dated status note when needed.
+Future proposals and genuine pending approvals or store publication remain explicit.
+Keep the published-download version and actual distribution status accurate until
+publication succeeds. Include release-facing edits in the frozen commit before
+qualification, then repeat this review after publication for status changes.
