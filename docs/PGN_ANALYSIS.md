@@ -1,6 +1,9 @@
 # Saved analysis in PGN
 
-Published in [Preview beta.13](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.13) for [#61](https://github.com/Dash1971/maia-chess-android-preview/issues/61). [Qualification and immediate cleanup](releases/preview-2.6.0-beta.13.md) include actual signed-APK persistence, restoration and export checks. Also published in [Stable 2.6.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.6.0) after its separate qualification.
+Released in Stable 2.6.0 and Preview beta.13. Mobile Maia saves evaluations and
+move-quality annotations in PGN. This behavior was introduced in [Preview beta.13](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.13).
+Scope and implementation originated in [Preview #61](https://github.com/Dash1971/maia-chess-android-preview/issues/61)
+and [#267](https://github.com/Dash1971/maia-chess-android-preview/pull/267).
 
 Run Computer analysis as usual. Once every position has been evaluated, Mobile
 Maia saves those evaluations in the existing game's PGN. When move classification
@@ -82,4 +85,9 @@ selected-position cancellation, background/resume, engine toggling, late results
 after reanalysis/disposal and responsive Copy PGN on both screens with a PGN over
 2 MiB. The Copy tests detect the original synchronous stripping behavior.
 
-Installed production-APK save/share/copy, graph restoration, near-limit collection export, independent PGN reading and signed-upgrade checks passed for beta.13. Host tests retain cancellation/failure and large-text coverage. The release evidence distinguishes emulator observations from physical-device/OEM coverage.
+Host checks do not replace installed Android save/share and upgrade testing before
+publication. Installed checks and exact-source qualification are recorded with each release.
+
+See [Stable 2.6.0 qualification](https://github.com/Dash1971/maia-chess-android/blob/main/docs/release-notes/v2.6.0-verification.md) and
+[Preview beta.13 qualification](https://github.com/Dash1971/maia-chess-android-preview/blob/main/docs/releases/preview-2.6.0-beta.13.md)
+for installed save/share/copy, restoration, near-limit export and signed-upgrade results.

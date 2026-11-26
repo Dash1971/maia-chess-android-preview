@@ -37,7 +37,7 @@ separate lightweight procedure and identity. Both require immediate owned-output
 cleanup at the point specified in their procedures.
 
 [Testing Preview](TESTING_PREVIEW.md#from-preview-to-stable) explains promotion.
-[Stable 2.6.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.6.0) is published on GitHub and Zapstore after separate exact-source qualification. F-Droid’s catalog update remains pending as of November 26, 2026; see [Stable distribution status](https://github.com/Dash1971/maia-chess-android/blob/main/docs/BUILD_CHANNELS.md). Preview and Dev versions above are unchanged.
+[Stable 2.6.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.6.0) is published on GitHub and Zapstore after separate exact-source qualification. For F-Droid and other distribution progress, see [Stable distribution status](https://github.com/Dash1971/maia-chess-android/blob/main/docs/BUILD_CHANNELS.md). Preview and Dev versions above are unchanged.
 See [release records](releases/README.md) and [historical channel records](releases/HISTORY.md)
 for dated evidence.
 

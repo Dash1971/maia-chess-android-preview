@@ -1,9 +1,9 @@
 # Mobile Maia Preview
 
-> **Prerelease channel:** This repository contains experimental Mobile Maia
-> builds. The Android package ID is separate from the stable app, so **Mobile
-> Maia Preview** can be installed beside **Mobile Maia** without replacing it.
-> Preview features may change or be withdrawn before a stable release.
+> **Prerelease channel:** Preview is the testing channel for future Mobile Maia
+> changes. It has a separate Android package and can be installed beside Stable.
+> Preview 2.6.0-beta.13 currently offers the same features as Stable 2.6.0.
+> Future Preview features may change or be withdrawn before a Stable release.
 
 Mobile Maia is an offline-first Android chess app for playing against
 [Maia-3](https://github.com/CSSLab/maia3), reviewing games with Maia and
@@ -34,9 +34,14 @@ is published. It uses the **79M Maia-3 model**. Grand Kingdom has passed user
 acceptance; Pegasus and the former camera/image prototype are withdrawn.
 See [qualification and cleanup](docs/releases/preview-2.6.0-beta.13.md).
 
-[Stable 2.6.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.6.0) is published on GitHub and Zapstore. F-Droid’s catalog update is pending as of November 26, 2026; see [Stable distribution status](https://github.com/Dash1971/maia-chess-android/blob/main/docs/BUILD_CHANNELS.md). Dev remains 2.6.0-alpha.2-dev with the 5M model and its historical
-prototype payload. See [Testing Preview](docs/TESTING_PREVIEW.md) for channel
-installation, reports and the path to Stable.
+Preview beta.13 currently offers the same features as
+[Stable 2.6.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.6.0).
+Use [Stable distribution status](https://github.com/Dash1971/maia-chess-android/blob/main/docs/BUILD_CHANNELS.md)
+for GitHub, F-Droid and Zapstore delivery.
+
+Dev remains 2.6.0-alpha.2-dev with the 5M model and its historical prototype
+payload. See [Testing Preview](docs/TESTING_PREVIEW.md) for installation,
+reports and the path to Stable.
 
 ## Feature guide
 
@@ -105,8 +110,9 @@ implemented feature.
 **More device and board feedback**
 
 Chessnut Pro owners and Grand Kingdom owners are welcome to help test the
-[supported-board flows](docs/ELECTRONIC_BOARD_DEV.md). Grand Kingdom feedback
-continues in [Stable #15](https://github.com/Dash1971/maia-chess-android/issues/15).
+[supported-board flows](docs/ELECTRONIC_BOARD_DEV.md). Report new board problems in the running channel’s tracker.
+[Stable #15](https://github.com/Dash1971/maia-chess-android/issues/15) retains the
+original Grand Kingdom hardware feedback and delivery history.
 Further physical-tablet, landscape, large-text and split-screen feedback will
 help refine the [adaptive layouts](docs/ADAPTIVE_LAYOUTS_26.md).
 
@@ -139,6 +145,9 @@ from their official release pages and can notify you when updates are available.
 
 After setup, use Obtainium's update check to download and install future Mobile
 Maia Preview releases. Android may ask you to confirm each update.
+
+For manual downloads, see [Preview releases](https://github.com/Dash1971/maia-chess-android-preview/releases)
+and [Verify your download](docs/VERIFY_DOWNLOAD.md).
 
 ## Testing and contributing
 
@@ -202,7 +211,7 @@ The build reads `MOBILE_MAIA_KEYSTORE`, `MOBILE_MAIA_STORE_PASSWORD`, and
 this repository. When those variables are absent, Gradle produces an unsigned
 release suitable for independent verification.
 
-See [Verify your download](docs/VERIFY_DOWNLOAD.md) for checksum/signature commands, the official certificate digest and installation troubleshooting.
+The [download verification guide](docs/VERIFY_DOWNLOAD.md) lists the official signer and checksum commands.
 
 ## Fast phone iteration
 
@@ -266,10 +275,10 @@ Supported in Stable 2.6 and the current Preview/Dev sources:
 The [support decision](docs/decisions/2026-11-22-electronic-board-support.md)
 records the Pegasus withdrawal. The uncertainty concerns initialization
 permission, not the GPL-licensed MoveAPiece protocol code. Older Dev APKs may
-contain the retired prototype; no published APK is changed by this source PR.
+contain the retired prototype. Current Preview and Stable 2.6 exclude it.
 
 Board owners and manufacturers are welcome to
-[contact us through an issue](https://github.com/Dash1971/maia-chess-android/issues/new)
+[contact us through a Preview issue](https://github.com/Dash1971/maia-chess-android-preview/issues/new)
 to help test devices, document protocols, and expand supported models. The
 [board testing guide](docs/ELECTRONIC_BOARD_DEV.md) describes the supported
 workflows and the [Grand Kingdom acceptance record](docs/ELECTRONIC_BOARD_GRAND_KINGDOM_26.md)
@@ -289,6 +298,13 @@ including the default Lichess brown theme and Cburnett pieces. Local Stockfish
 support uses
 [Lichess multistockfish](https://github.com/lichess-org/dart-multistockfish).
 Both Lichess projects are credited and linked in the app's About screen.
+Opening names and ECO codes come from the CC0
+[Lichess chess-openings dataset](https://github.com/lichess-org/chess-openings),
+pinned to the source revision recorded in
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). Analysis Board interactions
+are also informed by the open-source
+[Lichess Mobile analysis experience](https://github.com/lichess-org/mobile).
+Mobile Maia is independently implemented and is not affiliated with Lichess.
 
 Chessnut support uses Chessnut's
 [published e-board API](https://github.com/chessnutech/Chessnut_eBoards) and
@@ -314,6 +330,12 @@ retains the upstream classification rules while adding background-isolate
 execution and its own review integration. The pinned
 upstream revision and licence details are recorded in
 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
+The double-press NEW GAME Chessnut e-board behavior was inspired by [MoveAPiece](https://github.com/egdels/moveapiece) by [egdels](https://github.com/egdels).
+
+The **Max variety in opening** idea is credited to
+[Maia3-tauri](https://github.com/outusuke/maia3-tauri) by outusuke. This is an
+idea attribution; no Maia3-tauri source code is incorporated for this feature.
 
 ## Licensing
 

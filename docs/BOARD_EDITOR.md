@@ -1,6 +1,12 @@
-# Preview board editor (#189)
+# Board editor
+
+<a id="preview-board-editor-189"></a>
 
 **Status:** shipped in Stable 2.5.0 and later, and in Preview. This page describes the feature; dated qualification remains in the release records.
+
+The existing editor is retained in Stable 2.6. Camera and screenshot recognition
+are not included. The original Preview work is recorded in
+[Preview #189](https://github.com/Dash1971/maia-chess-android-preview/issues/189).
 
 The interaction/layout reference is Lichess mobile v0.30.1, commit
 `243b19b532c86101a389072becce60e51c71bbd0`, files:
@@ -50,9 +56,12 @@ adaptations. Remaining new labels are translated in all ten languages and still
 need native-speaker review. The metadata sheet owns its controllers through the
 route's reverse transition, preventing disposed-controller errors on dismissal.
 
-Publication requires the channel’s full release gates; widget verification alone
-is not release qualification.
+Stable 2.6 keeps the manual editor and removes the disabled camera placeholder.
+See the [channel release procedure](RELEASING.md) for publication checks; earlier
+Preview evidence applies only to its recorded artifacts.
 
 ## Image scanning status
 
-The former Preview camera/image prototype was withdrawn in 2.6.0-beta.3. The manual editor and FEN import remain available. Open Board Scanner is a 2.7 candidate pending F-Droid licensing clarification; see the [roadmap](../README.md#roadmap) and [historical prototype](BOARD_IMAGE_IMPORT.md).
+Camera/image recognition is not included in Stable 2.6 or current Preview.
+Open Board Scanner is a 2.7 candidate pending F-Droid licensing clarification;
+see the [Preview roadmap](https://github.com/Dash1971/maia-chess-android-preview#roadmap).

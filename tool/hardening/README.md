@@ -191,10 +191,10 @@ PyTorch checkpoint hash as well as the Mobile Maia ONNX hash. Regenerate it only
 from clean, independently checked-out Maia-3 source and the pinned checkpoint:
 
 ```sh
-python3.12 -m venv /tmp/maia3-reference-venv
-/tmp/maia3-reference-venv/bin/pip install \
+python3.12 -m venv /absolute/task/bulk/maia3-reference-venv
+/absolute/task/bulk/maia3-reference-venv/bin/pip install \
   -r tool/hardening/requirements-maia3-reference.txt
-/tmp/maia3-reference-venv/bin/python tool/generate_maia3_reference.py \
+/absolute/task/bulk/maia3-reference-venv/bin/python tool/generate_maia3_reference.py \
   --maia3-source /path/to/clean/maia3 \
   --checkpoint /path/to/maia3-79m.pt
 dart format integration_test/fixtures/maia3_reference.dart

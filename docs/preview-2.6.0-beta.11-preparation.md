@@ -1,6 +1,6 @@
 # Preview beta.11 preparation history
 
-Beta.11 is now [published](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11); [qualification and cleanup](releases/preview-2.6.0-beta.11.md) record the release. The entries below describe pre-release work and its earlier no-build/no-Actions scope. Those dated limits are historical; Stable approval remains separate.
+Beta.11 is now [published](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.11); [qualification and cleanup](releases/preview-2.6.0-beta.11.md) record the release. The entries below describe pre-release work and its earlier no-build/no-Actions scope. Those dated limits are historical. Stable 2.6.0 is now released; see [its separate qualification](https://github.com/Dash1971/maia-chess-android/blob/main/docs/release-notes/v2.6.0-verification.md).
 
 ## Proposed changes
 
