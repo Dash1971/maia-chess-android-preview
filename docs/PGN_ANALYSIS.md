@@ -1,6 +1,6 @@
 # Saved analysis in PGN
 
-Published in [Preview beta.13](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.13) for [#61](https://github.com/Dash1971/maia-chess-android-preview/issues/61). [Qualification and immediate cleanup](releases/preview-2.6.0-beta.13.md) include actual signed-APK persistence, restoration and export checks. Stable 2.6 promotion remains separate.
+Published in [Preview beta.13](https://github.com/Dash1971/maia-chess-android-preview/releases/tag/v2.6.0-beta.13) for [#61](https://github.com/Dash1971/maia-chess-android-preview/issues/61). [Qualification and immediate cleanup](releases/preview-2.6.0-beta.13.md) include actual signed-APK persistence, restoration and export checks. Also published in [Stable 2.6.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.6.0) after its separate qualification.
 
 Run Computer analysis as usual. Once every position has been evaluated, Mobile
 Maia saves those evaluations in the existing game's PGN. When move classification
