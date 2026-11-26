@@ -1720,4 +1720,29 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get analysisSaveFailed =>
       'विश्लेषण सहेजा नहीं जा सका। बाज़ी में कोई बदलाव नहीं हुआ।';
+
+  @override
+  String get scanCamera => 'कैमरा';
+
+  @override
+  String get scanTakePhoto => 'फ़ोटो लें';
+
+  @override
+  String get scanChoosePhoto => 'फ़ोटो चुनें';
+
+  @override
+  String get scanReadingBoard => 'बिसात पढ़ी जा रही है…';
+
+  @override
+  String get scanReadFailed => 'इस फ़ोटो से बिसात नहीं पढ़ी जा सकी।';
+
+  @override
+  String get scanNoBoard => 'पूरी बिसात नहीं मिली। दूसरी फ़ोटो आज़माएँ।';
+
+  @override
+  String get scanImageTooLarge => '16 MiB से छोटी छवि चुनें।';
+
+  @override
+  String get scanSourceUnavailable =>
+      'इस स्रोत से फ़ोटो लेने के लिए कोई ऐप उपलब्ध नहीं है।';
 }

@@ -1732,4 +1732,31 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get analysisSaveFailed =>
       'Die Analyse konnte nicht gespeichert werden. Die Partie ist unverändert.';
+
+  @override
+  String get scanCamera => 'Kamera';
+
+  @override
+  String get scanTakePhoto => 'Foto aufnehmen';
+
+  @override
+  String get scanChoosePhoto => 'Foto auswählen';
+
+  @override
+  String get scanReadingBoard => 'Brett wird erkannt…';
+
+  @override
+  String get scanReadFailed =>
+      'Das Brett konnte auf diesem Foto nicht erkannt werden.';
+
+  @override
+  String get scanNoBoard =>
+      'Kein vollständiges Brett gefunden. Versuche ein anderes Foto.';
+
+  @override
+  String get scanImageTooLarge => 'Wähle ein Bild mit weniger als 16 MiB.';
+
+  @override
+  String get scanSourceUnavailable =>
+      'Für diese Fotoquelle ist keine App verfügbar.';
 }

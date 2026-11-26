@@ -473,5 +473,13 @@
   "recentImportGames": "PGN importieren",
   "pgnFirstGameOnly": "Nur die erste Partie wurde geöffnet. Um alle Partien zu importieren, wähle Neueste Partien → PGN importieren.",
   "includeAnalysisAnnotations": "Analyse einschließen",
-  "analysisSaveFailed": "Die Analyse konnte nicht gespeichert werden. Die Partie ist unverändert."
+  "analysisSaveFailed": "Die Analyse konnte nicht gespeichert werden. Die Partie ist unverändert.",
+  "scanCamera": "Kamera",
+  "scanTakePhoto": "Foto aufnehmen",
+  "scanChoosePhoto": "Foto auswählen",
+  "scanReadingBoard": "Brett wird erkannt…",
+  "scanReadFailed": "Das Brett konnte auf diesem Foto nicht erkannt werden.",
+  "scanNoBoard": "Kein vollständiges Brett gefunden. Versuche ein anderes Foto.",
+  "scanImageTooLarge": "Wähle ein Bild mit weniger als 16 MiB.",
+  "scanSourceUnavailable": "Für diese Fotoquelle ist keine App verfügbar."
 }

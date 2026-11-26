@@ -99,7 +99,7 @@ void main() {
       await tester.pumpWidget(app());
       await tester.pumpAndSettle();
       expect(find.byKey(const ValueKey('editor-from-image')), findsNothing);
-      expect(find.byIcon(Icons.photo_camera_outlined), findsNothing);
+      expect(find.byIcon(Icons.photo_camera_outlined), findsOneWidget);
       if (flipped) {
         await tester.tap(find.byKey(const ValueKey('board-editor-flip')));
         await tester.pumpAndSettle();

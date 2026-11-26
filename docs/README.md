@@ -24,6 +24,8 @@ Start with the [app README](../README.md), [Stable user guide](https://github.co
 
 ## Feature and design references
 
+- [Offline board scanning for 2.7 (draft)](BOARD_SCANNER_27.md)
+
 - [Adaptive layouts for 2.6](ADAPTIVE_LAYOUTS_26.md)
 - [Fixed engine analysis and independent moves for 2.6](ANALYSIS_SCROLL_26.md)
 - [Preview board editor (#189)](BOARD_EDITOR.md)

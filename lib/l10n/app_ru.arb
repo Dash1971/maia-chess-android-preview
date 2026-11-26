@@ -473,5 +473,13 @@
   "recentImportGames": "Импорт PGN",
   "pgnFirstGameOnly": "Открыта только первая партия. Чтобы импортировать все партии, выберите Недавние игры → Импорт PGN.",
   "includeAnalysisAnnotations": "Включить анализ",
-  "analysisSaveFailed": "Не удалось сохранить анализ. Партия не изменена."
+  "analysisSaveFailed": "Не удалось сохранить анализ. Партия не изменена.",
+  "scanCamera": "Камера",
+  "scanTakePhoto": "Сделать фото",
+  "scanChoosePhoto": "Выбрать фото",
+  "scanReadingBoard": "Распознавание доски…",
+  "scanReadFailed": "Не удалось распознать доску на этом фото.",
+  "scanNoBoard": "Полная доска не найдена. Попробуйте другое фото.",
+  "scanImageTooLarge": "Выберите изображение размером менее 16 МиБ.",
+  "scanSourceUnavailable": "Нет приложения для получения фото этим способом."
 }

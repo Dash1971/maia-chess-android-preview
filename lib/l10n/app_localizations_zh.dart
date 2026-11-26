@@ -1572,4 +1572,28 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get analysisSaveFailed => '无法保存分析。对局未更改。';
+
+  @override
+  String get scanCamera => '相机';
+
+  @override
+  String get scanTakePhoto => '拍照';
+
+  @override
+  String get scanChoosePhoto => '选择照片';
+
+  @override
+  String get scanReadingBoard => '正在识别棋盘…';
+
+  @override
+  String get scanReadFailed => '无法从这张照片识别棋盘。';
+
+  @override
+  String get scanNoBoard => '未找到完整棋盘，请尝试其他照片。';
+
+  @override
+  String get scanImageTooLarge => '请选择小于16 MiB的图片。';
+
+  @override
+  String get scanSourceUnavailable => '没有可用于获取此照片的应用。';
 }

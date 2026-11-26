@@ -24,9 +24,7 @@ licensing and downstream redistribution remain unresolved; the
 [support decision](decisions/2026-11-22-electronic-board-support.md) explains the distinction
 from GPL-licensed protocol references. Older APKs retain their original payloads.
 
-The former camera/image prototype is withdrawn from source and published
-Preview. Open Board Scanner is a 2.7 candidate pending F-Droid licensing
-clarification; see the [roadmap](../README.md#roadmap).
+The former camera/image prototype remains withdrawn. The [2.7 draft](BOARD_SCANNER_27.md) adds Open Board Scanner with a Board Editor camera, but has not been published. F-Droid licensing acceptance and Android qualification remain pending; see the [roadmap](../README.md#roadmap).
 
 ## Release instructions
 

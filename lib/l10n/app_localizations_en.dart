@@ -1705,4 +1705,29 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get analysisSaveFailed =>
       'Could not save analysis. The game is unchanged.';
+
+  @override
+  String get scanCamera => 'Camera';
+
+  @override
+  String get scanTakePhoto => 'Take a photo';
+
+  @override
+  String get scanChoosePhoto => 'Choose a photo';
+
+  @override
+  String get scanReadingBoard => 'Reading the board…';
+
+  @override
+  String get scanReadFailed => 'Could not read the board from this photo.';
+
+  @override
+  String get scanNoBoard => 'No complete board found. Try another photo.';
+
+  @override
+  String get scanImageTooLarge => 'Choose an image smaller than 16 MiB.';
+
+  @override
+  String get scanSourceUnavailable =>
+      'No app is available for this photo source.';
 }

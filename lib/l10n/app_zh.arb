@@ -473,5 +473,13 @@
   "recentImportGames": "导入 PGN",
   "pgnFirstGameOnly": "仅打开了第一盘对局。要导入所有对局，请前往最近对局 → 导入 PGN。",
   "includeAnalysisAnnotations": "包含分析",
-  "analysisSaveFailed": "无法保存分析。对局未更改。"
+  "analysisSaveFailed": "无法保存分析。对局未更改。",
+  "scanCamera": "相机",
+  "scanTakePhoto": "拍照",
+  "scanChoosePhoto": "选择照片",
+  "scanReadingBoard": "正在识别棋盘…",
+  "scanReadFailed": "无法从这张照片识别棋盘。",
+  "scanNoBoard": "未找到完整棋盘，请尝试其他照片。",
+  "scanImageTooLarge": "请选择小于16 MiB的图片。",
+  "scanSourceUnavailable": "没有可用于获取此照片的应用。"
 }

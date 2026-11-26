@@ -1,5 +1,9 @@
 # Maia-3 model provenance
 
+The Preview 2.7 draft also includes two pinned Open Board Scanner models. Their
+source, hashes, license and remaining acceptance checks are documented in
+[Board Scanner 2.7](docs/BOARD_SCANNER_27.md#model-and-scope).
+
 The official Preview flavor bundles **79M**; red-icon Dev bundles **5M**.
 `pubspec.yaml` scopes the assets by flavor, and Android's BuildConfig selects
 the corresponding file. Neither a source tree containing both files nor a Dev

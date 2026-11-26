@@ -89,9 +89,15 @@ class BoardEditorDraft {
 }
 
 class BoardEditorPage extends StatefulWidget {
-  const BoardEditorPage({required this.initialFen, this.onContinue, super.key});
+  const BoardEditorPage({
+    required this.initialFen,
+    this.onContinue,
+    this.scanner = const BoardScanner(),
+    super.key,
+  });
   final String initialFen;
   final Future<void> Function(String fen)? onContinue;
+  final BoardScanner scanner;
   @override
   State<BoardEditorPage> createState() => _BoardEditorPageState();
 }
@@ -102,6 +108,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
   dc.Piece? _placement;
   dc.Square? _selected;
   bool _flipped = false, _continuing = false;
+  bool _scanning = false;
   Offset? _pointerDown;
   final _boardKey = GlobalKey();
 
@@ -187,6 +194,93 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
           context,
         ).showSnackBar(SnackBar(content: Text(l10n(context).invalidPosition)));
       }
+    }
+  }
+
+  Future<void> _scanBoard() async {
+    if (_scanning) return;
+    final camera = await showModalBottomSheet<bool>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Text(l10n(context).scanTakePhoto),
+              onTap: () => Navigator.pop(context, true),
+            ),
+            ListTile(
+              title: Text(l10n(context).scanChoosePhoto),
+              onTap: () => Navigator.pop(context, false),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (!mounted || camera == null) return;
+    setState(() => _scanning = true);
+    BoardScanImage? image;
+    DialogRoute<void>? progress;
+    NavigatorState? navigator;
+    try {
+      image = await widget.scanner.pick(camera: camera);
+      if (!mounted || image == null) return;
+      navigator = Navigator.of(context);
+      final selected = image;
+      progress = DialogRoute<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => PopScope(
+          canPop: false,
+          child: AlertDialog(
+            scrollable: true,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.memory(
+                  selected.preview,
+                  height: 160,
+                  fit: BoxFit.contain,
+                ),
+                const SizedBox(height: 16),
+                const CircularProgressIndicator(),
+                const SizedBox(height: 12),
+                Text(l10n(context).scanReadingBoard),
+              ],
+            ),
+          ),
+        ),
+      );
+      unawaited(navigator.push<void>(progress));
+      final placement = await widget.scanner.recognize(image);
+      if (!mounted) return;
+      // A photo conveys piece placement only. Never carry unrelated FEN rights,
+      // counters or side-to-move over from the previous position.
+      final next = BoardEditorDraft('$placement w - - 0 1');
+      _change(() {
+        _draft.load(next.fen);
+        _flipped = false;
+      });
+    } catch (error) {
+      if (mounted) {
+        final strings = l10n(context);
+        final message = switch (error) {
+          PlatformException(code: 'scan_no_board') => strings.scanNoBoard,
+          PlatformException(code: 'scan_too_large') =>
+            strings.scanImageTooLarge,
+          PlatformException(code: 'scan_picker_unavailable') ||
+          MissingPluginException() => strings.scanSourceUnavailable,
+          _ => strings.scanReadFailed,
+        };
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (progress?.isActive == true && navigator?.mounted == true) {
+        navigator!.removeRoute(progress!);
+      }
+      if (image != null) await widget.scanner.discard(image);
+      if (mounted) setState(() => _scanning = false);
     }
   }
 
@@ -705,6 +799,12 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
     appBar: AppBar(
       title: Text(l10n(context).boardEditor),
       actions: [
+        IconButton(
+          key: const ValueKey('editor-camera'),
+          tooltip: l10n(context).scanCamera,
+          onPressed: _scanning || _continuing ? null : _scanBoard,
+          icon: const Icon(Icons.photo_camera_outlined),
+        ),
         IconButton(
           key: const ValueKey('editor-share'),
           onPressed: _export,

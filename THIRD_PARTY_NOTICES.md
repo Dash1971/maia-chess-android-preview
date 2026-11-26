@@ -401,6 +401,13 @@ section 13. The existing bundled GPL license text is available in license inform
 > IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 > CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+## Open Board Scanner (Preview 2.7 draft)
+
+- Source: [Open Board Scanner](https://github.com/Dash1971/open-board-scanner/tree/dee0475dfc2cda96c0f6aa50e003536d53592ab1), revision `dee0475dfc2cda96c0f6aa50e003536d53592ab1`.
+- Android `BoardScanCore.kt` adapts `boardscan/pipeline.py` and `boardscan/geometry.py`.
+- Code and published `models-v1` weights: AGPL-3.0-only. The complete [license](assets/board_scanner/LICENSE.txt), [weight license/training disclosure](assets/board_scanner/MODEL-LICENSE.md) and [model pins](docs/BOARD_SCANNER_27.md#model-and-scope) are retained with the app.
+- Training-data licensing implications and F-Droid acceptance remain open; this is not an assertion of upstream approval.
+
 ## Maia-3 Dev 5M conversion
 
 The Dev flavor uses [Maia3-5M](https://huggingface.co/UofTCSSLab/Maia3-5M); official Preview uses 79M. The 5M ONNX file is 21,346,652 bytes with SHA-256 `ddae2aa893b5ca7ec94d24178871f1c337d09fd72ff38abe8d76b8ecf08cb942`. It retains Maia-3’s AGPL-3.0 terms. Checkpoint and export references are in [model provenance](MODEL_PROVENANCE.md).

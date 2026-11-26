@@ -500,3 +500,7 @@ or this failure message. All ten catalogs therefore use contextual translations
 rather than borrowing an unrelated study or engine action. Existing Save PGN,
 Share PGN, Copy PGN and move-classification labels retain the reviewed baseline.
 Compact/large-text widget coverage includes the new checkbox in every locale.
+
+## Board Editor camera — 2.7 draft
+
+The new camera follows Lichess Mobile’s outlined Board Editor action and exact English “Take a photo” / “Choose a photo” labels. Lichess’s current scanner source hardcodes these labels; the pinned translated catalogs have no equivalent camera/recognition messages. All ten catalogs therefore use contextual native translations for the eight new keys, recorded in the review sheet. They do not add a separate review/confirmation concept. Translations remain provisional pending native-speaker review.

@@ -39,8 +39,7 @@ The menu contains Starting position, Load FEN, Continue from here and Clear boar
 The toolbar has menu, flip, Analysis and position settings. Sharing uses Android's
 plain-text chooser; copying works offline and is also the fallback when a native
 share handler is unavailable. Neither action sends to a recipient automatically.
-Variant, Challenge from position and camera/image recognition are absent.
-Camera and screenshot import have been shelved after the
+Variant and Challenge from position are absent. The old camera/screenshot prototype was shelved after the
 [offline model investigation](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md).
 Manual editing, FEN loading, Analysis and Continue from here retain their normal
 position validation and selected board/piece designs and aid preferences.
@@ -55,4 +54,4 @@ is not release qualification.
 
 ## Image scanning status
 
-The former Preview camera/image prototype was withdrawn in 2.6.0-beta.3. The manual editor and FEN import remain available. Open Board Scanner is a 2.7 candidate pending F-Droid licensing clarification; see the [roadmap](../README.md#roadmap) and [historical prototype](BOARD_IMAGE_IMPORT.md).
+The former Preview camera/image prototype was withdrawn in 2.6.0-beta.3. The manual editor and FEN import remain available. The [2.7 draft](BOARD_SCANNER_27.md) adds Open Board Scanner with Lichess’s Board Editor camera flow, pending Android qualification and F-Droid licensing clarification; see the [roadmap](../README.md#roadmap) and [historical prototype](BOARD_IMAGE_IMPORT.md).

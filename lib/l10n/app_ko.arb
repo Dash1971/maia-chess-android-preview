@@ -473,5 +473,13 @@
   "recentImportGames": "PGN 가져오기",
   "pgnFirstGameOnly": "첫 번째 대국만 열었습니다. 모든 대국을 가져오려면 최근 대국 → PGN 가져오기를 이용하세요.",
   "includeAnalysisAnnotations": "분석 포함",
-  "analysisSaveFailed": "분석을 저장하지 못했습니다. 대국은 변경되지 않았습니다."
+  "analysisSaveFailed": "분석을 저장하지 못했습니다. 대국은 변경되지 않았습니다.",
+  "scanCamera": "카메라",
+  "scanTakePhoto": "사진 촬영",
+  "scanChoosePhoto": "사진 선택",
+  "scanReadingBoard": "체스판을 읽는 중…",
+  "scanReadFailed": "이 사진에서 체스판을 읽을 수 없습니다.",
+  "scanNoBoard": "전체 체스판을 찾을 수 없습니다. 다른 사진을 사용해 보세요.",
+  "scanImageTooLarge": "16 MiB보다 작은 이미지를 선택하세요.",
+  "scanSourceUnavailable": "이 방식으로 사진을 가져올 수 있는 앱이 없습니다."
 }

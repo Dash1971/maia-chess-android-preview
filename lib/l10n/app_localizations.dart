@@ -2668,49 +2668,49 @@ abstract class AppLocalizations {
   /// **'It can be useful to contrast with Stockfish evaluation. Just because Stockfish thinks one side is better, does not mean that it is easy for a human to find the right moves to convert!'**
   String get maiaScoreStockfishHelp;
 
-  /// Standard-chess board editor: Move pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  /// Standard-chess board editor: Move pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata.
   ///
   /// In en, this message translates to:
   /// **'Move pieces'**
   String get editorMoveTool;
 
-  /// Standard-chess board editor: Erase pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  /// Standard-chess board editor: Erase pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata.
   ///
   /// In en, this message translates to:
   /// **'Erase pieces'**
   String get editorEraseTool;
 
-  /// Standard-chess board editor: Empty square. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  /// Standard-chess board editor: Empty square. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata.
   ///
   /// In en, this message translates to:
   /// **'Empty square'**
   String get editorEmptySquare;
 
-  /// Standard-chess board editor: Position settings. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  /// Standard-chess board editor: Position settings. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata.
   ///
   /// In en, this message translates to:
   /// **'Position settings'**
   String get editorPositionSettings;
 
-  /// Standard-chess board editor: Share FEN. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  /// Standard-chess board editor: Share FEN. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata.
   ///
   /// In en, this message translates to:
   /// **'Share FEN'**
   String get editorShareFen;
 
-  /// Standard-chess board editor: FEN metadata. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  /// Standard-chess board editor: FEN metadata. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata.
   ///
   /// In en, this message translates to:
   /// **'FEN metadata'**
   String get editorFenMetadata;
 
-  /// Standard-chess board editor: Halfmove clock. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  /// Standard-chess board editor: Halfmove clock. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata.
   ///
   /// In en, this message translates to:
   /// **'Halfmove clock'**
   String get editorHalfmoveClock;
 
-  /// Standard-chess board editor: Move number. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable.
+  /// Standard-chess board editor: Move number. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata.
   ///
   /// In en, this message translates to:
   /// **'Move number'**
@@ -2961,6 +2961,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not save analysis. The game is unchanged.'**
   String get analysisSaveFailed;
+
+  /// Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get scanCamera;
+
+  /// Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get scanTakePhoto;
+
+  /// Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a photo'**
+  String get scanChoosePhoto;
+
+  /// Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading the board…'**
+  String get scanReadingBoard;
+
+  /// Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read the board from this photo.'**
+  String get scanReadFailed;
+
+  /// Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'No complete board found. Try another photo.'**
+  String get scanNoBoard;
+
+  /// Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an image smaller than 16 MiB.'**
+  String get scanImageTooLarge;
+
+  /// Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'No app is available for this photo source.'**
+  String get scanSourceUnavailable;
 }
 
 class _AppLocalizationsDelegate

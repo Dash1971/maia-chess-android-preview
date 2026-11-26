@@ -64,6 +64,7 @@ part 'src/play.dart';
 part 'src/play_localization.dart';
 part 'src/analysis_board.dart';
 part 'src/board_editor.dart';
+part 'src/board_scan.dart';
 part 'src/review.dart';
 part 'src/review_widgets.dart';
 part 'src/stockfish.dart';

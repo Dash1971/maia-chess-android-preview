@@ -1756,4 +1756,29 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get analysisSaveFailed =>
       'Не удалось сохранить анализ. Партия не изменена.';
+
+  @override
+  String get scanCamera => 'Камера';
+
+  @override
+  String get scanTakePhoto => 'Сделать фото';
+
+  @override
+  String get scanChoosePhoto => 'Выбрать фото';
+
+  @override
+  String get scanReadingBoard => 'Распознавание доски…';
+
+  @override
+  String get scanReadFailed => 'Не удалось распознать доску на этом фото.';
+
+  @override
+  String get scanNoBoard => 'Полная доска не найдена. Попробуйте другое фото.';
+
+  @override
+  String get scanImageTooLarge => 'Выберите изображение размером менее 16 МиБ.';
+
+  @override
+  String get scanSourceUnavailable =>
+      'Нет приложения для получения фото этим способом.';
 }
