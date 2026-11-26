@@ -33,6 +33,5 @@ A tested Preview beta is followed by owner acceptance, a separate Stable
 promotion PR, and Stable's own exact-source CI, independent canonical Linux/
 F-Droid reproduction, signing, installed upgrade/native checks and download
 verification. GitHub, F-Droid and Zapstore have separate delivery states.
-[Stable 2.6 promotion #82](https://github.com/Dash1971/maia-chess-android/pull/82)
-remains a draft; Preview publication does not approve it. Follow
+[Stable 2.6.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.6.0) completed that process and is published on GitHub and Zapstore. F-Droid delivery is tracked separately in [Stable distribution status](https://github.com/Dash1971/maia-chess-android/blob/main/docs/BUILD_CHANNELS.md). Follow
 [Stable's release procedure](https://github.com/Dash1971/maia-chess-android/blob/main/docs/RELEASING.md).

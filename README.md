@@ -35,14 +35,15 @@ is published. It uses the **79M Maia-3 model**. Grand Kingdom has passed user
 acceptance; Pegasus and the former camera/image prototype are withdrawn.
 See [qualification and cleanup](docs/releases/preview-2.6.0-beta.13.md).
 
-Stable remains 2.5.1; [Stable 2.6 promotion #82](https://github.com/Dash1971/maia-chess-android/pull/82)
-is a draft. Dev remains 2.6.0-alpha.2-dev with the 5M model and its historical
+[Stable 2.6.0](https://github.com/Dash1971/maia-chess-android/releases/tag/v2.6.0) is published on GitHub and Zapstore. F-Droid’s catalog update is pending as of November 26, 2026; see [Stable distribution status](https://github.com/Dash1971/maia-chess-android/blob/main/docs/BUILD_CHANNELS.md). Dev remains 2.6.0-alpha.2-dev with the 5M model and its historical
 prototype payload. See [Testing Preview](docs/TESTING_PREVIEW.md) for channel
 installation, reports and the path to Stable.
 
 ## Feature guide
 
-### New in 2.6, awaiting Stable
+<a id="new-in-26-awaiting-stable"></a>
+
+### Promoted in Stable 2.6
 
 | Feature | Available in Preview | Guide |
 | --- | --- | --- |
@@ -57,7 +58,7 @@ installation, reports and the path to Stable.
 PGN transfers games and supported annotations, not app preferences or live
 clock/motor checkpoints. Physical touch/tablet feedback remains welcome; host
 renders and emulator checks do not establish every device's usability.
-The [Stable user guide](https://github.com/Dash1971/maia-chess-android#feature-guide)
+The [Stable user guide](https://github.com/Dash1971/maia-chess-android/blob/main/docs/USER_GUIDE.md)
 covers features already released in Stable.
 
 <a id="saved-analysis-in-pgn--preview-beta13"></a>
@@ -253,7 +254,7 @@ ordinary app build; it is not needed to use the checked-in LFS assets.
 
 ## Electronic-board support
 
-Support planned for Stable 2.6 and the updated Preview/Dev sources:
+Supported in Stable 2.6 and the current Preview/Dev sources:
 
 | Board | Support | Hardware testing | Notes |
 | --- | --- | --- | --- |
