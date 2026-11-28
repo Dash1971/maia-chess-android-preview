@@ -70,10 +70,9 @@ covers features already released in Stable.
 
 ## Roadmap
 
-**Offline board scanning: Open Board Scanner candidate for 2.7**
+**Offline board scanning: 2.7 draft**
 
-We are considering [Open Board Scanner](https://github.com/Dash1971/open-board-scanner)
-for Mobile Maia 2.7. Its board-finder and piece-reader models total **3.5 MB**
+The [2.7 draft](docs/BOARD_SCANNER_27.md) adds Open Board Scanner through the camera button in Board Editor, matching Lichess’s photo flow. This has not been published. Its board-finder and piece-reader models total **3.5 MB**
 and run entirely offline, reading screenshots and photos of printed chess diagrams.
 In our desktop test, it read all 64 squares correctly in **87 of 88 photos**.
 See the [results and visual comparison](https://github.com/Dash1971/open-board-scanner/blob/main/REPORT.md).
@@ -81,8 +80,7 @@ See the [results and visual comparison](https://github.com/Dash1971/open-board-s
 **The code and model weights are published under AGPL-3.0-only**, the same
 licence as Mobile Maia. Training included noncommercial piece artwork and
 copyrighted diagram photos. Our understanding is that the trained weights are
-not derivative works of those images; before including the scanner, we want
-F-Droid to confirm that it accepts this licensing basis. The
+not derivative works of those images; before publication, F-Droid acceptance of this licensing basis still needs to be clarified. The
 [model licence and provenance](https://github.com/Dash1971/open-board-scanner/blob/main/MODEL-LICENSE.md)
 sets out the details.
 

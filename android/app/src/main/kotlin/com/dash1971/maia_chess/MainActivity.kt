@@ -131,6 +131,8 @@ class MainActivity : FlutterActivity() {
     private var chessnutBridge: ChessnutBridge? = null
     private var soundEffectBridge: SoundEffectBridge? = null
     private var restoredSamplingDocument: String? = null
+    private var restoredBoardScanCapture: String? = null
+    private val boardScanImages by lazy { BoardScanImages(this, restoredBoardScanCapture) }
     private val samplingDocuments by lazy { SamplingDocuments(this, restoredSamplingDocument) }
     private val documents by lazy { PgnDocuments(this) { methodChannel?.invokeMethod("pgnReceived", null) } }
 
@@ -261,6 +263,9 @@ class MainActivity : FlutterActivity() {
         methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).also {
             it.setMethodCallHandler { call, result ->
                 when (call.method) {
+                    "pickBoardScanImage" -> boardScanImages.pick(call.argument<Boolean>("camera") == true, result)
+                    "recognizeBoardScanImage" -> boardScanImages.recognize(call.argument<String>("token"), result)
+                    "discardBoardScanImage" -> { boardScanImages.discard(call.argument<String>("token")); result.success(null) }
                     "samplingMetadata" -> result.success(mapOf(
                         "appVersion" to BuildConfig.VERSION_NAME,
                         "versionCode" to BuildConfig.VERSION_CODE,
@@ -359,11 +364,14 @@ class MainActivity : FlutterActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         restoredSamplingDocument = savedInstanceState?.getString("samplingDocumentSnapshot")
+        restoredBoardScanCapture = savedInstanceState?.getString("boardScanCapture")
         super.onCreate(savedInstanceState)
+        boardScanImages // Initialize cleanup of abandoned private scanner files.
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         samplingDocuments.saveState()?.let { outState.putString("samplingDocumentSnapshot", it) }
+        boardScanImages.saveState()?.let { outState.putString("boardScanCapture", it) }
         super.onSaveInstanceState(outState)
     }
 
@@ -387,6 +395,7 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (boardScanImages.onResult(requestCode, resultCode, data)) return
         if (devDiagnostics?.onResult(requestCode, resultCode, data) == true) return
         if (!samplingDocuments.onResult(requestCode, resultCode, data) && !documents.onResult(requestCode, resultCode, data)) super.onActivityResult(requestCode, resultCode, data)
     }
@@ -412,6 +421,7 @@ class MainActivity : FlutterActivity() {
         devDiagnostics?.close()
         samplingDocuments.close()
         documents.close()
+        boardScanImages.close()
         super.onDestroy()
     }
 

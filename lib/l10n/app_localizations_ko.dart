@@ -1598,4 +1598,31 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get analysisSaveFailed => '분석을 저장하지 못했습니다. 대국은 변경되지 않았습니다.';
+
+  @override
+  String get scanCamera => '카메라';
+
+  @override
+  String get scanTakePhoto => '사진 촬영';
+
+  @override
+  String get scanChoosePhoto => '사진 선택';
+
+  @override
+  String get scanReadingBoard => '체스판을 읽는 중…';
+
+  @override
+  String get scanReadFailed => '이 사진에서 체스판을 읽을 수 없습니다.';
+
+  @override
+  String get scanNoBoard => '전체 체스판을 찾을 수 없습니다. 다른 사진을 사용해 보세요.';
+
+  @override
+  String get scanImageTooLarge => '16 MiB보다 작은 이미지를 선택하세요.';
+
+  @override
+  String get scanSourceUnavailable => '이 방식으로 사진을 가져올 수 있는 앱이 없습니다.';
+
+  @override
+  String get editorRotatePosition => '기물 배치 180° 회전';
 }

@@ -26,9 +26,7 @@ the actual APK manifest. Bluetooth hardware is optional for phone-only play.
   retention policy. Exports may contain your players, games and move choices.
 - Copy/save diagnostics is an explicit user action. Review files before putting
   them in a public report. Automatic detailed tracing is a Dev-only feature.
-- Camera/image recognition is not available in current Stable or Preview; the former Preview prototype was withdrawn. A future screenshot/diagram importer is
-  being considered in Preview; its licensing and implementation are not approval
-  to upload photos or add broad media access. See the [Preview roadmap](https://github.com/Dash1971/maia-chess-android-preview#roadmap).
+- The [Preview 2.7 scanner draft](docs/BOARD_SCANNER_27.md) reads selected photos and camera images locally. It uses temporary private files and scoped URI grants, then deletes its copies after use. Images are not uploaded or added to diagnostics. Android supplies the camera and image picker; no camera or broad media/storage permission is added. This draft is not published; Preview beta.13 and Stable 2.6 do not include scanning.
 
 The declared permissions are in
 [`AndroidManifest.xml`](android/app/src/main/AndroidManifest.xml); final APK

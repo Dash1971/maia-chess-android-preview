@@ -473,5 +473,14 @@
   "recentImportGames": "Importer le PGN",
   "pgnFirstGameOnly": "Seule la première partie a été ouverte. Pour importer toutes les parties, utilisez Parties récentes → Importer le PGN.",
   "includeAnalysisAnnotations": "Inclure l’analyse",
-  "analysisSaveFailed": "Impossible d’enregistrer l’analyse. La partie est inchangée."
+  "analysisSaveFailed": "Impossible d’enregistrer l’analyse. La partie est inchangée.",
+  "scanCamera": "Appareil photo",
+  "scanTakePhoto": "Prendre une photo",
+  "scanChoosePhoto": "Choisir une photo",
+  "scanReadingBoard": "Lecture de l’échiquier…",
+  "scanReadFailed": "Impossible de lire l’échiquier sur cette photo.",
+  "scanNoBoard": "Aucun échiquier complet trouvé. Essayez une autre photo.",
+  "scanImageTooLarge": "Choisissez une image de moins de 16 MiB.",
+  "scanSourceUnavailable": "Aucune application disponible pour cette source de photo.",
+  "editorRotatePosition": "Tourner la position de 180°"
 }

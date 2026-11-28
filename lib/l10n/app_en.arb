@@ -1996,35 +1996,35 @@
   },
   "editorMoveTool": "Move pieces",
   "@editorMoveTool": {
-    "description": "Standard-chess board editor: Move pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
+    "description": "Standard-chess board editor: Move pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata."
   },
   "editorEraseTool": "Erase pieces",
   "@editorEraseTool": {
-    "description": "Standard-chess board editor: Erase pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
+    "description": "Standard-chess board editor: Erase pieces. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata."
   },
   "editorEmptySquare": "Empty square",
   "@editorEmptySquare": {
-    "description": "Standard-chess board editor: Empty square. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
+    "description": "Standard-chess board editor: Empty square. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata."
   },
   "editorPositionSettings": "Position settings",
   "@editorPositionSettings": {
-    "description": "Standard-chess board editor: Position settings. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
+    "description": "Standard-chess board editor: Position settings. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata."
   },
   "editorShareFen": "Share FEN",
   "@editorShareFen": {
-    "description": "Standard-chess board editor: Share FEN. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
+    "description": "Standard-chess board editor: Share FEN. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata."
   },
   "editorFenMetadata": "FEN metadata",
   "@editorFenMetadata": {
-    "description": "Standard-chess board editor: FEN metadata. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
+    "description": "Standard-chess board editor: FEN metadata. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata."
   },
   "editorHalfmoveClock": "Halfmove clock",
   "@editorHalfmoveClock": {
-    "description": "Standard-chess board editor: Halfmove clock. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
+    "description": "Standard-chess board editor: Halfmove clock. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata."
   },
   "editorFullmoveNumber": "Move number",
   "@editorFullmoveNumber": {
-    "description": "Standard-chess board editor: Move number. Tool labels must distinguish moving existing pieces, repeated placement and erasure. FEN counters are preserved; camera recognition is unavailable."
+    "description": "Standard-chess board editor: Move number. Tool labels must distinguish moving existing pieces, repeated placement and erasure. Manual edits preserve FEN counters. Scanning imports a new placement with fresh position metadata."
   },
   "editorWhitePawn": "White pawn",
   "@editorWhitePawn": {
@@ -2147,7 +2147,14 @@
   },
   "recentExportTooLarge": "Selected games exceed the 5 MB export limit. Select fewer games and try again.",
   "pgnCollectionImported": "{count, plural, one{{count} game added to Recent games.} other{{count} games added to Recent games.}}",
-  "@pgnCollectionImported": {"description": "A whole PGN collection was validated and added to Recent games without replacing the current game. Reuse the existing localized Recent games screen name.", "placeholders": {"count": {"type": "int"}}},
+  "@pgnCollectionImported": {
+    "description": "A whole PGN collection was validated and added to Recent games without replacing the current game. Reuse the existing localized Recent games screen name.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "recentExportGameTooLarge": "A selected game exceeds the 5 MB limit per game.",
   "@recentExportGameTooLarge": {
     "description": "One selected PGN exceeds the 5 MiB individual-game parser limit, shown as 5 MB (or localized equivalent). This is distinct from the 5 MiB combined export limit. Nothing is saved/shared and saved games are unchanged."
@@ -2203,5 +2210,41 @@
   },
   "@analysisSaveFailed": {
     "description": "Completed computer analysis could not be saved into the PGN; the existing saved game is preserved."
+  },
+  "scanCamera": "Camera",
+  "@scanCamera": {
+    "description": "Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded."
+  },
+  "scanTakePhoto": "Take a photo",
+  "@scanTakePhoto": {
+    "description": "Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded."
+  },
+  "scanChoosePhoto": "Choose a photo",
+  "@scanChoosePhoto": {
+    "description": "Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded."
+  },
+  "scanReadingBoard": "Reading the board…",
+  "@scanReadingBoard": {
+    "description": "Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded."
+  },
+  "scanReadFailed": "Could not read the board from this photo.",
+  "@scanReadFailed": {
+    "description": "Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded."
+  },
+  "scanNoBoard": "No complete board found. Try another photo.",
+  "@scanNoBoard": {
+    "description": "Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded."
+  },
+  "scanImageTooLarge": "Choose an image smaller than 16 MiB.",
+  "@scanImageTooLarge": {
+    "description": "Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded."
+  },
+  "scanSourceUnavailable": "No app is available for this photo source.",
+  "@scanSourceUnavailable": {
+    "description": "Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded."
+  },
+  "editorRotatePosition": "Rotate position 180°",
+  "@editorRotatePosition": {
+    "description": "Board Editor menu action. Rotate actual piece placement 180 degrees to correct an upside-down scan; keep piece colors, side to move and counters, clear castling/en passant. Different from Flip board, which only changes the view. No equivalent in the pinned Lichess catalog."
   }
 }

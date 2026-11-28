@@ -473,5 +473,14 @@
   "recentImportGames": "Importar PGN",
   "pgnFirstGameOnly": "Solo se abrió la primera partida. Para importar todas las partidas, ve a Partidas recientes → Importar PGN.",
   "includeAnalysisAnnotations": "Incluir análisis",
-  "analysisSaveFailed": "No se pudo guardar el análisis. La partida no ha cambiado."
+  "analysisSaveFailed": "No se pudo guardar el análisis. La partida no ha cambiado.",
+  "scanCamera": "Cámara",
+  "scanTakePhoto": "Hacer una foto",
+  "scanChoosePhoto": "Elegir una foto",
+  "scanReadingBoard": "Leyendo el tablero…",
+  "scanReadFailed": "No se ha podido leer el tablero de esta foto.",
+  "scanNoBoard": "No se ha encontrado un tablero completo. Prueba con otra foto.",
+  "scanImageTooLarge": "Elige una imagen de menos de 16 MiB.",
+  "scanSourceUnavailable": "No hay ninguna aplicación disponible para obtener esta foto.",
+  "editorRotatePosition": "Girar la posición 180°"
 }

@@ -41,12 +41,14 @@ No e-board adapter, connection owner or synchronization policy is replaced. For 
 [Physical-board editing (#39)](https://github.com/Dash1971/maia-chess-android-preview/issues/39)
 was closed as not planned.
 
-The menu contains Starting position, Load FEN, Continue from here and Clear board.
+The released menu contains Starting position, Load FEN, Continue from here and Clear board.
+The 2.7 scanner draft adds Rotate position 180°: it changes piece placement while
+retaining colors, side to move and counters, and clears castling/en-passant metadata.
+Flip board changes only the view.
 The toolbar has menu, flip, Analysis and position settings. Sharing uses Android's
 plain-text chooser; copying works offline and is also the fallback when a native
 share handler is unavailable. Neither action sends to a recipient automatically.
-Variant, Challenge from position and camera/image recognition are absent.
-Camera and screenshot import have been shelved after the
+Variant and Challenge from position are absent. The old camera/screenshot prototype was shelved after the
 [offline model investigation](https://github.com/Dash1971/mobile-maia-research/blob/main/studies/offline-board-recognition-2026-11-13/REPORT.md).
 Manual editing, FEN loading, Analysis and Continue from here retain their normal
 position validation and selected board/piece designs and aid preferences.
@@ -62,6 +64,4 @@ Preview evidence applies only to its recorded artifacts.
 
 ## Image scanning status
 
-Camera/image recognition is not included in Stable 2.6 or current Preview.
-Open Board Scanner is a 2.7 candidate pending F-Droid licensing clarification;
-see the [Preview roadmap](https://github.com/Dash1971/maia-chess-android-preview#roadmap).
+The former Preview camera/image prototype was withdrawn in 2.6.0-beta.3. The manual editor and FEN import remain available. The [2.7 draft](BOARD_SCANNER_27.md) adds Open Board Scanner with Lichess’s Board Editor camera flow, pending Android qualification and F-Droid licensing clarification; see the [roadmap](../README.md#roadmap) and [historical prototype](BOARD_IMAGE_IMPORT.md).

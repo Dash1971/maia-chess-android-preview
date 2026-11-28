@@ -1728,4 +1728,34 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get analysisSaveFailed =>
       'Impossible d’enregistrer l’analyse. La partie est inchangée.';
+
+  @override
+  String get scanCamera => 'Appareil photo';
+
+  @override
+  String get scanTakePhoto => 'Prendre une photo';
+
+  @override
+  String get scanChoosePhoto => 'Choisir une photo';
+
+  @override
+  String get scanReadingBoard => 'Lecture de l’échiquier…';
+
+  @override
+  String get scanReadFailed =>
+      'Impossible de lire l’échiquier sur cette photo.';
+
+  @override
+  String get scanNoBoard =>
+      'Aucun échiquier complet trouvé. Essayez une autre photo.';
+
+  @override
+  String get scanImageTooLarge => 'Choisissez une image de moins de 16 MiB.';
+
+  @override
+  String get scanSourceUnavailable =>
+      'Aucune application disponible pour cette source de photo.';
+
+  @override
+  String get editorRotatePosition => 'Tourner la position de 180°';
 }

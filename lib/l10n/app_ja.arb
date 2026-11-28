@@ -473,5 +473,14 @@
   "recentImportGames": "PGN をインポート",
   "pgnFirstGameOnly": "最初の対局のみを開きました。すべての対局をインポートするには、最近の対局 → PGN をインポートを選んでください。",
   "includeAnalysisAnnotations": "解析を含める",
-  "analysisSaveFailed": "解析を保存できませんでした。対局は変更されていません。"
+  "analysisSaveFailed": "解析を保存できませんでした。対局は変更されていません。",
+  "scanCamera": "カメラ",
+  "scanTakePhoto": "写真を撮る",
+  "scanChoosePhoto": "写真を選ぶ",
+  "scanReadingBoard": "盤面を読み取り中…",
+  "scanReadFailed": "この写真から盤面を読み取れませんでした。",
+  "scanNoBoard": "盤面全体が見つかりませんでした。別の写真をお試しください。",
+  "scanImageTooLarge": "16 MiB未満の画像を選んでください。",
+  "scanSourceUnavailable": "この写真の取得方法に対応するアプリがありません。",
+  "editorRotatePosition": "配置を180°回転"
 }

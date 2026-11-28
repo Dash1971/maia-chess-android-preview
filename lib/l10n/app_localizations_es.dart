@@ -1728,4 +1728,33 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get analysisSaveFailed =>
       'No se pudo guardar el análisis. La partida no ha cambiado.';
+
+  @override
+  String get scanCamera => 'Cámara';
+
+  @override
+  String get scanTakePhoto => 'Hacer una foto';
+
+  @override
+  String get scanChoosePhoto => 'Elegir una foto';
+
+  @override
+  String get scanReadingBoard => 'Leyendo el tablero…';
+
+  @override
+  String get scanReadFailed => 'No se ha podido leer el tablero de esta foto.';
+
+  @override
+  String get scanNoBoard =>
+      'No se ha encontrado un tablero completo. Prueba con otra foto.';
+
+  @override
+  String get scanImageTooLarge => 'Elige una imagen de menos de 16 MiB.';
+
+  @override
+  String get scanSourceUnavailable =>
+      'No hay ninguna aplicación disponible para obtener esta foto.';
+
+  @override
+  String get editorRotatePosition => 'Girar la posición 180°';
 }

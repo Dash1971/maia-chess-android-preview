@@ -1592,4 +1592,31 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get analysisSaveFailed => '解析を保存できませんでした。対局は変更されていません。';
+
+  @override
+  String get scanCamera => 'カメラ';
+
+  @override
+  String get scanTakePhoto => '写真を撮る';
+
+  @override
+  String get scanChoosePhoto => '写真を選ぶ';
+
+  @override
+  String get scanReadingBoard => '盤面を読み取り中…';
+
+  @override
+  String get scanReadFailed => 'この写真から盤面を読み取れませんでした。';
+
+  @override
+  String get scanNoBoard => '盤面全体が見つかりませんでした。別の写真をお試しください。';
+
+  @override
+  String get scanImageTooLarge => '16 MiB未満の画像を選んでください。';
+
+  @override
+  String get scanSourceUnavailable => 'この写真の取得方法に対応するアプリがありません。';
+
+  @override
+  String get editorRotatePosition => '配置を180°回転';
 }

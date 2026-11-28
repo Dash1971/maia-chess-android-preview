@@ -473,5 +473,14 @@
   "recentImportGames": "PGN आयात करें",
   "pgnFirstGameOnly": "केवल पहली बाज़ी खोली गई है। सभी बाज़ियाँ आयात करने के लिए हाल के खेल → PGN आयात करें चुनें।",
   "includeAnalysisAnnotations": "विश्लेषण शामिल करें",
-  "analysisSaveFailed": "विश्लेषण सहेजा नहीं जा सका। बाज़ी में कोई बदलाव नहीं हुआ।"
+  "analysisSaveFailed": "विश्लेषण सहेजा नहीं जा सका। बाज़ी में कोई बदलाव नहीं हुआ।",
+  "scanCamera": "कैमरा",
+  "scanTakePhoto": "फ़ोटो लें",
+  "scanChoosePhoto": "फ़ोटो चुनें",
+  "scanReadingBoard": "बिसात पढ़ी जा रही है…",
+  "scanReadFailed": "इस फ़ोटो से बिसात नहीं पढ़ी जा सकी।",
+  "scanNoBoard": "पूरी बिसात नहीं मिली। दूसरी फ़ोटो आज़माएँ।",
+  "scanImageTooLarge": "16 MiB से छोटी छवि चुनें।",
+  "scanSourceUnavailable": "इस स्रोत से फ़ोटो लेने के लिए कोई ऐप उपलब्ध नहीं है।",
+  "editorRotatePosition": "स्थिति को 180° घुमाएँ"
 }

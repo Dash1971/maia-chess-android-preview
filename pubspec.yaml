@@ -90,6 +90,7 @@ flutter:
         - preview
     - assets/openings/lichess_openings.tsv
     - assets/openings/LICHESS_OPENINGS_CC0.txt
+    - assets/board_scanner/
     - assets/sounds/standard/
 
   fonts:
