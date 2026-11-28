@@ -36,11 +36,16 @@ class ClassifiedMove {
     required this.ply,
     required this.classification,
     this.moverIsWhite,
+    this.annotationReliable,
   });
 
   final int ply;
   final MoveClassification classification;
   final bool? moverIsWhite;
+
+  /// Worker-computed reliability for a provisional Mute Exchange award.
+  /// Null retains the legacy/reference confidence policy.
+  final bool? annotationReliable;
   bool get whiteMoved => moverIsWhite ?? ply.isOdd;
 }
 
@@ -56,6 +61,7 @@ class _MoveClassificationRequest {
     this.uciMoves,
     this.requireReliableComparisons,
     this.materialCache,
+    this.exchangeModelJson,
   );
 
   final SendPort reply;
@@ -64,6 +70,7 @@ class _MoveClassificationRequest {
   final List<String> uciMoves;
   final bool requireReliableComparisons;
   final Map<String, int> materialCache;
+  final String? exchangeModelJson;
 }
 
 void _runMoveClassification(_MoveClassificationRequest request) {
@@ -74,6 +81,7 @@ void _runMoveClassification(_MoveClassificationRequest request) {
     uciMoves: request.uciMoves,
     requireReliableComparisons: request.requireReliableComparisons,
     materialCache: materialCache,
+    exchangeModelJson: request.exchangeModelJson,
   );
   request.reply.send([0, result, materialCache]);
 }
@@ -118,6 +126,7 @@ class MoveClassificationJob {
     required List<String> uciMoves,
     bool requireReliableComparisons = true,
     Map<String, int>? materialCache,
+    String? exchangeModelJson,
   }) {
     final job = MoveClassificationJob._(ReceivePort());
     unawaited(
@@ -127,6 +136,7 @@ class MoveClassificationJob {
         uciMoves,
         requireReliableComparisons,
         Map.of(materialCache ?? const {}),
+        exchangeModelJson,
       ),
     );
     return job;
@@ -138,6 +148,7 @@ class MoveClassificationJob {
     List<String> uciMoves,
     bool requireReliableComparisons,
     Map<String, int> materialCache,
+    String? exchangeModelJson,
   ) async {
     try {
       final port = _messages!.sendPort;
@@ -150,6 +161,7 @@ class MoveClassificationJob {
           uciMoves,
           requireReliableComparisons,
           materialCache,
+          exchangeModelJson,
         ),
         onError: port,
         onExit: port,
@@ -209,6 +221,36 @@ class MoveClassificationJob {
   }
 }
 
+class OpenBrillyFinderAssets {
+  static const path = 'assets/classifiers/mute-exchange-model.json';
+  static const sha256 =
+      '992a792a646b11e612486c4fe26796fc38ee47f395f2220b00d26db65ba1e27d';
+  static Future<String>? _loaded;
+  static String? _verified;
+  static Future<String> load() async {
+    if (_verified != null) return _verified!;
+    try {
+      return _verified = await (_loaded ??= _read());
+    } finally {
+      // Keep the immutable value, not a completed future tied to an old zone.
+      _loaded = null;
+    }
+  }
+
+  static Future<String> _read() async {
+    final data = await rootBundle.load(path);
+    final bytes = data.buffer.asUint8List(
+      data.offsetInBytes,
+      data.lengthInBytes,
+    );
+    if (bytes.length != 480186 ||
+        crypto.sha256.convert(bytes).toString() != sha256) {
+      throw const FormatException('Open Brilly Finder checksum mismatch');
+    }
+    return utf8.decode(bytes);
+  }
+}
+
 class MoveClassifier {
   // Adapted and translated to Dart from En Croissant v0.15.0's GPL-3.0
   // move-annotation and sacrifice-detection code:
@@ -224,12 +266,14 @@ class MoveClassifier {
     required List<String> uciMoves,
     bool requireReliableComparisons = true,
     Map<String, int>? materialCache,
+    String? exchangeModelJson,
   }) => startOffMainIsolate(
     scores: scores,
     positions: positions,
     uciMoves: uciMoves,
     requireReliableComparisons: requireReliableComparisons,
     materialCache: materialCache,
+    exchangeModelJson: exchangeModelJson,
   ).result;
 
   static MoveClassificationJob startOffMainIsolate({
@@ -238,10 +282,12 @@ class MoveClassifier {
     required List<String> uciMoves,
     bool requireReliableComparisons = true,
     Map<String, int>? materialCache,
+    String? exchangeModelJson,
   }) {
     // Threshold-only classification is cheap and common in injected tests or
     // engines without MultiPV. The sacrifice heuristic is the expensive part.
-    if (!scores.any((score) => score.lines.length > 1)) {
+    if (exchangeModelJson == null &&
+        !scores.any((score) => score.lines.length > 1)) {
       return MoveClassificationJob.completed(
         classify(
           scores: scores,
@@ -259,10 +305,249 @@ class MoveClassifier {
       uciMoves: uciMoves,
       requireReliableComparisons: requireReliableComparisons,
       materialCache: materialCache,
+      exchangeModelJson: exchangeModelJson,
     );
   }
 
+  /// Production Review supplies the checksum-verified model. Omitting it keeps
+  /// the existing En Croissant oracle available for differential tests and
+  /// explicitly injected test evaluators; it is not a user-selectable fallback.
   static List<ClassifiedMove> classify({
+    required List<StockfishReview> scores,
+    required List<String> positions,
+    required List<String> uciMoves,
+    void Function(Map<String, Object?>)? trace,
+    bool requireReliableComparisons = true,
+    Map<String, int>? materialCache,
+    String? exchangeModelJson,
+  }) {
+    if (exchangeModelJson == null) {
+      return _legacy(
+        scores: scores,
+        positions: positions,
+        uciMoves: uciMoves,
+        trace: trace,
+        requireReliableComparisons: requireReliableComparisons,
+        materialCache: materialCache,
+      );
+    }
+    final exchange = BrilliantExchange(
+      BrilliantExchangeModel.fromJson(exchangeModelJson),
+    );
+    final prior = {
+      for (final m in _legacy(
+        scores: scores,
+        positions: positions,
+        uciMoves: uciMoves,
+        requireReliableComparisons: false,
+        materialCache: materialCache,
+      ))
+        m.ply: m,
+    };
+    final count = min(
+      uciMoves.length,
+      min(scores.length - 1, positions.length - 1),
+    );
+    final result = <ClassifiedMove>[];
+    for (var ply = 1; ply <= count; ply++) {
+      final white = positions[ply - 1].split(' ')[1] == 'w';
+      var label = prior[ply]?.classification;
+      // Rejected legacy Brilliants may retain the existing Interesting grade;
+      // the old Brilliant predicate never awards !! in the new production path.
+      if (label == MoveClassification.brilliant) {
+        label = _normalized(scores[ply], white) > -200
+            ? MoveClassification.interesting
+            : null;
+      }
+      if (label == MoveClassification.good &&
+          requireReliableComparisons &&
+          !hasReliableAnnotation(
+            scores: scores,
+            positions: positions,
+            uciMoves: uciMoves,
+            ply: ply,
+            classification: MoveClassification.good,
+          )) {
+        label = null;
+      }
+      var decision = ExchangeDecision.none;
+      bool? reliable;
+      final error =
+          label == MoveClassification.blunder ||
+          label == MoveClassification.mistake ||
+          label == MoveClassification.dubious;
+      if (!error) {
+        decision = exchangeDecision(
+          exchange,
+          positions,
+          uciMoves,
+          ply,
+          scores[ply - 1],
+          scores[ply],
+        );
+        if (decision.brilliant) {
+          reliable = _reliableExchange(
+            exchange,
+            scores,
+            positions,
+            uciMoves,
+            ply,
+          );
+          if (!requireReliableComparisons || reliable) {
+            label = MoveClassification.brilliant;
+          }
+        }
+      }
+      trace?.call({
+        'ply': ply,
+        'move': uciMoves[ply - 1],
+        'classification': label?.name,
+        'brilliantPolicy': 'mute-exchange',
+        'brilliantCandidate': decision.candidate,
+        'brilliantScore': decision.score,
+        'comparisonReliable': reliable,
+      });
+      if (label != null) {
+        result.add(
+          ClassifiedMove(
+            ply: ply,
+            classification: label,
+            moverIsWhite: white,
+            annotationReliable: label == MoveClassification.brilliant
+                ? reliable
+                : null,
+          ),
+        );
+      }
+    }
+    return List.unmodifiable(result);
+  }
+
+  /// Adapt actual root lines. Missing/illegal/incomplete evidence never becomes
+  /// a zero evaluation, an invented alternative or an old-style Brilliant.
+  @visibleForTesting
+  static ExchangeDecision exchangeDecision(
+    BrilliantExchange exchange,
+    List<String> positions,
+    List<String> moves,
+    int ply,
+    StockfishReview before,
+    StockfishReview after,
+  ) {
+    if (ply < 1 ||
+        ply >= positions.length ||
+        ply > moves.length ||
+        before.lines.isEmpty ||
+        after.lines.isEmpty ||
+        (before.evidence != null && !before.evidence!.complete) ||
+        (after.evidence != null && !after.evidence!.complete)) {
+      return ExchangeDecision.none;
+    }
+    final pos = dc.Chess.fromSetup(dc.Setup.parseFen(positions[ply - 1]));
+    final next = dc.Chess.fromSetup(dc.Setup.parseFen(positions[ply]));
+    final move = dc.Move.parse(moves[ply - 1]);
+    if (move == null ||
+        !pos.isLegal(move) ||
+        pos.playUnchecked(move).board.fen != next.board.fen ||
+        pos.turn == next.turn) {
+      return ExchangeDecision.none;
+    }
+    final legal = pos.legalMoves;
+    var legalCount = 0;
+    for (final e in legal.entries) {
+      for (final to in e.value.squares) {
+        legalCount +=
+            pos.board.roleAt(e.key) == dc.Role.pawn &&
+                (to.rank == 0 || to.rank == 7)
+            ? 4
+            : 1;
+      }
+    }
+    if (before.lines.length < min(2, legalCount)) return ExchangeDecision.none;
+    final lines = before.lines.take(2).toList();
+    bool scalarMatches(StockfishReview r) =>
+        r.evaluation == r.lines.first.evaluation &&
+        r.mate == r.lines.first.mate &&
+        r.bestMove == r.lines.first.moves.firstOrNull;
+    if (!scalarMatches(before) || !scalarMatches(after)) {
+      return ExchangeDecision.none;
+    }
+    bool valid(StockfishLine l, dc.Position p) {
+      if (l.moves.isEmpty) return false;
+      final m = dc.Move.parse(l.moves.first);
+      return m != null && p.isLegal(m);
+    }
+
+    if (lines.any((l) => !valid(l, pos)) ||
+        !valid(after.lines.first, next) ||
+        lines.map((l) => l.moves.first).toSet().length != lines.length) {
+      return ExchangeDecision.none;
+    }
+    final white = pos.turn == dc.Side.white;
+    int cp(StockfishLine l) => BrilliantExchange.lineCp(
+      cp: l.evaluation,
+      mate: l.mate,
+      moverIsWhite: white,
+    );
+    return exchange.evaluate(
+      ply > 1 ? positions[ply - 2] : null,
+      positions[ply - 1],
+      moves[ply - 1],
+      ExchangeEvidence(
+        [for (final l in lines) ExchangeLine(l.moves.first, cp(l))],
+        cp(after.lines.first),
+        after.lines.first.moves.first,
+      ),
+    );
+  }
+
+  static bool _reliableExchange(
+    BrilliantExchange exchange,
+    List<StockfishReview> scores,
+    List<String> positions,
+    List<String> moves,
+    int ply,
+  ) {
+    final before = scores[ply - 1], after = scores[ply];
+    final quality = before.evidence?.quality;
+    if (quality == null) {
+      return true; // Raw differential fixtures, same as the existing oracle.
+    }
+    bool complete(StockfishReview r) =>
+        _complete(r) && r.evidence!.quality == quality;
+    if (!complete(before) || !complete(after)) return false;
+    final confirmation = before.annotationConfirmation;
+    if (confirmation != null) {
+      if (!complete(confirmation.before) ||
+          !complete(confirmation.after) ||
+          confirmation.before.evidence!.depth < before.evidence!.depth ||
+          confirmation.after.evidence!.depth < after.evidence!.depth) {
+        return false;
+      }
+      return exchangeDecision(
+        exchange,
+        positions,
+        moves,
+        ply,
+        confirmation.before,
+        confirmation.after,
+      ).brilliant;
+    }
+    final previousBefore = _previousIteration(before),
+        previousAfter = _previousIteration(after);
+    return previousBefore != null &&
+        previousAfter != null &&
+        exchangeDecision(
+          exchange,
+          positions,
+          moves,
+          ply,
+          previousBefore,
+          previousAfter,
+        ).brilliant;
+  }
+
+  static List<ClassifiedMove> _legacy({
     required List<StockfishReview> scores,
     required List<String> positions,
     required List<String> uciMoves,
@@ -543,13 +828,14 @@ class MoveClassifier {
           ply >= positions.length ||
           ply > uciMoves.length ||
           scores[ply - 1].evidence?.quality == null ||
-          hasReliableAnnotation(
-            scores: scores,
-            positions: positions,
-            uciMoves: uciMoves,
-            ply: ply,
-            classification: label,
-          )) {
+          (classified.annotationReliable ??
+              hasReliableAnnotation(
+                scores: scores,
+                positions: positions,
+                uciMoves: uciMoves,
+                ply: ply,
+                classification: label,
+              ))) {
         continue;
       }
       final cost = label == MoveClassification.good && ply > 1 ? 3 : 2;

@@ -1004,7 +1004,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get aboutReviewCredits =>
-      'खेल की समीक्षा में चालों का वर्गीकरण और मोहरों के बलिदान की पहचान के अनुमान आधारित तरीके En Croissant के खुले स्रोत वाले शतरंज GUI से अनुकूलित किए गए हैं।';
+      'चालों का वर्गीकरण En Croissant पर आधारित है। शानदार चालों की पहचान के लिए Open Brilly Finder का उपयोग होता है।';
 
   @override
   String get aboutLicence =>

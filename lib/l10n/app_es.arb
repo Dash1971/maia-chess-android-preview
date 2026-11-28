@@ -278,7 +278,7 @@
   "aboutPoweredBy": "Utiliza Maia-3, el motor de ajedrez de estilo humano desarrollado por el Laboratorio de Ciencias Sociales Computacionales de la Universidad de Toronto.",
   "aboutOffline": "Maia-3 funciona íntegramente en tu teléfono. No requiere cuenta ni conexión a Internet.",
   "aboutBoardCredits": "La interfaz del tablero, el tema marrón predeterminado y las piezas Cburnett proceden de Lichess Flutter Chessground. El motor Stockfish local utiliza Lichess multistockfish.",
-  "aboutReviewCredits": "La clasificación de jugadas y los criterios de detección de sacrificios de la revisión de partidas se han adaptado de la interfaz de ajedrez de código abierto En Croissant.",
+  "aboutReviewCredits": "La clasificación de jugadas se basa en En Croissant. Las jugadas brillantes usan Open Brilly Finder.",
   "aboutLicence": "Mobile Maia es software libre distribuido bajo AGPL-3.0-only, sin garantía alguna. Puedes redistribuirlo y modificarlo según esa licencia. El código fuente completo está disponible en el repositorio del proyecto.",
   "aboutIndependent": "Esta aplicación independiente de la comunidad no es una aplicación oficial de Maia-3, la Universidad de Toronto, Lichess ni En Croissant.",
   "samplingRecommendationWarning": "Maia puede tener un repertorio de aperturas más limitado si desactivas la máxima variedad en la apertura.",

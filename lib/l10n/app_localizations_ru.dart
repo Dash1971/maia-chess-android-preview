@@ -1026,7 +1026,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get aboutReviewCredits =>
-      'Классификация ходов и эвристики распознавания жертв в разборе партии адаптированы из шахматного приложения En Croissant с открытым исходным кодом.';
+      'Оценки ходов основаны на En Croissant. Для определения блестящих ходов используется Open Brilly Finder.';
 
   @override
   String get aboutLicence =>

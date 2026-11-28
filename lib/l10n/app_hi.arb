@@ -278,7 +278,7 @@
   "aboutPoweredBy": "Maia-3 पर आधारित, इंसानों की तरह खेलने वाला शतरंज इंजन जिसे University of Toronto Computational Social Science Lab ने विकसित किया है।",
   "aboutOffline": "Maia-3 पूरी तरह आपके फ़ोन पर चलता है। किसी खाते या नेटवर्क कनेक्शन की ज़रूरत नहीं है।",
   "aboutBoardCredits": "बोर्ड इंटरफ़ेस, मूल भूरी थीम और Cburnett मोहरे Lichess Flutter Chessground से लिए गए हैं। स्थानीय Stockfish समर्थन Lichess multistockfish का उपयोग करता है।",
-  "aboutReviewCredits": "खेल की समीक्षा में चालों का वर्गीकरण और मोहरों के बलिदान की पहचान के अनुमान आधारित तरीके En Croissant के खुले स्रोत वाले शतरंज GUI से अनुकूलित किए गए हैं।",
+  "aboutReviewCredits": "चालों का वर्गीकरण En Croissant पर आधारित है। शानदार चालों की पहचान के लिए Open Brilly Finder का उपयोग होता है।",
   "aboutLicence": "Mobile Maia, AGPL-3.0-only के तहत वितरित मुक्त सॉफ़्टवेयर है, जिसकी कोई वारंटी नहीं है। आप इस लाइसेंस की शर्तों के तहत इसे दोबारा वितरित और संशोधित कर सकते हैं। पूरा स्रोत कोड परियोजना की रिपॉज़िटरी में उपलब्ध है।",
   "aboutIndependent": "यह समुदाय का स्वतंत्र ऐप है। यह Maia-3, University of Toronto, Lichess या En Croissant का आधिकारिक ऐप नहीं है।",
   "samplingRecommendationWarning": "ओपनिंग में अधिकतम विविधता बंद होने पर Maia की ओपनिंग के विकल्प अधिक सीमित हो सकते हैं।",

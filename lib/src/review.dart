@@ -1919,6 +1919,13 @@ class _ReviewPageState extends State<ReviewPage>
     });
     _savePgnAnalysis(scores, const []);
     try {
+      // Load only the small verified asset here; parsing, board features and
+      // tree inference stay in the existing cancellable classification worker.
+      final exchangeModel =
+          widget.evaluator == null && widget.classifier == null
+          ? await OpenBrillyFinderAssets.load()
+          : null;
+      if (!mounted || generation != _fullAnalysisGeneration) return;
       var materialCache = <String, int>{};
       if (widget.evaluator == null && widget.classifier == null) {
         // Identify actual provisional awards before spending the small engine
@@ -1929,6 +1936,7 @@ class _ReviewPageState extends State<ReviewPage>
           positions: positions,
           uciMoves: line.uciMoves,
           requireReliableComparisons: false,
+          exchangeModelJson: exchangeModel,
         );
         _classificationJob = provisionalJob;
         final List<ClassifiedMove> provisional;
@@ -1974,6 +1982,7 @@ class _ReviewPageState extends State<ReviewPage>
           positions: positions,
           uciMoves: line.uciMoves,
           materialCache: materialCache,
+          exchangeModelJson: exchangeModel,
         );
         _classificationJob = job;
         try {

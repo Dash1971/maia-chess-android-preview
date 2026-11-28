@@ -989,7 +989,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutReviewCredits =>
-      'Game Review move classification and sacrifice-detection heuristics are adapted from the En Croissant open-source chess GUI.';
+      'Move grades build on En Croissant. Brilliant moves use Open Brilly Finder.';
 
   @override
   String get aboutLicence =>

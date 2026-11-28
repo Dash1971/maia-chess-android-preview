@@ -914,7 +914,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aboutReviewCredits =>
-      '对局复盘中的着法分类和弃子检测启发式算法改编自开源国际象棋界面 En Croissant。';
+      '着法评级基于 En Croissant，精彩着法判定使用 Open Brilly Finder。';
 
   @override
   String get aboutLicence =>

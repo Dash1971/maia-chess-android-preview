@@ -278,7 +278,7 @@
   "aboutPoweredBy": "由多伦多大学计算社会科学实验室开发、模仿人类棋风的国际象棋引擎 Maia-3 提供支持。",
   "aboutOffline": "Maia-3 完全在手机上运行，无需账户或网络连接。",
   "aboutBoardCredits": "棋盘界面、默认棕色主题和 Cburnett 棋子由 Lichess Flutter Chessground 提供。本地 Stockfish 支持使用 Lichess multistockfish。",
-  "aboutReviewCredits": "对局复盘中的着法分类和弃子检测启发式算法改编自开源国际象棋界面 En Croissant。",
+  "aboutReviewCredits": "着法评级基于 En Croissant，精彩着法判定使用 Open Brilly Finder。",
   "aboutLicence": "Mobile Maia 是依照 AGPL-3.0-only 分发的自由软件，不提供任何担保。你可以按照该许可证的条款重新分发和修改。完整源代码可在项目仓库中获取。",
   "aboutIndependent": "这是一款独立的社区应用，并非 Maia-3、多伦多大学、Lichess 或 En Croissant 的官方应用。",
   "samplingRecommendationWarning": "关闭开局多样性最大化后，Maia的开局选择可能更有限。",

@@ -1006,7 +1006,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aboutReviewCredits =>
-      'La clasificación de jugadas y los criterios de detección de sacrificios de la revisión de partidas se han adaptado de la interfaz de ajedrez de código abierto En Croissant.';
+      'La clasificación de jugadas se basa en En Croissant. Las jugadas brillantes usan Open Brilly Finder.';
 
   @override
   String get aboutLicence =>

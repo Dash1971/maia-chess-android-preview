@@ -99,13 +99,13 @@ We would particularly like to hear from **Arabic, Hebrew, and Farsi (Persian) sp
 
 We are considering tappable analysis candidates that show Maia’s move probabilities alongside Stockfish evaluations, plus an optional view of how move preferences change across ratings. The [analysis candidates and Moves by rating issue](https://github.com/Dash1971/maia-chess-android-preview/issues/200) contains the proposed scope and interactive mockups for discussion.
 
-**Open Brilly Finder**
+**Open Brilly Finder — target 2.7**
 
-Evaluate [Open Brilly Finder](https://github.com/Dash1971/open-brilly-finder)
-for offline Brilliant-move classification, comparing it with the existing
-classifier using Mobile Maia's engine output. [#273](https://github.com/Dash1971/maia-chess-android-preview/issues/273)
-tracks investigation and the proposed integration checks; it is not yet an
-implemented feature.
+The [draft integration](docs/OPEN_BRILLY_FINDER_27.md) replaces Brilliant-move
+classification with [Open Brilly Finder](https://github.com/Dash1971/open-brilly-finder),
+using existing offline Stockfish analysis and a 469 KiB model. Host parity and
+review tests pass; Android performance and release qualification remain pending.
+See [#273](https://github.com/Dash1971/maia-chess-android-preview/issues/273).
 
 **More device and board feedback**
 
@@ -326,8 +326,9 @@ Game Review's move-classification and sacrifice-detection heuristics are
 adapted and translated to Dart from
 [En Croissant](https://github.com/franciscoBSalgueiro/en-croissant), the
 open-source chess GUI by Francisco Salgueiro and contributors. Mobile Maia
-retains the upstream classification rules while adding background-isolate
-execution and its own review integration. The pinned
+retains those rules for other move grades. The 2.7 draft uses
+[Open Brilly Finder](https://github.com/Dash1971/open-brilly-finder) for Brilliant
+moves, with Dart feature extraction and background model inference. The pinned
 upstream revision and licence details are recorded in
 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 

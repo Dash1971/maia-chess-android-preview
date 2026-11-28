@@ -924,7 +924,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get aboutReviewCredits =>
-      '대국 복기의 수 분류와 희생 감지 휴리스틱은 오픈 소스 체스 GUI En Croissant를 기반으로 합니다.';
+      '수의 등급은 En Croissant를 기반으로 합니다. 훌륭한 수 판정에는 Open Brilly Finder를 사용합니다.';
 
   @override
   String get aboutLicence =>
