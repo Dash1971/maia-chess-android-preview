@@ -33,7 +33,7 @@ class OpenBrillyAssetsTest(unittest.TestCase):
         self.assertEqual(hashlib.sha256(raw).hexdigest(), PARITY_SHA)
         self.assertEqual(len(json.loads(raw)['cases']), 360)
         edges = json.loads((ROOT / 'test/fixtures/brilly-exchange-edges.json').read_bytes())
-        self.assertEqual(len(edges['cases']), 17)
+        self.assertEqual(len(edges['cases']), 21)
         self.assertIn('synthetic', edges['scope'])
 
     def test_only_required_model_is_registered_as_asset(self):

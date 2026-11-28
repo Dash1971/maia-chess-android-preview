@@ -428,6 +428,6 @@ The app's About screen links both projects.
 It is a test-only regression fixture, excluded from the application assets.
 The upstream source boundaries retain third-party rights in public game records
 and observed review labels; this notice grants no new blanket license over them.
-`brilly-exchange-edges.json` contains 17 constructed boundary cases, generated
+`brilly-exchange-edges.json` contains 21 constructed boundary cases, generated
 by the pinned reference with synthetic engine scores. Neither fixture is an
 independent accuracy benchmark. No upstream imagery or training dataset is bundled.

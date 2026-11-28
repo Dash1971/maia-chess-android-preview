@@ -52,7 +52,7 @@ existing Include analysis option still governs save/share/copy exports.
 | Check | Result |
 | --- | --- |
 | Exact upstream parity | 360 cases; all 91 features within 1e-10, model score within 1e-9, award decisions identical |
-| Constructed reference boundaries | 17 cases covering both colors, castling, en passant/history, pins, all promotions/underpromotions, first move and checkmate |
+| Constructed reference boundaries | 21 cases covering both colors, castling, en passant/history, pins, all promotions/underpromotions, first move, first reply from custom FEN and checkmate |
 | Actual Review flow | Fast/Balanced/Thorough: confirmed award, refutation with unchanged graph, cancellation without stale publication |
 | Integration | Missing evidence, bounded confirmation, worker cancellation/replacement, mate perspective, PGN round trip, replacement and stripped export |
 
@@ -104,6 +104,47 @@ work. This is a single host sample, not an Android latency or memory measurement
 Before publication, measure worker memory/latency and additional confirmation
 cost with the actual Android engine package; exercise background/resume,
 engine-off, navigation, saved-game and installed PGN flows.
+
+## Independent Ginger validation in every analysis mode
+
+The same frozen 27-game sample has 32 captured gallery brillies on 922 Ginger
+moves. The original Fast recording is retained; Balanced and Thorough use fresh
+searches with the actual app analyzer and both classifiers.
+
+| Mode | En Croissant (adapted): gallery matches | Open Brilly Finder: gallery matches | Outside gallery: adapted / new |
+| --- | ---: | ---: | ---: |
+| Fast | 7 / 32 | 20 / 32 | 5 / 1 |
+| Balanced | 6 / 32 | 23 / 32 | 4 / 1 |
+| Thorough | 8 / 32 | 24 / 32 | 6 / 1 |
+
+These results support retaining the app's normal mode settings: warm within-session
+hash, MultiPV 2, ordinary time/depth budgets and unchanged cutoff. No minimum-depth
+rule or forced depth-12 scoring is added. All 81 game/mode recordings pass legal
+position/PV, evidence, confirmation-depth and budget checks; a separate per-move
+recount matches every total. No unconfirmed Brilliant candidate was omitted from
+the confirmation budget in these runs. Four history adapter cases and the full
+413-test focused host set pass; static analysis is clean.
+
+[Complete mode comparison, score shifts, depths and raw evidence](https://github.com/Dash1971/mobile-maia-research/blob/d5dc648c78e027c1107c9062e5cc97b3ef22457d/studies/famous-brilliants-2026-11-28/ginger/modes/REPORT.md).
+This is a selected gallery sample, not a population precision estimate. Awards
+outside the gallery are disagreements, not proven false positives. Android
+performance and installed qualification remain pending.
+
+## First-reply history boundary
+
+For a move at local ply 2, the root position is the position before the opponent's
+last move. The reference feature extractor accepts that actual history, including
+games started from FEN. The training builder obtained history from an earlier
+same-color move row, which was absent on the first reply; that is a difference
+in data availability, not an invalid app position. The app keeps known history
+and supplies none on local ply 1. It does not discard a real root to imitate a
+missing training row.
+
+Four independently generated reference vectors exercise both colors with and
+without root history. All 91 features and model scores match the pinned reference;
+adapter regressions verify the complete input window as well. The constructed
+piece offers score 0.7192656139 with history and 0.7433075694 without it; neither
+receives a Brilliant award. No model weights, threshold or history policy change.
 
 ## Reproduce host checks
 

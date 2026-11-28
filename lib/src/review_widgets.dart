@@ -489,6 +489,8 @@ class MoveClassifier {
       mate: l.mate,
       moverIsWhite: white,
     );
+    // Even on the first reply of a FEN-start game, the actual root is valid
+    // history for the reference feature extractor. Never invent an earlier FEN.
     return exchange.evaluate(
       ply > 1 ? positions[ply - 2] : null,
       positions[ply - 1],

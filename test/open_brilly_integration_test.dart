@@ -102,6 +102,84 @@ List<ClassifiedMove> classify(
 );
 
 void main() {
+  final historyEdges =
+      (jsonDecode(
+                File('test/fixtures/brilly-exchange-edges.json')
+                    .readAsStringSync(),
+              )['cases']
+              as List)
+          .cast<Map<String, dynamic>>()
+          .where(
+            (row) =>
+                (row['name'] as String).contains('first reply') ||
+                (row['name'] as String).contains('FEN-start first move'),
+          );
+  for (final row in historyEdges) {
+    test('adapter reference history boundary: ${row['name']}', () {
+      final previous = row['fenPrev'] as String?;
+      final before = row['fenBefore'] as String;
+      final uci = row['uci'] as String;
+      final position = dc.Chess.fromSetup(dc.Setup.parseFen(before));
+      final after = position.play(dc.Move.parse(uci)!);
+      final white = position.turn == dc.Side.white;
+      final priorMove = white ? 'e8d8' : 'e1d1';
+      if (previous != null) {
+        expect(
+          dc.Chess.fromSetup(dc.Setup.parseFen(previous))
+              .play(dc.Move.parse(priorMove)!)
+              .fen,
+          before,
+        );
+      }
+      final positions = [?previous, before, after.fen];
+      final moves = [if (previous != null) priorMove, uci];
+      final beforeScore = review([
+        for (final line in row['before'] as List)
+          {
+            'cp': (line['cp'] as num) * (white ? 1 : -1),
+            'moves': [line['uci']],
+          },
+      ], provenance: true);
+      final afterScore = review([
+        {
+          'cp': (row['after']['cp'] as num) * (white ? 1 : -1),
+          'moves': [row['after']['reply']],
+        },
+      ], provenance: true);
+      final evaluator = BrilliantExchange(
+        BrilliantExchangeModel.fromJson(modelJson),
+      );
+      final decision = MoveClassifier.exchangeDecision(
+        evaluator,
+        positions,
+        moves,
+        moves.length,
+        beforeScore,
+        afterScore,
+      );
+      expect(decision.candidate, true); // Reachable even on the first reply.
+      expect(decision.score, closeTo(row['score'] as num, 1e-9));
+      expect(decision.brilliant, row['brilliant']);
+      final scores = [
+        if (previous != null) const StockfishReview(0, ''),
+        beforeScore,
+        afterScore,
+      ];
+      expect(
+        MoveClassifier.classify(
+          scores: scores,
+          positions: positions,
+          uciMoves: moves,
+          exchangeModelJson: modelJson,
+        ).any(
+          (move) =>
+              move.ply == moves.length &&
+              move.classification == MoveClassification.brilliant,
+        ),
+        row['brilliant'],
+      );
+    });
+  }
   final positive = rows.firstWhere((r) => r['key'] == '147572300744:23');
   for (final color in ['w', 'b']) {
     test('new Brilliant award and complete evidence for $color', () {
