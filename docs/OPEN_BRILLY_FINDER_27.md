@@ -66,8 +66,18 @@ These are recorded engine outputs, not independent Brilliant ground truth.
 | Changed awards | — | 10 added; 6 withdrawn |
 | Changes unrelated to Brilliant | — | 0 |
 
-Examples include `e4c3` gaining and `c3e2` losing the award in the recorded
-1956 Byrne–Fischer game, and `d1d7` gaining it in the recorded 1858 Opera game.
+The [visual gains/losses catalog](https://github.com/Dash1971/mobile-maia-research/blob/9bb772b7a0563389b8951bb379eb5646a7a7418d/studies/brilliant-classification-2026-11-28/REPORT.md)
+shows every changed position before/after, all available engine/mode rows,
+and all 29 changed labeled reference cases. It is proposed in
+[research PR #23](https://github.com/Dash1971/mobile-maia-research/pull/23).
+
+| Distinct move | Change | Changed engine/mode snapshots |
+| --- | --- | --- |
+| Byrne–Fischer 11...Na4 | Interesting → Brilliant | SF18 Balanced only; already Brilliant in the other five recorded modes |
+| Byrne–Fischer 15...Nxc3 | Interesting → Brilliant | All six recorded modes |
+| Byrne–Fischer 19...Ne2+ | Brilliant → Interesting | All six; the exchange offer gate fails |
+| Opera game 13.Rxd7 | Unmarked → Brilliant | All three SF18 modes; no Light Opera runs were recorded |
+
 The same moves can recur across analysis modes; these are not 821 unique games.
 Complete recorded prior iterations supported all 27 new awards without fresh
 confirmation searches. This does not measure future search cost across games.
