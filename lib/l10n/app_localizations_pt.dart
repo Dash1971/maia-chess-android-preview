@@ -1014,7 +1014,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get aboutReviewCredits =>
-      'A classificação dos lances na Revisão da partida e as heurísticas de detecção de sacrifícios foram adaptadas da interface de xadrez de código aberto En Croissant.';
+      'A classificação dos lances se baseia no En Croissant. Os lances brilhantes usam o Open Brilly Finder.';
 
   @override
   String get aboutLicence =>

@@ -278,7 +278,7 @@
   "aboutPoweredBy": "Utiliza o Maia-3, o motor de xadrez que joga como humanos, desenvolvido pelo Laboratório de Ciências Sociais Computacionais da University of Toronto.",
   "aboutOffline": "O Maia-3 funciona inteiramente no seu celular. Não é necessário ter uma conta ou conexão à internet.",
   "aboutBoardCredits": "A interface do tabuleiro, o tema marrom padrão e as peças Cburnett são fornecidos pelo Lichess Flutter Chessground. O suporte ao Stockfish no dispositivo utiliza o Lichess multistockfish.",
-  "aboutReviewCredits": "A classificação dos lances na Revisão da partida e as heurísticas de detecção de sacrifícios foram adaptadas da interface de xadrez de código aberto En Croissant.",
+  "aboutReviewCredits": "A classificação dos lances se baseia no En Croissant. Os lances brilhantes usam o Open Brilly Finder.",
   "aboutLicence": "O Mobile Maia é um software livre distribuído sob a licença AGPL-3.0-only, sem qualquer garantia. Você pode redistribuí-lo e modificá-lo conforme os termos dessa licença. O código-fonte completo está disponível no repositório do projeto.",
   "aboutIndependent": "Este aplicativo independente da comunidade não é um aplicativo oficial do Maia-3, da University of Toronto, do Lichess ou do En Croissant.",
   "samplingRecommendationWarning": "O repertório de aberturas de Maia pode ficar mais limitado com a variedade máxima na abertura desativada.",

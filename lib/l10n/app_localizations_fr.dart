@@ -1003,7 +1003,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get aboutReviewCredits =>
-      'La classification des coups et les heuristiques de détection des sacrifices de la révision des parties sont adaptées de l’interface d’échecs libre En Croissant.';
+      'La classification des coups repose sur En Croissant. Les coups brillants sont détectés avec Open Brilly Finder.';
 
   @override
   String get aboutLicence =>

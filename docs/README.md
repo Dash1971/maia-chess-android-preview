@@ -38,6 +38,7 @@ Start with the [app README](../README.md), [Stable user guide](https://github.co
 - [Maia move-history input](MAIA_MOVE_HISTORY.md)
 - [Optional Maia score](MAIA_SCORE.md)
 - [Saved analysis in PGN](PGN_ANALYSIS.md)
+- [Open Brilly Finder integration for 2.7](OPEN_BRILLY_FINDER_27.md)
 - [PGN import and export](RECENT_GAMES_PGN_EXPORT.md)
 - [Opt-in Maia sampling data](SAMPLING_DATA.md)
 - [Game sound and haptic reference](game-feedback-reference.md)

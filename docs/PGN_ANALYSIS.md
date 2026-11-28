@@ -19,6 +19,13 @@ not automatically discard them. Stop before evaluation finishes retains the
 previous saved analysis. Stop during classification retains the newly completed
 evaluations without publishing a late classification result.
 
+## Brilliant classification in the 2.7 draft
+
+[Open Brilly Finder](OPEN_BRILLY_FINDER_27.md) changes how new Brilliant awards
+are selected. PGN still uses `$3` for `!!`; no new tags or model scores are saved.
+Existing saved awards remain until reanalysis, which replaces quality symbols on
+that line using the new classifier. Include analysis keeps its existing behavior.
+
 ## Save, share or copy
 
 The existing export menu has an **Include analysis** checkbox, checked by default.

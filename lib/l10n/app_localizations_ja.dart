@@ -922,7 +922,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get aboutReviewCredits =>
-      '対局レビューの手の分類と駒の犠牲を検出する手法は、オープンソースのチェスGUI「En Croissant」を基にしています。';
+      '指し手の評価はEn Croissantを基にしています。ブリリアント判定にはOpen Brilly Finderを使用しています。';
 
   @override
   String get aboutLicence =>

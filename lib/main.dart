@@ -28,6 +28,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'l10n/app_localizations.dart';
+import 'src/brilliant_exchange.dart';
 
 part 'src/engine_queue.dart';
 part 'src/session_repository.dart';
@@ -142,6 +143,7 @@ const lichessMultistockfishUrl =
     'https://github.com/lichess-org/dart-multistockfish';
 const enCroissantProjectUrl =
     'https://github.com/franciscoBSalgueiro/en-croissant';
+const openBrillyFinderProjectUrl = 'https://github.com/Dash1971/open-brilly-finder';
 const mobileMaiaSourceUrl =
     'https://github.com/Dash1971/maia-chess-android-preview';
 const mobileMaiaLicenseUrl = '$mobileMaiaSourceUrl/blob/main/LICENSE';

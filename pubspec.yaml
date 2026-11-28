@@ -88,6 +88,7 @@ flutter:
     - path: assets/models/maia3-79m.onnx
       flavors:
         - preview
+    - assets/classifiers/mute-exchange-model.json
     - assets/openings/lichess_openings.tsv
     - assets/openings/LICHESS_OPENINGS_CC0.txt
     - assets/sounds/standard/

@@ -1616,6 +1616,13 @@ class _GamePageState extends State<GamePage>
             icon: const Icon(Icons.open_in_new),
             label: Text(l10n(context).enCroissantProjectSource),
           ),
+          TextButton.icon(
+            onPressed: () => maiaEngineChannel.invokeMethod<void>('openUrl', {
+              'url': openBrillyFinderProjectUrl,
+            }),
+            icon: const Icon(Icons.open_in_new),
+            label: const Text('Open Brilly Finder'),
+          ),
           const SizedBox(height: 8),
           Text(l10n(context).aboutLicence),
           TextButton.icon(

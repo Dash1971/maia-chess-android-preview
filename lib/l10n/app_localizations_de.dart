@@ -1009,7 +1009,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get aboutReviewCredits =>
-      'Die Zugeinstufung und die Heuristiken zur Opfererkennung im Partierückblick wurden aus der quelloffenen Schachoberfläche En Croissant übernommen und angepasst.';
+      'Die Zugbewertungen basieren auf En Croissant. Brillante Züge werden mit Open Brilly Finder erkannt.';
 
   @override
   String get aboutLicence =>

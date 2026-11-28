@@ -278,7 +278,7 @@
   "aboutPoweredBy": "Propulsé par Maia-3, un moteur d’échecs développé par le Computational Social Science Lab de l’Université de Toronto pour imiter le jeu humain.",
   "aboutOffline": "Maia-3 fonctionne entièrement sur votre téléphone. Aucun compte ni connexion réseau n’est nécessaire.",
   "aboutBoardCredits": "L’interface de l’échiquier, le thème brun par défaut et les pièces Cburnett sont fournis par Lichess Flutter Chessground. La prise en charge locale de Stockfish utilise Lichess multistockfish.",
-  "aboutReviewCredits": "La classification des coups et les heuristiques de détection des sacrifices de la révision des parties sont adaptées de l’interface d’échecs libre En Croissant.",
+  "aboutReviewCredits": "La classification des coups repose sur En Croissant. Les coups brillants sont détectés avec Open Brilly Finder.",
   "aboutLicence": "Mobile Maia est un logiciel libre distribué sous licence AGPL-3.0-only, sans aucune garantie. Vous pouvez le redistribuer et le modifier selon les termes de cette licence. Le code source complet est disponible dans le dépôt du projet.",
   "aboutIndependent": "Cette application communautaire indépendante n’est pas une application officielle de Maia-3, de l’Université de Toronto, de Lichess ou d’En Croissant.",
   "samplingRecommendationWarning": "Le répertoire de Maia peut être plus limité si la variété maximale en ouverture est désactivée.",

@@ -30,3 +30,23 @@ verify the selected checkpoint hash, and pass `--model maia3-5m` with the 5M
 output path to `tool/export_maia3_onnx.py`. Run its PyTorch/ONNX parity checks
 and compare artifact hashes before proposing an asset change. Qualification
 must use the actual flavor/model, with the full 79M suite for official Preview.
+
+## Open Brilly Finder — Preview 2.7 draft
+
+This is a separate move-classification model, not a replacement Maia engine.
+
+- Project: [Open Brilly Finder](https://github.com/Dash1971/open-brilly-finder),
+  revision `59cab58a8b63387d9775252f03a6875fe451f697`.
+- Exact source: `studies/brilliant-exchange-2026-11-22/model/mute-exchange-model.json`.
+- Bundled asset: `assets/classifiers/mute-exchange-model.json`, 480,186 bytes.
+- SHA-256: `992a792a646b11e612486c4fe26796fc38ee47f395f2220b00d26db65ba1e27d`.
+- 91 named features; 222 exported trees; cutoff `0.8193002847777424`.
+  The upstream description's 400 trees is the training iteration cap, not the
+  actual exported tree count. The asset is unchanged.
+- License: AGPL-3.0-only, under the pinned project's LICENSE and source boundaries.
+
+Runtime loading checks the asset's byte count and SHA-256. Dart inference is
+checked against all 360 upstream parity fixtures. See the
+[integration contract](docs/OPEN_BRILLY_FINDER_27.md) and
+[third-party notices](THIRD_PARTY_NOTICES.md). No training stack, engine binary,
+Node package or research corpus is added to the application bundle.

@@ -1279,9 +1279,9 @@
   "@aboutBoardCredits": {
     "description": "Play help, about or error message: Board interface, default brown theme, and Cburnett pieces are provided by Lichess Flutter Chessground. Local Stockfish support uses Lichess multistockfish."
   },
-  "aboutReviewCredits": "Game Review move classification and sacrifice-detection heuristics are adapted from the En Croissant open-source chess GUI.",
+  "aboutReviewCredits": "Move grades build on En Croissant. Brilliant moves use Open Brilly Finder.",
   "@aboutReviewCredits": {
-    "description": "Play help, about or error message: Game Review move classification and sacrifice-detection heuristics are adapted from the En Croissant open-source chess GUI."
+    "description": "About credits: En Croissant remains the basis for move grades; Brilliant detection uses Open Brilly Finder. Project names stay unchanged in translation."
   },
   "aboutLicence": "Mobile Maia is free software distributed under AGPL-3.0-only, without any warranty. You may redistribute and modify it under the terms of that licence. The complete source code is available from the project repository.",
   "@aboutLicence": {

@@ -1,7 +1,8 @@
 # Architecture map
 
 The Flutter app is one Dart library: `lib/main.dart` includes `lib/src/` part
-files. A part file is not an independent package. Keep UI, game ownership and
+files. The pure-Dart `lib/src/brilliant_exchange.dart` classifier is an imported
+library. A part file is not an independent package. Keep UI, game ownership and
 asynchronous engine/storage work consistent across those parts.
 
 | Area | Responsibility |
@@ -13,6 +14,11 @@ asynchronous engine/storage work consistent across those parts.
 | `lib/src/session_model.dart` / repository/store parts | Saved-game/checkpoint serialization and recovery. |
 | `lib/src/pgn_analysis.dart` | Portable PGN evaluation/NAG annotations, restoration and analysis-free exports. |
 | `lib/src/chessnut.dart` / electronic-board parts | Connection ownership, board snapshots and game handoff. |
+
+The 2.7 draft loads a checksum-verified Open Brilly Finder model, then runs
+feature extraction and tree inference in the cancellable classification isolate.
+It reuses Stockfish root lines and the existing bounded annotation-confirmation
+searches. [Integration contract and validation](OPEN_BRILLY_FINDER_27.md).
 
 ## Android bridges
 

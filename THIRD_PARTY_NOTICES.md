@@ -404,3 +404,30 @@ section 13. The existing bundled GPL license text is available in license inform
 ## Maia-3 Dev 5M conversion
 
 The Dev flavor uses [Maia3-5M](https://huggingface.co/UofTCSSLab/Maia3-5M); official Preview uses 79M. The 5M ONNX file is 21,346,652 bytes with SHA-256 `ddae2aa893b5ca7ec94d24178871f1c337d09fd72ff38abe8d76b8ecf08cb942`. It retains Maia-3’s AGPL-3.0 terms. Checkpoint and export references are in [model provenance](MODEL_PROVENANCE.md).
+
+## Open Brilly Finder — Preview 2.7 draft
+
+- Project: <https://github.com/Dash1971/open-brilly-finder>
+- Pinned revision: `59cab58a8b63387d9775252f03a6875fe451f697`
+- Source: [`noSweatBrilliantExchange.ts`](https://github.com/Dash1971/open-brilly-finder/blob/59cab58a8b63387d9775252f03a6875fe451f697/studies/brilliant-exchange-2026-11-22/model/noSweatBrilliantExchange.ts)
+- Source SHA-256: `eaee76561ebbd229887a149285a1c109a8522f7d4931610a1577dfb9fd004fb8`
+- Model: `mute-exchange-model.json`; exact bytes/checksum in [model provenance](MODEL_PROVENANCE.md).
+- Code/model license: [AGPL-3.0-only](https://github.com/Dash1971/open-brilly-finder/blob/59cab58a8b63387d9775252f03a6875fe451f697/LICENSE), reproduced by this repository's root LICENSE.
+- Source lineage: Mute Chess / Mute Chess Research; upstream
+  [source boundaries](https://github.com/Dash1971/open-brilly-finder/blob/59cab58a8b63387d9775252f03a6875fe451f697/THIRD_PARTY.md).
+
+`lib/src/brilliant_exchange.dart` ports the static-exchange test, 91-feature
+extractor and tree inference to Dart, using existing dartchess legal positions.
+The model is bundled byte-for-byte. Existing En Croissant-derived code and GPL
+notices above remain for the other grades and the differential test reference.
+The app's About screen links both projects.
+
+`test/fixtures/brilly-exchange-parity.json` is the exact 360-case upstream
+`parity-fixtures.json`, SHA-256
+`4c049a91c96043de607e221149cbf2e4c7a7db293f6a6558e37a1a5719f3cbd6`.
+It is a test-only regression fixture, excluded from the application assets.
+The upstream source boundaries retain third-party rights in public game records
+and observed review labels; this notice grants no new blanket license over them.
+`brilly-exchange-edges.json` contains 21 constructed boundary cases, generated
+by the pinned reference with synthetic engine scores. Neither fixture is an
+independent accuracy benchmark. No upstream imagery or training dataset is bundled.

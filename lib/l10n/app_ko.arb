@@ -278,7 +278,7 @@
   "aboutPoweredBy": "토론토 대학교 계산사회과학 연구실이 개발한 사람처럼 두는 체스 엔진 Maia-3를 사용합니다.",
   "aboutOffline": "Maia-3는 휴대폰에서 완전히 실행됩니다. 계정이나 네트워크 연결이 필요하지 않습니다.",
   "aboutBoardCredits": "보드 인터페이스, 기본 갈색 테마와 Cburnett 기물은 Lichess Flutter Chessground에서 제공합니다. 로컬 Stockfish 지원에는 Lichess multistockfish를 사용합니다.",
-  "aboutReviewCredits": "대국 복기의 수 분류와 희생 감지 휴리스틱은 오픈 소스 체스 GUI En Croissant를 기반으로 합니다.",
+  "aboutReviewCredits": "수의 등급은 En Croissant를 기반으로 합니다. 훌륭한 수 판정에는 Open Brilly Finder를 사용합니다.",
   "aboutLicence": "Mobile Maia는 AGPL-3.0-only로 배포되는 자유 소프트웨어이며 어떠한 보증도 없습니다. 해당 라이선스에 따라 재배포하고 수정할 수 있습니다. 전체 소스 코드는 프로젝트 저장소에서 확인할 수 있습니다.",
   "aboutIndependent": "이 앱은 독립적인 커뮤니티 앱이며 Maia-3, 토론토 대학교, Lichess 또는 En Croissant의 공식 앱이 아닙니다.",
   "samplingRecommendationWarning": "오프닝 다양성 최대화를 끄면 Maia의 오프닝 선택이 더 좁아질 수 있습니다.",

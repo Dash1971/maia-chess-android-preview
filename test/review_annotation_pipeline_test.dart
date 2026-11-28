@@ -6,15 +6,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'stockfish_failure_test.dart' show FakeStockfish;
 
 const _before =
-    'r2q1rk1/pp2ppbp/2p2np1/2Q3B1/n2PP1b1/2N2N2/PP3PPP/3RKB1R w K - 7 12';
+    'rn1q1bkr/4p2p/b1ppP1p1/p2n3Q/1p1P1P2/3B4/PPPN2PP/R1B1K2R w KQ - 0 12';
 const _after =
-    'r2q1rk1/pp2ppbp/2p2np1/6B1/n2PP1b1/Q1N2N2/PP3PPP/3RKB1R b K - 8 12';
+    'rn1q1bkr/4p2p/b1ppP1B1/p2n3Q/1p1P1P2/8/PPPN2PP/R1B1K2R b KQ - 0 12';
 
 class _PipelineEngine extends FakeStockfish {
   _PipelineEngine(this.quality);
   final GameAnalysisQuality quality;
   final commands = <String>[];
   bool holdVerification = false;
+  bool refuteVerification = true;
   bool verificationPending = false;
   bool white = true;
   @override
@@ -26,7 +27,7 @@ class _PipelineEngine extends FakeStockfish {
     }
     if (command == 'stop' && verificationPending) {
       verificationPending = false;
-      output.add('bestmove ${white ? 'c5a3' : 'a4c3'}');
+      output.add('bestmove ${white ? 'd3g6' : 'h7g6'}');
       return;
     }
     if (command.startsWith('go ')) {
@@ -35,14 +36,18 @@ class _PipelineEngine extends FakeStockfish {
         verificationPending = true;
         return;
       }
-      final primary = white ? 'c5a3' : 'a4c3';
-      final second = white ? 'c5b4' : 'b7b5';
+      final primary = white ? 'd3g6' : 'h7g6';
+      final second = white ? 'h5f3' : 'a5a4';
       final depth = verifying ? quality.depth + 2 : quality.depth;
-      final currentCp = verifying ? (white ? -190 : 190) : (white ? 300 : -300);
-      final secondCp = verifying ? (white ? -200 : 180) : (white ? -10 : -310);
+      final currentCp = verifying && refuteVerification
+          ? (white ? -900 : 900)
+          : 0;
+      final secondCp = verifying && refuteVerification
+          ? (white ? -910 : 890)
+          : (white ? -209 : -10);
       searchOutput = [
-        'info depth ${depth - 1} multipv 1 score cp ${white && !verifying ? 0 : currentCp} pv $primary',
-        'info depth ${depth - 1} multipv 2 score cp ${white && !verifying ? -10 : secondCp} pv $second',
+        'info depth ${depth - 1} multipv 1 score cp ${!white && !verifying ? 900 : currentCp} pv $primary',
+        'info depth ${depth - 1} multipv 2 score cp ${!white && !verifying ? 890 : secondCp} pv $second',
         'info depth $depth multipv 1 score cp $currentCp pv $primary',
         'info depth $depth multipv 2 score cp $secondCp pv $second',
         'bestmove $primary',
@@ -73,8 +78,8 @@ Future<void> _mount(
       navigatorObservers: [maiaRouteObserver],
       home: ReviewPage(
         positions: const [_before, _after],
-        uciMoves: const ['c5a3'],
-        sanMoves: const ['Qa3'],
+        uciMoves: const ['d3g6'],
+        sanMoves: const ['Bxg6'],
         playerIsWhite: true,
         pgn: '*',
         onHome: () {},
@@ -95,7 +100,45 @@ void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
   for (final quality in GameAnalysisQuality.values) {
     testWidgets(
-      '${quality.name}: actual Review verifies Qa3 and preserves graph scores',
+      '${quality.name}: confirmed Exchange award reaches the real Review graph',
+      (tester) async {
+        final engine = _PipelineEngine(quality)..refuteVerification = false;
+        final analyzer = StockfishAnalyzer.withFactory(engine.create);
+        try {
+          await _mount(tester, analyzer, quality);
+          await _wait(
+            tester,
+            () =>
+                find.byType(AnalysisGraph).evaluate().isNotEmpty &&
+                tester
+                    .widget<AnalysisGraph>(find.byType(AnalysisGraph))
+                    .classifications
+                    .any(
+                      (m) => m.classification == MoveClassification.brilliant,
+                    ),
+          );
+          final graph = tester.widget<AnalysisGraph>(
+            find.byType(AnalysisGraph),
+          );
+          expect(graph.scores.map((s) => s.evaluation), [0, 0]);
+          expect(
+            graph.classifications.single.classification,
+            MoveClassification.brilliant,
+          );
+          expect(
+            engine.commands.where((c) => c == quality.annotationCommand),
+            hasLength(2),
+          );
+          expect(tester.takeException(), isNull);
+        } finally {
+          await tester.pumpWidget(const SizedBox.shrink());
+          await tester.runAsync(analyzer.close);
+          await engine.output.close();
+        }
+      },
+    );
+    testWidgets(
+      '${quality.name}: actual Review verifies Bxg6 and preserves graph scores',
       (tester) async {
         final engine = _PipelineEngine(quality);
         final analyzer = StockfishAnalyzer.withFactory(engine.create);
@@ -117,8 +160,13 @@ void main() {
           final graph = tester.widget<AnalysisGraph>(
             find.byType(AnalysisGraph),
           );
-          expect(graph.scores.map((score) => score.evaluation), [300, 300]);
-          expect(graph.classifications, isEmpty);
+          expect(graph.scores.map((score) => score.evaluation), [0, 0]);
+          expect(
+            graph.classifications.where(
+              (m) => m.classification == MoveClassification.brilliant,
+            ),
+            isEmpty,
+          );
           expect(
             engine.commands.where((c) => c == quality.stockfishCommand).length,
             greaterThanOrEqualTo(2),
@@ -130,7 +178,7 @@ void main() {
           expect(graph.scores.first.annotationConfirmation, isNotNull);
           expect(
             graph.scores.first.annotationConfirmation!.before.evaluation,
-            -190,
+            -900,
           );
           expect(find.textContaining('failed'), findsNothing);
           expect(tester.takeException(), isNull);
@@ -152,8 +200,13 @@ void main() {
           final graph = tester.widget<AnalysisGraph>(
             find.byType(AnalysisGraph),
           );
-          expect(graph.scores.map((score) => score.evaluation), [300, 300]);
-          expect(graph.classifications, isEmpty);
+          expect(graph.scores.map((score) => score.evaluation), [0, 0]);
+          expect(
+            graph.classifications.where(
+              (m) => m.classification == MoveClassification.brilliant,
+            ),
+            isEmpty,
+          );
           // Route disposal executes the actual Review lifecycle cancellation.
           await tester.pumpWidget(
             const MaterialApp(home: Scaffold(body: Text('Away'))),
@@ -173,7 +226,7 @@ void main() {
               .then((score) => restarted = score);
           await _wait(tester, () => restarted != null);
           await restart;
-          expect(restarted!.evaluation, 300);
+          expect(restarted!.evaluation, 0);
           expect(engine.commands, contains('stop'));
         } finally {
           await tester.pumpWidget(const SizedBox.shrink());

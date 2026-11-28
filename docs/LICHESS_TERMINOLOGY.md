@@ -500,3 +500,11 @@ or this failure message. All ten catalogs therefore use contextual translations
 rather than borrowing an unrelated study or engine action. Existing Save PGN,
 Share PGN, Copy PGN and move-classification labels retain the reviewed baseline.
 Compact/large-text widget coverage includes the new checkbox in every locale.
+
+## Open Brilly Finder credits — 2.7 draft
+
+The existing About review credit now distinguishes En Croissant's move grades
+from Open Brilly Finder's Brilliant classification. This is app-specific project
+attribution, with no equivalent Lichess string. All ten catalogs retain the
+project names and translate the explanation; move-grade names are unchanged.
+These translations remain provisional pending native-speaker review.

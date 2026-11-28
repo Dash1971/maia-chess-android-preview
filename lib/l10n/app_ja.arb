@@ -278,7 +278,7 @@
   "aboutPoweredBy": "トロント大学の計算社会科学研究室が開発した、人間らしく指すチェスエンジンMaia-3を使用しています。",
   "aboutOffline": "Maia-3はスマートフォン上で完結して動作します。アカウントやネットワーク接続は不要です。",
   "aboutBoardCredits": "盤面インターフェース、標準の茶色テーマ、Cburnettの駒はLichess Flutter Chessgroundが提供しています。端末上のStockfishにはLichess multistockfishを使用しています。",
-  "aboutReviewCredits": "対局レビューの手の分類と駒の犠牲を検出する手法は、オープンソースのチェスGUI「En Croissant」を基にしています。",
+  "aboutReviewCredits": "指し手の評価はEn Croissantを基にしています。ブリリアント判定にはOpen Brilly Finderを使用しています。",
   "aboutLicence": "Mobile MaiaはAGPL-3.0-onlyで配布される自由ソフトウェアで、いかなる保証もありません。このライセンスの条件に従って再配布・改変できます。完全なソースコードはプロジェクトのリポジトリで公開されています。",
   "aboutIndependent": "このアプリはコミュニティによる独立したアプリです。Maia-3、トロント大学、Lichess、En Croissantの公式アプリではありません。",
   "samplingRecommendationWarning": "「序盤の多様性を最大にする」をオフにすると、Maiaのオープニングの幅が狭くなる可能性があります。",

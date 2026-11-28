@@ -278,7 +278,7 @@
   "aboutPoweredBy": "Basiert auf Maia-3, der menschenähnlichen Schachengine des Computational Social Science Lab der University of Toronto.",
   "aboutOffline": "Maia-3 läuft vollständig auf deinem Smartphone. Ein Konto oder eine Netzwerkverbindung ist nicht erforderlich.",
   "aboutBoardCredits": "Brettoberfläche, braunes Standarddesign und Cburnett-Figuren stammen von Lichess Flutter Chessground. Für die lokale Stockfish-Unterstützung wird Lichess multistockfish verwendet.",
-  "aboutReviewCredits": "Die Zugeinstufung und die Heuristiken zur Opfererkennung im Partierückblick wurden aus der quelloffenen Schachoberfläche En Croissant übernommen und angepasst.",
+  "aboutReviewCredits": "Die Zugbewertungen basieren auf En Croissant. Brillante Züge werden mit Open Brilly Finder erkannt.",
   "aboutLicence": "Mobile Maia ist freie Software unter der Lizenz AGPL-3.0-only und wird ohne jegliche Gewährleistung bereitgestellt. Du darfst sie gemäß den Bedingungen dieser Lizenz weitergeben und verändern. Der vollständige Quellcode ist im Projekt-Repository verfügbar.",
   "aboutIndependent": "Diese unabhängige Community-App ist keine offizielle Anwendung von Maia-3, der University of Toronto, Lichess oder En Croissant.",
   "samplingRecommendationWarning": "Ohne maximale Eröffnungsvielfalt kann Maias Eröffnungsrepertoire enger ausfallen.",
