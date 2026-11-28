@@ -1,6 +1,12 @@
-# Preview board editor (#189)
+# Board editor
+
+<a id="preview-board-editor-189"></a>
 
 **Status:** shipped in Stable 2.5.0 and later, and in Preview. This page describes the feature; dated qualification remains in the release records.
+
+The existing editor is retained in Stable 2.6. Camera and screenshot recognition
+are not included. The original Preview work is recorded in
+[Preview #189](https://github.com/Dash1971/maia-chess-android-preview/issues/189).
 
 The interaction/layout reference is Lichess mobile v0.30.1, commit
 `243b19b532c86101a389072becce60e51c71bbd0`, files:
@@ -35,7 +41,10 @@ No e-board adapter, connection owner or synchronization policy is replaced. For 
 [Physical-board editing (#39)](https://github.com/Dash1971/maia-chess-android-preview/issues/39)
 was closed as not planned.
 
-The menu contains Starting position, Load FEN, Continue from here and Clear board.
+The released menu contains Starting position, Load FEN, Continue from here and Clear board.
+The 2.7 scanner draft adds Rotate position 180°: it changes piece placement while
+retaining colors, side to move and counters, and clears castling/en-passant metadata.
+Flip board changes only the view.
 The toolbar has menu, flip, Analysis and position settings. Sharing uses Android's
 plain-text chooser; copying works offline and is also the fallback when a native
 share handler is unavailable. Neither action sends to a recipient automatically.
@@ -49,8 +58,9 @@ adaptations. Remaining new labels are translated in all ten languages and still
 need native-speaker review. The metadata sheet owns its controllers through the
 route's reverse transition, preventing disposed-controller errors on dismissal.
 
-Publication requires the channel’s full release gates; widget verification alone
-is not release qualification.
+Stable 2.6 keeps the manual editor and removes the disabled camera placeholder.
+See the [channel release procedure](RELEASING.md) for publication checks; earlier
+Preview evidence applies only to its recorded artifacts.
 
 ## Image scanning status
 

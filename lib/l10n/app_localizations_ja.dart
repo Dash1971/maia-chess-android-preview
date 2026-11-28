@@ -1616,4 +1616,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get scanSourceUnavailable => 'この写真の取得方法に対応するアプリがありません。';
+
+  @override
+  String get editorRotatePosition => '配置を180°回転';
 }

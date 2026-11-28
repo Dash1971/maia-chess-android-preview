@@ -1622,4 +1622,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get scanSourceUnavailable => '이 방식으로 사진을 가져올 수 있는 앱이 없습니다.';
+
+  @override
+  String get editorRotatePosition => '기물 배치 180° 회전';
 }

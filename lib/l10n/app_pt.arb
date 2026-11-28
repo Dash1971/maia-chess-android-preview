@@ -481,5 +481,6 @@
   "scanReadFailed": "Não foi possível ler o tabuleiro desta foto.",
   "scanNoBoard": "Nenhum tabuleiro completo encontrado. Tente outra foto.",
   "scanImageTooLarge": "Escolha uma imagem com menos de 16 MiB.",
-  "scanSourceUnavailable": "Nenhum aplicativo disponível para obter esta foto."
+  "scanSourceUnavailable": "Nenhum aplicativo disponível para obter esta foto.",
+  "editorRotatePosition": "Girar a posição em 180°"
 }

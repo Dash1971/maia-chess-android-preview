@@ -1745,4 +1745,7 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get scanSourceUnavailable =>
       'इस स्रोत से फ़ोटो लेने के लिए कोई ऐप उपलब्ध नहीं है।';
+
+  @override
+  String get editorRotatePosition => 'स्थिति को 180° घुमाएँ';
 }

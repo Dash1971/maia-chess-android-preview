@@ -1,6 +1,6 @@
 # Documentation
 
-Start with the [app README](../README.md), [Stable user guide](https://github.com/Dash1971/maia-chess-android#feature-guide),
+Start with the [app README](../README.md), [Stable user guide](https://github.com/Dash1971/maia-chess-android/blob/main/docs/USER_GUIDE.md),
 [privacy and permissions](../PRIVACY.md), and [download verification/troubleshooting](VERIFY_DOWNLOAD.md).
 
 ## Contributors and testers
@@ -28,17 +28,17 @@ Start with the [app README](../README.md), [Stable user guide](https://github.co
 
 - [Adaptive layouts for 2.6](ADAPTIVE_LAYOUTS_26.md)
 - [Fixed engine analysis and independent moves for 2.6](ANALYSIS_SCROLL_26.md)
-- [Preview board editor (#189)](BOARD_EDITOR.md)
+- [Board editor](BOARD_EDITOR.md)
 - [Board preferences](BOARD_PREFERENCES.md)
 - [CI artifact retention](CI_ARTIFACTS.md)
-- [Continue from here on an electronic board (#182)](CONTINUATION_ELECTRONIC_BOARD.md)
+- [Continue from here on an electronic board](CONTINUATION_ELECTRONIC_BOARD.md)
 - [Dev local diagnostics](DEV_DIAGNOSTICS.md)
 - [Electronic-board testing](ELECTRONIC_BOARD_DEV.md)
 - [Grand Kingdom support and testing](ELECTRONIC_BOARD_GRAND_KINGDOM_26.md)
 - [Native electronic-board protocol evidence](ELECTRONIC_BOARD_NATIVE_PROTOCOL.md)
 - [Lichess terminology baseline — 2026-10-06](LICHESS_TERMINOLOGY.md)
 - [Maia move-history input](MAIA_MOVE_HISTORY.md)
-- [Optional Maia score (#186)](MAIA_SCORE.md)
+- [Optional Maia score](MAIA_SCORE.md)
 - [Saved analysis in PGN](PGN_ANALYSIS.md)
 - [PGN import and export](RECENT_GAMES_PGN_EXPORT.md)
 - [Opt-in Maia sampling data](SAMPLING_DATA.md)

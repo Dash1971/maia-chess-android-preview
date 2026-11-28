@@ -37,7 +37,10 @@ Total model payload: **3,459,238 bytes**, about 3.5 MB. Actual APK size and
 Android latency/memory have not been measured. The supported target is screenshots
 and photographs of printed two-dimensional diagrams, not physical 3D boards.
 Dense pages may select the wrong diagram; select a tighter source image and retry.
-Automatic orientation is fallible; use the existing editor controls to correct it.
+Automatic orientation is fallible. Use the editor menu’s **Rotate position 180°**
+to correct an upside-down placement. This preserves piece colors, side to move
+and counters, clears castling/en-passant metadata, and leaves the view unchanged.
+The toolbar’s Flip board still changes only the view.
 Blank/near-uniform inputs are rejected before inference.
 
 The publisher licenses the code and weights under AGPL-3.0-only. Its
@@ -57,8 +60,26 @@ Temporary files and URI grants are released after success, failure or cancellati
 abandoned private files are cleaned at startup. If Android recreates the activity
 during camera capture, a stale result is discarded rather than replacing a draft.
 Inference sessions close after each scan instead of remaining loaded alongside Maia.
+Both preparation and inference return an error and release their image/busy state
+after memory exhaustion or native-link errors, allowing a retry without changing
+the draft. Fatal VM/thread errors still propagate. This is best-effort recovery;
+it cannot protect against Android killing the whole process.
+The pending installed lifecycle checks include process death while the camera is
+open: the stale photo must be discarded and the recreated editor remain usable.
 
 ## Verification
+
+November 28 review fixes: **97 focused Flutter host tests passed**, including
+rotation in both board views, retry after preparation/recognition failures, and
+all ten languages at compact/landscape/tablet sizes with 200% text. Static analysis
+is clean; localization contracts cover 483 messages. **28 JVM checks passed**:
+11 failure-boundary checks and 17 production image-adapter cases using explicit
+platform/inference substitutes. These inject memory/native-link errors during
+decode, EXIF/rotation, preview generation, pixel extraction and inference, then
+verify file release, a single callback and successful retry. The same memory-error
+regression fails on the original PR head because no callback arrives. Restored
+camera-result discard is also covered on the JVM; real Android process-death
+behavior remains part of installed qualification.
 
 November 26 host validation: **1,652 tests passed**, including 40 new scanner cases; final focused scanner/editor checks: **68 passed**. Flutter analysis reports no issues. Production Kotlin checks: **27 passed**; the Android image-source adapter also passes a host JVM source type check. These checks do not replace installed Android tests.
 
@@ -89,6 +110,9 @@ python3 tool/run_board_scan_jvm.py --java "$JAVA_HOME/bin/java" \
   --runtime /path/to/onnxruntime-1.24.3.jar --scratch /path/to/owned/bulk \
   --fixtures /path/to/upstream/docs/integration
 ```
+
+Use `--work-only` without `--runtime` to run the preparation/inference failure
+and retry regressions without ONNX Runtime.
 
 The helper makes no downloads and requires a scratch directory initialized with
 `tool/build_workspace.py`. Omit `--fixtures` for the synthetic decoder/geometry

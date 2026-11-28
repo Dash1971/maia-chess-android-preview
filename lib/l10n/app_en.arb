@@ -2242,5 +2242,9 @@
   "scanSourceUnavailable": "No app is available for this photo source.",
   "@scanSourceUnavailable": {
     "description": "Board Editor camera/photo recognition. Match Lichess camera flow; no direct equivalent in the pinned translated catalog. Screenshots and printed diagrams only; photos never uploaded."
+  },
+  "editorRotatePosition": "Rotate position 180°",
+  "@editorRotatePosition": {
+    "description": "Board Editor menu action. Rotate actual piece placement 180 degrees to correct an upside-down scan; keep piece colors, side to move and counters, clear castling/en passant. Different from Flip board, which only changes the view. No equivalent in the pinned Lichess catalog."
   }
 }

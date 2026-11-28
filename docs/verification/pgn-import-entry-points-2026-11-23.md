@@ -99,3 +99,7 @@ At draft preparation, only local Python/XML checks had run; no Android build, Ac
 ## Published Android qualification
 
 [Preview beta.12 qualification](../releases/preview-2.6.0-beta.12.md) records actual signed-APK Recent import, first-only Analysis, Android file/share routing, export/re-import, interruption recovery, 10,000-game atomic saving and Home/background tests. The private supplied 119-entry analysis above remains a separate host-only observation; the installed tests use synthetic fixtures. Existing private duplicate copies are not attributed conclusively to the reproduced race.
+
+Status update, 26 November 2026: Stable #82 and Preview #265 have merged.
+Stable 2.6.0 is released; see [its separate qualification](https://github.com/Dash1971/maia-chess-android/blob/main/docs/release-notes/v2.6.0-verification.md).
+The checks and source limits recorded above are unchanged.

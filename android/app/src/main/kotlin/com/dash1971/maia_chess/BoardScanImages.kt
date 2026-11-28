@@ -80,8 +80,8 @@ class BoardScanImages(private val activity: Activity, restoredCapture: String?) 
         preparing = true
         io.execute {
             var target: File? = null
-            try {
-                target = if (request == CAMERA) requireNotNull(capture) else {
+            BoardScanWork.run(work = {
+                val file = if (request == CAMERA) requireNotNull(capture) else {
                     val file = File(directory, "${UUID.randomUUID()}.jpg")
                     target = file
                     activity.contentResolver.openInputStream(requireNotNull(data?.data)).use { input ->
@@ -97,8 +97,9 @@ class BoardScanImages(private val activity: Activity, restoredCapture: String?) 
                     }
                     file
                 }
-                require(target.length() in 1..MAX_BYTES.toLong()) { "scan_too_large" }
-                val bitmap = decode(target)
+                target = file
+                require(file.length() in 1..MAX_BYTES.toLong()) { "scan_too_large" }
+                val bitmap = decode(file)
                 val preview = try {
                     val thumb = Bitmap.createScaledBitmap(bitmap,
                         maxOf(1, bitmap.width * 240 / maxOf(bitmap.width, bitmap.height)),
@@ -106,19 +107,20 @@ class BoardScanImages(private val activity: Activity, restoredCapture: String?) 
                     try { ByteArrayOutputStream().use { out -> thumb.compress(Bitmap.CompressFormat.JPEG, 80, out); out.toByteArray() } }
                     finally { if (thumb !== bitmap) thumb.recycle() }
                 } finally { bitmap.recycle() }
-                val file = target
+                Pair(file, preview)
+            }, release = { failure ->
+                if (failure != null) { target?.delete(); capture?.delete() }
+            }, complete = { prepared, failure ->
                 activity.runOnUiThread {
                     preparing = false
-                    if (closed) { file.delete(); reply.success(null) }
-                    else { current = file; reply.success(mapOf("token" to file.name, "preview" to preview)) }
+                    if (failure != null) reply.error(BoardScanWork.errorCode(failure), "Could not read image", null)
+                    else {
+                        val (file, preview) = requireNotNull(prepared)
+                        if (closed) { file.delete(); reply.success(null) }
+                        else { current = file; reply.success(mapOf("token" to file.name, "preview" to preview)) }
+                    }
                 }
-            } catch (error: Exception) {
-                target?.delete(); capture?.delete()
-                activity.runOnUiThread {
-                    preparing = false
-                    reply.error(errorCode(error), "Could not read image", null)
-                }
-            }
+            })
         }
         return true
     }
@@ -130,9 +132,7 @@ class BoardScanImages(private val activity: Activity, restoredCapture: String?) 
         }
         reading = true
         io.execute {
-            var placement: String? = null
-            var failure: String? = null
-            try {
+            BoardScanWork.run(work = {
                 val image = decode(file)
                 val rgb = try {
                     val pixels = IntArray(image.width * image.height)
@@ -142,19 +142,19 @@ class BoardScanImages(private val activity: Activity, restoredCapture: String?) 
                 val result = BoardScanCore.scan(rgb,
                     model("boardfinder-v1-int8.onnx", 1428260, FINDER_SHA),
                     model("boardnet-v4-int8.onnx", 2030978, READER_SHA))
-                placement = result.placement
-            } catch (error: Exception) {
-                failure = errorCode(error)
-            } finally {
-                file.delete(); if (current == file) current = null; reading = false
-            }
-            // Finalize ownership before replying: immediate retry must not see
-            // the previous job as busy or delete the next job's file.
-            activity.runOnUiThread {
-                if (closed) reply.error("scan_stale", "Scanner closed", null)
-                else if (failure != null) reply.error(failure, "Could not read board", null)
-                else reply.success(mapOf("placement" to placement))
-            }
+                result.placement
+            }, release = {
+                try { file.delete() }
+                finally { if (current == file) current = null; reading = false }
+            }, complete = { placement, failure ->
+                // Finalize ownership before replying: immediate retry must not see
+                // the previous job as busy or delete the next job's file.
+                activity.runOnUiThread {
+                    if (closed) reply.error("scan_stale", "Scanner closed", null)
+                    else if (failure != null) reply.error(BoardScanWork.errorCode(failure), "Could not read board", null)
+                    else reply.success(mapOf("placement" to placement))
+                }
+            })
         }
     }
     fun discard(token: String?) {
@@ -171,11 +171,6 @@ class BoardScanImages(private val activity: Activity, restoredCapture: String?) 
     private fun revoke(file: File) { activity.revokeUriPermission(uri(file),
         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION) }
     private fun clearCapture() { cameraFile?.let { revoke(it); it.delete() }; cameraFile = null }
-    private fun errorCode(error: Exception): String = when (error.message) {
-        "no_board" -> "scan_no_board"
-        "scan_too_large" -> "scan_too_large"
-        else -> "scan_read_failed"
-    }
     private fun model(name: String, size: Int, hash: String): ByteArray {
         val bytes = activity.assets.open("flutter_assets/assets/board_scanner/$name").use { it.readBytes() }
         require(bytes.size == size && MessageDigest.getInstance("SHA-256").digest(bytes)
@@ -191,23 +186,29 @@ class BoardScanImages(private val activity: Activity, restoredCapture: String?) 
         val bitmap = requireNotNull(BitmapFactory.decodeFile(file.path, BitmapFactory.Options().apply {
             inSampleSize = sample; inPreferredConfig = Bitmap.Config.ARGB_8888
         })) { "scan_read_failed" }
-        // Some older Android ExifInterface versions do not support PNG/WebP.
-        // A successfully decoded screenshot does not need EXIF to be usable.
-        val orientation = try {
-            ExifInterface(file.path).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-        } catch (_: java.io.IOException) { ExifInterface.ORIENTATION_NORMAL }
-        val matrix = Matrix()
-        when (orientation) {
-            ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.setScale(-1f, 1f)
-            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.setRotate(180f)
-            ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.setScale(1f, -1f)
-            ExifInterface.ORIENTATION_TRANSPOSE -> { matrix.setRotate(90f); matrix.postScale(-1f, 1f) }
-            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.setRotate(90f)
-            ExifInterface.ORIENTATION_TRANSVERSE -> { matrix.setRotate(270f); matrix.postScale(-1f, 1f) }
-            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.setRotate(270f)
+        try {
+            // Some older Android ExifInterface versions do not support PNG/WebP.
+            // A successfully decoded screenshot does not need EXIF to be usable.
+            val orientation = try {
+                ExifInterface(file.path).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+            } catch (_: java.io.IOException) { ExifInterface.ORIENTATION_NORMAL }
+            val matrix = Matrix()
+            when (orientation) {
+                ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.setScale(-1f, 1f)
+                ExifInterface.ORIENTATION_ROTATE_180 -> matrix.setRotate(180f)
+                ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.setScale(1f, -1f)
+                ExifInterface.ORIENTATION_TRANSPOSE -> { matrix.setRotate(90f); matrix.postScale(-1f, 1f) }
+                ExifInterface.ORIENTATION_ROTATE_90 -> matrix.setRotate(90f)
+                ExifInterface.ORIENTATION_TRANSVERSE -> { matrix.setRotate(270f); matrix.postScale(-1f, 1f) }
+                ExifInterface.ORIENTATION_ROTATE_270 -> matrix.setRotate(270f)
+            }
+            if (matrix.isIdentity) return bitmap
+            val transformed = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            if (transformed !== bitmap) bitmap.recycle()
+            return transformed
+        } catch (error: Throwable) {
+            bitmap.recycle()
+            throw error
         }
-        if (matrix.isIdentity) return bitmap
-        return try { Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true) }
-        finally { bitmap.recycle() }
     }
 }

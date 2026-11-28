@@ -6,6 +6,27 @@ import 'package:maia_chess/main.dart';
 import 'package:maia_chess/l10n/app_localizations.dart';
 
 void main() {
+  test(
+    'rotation changes all square coordinates, not colors or move counters',
+    () {
+      final draft = BoardEditorDraft(
+        'r3k2r/8/8/3pP3/8/8/8/R3K2R b KQkq d6 17 42',
+      );
+      final pieces = Map.of(draft.pieces);
+      draft.rotatePosition();
+      expect(draft.fen, 'R2K3R/8/8/8/3Pp3/8/8/r2k3r b - - 17 42');
+      draft.rotatePosition();
+      expect(draft.pieces, pieces);
+      expect(draft.turn, dc.Side.black);
+      expect(draft.castling, isEmpty);
+      expect(draft.enPassant, '-');
+      expect(draft.halfmoves, 17);
+      expect(draft.fullmoves, 42);
+      draft.clear();
+      draft.rotatePosition();
+      expect(draft.pieces, isEmpty);
+    },
+  );
   test('draft FEN retains counters and EP; failed load is atomic', () {
     final draft = BoardEditorDraft('4k3/8/8/3pP3/8/8/8/4K3 w - d6 17 42');
     expect(draft.fen, endsWith('w - d6 17 42'));

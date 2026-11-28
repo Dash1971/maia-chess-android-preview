@@ -481,5 +481,6 @@
   "scanReadFailed": "इस फ़ोटो से बिसात नहीं पढ़ी जा सकी।",
   "scanNoBoard": "पूरी बिसात नहीं मिली। दूसरी फ़ोटो आज़माएँ।",
   "scanImageTooLarge": "16 MiB से छोटी छवि चुनें।",
-  "scanSourceUnavailable": "इस स्रोत से फ़ोटो लेने के लिए कोई ऐप उपलब्ध नहीं है।"
+  "scanSourceUnavailable": "इस स्रोत से फ़ोटो लेने के लिए कोई ऐप उपलब्ध नहीं है।",
+  "editorRotatePosition": "स्थिति को 180° घुमाएँ"
 }

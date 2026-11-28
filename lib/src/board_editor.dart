@@ -56,6 +56,19 @@ class BoardEditorDraft {
     enPassant = '-';
   }
 
+  void rotatePosition() {
+    pieces = {
+      for (final entry in pieces.entries)
+        dc.Square.fromCoords(
+          dc.File.values[7 - entry.key.file],
+          dc.Rank.values[7 - entry.key.rank],
+        ): entry.value,
+    };
+    // Rights and an en-passant target describe the old square arrangement.
+    castling.clear();
+    enPassant = '-';
+  }
+
   bool canCastle(String right) {
     final white = right == right.toUpperCase();
     final side = white ? dc.Side.white : dc.Side.black;
@@ -336,6 +349,11 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
                 ('start', Icons.restart_alt, l10n(context).startingPosition),
                 ('load', Icons.input, l10n(context).loadFen),
                 (
+                  'rotate',
+                  Icons.rotate_right,
+                  l10n(context).editorRotatePosition,
+                ),
+                (
                   'continue',
                   Icons.play_arrow_outlined,
                   l10n(context).continueFromHere,
@@ -364,6 +382,8 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
         _change(_draft.clear);
       case 'load':
         await _load();
+      case 'rotate':
+        _change(_draft.rotatePosition);
       case 'continue':
         await _continue();
     }

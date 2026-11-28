@@ -1761,4 +1761,7 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get scanSourceUnavailable =>
       'Nenhum aplicativo disponível para obter esta foto.';
+
+  @override
+  String get editorRotatePosition => 'Girar a posição em 180°';
 }

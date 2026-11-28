@@ -1781,4 +1781,7 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get scanSourceUnavailable =>
       'Нет приложения для получения фото этим способом.';
+
+  @override
+  String get editorRotatePosition => 'Повернуть позицию на 180°';
 }

@@ -1596,4 +1596,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get scanSourceUnavailable => '没有可用于获取此照片的应用。';
+
+  @override
+  String get editorRotatePosition => '将局面旋转180°';
 }

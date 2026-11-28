@@ -481,5 +481,6 @@
   "scanReadFailed": "Impossible de lire l’échiquier sur cette photo.",
   "scanNoBoard": "Aucun échiquier complet trouvé. Essayez une autre photo.",
   "scanImageTooLarge": "Choisissez une image de moins de 16 MiB.",
-  "scanSourceUnavailable": "Aucune application disponible pour cette source de photo."
+  "scanSourceUnavailable": "Aucune application disponible pour cette source de photo.",
+  "editorRotatePosition": "Tourner la position de 180°"
 }

@@ -1730,4 +1730,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get scanSourceUnavailable =>
       'No app is available for this photo source.';
+
+  @override
+  String get editorRotatePosition => 'Rotate position 180°';
 }

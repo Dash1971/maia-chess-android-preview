@@ -94,6 +94,9 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Copy FEN'));
     await tester.pumpAndSettle();
+    ScaffoldMessenger.of(tester.element(find.byType(BoardEditorPage)))
+        .removeCurrentSnackBar();
+    await tester.pumpAndSettle();
   }
 
   for (final camera in [false, true]) {
@@ -124,6 +127,103 @@ void main() {
         expect(scanner.discarded, ['one-image']);
         await copyFen(tester);
         expect(clipboard, '$recognized w - - 0 1');
+      },
+    );
+  }
+
+  for (final flipped in [false, true]) {
+    testWidgets(
+      'correct an upside-down scan without changing the view (flipped=$flipped)',
+      (tester) async {
+        await mount(tester);
+        await select(tester);
+        scanner.pickResult.complete(photo());
+        await tester.pump();
+        scanner.reading.complete(recognized);
+        await tester.pumpAndSettle();
+        if (flipped) {
+          await tester.tap(find.byKey(const ValueKey('board-editor-flip')));
+          await tester.pumpAndSettle();
+        }
+        await copyFen(tester);
+        expect(
+          clipboard,
+          '$recognized w - - 0 1',
+        ); // View flip does not repair placement.
+        final orientation = tester
+            .widget<cg.ChessboardEditor>(find.byType(cg.ChessboardEditor))
+            .orientation;
+        await tester.tap(find.byKey(const ValueKey('editor-menu')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const ValueKey('editor-menu-rotate')));
+        await tester.pumpAndSettle();
+        expect(
+          tester
+              .widget<cg.ChessboardEditor>(find.byType(cg.ChessboardEditor))
+              .orientation,
+          orientation,
+        );
+        await copyFen(tester);
+        expect(clipboard, '8/R7/8/8/3PK3/8/4k3/1r6 w - - 0 1');
+        await tester.tap(find.byKey(const ValueKey('editor-menu')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const ValueKey('editor-menu-rotate')));
+        await tester.pumpAndSettle();
+        await copyFen(tester);
+        expect(clipboard, '$recognized w - - 0 1');
+      },
+    );
+  }
+
+  for (final phase in ['pick', 'recognize']) {
+    testWidgets(
+      '$phase native failure leaves editor usable for an immediate retry',
+      (tester) async {
+        await mount(tester);
+        var picks = 0, readings = 0, discards = 0;
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(maiaEngineChannel, (call) async {
+              switch (call.method) {
+                case 'pickBoardScanImage':
+                  picks++;
+                  if (phase == 'pick' && picks == 1) {
+                    throw PlatformException(code: 'scan_read_failed');
+                  }
+                  return {'token': 'retry-$picks', 'preview': preview};
+                case 'recognizeBoardScanImage':
+                  readings++;
+                  if (phase == 'recognize' && readings == 1) {
+                    throw PlatformException(code: 'scan_read_failed');
+                  }
+                  return {'placement': recognized};
+                case 'discardBoardScanImage':
+                  discards++;
+              }
+              return null;
+            });
+        await tester.pumpWidget(
+          MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const BoardEditorPage(initialFen: original),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await select(tester);
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(find.byType(SnackBar), findsOneWidget);
+        await copyFen(tester);
+        expect(clipboard, original);
+        ScaffoldMessenger.of(tester.element(find.byType(BoardEditorPage)))
+            .removeCurrentSnackBar();
+        await tester.pumpAndSettle();
+        await select(tester);
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(picks, 2);
+        expect(discards, phase == 'pick' ? 1 : 2);
+        await copyFen(tester);
+        expect(clipboard, '$recognized w - - 0 1');
+        expect(tester.takeException(), isNull);
       },
     );
   }
@@ -240,6 +340,17 @@ void main() {
           await tester.pumpAndSettle();
           expect(find.byType(ListTile), findsNWidgets(2));
           expect(find.byType(Checkbox), findsNothing);
+          await tester.binding.handlePopRoute();
+          await tester.pumpAndSettle();
+          await tester.tap(find.byKey(const ValueKey('editor-menu')));
+          await tester.pumpAndSettle();
+          final context = tester.element(
+            find.byKey(const ValueKey('editor-menu-rotate')),
+          );
+          expect(
+            find.text(AppLocalizations.of(context)!.editorRotatePosition),
+            findsOneWidget,
+          );
           expect(tester.takeException(), isNull);
         },
       );

@@ -481,5 +481,6 @@
   "scanReadFailed": "Das Brett konnte auf diesem Foto nicht erkannt werden.",
   "scanNoBoard": "Kein vollständiges Brett gefunden. Versuche ein anderes Foto.",
   "scanImageTooLarge": "Wähle ein Bild mit weniger als 16 MiB.",
-  "scanSourceUnavailable": "Für diese Fotoquelle ist keine App verfügbar."
+  "scanSourceUnavailable": "Für diese Fotoquelle ist keine App verfügbar.",
+  "editorRotatePosition": "Stellung um 180° drehen"
 }

@@ -3009,6 +3009,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No app is available for this photo source.'**
   String get scanSourceUnavailable;
+
+  /// Board Editor menu action. Rotate actual piece placement 180 degrees to correct an upside-down scan; keep piece colors, side to move and counters, clear castling/en passant. Different from Flip board, which only changes the view. No equivalent in the pinned Lichess catalog.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate position 180°'**
+  String get editorRotatePosition;
 }
 
 class _AppLocalizationsDelegate
